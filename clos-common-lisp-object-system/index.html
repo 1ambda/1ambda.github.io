@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>CLOS, Common Lisp Object System</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CLOS, Common Lisp Object System">
+  <meta name="twitter:description" content="CLOS Brief Guide based on http://www.aiai.ed.ac.uk/~jeff/clos-guide.html   http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php   http://cl-cookbook.sourceforge.net/clos-tutorial/   http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html Full source code : Here 1. class-of Built-in Classes SYMBOL STRING INTEGER CONS VECTOR">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/clos-common-lisp-object-system/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.4" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/clos-common-lisp-object-system/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, FP</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      
+      <h1 class="margin_bottom_medium">CLOS, Common Lisp Object System</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-06-26">Thursday, June 26, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/clos-common-lisp-object-system/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>CLOS Brief Guide based on</p>
+
+<ol>
+<li><a href='http://www.aiai.ed.ac.uk/~jeff/clos-guide.html'>http://www.aiai.ed.ac.uk/~jeff/clos-guide.html</a>  </li>
+<li><a href='http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php'>http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php</a>  </li>
+<li><a href='http://cl-cookbook.sourceforge.net/clos-tutorial/'>http://cl-cookbook.sourceforge.net/clos-tutorial/</a>  </li>
+<li><a href='http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html'>http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html</a></li>
+</ol>
+
+<p>Full source code : <a href="https://github.com/1ambda/CLOS/blob/master/concept.lisp">Here</a></p>
+
+<h3 id="1classof">1. class-of</h3>
+
+<p>Built-in Classes</p>
+
+<ul>
+<li>SYMBOL</li>
+<li>STRING</li>
+<li>INTEGER</li>
+<li>CONS</li>
+<li>VECTOR</li>
+<li>and so on</li>
+</ul>
+
+<p><br/>  </p>
+
+<h3 id="2defstruct">2. defstruct</h3>
+
+<p><code>defstruct</code> automatically define access-function and constructor</p>
+
+<pre><code class="lisp">(defstruct cat 
+  (name)
+  (age))
+
+(setf c1 (make-cat :name 'blue :age 6))
+(cat-age c1) ;; 6
+(cat-name c1) ;; BLUE
+</code></pre>
+
+<p><br/></p>
+
+<p>What defined by <code>defstruct</code> is <code>STRUCTURE-CLASS</code></p>
+
+<pre><code class="lisp">(class-of c1)
+
+;; #&lt;STRUCTURE-CLASS CAT)
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="3defclass">3. defclass</h3>
+
+<p>defclass gives you more controll. You can specify <strong>initform</strong>, <strong>initarg</strong>, <strong>accessor</strong> and so on.</p>
+
+<pre><code class="lisp">;; syntax
+(DEFCLASS class-name (superclass-name*)
+  (slot-description*)
+  class-option*)
+
+(defclass person ()
+  ((name :initarg :name
+         :initform 'bill
+         :accessor person-name)
+   (age :initarg :age
+        :initform 26
+        :accessor person-age)))
+
+(setf p1 (make-instance 'person :name 'bob :age 26))
+</code></pre>
+
+<p><br/></p>
+
+<p>What defined by <code>defclass</code> is <code>STANDARD-CLASS</code> which subclasses <code>STANDARD-OBJECT</code></p>
+
+<pre><code class="lisp">(class-of p1)
+(find-class 'person)
+
+;; #&lt;STANDARD-CLASS PERSON&gt;
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="4slot">4. Slot</h3>
+
+<p>Class defined by <code>defclass</code> can have slots. Slot is member-variable.</p>
+
+<pre><code class="lisp">(setf p1 (make-instance 'person :name 'bob :age 26''))
+(slot-value p1 'name)
+
+;; BOB
+</code></pre>
+
+<p><br/></p>
+
+<p><code>describe</code> function can be used to show instance or classes information</p>
+
+<pre><code class="lisp">(describe p1) ;; instance information
+;; #&lt;PERSON {1002E70513}&gt;
+;;   [standard-object]
+;; 
+;; Slots with :INSTANCE allocation:
+;;   NAME  = HOON
+;;   AGE   = 26
+
+(describe 'person) ;; class information
+;; COMMON-LISP-USER::PERSON
+;;   [symbol]
+;; 
+;; PERSON names the standard-class #&lt;STANDARD-CLASS PERSON&gt;:
+;;   Class precedence-list: PERSON, STANDARD-OBJECT, SB-PCL::SLOT-OBJECT, T
+;;   Direct superclasses: STANDARD-OBJECT
+;;   No subclasses.
+;;   Direct slots:
+;;     NAME
+;;       Initargs: :NAME
+;;       Readers: PERSON-NAME
+;;       Writers: (SETF PERSON-NAME)
+;;     AGE
+;;       Initargs: :AGE
+;;       Readers: PERSON-AGE
+;;       Writers: (SETF PERSON-AGE)
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="5slotoptioninheritance">5. Slot Option Inheritance</h3>
+
+<p><code>initform</code> Slot options can be overrided. But <code>initarg</code> and <code>accessor</code> can't</p>
+
+<pre><code class="lisp">(defclass teacher (person)
+  ((subject :accessor teacher-subject
+        :initarg :subject
+        :initform "None")))
+
+(defclass math-teacher (teacher)
+  ((subject :initform "Mathmatics")))
+
+(defvar t1 nil)
+(defvar m1 nil)
+
+(setf t1 (make-instance 'teacher :name 'bob :age 25))
+(setf m1 (make-instance 'math-teacher :name 'john :age 25))
+
+(describe t1)
+
+;; #&lt;TEACHER {10040F9363}&gt;
+;;   [standard-object]
+;; 
+;; Slots with :INSTANCE allocation:
+;;   NAME     = BOB
+;;   AGE      = 25
+;;   SUBJECT  = "None"
+
+
+(describe m1)
+
+;; #&lt;MATH-TEACHER {10040FE653}&gt;
+;;   [standard-object]
+;; 
+;; Slots with :INSTANCE allocation:
+;;   NAME     = JOHN
+;;   AGE      = 25
+;;   SUBJECT  = "Mathmatics"
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="6multipleinheritance">6. Multiple Inheritance</h3>
+
+<p>CLOS supports <strong>Multiple Inheritance</strong>. But I'm not going to discuss.</p>
+
+<p>If you are interested in how CLOS solves diamond problem, see <a href="http://en.wikipedia.org/wiki/Multiple_inheritance">Wiki</a></p>
+
+<blockquote>
+  <p>Common Lisp CLOS attempts to provide both reasonable default behavior and the ability to override it. By default, the method with the most specific argument classes is chosen; then in the order in which parent classes are named in the subclass definition. However, the programmer can override this, by giving a specific method resolution order or stating a rule for combining methods. This is called method combination, which may be fully controlled. The MOP (metaobject protocol) also provides means to modify the inheritance, dynamic dispatch, class instantiation, and other internal mechanisms without affecting the stability of the system.</p>
+</blockquote>
+
+<p>Basically, There are two rules about inheritance.</p>
+
+<ol>
+<li>Each class is more specific than its superclasses.  </li>
+<li>For a given class, superclasses listed earlier are more specific than those listed later.</li>
+</ol>
+
+<p>The second rule is useful in case of</p>
+
+<pre><code class="lisp">(defclass a (b c) ...)
+</code></pre>
+
+<p><br/> <br />
+<code>initform</code> or <code>method</code> are can be from both class <code>b</code> and class <code>c</code>. But class 'b' precedes class 'c', class 'c''s <code>method' or</code>initform` will be selected.</p>
+
+<p><br/>  </p>
+
+<h3 id="7genericfunction">7. Generic function</h3>
+
+<p>In common lisp, class have only <strong>data</strong>. That means <strong>code (method)</strong> is separeted from class and is <strong>not</strong> tired to any class contrary to popular object-oriented language like Java, C++. This is why we call it <strong>generic</strong> method or function.</p>
+
+<pre><code class="lisp">;; inherit standard object
+(defclass person ()
+  ((name :accessor person-name
+     :initarg :name)
+   (age :accessor person-age
+    :initarg :age)))
+
+;; inherit person
+(defclass teacher (person)
+  ((subject :accessor teacher-subject
+        :initarg :subject
+        :initform "nothing")))
+
+;; inherit teacher
+(defclass math-teacher (teacher)
+  ((subject :initform "math")))
+
+;; create instance
+(setf t1 (make-instance 'teacher :name 'bob :age 25))
+(setf m1 (make-instance 'math-teacher :name 'john :age 25))
+
+;; call method
+
+(work t1)
+;; BOB is teaching nothing
+
+(work m1)
+;; JOHN is teaching math
+</code></pre>
+
+<p><br/> <br />
+Calling method like this is somewhat different from other languages. In Java, methods are binded in a class. So we can call methods <code>Class.method(args)</code>. This is <strong>Single dispatch</strong>. According to <a href="http://en.wikipedia.org/wiki/Dynamic_dispatch#Single_and_multiple_dispatch">wikipedia</a></p>
+
+<blockquote>
+  <p>If the decision of which version of a method to call is based entirely on the class of the object x, then this is known as single dispatch because an implementation is chosen based on a single type — the type of the instance. Single dispatch is supported by many object-oriented languages, including statically typed languages such as C++ and Java, and dynamically typed languages such as Smalltalk and Objective-C.</p>
+</blockquote>
+
+<p>But in Common Lisp, Method is invoked like <code>(method classes args)</code>. CLOS select which method will be called based on <strong>classes</strong>. This is <strong>Multiple dispatch</strong>.</p>
+
+<blockquote>
+  <p>In some languages such as Common Lisp and Dylan, methods or functions can also be dynamically dispatched based on the run-time type of arguments. Expressed in pseudocode, the code manager.handle(y) could call different implementations depending on the types of both objects manager and y. This is known as multiple dispatch.</p>
+</blockquote>
+
+<p><br/>  </p>
+
+<h3 id="8methodcombination">8. Method Combination</h3>
+
+<p>More than one method are applicable to a given set of arguments, the applicable methods are called <strong>single effective method</strong>. Common Lisp comes with predefined <strong>standard method combination</strong>. Also, It is possible to define new kinds of method combination. Standard method combination consists of</p>
+
+<ul>
+<li>primary</li>
+<li>:before</li>
+<li>:after</li>
+<li>:around</li>
+</ul>
+
+<pre><code class="lisp">(defgeneric work (teacher)
+  (:documentation "do something based on their job"))
+
+(defmethod work ((t1 teacher))
+  (format t "~a is teaching ~a"
+    (slot-value t1 'name)
+    (slot-value t1 'subject)))
+
+(defmethod work ((t1 math-teacher))
+  (format t "~a's major is math~%"
+    (slot-value t1 'name))
+  (call-next-method))
+
+(setf t1 (make-instance 'teacher :name 'bob :age 25))
+(setf m1 (make-instance 'math-teacher :name 'john :age 25))
+
+(work m1)
+;; BOB is teaching nothing
+
+(work t1)
+;; JOHN's major is math
+;; JOHN is teaching math
+</code></pre>
+
+<p><br/> <br />
+If <code>around</code>, <code>before</code>, <code>after</code> keyword is not specified, the generic method is <strong>Primary</strong> method which is responsible for providing primary implementation. Above <code>work</code> methods are primary. <code>call-next-method</code> indicates that control should be passaed from this method to the method specialized on superclass as arguments.</p>
+
+<pre><code class="lisp">(setf t1 (make-instance 'teacher :name 'bob :age 25))
+(setf m1 (make-instance 'math-teacher :name 'john :age 25))
+
+(defgeneric work (teacher)
+  (:documentation "do something based on their job"))
+
+(defmethod work ((t1 teacher))
+  (format t "~a is teaching ~a~%"
+    (slot-value t1 'name)
+    (slot-value t1 'subject)))
+
+(defmethod work :before ((t1 teacher))
+  (format t "~a is preparing the class~%"
+    (slot-value t1 'name)))
+
+(defmethod work :after ((t1 teacher))
+  (format t "~a has done his class~%"
+    (slot-value t1 'name)))
+
+(defmethod work :around ((t1 teacher))
+  (format t "start around for teacher class~%")
+  (let ((result (call-next-method)))
+    (format t "end around for teacher class~%")
+    result))
+
+(defmethod work ((t1 math-teacher))
+  (format t "~a's major is math~%"
+    (slot-value t1 'name))
+  (call-next-method))
+
+(work t1)
+;; start around for teacher class
+;; BOB is preparing the class
+;; BOB is teaching nothing
+;; BOB has done his class
+;; end around for teacher class
+;; NIL
+
+(work m1)
+;; start around for teacher class
+;; JOHN is preparing the class
+;; JOHN's major is math
+;; JOHN is teaching math
+;; JOHN has done his class
+;; end around for teacher class
+;; NIL
+</code></pre>
+
+<p><br/> <br />
+These <code>:before</code>, <code>:after</code>, <code>:around</code> are auxiliary methods. Superclass's auxiliary methods are automatically called when you invoke subclass's a primary method. Of course, we can define subclass's auxiliary methods.</p>
+
+<pre><code class="lisp">(defmethod work :before ((t1 math-teacher))
+  (format t "Math teacher ~a is preparing the math class~%"
+    (slot-value t1 'name)))
+
+(defmethod work :after ((t1 math-teacher))
+  (format t "Math teacher ~a has done his math class~%"
+    (slot-value t1 'name)))
+
+(defmethod work :around ((t1 math-teacher))
+  (format t "start around for math-teacher class~%")
+  (let ((result (call-next-method)))
+    (format t "end around for math-teacher class~%")
+    result))
+
+(work m1)
+;; start around for math-teacher class
+;; start around for teacher class
+;; Math teacher JOHN is preparing the math class
+;; JOHN is preparing the class
+;; JOHN's major is math
+;; JOHN is teaching math
+;; JOHN has done his class
+;; Math teacher JOHN has done his math class
+;; end around for teacher class
+;; end around for math-teacher class
+;; NIL
+</code></pre>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(../content/images/2014/Jun/Profile-1.jpg); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="index.html">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, Functional Programming</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '3';
+  var disqus_url = 'http://1ambda.github.io/clos-common-lisp-object-system/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
