@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 10 Aug 2014 04:51:49 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Javascript Inheritance]]></title><description><![CDATA[<h2 id="prototypeinheritance">Prototype Inheritance?</h2>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 10 Aug 2014 05:03:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Javascript Inheritance]]></title><description><![CDATA[<h2 id="prototypeinheritance">Prototype Inheritance?</h2>
 
 <p>자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다.</p>
 
@@ -238,7 +238,7 @@ console.log( newed.x ); // 0;
 {
   var obj = {};
   obj.__proto__ = Shape.prototype;
-  return Shape.apply(obj, arguments); 
+  return Shape.apply(obj, arguments) || obj; 
 }
 </code></pre>
 

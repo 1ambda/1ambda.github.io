@@ -330,7 +330,7 @@ console.log( newed.x ); // 0;
 {
   var obj = {};
   obj.__proto__ = Shape.prototype;
-  return Shape.apply(obj, arguments); 
+  return Shape.apply(obj, arguments) || obj; 
 }
 </code></pre>
 
