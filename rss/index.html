@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 10 Aug 2014 05:03:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Javascript Inheritance]]></title><description><![CDATA[<h2 id="prototypeinheritance">Prototype Inheritance?</h2>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 19 Aug 2014 13:02:01 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[MySQL Derived Table, Correlated Query]]></title><description><![CDATA[<h3 id="correlatedvsnoncorrelated">Correlated vs Non-Correlated</h3>
+
+<p>아래는 <strong>Non-Correlated</strong> 쿼리다. 즉 내부(Inner) 쿼리가 외부(Outer) 쿼리를 참조하지 않는다.</p>
+
+<pre><code class="mysql">SELECT name  
+FROM city  
+WHERE population &gt; (SELECT population  
+                    FROM city
+                    WHERE name = 'new york');
+</code></pre>
+
+<p>반면 아래는 <strong>Correlated</strong> 쿼리다. 내부 쿼리가 <code>co.code</code> 로 외부 쿼리를 참조한다.</p>
+
+<pre><code class="mysql">SELECT name  
+FROM country as co  
+WHERE EXISTS (SELECT *  
+              FROM city
+              WHERE population &gt; 900 AND co.code = country_code);
+</code></pre>
+
+<p><strong>Correlated Query</strong> 는 이렇게 외부 쿼리에 대한 참조를 가지고 있기 때문에 외부 쿼리의 각 <strong>Row</strong> 마다 서브쿼리가 실행되고, 결국 성능은 떨어진다. 다시 말해 일반적인 서브 쿼리<strong>(Non-Correlated)</strong> 라면 <code>N + M</code> 번 만큼 연산을 수행하지만, <strong>Correlated</strong> 서브쿼리라면 <code>N x M</code> 만큼의 연산을 수행한다.</p>
+
+<p>이런 <strong>Correlated Query</strong> 는 <strong>Join</strong> 구문을 이용한 쿼리로 변경할 수 있다.</p>
+
+<pre><code class="mysql">SELECT DISTINCT country.name  
+FROM country  
+JOIN city ON country.code = city.country_code  
+WHERE city.population &gt; 900;  
+</code></pre>
+
+<h3 id="derivedtable">Derived Table</h3>
+
+<p>이런 성능 저하 때문에 일반적으로는 Correlated Subquery 대신에 <strong>Derived Table</strong> 을 사용한다. <code>FROM</code> 혹은 <code>JOIN</code> 구문에서 사용하는 서브쿼리를 <strong>Derived Table</strong> 이라 부른다. 본질적으로 <strong>Derived Table</strong> 은 실제 존재하는 테이블이 아니라, 쿼리 내에서만 존재하는 <strong>Inline View</strong> 다.</p>
+
+<pre><code class="mysql">SELECT LastName, FirstName  
+FROM  
+    (SELECT * FROM Employee
+     WHERE State = "NY") AS EmployeeDerivedTable
+WHERE LastName = "Smith"  
+ORDER BY FirstName  
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<ol>
+<li><p><a href='http://sarahdba.blogspot.kr/2009/08/examples-of-bad-queries.html' >Example of bad queries</a></p></li>
+<li><p><a href='http://www.programmerinterview.com/index.php/database-sql/derived-table-vs-subquery/' >Derived Table vs Subquery</a></p></li>
+<li><p><a href='http://stackoverflow.com/questions/17268848/difference-between-subquery-and-correlated-subquery' >Difference between subquery and correlated subquery</a></p></li>
+</ol>]]></description><link>http://1ambda.github.io/mysql-derived-table/</link><guid isPermaLink="false">94d49870-33be-4d17-abd5-1d04f6ff0f22</guid><category><![CDATA[mysql]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 19 Aug 2014 12:59:57 GMT</pubDate></item><item><title><![CDATA[Javascript Inheritance]]></title><description><![CDATA[<h2 id="prototypeinheritance">Prototype Inheritance?</h2>
 
 <p>자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다.</p>
 
