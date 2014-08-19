@@ -37,10 +37,20 @@
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
   </script>
 
-<!--load css if windows -->
-  <script type="text/javascript"> 
-  <![CDATA[ if(Modernizr.windows) document.write('<link rel="stylesheet" type="text/css" href="/assets/1ambda/1ambda_windows.css"');]]> 
-  </script> 
+  <!--load css if windows -->
+  <script type="text/javascript">
+    console.log(Modernizr.windows);
+
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
 
 
   
