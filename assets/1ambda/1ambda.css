@@ -1,11 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Ubuntu:500);
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
 
 pre, code {
   background: #f8f8f8;
   border-radius: 10px;
-  font-family: 'Droid Sans', sans-serif;
+  font-family: 'Droid Sans Mono', sans-serif;
 }
 
 section {
