@@ -23,10 +23,15 @@
   <link rel="stylesheet" type="text/css" href="../../assets/stylesheets/xpressio.css" />
   <link rel="stylesheet" type="text/css" href="../../assets/1ambda/1ambda.css" />
   <script type="text/javascript" src="../../assets/1ambda/modernizr.js">
-</script>
+  </script>
   <script type="text/javascript" src="../../assets/1ambda/detectizr.min.js">
-</script>
-  
+  </script>
+
+<!--load css if windows -->
+  <script type="text/javascript"> 
+  <![CDATA[ if(Modernizr.windows) document.write('<link rel="stylesheet" type="text/css" href="/assets/1ambda/1ambda_windows.css"');]]> 
+  </script> 
+
 
   
   <link rel="stylesheet" href="../../assets/highlight/styles/github.css">
