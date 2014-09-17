@@ -1,5 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 16 Sep 2014 12:03:06 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Functional Programming in Scala, Chapter 1]]></title><description><![CDATA[<p>2014-09-16, <strong>Functional Programming in Scala</strong>, Coursera</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 17 Sep 2014 17:20:26 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Practical Common Lisp, Chapter 7]]></title><description><![CDATA[<h3 id="macrosstandardcontrolconstrucs">MACROS : STANDARD CONTROL CONSTRUCS</h3>
+
+<blockquote>
+  <p>All programmers should be used to the idea that the definition of a language can include a standard library of functionality that is implemented in terms of the "core" language functionality that could have benn implemented by any programmer on top of the language if it hand't been defined as part of the standard library.</p>
+</blockquote>
+
+<p>다른 언어에서 특정 기능이 부족할때 새로운 클래스나 메소드를 정의함으로서 standard library 를 확장할 수 있지만, Lisp 은 이 방법 외에도 <strong>Macro</strong> 라는 조금 다른 방식을 제공한다.</p>
+
+<p>각 매크로는<code>s-exp</code> 가 어떻게 lisp forms 으로 확장될지를 결정하는 자신만의 <strong>Syntax</strong> 를 정의할 수 있다. 이런 <strong>Macro</strong> 의 기능으로 인해서 <strong>Language</strong> 자체의 <strong>Syntax</strong> 가 확장될 수 있다. 대표적인 예가 <code>WHEN</code>, <code>DOLIST</code>, <code>LOOP</code> 와 같은 control constructs 와 <code>DEFUN</code>, <code>DEFPARAMETER</code> 과 같은 definitinal forms 들이다.</p>
+
+<h4 id="whenandunless">WHEN and UNLESS</h4>
+
+<p><code>(if condition then-form [else-form])</code> 은 <code>then-form</code> 과 <code>else-form</code> 이 single lisp form 이어야 한다는 제한을 가지고 있다. </p>
+
+<p>그렇기 때문에 스팸 메일을 받았을때, 폴더에 저장하고, 데이터베이스에 업데이트 하려고 할 때 <code>if</code> 구문을 다음과 같이 작성하면, 제대로 작동하지 않는다. </p>
+
+<pre><code class="lisp">(if (spam-p current-message)
+    (file-in-spam-folder current-message)
+    (update-spam-database current-message))
+</code></pre>
+
+<p>이 코드의 경우 <code>update-spam-database</code> 함수는 <code>if-then</code> 이 아니라 <code>else-then</code> 에 붙어있는 form 으로 인식되어 의도했던 바 대로 실행되지 않는다.</p>
+
+<p><code>progn</code> 을 이용하면, 여러 form 을 묶을 수 있기 때문에 다음과 같이 작성하면 제대로 동작한다.</p>
+
+<pre><code class="lisp">(if (spam-p current-message)
+    (progn
+      (file-in-spam-folder current-message)
+      (update-spam-database current-message)))
+</code></pre>
+
+<p>그러나 매번 <code>progn</code> 을 써야한다는 사실이 귀찮고, <code>if</code> 와 <code>progn</code> 의 조합으로 해당 역할을 해낼 수 있다는걸 깨달았으므로, 다음과 같은 인터페이스를 가지는 <code>when</code> 매크로를 작성해보자.</p>
+
+<pre><code class="lisp">(when (spam-p current-message)
+  (file-in-spam-folder current-message)
+  (update-spam-database current-message))
+
+(defmacro when (condition &amp;rest body)
+  `(if ,condition (progn ,@body)))
+
+(defmacro unless (condition &amp;rest body)
+  `(if (not ,condition) (progn ,@body)))
+</code></pre>
+
+<h4 id="cond">COND</h4>
+
+<p><code>if</code> 같은 경우도, 중첩되면 보기가 싫어질 수 있다.</p>
+
+<pre><code class="lisp">(if a
+    (do-x)
+    (if b
+        (do-y)
+        (do-z)))
+</code></pre>
+
+<p>이를 위해서 <code>cond</code> 매크로를 만들어 보자.</p>
+
+<pre><code class="lisp">(defmacro cond (&amp;rest body)
+  (when body
+    (let ((clause (first body)))
+      `(if ,(first clause) (progn ,@(rest clause))
+           (cond1 ,@(rest body))))))
+</code></pre>
+
+<h4 id="andorandnot">AND, OR, and NOT</h4>
+
+<p><code>AND</code> 와 <code>OR</code> 같은 경우 <strong>short-circuit</strong> 을 구현하기 위해서는, 두번 째 인자를 평가하지 않아야 하는데, 일반 함수로는 인자의 평가 시기를 조절하기 불가능하고, 매크로를 이용하면 그럴 수 있다.</p>
+
+<pre><code class="lisp">(defmacro (a b)
+</code></pre>
+
+<h4 id="looping">Looping</h4>
+
+<p>Lisp 의 25가지 special operators 는 직접적으로 Looping 을 지원하지 <strong>않기</strong> 때문에 Lisp 의 모든 looping control constructs 는 이 specical operator 를 이용해 만든 Macro 다.</p>
+
+<p><code>DO</code> 는 강력하지만, less expressie 하기 때문에 <code>DO</code> 위에 만들어진 <code>DOTIMES</code> 와 <code>DOLIST</code> 를 제공한다. <code>LOOP</code> 는 non-lispy, english-like 스타일의 문법을 제공한다.</p>
+
+<h4 id="dolistanddotimes">DOLIST and DOTIMES</h4>
+
+<p>아래는 <code>DOLIST</code> 와 <code>DOTIMES</code> 의 문법과 사용법이다.</p>
+
+<pre><code class="lisp">;; syntax
+(dolist (var list-form)
+  body-form*)
+
+(dotimes (var count-form)
+  body-form*)
+
+;; example
+(dolist (x '(1 2 3)) (princ x) (princ x)) ;; 112233
+(dotimes (x 4) (princ x) (princ x)) ;; 00112233
+(dotimes (x 4) (print x) (if (= (/ x 2) 0) (return))) ;; 0 1 2
+(dotimes (x 20)
+       (dotimes (y 20)
+         (format t "x: ~d, y: ~d~%" x y)))
+</code></pre>
+
+<h4 id="do">DO</h4>
+
+<p><code>DO</code> 의 Syntax 와 사용법은 아래와 같다.</p>
+
+<pre><code class="lisp">;; Syntax
+(do (variable-definitions*)
+    (end-test-form result-form*)
+  statement*)
+
+;; Usage : fibonacci
+(do ((n 0 (+1 n))
+     (cur 0 next
+     (next 1 (+ cur next)))
+    ((=10 n) cur))
+
+;; Usage: omiited result-form
+;; same as (dotimes (i 4) (print i))
+(do ((i 0 (1+ i)))
+    ((&gt;= i 4))
+   (print i))
+</code></pre>]]></description><link>http://1ambda.github.io/top-level-form-common-lisp/</link><guid isPermaLink="false">24b1d760-68b1-4861-b657-28f45fccdcc8</guid><category><![CDATA[Lisp]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Sep 2014 17:18:47 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 1]]></title><description><![CDATA[<p>2014-09-16, <strong>Functional Programming in Scala</strong>, Coursera</p>
 
 <h3 id="11programmingparadigms">1.1 Programming Paradigms</h3>
 
