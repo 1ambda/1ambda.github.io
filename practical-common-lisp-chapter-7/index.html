@@ -177,7 +177,16 @@
 
 <p><code>AND</code> 와 <code>OR</code> 같은 경우 <strong>short-circuit</strong> 을 구현하기 위해서는, 두번 째 인자를 평가하지 않아야 하는데, 일반 함수로는 인자의 평가 시기를 조절하기 불가능하고, 매크로를 이용하면 그럴 수 있다.</p>
 
-<pre><code class="lisp">(defmacro (a b)
+<pre><code class="lisp">;; AND and OR macros
+(defmacro and1 (x &amp;rest other)
+  `(if ,(not other)
+       ,x
+       (if ,x (and1 ,@other) nil)))
+
+(defmacro or1 (x &amp;rest other)
+  `(if ,(not other)
+       ,x
+       (if ,x ,x (or1 ,@other))))
 </code></pre>
 
 <h4 id="looping">Looping</h4>

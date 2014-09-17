@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 17 Sep 2014 17:29:22 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Practical Common Lisp, Chapter 7]]></title><description><![CDATA[<h3 id="macrosstandardcontrolconstrucs">MACROS : STANDARD CONTROL CONSTRUCS</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 17 Sep 2014 17:31:48 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Practical Common Lisp, Chapter 7]]></title><description><![CDATA[<h3 id="macrosstandardcontrolconstrucs">MACROS : STANDARD CONTROL CONSTRUCS</h3>
 
 <blockquote>
   <p>All programmers should be used to the idea that the definition of a language can include a standard library of functionality that is implemented in terms of the "core" language functionality that could have benn implemented by any programmer on top of the language if it hand't been defined as part of the standard library.</p>
@@ -67,7 +67,16 @@
 
 <p><code>AND</code> 와 <code>OR</code> 같은 경우 <strong>short-circuit</strong> 을 구현하기 위해서는, 두번 째 인자를 평가하지 않아야 하는데, 일반 함수로는 인자의 평가 시기를 조절하기 불가능하고, 매크로를 이용하면 그럴 수 있다.</p>
 
-<pre><code class="lisp">(defmacro (a b)
+<pre><code class="lisp">;; AND and OR macros
+(defmacro and1 (x &amp;rest other)
+  `(if ,(not other)
+       ,x
+       (if ,x (and1 ,@other) nil)))
+
+(defmacro or1 (x &amp;rest other)
+  `(if ,(not other)
+       ,x
+       (if ,x ,x (or1 ,@other))))
 </code></pre>
 
 <h4 id="looping">Looping</h4>
