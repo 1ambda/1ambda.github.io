@@ -1,5 +1,516 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 22 Sep 2014 03:29:46 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Deadlock]]></title><description><![CDATA[<p>데드락 그 자체보다는, 데드락을 어떻게 해결하는가가 더 중요한 것 같다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 22 Sep 2014 13:59:18 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Algorithm I, Chapter 1]]></title><description><![CDATA[<p>Algorithm Part 1, Coursera</p>
+
+<h3 id="unionfind">Union Find</h3>
+
+<h4 id="dynamicconnectivity">Dynamic Connectivity</h4>
+
+<p>N 개의 오브젝트가 있을때, </p>
+
+<ul>
+<li><strong>Union command:</strong> connect two objects  </li>
+<li><strong>Find/connected query:</strong> is there a path connecting the two objects?</li>
+</ul>
+
+<p>이렇게 두 경로가 연결되어있는지 아닌지를 판별하는 알고리즘은 다양하게 활용될 수 있다.</p>
+
+<ul>
+<li>Pixels in adigital photo  </li>
+<li>Computers in a network  </li>
+<li>Friends in a social network  </li>
+<li>Transistors in a computer chip  </li>
+</ul>
+
+<h4 id="modeling">Modeling</h4>
+
+<p>connection 에서 몇개의 성질들을 뽑아낼 수 있는데,</p>
+
+<ul>
+<li><strong>Reflexive:</strong> <em>p</em> is connected to <em>p</em>  </li>
+<li><strong>Symetric:</strong> if <em>p</em> is connected to <em>q</em>, then <em>q</em> is connected to <em>p</em>  </li>
+<li><strong>Transitive:</strong> if <em>p</em> is connected to <em>q</em> and <em>q</em> is connected to <em>r</em>, then <em>p</em> is also connected to <em>r</em>  </li>
+<li><strong>Connected Components:</strong> mamximum set of objects that are mutually connected</li>
+</ul>
+
+<p>이제 연산들을 정의해 보면</p>
+
+<ul>
+<li><strong>Find query:</strong> Check if two objects are in the same component  </li>
+<li><strong>Union command:</strong> Replace components containing two objects with their union</li>
+</ul>
+
+<p>연산을 구현할때는 아래의 3가지 요소를 고려해야한다.</p>
+
+<ol>
+<li>Number of objects N can be huge  </li>
+<li>Number of operations M can be huse  </li>
+<li>Find queries and union command may be intermixed</li>
+</ol>
+
+<pre><code class="java">;; initialize union-find data structure with N objects (0 to N-1)
+class UF(int N) 
+
+;; add connection between p and q
+void union(int p, int q)
+
+;; are p and q in the same component?
+boolean connected(int p, int q)
+
+;; component identifier for p (0 to N-1)
+int find(int p)
+
+;; number of components
+int count()  
+</code></pre>
+
+<h3 id="quickfind">Quick-find</h3>
+
+<p>Dynamic Connectivity 를 푸는 한 방법으로 <strong>eager approache</strong> 를 사용하는 <strong>Quick-find</strong> 가 있다. </p>
+
+<p>데이터 구조는 배열을 사용하며 <code>int id[]</code>, 만약 <em>p</em> 와 <em>q</em> 가 연결되어있다면 똑같은 값을 가진다. 따라서</p>
+
+<ul>
+<li><strong>connected:</strong> <em>p</em> 와 <em>q</em> 가 같은 값을 가지는지 살핀다.  </li>
+<li><strong>union:</strong> <code>id[p]</code> 와 같은 가지는 모든 인덱스의 값을 <code>id[q]</code> 로 바꾼다  </li>
+</ul>
+
+<p>구현은 다음과 같다.</p>
+
+<pre><code class="java">// UnionFind.java
+public interface UnionFind {  
+    public void union(int p, int q);
+    public boolean connected(int p, int q);
+}
+
+// QuickFind.java
+public class QuickFind implements UnionFind {
+
+    private int[] id;
+
+    public QuickFind(int N) {
+        this.id = new int[N];
+
+        for(int i = 0; i &lt; this.id.length; i++) {
+            this.id[i] = i;
+        }
+    }
+
+    public void union(int p, int q) {
+        if (!connected(p, q)) {
+            int pValue = id[p];
+
+            // replace id values same as p's into the value of q
+            for(int i = 0; i &lt; this.id.length; i++) {
+                if (id[i] == pValue) {
+                    id[i] = id[q];
+                }
+            }
+        }
+    }
+
+    public boolean connected(int p, int q) {
+        return id[p] == id[q];
+    }
+
+}
+
+// QuickFindTest.java
+import static org.hamcrest.CoreMatchers.*;  
+import static org.junit.Assert.*;
+
+import org.junit.Before;  
+import org.junit.Test;
+
+
+public class QuickFindTest {
+
+    private UnionFind uf;
+
+    @Before
+    public void setup() {
+        uf = new QuickFind(10);
+    }
+
+    @Test
+    public void testConnected() {
+        assertThat(uf.connected(0, 1), is(false));
+    }
+
+    @Test
+    public void testUnion() {
+        assertThat(uf.connected(0, 1), is(not(true)));
+
+        uf.union(0, 1);
+        uf.union(0, 2);
+
+        assertThat(uf.connected(0, 1), is(true));
+        assertThat(uf.connected(1, 2), is(true));
+    }
+}
+</code></pre>
+
+<p><code>find(connected)</code> 연산은 <strong>O(1)</strong>, <code>union</code> 연산은 <strong>O(n)</strong> 의 복잡도를 가진다. 강좌에서는 각각 <strong>2 array accesses</strong>, <strong>at most 2N+1 array accesses</strong> 로 표현했다. 따라서 <strong>Quick-find</strong> 의 Cost Model 은 아래와 같다. (Order of growth of number of array accesses)</p>
+
+<ul>
+<li><strong>initialize:</strong> N  </li>
+<li><strong>union:</strong> N  </li>
+<li><strong>conncected:</strong> 1</li>
+</ul>
+
+<p>이런 <strong>Quick-find</strong> 방법 문제점은 <code>union</code> 연산이 너무 비싸다는 것이다. N개의 오브젝트에 대해 N번의 Union 연산을 수행하면 <strong>N^2</strong>, 즉 Quadratic(제곱)의 비용이 드는데, 이건 큰 문제다.</p>
+
+<blockquote>
+  <p>Quadratic algorithms don't scale with technology.</p>
+</blockquote>
+
+<p>컴퓨터가 10배 빨라지고, 메모리도 10 배만큼 늘었다고 하자. <strong>quadratic algorithm</strong> 으로는 문제의 사이즈가 10배가 되면, 걸리는 시간은 100배가 된다. 연산 시간이 10배 빨라졌으므로 문제를 해결하려면 여전히 10배의 시간이 걸린다. 즉 기술이 10배나 발전해도, 문제의 사이즈에 해당하는 시간이 여전히 걸리는 것이다. </p>
+
+<p><strong>Quick-find</strong> 접근 법은, <strong>find</strong> 연산만 빠르다.</p>
+
+<h3 id="quickunion">Quick-union</h3>
+
+<p><strong>Quick-union</strong> 은 알고리즘 디자인적으로 <strong>lazy approach</strong> 라 볼 수 있다. <strong>Quick-find</strong> 와 같은 자료 구조(배열)을 사용하나 자료 구조에 대한 interpretation 이 다르다. </p>
+
+<p align="center"><br/><img src='http://www.timgittos.com/images/pa1/quick-union-overview.png'  />(<a href='http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/' >http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/</a>)<br/></p>
+
+<p>이 경우 연산은 각각 아래와 같이 생각할 수 있다.</p>
+
+<ul>
+<li><strong>find:</strong> Check if <em>p</em> and <em>q</em> have the same root  </li>
+<li><strong>union:</strong> To mege components containing <em>p</em> and <em>q</em>, set the id of <em>p</em>'s root to the id of <em>q</em>'s root</li>
+</ul>
+
+<p>구현은 아래와 같다. </p>
+
+<pre><code class="java">// UnionFind.java
+// same as above
+
+// QuickUnion.java
+public class QuickUnion implements UnionFind {
+
+    private int[] id;
+
+    public QuickUnion(int N) {
+        this.id = new int[N];
+
+        for(int i = 0; i &lt; N; i++) {
+            this.id[i] = i;
+        }
+    }
+
+    public int getRoot(int n) {
+        int root = id[n];
+
+        while(root != id[root]) {
+            root = id[root];
+        }
+
+        return root;
+    }
+
+    public void union(int p, int q) {
+        if (!connected(p, q)) {
+            int pRoot = this.getRoot(p);
+            int qRoot = this.getRoot(q);
+            id[pRoot] = qRoot;
+        }
+    }
+
+    public boolean connected(int p, int q) {
+        return getRoot(p) == getRoot(q);
+    }
+}
+</code></pre>
+
+<pre><code class="java">// QuickUnionTest.java
+import static org.hamcrest.CoreMatchers.is;  
+import static org.hamcrest.CoreMatchers.not;  
+import static org.junit.Assert.assertThat;  
+import static org.mockito.Mockito.*;
+
+import org.junit.Before;  
+import org.junit.Test;  
+import org.mockito.Mockito;
+
+public class QuickUnionTest {
+
+    UnionFind uf;
+
+    @Before
+    public void setup() {
+        uf = new QuickFind(10);
+    }
+
+    @Test
+    public void testGetRoot() {
+        QuickUnion spy = Mockito.spy(new QuickUnion(5));
+
+        assertThat(spy.getRoot(0), is(0));
+        assertThat(spy.getRoot(1), is(1));
+        assertThat(spy.getRoot(2), is(2));
+        assertThat(spy.getRoot(3), is(3));
+        assertThat(spy.getRoot(4), is(4));
+
+        spy.union(0, 1);
+        assertThat(spy.getRoot(0), is(1));
+        assertThat(spy.getRoot(1), is(1));
+
+        spy.union(2, 3);
+        spy.union(4, 2);
+        assertThat(spy.getRoot(2), is(3));
+        assertThat(spy.getRoot(3), is(3));
+        assertThat(spy.getRoot(4), is(3));
+    }
+
+    @Test
+    public void testConnected() {
+        // initial     : 0 1 2 3 4
+        // union(0, 1) : 1 1 2 3 4
+        // union(2, 3) : 1 1 3 3 4
+        // union(3, 1) : 1 1 3 1 4
+
+        //   1   4
+        //  0 3
+        //    2 
+
+        QuickUnion spy = Mockito.spy(new QuickUnion(5)); 
+        when(spy.getRoot(1)).thenReturn(1);
+        when(spy.getRoot(0)).thenReturn(1);
+        when(spy.getRoot(3)).thenReturn(1);
+        when(spy.getRoot(2)).thenReturn(1);
+        when(spy.getRoot(4)).thenReturn(4);
+
+        assertThat(spy.connected(0, 4), is(not(true)));
+        assertThat(spy.connected(1, 4), is(not(true)));
+        assertThat(spy.connected(2, 4), is(not(true)));
+        assertThat(spy.connected(3, 4), is(not(true)));
+
+        assertThat(spy.connected(0, 1), is(true));
+        assertThat(spy.connected(0, 2), is(true));
+        assertThat(spy.connected(0, 3), is(true));
+        assertThat(spy.connected(1, 2), is(true));
+        assertThat(spy.connected(1, 3), is(true));
+        assertThat(spy.connected(2, 3), is(true));
+    }
+
+    @Test
+    public void testUnion() {
+        QuickUnion spy = Mockito.spy(new QuickUnion(5));
+        when(spy.getRoot(0)).thenReturn(0);
+        when(spy.getRoot(1)).thenReturn(1);
+        when(spy.getRoot(2)).thenReturn(2);
+        when(spy.getRoot(3)).thenReturn(3);
+        when(spy.getRoot(4)).thenReturn(4);
+
+        spy.union(0, 1);
+        when(spy.getRoot(0)).thenReturn(1);
+        spy.union(2, 3);
+        when(spy.getRoot(2)).thenReturn(3);
+        spy.union(2, 0);
+        when(spy.getRoot(2)).thenReturn(1);
+        when(spy.getRoot(3)).thenReturn(1);
+
+        verify(spy, times(1)).connected(0, 1);
+        verify(spy, times(1)).connected(2, 3);
+        Mockito.reset(spy);
+
+        assertThat(spy.connected(0, 1), is(true));
+        assertThat(spy.connected(2, 3), is(true));
+        assertThat(spy.connected(2, 0), is(true));
+        assertThat(spy.connected(1, 3), is(true));
+        assertThat(spy.connected(0, 3), is(true));
+    }   
+}
+</code></pre>
+
+<p>이 경우 <strong>Cost Model</strong> 은 아래와 같다.</p>
+
+<ul>
+<li><code>getRoot</code>: depth of <code>n</code> array accesses. <strong>O(n)</strong> in worst case   </li>
+<li><code>connected</code>: depth of <code>q</code> and <code>p</code> array accesses. <strong>O(n)</strong> in worst case</li>
+<li><code>union</code>: depth of <code>q</code> and <code>p</code> array accesses. <strong>O(n)</strong> in worse case</li>
+</ul>
+
+<p><strong>Quick-find</strong> 의 defect 는 
+- <code>union</code> is too expensive <br />
+- Trees are flat but too expensive keep them flat.</p>
+
+<p><strong>Quick-union</strong> 의 defect 는 
+- Trees can get tall <br />
+- <code>find(connected)</code> is too expensive (could be N array accesses)</p>
+
+<h3 id="quickunionimprovement">Quick-union Improvement</h3>
+
+<h4 id="1weightedquickunion">1. Weighted Quick-union</h4>
+
+<p>기본 아이디어는 간단하다. <code>union</code> 연산을 수행할때 낮은 트리가 높은 트리에 속하게 함으로써 <strong>Worst case</strong> 를 방지하는 것이다. (마치 Balanced Tree 처럼)</p>
+
+<p align="center"><br/><img src='http://my.csdn.net/uploads/201206/12/1339479587_5986.png'  />(<a href='http://my.csdn.net/uploads/201206/12/1339479587_5986.png' >http://my.csdn.net/uploads/201206/12/1339479587_5986.png</a>)<br/></p>
+
+<p>다른것은 모두 같지만, 트리의 크기를 비교해야 하기 때문에 트리의 크기를 저장할 배열이 필요하며, 이런 트리 크기를 비교하고 변경할 로직이 <code>union</code> 메소드에 추가되어야 한다.</p>
+
+<pre><code class="java">// UnionFind.java is same as above
+// QuickUnion.java is same as above
+// WeightedQuickUnion.java
+
+public class WeightedQuickUnion extends QuickUnion {
+
+    int treeSize[];
+
+    public WeightedQuickUnion(int N) {
+        super(N);
+
+        this.treeSize = new int[N];
+
+        for(int i = 0; i &lt; this.treeSize.length; i++)  {
+            this.treeSize[i] = 1;
+        }
+    }
+
+    // for debug
+    public int getTreeSize(int index) {
+        return treeSize[index];
+    }
+
+    @Override
+    public void union(int p, int q) {
+        if(!connected(p, q)) {
+            int qRoot = getRoot(q);
+            int pRoot = getRoot(p);
+
+            if (treeSize[qRoot] &gt;= treeSize[pRoot]) {
+                id[pRoot] = qRoot;
+                treeSize[qRoot] += treeSize[pRoot];
+            } else {
+                id[qRoot] = pRoot;
+                treeSize[pRoot] += treeSize[qRoot];
+            }
+
+        }
+    }
+}
+</code></pre>
+
+<pre><code class="java">WeightedQuickUnionTest.java  
+import static org.hamcrest.CoreMatchers.*;  
+import static org.junit.Assert.*;
+
+import org.junit.Test;  
+import org.mockito.Mockito;
+
+public class WeightedQuickUnionTest {
+
+    WeightedQuickUnionTest spy;
+
+    @Test
+    public void testUnion() {
+        WeightedQuickUnion spy = Mockito.spy(new WeightedQuickUnion(5));
+
+        assertThat(spy.connected(0, 1), is(not(true)));
+        // 0 1 -&gt; 1 1
+        spy.union(0, 1);
+        assertThat(spy.connected(1, 0), is(true));
+        assertThat(spy.getTreeSize(0), is(1));
+        assertThat(spy.getTreeSize(1), is(2));
+
+        // 1 1 2 -&gt; 1 1 1 
+        spy.union(0, 2);
+        assertThat(spy.connected(0, 1), is(true));
+        assertThat(spy.connected(1, 2), is(true));
+        assertThat(spy.connected(0, 2), is(true));
+
+        assertThat(spy.getRoot(0), is(1));
+        assertThat(spy.getRoot(1), is(1));
+        assertThat(spy.getRoot(2), is(1));
+
+        // 1 1 1 4 4
+        spy.union(3, 4);
+        assertThat(spy.connected(1, 3), is(false));
+        assertThat(spy.connected(4, 3), is(true));
+
+        // 1 1 1 4 1
+        spy.union(2,  4);
+        assertThat(spy.connected(4, 3), is(true));
+        assertThat(spy.getRoot(4), is(1));
+        assertThat(spy.getRoot(3), is(1));
+    }
+}
+</code></pre>
+
+<p>이 때 <strong>Cost Model</strong> 은</p>
+
+<ul>
+<li><code>find</code>: taks time proportional to depth of <em>p</em> and <em>q</em> <strong>O(logN)</strong></li>
+<li><code>union</code>: take constant time, given roots (without roots <strong>O(logN)</strong>)</li>
+</ul>
+
+<p>같은 사이즈의 트리끼리 merged 도야 depth 가 1 깊어지므로 N개의 원소에 대해 <strong>Weighted Quick-union</strong> 이 구성하는 트리는 아무리 깊어봐야(at most) <strong>lg <em>N</em></strong> 이다. </p>
+
+<h4 id="2pathcompression">2. Path Compression</h4>
+
+<p>또 다른 <strong>Quick-union</strong> 개선 방안은, <strong>Path Compression</strong> 으로 루트를 탐색할때마다, 루트값을 새로 고쳐 써 다음번에 탐색할때 탐색 시간을 줄이는 방법이다.</p>
+
+<pre><code class="java">// WeightedQuickUnion.java
+
+...
+...
+    public int getRoot(int n) {
+
+        int root = id[n];
+
+        while(root != id[root]) {
+            id[root] = id[id[root]];
+            root = id[root];
+        }
+
+        return root;
+    }
+...
+...
+</code></pre>
+
+<p><strong>WQUPC(Weighted Quick-union with path compression)</strong> 은 <a href='http://upload.wikimedia.org/math/6/b/3/6b3721001c02b39a0da7d57a129e7661.png' >iterated logarithm (<strong>lg*<em>N</em></strong>)</a> 의 복잡도를 가진 다는 것이 증명 되었다. <strong>WQUPC</strong> 는 실제로 데이터를 읽어 들이는 비용도 있기 때문에 이론적으로는 linear 하지 않으나, 실제로는 linear 할 수 있다. </p>
+
+<p><strong><em>N</em></strong> 개의 오브젝트를 초기화 하고 여기에 대해 <strong><em>M</em></strong> 번의 <code>union-find</code> 연산을 수행한다면 <strong>Worst case</strong> 에 대해 복잡도를 정리해 보면</p>
+
+<ul>
+<li><strong>Quick-find:</strong> M * N  </li>
+<li><strong>Quick-union:</strong> M * N  </li>
+<li><strong>Weighted Quick-union:</strong> N + M <em>logN</em> (array 를 balanced 하게 만든다.)  </li>
+<li><strong>Quick-union with path compression:</strong> N + M <em>logN</em> (array 를 flat 하게 만든다.)  </li>
+<li><strong>WQUPC:</strong> N + M lg*<em>N</em></li>
+</ul>
+
+<p>이렇게 보면 알고리즘의 복잡도는 별거 없어보이는데, 사실 무지막지하게 큰 차이다. 10^9 개의 오브젝트에 대해서 10^9 연산을 할 경우 <strong>Quick-find</strong> 를 사용할때 30년이 걸린다면 <strong>WQUPC</strong> 는 6초만에 해결할 수 있다. 다시 말해, 알고리즘은 슈퍼컴퓨터도 별 도움이 되지 못하는 문제를 해결할 수 있다.</p>
+
+<h3 id="applicationsofunionfind">Applications of Union-find</h3>
+
+<ul>
+<li>Percolation  </li>
+<li>Dynmaic Connectivity  </li>
+<li>Lear common ancestor  </li>
+<li>Kruskal's minimum spanning tree</li>
+<li>and so on  </li>
+</ul>
+
+<h4 id="percolation">Percolation</h4>
+
+<p align="center"><br/><img src='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolates.png'  />(<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html' >http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
+
+<p><strong>Percolation</strong> 이란, <em>N</em>-by-<em>N</em> 의 Grid 에서 각 opened-site 는 확률 <em>p</em> blocked-site 는 <em>1-p</em> 의 확률을 가진다. 이 모델은 주로 물리 시스템을 모델링하기위해 사용된다.</p>
+
+<p>이론상 <em>N</em> 이 충분히 크면 </p>
+
+<ul>
+<li><em>p</em> > <em>p*</em> 인 지점에서는 almost certainly percolates 하고  </li>
+<li><em>p</em> &lt; <em>p*</em> 인 지점에서는 alomost certainly does not percolate 하다.</li>
+</ul>
+
+<p align="center"><br/><img src='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation-threshold20.png'  /> (<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html' >http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
+
+<p>문제는 그런 <em>p*</em> 값이 무엇이냐 하는건데, 수학적으로는 찾을 길이 없고, 컴퓨터 시뮬레이션으로는 <strong>Union-find algorithm</strong> 을 이용하면 구할 수 있다. 유명한 방법으로 <strong>Monte Carlo simulation</strong> 이 있는데, <em>N</em>-by-<em>N</em> Grid 를 blocked site 로 채우고, 랜덤하게 open site 를 만들면서 top 과 bottom 이 percolate 되는지 매번 확인한다. 연결되면, vacancy percentage 가 <em>p*</em> 에 대한 추정값이다.</p>
+
+<p>구현 방법은 각 site 를 노드로 생각하고, top 과 bottom 을 그룹으로 묶어(virtual site) top 이 bottom 과 연결되는지 매번 체크하면 된다. 자세한 내용은 <a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html' >여기</a>를 참조</p>]]></description><link>http://1ambda.github.io/union-find-algorithms-week-1/</link><guid isPermaLink="false">df59dca1-76f2-4e0c-be10-96e24881af0d</guid><category><![CDATA[Algorithm]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 22 Sep 2014 05:49:05 GMT</pubDate></item><item><title><![CDATA[Deadlock]]></title><description><![CDATA[<p>데드락 그 자체보다는, 데드락을 어떻게 해결하는가가 더 중요한 것 같다.</p>
 
 <h3 id="deadlocknecessaryconditions">Deadlock Necessary Conditions</h3>
 
