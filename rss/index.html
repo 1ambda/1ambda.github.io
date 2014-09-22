@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 22 Sep 2014 00:42:08 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Deadlock]]></title><description><![CDATA[<p>데드락 그 자체보다는, 데드락을 어떻게 해결하는가가 더 중요한 것 같다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 22 Sep 2014 03:29:46 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Deadlock]]></title><description><![CDATA[<p>데드락 그 자체보다는, 데드락을 어떻게 해결하는가가 더 중요한 것 같다.</p>
 
 <h3 id="deadlocknecessaryconditions">Deadlock Necessary Conditions</h3>
 
@@ -31,7 +31,7 @@
 
 <p><strong>Deadlock</strong>이 발생할 수 있다고 보고, 감지한 뒤 해결하는 방법이다. <strong>Deadlock</strong>을 감지하기 위해서 recourse allocation 과 process states 를 추적 해야 한다. <strong>finite state-model</strong> 등을 이용해서 termination 조건을 결정하는 방법을 사용한다고 위키에 나와있다. (오토마타는 컴파일러뿐 아니라 여러 분야에서 중요한 것 같다.)</p>
 
-<p>(1). <strong>Deadlock</strong> 을 발견한 뒤에는 <strong>Process Termiantion</strong> 을 통해 해결할 수 있다. 그러나 단순히 모든 프로세스를 종료 하게 되면, 진행중이던 computation 과 같은 리소스 들이 낭비되기 때문에 어떤 프로세스를 종료해야 가장 부담 없이 결정해야 하는데, 이 부분이 쉽지 않다. 해당 프로세스를 종료 했을 때 <strong>Deadlock</strong> 이 풀릴지 아닐지를 계산하고, priority 와 process age 를 고려해야 하기 때문에 복잡하다.</p>
+<p>(1). <strong>Deadlock</strong> 을 발견한 뒤에는 <strong>Process Termiantion</strong> 을 통해 해결할 수 있다. 그러나 단순히 모든 프로세스를 종료 하게 되면, 진행중이던 computation 과 같은 리소스 들이 낭비되기 때문에 어떤 프로세스를 종료해야 가장 리소스 낭비가 적을지 결정해야 하는데, 이 부분이 쉽지 않다. 해당 프로세스를 종료 했을 때 <strong>Deadlock</strong> 이 풀릴지 아닐지를 계산하고, priority 와 process age 를 고려해야 하기 때문에 복잡하다.</p>
 
 <p>(2). 다른 대안으로 <strong>Deadlock</strong>이 풀릴 때 까지 <strong>Resource Preemption</strong> 을 사용할 수 도 있다.</p>
 
