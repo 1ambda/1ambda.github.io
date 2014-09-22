@@ -6,7 +6,289 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
   <loc>http://1ambda.github.io/</loc>
-  <lastmod>2014-09-22T11:43:19+00:00</lastmod>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/robots.txt</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/rss</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/rss/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/about-me</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/union-find-algorithms-week-1</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/union-find-algorithms-week-1/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/union-find-algorithms-week-1/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/deadlock</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/deadlock/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/deadlock/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/practical-common-lisp-chapter-7</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/practical-common-lisp-chapter-7/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/practical-common-lisp-chapter-7/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/scala-chapter-1</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/scala-chapter-1/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/scala-chapter-1/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/mysql-derived-table</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/mysql-derived-table/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/mysql-derived-table/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/2</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/2/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/index.html</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/operating-system</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/operating-system/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lisp</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lisp/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mysql</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mysql/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/2/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/javascript-object-inheritance</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/javascript-object-inheritance/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/javascript-object-inheritance/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/clos-common-lisp-object-system</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/clos-common-lisp-object-system/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/clos-common-lisp-object-system/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/operating-system/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lisp/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mysql/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/javascript</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/javascript/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/javascript/</loc>
+  <lastmod>2014-09-22T23:14:05+00:00</lastmod>
   <changefreq>daily</changefreq>
   <priority>0.5</priority>
   </url>

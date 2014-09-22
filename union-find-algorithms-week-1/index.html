@@ -281,7 +281,7 @@ public class QuickFindTest {
 
 <p><strong>Quick-union</strong> 은 알고리즘 디자인적으로 <strong>lazy approach</strong> 라 볼 수 있다. <strong>Quick-find</strong> 와 같은 자료 구조(배열)을 사용하나 자료 구조에 대한 interpretation 이 다르다. </p>
 
-<p align="center"><br/><img src="http://www.timgittos.com/images/pa1/quick-union-overview.png" />(<a href='http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/'>http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/</a>)<br/></p>
+<p align=""><br/><img src="http://www.timgittos.com/images/pa1/quick-union-overview.png" />(<a href='http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/'>http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/</a>)<br/></p>
 
 <p>이 경우 연산은 각각 아래와 같이 생각할 수 있다.</p>
 
@@ -455,7 +455,7 @@ public class QuickUnionTest {
 
 <p>기본 아이디어는 간단하다. <code>union</code> 연산을 수행할때 낮은 트리가 높은 트리에 속하게 함으로써 <strong>Worst case</strong> 를 방지하는 것이다. (마치 Balanced Tree 처럼)</p>
 
-<p align="center"><br/><img src="http://my.csdn.net/uploads/201206/12/1339479587_5986.png" />(<a href='http://my.csdn.net/uploads/201206/12/1339479587_5986.png'>http://my.csdn.net/uploads/201206/12/1339479587_5986.png</a>)<br/></p>
+<p align=""><br/><img src="http://my.csdn.net/uploads/201206/12/1339479587_5986.png" />(<a href='http://my.csdn.net/uploads/201206/12/1339479587_5986.png'>http://my.csdn.net/uploads/201206/12/1339479587_5986.png</a>)<br/></p>
 
 <p>다른것은 모두 같지만, 트리의 크기를 비교해야 하기 때문에 트리의 크기를 저장할 배열이 필요하며, 이런 트리 크기를 비교하고 변경할 로직이 <code>union</code> 메소드에 추가되어야 한다.</p>
 
@@ -605,7 +605,7 @@ public class WeightedQuickUnionTest {
 
 <h4 id="percolation">Percolation</h4>
 
-<p align="center"><br/><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolates.png" />(<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html'>http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
+<p align=""><br/><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolates.png" />(<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html'>http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
 
 <p><strong>Percolation</strong> 이란, <em>N</em>-by-<em>N</em> 의 Grid 에서 각 opened-site 는 확률 <em>p</em> blocked-site 는 <em>1-p</em> 의 확률을 가진다. 이 모델은 주로 물리 시스템을 모델링하기위해 사용된다.</p>
 
@@ -616,7 +616,7 @@ public class WeightedQuickUnionTest {
 <li><em>p</em> &lt; <em>p*</em> 인 지점에서는 alomost certainly does not percolate 하다.</li>
 </ul>
 
-<p align="center"><br/><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation-threshold20.png" /> (<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html'>http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
+<p align=""><br/><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation-threshold20.png" /> (<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html'>http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
 
 <p>문제는 그런 <em>p*</em> 값이 무엇이냐 하는건데, 수학적으로는 찾을 길이 없고, 컴퓨터 시뮬레이션으로는 <strong>Union-find algorithm</strong> 을 이용하면 구할 수 있다. 유명한 방법으로 <strong>Monte Carlo simulation</strong> 이 있는데, <em>N</em>-by-<em>N</em> Grid 를 blocked site 로 채우고, 랜덤하게 open site 를 만들면서 top 과 bottom 이 percolate 되는지 매번 확인한다. 연결되면, vacancy percentage 가 <em>p*</em> 에 대한 추정값이다.</p>
 
