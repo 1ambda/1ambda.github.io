@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Scala for the Impatient, Chapter 1, 2, 3</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Scala for the Impatient, Chapter 1, 2, 3">
+  <meta name="twitter:description" content="Chapter 1 (1). 스칼라의 REPL 은 엄밀히 말해서 인터프리터가 아니다. 입력받은 코드를 자바 바이트코드로 컴파일 한 후 자바 가상머신에서 실행시킨뒤 결과를 돌려준다. (2). 스칼라는 문자열을 위한 추가적인 연산들을 제공하기 위해 java.lang.String 오브젝트를 StringOps 오브젝트로 변환한다. "Hello".intersect("World") 가 그 예다. 따라서 ScalaDoc 을 보려면 SpringOps 클래스를 살펴보는">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=b3d8c27917"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, FP</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala">scala</a></h5>
+      <h1 class="margin_bottom_medium">Scala for the Impatient, Chapter 1, 2, 3</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-26">Friday, September 26, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <h3 id="chapter1">Chapter 1</h3>
+
+<p>(1). 스칼라의 REPL 은 엄밀히 말해서 인터프리터가 아니다. 입력받은 코드를 자바 바이트코드로 컴파일 한 후 자바 가상머신에서 실행시킨뒤 결과를 돌려준다.</p>
+
+<p>(2). 스칼라는 문자열을 위한 추가적인 연산들을 제공하기 위해 <code>java.lang.String</code> 오브젝트를 <code>StringOps</code> 오브젝트로 변환한다. <code>"Hello".intersect("World")</code> 가 그 예다. 따라서 ScalaDoc 을 보려면 <code>SpringOps</code> 클래스를 살펴보는 편이 정신 건강에 좋다.</p>
+
+<p>마찬가지로 <code>Int</code>, <code>Double</code> 등에도 편의 메소드를 추가한 <code>RichInt</code>, <code>RichDouble</code>, <code>RichChar</code> 등을 제공한다. <code>1.to(10)</code> 에서 <code>1</code> 은 <code>RichInt</code> 로 변환된 뒤에 <code>to</code> 메소드를 적용한다.</p>
+
+<p>참고로 스칼라에서는 숫자간 타입 변환을 위해 캐스팅이 아니라 메소드를 사용한다. <code>99.44.toInt</code>, <code>99.toChar</code>, <code>"99.44".toDouble</code></p>
+
+<p>(3). 스칼라에는 <code>++</code> 연산자가 없다.</p>
+
+<p>(4). 스칼라에는 Static Method 대신 <strong>Singleton Object</strong> 와 <strong>Companion Object</strong> 가 있다.</p>
+
+<p>(5). 오브젝트를 수정하지 않는, 인자가 없는 메소드는 괄호를 사용하지 않는다. </p>
+
+<p><code>"Hello".distinct</code> </p>
+
+<p>(6). ScalaDoc 에서 <strong>implicit</strong> 로 태그된 메소드는 자동변환이다. 예를들어 <code>BigInt</code> 오브젝트는 필요할때 자동으로 <code>int</code> 와 <code>long</code> 을 <code>BigInt</code> 로 바꾼다.</p>
+
+<h3 id="chapter2">Chapter 2</h3>
+
+<p>(1). 스칼라에서는 <strong>구문(Statement)</strong> 이 아니라 모든 것을 <strong>식(Expression)</strong> 으로 취급한다. 그런데, <code>else</code> 가 없는 <code>if</code> 문은 값이 없을 수 있는데, 스칼라에서는 <code>Unit</code> 클래스를 도입해서 해결한다. <code>Unit</code> 은 <strong>값 없음</strong> 을 뜻하는 <code>()</code> 을 값으로 가진다.</p>
+
+<p>(2). 스칼라에서 <strong>할당(assignment)</strong> 은 <code>Unit</code> 타입의 값을 가진다. 따라서 할당을 묶어서 사용하지 않는다.</p>
+
+<p><code>x = y = z = 1 // no</code></p>
+
+<p>(3) <code>for</code> 루프에서 인덱스가 필요하면, <code>until</code> 을 사용하면 된다.</p>
+
+<pre><code class="scala">val str = "lambda"  
+var sum = 0  
+for (index &lt; - 0until str.length)  
+  sum += index
+</code></pre>
+
+<p>(4). <code>return</code> 이 없는 삶에 익숙해지자, 익명함수를 사용할 경우 리턴값이 쓸모가 없다. <code>break</code> 쯤으로 여기는 것이 마음 편하다.</p>
+
+<p>(5). 재귀 함수는 타입을 반드시 명시해야 한다. <strong>ML</strong> 이나 <strong>하스켈</strong> 같은 일부 언어는 <strong><a href="http://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system">힌들리-밀너</a></strong> 알고리즘을 이용하여 재귀함수의 타입을 추론할 수 있지만, 이 알고리즘은 객체지향과는 잘 안맞는다.</p>
+
+<p>(6). 가변인자가 필요하면, <code>*</code> 를 사용하자. 배열을 풀어헤치기 위해 사용하는 <code>_*</code> 는 <strong>Splat operator</strong> 다</p>
+
+<pre><code class="scala">def sum(args: Int*) = {  
+  var sum = 0;
+  for(arg &lt;- args) sum += arg
+  sum
+}
+
+sum(1 to 5: _*)
+
+def recursiveSum(args: Int*): Int = {  
+  if (args.length == 0) 0
+  else args.head + recursiveSum(args.tail : _*)
+}
+</code></pre>
+
+<p>참고로, <code>Object</code> 타입의 가변인자를 받으면 <code>42.asInstanceOf[AnyRef]</code> 처럼 직접 변환해야 한다.</p>
+
+<p>(7). <strong>=</strong> 가 없는 함수는 <strong>Unit</strong> 리턴 타입을 가지며, <strong>프로시저</strong> 라 불린다. 값을 리턴하지 않기 때문에, 사이드 이펙트만를 위해 사용한다. 프로시저에서 <code>Unit</code> 을 직접 명시할수도 있다.</p>
+
+<pre><code class="scala">def proc(str: String) {  
+  ...
+  ... // side effect
+  ...
+}
+</code></pre>
+
+<p>(8). <code>lazy val</code> 을 이용하면, <code>def</code> 처럼 해당 변수가 사용되기 전까지 평가되지 않는다.</p>
+
+<pre><code class="scala">lazy val words = scala.io.Source.fromFile("words.txt").mkString  
+</code></pre>
+
+<p>그런데, <code>lazy</code> 로 선언되면 값을 접근할때 마다 스레드세이프하게 초기화가 되었는지 확인하는 검사가 필요하므로 비용이 든다.</p>
+
+<p>(8). 스칼라에는 체크예외가 없다. 모두 런타임 예외다. 그리고, <code>throw</code> 는 <code>Nothing</code> 을 값으로 가지는데, <code>if</code> 문에서는 <code>Nothing</code> 대신 다른 분기의 타입으로 식의 값이 정해진다.</p>
+
+<h3 id="chapter3">Chapter 3</h3>
+
+<p>(1). 고정길이 배열이 필요하면 <code>Array</code> 로 사용하면 된다. 만약 초기값이 필요없으면 <code>new</code> 를 사용하고, 아니면 <code>new</code> 를 제외한다.</p>
+
+<pre><code class="scala">val nums = new Array[Int](10)  
+val strs = Array[String]("Hello", "World")  
+</code></pre>
+
+<p>고정 배열은 JVM 내부에서 자바의 일반 배열로 처리된다.</p>
+
+<p>(2). 가변빌이 배열이 필요하면 <code>ArrayBuffer</code> 를 사용하면 된다. 자바의 <code>ArrayList</code> 라 보면 된다. </p>
+
+<pre><code class="scala">val ab = ArrayBuffer[Int]()  
+ab += 1  
+ab += (2, 3)  
+ab ++= Array(4, 5)  
+</code></pre>
+
+<p><code>ArrayBuffer</code> 끝에 원소를 삽입하고 삭제하는건 성능이 괜찮지만, 중간에 삽입하고 삭제하면 기존의 원소를 옮겨야 하므로 성능이 떨어진다는 점에 주의하자. </p>
+
+<p>만약 <code>Array</code> 를 <code>ArrayBuffer</code> 로 만들려면 <code>toBuffer</code> 메소드를, <code>ArrayBuffer</code> 를 <code>Array</code> 로 만들려면 <code>toArray</code> 를 호출하면 된다.</p>
+
+<p>(3). <code>until</code> 은 <code>RichInt</code> 클래스에 속한다. 만약 0부터 10까지 2씩 건너뛰고 싶으면</p>
+
+<p><code>0 to (10, 2)</code> </p>
+
+<p>거꾸로 순회하고 싶으면</p>
+
+<p><code>(0 to 10).reverse</code></p>
+
+<p>(4). 만약 <code>ArrayBuffer</code> 에 있는 음수 중, 처음 것만 제외하고 모두 삭제하고 싶을때 Flag 를 사용하면 다음과 같은 코드를 만들 수 있다.</p>
+
+<pre><code class="scala">val first = true  
+val n = arr.length  
+var i = 0
+
+while(i &lt; n) {  
+  if (arr(i) &gt;= 0) i += 1
+  else {
+    if (first) { first = false; i += 1}
+    else {
+      arr.remove(i); n -= 1
+    }
+  }
+}
+</code></pre>
+
+<p>그런데, 배열 버퍼 중간에 있는 원소를 삭제하는건 비효율적이기 때문에, 차라리 인덱스를 보존하고 한꺼번에 옮겨 자르는 편이 더 낫다.</p>
+
+<pre><code class="scala">val indexes = for(i until arr.length if arr(i) &gt;= 0 || first) yield {  
+  if (a &lt; 0) first = false;
+  i
+}
+
+for(j until indexes.length) {  
+  arr(j) == arr(indexes(j))
+}
+
+arr.trimEnd(arr.length - indexes.length)  
+</code></pre>
+
+<p>(4). <strong>for comprehension</strong> 의 <code>guard</code> 와 <code>yield</code> 를 사용하든, <strong>collection</strong> 의 <code>filter</code> 와 <code>map</code>을 사용하든 하는일은 같다.</p>
+
+<p>(5). <code>ArrayBuffer</code> 나 <code>Array</code> 는 <code>max</code>, <code>min</code>, <code>sum</code> 과 같은 메소드 들을 가지고 있다. 그리고 <code>min</code>, <code>max</code> 혹은 <code>scala.util.Sorting.quickSort</code> 에 들어갈 컬렉션의 원소타입들은 반드시 비교 연산을 가지고 있어야 하는데, <strong>숫자</strong>, <strong>문자열</strong>, <strong>Ordered Trait</strong> 을 가지는 타입이 해당된다.</p>
+
+<p>(6). 컬렉션의 원소를 이쁘게 출력하고 싶으면 <code>mkString</code> 을 이용하자.</p>
+
+<pre><code class="scala">Array(1, 2, 3).mkString(" and ")  
+// "1 and 2 and 3"
+Array(1, 2, 3).mkString("&lt;", ", ", "&gt;")  
+//  "&lt;1, 2, 3&gt;"
+</code></pre>
+
+<p>(7) <code>Array</code> 의 <code>toString</code> 은 <code>ArrayBuffer</code> 와는 달리 쓸모가 없다.</p>
+
+<pre><code class="scala">scala&gt; Array(1, 2, 3).toString  
+// res28: String = [I@412d54b3
+</code></pre>
+
+<p>(8). ScalaDoc 을 여행하다보면 기기묘묘한 것들을 만날 수 있다.</p>
+
+<p><code>def appendAll(xs: TraversableOnce[A]): Unit</code> 같은 경우, <code>xs</code> 는 <code>TraversableOnce</code> 트레이트를 구현하는 콜렉션이라 보면 된다.. 스칼라의 모든 컬렉션은  <code>TraversableOnce</code> 또는 흔하게 볼 수 있는 컬렉션의 트레이트로 <code>TraversableIterable</code> 이 있다.</p>
+
+<p><code>def += (elem: A): ArrayBuffer.this.type</code> 의 경우 체이닝이 가능하도록 자기 자신을 리턴하는 메소드다. 이를테면 <code>b += 4 += 5.</code> 처럼</p>
+
+<p><code>def copyToArray[B &gt;: A] (xs: Array[B]): Unit</code> 의 경우 <code>ArrayBuffer[A]</code> 의 모든 원소를 <code>Array[B]</code> 로 복사하는데 <code>B</code>는 <code>A</code> 의 하위 타입이다. <code>ArrayBuffer[Int]</code>,   <code>Array[Any]</code> 처럼</p>
+
+<p>(9). 자바처럼 당연히 컬럼이 고정되지 않은 다차원 배열도 만들 수 있다. </p>
+
+<pre><code class="scala">val triangle = new Array[Array[Int]](10)  
+for(i &lt;- 0 to triangle.length)  
+  triangle(i) = new Array[Int](i + 1)
+</code></pre>
+
+<p>만약 컬럼이 고정된 다차원 배열을 만든다면 <code>ofDim</code> 메소드를 이용하면 된다. 접근하려면 괄호를 두번 사용한다.</p>
+
+<pre><code class="scala">val matrix = Array.ofDim[Double](3, 4)
+
+maxtric(0)(1)  
+</code></pre>
+
+<p>(10). 스칼라 배열은 자바 배열로 구현되므로, 당연히 주고 받을 수 있다. <code>java.util.List</code> 를 받거나 리턴하는 자바 메소드를 호출하면 스칼라 코드에서 <code>ArrayList</code> 를 사용할 수 있지만, 이것 대신 <code>scala.collection.JavaConversions</code> 에 속한 메소드들을 임포트하면, 스칼라 버퍼를 자동으로 자바 리스트로 변환할 수 있다. </p>
+
+<p>아래 예제에서 자바의 <code>java.lang.ProcessBuilder</code> 는 <code>List&lt;String&gt;</code> 을 받는 생성자를 가지고 있는데, <code>JavaConversions.bufferAsJavaList</code> 를 임포트하면 스칼라 버퍼가 <code>java.util.List</code> 인터페이스를 구현한 자바 클래스 오브젝트로 감싸진다.</p>
+
+<pre><code class="scala">iport scala.collection.JavaConversions.bufferAsJavaList  
+import scala.collection.mutable.ArrayBuffer
+
+val command = ArrayBuffer("ls", "-al" "/home/user")  
+val processBuilder(command)  
+</code></pre>
+
+<p>반대로 자바 메소드가 <code>java.util.List</code> 리턴하면 <code>Buffer</code> 로 자동으로 변환할 수 있다. 아래 예제에서 <code>cmd == command</code> 다. 바로 <code>ArrayBuffer</code> 로 받지 않는다는 점에 주의하자. <code>Buffer</code> 만 보장한다.</p>
+
+<pre><code class="scala">import scala.collection.JavaConversions.asScalaBuffer  
+import scala.collection.mutable.ArrayBuffer
+
+val cmd: Buffer[String] = pb.command()  
+</code></pre>
+
+<p>참고로, 스칼라의 컬렉션은 <code>immutable</code> 이 기본이고, 자바의 컬렉션은 <code>mutable</code> 이 기본이다.</p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '29';
+  var disqus_url = 'http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
