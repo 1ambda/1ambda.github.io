@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Functional Programmin in Scala, Chapter 2</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Functional Programmin in Scala, Chapter 2">
+  <meta name="twitter:description" content="2014-09-27, Functional Programming in Scala, Coursera 2.1 Higher-Order Functions Higher-Order Functions Functional PL 에서는 함수를 first-class 로 다루는데, 이는 함수를 파라미터로 넘기거나 결과로 리턴할 수 있다는 소리다.  이렇게 함수를 파라미터로 받거나, 혹은 함수를 리턴하는 함수를 Higher order functions 라 부른다. Function Types   type A => B is the type of">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/functional-programmin-in-scala-chapter-2/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/functional-programmin-in-scala-chapter-2/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=aaee7e16e7"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, FP</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala tag-coursera">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala">scala</a>, <a href="../tag/coursera">coursera</a></h5>
+      <h1 class="margin_bottom_medium">Functional Programmin in Scala, Chapter 2</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-30">Tuesday, September 30, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/functional-programmin-in-scala-chapter-2/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>2014-09-27, <strong>Functional Programming in Scala</strong>, Coursera</p>
+
+<h3 id="21higherorderfunctions">2.1 Higher-Order Functions</h3>
+
+<h4 id="higherorderfunctions">Higher-Order Functions</h4>
+
+<p>Functional PL 에서는 함수를 <em>first-class</em> 로 다루는데, 이는 함수를 파라미터로 넘기거나 결과로 리턴할 수 있다는 소리다. </p>
+
+<p>이렇게 함수를 파라미터로 받거나, 혹은 함수를 리턴하는 함수를 <strong>Higher order functions</strong> 라 부른다.</p>
+
+<h4 id="functiontypes">Function Types</h4>
+
+<blockquote>
+  <p>type A => B is the type of a function that thaks an arg of type A and return a result of type B.</p>
+</blockquote>
+
+<h4 id="anonymousfunctions">Anonymous Functions</h4>
+
+<blockquote>
+  <p>The type of the parameter can be omittered if it can be infferred by the compiler</p>
+</blockquote>
+
+<h3 id="22currying">2.2 Currying</h3>
+
+<p>2.1 에서 우리는 <strong>Higher Order Functions</strong> 를 만들었다. 다음과 같은 Tail-Recursive 버전의 <code>sum</code> 이 있다고 하자.</p>
+
+<pre><code class="scala">def TailRecursiveSum(f: Int =&gt; Int, a: Int, b: Int): Int = {  
+  def loop(a: Int, acc: Int): Int = {
+    if (a &gt; b) acc
+    else loop(a + 1, f(a) + acc)
+  }
+  loop(a, 0);
+}
+
+def sumInts(a: Int, b: Int) =  sum(x =&gt; x, a, b)  
+def sumCubes(a: Int, b: Int) =  sum(x =&gt; x * x * x, a, b)  
+def sumFactorials(a: Int, b: Int) =  sum(fact, a, b)  
+</code></pre>
+
+<pre><code>
+</code></pre>
+
+<p><code>a</code> 와 <code>b</code>는 <code>sumInts</code> 와 <code>sumCubes</code> 로 부터 <code>sum</code> 으로 변하지 않고 넘어간다. 제거할 수 없을까? <br />
+답은 간단하다. <code>sum</code> 이 <code>a, b</code> 를 받는 함수를 리턴하면 된다.</p>
+
+<pre><code class="scala">def sum(f: Int =&gt; Int): (Int, Int) =&gt; Int = {  
+  def sumF(a: Int, b: Int): Int = {
+    def loop(a: Int, acc: Int): Int = {
+      if (a &gt; b) acc
+      else loop(a + 1, f(a) +  acc)
+    }
+    loop(a, 0)
+  }
+  sumF
+}
+</code></pre>
+
+<p>그러면 이렇게 인자를 숨길 수 있다.</p>
+
+<pre><code class="scala">def sumInts = Currying.sum(x =&gt; x)  
+assert(sumInts(1, 10) == 55)  
+</code></pre>
+
+<p><code>sum</code> 이 인자로 받은 <code>f</code> 를 적용한 새로운 함수 <code>sumF</code> 를 돌려주므로 다음과 같이 호출도 가능하다.</p>
+
+<pre><code class="scala">def cube = (x: Int) =&gt; x * x * x  
+sum(cube)(1, 10)  
+</code></pre>
+
+<p>함수를 리턴하는 함수는 유용하기 때문에, 스칼라에서는 이를 위한 특별한 문법을 제공한다. 다음의 두 함수 <code>sum1</code>과 <code>sum2</code> 는 동일하다.</p>
+
+<pre><code class="scala">def sum1(f: Int =&gt; Int): (Int, Int) =&gt; Int = {  
+  def sumF(a: Int, b: Int): Int = {
+    if (a &gt; b) 0
+    else f(a) + sum(a + 1, b)
+  }
+}
+
+def sum2(f: Int =&gt; Int)(a: Int, b: Int): Int = {  
+  if (a &gt; b) 0
+  else f(a) + sum2(f)(a + 1, b)
+}
+</code></pre>
+
+<h4 id="expansionofmultipleparameterlists">Expansion of Multiple Parameter Lists</h4>
+
+<p><code>def f(args1)...(argsn) = E</code> 가 있을때 이건 다음과 같이 함수로 감싸고 그 함수를 다시 돌려주면, 원 함수 <code>f</code> 에서 파라미터를 하나 줄일 수 있다.</p>
+
+<p><code>def f(args1)...(argsn-1) = { def g(argn) = E; g }</code> 만약 익명함수로 표현한다면,</p>
+
+<p><code>def f(args1)...(argsn-1) = (argsn =&gt; E)</code> 와 같이 표현할 수 있다. 따라서 이와 같이 함수로 감싸 원 함수 <code>f</code> 에서 파라미터를 반복적으로 줄이다 보면 </p>
+
+<p><code>def f(args1)...(argsn) = E</code> 는 인자를 1개씩 받는 N개의 익명함수로 표현할 수 있다.</p>
+
+<p><code>def f = (args1 =&gt; (args2 =&gt; ...(argn =&gt; E) ...))</code> 이러한 스타일을 <strong>currying</strong> 이라 부른다.</p>
+
+<h4 id="morefunctiontypes">More Function Types</h4>
+
+<p>그렇다면, 위에서 본 <code>sum</code> 함수의 타입은 무엇일까? <code>def sum(f: Int =&gt; Int)(a: Int, b: Int): Int</code></p>
+
+<p><code>(Int =&gt; Int) =&gt; Int, Int =&gt; Int</code> 로 표현할 수 있다. 근데 스칼라에서 <strong>functional types associate to the right.</strong> 이므로,</p>
+
+<p><code>(Int =&gt; Int) =&gt; (Int, Int =&gt; Int)</code> 와 동일하다.</p>
+
+<h4 id="exercise">Exercise</h4>
+
+<blockquote>
+  <p>(1). Write a <code>product</code> function that calculates the product of the value of a function for the points on a given interval</p>
+</blockquote>
+
+<pre><code class="scala">def product(f: Int =&gt; Int)(a: Int, b: Int): Int = {  
+  if (a &gt; b) 1
+  else f(a) * product(f)(a + 1, b)
+}
+</code></pre>
+
+<blockquote>
+  <p>(2). Write <code>factorial</code> in terms of <code>product</code></p>
+</blockquote>
+
+<pre><code class="scala">def factorial(n: Int): Int = {  
+  product(x =&gt; x)(1, n)
+}
+</code></pre>
+
+<blockquote>
+  <p>(3). Can you write a more general funtion, which generalizes both <code>sum</code> and <code>product</code> </p>
+</blockquote>
+
+<pre><code class="scala">def mapReduce(f: Int =&gt; Int, combine: (Int, Int) =&gt; Int, init: Int)(a: Int, b: Int): Int = {  
+  if (a &gt; b) init
+  else combine(f(a), mapReduce(f, combine, init)(a + 1, b))
+}
+
+def sumUsingMapReduce(f: Int =&gt; Int)(a: Int, b: Int) =  
+  mapReduce(f, (x: Int, y: Int) =&gt; x + y, 0)(a, b)
+
+def productUsingMapReduce(f: Int =&gt; Int)(a: Int, b: Int) =  
+  mapReduce(f, (x: Int, y: Int) =&gt; x * y, 1)(a, b)
+</code></pre>
+
+<h3 id="23examplefindingfixedpoints">2.3 Example: Finding Fixed Points</h3>
+
+<h4 id="findingafixedpointofafunction">Finding a fixed point of a function</h4>
+
+<blockquote>
+  <p>A number is called a <strong>fixed point</strong> of a function f  if <code>f(x) = x</code> </p>
+</blockquote>
+
+<p>어떤 <code>f</code> 들에 대해서는 <code>f(x)</code> 를 반복적으로 적용하면서 변하지 않거나 변화량이 충분히 작아질때를 찾아 <strong>fixed point</strong> 를 찾을 수 있다.</p>
+
+<p>1장에서 만들었던 제곱근을 구하는 함수로 돌아가 보자. 사실 이 함수는 <strong>fixed point</strong> 와 관련이 있다. <code>sqrt(x) = y</code> 라고 했을때 <code>y * y = x</code> 이므로 <code>y = x / y</code> 다. 따라서 <code>sqrt(x)</code> 는 함수 <code>y = x / y</code> 를 꾸준히 적용해서 찾아낼 수 있으므로 <code>y = x / y</code> 의 <strong>fixed point</strong> 다.</p>
+
+<p>다음과 같은 <code>fixedPoint</code> 함수가 있다고 하자.</p>
+
+<pre><code class="scala">val tolerance = 0.0001 // = 1.0E-4  
+def isCloseEnough(x: Double, y: Double) = {  
+  abs((x - y) / x) / x &lt; tolerance
+}
+
+def fixedPoint(f: Double =&gt; Double)(firstGuess: Double): Double = {  
+  def iterate(guess: Double): Double = {
+    val next = f(guess)
+    if (isCloseEnough(guess, next)) next
+    else iterate(next)
+  }
+  iterate(firstGuess)
+}
+</code></pre>
+
+<p>이 함수를 이용해서 </p>
+
+<p><code>sqrt(x: Int) = fixedPoint(y =&gt; x / y)(1.0)</code> </p>
+
+<p>와 같은 제곱근을 구하는 함수를 만들어 볼 수 있겠다. 그러나 <code>sqrt(2)</code>
+ 를 실행하면 <code>guess</code> 값이 <code>1.0</code>과 <code>2.0</code> 사이를 널뛰기 하면서 무한 루프를 돈다.</p>
+
+<p>이건 <code>guess</code> 값이 너무나 많이 변하기 때문인데, <code>f</code> 를 적용하는 시퀀스에서 연속적인 두개의 <code>guess</code> 값의 평균을 구하는 <code>f</code> 를 만듦으로서 이 문제를 피할 수 있다. (잘못된 해석일 수 있으므로 원문을 첨부한다.)</p>
+
+<pre><code class="scala">One way to control such oscillations is to prevent the estimation from varying too much. This is done by averaging successive values of the original sequence  
+</code></pre>
+
+<h4 id="functionsasreturnvalues">Functions as return values</h4>
+
+<p>여태까지는 함수를 인자로 사용했을때 언어에서 어떤 이점을 얻을 수 있는가에 대한 설명이었고, 이제부터는 함수를 리턴값으로 사용할때의 장점을 알아 보자. </p>
+
+<p>아까와 같이 averaging 함으로써 stabilizing 하는 기법을 <strong>Average Damping</strong> 이라 부르는데, 아래와 같은 함수를 만들어서 인자로 넘길 수 있다.</p>
+
+<p><code>def avgDamp(f: Double =&gt; Double)(x: Doube) = (x + f(x)) / 2</code></p>
+
+<p>따라서 <code>sqrt</code> 함수는 다음과 같이 새로 작성할 수 있다.</p>
+
+<pre><code class="scala">def avgDamp(f: Double =&gt; Double)(x: Double) = (x + f(x)) / 2  
+def sqrt(x: Double): Double = fixedPoint(avgDamp(y =&gt; x / y))(1)  
+</code></pre>
+
+<p><code>avgDamp</code> 는 <code>x</code> 를 다시 인자로 받는 함수를 돌려준다. 원래라면 <code>def</code> 를 이용해서 새로 함수를 만들고 리턴했어야 하나, 스칼라에서 지원해주는 문법을 이용해서 <code>(x: Double)</code> 을 추가하는 것 만으로 편하게 만들었다.</p>
+
+<p>이번장에선 Higher order function 을 이용해서 함수를 combine 하면 더 강력한 <strong>abstraction(추상화)</strong> 를 얻을 수 있다는 법을 배웠다. 비록 이 방법이 항상 좋은건  아니지만 배우면 다 쓸데가 있기 마련이다.</p>
+
+<p>덤으로 하나 더 정리하자면, <strong>Currying</strong> 은 함수의 인자를 반복적으로 쪼개어 익명 함수로 만든 뒤 재활용 할 수 있도록 만드는 기술이라 보면 된다. 왜냐면 N개의 인자가 있다고 가정할때, 이전에는 1개의 함수에 다양한 인자를 줘야했지만, 커링을 이용하면 N개의 함수로 쪼갤 수 있고, 각각의 리턴되는 함수를 저장할 수 있으므로 각각을 재활용 할 수 있다.</p>
+
+<h3 id="25functionsanddata">2.5 Functions and Data</h3>
+
+<p>이번 장에서는 클래스를 사용한다. 유리수 계산을 하기 위해 <code>def add(n1: Int, d1: Int, n2: Int, d2: Int): Int</code> 와 같은 함수를 만드는 것이 아니라, 데이터를 추상화 하기 위한 방법으로 다음과 같은 클래스를 만들 수 있다.</p>
+
+<pre><code class="scala">class Rational(x: Int, y: Int) {  
+  def numer = x
+  def denom = y
+
+  def add(that: Rational) = {
+    new Rational(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+  }
+}
+</code></pre>
+
+<p>참고로, 스칼라는 <strong>type</strong> 과 <strong>value</strong> 를 서로 다른네임스페이스에서 관리하기 때문에 충돌할 걱정을 할 필요가 없다.</p>
+
+<h4 id="exercise">Exercise</h4>
+
+<blockquote>
+  <p>(1). In your worksheet, add a method <code>neg</code> to class Rational that is used like this <code>x.neg // -x</code></p>
+  
+  <p>(2). Add a method sub to subtract two rational numbers</p>
+  
+  <p>(3). With the values of x, y, z as given in the previous slide, what is the result of <code>x - y - z</code></p>
+</blockquote>
+
+<pre><code class="scala">class Rational(x: Int, y: Int) {  
+  def numer = x
+  def denom = y
+
+  def add(that: Rational) = {
+    new Rational(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+  }
+
+  def sub(that: Rational) = {
+    add(that.neg)
+  }
+
+  def neg = new Rational(-numer, denom)
+}
+</code></pre>
+
+<h3 id="26morefunwithrationals">2.6 More Fun With Rationals</h3>
+
+<p>이전에 만든 <code>Rational</code> 클래스는 약분된 형태로 표현되지 않기 때문에 이런 기능을 추가할 필요가 있다.</p>
+
+<blockquote>
+  <p>reduce them to their smallest numerator and denominator by dividing both with a divisor</p>
+</blockquote>
+
+<p>다양한 방법으로 구현할 수 있겠지만, 가장 쉬운 방법은 <code>Rational</code> 오브젝트가 생성될때 약분 하는 방법이다. </p>
+
+<pre><code class="scala">  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+  private val g = abs(gcd(x, y))
+
+  def numer = x / g
+  def denom = y / g
+</code></pre>
+
+<h4 id="selfreference">Self-reference</h4>
+
+<p>그리고, <code>less</code>, <code>max</code> 와 같은 함수도 만들어 볼 수 있다. <code>max</code> 가 <strong>self-referencing</strong> 을 위해 <code>this</code> 키워드를 사용한다는 점에 주목하자.</p>
+
+<pre><code class="scala">  def less(that: Rational) = numer * that.denom &lt; that.numer * denom
+  def max(that: Rational) = if (this.less(that)) that else this
+</code></pre>
+
+<h4 id="precondition">Pre-condition</h4>
+
+<p><code>new Rational(1, 0)</code> 을 시도하면 <code>0</code> 으로 나눌수 없기 때문에 에러를 뿜는다. 검사하기 위해 <code>require</code> 함수를 사용할 수 있다.</p>
+
+<p><code>require(y &gt; 0, "denum must be != 0</code></p>
+
+<p><code>assert</code> 도 사용할 수 있는데, <code>require</code> 와는 차이가 있다. <code>AssertionError</code> 가 나오고, <code>require</code> 에서는 <code>IllegalArgumentException</code> 이 나온다. 그래서 서로 다른 의도로 쓰이게끔 만들어졌다는걸 알 수 있다. (오역이 있을 수 있기 때문에 원문을 첨부한다.)</p>
+
+<blockquote>
+  <p>The reflects a difference in intent </br><br/>
+  - <code>require</code> is used to enforce a precondition on the caller of a function <br/>
+  - <code>assert</code> is used as to check the code of the function itself</p>
+</blockquote>
+
+<p>만약 예외를 테스트한다면 <code>scalatest</code> 에서는 <code>intercept</code> 를 이용하면 된다.</p>
+
+<pre><code class="scala">  "Rational(1, 0)" should "throw IllegalArgumentException" in {
+    intercept[IllegalArgumentException] {
+      new Rational(1, 0)
+    }
+  }
+</code></pre>
+
+<h4 id="constructor">Constructor</h4>
+
+<p>스칼라에서는 암시적(implicitly) 인 생성자를 도입했는데, 다시 말해 코드상에 없어도 <strong>Primary Constuctor</strong> 존재하는데, 이 <strong>Primary Constructor</strong> 는 클래스의 파라미터를 받아서 클래스 바디의 모든 문장을 실행한다. 만약 다른 생성자를 만들고 싶으면, 다음과 같이 작성하면 된다.</p>
+
+<p><code>def this(x: Int) = this(x, 1)</code></p>
+
+<p>우측에 나오는 <code>this</code> 는 <strong>implicit primary constructor</strong> 다.</p>
+
+<h4 id="excercise">Excercise</h4>
+
+<blockquote>
+  <p>Modify the <code>Rational</code> class so that rational numbers are kept unsimplified internally, but the simplification is applied when numbers are converted to strings. Do clients observe the same behavior when interacting with rational class? </br></p>
+</blockquote>
+
+<p>primary consturctor 에서 약분을 하지 않고, <code>toString</code> 에서 약분을 할때 과연 제대로 되겠느냐인데, 답은 <strong>아니오</strong> 다. integer overflow 를 생각하면 쉽다. 최대한 약분할 수 있을때 먼저 해버리는것이 낫다. 커다란 수 <code>a</code> ... <code>z</code> 에 대해서 연산 해버리면, 마지막 <code>toString</code> 에서만 약분이 될텐데. 제대로 되지 않을 가능성이 있다.</p>
+
+<blockquote>
+  <p>Yes for small sizes of denominators and nomiators and small numbers of operations</p>
+</blockquote>
+
+<h3 id="27evaluationandoperators">2.7 Evaluation and Operators</h3>
+
+<h4 id="classesandsubtitutions">Classes and Subtitutions</h4>
+
+<p>(단어 오역이 있을 수 있어서 용어를 그대로 씀)</p>
+
+<p>함수에서 <strong>subtitution</strong> 에 기반한 <strong>compuation model</strong> 을 이용했는데, 사실 이건 클래스를 인스턴스 할때도 똑같이 적용된다. 즉 <code>new C(x1, ... ,xn)</code> 은 <code>new C(v1, ..., vn)</code> 과 같다.</p>
+
+<p>그렇다면, 다음과 같이 클래스가 인자 n 개를 받는 함수를 정의했을때 <code>def f(y1, ... , yn) = b</code> 이런 식은 어떻게 평가될까?</p>
+
+<p><code>new C(v1, ..., vm).f(w1, ... , wn)</code></p>
+
+<p>(1). 클래스의 <strong>formal parameter</strong> <code>x1, ..., xn</code> 이 <strong>actual parameter</strong> <code>v1, ... , vm</code> 으로 <strong>substitution</strong> 된다.<br/></p>
+
+<p>(2). 함수 <code>f</code> 의 <strong>formal parameter</strong> <code>y1, ... , yn</code> 이 <strong>actual parameter</strong> <code>w1, ... , wn</code> 으로 <strong>substitution</strong> 된다. <br/></p>
+
+<p>(3) <code>new Class(v1, ... , vm)</code> 이 <code>this</code> 로 치환되고</p>
+
+<p>(4) <code>f</code> 의 바디 <code>b</code> 가 평가된다.</p>
+
+<p>따라서 이를 식으로 표현하면, 다음과 같이 쓸 수 있다.</p>
+
+<p><code>[v1/x1, ... , vm/xm][w1/y1, ... , wn/yn][new C(v1, ..., vm)/this]b</code> </p>
+
+<p>그러면, 예제를 통해서 살펴보자.</p>
+
+<pre><code class="scala">new Rational(1, 2).less(new Rational(2, 3))  
+</code></pre>
+
+<p>이건 다음과 같이 평가된다.</p>
+
+<pre><code class="scala">[1/2, 2/y][new Rational(2, 3)/that][new Rational(1, 2)/this] this.numer * that.denom &lt; that.numer * this denom
+</code></pre>
+
+<p>결국 이건 아래와 같다.</p>
+
+<pre><code class="scala">new Rational(1, 2).numer * new Rational(2, 3).denom &lt; new Rational(2, 3).numer * new Rational(1, 2).denom
+
+// 1 * 3 &lt; 2 * 2
+// true
+</code></pre>
+
+<h4 id="operators">Operators</h4>
+
+<p><code>Int</code> 의 경우에는 <code>+</code> 를 사용하면 <code>3 + 5</code> 와 같이 표현할 수 있지만 <code>Rational</code> 의 경우에는 <code>r.add(r2)</code> 와 같이 사용해야 했다. 뭔가 불편하다.</p>
+
+<p>스칼라에는 이런 문제를 해결하기 위해 <strong>Infix Notation</strong> 이 있다. 함수의 인자가 하나라면, 괄호를 생략하는 것이다. 바이너리 오퍼레이터처럼 보일 수 있도록.</p>
+
+<pre><code class="scala">r add s // r.add(s)  
+r less s // r less s  
+r max s // r max s  
+</code></pre>
+
+<h4 id="relaxedidentifiers">Relaxed Identifiers</h4>
+
+<p>스칼라에서는 <strong>operator</strong> 또한 <strong>identifier</strong> 가 될 수 있다. 스칼라에서 <strong>identifier</strong> 룰은 아래와 같다</p>
+
+<blockquote>
+  <p>(1). <strong>Alphanumeric:</strong> starting with a letter, followed by a sequence of letters or numbers <br/></p>
+  
+  <p>(2). <strong>Symbolic:</strong> starting with an operator symbol, followed by otheraracter operator symbols <br/></p>
+  
+  <p>(3). The underscore character <code>_</code> counts as a letter <br/></p>
+  
+  <p>(4). Alphanumeric identifiers can also end in an underscore, followed by some operator symbols</p>
+</blockquote>
+
+<p>따라서 <code>*</code>, <code>+?%&amp;</code>, <code>vector_++</code>, <code>counter_=</code> 모두 유효한 identifer 들이다. </p>
+
+<p>이제 이런 symbolic identifer 들을 이용해서 <code>Rational</code> 클래스의 함수 이름들을 산술연산 처럼 보이도록 변경해 보자.</p>
+
+<pre><code class="scala">class Rational(x: Int, y: Int) {  
+  require(y &gt; 0, "denom != 0")
+
+  // secondary constructor
+  def this(x: Int) = this(x, 1)
+
+  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+  private val g = abs(gcd(x, y))
+
+  def numer = x / g
+  def denom = y / g
+
+  def &lt; (that: Rational) = numer * that.denom &lt; that.numer * denom
+  def max(that: Rational) = if (this &lt; that) that else this
+
+  def + (that: Rational) = {
+    new Rational(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+  }
+
+  def - (that: Rational) = {
+    this + -that
+  }
+
+  def unary_- = new Rational(-numer, denom)
+}
+</code></pre>
+
+<p>재밌는 점은 <code>neg</code> 를 <strong>unary operator</strong> <code>-</code> 로 만들기 위해 <code>unary_</code> 를 이용해서 <code>unary_-</code> 로 정의했다는 것이다. </p>
+
+<p>참고로, return 값을 주기 위해서 <code>unary-_: Rational</code> 과 같이 정의하면 에러가 난다. <code>:</code> 가 포함된 identifer 로 인식하기 때문에 <code>unary-_ :</code> 로 스페이스를 꼭 주어야 한다.</p>
+
+<h4 id="precedencerules">Precedence Rules</h4>
+
+<p>그렇다면 <code>x * x + y</code> 와 같은 경우 <code>*</code> 가 먼저 계산되어야 하는데, 이런건 어떻게 해결할까? 우리가 만든건 정수 연산자가 아니라 함수인데.</p>
+
+<p>이를 위해 스칼라는 다음과 같은 룰을 만들어 두었다.</p>
+
+<blockquote>
+  <p>The precedence of an operator is determined by its first character. The following table lists the characters in increasing order of priority precedence</p>
+</blockquote>
+
+<pre><code class="scala">(all letters) // Alphanumeric
+|
+^
+&amp;
+&lt; &gt;  
+= !
+:
++ -
+* / %
+(all other special characters)
+</code></pre>
+
+<p>identifer 의 첫글자가 미리 정의된 테이블에 있다면 우선순위가 정해지는 룰이다.</p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '30';
+  var disqus_url = 'http://1ambda.github.io/functional-programmin-in-scala-chapter-2/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>

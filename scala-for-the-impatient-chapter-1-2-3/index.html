@@ -77,7 +77,7 @@
 <body>
 
   
-  <script src="../public/jquery.js?v=b3d8c27917"></script>
+  <script src="../public/jquery.js?v=aaee7e16e7"></script>
 
   
 
@@ -300,8 +300,8 @@ val processBuilder(command)
 <p>반대로 자바 메소드가 <code>java.util.List</code> 리턴하면 <code>Buffer</code> 로 자동으로 변환할 수 있다. 아래 예제에서 <code>cmd == command</code> 다. 바로 <code>ArrayBuffer</code> 로 받지 않는다는 점에 주의하자. <code>Buffer</code> 만 보장한다.</p>
 
 <pre><code class="scala">import scala.collection.JavaConversions.asScalaBuffer  
-import scala.collection.mutable.ArrayBuffer
-
+import scala.collection.mutable.ArrayBuffer  
+sd  
 val cmd: Buffer[String] = pb.command()  
 </code></pre>
 
