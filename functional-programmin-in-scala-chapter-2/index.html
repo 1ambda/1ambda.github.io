@@ -409,7 +409,7 @@ def sqrt(x: Double): Double = fixedPoint(avgDamp(y =&gt; x / y))(1)
 
 <h4 id="constructor">Constructor</h4>
 
-<p>스칼라에서는 암시적(implicitly) 인 생성자를 도입했는데, 다시 말해 코드상에 없어도 <strong>Primary Constuctor</strong> 존재하는데, 이 <strong>Primary Constructor</strong> 는 클래스의 파라미터를 받아서 클래스 바디의 모든 문장을 실행한다. 만약 다른 생성자를 만들고 싶으면, 다음과 같이 작성하면 된다.</p>
+<p>스칼라에서는 암시적(implicitly) 인 생성자를 도입했는데, 다시 말해 코드상에 없어도 <strong>Primary Constuctor</strong> 가 존재하는데, 이 <strong>Primary Constructor</strong> 는 클래스의 파라미터를 받아서 클래스 바디의 모든 문장을 실행한다. 만약 다른 생성자를 만들고 싶으면, 다음과 같이 작성하면 된다.</p>
 
 <p><code>def this(x: Int) = this(x, 1)</code></p>
 
@@ -554,7 +554,7 @@ r max s // r max s
 (all other special characters)
 </code></pre>
 
-<p>identifer 의 첫글자가 미리 정의된 테이블에 있다면 우선순위가 정해지는 룰이다.</p>
+<p>identifier 의 첫글자가 미리 정의된 테이블에 있다면 우선순위가 정해지는 룰이다.</p>
     </section>
 
     <footer>
