@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Functional Programming in Scala, Chapter 3</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Functional Programming in Scala, Chapter 3">
+  <meta name="twitter:description" content="2014-09-29, Functional Programming in Scala, Coursera 3.1 Class Hierarchies Abstract Classes abstract class 는 다른 언어의 그것과 같다. abstract class IntSet {     def contains(x: Int): Boolean   def incl(x: Int): IntSet } object EmptySet extends IntSet {     def contains(x: Int) = false   def incl(x: Int) = new NonEmptySet(x, EmptySet, EmptySet">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-3/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=dfed7a1ad8"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, FP</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala tag-coursera">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala">scala</a>, <a href="../tag/coursera">coursera</a></h5>
+      <h1 class="margin_bottom_medium">Functional Programming in Scala, Chapter 3</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-30">Tuesday, September 30, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>2014-09-29, <strong>Functional Programming in Scala</strong>, Coursera</p>
+
+<h3 id="31classhierarchies">3.1 Class Hierarchies</h3>
+
+<h4 id="abstractclasses">Abstract Classes</h4>
+
+<p><strong>abstract class</strong> 는 다른 언어의 그것과 같다.</p>
+
+<pre><code class="scala">abstract class IntSet {  
+  def contains(x: Int): Boolean
+  def incl(x: Int): IntSet
+}
+
+object EmptySet extends IntSet {  
+  def contains(x: Int) = false
+  def incl(x: Int) = new NonEmptySet(x, EmptySet, EmptySet)
+}
+
+class NonEmptySet(elem: Int, left: IntSet, right: IntSet) extends IntSet {  
+  def contains(x: Int) = {
+    if (x &lt; elem) left contains x
+    else if (x &gt; elem) right contains x
+    else true
+  }
+
+  def incl(x: Int) = {
+    if (x &lt; elem) new NonEmptySet(elem, left incl x, right)
+    else if (x &gt; elem) new NonEmptySet(elem, left, right incl x)
+    else this
+  }
+}
+</code></pre>
+
+<p>여기서 재밌는 점은 <code>incl</code> 을 수행할때 새로운 서브트리를 매번 만든다는 것인데, 이건 이 프로그램이 <code>immutable</code> 하다는 것을 말한다. </p>
+
+<p>이전의 데이터들을 변경하지 않으므로 <strong>persistent data structures</strong> 라 볼 수 있다.</p>
+
+<p>클래스에서는 다른 언어와 마찬가지로 <strong>override</strong> 를 이용해서 existing 혹은 non-abstract definition 을 서브클래스에서 <strong>재정의(redefined)</strong> 할 수 있다.  </p>
+
+<h4 id="objectdefinitions">Object Definitions</h4>
+
+<p><code>object</code> 키워드를 이용하면 <strong>singleton object</strong> 를 만든다. 그리고 <strong>singleton object</strong> 는 value 이기 때문에, 그 자체로 evaluate 된다. 다시말해 evaluation step 이 수행 될 필요가 없다.</p>
+
+<pre><code class="scala">object EmptySet extends IntSet {  
+  def contains(x: Int) = false
+  def incl(x: Int) = new NonEmptySet(x, EmptySet, EmptySet)
+}
+</code></pre>
+
+<h4 id="exercisee">Exercisee</h4>
+
+<blockquote>
+  <p>Write a method <code>union</code> for forming the union of two sets. You should implement the following abstract class</p>
+</blockquote>
+
+<pre><code class="scala">  def union(other: IntSet): IntSet = {
+    ((left union right) union other) incl elem
+  }
+</code></pre>
+
+<p>해석하면 terminal node 의 경우, union 연산이 <code>other incl elem</code> 이 된다. 게다가 매번의 <code>left union right</code> 연산은 현재보다 더 작은 단위를 호출하고, <code>(left union right) union other</code> 은 적어도 좌측 operand 가 적어도 현재보다 1개 작은 elem 을 가지고 있기 때문에 최소한 자기 자신을 다시 호출하지 않는다는 것을 알 수 있다. 따라서 이런 점을 고려하면 함수는 언젠가 끝난다는 것을 알 수 있다.</p>
+
+<h4 id="dynamicbinding">Dynamic Binding</h4>
+
+<blockquote>
+  <p>Object-oriented language implement dynamic method dispatch. This means that the code invoked by a method call depends on the runtime type of the object that contains the method</p>
+</blockquote>
+
+<p>이렇게 보면, <strong>Dynamic dispatch</strong> 는 <em>* higher-orher functions</em>* 와 유사한데, 둘 다 static 타임에 어떤 함수가 실행될 지 알 수 없다. 그럼 둘을 섞으면 어떻게 될까?</p>
+
+<h3 id="32howclassesareorganized">3.2 How Classes Are Organized</h3>
+
+<p>스칼라에서 class 들은 <strong>package</strong> 로 관리된다. 스칼라에서 자동으로 임포트하는 것들은</p>
+
+<ul>
+<li>All members of package <code>scala</code> like scala.Int  </li>
+<li>All members of package <code>java.lang</code> like java.lang.Object  </li>
+<li>All members of the singleton object  <code>scala.Predef</code> like scala.Predef.require  </li>
+</ul>
+
+<h4 id="trait">Trait</h4>
+
+<blockquote>
+  <p>A trait is declared like an abstract class, just with trait instead of abstract class</p>
+</blockquote>
+
+<pre><code class="scala">trait Planar {  
+  def height: Int
+  def width: Int
+  def surface = height * width
+}
+</code></pre>
+
+<p><strong>Trait</strong> 는 자바의 <strong>Interface</strong> 와 비슷하지만, fields 와 concrete methods 를 포함할 수 있다는 점에서 더 강력하다. 반면 <strong>Trait</strong> 는 parameter 를 가질 수 없다.</p>
+
+<h4 id="scalashierarchy">Scala's Hierarchy</h4>
+
+<p><img src="http://librairie.immateriel.fr/baw/9780596155957/httpatomoreillycomsourceoreillyimages322250.png" /></p>  
+
+<p align="center">(<a href='http://librairie.immateriel.fr/fr/read_book/9780596155957/ch07s04#scalas-type-hierarchy'>http://librairie.immateriel.fr/fr/read_book/9780596155957/ch07s04#scalas-type-hierarchy</a>)</p>
+
+<p>그림을 보면 알겠지만, 가장 상위에 <code>scala.Any</code> 가 있고, 그 아래로 기본 타입들은 <code>scala.AnyVal</code> 아래에 위치한다. 스칼라의 <code>Double</code> 은 자바의 <code>double</code> 와 일치한다. <code>java.lang.Double</code> 과는 다르다. <code>java.lang.Double</code> 은 아래 설명을 보면 알겠지만, <code>AnyRef</code> 하위에 위치한다. </p>
+
+<p>레퍼런스 타입은 <code>scala.AnyRef</code> 아래에 위치 한다. 그리고 <code>scala.AnyRef</code> 는 자바의 <code>java.lang.Object</code> 와 동일하다. 모든 스칼라 오브젝트들은 <code>scala.AnyRef</code> 를 하위에 위치한다. 받는다.</p>
+
+<p>정리하자면 primitive type 은 <code>scala.AnyVal</code> 하위에 있고, object 는 <code>scala.AnyRef</code> 하위에 있다고 보면 된다.  </p>
+
+<p>그리고 하위에 보면 <code>scala.Nothing</code> 과 <code>scala.Null</code> 이 <strong>Trait</strong> 로 존재하는 걸 확인할 수 있다.</p>
+
+<p><br/>  </p>
+
+<p><img src="http://docs.scala-lang.org/resources/images/classhierarchy.img_assist_custom.png" /></p>  
+
+<p align="center"><a href='http://docs.scala-lang.org/tutorials/tour/unified-types.html'>http://docs.scala-lang.org/tutorials/tour/unified-types.html</a></p>
+
+<p>그림이 좀 작긴 한데, 자세히 보면 dotted arrow  가 있는걸 볼 수 있다. 이건 해당 타입이 화살표가 이어진 곳에 있는 타입으로 자동으로 converted 될 수 있는지의 여부다. 따라서 아래와 같은 <strong>REPL</strong> 실행 결과를 얻을 수 있다.</p>
+
+<pre><code class="scala">scala&gt; val a: Byte = 1  
+a: Byte = 1
+
+scala&gt; val b: Short = a  
+b: Short = 1
+
+scala&gt; b  
+res0: Short = 1
+
+scala&gt; val c: Byte = b  
+&lt;console&gt;:9: error: type mismatch;  
+ found   : Short
+ required: Byte
+       val c: Byte = b
+                     ^
+</code></pre>
+
+<h4 id="toptypes">Top Types</h4>
+
+<p><code>Any</code> 은 모든 타입의 베이스 타입으로, <code>==</code>, <code>!=</code>, <code>equals</code>, <code>hashCode</code>, <code>toString</code> 등의 메소드를 포함하고 있다.</p>
+
+<h4 id="thenothingtype">The Nothing Type</h4>
+
+<p><br/>  </p>
+
+<p><img src="http://docs.scala-lang.org/resources/images/classhierarchy.img_assist_custom.png" /></p>  
+
+<p align="center"><a href='http://docs.scala-lang.org/tutorials/tour/unified-types.html'>http://docs.scala-lang.org/tutorials/tour/unified-types.html</a></p>
+
+<p><code>Nothing</code> 은 Scala's type hierarchy 가장 아래쪽에 위치하는데, <strong>모든 타입의 subtype</strong> 이다. <code>Nothing</code> 은 또한 값이 없는데, 다음의 두 가지 경우 유용하다.</p>
+
+<p>(1). To signal abnormal termination <br />
+(2). As an element type of empty collections. ex) <code>Set[Nothing]</code></p>
+
+<p>참고로, <code>Exception</code> 의 타입도 <code>Nothing</code> 이다.</p>
+
+<h3 id="null">Null</h3>
+
+<p><code>Null</code> 은 모든 <code>scala.AnyRef</code> 하위에 있는 타입의 서브타입이다.</p>
+
+<blockquote>
+  <p>Every reference class type also has null as a value.</p>
+</blockquote>
+
+<p><code>null</code> 의 type 이 바로 <code>Null</code> 이다. <code>Null</code> 은 <code>java.lang.Object</code>, 즉 <code>scala.AnyRef</code> 를 상속받는 모든 클래스의 서브타입이기 때문에 <code>scala.AnyVal</code> 과는 incompatible 하다.</p>
+
+<pre><code class="scala">scala&gt; null  
+res1: Null = null
+
+scala&gt; val a:String = null  
+a: String = null
+
+scala&gt; val b: Int =  null  
+&lt;console&gt;:7: error: an expression of type Null is ineligible for implicit conversion  
+       val b: Int =  null
+</code></pre>
+
+<p>참고로 <code>if (true) 1 else false</code> 의 타입은 <code>AnyVal</code> 인데 <code>1</code>과 <code>false</code> 의 공통적인 상위 타입은 <code>AnyVal</code> 이기 때문이다.</p>
+
+<h3 id="33polymorphism">3.3 Polymorphism</h3>
+
+<p>대부분의 함수형 언어에서 기본적인 데이터 구조는 <strong>immutable linked list</strong> 다. 이건 <strong>Nil</strong> 과 <strong>Cons</strong> 로 구성되어 있는데, <strong>Nil</strong> 은 empty list 를, <strong>Cons</strong> 는 element 를 담고있는 부분을 말한다. 리습의 그것과 같다. </p>
+
+<p><br/>  </p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Cons-cells.svg/525px-Cons-cells.svg.png" /></p><p align="center"><a href='http://en.wikipedia.org/wiki/Cons'>http://en.wikipedia.org/wiki/Cons</a></p>
+
+<p>이번시간엔, <code>Cons</code> 와 <code>Nil</code> 들을 구현해 보자.</p>
+
+<pre><code class="scala">trait List[T] {  
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
+  def isEmpty = false
+}
+
+class Nil[T] extends List[T] {  
+  def isEmpty = true
+  def head = throw new NoSuchElementException("Nil.head")
+  def tail = throw new NoSuchElementException("Nil.tail")
+}
+</code></pre>
+
+<p>여기서 클래스에 있는 파라미터, <code>val head: T</code> 를 <strong><em>Value Parameter</em></strong> 라 부른다. <code>val</code> 의 경우에는 자동으로 <strong>public getter</strong> 를 만들어 준다.</p>
+
+<p>그리고 <code>[T]</code> 에서 <code>T</code> 는 <strong><em>Type Parameter</em></strong> 다. 타입 파라미터는 클래스 뿐만 아니라 함수에도 적용할 수 있는데, </p>
+
+<p><code>def signleton[T](elem:T) = new Cons[T](elem, new Nil[T])</code></p>
+
+<p>는 정상적으로 컴파일 된다. 물론 스칼라는 강력한 <strong><em>Type Inference</em></strong> 를 지원하기 때문에</p>
+
+<p><code>singleton[Boolean](true)</code> 대신 스칼라 컴파일러는 type inference 를 이용해서 <code>singleton(true)</code> 혹은 <code>singleton(1)</code> 를 받아들인다.</p>
+
+<h4 id="typesandevaluation">Types and Evaluation</h4>
+
+<blockquote>
+  <p>Type parameters do not affect evaluation in Scala</p>
+</blockquote>
+
+<p>재밌게도 Scala 프로그램이 evaluation 될 때  <code>[T]</code> 와 같은 <strong>Type parameters</strong> 는 전혀 영향을 미치지 않는다. 왜냐하면 Scala 가 evaluation 전에 모든 <strong>Type parameters</strong> 와 <strong>Type arguments</strong> 를 제거하기 때문이다. </p>
+
+<p>이 과정은 <strong><em>Type erasure</em></strong> 로 불린다. Java, Scala, Haskell, ML, OCaml 등은 <strong><em>Type erasure</em></strong> 를 이용하고, 런타임에도 <strong>Type parameters</strong> 를 유지하는 언어는 C++, C#, F# 등이 있다.  </p>
+
+<h4 id="polymorphism">Polymorphism</h4>
+
+<p><strong>Polymorphism</strong> 은 <em>"in many forms"</em> 라는 뜻이다. 프로그래밍에서는 다음과 같은 의미를 가진다.</p>
+
+<blockquote>
+  <p>(1) the function can be applied to arguments of many types or <br/>
+  (2) the type can have instances of many types</p>
+</blockquote>
+
+<p>이 정의로부터 두 가지 사실을 끌어낼 수 있는데,</p>
+
+<blockquote>
+  <p>(1) <strong>subtyping:</strong> instances of a subclass can be passed to a base class  <br/>
+  (2) <strong>generics:</strong> instances of a function or class are created by type parameterization</p>
+</blockquote>
+
+<p>사실 <strong>subtyping</strong> 은 OOP 언어에서 먼저 온 것이고, <strong>generics</strong> 는 함수형 언어에서 온 것이나, Scala 는 모두 사용한다.</p>
+
+<p>중요한 내용이므로 다시 한 번 정리 하면 <strong>다형성</strong> 이란, 다양한 형태를 가지고 있다는 뜻인데, 프로그래밍에서는 다음과 같은 의미를 지닌다.</p>
+
+<p>(1) 함수는 다양한 타입의 인자를 받아들일 수 있다. <br />
+(2) 타입은 다양한 타입의 인스턴스를 가질 수 있다.</p>
+
+<p>따라서 함수나 클래스의 인스턴스는 <strong><em>type parameterization</em></strong> 을 통해 생성될 수 있으며, 하위 클래스의 인스턴스는 상위 클래스로서 동작할 수 있다.</p>
+
+<h4 id="exercise">Exercise</h4>
+
+<blockquote>
+  <p>Write a function <code>nth</code> that takes an interger <code>n</code> and <code>a</code> list and selects the n'th element of the list<br/> <br/>
+  If index is outside the range from 0 up the length of the list minus one, a <code>IndexOutOfBoundsException</code> should be thrown</p>
+</blockquote>
+
+<pre><code class="scala">def nth[T](n: Int, list: List[T]): T = {  
+  if (list.isEmpty) throw new IndexOutOfBoundsException("out of bound index")
+  else if (n == 0) list.head
+  else nth(n - 1, list.tail)
+}
+</code></pre>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '31';
+  var disqus_url = 'http://1ambda.github.io/functional-programming-in-scala-chapter-3/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
