@@ -1,5 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 03 Oct 2014 11:09:48 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[new to Play Framework 2]]></title><description><![CDATA[<p><em>Play Framework</em> 를 배우기로 마음먹었다. 새로운 무언가를 마주쳤을때, 어떻게 해결할까를 위주로 서술했다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 03 Oct 2014 16:54:40 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Partial Functions, Scala]]></title><description><![CDATA[<h3 id="case">Case?</h3>
+
+<p><code>case</code> 는 <code>match</code> 가 없어도 쓰일 수 있다. 예를 들어</p>
+
+<pre><code class="scala">val m1 = Map(1 -&gt; "one", 2 -&gt; "two")  
+m1 foreach { case(k, v) =&gt; println(s"k -&gt; v" }  
+</code></pre>
+
+<p>사실, <code>case</code> 가 들어간 문장은 <code>function</code> 이다. Scala Doc 을 보면, <code>scala.collection.immutable.Map</code> 의 <code>foreach</code> 는 다음처럼 정의되어 있다.</p>
+
+<pre><code class="scala">def foreach(f: ((A, B)) =&gt; Unit): Unit  
+</code></pre>
+
+<h3 id="mapvscollect">Map vs Collect</h3>
+
+<p>여기 재미난 예제가 하나 더 있다. <code>map</code> 과 <code>collect</code> 가 서로 다른 결과를 보여준다.</p>
+
+<pre><code class="scala">scala &gt; val l = List(490, "Nexus5")  
+scala &gt; l map { case i: Int =&gt; i * 1000 }
+
+scala.MatchError: Nexus5 (of class java.lang.String)  
+  at $anonfun$1.apply(&lt;console&gt;:9)
+  at $anonfun$1.apply(&lt;console&gt;:9)
+  at scala.collection.immutable.List.map(List.scala:276)
+</code></pre>
+
+<p>문자열인 <code>"Nexus5"</code> 를 만나면 <code>MatchError</code> 가 발생한다. 반면 <code>collect</code> 는 </p>
+
+<pre><code class="scala">scala &gt; val l = List(490, "Nexus5")  
+scala &gt; l collect { case i: Int =&gt; i * 1000 }  
+res11: List[Int] = List(49000)  
+</code></pre>
+
+<p>왜 그럴까? <code>scala.collection.immutable.List</code> 의 <code>collect</code> 정의를 한번 보자.</p>
+
+<pre><code class="scala">def collect[B](pf: PartialFunction[A, B]): Map[B]  
+</code></pre>
+
+<p><code>function</code> 이 아니고 <code>PartialFunction</code> 을 취한다.</p>
+
+<h3 id="partialfunction">Partial Function</h3>
+
+<p><em>Partial Function</em> 을 이해하는 쉬운 방법은, 일반 <em>Function</em> 을 <em>Total Function</em> 으로 이해하면 된다. 즉, 일반 <em>Function</em> 이 주어진 인자에 대해 모든 값을 취한다면, <em>Partial Function</em> 은 주어진 타입에 대해서 특정 값만 취할 수 있다. Scala School 의 원문을 첨부하면</p>
+
+<blockquote>
+  <p>A function works for every argument of the defined type. In other words, a function defined as (Int) => String takes any Int and returns a String.
+  </br> <br />
+  A Partial Function is only defined for certain values of the defined type. A Partial Function (Int) => String might not accept every Int.
+  <br/></p>
+</blockquote>
+
+<pre><code class="scala">val onlyOne : PartialFunction[Int, String] = { case 1 =&gt; "one" }
+
+onlyOne.isDefinedAt(1) // true  
+onlyOne.isDefinedAt(2) // false  
+</code></pre>
+
+<p><code>onlyOne</code> 은 <code>Int</code> 를 인자로 받지만, 그 중에서도 <code>1</code> 만 취해 <code>"one"</code> 을 돌려주는 <code>PartialFunction[Int, String]</code> 이다.</p>
+
+<p><code>PartialFunction</code> 또한 compose 될 수 있다.</p>
+
+<pre><code class="scala">val onlyOne : PartialFunction[Int, String] = { case 1 =&gt; "one" }  
+val onlyTwo : PartialFunction[Int, String] = { case 2 =&gt; "two" }  
+val wildcard : PartialFunction[Int, String] = { case _ =&gt; "else" }
+
+val partial = onlyOne orElse onlyTwo orElse wildcard  
+</code></pre>
+
+<h3 id="case">Case!</h3>
+
+<p>처음엔 <code>case</code> 가 <code>Function</code> 을 만든다고 했지만, 사실 <code>PartialFunction</code> 을 정의한다. <code>map</code> 나 <code>filter</code> 는 <code>Function</code> 을 받지만, <code>PartialFunction</code> 은 <code>Function</code> 의 subtype 이므로 파라미터로 넘겨줄 수 있다.</p>
+
+<pre><code class="scala">case class Car(model: String, price: Int)
+
+val list = List(Car("H", 3000), Car("A", 2800))
+
+list filter { case Car(model, price) =&gt; price &lt; 2900 }
+
+// List[Car] = List(Car("A", 2800))
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://blog.bruchez.name/2011/10/scala-partial-functions-without-phd.html' >http://blog.bruchez.name/2011/10/scala-partial-functions-without-phd.html</a> <br />
+(2) <a href='https://twitter.github.io/scala_school/pattern-matching-and-functional-composition.html' >https://twitter.github.io/scala_school/pattern-matching-and-functional-composition.html</a></p>]]></description><link>http://1ambda.github.io/partial-functions-scala/</link><guid isPermaLink="false">38ff8181-481c-4535-8106-52584a473c95</guid><category><![CDATA[scala]]></category><category><![CDATA[partial function]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 03 Oct 2014 16:28:12 GMT</pubDate></item><item><title><![CDATA[new to Play Framework 2]]></title><description><![CDATA[<p><em>Play Framework</em> 를 배우기로 마음먹었다. 새로운 무언가를 마주쳤을때, 어떻게 해결할까를 위주로 서술했다.</p>
 
 <h3 id="installation">Installation</h3>
 
