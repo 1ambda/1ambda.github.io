@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>PUT vs POST, REST API</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PUT vs POST, REST API">
+  <meta name="twitter:description" content="idempotent PUT 과 POST 를 이해하려면, idempotent 라는 개념의 도입이 필요하다. 한글로 직역하면 멱등의 정도 되시겠다. 수학적으로 이해하는 편이 쉬운데,  f(x) = f(f(x)) 라 보면 된다. 다시 말해 몇 번이고 같은 연산 을 반복해도 같은 값이 나온다는 것. 이건 fault-tolerant API 를 디자인 하는데 있어서 굉장히 중요한 요소다">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/put-vs-post-restful-api/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/put-vs-post-restful-api/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=bf2473162b"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, FP</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-post-tag tag-put tag-rest">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/post-tag">post</a>, <a href="../tag/put">put</a>, <a href="../tag/rest">REST</a></h5>
+      <h1 class="margin_bottom_medium">PUT vs POST, REST API</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-05">Sunday, October 05, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/put-vs-post-restful-api/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <h3 id="idempotent">idempotent</h3>
+
+<p><code>PUT</code> 과 <code>POST</code> 를 이해하려면, <strong><a href="http://stackoverflow.com/questions/1077412/what-is-an-idempotent-operation">idempotent</a></strong> 라는 개념의 도입이 필요하다. 한글로 직역하면 <em>멱등의</em> 정도 되시겠다. 수학적으로 이해하는 편이 쉬운데, </p>
+
+<p><em>f(x) = f(f(x))</em></p>
+
+<p>라 보면 된다. 다시 말해 몇 번이고 같은 <em>연산</em> 을 반복해도 같은 값이 나온다는 것. 이건 fault-tolerant API 를 디자인 하는데 있어서 굉장히 중요한 요소다.</p>
+
+<p>예를 들어보자. 클라이언트가 <code>POST /dogs</code> 를 요청했는데, 어떤 이유로간에 요청이  time-out (408) 되었다고 해 보자. 클라이언트는 요청이 전달되었으나 네트워크가 끊어졌는지, 아니면 요청조차 전달이 되지 않았는지 알 수 없다.</p>
+
+<p>이 때, 클라이언트가 원하는 operation 이 <strong>idempotent</strong> 하다면 다시 요청해도 상관 없다. 항상 같은 결과를 만드니까. 그러나 <code>POST</code> 는 <strong>idempotent</strong> 하지 않다.</p>
+
+<h3 id="post">POST</h3>
+
+<p><code>POST</code> 는 클라이언트가 <em>리소스의 위치를 지정하지 않았을때</em> 리소스를 생성하기 위해 사용하는 연산이다. 예를들어</p>
+
+<pre><code class="json">POST /dogs HTTP/1.1
+
+{ "name": "blue", "age": 5 }
+
+HTTP/1.1 201 Created  
+</code></pre>
+
+<p>따라서 이 연산을 수행하면 <code>/dogs/2</code> 에 생기고, 그 다음번엔 <code>/dogs/3</code> 등 매번 다른곳에 새로운 리소스가 생성될 수 있으므로, 이 연산은 <strong>idempotent 하지 않다</strong>.</p>
+
+<h3 id="put">PUT</h3>
+
+<p>반면 리소스의 위치가 명확히 지정된 다음의 요청을 고려해 보자.</p>
+
+<pre><code class="json">PUT /dogs/3 HTTP/1.1
+
+{ "name": "blue", "age": 5 }
+</code></pre>
+
+<p><code>/dogs</code> 의 프로퍼티가 <code>name</code> 과 <code>age</code> 뿐이라면, 이건 몇 번을 수행하더라도, 같은 결과를 보장한다. 다시 말해 <strong>idempotent</strong> 하다.</p>
+
+<p>그리고 위에 예에서 알 수 있듯이 <code>PUT</code> 은 <em>리소스의 위치가 지정되었을때</em> <strong>생성</strong> 또는 <strong>업데이트</strong> 를 위해 사용할 수 있다. </p>
+
+<h3 id="patch"> PATCH</h3>
+
+<p><code>PUT</code> 이 리소스의 모든 프로퍼티를 업데이트 하기 위해 사용된다면, <code>PATCH</code> 는 부분만을 업데이트하기 위해 사용한다. <code>PUT</code> 과 마찬가지로 리소스의 위치를 클라이언트가 알고 있을 때 사용한다.</p>
+
+<p><a href="http://stackoverflow.com/questions/630453/put-vs-post-in-rest">SO</a> 에는 3개의 메소드를 다음과 같이 요약하는 답변이 있다.</p>
+
+<p>(1) <strong>POST</strong> to a URL <strong>creates a child resouce</strong> at a server defiend URL <br />
+(<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5">RFC 2616 POST</a>) <br />
+(2) <strong>PUT</strong> to a URL <strong>create/replaces the resource</strong> in is entirely at the client defined URL <br />
+(<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6">RFC 2616 PUT</a>) <br />
+(3) <strong>PATCH</strong> to a URL <strong>updates part of the resource</strong> at that client defined URL <br />
+(<a href="http://tools.ietf.org/html/rfc5789">RFC 5789: Patch Method for HTTP</a>)</p>
+
+<h3 id="responsecode">Response Code</h3>
+
+<p><code>POST</code> 이나 <code>POST</code> 요청이 리소스를 새로 생성할 경우엔 리소스의 위치를 response header 의 <strong>Location</strong> field 에 담아 <em>201 Created</em> 를 보낼 수 있다. 그러나 not-identifiable 한 리소스를 생성할 경우엔 <em>200 OK</em> 또는 <em>204 No Content</em> 를 보낼수도 있다.  </p>
+
+<p><a href="http://www.w3.org/Protocols이나 <code>POST</code> /rfc2616/rfc2616-sec9스의tml#sec9.5">원문</a>을 첨부하자면, </p>
+
+<blockquote>
+  <p>The action performed by the POST method might not result in a resource that can be identified by a URI. In this case, either 200 (OK) or 204 (No Content) is the appropriate response status, depending on whether or not the response includes an entity that describes the result. <br/><br/>
+  If a resource has been created on the origin server, the response SHOULD be 201 (Created) and contain an entity which describes the status of the request and refers to the new resource, and a Location header (see section 14.30).</p>
+</blockquote>
+
+<p>Async 하게 서버가 처리한다면, 요청은 수락 되었으나 아직 커밋되지 않았음을 알리기 위해 <em>202 Accepted</em> 를 보내야 한다. (if the operation has not been commited yet)</p>
+
+<p>아래 사진은, response code decision tree</p>
+
+<p><br/> <br />
+<a href="http://i.stack.imgur.com/whhD1.png"><img src="http://i.stack.imgur.com/whhD1.png" /></a><p align="center">(<a href='http://i.stack.imgur.com/whhD1.png'>http://i.stack.imgur.com/whhD1.png</a>)</p> <br />
+<br/></p>
+
+<h3 id="safemethods">Safe Methods</h3>
+
+<p>리소스를 수정하지 않는 메소드들, <code>OPTIONS</code>, <code>GET</code>, <code>HEAD</code> 등을 <em>safe</em> 하다고 말한다. 대부분의 경우 <em>idempotent</em> 하면 <em>safe</em> 하다. 물론 예외도 있는데 <code>DELETE</code> 는 <em>idempotent</em> 하지만 리소스를 변경하므로 <em>safe</em> 하지 않다. 자세한 내용은 <a href="http://tools.ietf.org/html/rfc7231#section-4.2">RFC 7231: Safe Methods</a> 를 보자. 참고로 <a href="http://tools.ietf.org/html/rfc7231#section-4.2.1">RFC 7231</a> 은 <code>PUT</code>, <code>DELETE</code> 와 <em>safe methods</em> 를 <em>idempotent</em> 하다고 정의한다.</p>
+
+<p><code>HEAD</code> 는 Response-Body 없이 Header 만 얻기 위해 사용하고, <code>OPTIONS</code> 는 해당 리소스에 대해 가능한 operation 이 무엇인지 응답을 얻기 위해 사용한다. 만약 <code>OPTIONS</code> 에 대한 응답이 온다면 response <code>Allow</code> 에 가능한 operation 이 와야한다. <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">RFC2616</a> 에는 다음과 같이 나와있다.</p>
+
+<blockquote>
+  <p>The <code>OPTIONS</code> method represents a request for information about the communication options available on the request/response chain identified by the Request-URI. This method allows the client to determine the options and/or requirements associated with a resource, or the capabilities of a server, without implying a resource action or initiating a resource retrieval. <br/><br/>
+  Responses to this method are not cacheable.</p>
+</blockquote>
+
+<h3 id="cacheablemethods">Cacheable Methods</h3>
+
+<p>왜 <code>OPTIONS</code> 메소드에 대한 응답은 캐시가 불가능한걸까? SO 에서 이 <a href="http://stackoverflow.com/questions/13073313/http-options-not-cacheable">답변</a> 이 제일 나은것 같아서 가져왔다.</p>
+
+<blockquote>
+  <p>The <code>OPTIONS</code> HTTP request returns the available methods which can be performed on a resource. (The objects methods)</p>
+  
+  <p>I can not say for certain why you can not cache the response, but its most likely a precaution. Caching would have little value for the <code>OPTIONS</code> http method.</p>
+  
+  <p>A Resource is "any information that can be given a name", that name is its URI. the response from the OPTIONs request is only a list of methods that can be requested on this resource (e.g. "GET PUT POST" maybe the response). To actually get at the information stored, you must use the GET method.</p>
+  
+  <p>History, more than anything; OPTIONS was defined that way to start with. The underlying reason is that HTTP caches are defined in terms of representations, which means the way you get something out of the cache is GET. This is why OPTIONS, PROPFIND, etc. caching are problematic.</p>
+</blockquote>
+
+<p>다시 말해서, 리소스는 주어진 URI 에 대한 정보인데 <code>OPTIONS</code> 는 정보를 가지고 오는 것이 아니라, 정보에 대해 어떤 연산이 가능한지를 알려준다. HTTP 에서는 정보에 대해 캐싱하므로, <code>GET</code> 이나 <code>HEAD</code> 같이 정보를 돌려주는 연산만 캐싱할 수 있다.</p>
+
+<h3 id="traceconnect">Trace, Connect</h3>
+
+<p><code>TRACE</code> 는 클라이언트가 방금 보낸 요청을 다시 달라고, 서버에게 요청하는 것이고 <code>CONNECT</code> 는 HTTP 터널링을 할때 쓰인다. 중간의 프록시 서버를 위해서는 <code>CONNECT</code> 로 요청하고, 마지막 프록시에서 end-point 로는 <code>GET</code> 또는 <code>CONNECT</code> 를 날린다. <code>HTTPS</code> 라면 <code>CONNECT</code> 를, <code>HTTP</code> 라면 둘 중 아무거나 써도 상관 없다. 더 자세한건 <a href="http://stackoverflow.com/questions/11697943/when-should-one-use-connect-and-get-http-methods-at-http-proxy-server">SO 답변</a> 으로</p>
+
+<p>원문을 첨부하면,</p>
+
+<blockquote>
+  <p><strong>CONNECT:</strong> This method could allow a client to use the web server as a proxy.</p>
+  
+  <p><strong>TRACE:</strong> This method simply echoes back to the client whatever string has been sent to the server, and is used mainly for debugging purposes. This method, originally assumed harmless, can be used to mount an attack known as Cross Site Tracing, which has been discovered by Jeremiah Grossman (see links at the bottom of the page).</p>
+</blockquote>
+
+<h3 id="summary">Summary</h3>
+
+<p>HTTP 메소드에 대해서 알아보았는데, 조금 더 찾아보니 HTTP 는 0.9 -> 1.0 -> 1.1 순으로 변화했다고 한다. 0.9 에선 <code>GET</code> 을 이용한 Read-only 버전이었고 1.0 에 들어와서야 <code>HEAD</code>, <code>POST</code> 등을 이용해 서버로 데이터 전송이 가능해졌다.   HTTP 1.1 (RFC 2616) 에 와서야 <code>DELETE</code>, <code>PUT</code> 등이 추가되면서 변경, 삭제까지 가능해졌다.</p>
+
+<p>다음번에 HTTP 를 또 살펴 볼 일이 생긴다면, <a href="http://tools.ietf.org/html/rfc7234">RFC 7243: Caching</a> 과 <a href="http://tools.ietf.org/html/rfc7235">RFC 7235: Authentication</a> 에 대해서 보지 않을까 싶다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://restcookbook.com/HTTP%20Methods/put-vs-post/">REST Cookbook: PUT vs POST</a> <br />
+(2) <a href="http://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete">HTTP status code for UPDATE and DELETE</a> <br />
+(3) <a href="http://stackoverflow.com/questions/630453/put-vs-post-in-rest/18243587#18243587">PUT vs POST in REST</a> <br />
+(4) <a href="http://restcookbook.com/HTTP%20Methods/idempotency/">REST Coookbook: idempotency</a> <br />
+(5) <a href="http://zacstewart.com/2012/04/14/http-options-method.html">HTTP OPTIONS Method</a> <br />
+(6) <a href="https://www.mnot.net/blog/2012/10/29/NO_OPTIONS">NO OPTIONS</a> <br />
+(7) <a href="http://www.mkexdev.net/Article/Content.aspx?parentCategoryID=1&amp;categoryID=11&amp;ID=119">HTTP History</a> <br />
+(8) <a href="http://stackoverflow.com/questions/13073313/http-options-not-cacheable">HTTP OPTIONS not cacheable</a> <br />
+(9) <a href="http://stackoverflow.com/questions/11697943/when-should-one-use-connect-and-get-http-methods-at-http-proxy-server">CONNECT vs GET in proxy</a></p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '36';
+  var disqus_url = 'http://1ambda.github.io/put-vs-post-restful-api/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
