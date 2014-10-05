@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Content-Type vs Accept, HTTP Header</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Content-Type vs Accept, HTTP Header">
+  <meta name="twitter:description" content="이 답변 이 젤 심플하다.    As you correctly note, the Accept header is used by HTTP clients to tell the server what content types they'll accept. The server will then send back a response, which will include a Content-Type header telling the client what the content type of the returned">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/content-type-vs-accept-http-header/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/content-type-vs-accept-http-header/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=bf2473162b"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, FP</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-accept tag-content-type tag-http">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/accept">Accept</a>, <a href="../tag/content-type">content-type</a>, <a href="../tag/http">HTTP</a></h5>
+      <h1 class="margin_bottom_medium">Content-Type vs Accept, HTTP Header</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-05">Sunday, October 05, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/content-type-vs-accept-http-header/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>이 <a href="http://webmasters.stackexchange.com/questions/31212/difference-between-accept-and-content-type-http-headers">답변</a> 이 젤 심플하다. </p>
+
+<blockquote>
+  <p>As you correctly note, the <strong>Accept</strong> header is used by HTTP clients to tell the server what content types they'll accept. The server will then send back a response, which will include a <strong>Content-Type</strong> header telling the client what the content type of the returned content actually is.</p>
+  
+  <p>However, as you may have noticed, HTTP requests can also contain <strong>Content-Type</strong> headers. Why? Well, think about POST or PUT requests. With those request types, the client is actually sending a bunch of data to the server as part of the request, and the <strong>Content-Type</strong> header tells the server what the data actually is (and thus determines how the server will parse it).</p>
+  
+  <p>In particular, for a typical POST request resulting from an HTML form submission, the Content-Type of the request will normally be either <strong>application/x-www-form-urlencoded</strong> or <strong>multipart/form-data</strong>.</p>
+</blockquote>
+
+<p>Request Header의 <code>Accept</code> 는 클라이언트가 <em>어떤 컨텐츠 타입을 받길 원하는가</em> 이고, <code>Content-Type</code> 은 어떤 컨텐츠 타입을 <em>실제로 보내는가</em> 를 기록한다. </p>
+
+<p><code>PUT</code> 이나 <code>POST</code> 를 생각해 보면 Response Header 뿐만 아니라, Request Header 에도 <code>Content-Type</code> 이 포함될 수 있는데, HTML FORM 에서 생성되는 전형적인 <code>Content-Type</code> 은 <code>application/x-www-form-urlencoded</code> 와 <code>multipart/form-data</code> 다.</p>
+
+<p>RFC 2616 원문을 보고 싶으면 이리로, <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">Accept</a>, <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a></p>
+
+<p><code>application/x-www-form-urlencoded</code> 는 <a href="http://www.w3.org/TR/html401/interact/forms.html">Spec</a> 에 스페이스를 <code>+</code> 로 바꾸고, key-valur pair 사이를 <code>&amp;</code>로 분리하는 등의 일을 하는데, 큰 문제점이 하나 있다. 바로 non-alphanumeric bytes 가 <code>%HH</code> 로 변경되는데, 1byte 를 3bytes 로 바꾸면, 커다란 파일이나, 바이너리 혹은 non-ASCII 로 구성된 파일들을 보낼때 마다 굉장히 비효율적인 인코딩을 하게 된다.</p>
+
+<p>그래서 나온게 바로 <code>multipart/form-data</code> 인데, 이건 데이터에 나타나지 않는 특별한 패턴, <strong>boundary</strong> 를 찾아 각 key-valur pair 를 <strong>part</strong> 로 나눈다. 각 파트마다 <strong>Content-Disposition</strong> 이라는 <strong>Content-Type</strong> 필드를 가지고 있고, 여기에 나온 MIME type 에 따라 적절한 인코딩을 한다. </p>
+
+<pre><code class="html">&lt;FORM action="http://server.com/cgi/handle"  
+       enctype="multipart/form-data"
+       method="post"&gt;
+   &lt;P&gt;
+   What is your name? &lt;INPUT type="text" name="submit-name"&gt;&lt;BR&gt;
+   What files are you sending? &lt;INPUT type="file" name="files"&gt;&lt;BR&gt;
+   &lt;INPUT type="submit" value="Send"&gt; &lt;INPUT type="reset"&gt;
+&lt;/FORM&gt;  
+</code></pre>
+
+<p>다음과 같은 Form 을 보낸다고 하면, 실제로는</p>
+
+<pre><code>  Content-Type: multipart/form-data; boundary=AaB03x
+
+   --AaB03x
+   Content-Disposition: form-data; name="submit-name"
+
+   Larry
+   --AaB03x
+   Content-Disposition: form-data; name="files"; filename="file1.txt"
+   Content-Type: text/plain
+
+   ... contents of file1.txt ...
+   --AaB03x--
+</code></pre>
+
+<p>만약에 파일을 하나 더 보낸다면</p>
+
+<pre><code>   Content-Type: multipart/form-data; boundary=AaB03x
+
+   --AaB03x
+   Content-Disposition: form-data; name="submit-name"
+
+   Larry
+   --AaB03x
+   Content-Disposition: form-data; name="files"
+   Content-Type: multipart/mixed; boundary=BbC04y
+
+   --BbC04y
+   Content-Disposition: file; filename="file1.txt"
+   Content-Type: text/plain
+
+   ... contents of file1.txt ...
+   --BbC04y
+   Content-Disposition: file; filename="file2.gif"
+   Content-Type: image/gif
+   Content-Transfer-Encoding: binary
+
+   ...contents of file2.gif...
+   --BbC04y--
+   --AaB03x--
+</code></pre>
+
+<p>그렇다고 해서 <code>multipart/form-data</code> 가 항상 좋은건 아니다. 간단한 alpha-numeric 이라면 <strong>boundary</strong> 를 찾고 MIME 인코딩 하고 디코딩 하는 과정 대신 그냥 <code>application/x-www-form-urlencoded</code> 로 보내면 된다.</p>
+
+<p>참고로, <code>Content-Type</code> 이 <code>text</code> 일 경우에는 문자 인코딩을 지정하기 위해 <code>charset</code> 을 사용할 수 있다. <code>text/plain; charset=utf-8</code> 처럼</p>
+
+<p><a href="http://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data">SO 답변</a> 에는 두 가지 컨텐츠 타입 뿐 아니라 <code>application/xml</code> 이나 <code>application/json</code> 을 이용해서도 binary 나 non-ascii 를 보낼수 있단다. </p>
+
+<h3 id="applicationoctetstream">application/octet-stream</h3>
+
+<p><code>Content-Type</code> 에 들어갈 수 있는 MIME 타입에는 <code>application/octet-stream</code> 이라는 arbitrary binary data 를 위한 값이 있다. 따라서</p>
+
+<pre><code>Content-Type: application/octet-stream  
+Content-Disposition: attachment; filename="picture.png"  
+</code></pre>
+
+<p>이건, 뭔진 모르겠지만 파일 이름은 <code>picture.png</code> 고 저장해줘, 라는 뜻이다.</p>
+
+<pre><code>Content-Type: image/png  
+Content-Disposition: attachment; filename="picture.png"  
+</code></pre>
+
+<p>이 요청은 이건 <code>png</code> 고, <code>picture.png</code> 라는 이름으로 저장해줘, 라는 뜻이다.</p>
+
+<pre><code>Content-Type: image/png  
+Content-Disposition: inline; filename="picture.png"  
+</code></pre>
+
+<p>이 요청은, 이건 <code>png</code> 인데 방법을 안다면 보여줘, 라는 뜻이다.</p>
+
+<h3 id="contentencoding">Content-Encoding</h3>
+
+<p><code>Content-Encoding</code> 은 그럼 무엇일까? <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP Compression</a> 을 보면, 클라이언트가 받길 기대하는 Encoding 의 목록이라고 나와있다. 문자열 인코딩이 아니라, <code>gzip</code> 이나 <code>bzip2</code>, <code>deflate</code> 같은 압축 방법이다. </p>
+
+<p>먼저 클라이언트가 다음과 같이 요청을 보내면</p>
+
+<pre><code>GET /encrypted-area HTTP/1.1  
+Host: www.example.com  
+Accept-Encoding: gzip, deflate  
+</code></pre>
+
+<p>서버가 다음과 같이 보낼 수 있다. </p>
+
+<pre><code>HTTP/1.1 200 OK  
+Date: mon, 4 Oct 2014 22:38:34 GMT  
+Server: Apache/1.3.3.7 (Unix)  (Red-Hat/Linux)  
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT  
+Accept-Ranges: bytes  
+Content-Length: 438  
+Connection: close  
+Content-Type: text/html; charset=UTF-8  
+Content-Encoding: gzip  
+</code></pre>
+
+<p>그럼 클라이언트는 <code>Content-Encoding</code> 필드를 파악한 뒤, 압축을 풀거나 하면 된다. </p>
+
+<h3 id="transferencoding">Transfer-Encoding</h3>
+
+<p><em>end-to-end</em> 인 <code>Content-Encoding</code> 과는 반대로 <code>Transfer-Encoding</code> 은 <code>hop-toh-top</code> 이다. <a href="http://stackapps.com/questions/916/why-content-encoding-gzip-rather-than-transfer-encoding-gzip">SO 답변</a>을 그대로 가져오면</p>
+
+<blockquote>
+  <p>Transfer-Encoding is hop-by-hop, while Content-Encoding is end-to-end.</p>
+  
+  <p>This means that if there is a proxy involved, anywhere, the proxy will see the TE gzip, unzip it, and not necessarily forward the request as TE gzip.</p>
+  
+  <p>So, the choices are</p>
+  
+  <p>CE gzip and always know what you will be getting, requiring logic to decompress the response.</p>
+  
+  <p>TE gzip and never know what you will be getting requiring logic to decide whether to decompress the response and the logic to decompress it when required.</p>
+  
+  <p>The logical choice is CE gzip.</p>
+</blockquote>
+
+<p>요약하자면, <code>CE(Content-Encoding)</code> 은 <code>gzip</code>(예를들어) 되어 올걸 알기 때문에  압축을 풀 로직이 필요한 반면, <code>TE(Content-Encoding)</code> 은 중간에 <code>gzip</code> 을 풀 수 있는 프록시가 있다면, 풀려서 올수도 있고 아닐 수도 있기 때문에 압축을 푸는 로직은 물론, 풀어야 하는지 아닌지를 결정할 수 있는 로직도 필요하다. </p>
+
+<p>아래는 RFC 2616(HTTP 1.1) 에서 <strong>Roy T. Fielding</strong> 이 작성한 글</p>
+
+<blockquote>
+  <p>changing content-encoding on the fly in an inconsistent manner (neither "never" nor "always) makes it impossible for later requests regarding that content (e.g., PUT or conditional GET) to be handled correctly. This is, of course, why performing on-the-fly content-encoding is a stupid idea, and why I added Transfer-Encoding to HTTP as the proper way to do on-the-fly encoding without changing the resource.</p>
+</blockquote>
+
+<h3 id="transferencodingchunked">Transfer-Encoding: Chunked</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunked transfer encoding</a> 에 보면, HTTP Response 를 여러번 보낼 수 있는 방법이 있다. 바로 <code>Content-Length</code> 대신 <code>Transfer-Encoding</code> 에 <code>chunked</code> 값을 넣어 보내다가 final chunked(empty) 가 오면 끝난다.</p>
+
+<p>예를들어, 서버가 다음과 같은 데이터를 보내면 (2라인씩 쌍지어 첫줄은 데이터의 길이, 두번째는 실제 데이터 chunk 다)</p>
+
+<pre><code>4\r\n  
+Wiki\r\n  
+5\r\n  
+pedia\r\n  
+e\r\n  
+ in\r\n\r\nchunks.\r\n
+0\r\n  
+\r\n
+</code></pre>
+
+<p>클라이언트는 다음과 같이 해석한다. 각 chunk 는 <code>CLRF</code> 로 끝나며 이건 길이에 포함되지 않는다. final chunk 는 길이가 <code>\r\n</code> 로만 표시된다.</p>
+
+<pre><code>Wikipedia in
+
+chunks.  
+</code></pre>
+
+<p><a href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding#rationale">여기</a> 보면 이걸 쓰는 이유가 몇 가지 나오는데,</p>
+
+<p>(1) HTTP persistent connection 을 만들 수 있고 <br />
+(2) 마지막에 부가적인 헤더를 첨부할 수 있으며 <br />
+(3) <code>Content-Encoding</code> 과 같이 쓰일 수 있다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>HTTP 헤더를 좀 살펴 보았다. <a href="http://en.wikipedia.org/wiki/HTTP/2">HTTP 2.0</a> 나 <a href="http://en.wikipedia.org/wiki/SPDY">SPDY</a> 도 좀 살펴보자.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4">HTML Form Specification</a> <br />
+(2) <a href="http://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data">form-data vs x-www-urlencoded</a> <br />
+(3) <a href="http://stackoverflow.com/questions/20508788/do-i-need-content-type-application-octet-stream-for-file-download">application/octet-stream</a> <br />
+(4) <a href="http://stackapps.com/questions/916/why-content-encoding-gzip-rather-than-transfer-encoding-gzip">why-content-encoding-gzip-rather-than-transfer-encoding-gzip</a> <br />
+(5) <a href="http://stackoverflow.com/questions/11641923/transfer-encoding-gzip-vs-content-encoding-gzip">Transfer-Encoding vs Content-Encoding</a></p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '37';
+  var disqus_url = 'http://1ambda.github.io/content-type-vs-accept-http-header/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
