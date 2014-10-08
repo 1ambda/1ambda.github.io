@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Functional Programming in Scala, Chapter 4</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Functional Programming in Scala, Chapter 4">
+  <meta name="twitter:description" content="2014-10-07, Functional Programming in Scala, Coursera Types and Pattern Matching Functions as Objects   In fact function values are treated as objects in Scala trait Function1[A, B] {     def apply(x: A): B } 결국, function 은 apply 메소드를 가진 오브젝트다. 예를 들어서 (x: Int) =&gt; x * x 는 다음과 같이 Function1">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-4/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/functional-programming-in-scala-chapter-4/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=daa447b747"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala tag-coursera tag-variant">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala">scala</a>, <a href="../tag/coursera">coursera</a>, <a href="../tag/variant">variant</a></h5>
+      <h1 class="margin_bottom_medium">Functional Programming in Scala, Chapter 4</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-07">Tuesday, October 07, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/functional-programming-in-scala-chapter-4/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>2014-10-07, <strong>Functional Programming in Scala</strong>, Coursera</p>
+
+<h2 id="typesandpatternmatching">Types and Pattern Matching</h2>
+
+<h3 id="functionsasobjects">Functions as Objects</h3>
+
+<blockquote>
+  <p>In fact function values are treated as objects in Scala</p>
+</blockquote>
+
+<pre><code class="scala">trait Function1[A, B] {  
+  def apply(x: A): B
+}
+</code></pre>
+
+<p>결국, <code>function</code> 은 <code>apply</code> 메소드를 가진 오브젝트다.</p>
+
+<p>예를 들어서 <code>(x: Int) =&gt; x * x</code> 는 다음과 같이 <code>Function1</code> ` <em>trait</em> 를 구현한 클래스 된다.</p>
+
+<pre><code class="scala">{
+  class AnonFun extends Function1[Int, Int] (
+    def apply(x: Int) = x * x
+  }
+
+  new AnonFun
+}
+
+// or using anonymous class syntax
+// trait can be instanciated
+
+new Function1[Int, Int] {  
+  def apply(x: Int) = x * x
+}
+</code></pre>
+
+<p>따라서 이런 정의를 보면, <code>f(a, b)</code> 는 <code>f.apply(a, b)</code> 다. 그런데 만약 메소드인 <code>def apply</code> 자체도 오브젝트일까? 그렇지 않다. 만약 <code>apply</code> 자체도 오브젝트라면, 그 오브젝트도 <code>apply</code> 메소드를 가지고 있어야 하고, 또 다시 그렇게 반복될 수 있다.</p>
+
+<h4 id="functionsandmethods">Functions and Methods</h4>
+
+<p>따라서 <code>def f(x: Int): Int = ...</code> 메소드 자체는 <strong>Function</strong> 이 아니다. (<em>Method != Function</em>) 그러나 </p>
+
+<blockquote>
+  <p>If <code>f</code> is used in a place where a <code>Function</code> type is expected, it is converted automatically to the function value</p>
+</blockquote>
+
+<p>예를 들어, <code>(x: Int) = f(x)</code> 는 다음과 같이 확장된다.</p>
+
+<pre><code class="scala">new Function1[Int Int] {  
+ def apply(x: Int) = f(x)
+}
+</code></pre>
+
+<p>이렇게 <em>Method</em> 가 <em>Function</em> 으로 변환되는 과정을 <em>lambda calculus</em> 에서는 <strong>eta-expansion</strong> 이라 부른다. </p>
+
+<p>그리고 위에서 보았겠지만 <code>apply</code> 메소드는, 오브젝트에 있을때 오브젝트 이름 자체로 호출될 수 있도록 해준다. 예를들어 지난 시간에 만들었던 <code>List</code> <em>trait</em> 에 대해서,</p>
+
+<pre><code class="scala">trait List[T] {  
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
+  def isEmpty = false
+}
+
+class Nil[T] extends List[T] {  
+  def isEmpty = true
+  def head = throw new NoSuchElementException("Nil.head")
+  def tail = throw new NoSuchElementException("Nil.tail")
+}
+</code></pre>
+
+<p>아래와 같은 호출을 원한다면</p>
+
+<pre><code class="scala">val e = List()  
+val e3 = List(3)  
+val e34 = List(3, 4)  
+</code></pre>
+
+<p>다음과 같이 <code>List</code> <em>Object</em> 와 <code>apply</code> <em>Method</em> 를 정의할 수 있다. </p>
+
+<pre><code class="scala">object List {  
+  def apply() = new Nil
+  def apply(x: Int) = new Cons(x, new Nil)
+  def apply(x: Int, y: Int) = new Cons(x, new Cons(y, new Nil))
+}
+</code></pre>
+
+<h3 id="subtypingandgenerics">Subtyping and Generics</h3>
+
+<p>지난시간에는 <em>Polymorphism</em> 의 두가지 형태에 대해 배웠었다. 하나는 <strong>Subtyping</strong> 이고, 다른 하나는 <strong>Generics</strong> 다. 기억을 더듬어 보면</p>
+
+<blockquote>
+  <p><strong>Subtyping:</strong> Instance of a subclass can be passed to a base class <br />
+  <strong>Generics:</strong> Instance of a function or class are created  by type parameterazation</p>
+</blockquote>
+
+<p>이 중에서 <em>subtyping</em> 은 OOP 에서 먼저 온 것이고, <em>generics</em> 는 <em>FP</em> 에서 먼저 온 것이라는 이야기 까지 했다.</p>
+
+<h4 id="typebounds">Type Bounds</h4>
+
+<p><code>assertAllPos</code> 메소드가 있다고 하자. <code>IntSet</code> 을 취해서, 모든 Element 가 양수면 <code>IntSet</code> 을 리턴하고 아니면 예외를 던진다. 다음과 같이 정의할 수 있겠다.</p>
+
+<p><code>def assertAllPos(s: IntSet): IntSet</code></p>
+
+<p>근데, 만약에 이 메소드가 <code>Empty</code> 를 받으면 <code>Empty</code> 를, <code>NonEmpty</code> 를 받으면 <code>NonEmpty</code> 를 돌려주게 하려면 어떻게 해야할까? 메소드를 2개를 더 만들어야 할까? <em>Type Bound</em> 를 이용해 문제를 해결할 수 있다.</p>
+
+<p><code>def assertAllPos[S &lt;: IntSet](r: S): S = ...</code></p>
+
+<p>여기서 <code>S &lt;: IntSet</code> 은 <code>S</code> 가 <code>IntSet</code> 의 서브타입임을 말하고, 이것을 <strong>Upper bound</strong> 라 부른다(<code>IntSet</code> 기준). 즉 <code>S</code> 의 상위 타입을 지정하는 것이다. </p>
+
+<p>반대로 <code>S :&gt; IntSet</code> 도 있을 수 있다. 이것은 <strong>Lower bound</strong> 라 부르며(<code>IntSet</code> 기준), 이 메소드가 <code>IntSet</code> 의 상위 타입 <code>S</code> 를 이용한다는 것을 컴파일 타임에 지정한다. <code>S</code> 는 <code>IntSet</code>, <code>AnyRef</code>, <code>Any</code> 가 될 수 있다. 정리 하자면,</p>
+
+<blockquote>
+  <p><code>S &lt;: T</code> means: <strong>S is a subtype of T</strong> <br />
+  <code>S :&gt; T</code> means: <strong>S is a supertype of T, or T is a subtype of S</strong></p>
+</blockquote>
+
+<p><strong>Mixed Bound</strong> 도 있다. <code>[S &gt;: NonEmpty &lt;: IntSet]</code></p>
+
+<h4 id="covariance">Covariance</h4>
+
+<p>그런데, <code>NonEmpty &lt;: IntSet</code> 일때 <code>List[NonEmpty] &lt;: List[IntSet]</code> 이면, <strong>Covariant</strong> 하다고 말한다. 직관적으로 보면 그럴듯 하다. </p>
+
+<p>이거 정말 문제가 없을까? <code>List</code> 말고 자바의 <code>Array</code> 를 예로 들어보자.</p>
+
+<pre><code class="java">NonEmpty[] a =  
+  new NonEmpty[]{new NonEmpty(1, Empty, Empty)}
+
+IntSet[] b = a  
+b[0] = Empty  
+NonEmpty s = a[0]  
+</code></pre>
+
+<p><code>b[0] = Empty</code> 가 문제가 된다. 여기서 런타임 예외가 발생하는데, 자바에서는 배열이 생성될때, 이 배열이 어떤 타입으로 생성되었는지 내부적으로 태그를 붙인다. 그런데, <code>NonEmpty</code> 로 태그가 붙은 배열에 호환되지 않는 <code>Empty</code> 를 넣고 있기 때문이다.</p>
+
+<p>자바 1.5 이전에는 Generics 가 없었기 때문에 정렬을 위해서는 <code>sort(Object[] a)</code> 처럼 주어야 했는데, 이를 위해서는 자바의 배열이 <strong>Covariant</strong> 여야 했다.</p>
+
+<h4 id="theliskovsubstitutionprinciple">The Liskov Substitution Principle</h4>
+
+<p><strong>Liskov Substitution Princile(리스코프 치환원칙)</strong> 은 언제 한 타입이 다른 타입의 서브타입이 될 수 있는지 말해준다.</p>
+
+<blockquote>
+  <p>If <code>A &lt;: B</code>, then everything one can to do with a value of type <code>B</code> one should also be able to do with a value of type <code>A</code></p>
+</blockquote>
+
+<p>자 이제, Scala 에서 위의 코드를 작성하면 어디서 에러가 나는지 확인 해 보자.</p>
+
+<pre><code class="scala">val a: Array[NonEmpty] = Array(new NonEmpty(1, Empty, Empty))  
+val b Array[IntSet] = a  
+b(0) = Empty  
+val s: NonEmpty = a(0)  
+</code></pre>
+
+<p><code>val b: Array[IntSet] = a</code> 에서 컴파일 타임 에러가 난다. 왜냐하면 Scala 의 <code>Array</code> 는 <strong>Not</strong> <em>covariant</em> 이기 때문이다.</p>
+
+<h3 id="variance">Variance</h3>
+
+<p>어떤 타입은 <em>covariant</em> 고 어떤 타입은 그렇지 않은걸까? 엄격히 말해서, elements 들의 <em>mutation</em> 을 허용하는 타입은 <em>not-covariant</em> 여야 한다. </p>
+
+<p>반면 <em>immutable types</em> 은 조건이 갖춰지면 <em>covariant</em> 일 수 있다. 위에서 <code>List</code> 는 되고, <code>Array</code>는 안되었던 것처럼.</p>
+
+<p><code>C[T]</code> 가 있고, <code>A &lt;: B</code> 일때 다음과 같은 정의를 내릴 수 있다.</p>
+
+<ul>
+<li><code>C[A] &lt;: C[B]</code> 이면, <strong>C is covariant</strong>, <code>C[+A]</code> 로 표시</li>
+<li><code>C[A] &gt;: C[B]</code> 이면, <strong>C is contravariant</strong>, <code>C[-A]</code> 로 표시  </li>
+<li><code>C[A]</code> 와 <code>C[B]</code> 가 상관이 없으면, <strong>C is non-variant</strong>, , <code>C[A]</code> 로 표시</li>
+</ul>
+
+<p>그렇다면 다음과 같은 두개의 타입이 있을때, 어떤것이 서브타입이고 어떤  것이 슈퍼타입일까?</p>
+
+<pre><code class="scala">type A = IntSet =&gt; NonEmpty  
+type B = NonEmpty =&gt; IntSet  
+</code></pre>
+
+<p>설명을 조금 자세히 하면, 함수의 파라미터는 <em>Contravariant</em> 하고, 함수의 리턴타입은 <em>Covariant</em> 하다. <code>Function1[-A, +B]</code> 를 보면 알 수 있다. 따라서 <code>A &lt;: B</code> 다. 왜 그럴까? 여기 <a href="https://twitter.github.io/scala_school/type-basics.html#variance">Scala School</a> 의 예제를 좀 보자.</p>
+
+<pre><code class="scala">class Animal {  
+  val sound = "rustle" 
+  def name = "animal"
+}
+
+class Bird extends Animal {  
+  override val sound = "call"
+  def name = "bird"
+}
+class Chicken extends Bird {  
+  override val sound = "cluck" 
+  def name = "chicken"
+}
+</code></pre>
+
+<p>이때, <code>val getTweet: (Bird =&gt; String)</code> 에 <code>(c: Chicken =&gt;  c.chicken</code> 과 같이 넘겨주고, 나중에 <code>getTweet(new Bird)</code> 를 호출하면 에러가 난다. 반면 <code>a: Animal =&gt; a.name</code> 을 주고, <code>getTweek(new Bird)</code> 는 상관 없다. 어차피 <code>Bird</code> 는 <code>Animal</code> 이니까</p>
+
+<p>따라서 함수의 파라미터는 현재와 같은 타입이거나, 혹은 그 슈퍼타입이어야 한다, 다시말해서 <strong>Contravariant</strong> 해야 한다.</p>
+
+<h4 id="variancechecks">Variance Checks</h4>
+
+<p><code>Array</code> 의 경우 <code>update</code> 연산이 문제가 될 수 있다는걸 위에서 논의 했었는데, 이걸 정리하자면</p>
+
+<blockquote>
+  <p>*The problematic combination is <br />
+  <strong>the covariant type parameter T</strong> <br />
+  <strong>which appears in parameter position of method <code>update</code></strong></p>
+</blockquote>
+
+<p>즉 <em>covariant</em> 타입 <code>T</code> 가 <code>update</code> 연산에 나타날때 문제가 된다. 그래서 Scala 는 컴파일 타임에 이런 문제가 생기지 않는지 검사를 한다.</p>
+
+<blockquote>
+  <p><em>covariant</em> type parameters can only appear in method results <br />
+  <em>contravariant</em> type parameters can only appear in method parameters <br />
+  <em>invariant</em> type parameters can appear anywhere  </p>
+</blockquote>
+
+<p><code>Function1</code> <em>Trait</em> 는 그래서 사실 이런 모양이다.</p>
+
+<pre><code class="scala">package scala  
+trait Function1[-T, +U] {  
+  def apply(x: T): U
+}
+</code></pre>
+
+<p><code>T</code> 는 <em>contravariant</em> 이므로 파라미터에만, <code>U</code> 는 <em>covaraint</em> 이므로 리턴타입에만 나타난다. 이제 지난시간에 만들었던 <code>Nil</code> 클래스를 <em>Object</em> 로 만들어 보자.</p>
+
+<pre><code class="scala">trait List[+T] {  
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
+  def isEmpty = false
+}
+
+object Nil extends List[Nothing] {  
+  def isEmpty = true
+  def head = throw new NoSuchElementException("Nil.head")
+  def tail = throw new NoSuchElementException("Nil.tail")
+}
+</code></pre>
+
+<p><code>Nil</code> 이 <code>List[Nothing]</code> 을 상속하게 해, 모든 리스트의 서브타입이 될 수 있도록 했다. 그러나 이것만으로는 부족하다. <code>trait List[T]</code> 로 만들면, <code>List[Something]</code> 과 <code>List[Nothing]</code> 과는 아무 관련이 없는 <em>non-variant</em> 다. 따라서 <code>List[+T]</code> 로 만들어, <code>List[Nothing] &lt;: List[Something]</code> 이 되도록 해야한다.</p>
+
+<p>이제, 다음과 같은 <code>prepend</code> 메소드를 고려 해 보자.</p>
+
+<pre><code class="scala">trait List[+T] {  
+  ...
+  def preprend(elem: T): List[T] = new Cons(elem, this)
+  ...
+}
+</code></pre>
+
+<p>이 경우에는 <em>covariant</em> <code>T</code> 가 파라미터에 나오므로, 컴파일이 실패한다. 그러나 우리의 <code>List</code> 는 <em>immutable</em> 한데, 이 경우 파라미터에 <code>T</code> 가 나오면 안되나?</p>
+
+<h4 id="prependviolateslsp">Prepend Violates LSP</h4>
+
+<pre><code class="scala">val xs = new List[IntSet]  
+xs.prepend(Empty)
+
+val ys = new List[NonEmpty]  
+xs.prepend(Empty) // compilation fail  
+</code></pre>
+
+<p>따라서, <code>List[IntSet]</code> 으로 할 수 있는걸 <code>List[NonEmpty]</code>로 할 수 없으니, <strong>LSP</strong> 에 따라서, <code>List[NonEmpty]</code> 는 <code>List[IntSet]</code> 의 서브타입이 될 수 없다.</p>
+
+<p><code>List</code> 는 <em>covariant</em> 하고, <code>update</code> 연산이 있는것도 아니므로 <code>immutable</code> 한데, <code>prepend</code> 메소드의 타입체킹이 문제다. 어떻게 하면 <em>covaraint</em> 타입 <code>T</code> 를 메소드 파라미터로 나타나게 할 수 있을까? <strong>Lower Bound</strong> 를 이용하면 된다.</p>
+
+<pre><code class="scala">def prepend[U :&gt; T](elem: U): List[U] = new Cons(elem, this)  
+</code></pre>
+
+<p>이 경우 <code>List[NonEmpty].prepend(Empty)</code> 의 리턴값은 <code>List[IntSet]</code> 이 될것이다. 따라서 룰을 정리하면</p>
+
+<blockquote>
+  <p>(1) <strong>covariant type parameters</strong> may appear in <strong>lower bounds</strong> of method type parameters <br />
+  (2) <strong>contravariant type parameters</strong> may appear in <strong>upper bounds</strong> of method</p>
+</blockquote>
+
+<h3 id="objectseverywhere">Objects Everywhere</h3>
+
+<h4 id="pureobjectorientation">Pure Object Orientation</h4>
+
+<p><em>Pure OO language</em> 는 모든 <em>value</em> 가 <em>object</em> 다. 스칼라는 얼핏 보기에 <em>primitive type</em> 을 사용하는 것 같지만 잘 보면 <code>scala.Boolean</code>, <code>scala.Int</code> 처럼 기본 타입이 클래스화 되어있다. (참고로 <code>Int</code> 는 성능을 위해 32-bit Integer 로 되어있다.)</p>
+
+<p><code>scala.Boolean</code> 대신, 직접 만든 <code>Boolean</code> 을 사용해 보자.</p>
+
+<pre><code class="scala">abstract class cBoolean {
+
+  def IfThenElse[T](t: T, e: T): T
+
+  def &amp;&amp;(other: cBoolean) = IfThenElse(other, False)
+  def ||(other: cBoolean) = IfThenElse(True, other)
+  def unary_! : cBoolean = IfThenElse(False, True)
+
+  def ==(other: cBoolean) = IfThenElse(other, other.unary_!)
+  def !=(other: cBoolean) = IfThenElse(other.unary_!, other)
+
+  def &lt;(other: cBoolean) = IfThenElse(False, other)
+  def &gt;(other: cBoolean) = IfThenElse(other.unary_!, False)
+}
+
+object True extends cBoolean {  
+  def IfThenElse[T](t: T, e:T) = t
+}
+
+object False extends cBoolean {  
+  def IfThenElse[T](t: T, e:T) = e
+}
+</code></pre>
+
+<p>그럼 과연, <em>primitive type</em> 없이 언어의 모든 부분을 클래스와 오브젝트로 구성하는것이 가능할까? <code>Boolean</code> 은 우리가 <code>cBoolean</code> 으로 대체했다. <code>Int</code> 부터 더 자그마한 <code>Nat</code>, 즉 자연수 범위부터 시작해보자.</p>
+
+<blockquote>
+  <p>Can it be represented as a class from first principles (i.e not using primitie ints)</p>
+</blockquote>
+
+<pre><code class="scala">abstract class Nat {  
+  def isZero: Boolean
+  def predecessor: Nat
+  def successor = new Succ(this)
+  def + (that: Nat): Nat
+  def - (that: Nat): Nat
+}
+
+object Zero extends Nat {  
+  def isZero = true
+  def predecessor = throw new RuntimeException("Zero.predecessor");
+  def + (that: Nat) = that
+  def - (that: Nat) = {
+    if (that.isZero) this
+    else throw new RuntimeException("Zero.-")
+  }
+}
+
+class Succ(n: Nat) extends Nat {  
+  def isZero = false
+  def predecessor: Nat = n
+  def + (that: Nat) = new Succ(n + that)
+  def - (that: Nat) = if(that.isZero) this else n - that.predecessor
+}
+</code></pre>
+
+<p>숫자가 없을때 숫자를 추상화(abstraction) 할 방법을 찾아야 하는데, 놀랍게도 인스턴스의 중첩을, 숫자로 표현했다. 개인적으로 기가막힌다. 4강 초반부에서 집합을 predicate function 의 접합(<code>||</code>, <code>&amp;&amp;</code>)으로 표현했을때도 놀라웠는데.. </p>
+
+<p>위 코드에서 <code>Succ.-</code> 메소드 같은 경우 <code>new Succ(n - that)</code> 을 할 수 있는데, <code>n</code> 이 <code>Zero</code> 즉, 현재 <code>Succ</code> 인스턴스가 1인 경우를 고려해야 한다. 이 경우 런타임 예외가 발생하므로, <code>n - that.predecessor</code> 가 적절하다. 여기에 <code>that</code> 이 <code>Zero</code> 일 경우를 고려하면 된다.</p>
+
+<p>테스트를 작성할 경우 <code>Zero</code> 를 제외하고는 나머지는 다 인스턴스라서, 비교가 어렵다. 그래서 다음과 같은 연속적인 <code>predecessor</code> 를 호출할 수 있는데,</p>
+
+<pre><code class="scala">  val one = Zero.successor
+  val two = one + one
+  val three = two + one
+  val four = three + one
+
+  "One + One" should "be Two" in {
+    assert(two.predecessor.predecessor == Zero)
+  }
+
+  "two + two" should "be four" in {
+    assert(four.predecessor.predecessor.predecessor.predecessor == Zero)
+  }
+</code></pre>
+
+<p>아래와 같은 테스트용 유틸리티 함수를 만들면 편하다. (아니면 <code>==</code>를 오버라이딩 하거나.)</p>
+
+<pre><code class="scala">  def number = {
+    def count(n: Int, succ: Nat): Int = {
+      if (succ == Zero) n
+      else count(n + 1, succ.predecessor)
+    }
+
+    count(0, this)
+  }
+</code></pre>
+
+<p>이렇게, 실제 타입에 대한 <em>primitive value</em> 없이 <em>abstraction</em> 만으로 타입을 구성할 수 있다. 위에서 구현한 <code>Nat</code> 클래스를 기술적으로는 <strong>Peano numbers</strong> 라 부른다. 다시 말해서,</p>
+
+<blockquote>
+  <p>The properties of the natural numbers can e derived from the <strong>Peano axioms</strong></p>
+</blockquote>
+
+<p>자세한건 <a href="http://en.wikipedia.org/wiki/Natural_number#Peano_axioms">여기</a>로</p>
+
+<h3 id="decomposition">Decomposition</h3>
+
+<p>프로그래밍의 많은 부분이 <em>Decomposition</em> 이다. 타입을 비교하고 타입에 따라 처리하는 일들. 다음과 같은 아주 자그마한 컴파일러가 있다고 해 보자. </p>
+
+<pre><code class="scala">object Decomposition {  
+  def eval(e: Expr): Int = {
+    if (e.isNumber) e.numValue
+    else if (e.isSum) eval(e.leftOp) + eval(e.rightOp)
+    else throw new Error(s"unknown Expr $e")
+  }
+}
+
+trait Expr {  
+  def isNumber: Boolean
+  def isSum: Boolean
+  def numValue: Int
+  def leftOp: Expr
+  def rightOp: Expr
+}
+
+class Number(n: Int) extends Expr {  
+  def isNumber = true
+  def isSum = false
+  def numValue = n
+  def leftOp = throw new Error("Number.leftOp")
+  def rightOp = throw new Error("Number.righOp")
+}
+
+class Sum(l: Expr, r: Expr) extends Expr {  
+  def isNumber = false
+  def isSum = true
+  def numValue = throw new Error("Sum.numValue")
+  def leftOp = l
+  def rightOp = r
+}
+</code></pre>
+
+<p>다음과 같은 테스트코드를 작성하면, 잘 돌아간다.</p>
+
+<pre><code class="sclaa">  import Decomposition._
+
+  "Sum(Number(3), Number(4))" should "be eql 7" in {
+    val three = new Number(3)
+    val four = new Number(4)
+    val sum = new Sum(three, four)
+
+    assert(eval(sum) == 7)
+  }
+</code></pre>
+
+<p>위에서, <code>isNumber</code> 과 같은 것들을 <strong>Classification</strong>, <code>rightOp</code>, <code>numValue</code> 같은 것들을 <strong>Accessor</strong> 라 부른다. </p>
+
+<p>문제는 만약 <code>Prod</code> 나 <code>Var</code> 같은 클래스들이 <code>Expr</code> 을 상속했을 때 새로운 <strong>Classification</strong> 과 <strong>Accessor</strong> 를 작성 해야 한다는 거다. 무려 <strong>25</strong> 개나! 단 두개의 클래스만 추가했을 뿐인데..</p>
+
+<p>일반적으로 새롭게 클래스를 정의했을때 메소드는 <em>quadratic</em> 으로 증가한다. 이건 큰 문제다. </p>
+
+<p>이걸 해결하는 한가지 방법은, <em>Type Cast</em> 와 <em>Type Test</em> 를 이용하는거다. 자바에서 사용하는 아래의 두 메소드는</p>
+
+<pre><code class="java">x instansceOf T  
+(T) x
+</code></pre>
+
+<p>스칼라에서 다음과 같다.</p>
+
+<pre><code>x.isInstanceOf[T]  
+x.asInstanceOf[T]  
+</code></pre>
+
+<p>이 방법을 이용하면 <code>eval</code> 함수에서 <code>if (e.isInstanceOf[Number])</code> 와 같이 비교할 수 있기 때문에 <em>Classification Method</em> 가 필요없다. 그러나, 타입캐스팅에 실패했을 경우 런타임 에러가 발생할 수 있다. 다른 방법은 없을까?</p>
+
+<h4 id="objectorienteddecomposition">Object-Oriented Decomposition</h4>
+
+<p>다른 한 가지 방법은, <code>eval</code> 에서 타입체킹을 하는게 아니라 각 클래스에 <code>eval</code> 메소드를 만드는거다.</p>
+
+<pre><code class="scala">trait Expr {  
+  def eval: Int
+}
+</code></pre>
+
+<p>이 방법의 문제는 <code>Expr</code> 에 새로운 메소드를 추가했을때 <em>Hierarchy</em> 내에 있는 모든 클래스에 같은 메소드를 작성해야 한다는 것이다.</p>
+
+<p>게다가 <code>a * b + a * c</code> 를 <code>a * (b + 3)</code> 로 축약하기가 어렵다. 이건 <em>Non-local simplification</em> 이기 때문에, sub-tree 를 모두 테스트하고 접근해야한다. <em>OO Decomposition</em> 은 <code>eval</code> 메소드 구현엔 좋지만, 이런 점에선 문제가 있다.</p>
+
+<h3 id="patternmatching">Pattern Matching</h3>
+
+<p>우리는 <em>Decomposition</em> 을 해결하기 위해서 3가지 방법을 시도해봤다.</p>
+
+<p>(1) <em>Classification</em> and <em>acess</em> methods: <strong>quadratic explosion</strong> <br />
+(2) <em>Type tests</em> and <em>Type casts</em>: <strong>unsafe</strong>, <strong>low-level</strong> <br />
+(3) <em>OO Decomposition</em>: <strong>need to touch all classes to add a new method</strong>, <strong>does not work always</strong>  </p>
+
+<h4 id="functionaldecompositionwithpatternmatching">Functional Decomposition with Pattern Matching</h4>
+
+<p>사실 <em>Classification</em> 이나 <em>Access</em> 의 목적은 다음의 두가지라 봐도 충분하다.</p>
+
+<blockquote>
+  <p>(1) Which subclass was used? <br />
+  (2) What were the arugmnets of the constructor?</p>
+</blockquote>
+
+<p>따라서 Scala 에서는 <strong>Pattern Matching</strong>, 그리고 그 과정에서 사용하는 <strong>Case class</strong> 를 통해 <em>Decomposition</em> 을 우아하게 자동화 한다. </p>
+
+<pre><code class="scala">trait Expr  
+case class Number(n: Int) extends Expr  
+case class Sum(l: Expr, r: Expr) extends Expr
+
+def eval(e: Expr): Expr = {  
+  e match {
+    case Number(n) =&gt; n
+    case Sum(e1, e2) =&gt; eval(e1) + eval(e2)
+  }
+}
+</code></pre>
+
+<p>(1) 패턴에서 사용하는 <em>Variable(변수)</em> 는 소문자로 시작해야 한다. 
+(2) <em>Variable</em> 은 두번 사용될 수 없다. <code>Sum(a, a)</code> 는 잘못된 패턴이다. <br />
+(3) <em>Constant(상수)</em> 는 대문자로 시작해야 하는데, 예외는 <code>null</code>, <code>true</code>, <code>false</code> </p>
+
+<p><code>Expr</code> <em>Trait</em> 내부에 <code>eval</code> 을 삽입하는 것도 가능하다</p>
+
+<pre><code class="scala">trait Expr {  
+  def eval: Int = {
+    this match {
+      case Number(n) =&gt; n
+      case Sum(e1, e2) =&gt; e1.eval + e2.eval
+    }
+  }
+}
+</code></pre>
+
+<p><em>Object-Oriented Decomposition</em> 과 <em>Functional Decomposition</em> 모두 장단이 있는데, 만약 메소드를 많이 만드는 경우라면 <em>Functional Decomposition</em> 이 더 우월하다. 매 클라스마다 메소드를 만들 필요가 없기 때문이다. 반대로, 클래스를 많이 만드는 경우라면, <em>OO Decomposition</em> 이 더 낫다. 클래스를 만들때마다 매번 <code>eval</code> 함수를 수정 할 필요 없기 <code>eval</code> 을 가진 클래스를 만들면 된다.</p>
+
+<h3 id="lists">Lists</h3>
+
+<p>Scala 에서 <code>List</code> 와 <code>Array</code> 는 크게 두가지 면에서 다르다, 먼저 <code>List</code> 는 <em>immutable</em> 이고, <em>recursive</em> 인 반면 <code>Array</code> 는 <em>mutable</em>, <em>flat</em> 하다.</p>
+
+<pre><code class="scala">List("apple", "oranges", "pears")  
+"apple" :: ("oranges" :: ("pears" :: Nil))
+
+List()  
+Nil  
+</code></pre>
+
+<h4 id="rightassociativity">Right Associativity</h4>
+
+<p>좀 더 편하게 하기 위해서, Scala 는 다음과 같은 문법을 제공한다.</p>
+
+<pre><code class="scala">A :: (B :: C)  
+A :: B :: C  
+</code></pre>
+
+<p>이는 Scala 에서 <code>:</code> 로 끝나는 <em>operator</em> 는 <strong>Right-associative</strong> 이기 때문이다.</p>
+
+<p>또한 <code>:</code> 로 끝나는 <em>operator</em> 에서는, 우측에 오는것이 본래의 <em>operand</em> 다</p>
+
+<blockquote>
+  <p>Operators ending in <code>:</code> are also difference in the they are seen as method calls of the right-hand operand</p>
+</blockquote>
+
+<p>따라서 다음의 세 라인은 모두 같다.</p>
+
+<pre><code class="scala">1 :: 2 :: 3 :: 4 :: Nil  
+1 :: (2 :: (3 :: (4 :: Nil)))  
+Nil.::(4).::(3).::(2).::(1)  
+</code></pre>
+
+<p>그러므로 <code>::</code> 를 <code>prepend</code> 메소드라 보면 된다.</p>
+
+<h4 id="listpatterns">List Patterns</h4>
+
+<p><code>::</code>(Cons) 연산자를 이용하면 다음과 같은 패턴이 가능하다.</p>
+
+<pre><code class="scala">1 :: 2 :: xs  
+x :: Nil  
+List(x) // same as x :: nil  
+List() // Nil  
+List(2 :: xs)  
+</code></pre>
+
+<h4 id="sortinglists">Sorting Lists</h4>
+
+<p><strong>Insertion Sort</strong> 는 재귀를 이용하면 다음과 같이 구현할 수 있다.</p>
+
+<pre><code class="scala">  def isort(xs: List[Int]): List[Int] = {
+    xs match {
+      case Nil =&gt; List()
+      case y :: ys =&gt; insert(y, isort(ys))
+    }
+  }
+
+  def insert(x: Int, xs: List[Int]): List[Int] = {
+    xs match {
+      case Nil =&gt; List(x)
+      case y :: ys =&gt; {
+        if (x &lt; y)  x :: xs
+        else y :: insert(x, ys)
+      }
+    }
+  }
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='https://twitter.github.io/scala_school/type-basics.html#variance'>https://twitter.github.io/scala_school/type-basics.html#variance</a>  </p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '39';
+  var disqus_url = 'http://1ambda.github.io/functional-programming-in-scala-chapter-4/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>

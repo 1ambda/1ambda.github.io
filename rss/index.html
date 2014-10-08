@@ -1,5 +1,774 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, FP]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 05 Oct 2014 11:24:58 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Content-Type vs Accept, HTTP Header]]></title><description><![CDATA[<p>이 <a href='http://webmasters.stackexchange.com/questions/31212/difference-between-accept-and-content-type-http-headers' >답변</a> 이 젤 심플하다. </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 08 Oct 2014 09:54:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Functional Programming in Scala, Chapter 4]]></title><description><![CDATA[<p>2014-10-07, <strong>Functional Programming in Scala</strong>, Coursera</p>
+
+<h2 id="typesandpatternmatching">Types and Pattern Matching</h2>
+
+<h3 id="functionsasobjects">Functions as Objects</h3>
+
+<blockquote>
+  <p>In fact function values are treated as objects in Scala</p>
+</blockquote>
+
+<pre><code class="scala">trait Function1[A, B] {  
+  def apply(x: A): B
+}
+</code></pre>
+
+<p>결국, <code>function</code> 은 <code>apply</code> 메소드를 가진 오브젝트다.</p>
+
+<p>예를 들어서 <code>(x: Int) =&gt; x * x</code> 는 다음과 같이 <code>Function1</code> ` <em>trait</em> 를 구현한 클래스 된다.</p>
+
+<pre><code class="scala">{
+  class AnonFun extends Function1[Int, Int] (
+    def apply(x: Int) = x * x
+  }
+
+  new AnonFun
+}
+
+// or using anonymous class syntax
+// trait can be instanciated
+
+new Function1[Int, Int] {  
+  def apply(x: Int) = x * x
+}
+</code></pre>
+
+<p>따라서 이런 정의를 보면, <code>f(a, b)</code> 는 <code>f.apply(a, b)</code> 다. 그런데 만약 메소드인 <code>def apply</code> 자체도 오브젝트일까? 그렇지 않다. 만약 <code>apply</code> 자체도 오브젝트라면, 그 오브젝트도 <code>apply</code> 메소드를 가지고 있어야 하고, 또 다시 그렇게 반복될 수 있다.</p>
+
+<h4 id="functionsandmethods">Functions and Methods</h4>
+
+<p>따라서 <code>def f(x: Int): Int = ...</code> 메소드 자체는 <strong>Function</strong> 이 아니다. (<em>Method != Function</em>) 그러나 </p>
+
+<blockquote>
+  <p>If <code>f</code> is used in a place where a <code>Function</code> type is expected, it is converted automatically to the function value</p>
+</blockquote>
+
+<p>예를 들어, <code>(x: Int) = f(x)</code> 는 다음과 같이 확장된다.</p>
+
+<pre><code class="scala">new Function1[Int Int] {  
+ def apply(x: Int) = f(x)
+}
+</code></pre>
+
+<p>이렇게 <em>Method</em> 가 <em>Function</em> 으로 변환되는 과정을 <em>lambda calculus</em> 에서는 <strong>eta-expansion</strong> 이라 부른다. </p>
+
+<p>그리고 위에서 보았겠지만 <code>apply</code> 메소드는, 오브젝트에 있을때 오브젝트 이름 자체로 호출될 수 있도록 해준다. 예를들어 지난 시간에 만들었던 <code>List</code> <em>trait</em> 에 대해서,</p>
+
+<pre><code class="scala">trait List[T] {  
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
+  def isEmpty = false
+}
+
+class Nil[T] extends List[T] {  
+  def isEmpty = true
+  def head = throw new NoSuchElementException("Nil.head")
+  def tail = throw new NoSuchElementException("Nil.tail")
+}
+</code></pre>
+
+<p>아래와 같은 호출을 원한다면</p>
+
+<pre><code class="scala">val e = List()  
+val e3 = List(3)  
+val e34 = List(3, 4)  
+</code></pre>
+
+<p>다음과 같이 <code>List</code> <em>Object</em> 와 <code>apply</code> <em>Method</em> 를 정의할 수 있다. </p>
+
+<pre><code class="scala">object List {  
+  def apply() = new Nil
+  def apply(x: Int) = new Cons(x, new Nil)
+  def apply(x: Int, y: Int) = new Cons(x, new Cons(y, new Nil))
+}
+</code></pre>
+
+<h3 id="subtypingandgenerics">Subtyping and Generics</h3>
+
+<p>지난시간에는 <em>Polymorphism</em> 의 두가지 형태에 대해 배웠었다. 하나는 <strong>Subtyping</strong> 이고, 다른 하나는 <strong>Generics</strong> 다. 기억을 더듬어 보면</p>
+
+<blockquote>
+  <p><strong>Subtyping:</strong> Instance of a subclass can be passed to a base class <br />
+  <strong>Generics:</strong> Instance of a function or class are created  by type parameterazation</p>
+</blockquote>
+
+<p>이 중에서 <em>subtyping</em> 은 OOP 에서 먼저 온 것이고, <em>generics</em> 는 <em>FP</em> 에서 먼저 온 것이라는 이야기 까지 했다.</p>
+
+<h4 id="typebounds">Type Bounds</h4>
+
+<p><code>assertAllPos</code> 메소드가 있다고 하자. <code>IntSet</code> 을 취해서, 모든 Element 가 양수면 <code>IntSet</code> 을 리턴하고 아니면 예외를 던진다. 다음과 같이 정의할 수 있겠다.</p>
+
+<p><code>def assertAllPos(s: IntSet): IntSet</code></p>
+
+<p>근데, 만약에 이 메소드가 <code>Empty</code> 를 받으면 <code>Empty</code> 를, <code>NonEmpty</code> 를 받으면 <code>NonEmpty</code> 를 돌려주게 하려면 어떻게 해야할까? 메소드를 2개를 더 만들어야 할까? <em>Type Bound</em> 를 이용해 문제를 해결할 수 있다.</p>
+
+<p><code>def assertAllPos[S &lt;: IntSet](r: S): S = ...</code></p>
+
+<p>여기서 <code>S &lt;: IntSet</code> 은 <code>S</code> 가 <code>IntSet</code> 의 서브타입임을 말하고, 이것을 <strong>Upper bound</strong> 라 부른다(<code>IntSet</code> 기준). 즉 <code>S</code> 의 상위 타입을 지정하는 것이다. </p>
+
+<p>반대로 <code>S :&gt; IntSet</code> 도 있을 수 있다. 이것은 <strong>Lower bound</strong> 라 부르며(<code>IntSet</code> 기준), 이 메소드가 <code>IntSet</code> 의 상위 타입 <code>S</code> 를 이용한다는 것을 컴파일 타임에 지정한다. <code>S</code> 는 <code>IntSet</code>, <code>AnyRef</code>, <code>Any</code> 가 될 수 있다. 정리 하자면,</p>
+
+<blockquote>
+  <p><code>S &lt;: T</code> means: <strong>S is a subtype of T</strong> <br />
+  <code>S :&gt; T</code> means: <strong>S is a supertype of T, or T is a subtype of S</strong></p>
+</blockquote>
+
+<p><strong>Mixed Bound</strong> 도 있다. <code>[S &gt;: NonEmpty &lt;: IntSet]</code></p>
+
+<h4 id="covariance">Covariance</h4>
+
+<p>그런데, <code>NonEmpty &lt;: IntSet</code> 일때 <code>List[NonEmpty] &lt;: List[IntSet]</code> 이면, <strong>Covariant</strong> 하다고 말한다. 직관적으로 보면 그럴듯 하다. </p>
+
+<p>이거 정말 문제가 없을까? <code>List</code> 말고 자바의 <code>Array</code> 를 예로 들어보자.</p>
+
+<pre><code class="java">NonEmpty[] a =  
+  new NonEmpty[]{new NonEmpty(1, Empty, Empty)}
+
+IntSet[] b = a  
+b[0] = Empty  
+NonEmpty s = a[0]  
+</code></pre>
+
+<p><code>b[0] = Empty</code> 가 문제가 된다. 여기서 런타임 예외가 발생하는데, 자바에서는 배열이 생성될때, 이 배열이 어떤 타입으로 생성되었는지 내부적으로 태그를 붙인다. 그런데, <code>NonEmpty</code> 로 태그가 붙은 배열에 호환되지 않는 <code>Empty</code> 를 넣고 있기 때문이다.</p>
+
+<p>자바 1.5 이전에는 Generics 가 없었기 때문에 정렬을 위해서는 <code>sort(Object[] a)</code> 처럼 주어야 했는데, 이를 위해서는 자바의 배열이 <strong>Covariant</strong> 여야 했다.</p>
+
+<h4 id="theliskovsubstitutionprinciple">The Liskov Substitution Principle</h4>
+
+<p><strong>Liskov Substitution Princile(리스코프 치환원칙)</strong> 은 언제 한 타입이 다른 타입의 서브타입이 될 수 있는지 말해준다.</p>
+
+<blockquote>
+  <p>If <code>A &lt;: B</code>, then everything one can to do with a value of type <code>B</code> one should also be able to do with a value of type <code>A</code></p>
+</blockquote>
+
+<p>자 이제, Scala 에서 위의 코드를 작성하면 어디서 에러가 나는지 확인 해 보자.</p>
+
+<pre><code class="scala">val a: Array[NonEmpty] = Array(new NonEmpty(1, Empty, Empty))  
+val b Array[IntSet] = a  
+b(0) = Empty  
+val s: NonEmpty = a(0)  
+</code></pre>
+
+<p><code>val b: Array[IntSet] = a</code> 에서 컴파일 타임 에러가 난다. 왜냐하면 Scala 의 <code>Array</code> 는 <strong>Not</strong> <em>covariant</em> 이기 때문이다.</p>
+
+<h3 id="variance">Variance</h3>
+
+<p>어떤 타입은 <em>covariant</em> 고 어떤 타입은 그렇지 않은걸까? 엄격히 말해서, elements 들의 <em>mutation</em> 을 허용하는 타입은 <em>not-covariant</em> 여야 한다. </p>
+
+<p>반면 <em>immutable types</em> 은 조건이 갖춰지면 <em>covariant</em> 일 수 있다. 위에서 <code>List</code> 는 되고, <code>Array</code>는 안되었던 것처럼.</p>
+
+<p><code>C[T]</code> 가 있고, <code>A &lt;: B</code> 일때 다음과 같은 정의를 내릴 수 있다.</p>
+
+<ul>
+<li><code>C[A] &lt;: C[B]</code> 이면, <strong>C is covariant</strong>, <code>C[+A]</code> 로 표시</li>
+<li><code>C[A] &gt;: C[B]</code> 이면, <strong>C is contravariant</strong>, <code>C[-A]</code> 로 표시  </li>
+<li><code>C[A]</code> 와 <code>C[B]</code> 가 상관이 없으면, <strong>C is non-variant</strong>, , <code>C[A]</code> 로 표시</li>
+</ul>
+
+<p>그렇다면 다음과 같은 두개의 타입이 있을때, 어떤것이 서브타입이고 어떤  것이 슈퍼타입일까?</p>
+
+<pre><code class="scala">type A = IntSet =&gt; NonEmpty  
+type B = NonEmpty =&gt; IntSet  
+</code></pre>
+
+<p>설명을 조금 자세히 하면, 함수의 파라미터는 <em>Contravariant</em> 하고, 함수의 리턴타입은 <em>Covariant</em> 하다. <code>Function1[-A, +B]</code> 를 보면 알 수 있다. 따라서 <code>A &lt;: B</code> 다. 왜 그럴까? 여기 <a href='https://twitter.github.io/scala_school/type-basics.html' #variance">Scala School</a> 의 예제를 좀 보자.</p>
+
+<pre><code class="scala">class Animal {  
+  val sound = "rustle" 
+  def name = "animal"
+}
+
+class Bird extends Animal {  
+  override val sound = "call"
+  def name = "bird"
+}
+class Chicken extends Bird {  
+  override val sound = "cluck" 
+  def name = "chicken"
+}
+</code></pre>
+
+<p>이때, <code>val getTweet: (Bird =&gt; String)</code> 에 <code>(c: Chicken =&gt;  c.chicken</code> 과 같이 넘겨주고, 나중에 <code>getTweet(new Bird)</code> 를 호출하면 에러가 난다. 반면 <code>a: Animal =&gt; a.name</code> 을 주고, <code>getTweek(new Bird)</code> 는 상관 없다. 어차피 <code>Bird</code> 는 <code>Animal</code> 이니까</p>
+
+<p>따라서 함수의 파라미터는 현재와 같은 타입이거나, 혹은 그 슈퍼타입이어야 한다, 다시말해서 <strong>Contravariant</strong> 해야 한다.</p>
+
+<h4 id="variancechecks">Variance Checks</h4>
+
+<p><code>Array</code> 의 경우 <code>update</code> 연산이 문제가 될 수 있다는걸 위에서 논의 했었는데, 이걸 정리하자면</p>
+
+<blockquote>
+  <p>*The problematic combination is <br />
+  <strong>the covariant type parameter T</strong> <br />
+  <strong>which appears in parameter position of method <code>update</code></strong></p>
+</blockquote>
+
+<p>즉 <em>covariant</em> 타입 <code>T</code> 가 <code>update</code> 연산에 나타날때 문제가 된다. 그래서 Scala 는 컴파일 타임에 이런 문제가 생기지 않는지 검사를 한다.</p>
+
+<blockquote>
+  <p><em>covariant</em> type parameters can only appear in method results <br />
+  <em>contravariant</em> type parameters can only appear in method parameters <br />
+  <em>invariant</em> type parameters can appear anywhere  </p>
+</blockquote>
+
+<p><code>Function1</code> <em>Trait</em> 는 그래서 사실 이런 모양이다.</p>
+
+<pre><code class="scala">package scala  
+trait Function1[-T, +U] {  
+  def apply(x: T): U
+}
+</code></pre>
+
+<p><code>T</code> 는 <em>contravariant</em> 이므로 파라미터에만, <code>U</code> 는 <em>covaraint</em> 이므로 리턴타입에만 나타난다. 이제 지난시간에 만들었던 <code>Nil</code> 클래스를 <em>Object</em> 로 만들어 보자.</p>
+
+<pre><code class="scala">trait List[+T] {  
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
+  def isEmpty = false
+}
+
+object Nil extends List[Nothing] {  
+  def isEmpty = true
+  def head = throw new NoSuchElementException("Nil.head")
+  def tail = throw new NoSuchElementException("Nil.tail")
+}
+</code></pre>
+
+<p><code>Nil</code> 이 <code>List[Nothing]</code> 을 상속하게 해, 모든 리스트의 서브타입이 될 수 있도록 했다. 그러나 이것만으로는 부족하다. <code>trait List[T]</code> 로 만들면, <code>List[Something]</code> 과 <code>List[Nothing]</code> 과는 아무 관련이 없는 <em>non-variant</em> 다. 따라서 <code>List[+T]</code> 로 만들어, <code>List[Nothing] &lt;: List[Something]</code> 이 되도록 해야한다.</p>
+
+<p>이제, 다음과 같은 <code>prepend</code> 메소드를 고려 해 보자.</p>
+
+<pre><code class="scala">trait List[+T] {  
+  ...
+  def preprend(elem: T): List[T] = new Cons(elem, this)
+  ...
+}
+</code></pre>
+
+<p>이 경우에는 <em>covariant</em> <code>T</code> 가 파라미터에 나오므로, 컴파일이 실패한다. 그러나 우리의 <code>List</code> 는 <em>immutable</em> 한데, 이 경우 파라미터에 <code>T</code> 가 나오면 안되나?</p>
+
+<h4 id="prependviolateslsp">Prepend Violates LSP</h4>
+
+<pre><code class="scala">val xs = new List[IntSet]  
+xs.prepend(Empty)
+
+val ys = new List[NonEmpty]  
+xs.prepend(Empty) // compilation fail  
+</code></pre>
+
+<p>따라서, <code>List[IntSet]</code> 으로 할 수 있는걸 <code>List[NonEmpty]</code>로 할 수 없으니, <strong>LSP</strong> 에 따라서, <code>List[NonEmpty]</code> 는 <code>List[IntSet]</code> 의 서브타입이 될 수 없다.</p>
+
+<p><code>List</code> 는 <em>covariant</em> 하고, <code>update</code> 연산이 있는것도 아니므로 <code>immutable</code> 한데, <code>prepend</code> 메소드의 타입체킹이 문제다. 어떻게 하면 <em>covaraint</em> 타입 <code>T</code> 를 메소드 파라미터로 나타나게 할 수 있을까? <strong>Lower Bound</strong> 를 이용하면 된다.</p>
+
+<pre><code class="scala">def prepend[U :&gt; T](elem: U): List[U] = new Cons(elem, this)  
+</code></pre>
+
+<p>이 경우 <code>List[NonEmpty].prepend(Empty)</code> 의 리턴값은 <code>List[IntSet]</code> 이 될것이다. 따라서 룰을 정리하면</p>
+
+<blockquote>
+  <p>(1) <strong>covariant type parameters</strong> may appear in <strong>lower bounds</strong> of method type parameters <br />
+  (2) <strong>contravariant type parameters</strong> may appear in <strong>upper bounds</strong> of method</p>
+</blockquote>
+
+<h3 id="objectseverywhere">Objects Everywhere</h3>
+
+<h4 id="pureobjectorientation">Pure Object Orientation</h4>
+
+<p><em>Pure OO language</em> 는 모든 <em>value</em> 가 <em>object</em> 다. 스칼라는 얼핏 보기에 <em>primitive type</em> 을 사용하는 것 같지만 잘 보면 <code>scala.Boolean</code>, <code>scala.Int</code> 처럼 기본 타입이 클래스화 되어있다. (참고로 <code>Int</code> 는 성능을 위해 32-bit Integer 로 되어있다.)</p>
+
+<p><code>scala.Boolean</code> 대신, 직접 만든 <code>Boolean</code> 을 사용해 보자.</p>
+
+<pre><code class="scala">abstract class cBoolean {
+
+  def IfThenElse[T](t: T, e: T): T
+
+  def &amp;&amp;(other: cBoolean) = IfThenElse(other, False)
+  def ||(other: cBoolean) = IfThenElse(True, other)
+  def unary_! : cBoolean = IfThenElse(False, True)
+
+  def ==(other: cBoolean) = IfThenElse(other, other.unary_!)
+  def !=(other: cBoolean) = IfThenElse(other.unary_!, other)
+
+  def &lt;(other: cBoolean) = IfThenElse(False, other)
+  def &gt;(other: cBoolean) = IfThenElse(other.unary_!, False)
+}
+
+object True extends cBoolean {  
+  def IfThenElse[T](t: T, e:T) = t
+}
+
+object False extends cBoolean {  
+  def IfThenElse[T](t: T, e:T) = e
+}
+</code></pre>
+
+<p>그럼 과연, <em>primitive type</em> 없이 언어의 모든 부분을 클래스와 오브젝트로 구성하는것이 가능할까? <code>Boolean</code> 은 우리가 <code>cBoolean</code> 으로 대체했다. <code>Int</code> 부터 더 자그마한 <code>Nat</code>, 즉 자연수 범위부터 시작해보자.</p>
+
+<blockquote>
+  <p>Can it be represented as a class from first principles (i.e not using primitie ints)</p>
+</blockquote>
+
+<pre><code class="scala">abstract class Nat {  
+  def isZero: Boolean
+  def predecessor: Nat
+  def successor = new Succ(this)
+  def + (that: Nat): Nat
+  def - (that: Nat): Nat
+}
+
+object Zero extends Nat {  
+  def isZero = true
+  def predecessor = throw new RuntimeException("Zero.predecessor");
+  def + (that: Nat) = that
+  def - (that: Nat) = {
+    if (that.isZero) this
+    else throw new RuntimeException("Zero.-")
+  }
+}
+
+class Succ(n: Nat) extends Nat {  
+  def isZero = false
+  def predecessor: Nat = n
+  def + (that: Nat) = new Succ(n + that)
+  def - (that: Nat) = if(that.isZero) this else n - that.predecessor
+}
+</code></pre>
+
+<p>숫자가 없을때 숫자를 추상화(abstraction) 할 방법을 찾아야 하는데, 놀랍게도 인스턴스의 중첩을, 숫자로 표현했다. 개인적으로 기가막힌다. 4강 초반부에서 집합을 predicate function 의 접합(<code>||</code>, <code>&amp;&amp;</code>)으로 표현했을때도 놀라웠는데.. </p>
+
+<p>위 코드에서 <code>Succ.-</code> 메소드 같은 경우 <code>new Succ(n - that)</code> 을 할 수 있는데, <code>n</code> 이 <code>Zero</code> 즉, 현재 <code>Succ</code> 인스턴스가 1인 경우를 고려해야 한다. 이 경우 런타임 예외가 발생하므로, <code>n - that.predecessor</code> 가 적절하다. 여기에 <code>that</code> 이 <code>Zero</code> 일 경우를 고려하면 된다.</p>
+
+<p>테스트를 작성할 경우 <code>Zero</code> 를 제외하고는 나머지는 다 인스턴스라서, 비교가 어렵다. 그래서 다음과 같은 연속적인 <code>predecessor</code> 를 호출할 수 있는데,</p>
+
+<pre><code class="scala">  val one = Zero.successor
+  val two = one + one
+  val three = two + one
+  val four = three + one
+
+  "One + One" should "be Two" in {
+    assert(two.predecessor.predecessor == Zero)
+  }
+
+  "two + two" should "be four" in {
+    assert(four.predecessor.predecessor.predecessor.predecessor == Zero)
+  }
+</code></pre>
+
+<p>아래와 같은 테스트용 유틸리티 함수를 만들면 편하다. (아니면 <code>==</code>를 오버라이딩 하거나.)</p>
+
+<pre><code class="scala">  def number = {
+    def count(n: Int, succ: Nat): Int = {
+      if (succ == Zero) n
+      else count(n + 1, succ.predecessor)
+    }
+
+    count(0, this)
+  }
+</code></pre>
+
+<p>이렇게, 실제 타입에 대한 <em>primitive value</em> 없이 <em>abstraction</em> 만으로 타입을 구성할 수 있다. 위에서 구현한 <code>Nat</code> 클래스를 기술적으로는 <strong>Peano numbers</strong> 라 부른다. 다시 말해서,</p>
+
+<blockquote>
+  <p>The properties of the natural numbers can e derived from the <strong>Peano axioms</strong></p>
+</blockquote>
+
+<p>자세한건 <a href='http://en.wikipedia.org/wiki/Natural_number' #Peano_axioms">여기</a>로</p>
+
+<h3 id="decomposition">Decomposition</h3>
+
+<p>프로그래밍의 많은 부분이 <em>Decomposition</em> 이다. 타입을 비교하고 타입에 따라 처리하는 일들. 다음과 같은 아주 자그마한 컴파일러가 있다고 해 보자. </p>
+
+<pre><code class="scala">object Decomposition {  
+  def eval(e: Expr): Int = {
+    if (e.isNumber) e.numValue
+    else if (e.isSum) eval(e.leftOp) + eval(e.rightOp)
+    else throw new Error(s"unknown Expr $e")
+  }
+}
+
+trait Expr {  
+  def isNumber: Boolean
+  def isSum: Boolean
+  def numValue: Int
+  def leftOp: Expr
+  def rightOp: Expr
+}
+
+class Number(n: Int) extends Expr {  
+  def isNumber = true
+  def isSum = false
+  def numValue = n
+  def leftOp = throw new Error("Number.leftOp")
+  def rightOp = throw new Error("Number.righOp")
+}
+
+class Sum(l: Expr, r: Expr) extends Expr {  
+  def isNumber = false
+  def isSum = true
+  def numValue = throw new Error("Sum.numValue")
+  def leftOp = l
+  def rightOp = r
+}
+</code></pre>
+
+<p>다음과 같은 테스트코드를 작성하면, 잘 돌아간다.</p>
+
+<pre><code class="sclaa">  import Decomposition._
+
+  "Sum(Number(3), Number(4))" should "be eql 7" in {
+    val three = new Number(3)
+    val four = new Number(4)
+    val sum = new Sum(three, four)
+
+    assert(eval(sum) == 7)
+  }
+</code></pre>
+
+<p>위에서, <code>isNumber</code> 과 같은 것들을 <strong>Classification</strong>, <code>rightOp</code>, <code>numValue</code> 같은 것들을 <strong>Accessor</strong> 라 부른다. </p>
+
+<p>문제는 만약 <code>Prod</code> 나 <code>Var</code> 같은 클래스들이 <code>Expr</code> 을 상속했을 때 새로운 <strong>Classification</strong> 과 <strong>Accessor</strong> 를 작성 해야 한다는 거다. 무려 <strong>25</strong> 개나! 단 두개의 클래스만 추가했을 뿐인데..</p>
+
+<p>일반적으로 새롭게 클래스를 정의했을때 메소드는 <em>quadratic</em> 으로 증가한다. 이건 큰 문제다. </p>
+
+<p>이걸 해결하는 한가지 방법은, <em>Type Cast</em> 와 <em>Type Test</em> 를 이용하는거다. 자바에서 사용하는 아래의 두 메소드는</p>
+
+<pre><code class="java">x instansceOf T  
+(T) x
+</code></pre>
+
+<p>스칼라에서 다음과 같다.</p>
+
+<pre><code>x.isInstanceOf[T]  
+x.asInstanceOf[T]  
+</code></pre>
+
+<p>이 방법을 이용하면 <code>eval</code> 함수에서 <code>if (e.isInstanceOf[Number])</code> 와 같이 비교할 수 있기 때문에 <em>Classification Method</em> 가 필요없다. 그러나, 타입캐스팅에 실패했을 경우 런타임 에러가 발생할 수 있다. 다른 방법은 없을까?</p>
+
+<h4 id="objectorienteddecomposition">Object-Oriented Decomposition</h4>
+
+<p>다른 한 가지 방법은, <code>eval</code> 에서 타입체킹을 하는게 아니라 각 클래스에 <code>eval</code> 메소드를 만드는거다.</p>
+
+<pre><code class="scala">trait Expr {  
+  def eval: Int
+}
+</code></pre>
+
+<p>이 방법의 문제는 <code>Expr</code> 에 새로운 메소드를 추가했을때 <em>Hierarchy</em> 내에 있는 모든 클래스에 같은 메소드를 작성해야 한다는 것이다.</p>
+
+<p>게다가 <code>a * b + a * c</code> 를 <code>a * (b + 3)</code> 로 축약하기가 어렵다. 이건 <em>Non-local simplification</em> 이기 때문에, sub-tree 를 모두 테스트하고 접근해야한다. <em>OO Decomposition</em> 은 <code>eval</code> 메소드 구현엔 좋지만, 이런 점에선 문제가 있다.</p>
+
+<h3 id="patternmatching">Pattern Matching</h3>
+
+<p>우리는 <em>Decomposition</em> 을 해결하기 위해서 3가지 방법을 시도해봤다.</p>
+
+<p>(1) <em>Classification</em> and <em>acess</em> methods: <strong>quadratic explosion</strong> <br />
+(2) <em>Type tests</em> and <em>Type casts</em>: <strong>unsafe</strong>, <strong>low-level</strong> <br />
+(3) <em>OO Decomposition</em>: <strong>need to touch all classes to add a new method</strong>, <strong>does not work always</strong>  </p>
+
+<h4 id="functionaldecompositionwithpatternmatching">Functional Decomposition with Pattern Matching</h4>
+
+<p>사실 <em>Classification</em> 이나 <em>Access</em> 의 목적은 다음의 두가지라 봐도 충분하다.</p>
+
+<blockquote>
+  <p>(1) Which subclass was used? <br />
+  (2) What were the arugmnets of the constructor?</p>
+</blockquote>
+
+<p>따라서 Scala 에서는 <strong>Pattern Matching</strong>, 그리고 그 과정에서 사용하는 <strong>Case class</strong> 를 통해 <em>Decomposition</em> 을 우아하게 자동화 한다. </p>
+
+<pre><code class="scala">trait Expr  
+case class Number(n: Int) extends Expr  
+case class Sum(l: Expr, r: Expr) extends Expr
+
+def eval(e: Expr): Expr = {  
+  e match {
+    case Number(n) =&gt; n
+    case Sum(e1, e2) =&gt; eval(e1) + eval(e2)
+  }
+}
+</code></pre>
+
+<p>(1) 패턴에서 사용하는 <em>Variable(변수)</em> 는 소문자로 시작해야 한다. 
+(2) <em>Variable</em> 은 두번 사용될 수 없다. <code>Sum(a, a)</code> 는 잘못된 패턴이다. <br />
+(3) <em>Constant(상수)</em> 는 대문자로 시작해야 하는데, 예외는 <code>null</code>, <code>true</code>, <code>false</code> </p>
+
+<p><code>Expr</code> <em>Trait</em> 내부에 <code>eval</code> 을 삽입하는 것도 가능하다</p>
+
+<pre><code class="scala">trait Expr {  
+  def eval: Int = {
+    this match {
+      case Number(n) =&gt; n
+      case Sum(e1, e2) =&gt; e1.eval + e2.eval
+    }
+  }
+}
+</code></pre>
+
+<p><em>Object-Oriented Decomposition</em> 과 <em>Functional Decomposition</em> 모두 장단이 있는데, 만약 메소드를 많이 만드는 경우라면 <em>Functional Decomposition</em> 이 더 우월하다. 매 클라스마다 메소드를 만들 필요가 없기 때문이다. 반대로, 클래스를 많이 만드는 경우라면, <em>OO Decomposition</em> 이 더 낫다. 클래스를 만들때마다 매번 <code>eval</code> 함수를 수정 할 필요 없기 <code>eval</code> 을 가진 클래스를 만들면 된다.</p>
+
+<h3 id="lists">Lists</h3>
+
+<p>Scala 에서 <code>List</code> 와 <code>Array</code> 는 크게 두가지 면에서 다르다, 먼저 <code>List</code> 는 <em>immutable</em> 이고, <em>recursive</em> 인 반면 <code>Array</code> 는 <em>mutable</em>, <em>flat</em> 하다.</p>
+
+<pre><code class="scala">List("apple", "oranges", "pears")  
+"apple" :: ("oranges" :: ("pears" :: Nil))
+
+List()  
+Nil  
+</code></pre>
+
+<h4 id="rightassociativity">Right Associativity</h4>
+
+<p>좀 더 편하게 하기 위해서, Scala 는 다음과 같은 문법을 제공한다.</p>
+
+<pre><code class="scala">A :: (B :: C)  
+A :: B :: C  
+</code></pre>
+
+<p>이는 Scala 에서 <code>:</code> 로 끝나는 <em>operator</em> 는 <strong>Right-associative</strong> 이기 때문이다.</p>
+
+<p>또한 <code>:</code> 로 끝나는 <em>operator</em> 에서는, 우측에 오는것이 본래의 <em>operand</em> 다</p>
+
+<blockquote>
+  <p>Operators ending in <code>:</code> are also difference in the they are seen as method calls of the right-hand operand</p>
+</blockquote>
+
+<p>따라서 다음의 세 라인은 모두 같다.</p>
+
+<pre><code class="scala">1 :: 2 :: 3 :: 4 :: Nil  
+1 :: (2 :: (3 :: (4 :: Nil)))  
+Nil.::(4).::(3).::(2).::(1)  
+</code></pre>
+
+<p>그러므로 <code>::</code> 를 <code>prepend</code> 메소드라 보면 된다.</p>
+
+<h4 id="listpatterns">List Patterns</h4>
+
+<p><code>::</code>(Cons) 연산자를 이용하면 다음과 같은 패턴이 가능하다.</p>
+
+<pre><code class="scala">1 :: 2 :: xs  
+x :: Nil  
+List(x) // same as x :: nil  
+List() // Nil  
+List(2 :: xs)  
+</code></pre>
+
+<h4 id="sortinglists">Sorting Lists</h4>
+
+<p><strong>Insertion Sort</strong> 는 재귀를 이용하면 다음과 같이 구현할 수 있다.</p>
+
+<pre><code class="scala">  def isort(xs: List[Int]): List[Int] = {
+    xs match {
+      case Nil =&gt; List()
+      case y :: ys =&gt; insert(y, isort(ys))
+    }
+  }
+
+  def insert(x: Int, xs: List[Int]): List[Int] = {
+    xs match {
+      case Nil =&gt; List(x)
+      case y :: ys =&gt; {
+        if (x &lt; y)  x :: xs
+        else y :: insert(x, ys)
+      }
+    }
+  }
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='https://twitter.github.io/scala_school/type-basics.html' #variance'>https://twitter.github.io/scala_school/type-basics.html#variance</a>  </p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-4/</link><guid isPermaLink="false">fa146b4b-9c91-4762-ae3f-55f9179f16d9</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[variant]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 07 Oct 2014 08:06:00 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 1]]></title><description><![CDATA[<p><strong>Machine Learning</strong> by Andrew Ng, <em>Coursera</em></p>
+
+<h3 id="whatismachinelearning">What is Machine Learning?</h3>
+
+<blockquote>
+  <p>Field of study that gies computers the abiliry to learn without being explicitly programmed. (1959, Arthur Samuel)</p>
+  
+  <p><strong>Well-posed Learning Problem:</strong> A computer program is said to <em>learn</em> from experience E with respect to some task T and some performance measure P, if its performance on T, as measured by P, improves with experience E (1998, Tom Michell)</p>
+</blockquote>
+
+<p>체크메이트를 예로 들면, 수천번의 체스 게임은 <em>E</em> 에 해당하고 게임 속에서 체크메이트는 <em>T</em> 에, <em>P</em> 는 다음 게임에서 이길 확률로 볼 수 있다.</p>
+
+<p>다른 예로, 이메일을 분류하는 스팸검사기가 있다고 할때 </p>
+
+<ul>
+<li><em>E</em>: Wathing you label emails as spam or not spam.  </li>
+<li><em>T</em>: Classifying emails as spam or not spam.  </li>
+<li><em>P</em>: The number(or fraction) of emails correctly classified as spam/not spam.  </li>
+</ul>
+
+<h3 id="supervisedlearning">Supervised Learning</h3>
+
+<blockquote>
+  <p><strong>Given the rihgt answer</strong> for each example in the data</p>
+</blockquote>
+
+<p>즉, 주어진 정답이 있을때 사용할 수 있다. 이런 문제들은 많은데, <em>Regression</em> 이나 <em>Classification</em> 등이 있다.</p>
+
+<ul>
+<li><strong>Regression:</strong> Predict continuous valued output  </li>
+<li><strong>Classification:</strong> Discrete valued output (0 or 1)  </li>
+</ul>
+
+<p>단순히 1개 혹은 2개의 attribute 를 사용할 수 있지만, infinite number of features(attribute) 를 사용하는 <em>Support Vector Machine</em> 같은 알고리즘도 있다.</p>
+
+<h3 id="unsupervisedlearning">Unsupervised Learning</h3>
+
+<p>즉 모든 데이터에 attribute 는 있지만 주어진 정답이 없을때 사용한다. 다시 말해서, 여러 집단으로 분류될때 미리 컴퓨터에게 이건 <code>type1</code> 이야 등의 정보를 제공하지 않는다. </p>
+
+<p>예를 들어서, 다음의 두가지 예는 <em>Unsupervised leanring</em> 이 아니라 <em>Supervised learning</em> 이다.</p>
+
+<blockquote>
+  <p>(1) <strong>Given email labeled as spam/not spam</strong>, learn a spam filter<br/><br/>
+  (2) <strong>Given a dataset of patients diagnosed as either having diabetes or not</strong>, learn to classify new patients as having diabetes or not</p>
+</blockquote>
+
+<p><strong>Clustering</strong> 이라 불리는데, DNS Clustering, Social network analysis, market segmentation 등에 쓰인다.</p>
+
+<p><strong>Cocktail party problem</strong> 은 2명이 동시에 말하고, 이걸 서로 다른 위치에 있는 마이크가 녹음한다고 할 때 이 소리를 구분할 수 있는가 하는 문제다. 이것 또한 <em>Unsupervised lerning</em> 으로 해결할 수 있다.</p>
+
+<h3 id="modelrepresentation">Model Representation</h3>
+
+<p><img src='http://mercris.files.wordpress.com/2012/07/genericmlatwork.png'  />  </p>
+
+<p align="center">(<a href='http://mercris.files.wordpress.com/2012/07/genericmlatwork.png' >http://mercris.files.wordpress.com/2012/07/genericmlatwork.png</a>)</p>
+
+<p><em>Traning Set</em> 을 넣고 <em>Learning Algorithm</em> 을 돌리면 <em>Hypothesis</em> 가 나오는데, 이건 사실 함수라 보면 된다. 여기에 새로운 <em>Input X</em> 를 넣으면 <em>Estimated Y</em> 가 나온다.</p>
+
+<p>참고로, 변수가 하나인 <em>Linear regression</em> 은 <strong>Univariate linear regression</strong> 이라 부른다.</p>
+
+<h3 id="costfunction">Cost Function</h3>
+
+<p>예를 들어서 다음과 같은 데이터셋이 있을때, </p>
+
+<p><img src='http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584'  align="center" />  </p>
+
+<p align="center"><a href='http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584' >http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584</a></p>
+
+<p><em>H(hypothesis)</em> 가 다음처럼 나온다면 </p>
+
+<p><img src='http://s0.wp.com/latex.php?latex=h_%7B%5Ctheta%7Dx+%3D+%5Ctheta_%7B0%7D+%2B+%5Ctheta_%7B1%7Dx&amp;bg=ffffff&amp;fg=333333&amp;s=0'  align="center" /></p>
+
+<p>여기서 <code>0 (Theta)</code> 는 <em>parameter</em> 라고 부른다. 
+문제는, 상수를 어떻게 찾느냐인데, 아이디어는 간단하다. training set <code>(x, y)</code> 에 가까운 <code>h(x)</code> 를 찾으면 된다.</p>
+
+<p>따라서 다음과 같은 식을 만들 수 있고,</p>
+
+<p><img src='http://s0.wp.com/latex.php?latex=J%28%5Ctheta_%7B0%7D%2C+%5Ctheta_%7B1%7D%29+%3D+%5Cdfrac+%7B1%7D%7B2m%7D+%5Csum+%5Climits_%7Bi%3D1%7D%5E%7Bm%7D+%28h_%7B%5Ctheta%7D+%28x%5E%7B%28i%29%7D%29+-+y%5E%7B%28i%29%7D%29%5E2&amp;bg=ffffff&amp;fg=333333&amp;s=0'  align="center" /> </p>
+
+<p><code>J(01, 02)</code> 를 최소화 하는 <code>(01, 02)</code> 를 찾으면 된다. 이 식을 <strong>cost function</strong> 또는 <strong>squred error function</strong> 이라 부른다. 여기서 <code>1/2m</code> 으로 나누는 이유에 대해 좀 궁금해서 구글링 해봤는데, <code>1/m</code> 으로 나누는 이유는 <em>squared error</em> 에 대해 <em>mean</em> 을 얻기 위한거고, <code>1/2</code> 로 다시 나누는 이유는 미분했을때 나오는 <code>2</code> 를 제거하기 위해서다. <a href='http://stackoverflow.com/questions/21099289/cant-understand-the-cost-function-for-linear-regression' >SO 답변</a> 을 첨부하면,</p>
+
+<blockquote>
+  <p>The cost function is</p>
+  
+  <p>J(theta<em>0, theta</em>1) = 1/(2m) * sum<em>(i=1)^m [ h</em>theta(x^i) - y^i ]^2
+  By h<em>theta(x^i) we denote what model outputs for x^i, so h</em>theta(x^i) - y^i is its error (assuming, that y^i is a correct output).</p>
+  
+  <p>Now, we calculate the square of this error [ h_theta(x^i) - y^i ]^2 (which removes the sign, as this error could be both positive and negative) and sum it over all samples, and to <strong>bound it somehow we normalize it - simply by dividing by m,</strong> so we have mean (because we devide by number of samples) squared (because we square) error (because we compute an error):</p>
+  
+  <p>1/m * sum<em>(i=1)^m [ h</em>theta(x^i) - y^i ]^2
+  <strong>This 2 which appears in the front is used only for simplification of the derivative</strong>, because when you will try to minimize it, you will use the steepest descent method, which is based on the derivative of this function. Derivative of a^2 is 2a, and our function is a square of something, so this 2 will cancel out. This is the only reason of its existance.</p>
+</blockquote>
+
+<p>이 <em>cost function</em> 은 <em>regression</em> 문제를 위해 자주 쓰이는 기법이다. </p>
+
+<h3 id="costfunctionintuition1">Cost Function: Intuition 1</h3>
+
+<p><em>Cost function</em> 에서 만약에 <code>0_0</code> 이 제로라면 <code>0_1</code> 만 찾으면 된다. 따라서 다음과 같은 실제 데이터에서</p>
+
+<p><img src='http://cfile3.uf.tistory.com/image/2275174452D612AE06C75B'  />  </p>
+
+<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
+
+<p><code>J(0_1)</code> 을 찾아보면, 다음과 같은 이차함수가 나온다.</p>
+
+<p><img align="center" src='http://cfile29.uf.tistory.com/image/234E894A52D6113D1F8267'  />  </p>
+
+<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
+
+<p>당연히 이차함수이므로, 기울기가 0이 되는 지점은 <code>J(0_1)</code> 을 미분해서 찾으면 된다. (이래서 아까 1/2가 있던 것)</p>
+
+<h3 id="costfunctionintuition2">Cost Function: Intuition 2</h3>
+
+<p><em>Parameter</em> 가 <code>0_1</code> 만 있었을때는, (<code>0_0</code> = 0) <code>J(0_1)</code> 이 이차함수였지만, <code>J(0_0, 0_1)</code> 일때는 다음과 같은 모양을 보여준다.</p>
+
+<p><img align="center" src='http://cfile2.uf.tistory.com/image/2232CA4C52D611111DDFCD'  />  </p>
+
+<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
+
+<p>여기서 <code>J(0_0, 0_1)</code> 값을 제외하고 <code>(0_0, 0_1)</code> 을 평면으로 나타내면 아래 사진에서 우측과 같은 여러 궤도가 나온다.</p>
+
+<p><img src='http://cfile24.uf.tistory.com/original/2107074652D6134E0ECB0F'  align="center" />  </p>
+
+<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
+
+<p>여기서 같은 궤도에 있는 <code>(0_0, 0_1)</code> 쌍은, 같은 <code>J</code> 함수를 만든다. 그리고 재밌는 사실은 궤도가 가장 좁은 타원의 중심에 있는 <code>(0_0, 0_1)</code> 가 가장 작은 <code>J(0_0, 0_1)</code> 를 만들어 낸다.</p>
+
+<h3 id="gradientdescent">Gradient Descent</h3>
+
+<p><em>Gradient Descent</em> 알고리즘은 <em>Linear Regression</em> 에만 쓸 수 있는건 아니고, 범용적인 알고리즘이다. <em>cost function</em> 의 최소값을 찾기 위해 사용할 수 있는데, 다음과 같은 <code>J</code> 가 있을때,</p>
+
+<p><img src='http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5'  align="center" />  </p>
+
+<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
+
+<p>높이를 비교해 가며 점점 낮은쪽으로 이동해 가면서 <code>J</code> 의 최소값을 찾을 수 있다. 식은 다음과 같은데,</p>
+
+<p><img src='http://2.bp.blogspot.com/-AdV-O-MoZHE/TtLibFTaf9I/AAAAAAAAAVM/aOxUGP7zl98/s1600/gradient+descent+algorithm+OLS.png'  align="center" />  </p>
+
+<p align="center">(<a href='http://econometricsense.blogspot.kr/2011_11_01_archive.html' >http://econometricsense.blogspot.kr/2011_11_01_archive.html</a>)</p>
+
+<p>여기서 <code>:=</code> 는 <em>assignment</em> 다. <code>a(alpha)</code> 는 <em>learning rate</em> 라 부른다. 이때 <code>(0_0, 0_1)</code> 은 동시에 업데이트 되야한다. <strong>(Simultaneous update)</strong></p>
+
+<h3 id="gradientdescentintuition">Gradient Descent: Intuition</h3>
+
+<p>이제 저 식을 분해하기 위해 <code>J(0_1)</code> 처럼 <em>parameter</em> 하나만 놓고 보면, 이차원 함수가 나올테다. 만약 현재 <code>0_1</code> 이 이차함수의 최저점 우측에 있다면, <code>J(0_1)</code> 을 미분한 값<strong>(Slope, 기울기)</strong> 에 양수 <code>a</code> 를 곱한 값을 <code>0_1</code> 에서 뻬면서 갱신하면 <code>0_1</code> 은 점점 최저점 쪽으로 간다, </p>
+
+<p>반대로 <code>0_1</code> 이 <code>J(0_1)</code> 의 좌측에 위치한다면 우측으로 이동하고, 아래는 그걸 요약한 그림이다.</p>
+
+<p><img src='http://i.ytimg.com/vi/ud4o8AYe9tI/hqdefault.jpg'  align="center" /></p>
+
+<p>따라서 <em>learning late</em> <code>a</code> 가 너무 작으면 <em>Gradient descent</em> 가 너무 느려진다. 왜냐하면 <code>0</code> 의 차이가 점점 작이지기 때문에 최저점에 도착할때 까지 너무 많은 step 이 필요하다.</p>
+
+<p>반대로 너무 크면 최저점을 넘어갈 수 있다. 심지어 최저점에서 점점 더 멀어질 수 있다.</p>
+
+<blockquote>
+  <p>if <code>a</code> is too small, <em>gradient descent</em> can be slow <br/><br/>
+  if <code>a</code> is too large, <em>gradient desscent</em> can overshoot the minimum, It may fail to converge, or even diverge</p>
+</blockquote>
+
+<p>그런데 이 <em>gradient descent</em> 알고리즘의 문제는 <strong>local optimum</strong> 수 있다는 점이다. 왜냐하면 <strong>local optimum</strong> 에서도 <code>J</code> 의 derivative 가 <code>0</code> 이기 때문이다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Extrema_example.svg/2000px-Extrema_example.svg.png'  align="center" /><p align="center"><a href='http://en.wikipedia.org/wiki/Backpropagation' >http://en.wikipedia.org/wiki/Backpropagation</a></p></p>
+
+<h3 id="gradientdescentforlinearregression">Gradient Descent For Linear Regression</h3>
+
+<p>이제 <em>cost function</em> 을 <em>gradient descent</em> 에 집어넣고, 정리하자. <code>0_0(Theta zero)</code>, 과 <code>0_1(Theta one)</code> 대해서 시그마 내부 제곱을 각각 미분해서 정리하면,</p>
+
+<p><img src='http://pingax.com/wp-content/uploads/2013/11/Convergence-300x107.png'   align="center" />  </p>
+
+<p align="center">(<a href='http://pingax.com/linear-regression-with-r-step-by-step-implementation-part-1/' >http://pingax.com/linear-regression-with-r-step-by-step-implementation-part-1/</a>)</p>
+
+<p>참고로 <strong>Convex function</strong> 은 <em>Bowl shaped</em> 처럼 <em>local optima</em> 가 없는 <code>h</code>(Hypothesis) 를 말한다. 따라서 <em>convex function</em> 을 선택할 수 있다면, 하는편이 낫다.</p>
+
+<p><strong>Batch</strong> <em>gradient descent</em> 는 모든 training example 을 사용하는 <em>gradient descent</em> 를 말한다. (시그마에서)</p>
+
+<p>어떤 경우에는 <em>gradient descent</em> 같은 interative algorithm 없이도 <code>min J(0_0, 0_1)</code> 를 풀 수 있다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://mercris.wordpress.com/' >http://mercris.wordpress.com/</a> <br />
+(2) <a href='http://mapository.tistory.com/' >http://mapository.tistory.com/</a> <br />
+(3) <a href='http://econometricsense.blogspot.kr/' >http://econometricsense.blogspot.kr</a> <br />
+(4) <a href='http://pingax.com/' >http://pingax.com/</a></p>]]></description><link>http://1ambda.github.io/machine-learning-week-1/</link><guid isPermaLink="false">bf54bf16-5f85-4773-bc9c-658c74a10ecf</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 06 Oct 2014 03:59:07 GMT</pubDate></item><item><title><![CDATA[Content-Type vs Accept, HTTP Header]]></title><description><![CDATA[<p>이 <a href='http://webmasters.stackexchange.com/questions/31212/difference-between-accept-and-content-type-http-headers' >답변</a> 이 젤 심플하다. </p>
 
 <blockquote>
   <p>As you correctly note, the <strong>Accept</strong> header is used by HTTP clients to tell the server what content types they'll accept. The server will then send back a response, which will include a <strong>Content-Type</strong> header telling the client what the content type of the returned content actually is.</p>
@@ -3179,362 +3948,4 @@ console.log( Shape.prototype.constructor ); // Shape;
 (<a href='http://dmitrysoshnikov.com/ecmascript/javascript-the-core/' >http://dmitrysoshnikov.com/ecmascript/javascript-the-core/</a>)
 </p>  
 
-<p><br/></p>]]></description><link>http://1ambda.github.io/javascript-object-inheritance/</link><guid isPermaLink="false">57da5ecb-1d40-4b48-a3bb-09654e4574ac</guid><category><![CDATA[javascript]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 10 Aug 2014 03:54:29 GMT</pubDate></item><item><title><![CDATA[CLOS, Common Lisp Object System]]></title><description><![CDATA[<p>CLOS Brief Guide based on</p>
-
-<ol>
-<li><a href='http://www.aiai.ed.ac.uk/' ~jeff/clos-guide.html'>http://www.aiai.ed.ac.uk/~jeff/clos-guide.html</a>  </li>
-<li><a href='http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php' >http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php</a>  </li>
-<li><a href='http://cl-cookbook.sourceforge.net/clos-tutorial/' >http://cl-cookbook.sourceforge.net/clos-tutorial/</a>  </li>
-<li><a href='http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html' >http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html</a></li>
-</ol>
-
-<p>Full source code : <a href='https://github.com/1ambda/CLOS/blob/master/concept.lisp' >Here</a></p>
-
-<h3 id="1classof">1. class-of</h3>
-
-<p>Built-in Classes</p>
-
-<ul>
-<li>SYMBOL</li>
-<li>STRING</li>
-<li>INTEGER</li>
-<li>CONS</li>
-<li>VECTOR</li>
-<li>and so on</li>
-</ul>
-
-<p><br/>  </p>
-
-<h3 id="2defstruct">2. defstruct</h3>
-
-<p><code>defstruct</code> automatically define access-function and constructor</p>
-
-<pre><code class="lisp">(defstruct cat 
-  (name)
-  (age))
-
-(setf c1 (make-cat :name 'blue :age 6))
-(cat-age c1) ;; 6
-(cat-name c1) ;; BLUE
-</code></pre>
-
-<p><br/></p>
-
-<p>What defined by <code>defstruct</code> is <code>STRUCTURE-CLASS</code></p>
-
-<pre><code class="lisp">(class-of c1)
-
-;; #&lt;STRUCTURE-CLASS CAT)
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="3defclass">3. defclass</h3>
-
-<p>defclass gives you more controll. You can specify <strong>initform</strong>, <strong>initarg</strong>, <strong>accessor</strong> and so on.</p>
-
-<pre><code class="lisp">;; syntax
-(DEFCLASS class-name (superclass-name*)
-  (slot-description*)
-  class-option*)
-
-(defclass person ()
-  ((name :initarg :name
-         :initform 'bill
-         :accessor person-name)
-   (age :initarg :age
-        :initform 26
-        :accessor person-age)))
-
-(setf p1 (make-instance 'person :name 'bob :age 26))
-</code></pre>
-
-<p><br/></p>
-
-<p>What defined by <code>defclass</code> is <code>STANDARD-CLASS</code> which subclasses <code>STANDARD-OBJECT</code></p>
-
-<pre><code class="lisp">(class-of p1)
-(find-class 'person)
-
-;; #&lt;STANDARD-CLASS PERSON&gt;
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="4slot">4. Slot</h3>
-
-<p>Class defined by <code>defclass</code> can have slots. Slot is member-variable.</p>
-
-<pre><code class="lisp">(setf p1 (make-instance 'person :name 'bob :age 26''))
-(slot-value p1 'name)
-
-;; BOB
-</code></pre>
-
-<p><br/></p>
-
-<p><code>describe</code> function can be used to show instance or classes information</p>
-
-<pre><code class="lisp">(describe p1) ;; instance information
-;; #&lt;PERSON {1002E70513}&gt;
-;;   [standard-object]
-;; 
-;; Slots with :INSTANCE allocation:
-;;   NAME  = HOON
-;;   AGE   = 26
-
-(describe 'person) ;; class information
-;; COMMON-LISP-USER::PERSON
-;;   [symbol]
-;; 
-;; PERSON names the standard-class #&lt;STANDARD-CLASS PERSON&gt;:
-;;   Class precedence-list: PERSON, STANDARD-OBJECT, SB-PCL::SLOT-OBJECT, T
-;;   Direct superclasses: STANDARD-OBJECT
-;;   No subclasses.
-;;   Direct slots:
-;;     NAME
-;;       Initargs: :NAME
-;;       Readers: PERSON-NAME
-;;       Writers: (SETF PERSON-NAME)
-;;     AGE
-;;       Initargs: :AGE
-;;       Readers: PERSON-AGE
-;;       Writers: (SETF PERSON-AGE)
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="5slotoptioninheritance">5. Slot Option Inheritance</h3>
-
-<p><code>initform</code> Slot options can be overrided. But <code>initarg</code> and <code>accessor</code> can't</p>
-
-<pre><code class="lisp">(defclass teacher (person)
-  ((subject :accessor teacher-subject
-        :initarg :subject
-        :initform "None")))
-
-(defclass math-teacher (teacher)
-  ((subject :initform "Mathmatics")))
-
-(defvar t1 nil)
-(defvar m1 nil)
-
-(setf t1 (make-instance 'teacher :name 'bob :age 25))
-(setf m1 (make-instance 'math-teacher :name 'john :age 25))
-
-(describe t1)
-
-;; #&lt;TEACHER {10040F9363}&gt;
-;;   [standard-object]
-;; 
-;; Slots with :INSTANCE allocation:
-;;   NAME     = BOB
-;;   AGE      = 25
-;;   SUBJECT  = "None"
-
-
-(describe m1)
-
-;; #&lt;MATH-TEACHER {10040FE653}&gt;
-;;   [standard-object]
-;; 
-;; Slots with :INSTANCE allocation:
-;;   NAME     = JOHN
-;;   AGE      = 25
-;;   SUBJECT  = "Mathmatics"
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="6multipleinheritance">6. Multiple Inheritance</h3>
-
-<p>CLOS supports <strong>Multiple Inheritance</strong>. But I'm not going to discuss.</p>
-
-<p>If you are interested in how CLOS solves diamond problem, see <a href='http://en.wikipedia.org/wiki/Multiple_inheritance' >Wiki</a></p>
-
-<blockquote>
-  <p>Common Lisp CLOS attempts to provide both reasonable default behavior and the ability to override it. By default, the method with the most specific argument classes is chosen; then in the order in which parent classes are named in the subclass definition. However, the programmer can override this, by giving a specific method resolution order or stating a rule for combining methods. This is called method combination, which may be fully controlled. The MOP (metaobject protocol) also provides means to modify the inheritance, dynamic dispatch, class instantiation, and other internal mechanisms without affecting the stability of the system.</p>
-</blockquote>
-
-<p>Basically, There are two rules about inheritance.</p>
-
-<ol>
-<li>Each class is more specific than its superclasses.  </li>
-<li>For a given class, superclasses listed earlier are more specific than those listed later.</li>
-</ol>
-
-<p>The second rule is useful in case of</p>
-
-<pre><code class="lisp">(defclass a (b c) ...)
-</code></pre>
-
-<p><br/> <br />
-<code>initform</code> or <code>method</code> are can be from both class <code>b</code> and class <code>c</code>. But class 'b' precedes class 'c', class 'c''s <code>method' or</code>initform` will be selected.</p>
-
-<p><br/>  </p>
-
-<h3 id="7genericfunction">7. Generic function</h3>
-
-<p>In common lisp, class have only <strong>data</strong>. That means <strong>code (method)</strong> is separeted from class and is <strong>not</strong> tired to any class contrary to popular object-oriented language like Java, C++. This is why we call it <strong>generic</strong> method or function.</p>
-
-<pre><code class="lisp">;; inherit standard object
-(defclass person ()
-  ((name :accessor person-name
-     :initarg :name)
-   (age :accessor person-age
-    :initarg :age)))
-
-;; inherit person
-(defclass teacher (person)
-  ((subject :accessor teacher-subject
-        :initarg :subject
-        :initform "nothing")))
-
-;; inherit teacher
-(defclass math-teacher (teacher)
-  ((subject :initform "math")))
-
-;; create instance
-(setf t1 (make-instance 'teacher :name 'bob :age 25))
-(setf m1 (make-instance 'math-teacher :name 'john :age 25))
-
-;; call method
-
-(work t1)
-;; BOB is teaching nothing
-
-(work m1)
-;; JOHN is teaching math
-</code></pre>
-
-<p><br/> <br />
-Calling method like this is somewhat different from other languages. In Java, methods are binded in a class. So we can call methods <code>Class.method(args)</code>. This is <strong>Single dispatch</strong>. According to <a href='http://en.wikipedia.org/wiki/Dynamic_dispatch' #Single_and_multiple_dispatch">wikipedia</a></p>
-
-<blockquote>
-  <p>If the decision of which version of a method to call is based entirely on the class of the object x, then this is known as single dispatch because an implementation is chosen based on a single type — the type of the instance. Single dispatch is supported by many object-oriented languages, including statically typed languages such as C++ and Java, and dynamically typed languages such as Smalltalk and Objective-C.</p>
-</blockquote>
-
-<p>But in Common Lisp, Method is invoked like <code>(method classes args)</code>. CLOS select which method will be called based on <strong>classes</strong>. This is <strong>Multiple dispatch</strong>.</p>
-
-<blockquote>
-  <p>In some languages such as Common Lisp and Dylan, methods or functions can also be dynamically dispatched based on the run-time type of arguments. Expressed in pseudocode, the code manager.handle(y) could call different implementations depending on the types of both objects manager and y. This is known as multiple dispatch.</p>
-</blockquote>
-
-<p><br/>  </p>
-
-<h3 id="8methodcombination">8. Method Combination</h3>
-
-<p>More than one method are applicable to a given set of arguments, the applicable methods are called <strong>single effective method</strong>. Common Lisp comes with predefined <strong>standard method combination</strong>. Also, It is possible to define new kinds of method combination. Standard method combination consists of</p>
-
-<ul>
-<li>primary</li>
-<li>:before</li>
-<li>:after</li>
-<li>:around</li>
-</ul>
-
-<pre><code class="lisp">(defgeneric work (teacher)
-  (:documentation "do something based on their job"))
-
-(defmethod work ((t1 teacher))
-  (format t "~a is teaching ~a"
-    (slot-value t1 'name)
-    (slot-value t1 'subject)))
-
-(defmethod work ((t1 math-teacher))
-  (format t "~a's major is math~%"
-    (slot-value t1 'name))
-  (call-next-method))
-
-(setf t1 (make-instance 'teacher :name 'bob :age 25))
-(setf m1 (make-instance 'math-teacher :name 'john :age 25))
-
-(work m1)
-;; BOB is teaching nothing
-
-(work t1)
-;; JOHN's major is math
-;; JOHN is teaching math
-</code></pre>
-
-<p><br/> <br />
-If <code>around</code>, <code>before</code>, <code>after</code> keyword is not specified, the generic method is <strong>Primary</strong> method which is responsible for providing primary implementation. Above <code>work</code> methods are primary. <code>call-next-method</code> indicates that control should be passaed from this method to the method specialized on superclass as arguments.</p>
-
-<pre><code class="lisp">(setf t1 (make-instance 'teacher :name 'bob :age 25))
-(setf m1 (make-instance 'math-teacher :name 'john :age 25))
-
-(defgeneric work (teacher)
-  (:documentation "do something based on their job"))
-
-(defmethod work ((t1 teacher))
-  (format t "~a is teaching ~a~%"
-    (slot-value t1 'name)
-    (slot-value t1 'subject)))
-
-(defmethod work :before ((t1 teacher))
-  (format t "~a is preparing the class~%"
-    (slot-value t1 'name)))
-
-(defmethod work :after ((t1 teacher))
-  (format t "~a has done his class~%"
-    (slot-value t1 'name)))
-
-(defmethod work :around ((t1 teacher))
-  (format t "start around for teacher class~%")
-  (let ((result (call-next-method)))
-    (format t "end around for teacher class~%")
-    result))
-
-(defmethod work ((t1 math-teacher))
-  (format t "~a's major is math~%"
-    (slot-value t1 'name))
-  (call-next-method))
-
-(work t1)
-;; start around for teacher class
-;; BOB is preparing the class
-;; BOB is teaching nothing
-;; BOB has done his class
-;; end around for teacher class
-;; NIL
-
-(work m1)
-;; start around for teacher class
-;; JOHN is preparing the class
-;; JOHN's major is math
-;; JOHN is teaching math
-;; JOHN has done his class
-;; end around for teacher class
-;; NIL
-</code></pre>
-
-<p><br/> <br />
-These <code>:before</code>, <code>:after</code>, <code>:around</code> are auxiliary methods. Superclass's auxiliary methods are automatically called when you invoke subclass's a primary method. Of course, we can define subclass's auxiliary methods.</p>
-
-<pre><code class="lisp">(defmethod work :before ((t1 math-teacher))
-  (format t "Math teacher ~a is preparing the math class~%"
-    (slot-value t1 'name)))
-
-(defmethod work :after ((t1 math-teacher))
-  (format t "Math teacher ~a has done his math class~%"
-    (slot-value t1 'name)))
-
-(defmethod work :around ((t1 math-teacher))
-  (format t "start around for math-teacher class~%")
-  (let ((result (call-next-method)))
-    (format t "end around for math-teacher class~%")
-    result))
-
-(work m1)
-;; start around for math-teacher class
-;; start around for teacher class
-;; Math teacher JOHN is preparing the math class
-;; JOHN is preparing the class
-;; JOHN's major is math
-;; JOHN is teaching math
-;; JOHN has done his class
-;; Math teacher JOHN has done his math class
-;; end around for teacher class
-;; end around for math-teacher class
-;; NIL
-</code></pre>]]></description><link>http://1ambda.github.io/clos-common-lisp-object-system/</link><guid isPermaLink="false">f45536c4-b80f-424f-9134-3a3cd7e46f1d</guid><category><![CDATA[Lisp]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 23 Jul 2014 01:27:33 GMT</pubDate></item></channel></rss>
+<p><br/></p>]]></description><link>http://1ambda.github.io/javascript-object-inheritance/</link><guid isPermaLink="false">57da5ecb-1d40-4b48-a3bb-09654e4574ac</guid><category><![CDATA[javascript]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 10 Aug 2014 03:54:29 GMT</pubDate></item></channel></rss>
