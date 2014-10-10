@@ -67,7 +67,7 @@
 <body>
 
   
-  <script src="../../public/jquery.js?v=daa447b747"></script>
+  <script src="../../public/jquery.js?v=7140f5e5b7"></script>
 
   
 
@@ -85,6 +85,42 @@
 </header>
 
 <main class="site_width" role="main">
+  
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../scala-for-the-impatient-chapter-1-2-3">Scala for the Impatient, Chapter 1, 2, 3</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-26">Friday, September 26, 2014</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/" data-disqus-identifier="29">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><h3 id="chapter1"></h3></i>
+      <p>Chapter 1 (1). 스칼라의 REPL 은 엄밀히 말해서 인터프리터가 아니다. 입력받은 코드를 자바 바이트코드로 컴파일 한 후 자바 가상머신에서 실행시킨뒤 결과를 돌려준다. (2). 스칼라는 문자열을 위한 추가적인 연산들을 제공하기 위해 java.lang.String 오브젝트를 StringOps 오브젝트로 변환한다. "Hello".intersect("World") 가 그 예다. 따라서 ScalaDoc 을 보려면 SpringOps 클래스를 살펴보는&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../scala-for-the-impatient-chapter-1-2-3">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
+  
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../union-find-algorithms-week-1">Algorithm I, Chapter 1</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-22">Monday, September 22, 2014</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/union-find-algorithms-week-1/" data-disqus-identifier="24">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p></p></i>
+      <p>Algorithm Part 1, Coursera Union Find Dynamic Connectivity N 개의 오브젝트가 있을때,  Union command: connect two objects   Find/connected query: is there a path connecting the two objects? 이렇게 두 경로가 연결되어있는지 아닌지를 판별하는 알고리즘은 다양하게 활용될 수 있다. Pixels in adigital photo   Computers in a network   Friends in a&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../union-find-algorithms-week-1">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
   
 
   <article class="margin_bottom_big">
@@ -136,42 +172,6 @@
       <p><p></p></i>
       <p>2014-09-16, Functional Programming in Scala, Coursera 1.1 Programming Paradigms Imperative Programming modifying mutable variables   using assignment   and control str such as if-then-else, loop breakl continue, return   절차적인 프로그래밍은 폰 노이만 구조랑 비슷한데,  Mutable var = memory cells   variable deferences = load instructions   var assginment = store instsruction   control structure = jumps   그런데 이런&hellip;</p>
       <h5><a class="text book small uppercase color c_blue" href="../../functional-programming-in-scala-chapter-1">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-  
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="../../mysql-derived-table">MySQL Derived Table, Correlated Query</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-08-19">Tuesday, August 19, 2014</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/mysql-derived-table/" data-disqus-identifier="20">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><h3 id="correlatedvsnoncorrelated"></h3></i>
-      <p>Correlated vs Non-Correlated 아래는 Non-Correlated 쿼리다. 즉 내부(Inner) 쿼리가 외부(Outer) 쿼리를 참조하지 않는다. SELECT name   FROM city   WHERE population &gt; (SELECT population                       FROM city                     WHERE name = 'new york'); 반면 아래는 Correlated 쿼리다. 내부 쿼리가 co.code 로 외부 쿼리를 참조한다. SELECT name   FROM country as co   WHERE EXISTS&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="../../mysql-derived-table">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-  
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="../../javascript-object-inheritance">Javascript Inheritance</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-08-10">Sunday, August 10, 2014</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/javascript-object-inheritance/" data-disqus-identifier="13">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><h2 id="prototypeinheritance"></h2></i>
-      <p>Prototype Inheritance? 자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다. .constructor .__proto__ .prototype Object.create new Object, Function 먼저 예제부터 보시겠습니다. // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="../../javascript-object-inheritance">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
     </section>
   </article>
 

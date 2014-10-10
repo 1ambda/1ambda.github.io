@@ -1,5 +1,717 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 08 Oct 2014 09:54:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Functional Programming in Scala, Chapter 4]]></title><description><![CDATA[<p>2014-10-07, <strong>Functional Programming in Scala</strong>, Coursera</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 10 Oct 2014 14:33:01 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Programming Language, Week1]]></title><description><![CDATA[<p><strong>Programming Language</strong> by <em>Dan Grossman</em>, Coursera</p>
+
+<p><em>Coursera</em> PL 클래스인데 과제 마감기한도 까다롭고, 동료평가도 있고, 여러모로 조금 빡세다. 유일한 낙은 언어의 다양한 특징들을 탐구하기 위해 <strong>ML</strong> 을 사용하고 <del>오오 갓 ML</del> , emacs 를 사용한다는 건데.. 잘 버틸수 있을까 의심스럽다. 무려 첫 강의부터 대략 300분이 넘는 동영상을 올려주시는 교수님 -_-;</p>
+
+<p>미국 CS 전공자들은 모두 이렇게 빡세게 배우는가요 ㅠㅠ?</p>
+
+<p><code>SML/nj</code> 와 Emacs 에 <code>sml-mode</code> 설치 후 시작한다. <code>c-c, c-s</code> 는 <code>REPL</code> 을 켠다. </p>
+
+<h3 id="mlvariablebindingsandexpressions">ML Variable Bindings and Expressions</h3>
+
+<pre><code class="sml">(* This is a comment. *)
+
+val x = 34;  
+(*: static env: x : int *)
+(*: dynamic env: x --&gt; 34 *)
+val y = 35 : int;  
+val z = (x + y) + (y + 2);  
+</code></pre>
+
+<p>각 라인마다, <em>dynamic environment</em> 에 바인딩을 하나씩 추가한다. 따라서 세번 째 라인에서 <code>x</code> 와 <code>y</code> 를 <code>z</code> 를 바인딩하기 위해 사용할 수 있다.</p>
+
+<p>그리고, <em>dynamic env</em> 에 바인딩을 추가하기 전에 <em>static enviornment</em> 에 <em>Type</em> 을 추가한다. 맨 처음엔 <code>x: int</code> 가 추가되고 <code>y</code> 와 값이 바인딩 되기 전에는 <code>x: int, y: int</code> 가 <em>static env</em> 에 추가된다.</p>
+
+<p>따라서 매 라인마다 <em>type checking</em> 이 먼저 일어나고 그 후에야 프로그램이 <em>evaluated (excuted)</em> 된다. </p>
+
+<p><em>ML</em> 에서 <code>if</code> 는 다음과 같이 작성할 수 있다. 다르 언어와 비슷하다.</p>
+
+<pre><code class="sml">val abs_of_z = if z &lt; 0 then 0 - z else z;  
+</code></pre>
+
+<p>여기서 잠깐 <em>Syntax</em> 와 <em>Semantics</em> 를 정리하자면</p>
+
+<blockquote>
+  <p><strong>Syntax</strong> is just how you write something<br/></p>
+  
+  <p><strong>Semantics</strong> is what that something means<br/>
+  - <em>Type-checking</em> (before program runs)<br/>
+  - <em>Evaluation</em> (as program runs)  </p>
+</blockquote>
+
+<p><em>variable binding</em> 에서는, <em>type checking</em> 은 <em>static environment</em> 를 확장하고, <em>evaluation</em> 은 <em>dynamic environment</em> 를 확장한다.</p>
+
+<h3 id="rulesforexpressions">Rules for Expressions</h3>
+
+<p><em>expression</em> 은 <em>sub-expression</em> 을 가질 수 있기 때문에, <em>expression</em> 을 해석 하는데 있어서 3가지가 꼭 필요하다.</p>
+
+<p>(1) <strong>Syntax</strong> <br />
+(2) <strong>Type-checking rules:</strong> produces a type of fails <br />
+(2) <strong>Evaluation rules:</strong> produces a value</p>
+
+<p>다시 말하면 <em>Syntax</em> 와 <em>Semantics</em> 가 필요하단 이야기다.</p>
+
+<h4 id="variables">Variables</h4>
+
+<blockquote>
+  <p><strong>Syntax:</strong> sequence of letters, digits, _, not starting with digit</p>
+  
+  <p><strong>Type-checking:</strong> look up type in current statix env if
+  non there, fail</p>
+  
+  <p><strong>Evaluation:</strong> look up value in current dynamic env</p>
+</blockquote>
+
+<h4 id="addition">Addition</h4>
+
+<p>Addition 의 경우에는 <em>sub-exp</em> 가 있을 수 있다.</p>
+
+<blockquote>
+  <p><strong>Syntax:</strong> <code>e1</code> + <code>e2</code> where <code>e1</code> and <code>e2</code> are expressions</p>
+  
+  <p><strong>Type-checking:</strong> if <code>e1</code> and <code>e2</code> have type <em>int</em> then <em>int</em></p>
+  
+  <p><strong>Evaluation:</strong> if <code>e1</code> evaluates to <code>v1</code> and <code>e2</code> evaluates to <code>v2</code>, then sum of <code>v1</code> and <code>v2</code></p>
+</blockquote>
+
+<h4 id="values">Values</h4>
+
+<p>모든 <em>value</em> 는 <em>expression</em> 이다. 그러나 모든 <em>expression</em> 이 <em>value</em> 인 것은 아니다. 그리고,</p>
+
+<blockquote>
+  <p>Every value evaluates to itself in <strong>zero steps</strong></p>
+</blockquote>
+
+<p>참고로, <code>()</code> 는 <code>unit</code> 타입을 가진다.</p>
+
+<h4 id="conditional">Conditional</h4>
+
+<blockquote>
+  <p><strong>Syntax:</strong> if <code>e1</code> then <code>e2</code> else <code>e3</code> where if, then, and else are keywords and <code>e1</code> <code>e2</code> and <code>e3</code> are sub-expressions</p>
+  
+  <p><strong>Type-checking:</strong> <code>e1</code> must have type <code>bool</code>. <code>e2</code> and <code>e3</code> can have any type, but they must have the same type</p>
+  
+  <p><strong>Evaluation:</strong> first evaluate <code>e1</code> to <code>v1</code>, if it's true evaluate <code>e2</code> and that resut is the whole expressions's result else evaluate <code>e3</code></p>
+</blockquote>
+
+<h3 id="replanderrors">REPL and Errors</h3>
+
+<h4 id="use">use</h4>
+
+<p><code>use</code> 는 특정 파일을 읽어 <em>binding</em> 하고 <code>it: unit</code> 을 돌려주는데, 이건 무시해도 된다. 그리고 같은 파일을 <code>use</code> 할때는 항상 <code>REPL</code> 을 다시 시작하자. <code>C-d</code>, <code>C-c, C-s</code></p>
+
+<h4 id="error">Error</h4>
+
+<p>대부분의 에러는 <em>syntax</em>, <em>type-checking</em>, <em>evaluation</em> 의 문제다.</p>
+
+<h3 id="shadowing">Shadowing</h3>
+
+<p>같은 변수에 대한 <em>multiple binding</em> 은 <em>poor style</em> 이다. 그러나 이를 통해 <em>environment</em> 와 <em>binding</em> 이 어떻게 동작하는지 알 수 있다.</p>
+
+<pre><code class="sml">val a = 10;  
+val b = a * 2  
+val a = 5; (* this is not an assignment statement *)  
+(* a -&gt; 5, b -&gt; 20 *)
+val c = 2;  
+(* a -&gt; 5, b -&gt; 20, c -&gt; 20 *)
+</code></pre>
+
+<p><code>val a = 5</code> 문장은, 할당하는게 아니라 <code>a</code> 를 <em>shadowing</em> 한다. <em>ML</em> 에서는 <em>mutate</em> 할 수 없다. 매번 새롭게 <em>dynamic env</em> 를 만든다.</p>
+
+<pre><code class="sml">val d = a  
+(* ..., d -&gt; 5 *)
+val a =  a + 1  
+(* ..., a -&gt; 6 *)
+val f = a * 2  
+</code></pre>
+
+<p><code>use</code> 를 이용하면, 기존의 <code>a</code> 의 값이 <code>&lt;hidden-value&gt;</code> 로 나오는 것을 확인 할수 있다.</p>
+
+<pre><code class="sml">val a = 1;  
+val b = a;  
+val a = 2;  
+</code></pre>
+
+<p>다음과 같은 예제가 있을 때, <code>b</code> 는 <code>1</code> 이다. <em>eagerly evaluated</em> 되어 바인딩 후에는 <code>value</code> 를 만든 <em>expression</em> 과는 관련이 없어진다. 다시 말해  바인딩 후에는 <code>a</code> 와 <code>b</code>는 상관이 없다.</p>
+
+<p>그리고 위에서 언급 했듯이 <strong>ML</strong> 에서는 <em>assign to</em> 가 없고, 앞의 <code>a</code> 는 뒤의 <code>a</code> 에가 있는 <em>dynamic env</em> 에 의해서 가려질 뿐이다.</p>
+
+<p>그렇기 때문에 <em>REPL</em> 을 재시작 하지 않고서 같은 파일을 여러번 <code>use</code> 하면 문제가 생길 수 있다고 교수님이 누차 말한 것</p>
+
+<h3 id="functionsinformally">Functions Informally</h3>
+
+<pre><code class="sml">fun pow (x: int, y: int) =  
+  if y = 0
+  then 1
+  else x * pow(x, y-1)
+
+fun cube(x: int)  
+  pow(x, 3)
+</code></pre>
+
+<p>이 경우 두 함수 모두 타입은 <code>fn: int -&gt; int</code> 다. 타입을 이름 뒤에 사용하는것도 그렇고, 함수 타입도 그렇고 스칼라와 문법이 비슷한 것 같다.</p>
+
+<p><code>*</code> 가 타입에 있을때는 곱셈이 아니라 <code>,</code> 같은 역할을 한다. 따라서 다음과 같이 <code>pow</code> 를 호출할 수 있다.</p>
+
+<pre><code class="sml">val x : int * int = (2, 3)  
+val y = pow x  
+</code></pre>
+
+<p>참고로, 함수를 사용한 후 정의하는 것은 불가능하다. 따라서 사용하는 <em>expression</em> 위에 함수를 정의해야 한다.</p>
+
+<h4 id="recursion">Recursion</h4>
+
+<p>재귀에 대해서도 간단히 언급을 하는데, 문제를 간단한 방법으로 나누어 푸는 좋은 기술이라고..</p>
+
+<h3 id="functionsformally">Functions Formally</h3>
+
+<p>우리가 <strong>Function</strong> 이 무엇인지 PL 에서 정의하려면 위에서 언급했듯이 <em>syntax</em> 와 <em>semantics</em> 가 필요하다. </p>
+
+<blockquote>
+  <p><strong>Syntax:</strong> <code>fun x0 (x1: t1, ... , xn: tn) = e</code></p>
+  
+  <p><strong>Evaluation:</strong> A function is a value. <code>x0</code> is added to <em>dynamic env</em></p>
+  
+  <p><strong>Type-checking:</strong> <code>(t1 *, ..., * tn) -&gt; t</code></p>
+</blockquote>
+
+<p>타입체킹이 조금 복잡한데, <code>e</code> 가 <code>t</code> 타입을 가지는지 검사하고, 파라미터도 마찬가지로 올바른 타입을 가지는지 검사한다.</p>
+
+<p>다른 언어와 마찬가지로 <code>t1</code> 등의 파라미터는 <code>e</code> 를 위한 <em>environment</em> 에만 추가된다.</p>
+
+<p><code>x0</code> 이 <em>dynamic</em>, <em>static env</em> 에 추가되므로 이후의 코드에서 <em>recursion</em> 을 사용할 수 있다.</p>
+
+<h4 id="functioncalls">Function calls</h4>
+
+<p><em>Function calls</em> 의 <em>syntax</em> 는 <code>e0 (e1, ..., en)</code> 이다. 만약에 인자가 하나라면 괄호(parentheses) 는 없어도 된다.</p>
+
+<p>참고로 <strong>ML</strong> 에서는 <strong>variable numbers of arguments</strong> 를 함수에서 받을 수 없다. 인자의 개수가 정해져야 한다.</p>
+
+<p><em>type-checking</em> 의 경우에는 , <code>e0</code> 이 <code>(t1 * ... * tn) -&gt; t</code> 인지 검사하고 <code>en</code> 이 <code>tn</code> 타입을 가지면, <code>e0</code> 은 <code>t</code> 타입이다. </p>
+
+<p><em>Evaluation</em> 스텝은 다음과 같다.</p>
+
+<p>(1) evaluate <code>e0</code> to <code>fun x0(x1: t1, ... , x: tn) = e</code> <br />
+(2) evaluate arguments <code>e1</code>, ... , <code>en</code> to <code>v1</code>, ..., <code>vn</code> <br />
+(3) extend <em>dynamic env</em> mapping <code>x1</code> to <code>v1</code> , ... , <code>xn</code> to <code>vn</code></p>
+
+<p>두 번째 스텝에서는 <em>eager evaluation</em> 이 사용되는데 <code>pow(2, 2+2)</code> 같은 경우 인자가 <code>2, 4</code> 가 된다. </p>
+
+<p>세 번째 스텝에서는 <em>dynamic environment</em> 를 확장하는데, 현재 함수인 <code>x0</code> 과 인자들인 <code>xn</code> 을 포함하도록 한다. 따라서 <em>recursion</em> 이 가능하다.</p>
+
+<p>사실은 스칼라의 그것과 같은데 교재에 나온 설명이 너무 함축적이어서 이해하기가 어렵다.</p>
+
+<h3 id="pairsandothertuples">Pairs and Other Tuples</h3>
+
+<p>위에서 잠깐 보았던 <code>t1 * t2</code> 같은 것들이 <em>Pair</em> 다. 다른말로 <em>2-tuples</em> 라 부른다. </p>
+
+<p><em>Syntax</em> 는 <code>(e1, e2)</code> 로 <em>Type-checking</em> 은 <code>e1</code> 과 <code>e2</code> 가 올바른 타입을 가졌는지 검사한다.</p>
+
+<p><em>Pair</em> 에 접근할때는 <code>#1 e</code> 또는 <code>#2 e</code> 와 같은 <em>Syntax</em> 를 사용하고, <code>e</code>가 <code>t1 * t2</code> 타입인지, 그 후에 <code>#1 e</code> 가 <code>t1</code> 또는 <code>#2 e</code> 가 <code>t2</code> 타입을 가졌는지 검사한다.</p>
+
+<pre><code class="sml">fun su_two_pairs (pr1: int * int, pr2: int* int) =  
+  (#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)
+</code></pre>
+
+<p>의 경우에는 타입이 <code>(int * int) * (int * int) -&gt; int</code> 된다. 그리고 다른 언어와 마찬가지로 <em>tuple</em> 도 겹칠 수 있다.</p>
+
+<pre><code class="sml">val x1 = (7, (true, 9)) // int * (bool * int )  
+val x2 = #1 (#2 x1) // true  
+</code></pre>
+
+<h3 id="introducinglists">Introducing Lists</h3>
+
+<p><em>Tuple</em> 은 여러 타입을 가질 수 있지만, 정해진 갯수만큼의 element 만 저장할 수 있다. 반면 <em>List</em> 는 하나의 타입만 가져야 하지만, 원소의 갯수가 변할 수 이다.</p>
+
+<p>빈 리스트는 <code>[]</code> 와 같이 만든다. <code>[3, 4, 5]</code> 는 <code>int list</code> 다. <code>[(1+2), 3, 7]</code> 과 같이 초기화하면 <code>[3, 3, 7]</code> 이 나온다. 리스트는 그 자체로 <em>value</em> 다.</p>
+
+<p><code>::</code> 는 <em>cons</em> 라 발음하고, 다음과 같이 쓸 수 있다.</p>
+
+<pre><code class="sml">val x = [3, 4, 5]  
+val y = 2 :: x  
+</code></pre>
+
+<p><em>cons</em> 뒤에 오는것은 <code>List</code> 여야 한다. 리스트가 비었는지 검사하기 위해 <code>null</code> 을, <em>head</em> 를 얻기 위해 <code>hd</code> 를, <em>tail</em> 을 얻기 위해 <em>tl</em> 을 이용한다. 따라서 <code>tl [3, 4, 5]</code> 는 <code>[4, 5]</code> 를 돌려준다.</p>
+
+<p>그리고 다른 함수형 언어와 마찬가지로 <code>tl [9]</code> 는 <code>[]</code>(<em>nil</em>) 이다.</p>
+
+<p>리스트는 다양한 타입을 가질 수 있기 때문에 <code>(int * int) list</code> 같은 것도 타입이 될 수 있다. <code>[(3, 4), (5, 6)]</code> 처럼.</p>
+
+<p><code>null</code> 은 <code>fn: a list -&gt; bool</code> 타입이고, 
+<code>hd</code> 는 <code>fn: a list -&gt; a</code>, 
+<code>tl</code> 은 <code>fn: a list -&gt; a list</code></p>
+
+<p><code>[]: a list</code> 는 좀 특이한데, 다양한 타입이 될 수 있다. <code>3 :: []</code>, <code>false :: []</code> 이라던지.</p>
+
+<h3 id="listfunctions">List Functions</h3>
+
+<p>리스트를 조작하는 간단한 함수를 <em>ML</em> 로 몇 개 짜보자.</p>
+
+<pre><code class="sml">fun pow(x: int, y: int) =  
+    if y = 0 then 1 else x * pow(x, y - 1);
+
+fun cube(x: int) =  
+    pow(x, 3);
+
+fun sum_list(xs: int list) =  
+    if null xs
+    then 0
+    else hd xs + sum_list(tl xs)
+
+fun product_list(xs: int list) =  
+    if null xs
+    then 1
+    else hd xs * product_list(tl xs)
+
+fun countdown(x: int) =  
+    if x = 0
+    then []
+    else x :: countdown(x - 1)
+
+fun append(xs: int list, ys: int list) =  
+    if null xs
+    then ys
+    else (hd xs) :: append(tl xs, ys)
+
+fun sum_pair_list(xs: (int * int) list) =  
+    if null xs
+    then 0
+    else (#1 (hd xs)) + (#2 (hd xs)) + sum_pair_list(tl xs)
+
+fun firsts(xs: (int * int) list) =  
+    if null xs
+    then []
+    else #1 (hd xs) :: firsts(tl xs)
+
+fun seconds(xs: (int * int) list) =  
+    if null xs
+    then []
+    else #2 (hd xs) :: seconds(tl xs)
+
+fun sum_pair_list(xs: (int * int) list) =  
+    if null xs
+    then 0
+    else sum_list(firsts xs) + sum_list(seconds xs)
+
+fun factorial(n : int) =  
+    product_list(countdown(n))
+</code></pre>
+
+<p>참고로 <code>#</code> 이 <code>+</code> 이나 <code>::</code> 보다 우선순위가 높다.</p>
+
+<h4 id="listrecursion">List Recursion</h4>
+
+<p>재귀에 대해 생각할땐, 항상 명심해야 하는게 있는데 <strong>탈출 조건</strong> 이다. 따라서 empty-list 에 대해선 어떤걸 돌려줄지, non-empty-list 에 대해서는 무엇을 처리해야 할지 항상 생각해야 한다.</p>
+
+<h3 id="letexpressions">Let Expressions</h3>
+
+<p><code>let</code> 은 <em>local variable</em> 을 바인딩하는 법이다.</p>
+
+<blockquote>
+  <p><strong>Syntax:</strong> <code>let b1 b2 ... bn in e end</code>. Each <code>b1</code> is any <em>binding</em> and <code>e</code> is any expression</p>
+  
+  <p><strong>Type-checking:</strong> Type of whole let-expression is the type of e. Type-check each <code>b1</code> and <code>e</code> in a staic env that includes the previous bindings</p>
+  
+  <p><em>*Evaluation: *</em> evaluate each <code>b1</code> and <code>e</code> in a dynamic env that includes the previous bindings. Result of whole expression is result of evaluating <code>e</code></p>
+</blockquote>
+
+<pre><code class="sml">fun silly () =  
+    let
+      val x = 3
+    in
+      (let val x = 2 in x + 1 end) + (let val y = x + 1 in y + 1 end)
+    end
+</code></pre>
+
+<p>여기서 <em>Scope</em> 의 개념이 나온다.</p>
+
+<blockquote>
+  <p><strong>Scope:</strong> Where a binding is in the environment</p>
+</blockquote>
+
+<h4 id="nestedfunctions">Nested Functions</h4>
+
+<p><em>Function</em> 은 <em>binding</em> 이다. 따라서 <code>let</code> 내부에서 <em>local binding</em> 할 수 있다.</p>
+
+<pre><code class="sml">fun count_from_1 (x: int) =  
+    let
+    fun count (from: int, to: int) =
+        if from == to
+        then []
+        else from :: count(from + 1, to)
+    in
+    count(1, x)
+    end
+</code></pre>
+
+<p>이렇게 하면 <em>top-level</em> 에서 <code>count</code> 는 사라진다. 그리고 엄밀히 말해서 <code>count</code> 가 가진 <em>environment</em> 에는 <code>to</code> 가 있기 때문에, <code>to</code> 를 인자로 가질 필요가 없다.</p>
+
+<pre><code class="sml">fun count_from_1 (x: int) =  
+    let
+    fun count (from: int) =
+        if from = x
+        then []
+        else from :: count(from + 1)
+    in
+    count(1)
+    end
+</code></pre>
+
+<h3 id="letandefficiency">Let and Efficiency</h3>
+
+<p>가장 큰 숫자를 찾는 다음의 함수를 고려 해 보자</p>
+
+<pre><code class="sml">fun bad_max (xs : int list) =  
+  if null xs
+  then 0
+  else if null (tl xs)
+  then hd xs
+  else if hd sx &gt; bad_max(tl xs)
+  then hd xs
+  else bad_max(tl xs)
+</code></pre>
+
+<p>이 함수는 <code>[1, 2, ... , 30]</code> 과 같은 리스트에 굉장히 나쁜 성능 <em>exponentially (2^30)</em> 을 보여준다. <code>bad_max(tl xs)</code> 를 두번 호출하기 때문이다. 따라서 <code>max(tl xs)</code> 를 변수로 놓아 캐싱하면</p>
+
+<pre><code class="sml">fun good_max (xs: int list) =  
+    if null xs then 0
+    else if null (tl xs) then hd xs
+    else
+    let
+        val res = good_max(tl xs)
+    in
+        if hd xs &gt; res then hd xs
+        else res
+
+    end
+</code></pre>
+
+<p><code>bad_max</code> 의 <code>if-then-else</code> 가 10^-7 정도의 시간이 든다고 하면, <code>[1, 2, ..., 55]</code> 는 100년이 넘게 걸린다. 따라서 재귀를 구현하는데 있어서 <em>local binding</em> 은 필수다.</p>
+
+<h3 id="options">Options</h3>
+
+<p>참고로, <code>good_max</code> 는 리스트가 모두 음수일때 <code>0</code> 을 돌려준다. 이건 리스트가 비었을때 <code>0</code> 을 돌려주기 때문에 생기는 문제인데, <code>0</code> 말고 다른 무언갈 돌려줄 수 없을까?</p>
+
+<p><em>SML</em> 도 <em>Scala</em> 처럼 <em>Option</em> 을 지원한다.(물론 <em>SML</em> 이 먼저..) <code>NONE</code> 은 <code>a option</code> 타입이고, <code>SOME e</code> 는 <code>t option</code> 이다. <code>t</code> 는 <code>e</code> 의 타입.</p>
+
+<p><em>Option</em> 을 이용해 <code>max</code> 를 리팩토링 해 보면,</p>
+
+<pre><code class="sml">fun max1 (xs: int list) =  
+  if null xs NONE
+  else 
+    let val res = max(tl xs)    
+    in if isSome res andalso isVal res &gt; hd xs then res
+       else Some(hd xs) 
+    end
+</code></pre>
+
+<p>그런데, 이 <code>max1</code> 또한 문제가 있다. 사실 <code>[]</code> 는 리스트가 오름차순으로 구성되어있을때 (<code>[1, 2, 3, 4]</code>) 맨 마지막 호출에서만 오는데, 매번 <code>isSome</code> 으로 검사하니까 비효율적이다. 다시 리팩토링하면</p>
+
+<pre><code class="sml">fun max2 (xs: int list) =  
+    if null xs then NONE
+    else
+    let
+        fun max_non_empty(ys: int list) =
+        if null (tl ys) then hd ys
+        else
+            let val res = max_non_empty(tl ys)
+            in if hd xs &gt; res then hd ys
+               else res
+            end
+    in
+        SOME (max_non_empty xs)
+    end
+</code></pre>
+
+<p><del>교수님 <code>let in end</code> 는 제발그만 가..가독성이</del></p>
+
+<h3 id="booleansandcomparisonoperations">Booleans and Comparison Operations</h3>
+
+<p>다른 언어의 <em>&amp;&amp; (and)</em> 와 <em>|| (or)</em> <em>! (not)</em> 은 <em>SML</em> 에서는 <code>ansalso</code>, <code>orelse</code>, <code>not</code> 이다.</p>
+
+<p>그리고 <code>andalso</code>, <code>orelse</code> 연산자는 다른 언어처럼 <em>Short circuiting</em> 을 제공한다. 함수가 아니다.   </p>
+
+<p><code>andalso</code> 와 <code>orelse</code>, <code>not</code> 은 다음처럼 쓸 수도 있다.</p>
+
+<pre><code class="sml">(* andalso *)
+if e1  
+then e2  
+else false
+
+(* orelse *)
+if e1  
+then true  
+else e2
+
+(* not *)
+if e1  
+then false  
+else true  
+</code></pre>
+
+<p><code>if-then-else</code> 만 가지고도 할 수 있으나, 그냥 <code>andalso</code> 와 <code>orelse</code>, <code>not</code> 을 쓰는게 코드를 읽는 사람의 정신 건강에 좋다. </p>
+
+<h4 id="comparisons">Comparisons</h4>
+
+<p>비교의 경우엔 <code>==</code> 가 아니라 <code>=</code> 를 쓴다. <code>!=</code> 가 아니라 <code>&lt;&gt;</code> 를 쓴다. </p>
+
+<p>그리고 <code>3.0 &gt; 2</code> 와 같은 비교는 안된다.<code>3.0</code> 은 <code>real</code> 이고, <code>2</code> 는 <code>int</code> 다 <code>Real.fromInt</code> 를 이용하자.</p>
+
+<h3 id="nomutation">No Mutation</h3>
+
+<p>교수님이 <em>A valuable non-feature</em> 라고 이야기 하시는데, 기능이 없는게 장점이라고.. <em>SML</em> 에서는 아래의 두 코드가 같다. (<em>inditinguishable</em>)</p>
+
+<pre><code class="sml">fun sort_pair(pr: int * int) =  
+  if #1 pr &lt; #2 pr then pr
+  else (#2 pr, #1 pr)
+
+fun sort_pair(pr: int * int) =  
+  if #1 pr &lt; #2 pr then (#1 pr, #2pr)
+  else (#2 pr, #1 pr)
+</code></pre>
+
+<p>위가 더 나은 <em>style</em> 이라고 주장할 순 있지만, 다르다고 말할 순 없다. 그러나 <em>mutable compound data</em> 를 다루는 다른 언어에서는 위 두 함수는 다르다</p>
+
+<p>예를 들어서 <em>mutable data</em> 를 다루는 언어라 가정하고 다음의 코드를 고려 해 보자.</p>
+
+<pre><code class="sml">val x = (3, 4)  
+val y = sort_pair x
+
+(* somehow mutate #1 x to hold 5 *)
+
+val z = #1 y  
+</code></pre>
+
+<p>이제 <code>z</code> 의 값은 무엇일까? <code>sort_pair</code> 구현에 따라 다르다. <code>then</code> 에서 <code>pr</code> 을 돌려줬다면, <code>5</code> 일거고, <code>(#1 pr, #2 pr)</code> 을 돌려줬다면 <code>3</code> 일거다. 그러나 <em>ML</em> 에선 문제가 안된다. <em>immutable</em> 하니까. <del>오오 immutable 오오</del></p>
+
+<blockquote>
+  <p>But <strong>without mutation</strong>, we can implement either way <br/><br/>
+  - No code can ever distinguishe aliasing vs identical copies <br />
+  - No need to think about aliasing: focus on other things <br />
+  - Can use aliasing, which saves space, without danger</p>
+</blockquote>
+
+<p><em>ML</em> 에서는 <code>tl</code> 이 상수 시간내에 이뤄진다. 첫번째 원소를 제외한 나머지를 가리키기만 하면 되니까. 어차피 그 데이터는 <em>immutable</em> 이니까 그냥 쓰기만 하면 된다. 변경이 필요하면, 그 때 새로 만들면 된다.</p>
+
+<h3 id="javamutation">Java Mutation</h3>
+
+<pre><code class="java">public String[] getAllowedUsers() {  
+  // return a references of allowedUsers
+}
+</code></pre>
+
+<p><code>allowedUsers</code> 자체가 <code>private</code> 여도, 다음과 같은 코드에 취약하다.</p>
+
+<pre><code class="java">p.getAllowedUsers()[0] = p.currentUser();  
+p.useTheResource();  
+</code></pre>
+
+<p>따라서 위의 <code>getAllowedUsers</code> 는 <em>copy</em> 를 돌려줘야한다. </p>
+
+<p><em>ML</em> 같은 <em>immutable</em> 한 언어에서는 <em>Reference (Alias)</em> vs <em>Copy</em> 는 문제가 안된다.</p>
+
+<h3 id="piecesofalanguage">Pieces of a Language</h3>
+
+<p>언어를 배울때는 다음의 다섯가지를 고려해야한다.</p>
+
+<p>(1) <strong>Syntax:</strong> How do you write language constructs? <br />
+(2) <strong>Semantics:</strong> What do programs mean? (Evaluation rules) <br />
+(3) <strong>Idioms:</strong> What are typical patterns for using language features to express your computation <br />
+(4) <strong>Libraries:</strong> What facilities does the language provide <strong>standard</strong>? <br />
+(5) <strong>Tools:</strong> What do language implementations provide to make your job easier? (REPL debugger..)  </p>
+
+<p>다시 말하면 다섯가지를 모두 배워야 한다. 언어의 코어부터 그 확장인 라이브러리와 툴까지. 그러나 이 코스에서는 <em>Semantics</em> 와 <em>Idioms</em> 에 집중한다. <em>ML</em> 을 고른것도 그 이유고, 이걸 잘 이해하게 되면 <em>Libraries</em> 가 어떻게 구성되었는지 더 잘 이해할 수 있다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>처음엔 재귀가 어려웠는데, 시간이 지날수록 재귀가 얼마나 재밌고 강력한지 알게 된다. 함수를 <em>building block</em> 처럼 조립하는것도 너무 재밌고</p>
+
+<p>Lisp 을 이용했으면 개인적 취향에 맞아 더 재밌게 배울 수 있었을텐데. 나중에 수업이 모두 끝났을때 <em>ML</em> 을 고른 이유를 느낄 수 있었으면 좋겠다.</p>
+
+<p>그리고 Emacs <em>sml-mode</em> 가 좀.. 음.. 빈약한데 더 좋은걸 찾아야겠다. <em>MELPA</em> 엔 없던데.. 테스팅 프레임워크도 좀 찾아서 해보고. </p>]]></description><link>http://1ambda.github.io/programming-language-week1/</link><guid isPermaLink="false">30e30421-f55b-48df-b96b-a19a661c143f</guid><category><![CDATA[coursera]]></category><category><![CDATA[programming language]]></category><category><![CDATA[ml]]></category><category><![CDATA[emacs]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 10 Oct 2014 06:26:00 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 2]]></title><description><![CDATA[<p><strong>Machine Learning</strong> by Andrew Ng, <em>Coursera</em></p>
+
+<h2 id="linearregressionwithmultiplevariables">Linear Regression with Multiple Variables</h2>
+
+<h3 id="mutiplefeatures">Mutiple Features</h3>
+
+<p>변수가 적을때는 <em>Hypothesis</em> 가 간단하다. 많으면 어떻게 될까? <em>Feature</em> 가 <code>N+1</code> 개라면,</p>
+
+<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_2.png?w=300&amp;h=19'  align="center" />  </p>
+
+<p align="center"><a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com</a></p>
+
+<p>편의상 <code>x_0 = 1</code> 이라 두면, <em>Hypothesis</em> 는 <em>Zero-based index</em> 인 <code>n+1</code> 벡터 <code>h</code> 와 <code>x</code> 의 곱이다. 따라서 <code>h(x) = h_t * x</code> 로 표기할 수 있다. 이걸 <strong>Mutivariate linear regression</strong> 이라 부른다.</p>
+
+<h3 id="gradientdescentformultiplevariables">Gradient Descent for Multiple Variables</h3>
+
+<p><em>Cost function</em> 은 다음과 같다. 변수의 subscript 는 <code>j</code> 번째 <em>Feature</em> 를, superscript 는 <code>i</code> 번째 데이터임을 말한다.</p>
+
+<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_6.png'  align="center" />  </p>
+
+<p align="center">(<a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a>)</p>  
+
+<p><br/></p>
+
+<p>다음은 <em>Gradient Descent</em> 알고리즘을 구하는 정의다.</p>
+
+<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_7.png?w=300&amp;h=104'  align="center" />  </p>
+
+<p align="center">(<a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a>)</p>  
+
+<p><br/></p>
+
+<p>따라서</p>
+
+<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_8.png?w=630&amp;h=354'  align="center" />  </p>
+
+<p align="center">(<a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a>)</p>
+
+<h3 id="featurescaling">Feature Scaling</h3>
+
+<p><em>Feature</em> 간 데이터 크기가 많이 차이가 나면, <em>Gradient Descent</em> 에서 등고선 간 간격이 좁으므로, <em>Global optima</em> 를 찾는데 오래걸릴 수 있다. 따라서 <em>Feature</em> 값을 <code>m</code> 으로 나누거나  -1 과 1 사이로 <em>scaliing</em> 할 수 있다. 거꾸로 말하면, <em>Feature scaling</em> 을 이용하면 <em>Gradient descent</em> 가 결과값을 더 빠르게 찾는다.</p>
+
+<p><img src='http://i.stack.imgur.com/4RBjR.png'  align="center" /></p>
+
+<p>또한 <strong>Mean normalization</strong> 을 이용할 수 있는데, 모든 <em>feature</em> 에서 평균을 빼서, 평균을 0 으로 만드는 방법이다.</p>
+
+<p>더 일반적인 방법은 <em>mean normalization</em> 을 하고, 거기에 <code>max-min</code> 또는 <em>standard deviation</em> 으로 나누는 방법이다.</p>
+
+<h3 id="learningrate">Learning Rate</h3>
+
+<p>디버깅 팁 중 하나는, 우리가 작성한 <em>Gradient descent</em> 알고리즘이 매 <em>interation</em> 마다 줄어들어야 한다는 것이다.</p>
+
+<p><img src='http://d37rcl8t6g8sj5.cloudfront.net/wp-content/uploads/gradient_descent_error_by_iteration.png'  align="center" />  </p>
+
+<p align="center">(<a href='http://spin.atomicobject.com/' >http://spin.atomicobject.com</a>)</p>
+
+<p>그리고, 어느 지점에선가 <em>converged</em> 되는지 검사하기 위해 <em>automatic convergence test</em> 를 사용할 수 있다. 예를 들어 한 이터레이션에서, 10^-3 보다 적게 줄어드는지 검사한다거나.</p>
+
+<p>만약에 <em>gradient descent</em> 값이 증가하면, 더 작은 <em>learning rate</em> 를 사용해라. 그렇다고 너무 작은 값을 사용하면 <em>gradient descent</em> 가 느리게 수렴할 수 있다. <em>learning rate</em> 가 너무 크면, 심지어 수렴하지 않을 수도 있다.</p>
+
+<p>따라서 <em>learning rate</em> 를 <code>0.001</code>, <code>0.003</code>, <code>0.01</code>, <code>0.03</code>, <code>0.1</code>, <code>0.3</code>, <code>1</code> 처럼 작은 것부터 선택하되, 천천히 늘려가는 것이 좋다.</p>
+
+<h3 id="polynomialregression">Polynomial Regression</h3>
+
+<p>집값을 예측하기 위해 두개의 <em>feature</em>, <code>frontage</code> 와 <code>depth</code> 가 있다고 하자. 두 값을 곱해 <code>area</code> 라는 새로운 <em>feature</em> 를 만들면, <em>Hypothesis</em> 가 간단해진다. 따라서 기존의 <em>feature</em> 를 이용 할 수 있는지도 잘 알아보는 게 좋다.</p>
+
+<p>자 이제, 집 값(Housing prices) 을 예측하기 위해 <em>Size(Area)</em> 라는 <em>feature</em> 를 이용한다 하자. <em>training set</em> 이 다음과 같을때, </p>
+
+<p><img src='http://www.holehouse.org/mlclass/01_02_Introduction_regression_analysis_and_gr_files/Image.png'  align="center" />  </p>
+
+<p align="center"><a href='http://www.holehouse.org/mlclass' >http://www.holehouse.org/mlclass</a></p>  
+
+<p><br/></p>
+
+<p><em>hypothesis</em> 를 <em>quadratic</em> 로 세우면 어느 지점부터는 예측된 값이 감소하므로 <em>traning set</em> 과 일치하지 않는다. 따라서 <em>cubic</em> 다항식을 이용해 볼 수 있겠는데, <em>feature</em> 가 <code>size</code> 하나 뿐이므로, <em>hypothesis</em> 는 <code>size</code> 를 이용한 삼차식이 되겠다.</p>
+
+<p><img src='http://www.holehouse.org/mlclass/04_Linear_Regression_with_multiple_variables_files/Image%20' [10].png" align="center" />  </p>
+
+<p align="center"><a href='http://www.holehouse.org/mlclass' >http://www.holehouse.org/mlclass</a></p>
+
+<p>이 경우 <code>size</code> 하나로 3개의 <em>feature</em> 를 만들었으니, <em>scaling</em> 이 문제가 될 수 있다.</p>
+
+<p>이 전에 앞서서 <em>feature</em> 가 두개인 <em>hypothesis</em> (quadratic) 은 말이 안된다고 했는데, 두개지만 <em>square</em> 모델을 사용하면 우리가 가진 <em>training set</em> 과 얼추 맞아 떨어지는 모델을 찾을 수 있다. 그림이 없어서 대충 식을 첨부하면,</p>
+
+<p><code>h(x) = y0 + y1(size) + y2 * square(size)</code></p>
+
+<p>여기서 <code>y</code> 는 강의에서 말하는 <code>0(theta)</code> 라 보면 된다.</p>
+
+<h3 id="nomalequation">Nomal Equation</h3>
+
+<p><em>gradient descent</em> 는 반복하면서 특정 값에 수렴해 가는 알고리즘 이었지만 <strong>normal equation</strong> 은 그냥 <code>J(0)</code> 식을 풀어버려 값을 찾아낸다.</p>
+
+<p>예를 들어서 <code>J(0)</code> 가 <code>0(theta)</code> 에 대해  <em>quadratic</em> 이면, <code>0</code> 에 대해 미분해서 최저점을 찾아내면 된다. 문제는, <code>0</code> 가 여러개 일때, 모든 <code>0_j</code> 에 대해 <em>cost function</em> 을 풀어야 한다는 것이다. <em>partial derivative</em> 를 이용해서 해를 찾으면 된다.</p>
+
+<p><img src='http://www.longhaiqiang.com/wp-content/uploads/2013/08/Snip20130817_44.png'  align="center" />  </p>
+
+<p align="center">(<a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>)</p>  
+
+<p><br/></p>
+
+<p>행렬을 이용할 수도 있다. 자세한 건 강의 내용을 보자, <em>design matrix</em> 라고 부르는 <code>X</code> 를 만들어서 아래의 식을 구하면 된다. 사실 <code>X</code> 는 그냥 <em>feature</em> 들을 있는 그대로 행렬로 만들면 된다. 맨 앞에 <code>x0</code> 만 추가해서. </p>
+
+<p><img src='http://www.longhaiqiang.com/wp-content/uploads/2013/08/Snip20130817_41.png'  align="center" />  </p>
+
+<p align="center">(<a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>)</p>
+
+<p>참고로, 저 식을 <em>Octave</em> 에서는 다음과 같이 계산한다.</p>
+
+<pre><code class="octave">pinv(X`*X)*X`*y  
+</code></pre>
+
+<p><br/></p>
+
+<p><em>normal equation</em> 을 이용할때는 <em>feature scaling</em> 을 하지 않아도 괜찮다. <em>gradient descent</em> 와 비교해 보자면,</p>
+
+<blockquote>
+  <p><strong>Gradient Descent:</strong> <br/>
+  (1) <em>learning rate</em> 를 골라야 한다. 
+  (2) <em>feature scaling</em> 을 해야할 필요가 있다. <br />
+  (3) <em>interation</em> 을 해야하므로 알고리즘이 제대로 돌아가는지 체크해야할 필요가 있다. <br />
+  (4) 대신 <code>n</code> 이 커도 잘 돌아간다.</p>
+  
+  <p><strong>Normal Equation:</strong> <br/>
+  (1) <em>learning rate</em> 를 고를 필요가 없다. <br />
+  (2) <em>feature scaling</em> 을 해야할 필요가 없다. <br />
+  (3) <em>interation</em> 을 하지 않는다. <br />
+  (4) <code>n</code> 이 커질경우 굉장히 느려지고 <code>(X^TX)^-1)</code> 을 계산해야 한다.</p>
+</blockquote>
+
+<p>따라서 <code>n</code> 이 너무 크지 않으면, 100~1000 정도까지는, <em>normal equation</em> 을 쓰는편이 낫다.</p>
+
+<h3 id="nomalequationnoninvertibility">Nomal Equation Noninvertibility</h3>
+
+<p>만약에, 우리가 가진 <code>X</code> 가 <em>non-invertible</em> 하다면 어떻게 될까? <em>invertible matrix</em> 란, 아래를 만족시키는 <code>B</code> 가 존재하는 행렬이다. <code>I</code> 는 <em>identity matrix</em> 다.</p>
+
+<p><img src='http://upload.wikimedia.org/math/7/3/3/7334597613ae1773c19e1ed1289349db.png'  align="center" />  </p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Invertible_matrix' >http://en.wikipedia.org/wiki/Invertible_matrix</a>)</p>
+
+<p>만약 저런 <code>B</code> 가 존재하지 않아 <em>non-invertible</em> 한 행렬을 <strong>sigular matrix</strong>, <strong>degenerate matrix</strong> 라 부른다.</p>
+
+<p>우리가 계산해야 할 행렬이 <em>non-invertible</em> 이라면, 두 가지 경우가 있을 수 있는데, </p>
+
+<p>(1) Redundant features(linearly dependent) e.g <code>x1 = (3.28) * x2</code> <br />
+(2) too many features e.g <code>m &lt;= n</code></p>
+
+<p>이럴 때는 몇몇 <em>feature</em> 를 삭제하고, <em>regulaization</em> 을 하면 된다. </p>
+
+<h3 id="costfunctionoctave">Cost Function: Octave</h3>
+
+<p><em>cost function</em> 을 구현 해 보면</p>
+
+<pre><code class="matlab">function J = costFunctionJ(X, y, theta)
+
+m = size(X, 1) % number of training examples  
+predictions= X * theta; % predictions of hypothesis on all m examples  
+sqrErros = (predictions-y).^2;
+
+J = 1 / (2*m) * sum(sqrErros);  
+</code></pre>
+
+<p><em>R</em> 이나 이런것들은 행렬연산이 참 쉬운것 같다.</p>
+
+<h3 id="vectorization">Vectorization</h3>
+
+<p><em>Vectorization</em> 을 이용하면, <code>for loop</code> 을 제거할 수 있는데, 예를 들어</p>
+
+<p><img src='http://i.ytimg.com/vi/jRr2XuZOWB8/hqdefault.jpg'  align="center" /></p>
+
+<p>이건 행렬 곱셈이 한번에 이루어진다는 것을 이용한 방법이다. 따라서 <em>gradient descent</em> 알고리즘에서 <code>theta</code> 를 <code>for-loop</code> 으로 구하는 것이 아니라, <em>vectorization</em> 을 이용하면 한번에 계산할 수 있다.</p>
+
+<p>이게 그림을 구하기가 어려운데, 아래첨자(sub-script) 를 이렇게 기술한다고 하자. <code>x_0</code> 그럼, <em>grandient descent</em> 알고리즘 식에서 <em>learning rate</em> 뒷부분이 <em>vector</em> 가 되는데 그 이유는 <code>theta</code> 와 마찬가지로 <code>j</code> 에 대한 나열이기 때문이다.</p>
+
+<p><img src='http://2.bp.blogspot.com/-ZxJ87cWjPJ8/TtLtwqv0hCI/AAAAAAAAAV0/9FYqcxJ6dNY/s1600/gradient+descent+algorithm+OLS.png'  align="center" /></p>
+
+<p>구글에 검색하니까 1번으로 뜨는게 <em>vectorization(parallel computing)</em> 이더라. 병렬 연산에 많이 사용되나보다.</p>
+
+<h3 id="refenrences">Refenrences</h3>
+
+<p>(1) <a href='http://stats.stackexchange.com/questions/111467/is-it-necessary-to-scale-the-target-value-in-addition-to-scaling-features-for-re' >StackExchange</a> <br />
+(2) <a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a> <br />
+(3) <a href='http://spin.atomicobject.com/2014/06/24/gradient-descent-linear-regression/' >http://spin.atomicobject.com</a> <br />
+(4) <a href='http://www.holehouse.org/mlclass/01_02_Introduction_regression_analysis_and_gr.html' >http://www.holehouse.org/mlclass/</a> <br />
+(5) <a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-2/</link><guid isPermaLink="false">78e8635f-a298-477a-8823-0c2738c21251</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[gradient descent]]></category><category><![CDATA[normal equation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 08 Oct 2014 10:50:00 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 4]]></title><description><![CDATA[<p>2014-10-07, <strong>Functional Programming in Scala</strong>, Coursera</p>
 
 <h2 id="typesandpatternmatching">Types and Pattern Matching</h2>
 
@@ -3587,365 +4299,4 @@ someOtherExp
       if (n == 0) acc else loop(acc * n, n-1)
     loop(1, n);
   }
-</code></pre>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-1/</link><guid isPermaLink="false">13422f6a-c277-4a2f-8db9-682eeaca0144</guid><category><![CDATA[scala]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 16 Sep 2014 12:00:01 GMT</pubDate></item><item><title><![CDATA[MySQL Derived Table, Correlated Query]]></title><description><![CDATA[<h3 id="correlatedvsnoncorrelated">Correlated vs Non-Correlated</h3>
-
-<p>아래는 <strong>Non-Correlated</strong> 쿼리다. 즉 내부(Inner) 쿼리가 외부(Outer) 쿼리를 참조하지 않는다.</p>
-
-<pre><code class="mysql">SELECT name  
-FROM city  
-WHERE population &gt; (SELECT population  
-                    FROM city
-                    WHERE name = 'new york');
-</code></pre>
-
-<p>반면 아래는 <strong>Correlated</strong> 쿼리다. 내부 쿼리가 <code>co.code</code> 로 외부 쿼리를 참조한다.</p>
-
-<pre><code class="mysql">SELECT name  
-FROM country as co  
-WHERE EXISTS (SELECT *  
-              FROM city
-              WHERE population &gt; 900 AND co.code = country_code);
-</code></pre>
-
-<p><strong>Correlated Query</strong> 는 이렇게 외부 쿼리에 대한 참조를 가지고 있기 때문에 외부 쿼리의 각 <strong>Row</strong> 마다 서브쿼리가 실행되고, 결국 성능은 떨어진다. 다시 말해 일반적인 서브 쿼리<strong>(Non-Correlated)</strong> 라면 <code>N + M</code> 번 만큼 연산을 수행하지만, <strong>Correlated</strong> 서브쿼리라면 <code>N x M</code> 만큼의 연산을 수행한다.</p>
-
-<p>이런 <strong>Correlated Query</strong> 는 <strong>Join</strong> 구문을 이용한 쿼리로 변경할 수 있다.</p>
-
-<pre><code class="mysql">SELECT DISTINCT country.name  
-FROM country  
-JOIN city ON country.code = city.country_code  
-WHERE city.population &gt; 900;  
-</code></pre>
-
-<h3 id="derivedtable">Derived Table</h3>
-
-<p>이런 성능 저하 때문에 일반적으로는 Correlated Subquery 대신에 <strong>Derived Table</strong> 을 사용한다. <code>FROM</code> 혹은 <code>JOIN</code> 구문에서 사용하는 서브쿼리를 <strong>Derived Table</strong> 이라 부른다. 본질적으로 <strong>Derived Table</strong> 은 실제 존재하는 테이블이 아니라, 쿼리 내에서만 존재하는 <strong>Inline View</strong> 다.</p>
-
-<pre><code class="mysql">SELECT LastName, FirstName  
-FROM  
-    (SELECT * FROM Employee
-     WHERE State = "NY") AS EmployeeDerivedTable
-WHERE LastName = "Smith"  
-ORDER BY FirstName  
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<ol>
-<li><p><a href='http://sarahdba.blogspot.kr/2009/08/examples-of-bad-queries.html' >Example of bad queries</a></p></li>
-<li><p><a href='http://www.programmerinterview.com/index.php/database-sql/derived-table-vs-subquery/' >Derived Table vs Subquery</a></p></li>
-<li><p><a href='http://stackoverflow.com/questions/17268848/difference-between-subquery-and-correlated-subquery' >Difference between subquery and correlated subquery</a></p></li>
-</ol>]]></description><link>http://1ambda.github.io/mysql-derived-table/</link><guid isPermaLink="false">94d49870-33be-4d17-abd5-1d04f6ff0f22</guid><category><![CDATA[mysql]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 19 Aug 2014 12:59:57 GMT</pubDate></item><item><title><![CDATA[Javascript Inheritance]]></title><description><![CDATA[<h2 id="prototypeinheritance">Prototype Inheritance?</h2>
-
-<p>자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다.</p>
-
-<ul>
-<li>.constructor</li>
-<li>.__proto__</li>
-<li>.prototype</li>
-<li>Object.create</li>
-<li>new</li>
-<li>Object, Function</li>
-</ul>
-
-<p>먼저 예제부터 보시겠습니다.</p>
-
-<pre><code class="javascript">// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
-
-// Shape - superclass (1)
-function Shape() {  
-  this.x = 0;
-  this.y = 0;
-}
-
-// superclass method (2)
-Shape.prototype.move = function(x, y) {  
-    this.x += x;
-    this.y += y;
-    console.info("Shape moved.");
-};
-
-// Rectangle - subclass (3)
-function Rectangle() {  
-  Shape.call(this); // call super constructor.
-}
-
-// subclass extends superclass
-Rectangle.prototype = Object.create(Shape.prototype); (4)  
-Rectangle.prototype.constructor = Rectangle; (5)
-
-var rect = new Rectangle();
-
-rect instanceof Rectangle // true.  
-rect instanceof Shape // true.
-
-rect.move(1, 1); // Outputs, "Shape moved."  
-</code></pre>
-
-<p>(1). 먼저 <code>Shape</code> 이라는 함수를 만듭니다. 자바스크립트에서는 객체를 생성하기 위한 함수를 <code>Constructor(생성자)</code> 라고 부르며, 생성자임을 알아볼 수 있게 첫 글자를 <strong>대문자</strong>로 작성하는 것이 관례입니다. 이렇게 만들어진 생성자는 <code>new</code> 를 통해 호출할 수 있습니다. 물론 생성자는 그 자체로서 함수이기 때문에 <code>Shape()</code> 과 같이 호출도 가능합니다. 그러나 <code>new</code> 가 있는것과 없는것은 조금 차이가 있습니다. 아래에서 알아보겠습니다.</p>
-
-<p>(2). 생성자에 존재하는 <code>prototype</code> 속성, 즉 <code>Shape.prototype</code> 에 <code>move</code> 란 메소드를 추가하고 있습니다. 생성자의 <code>prototype</code> 속성에 추가된 모든 것들은 이 생성자를 통해 생성된 모든 객체에서 사용 가능합니다. 그러나, 생성자의 <code>prototype</code> 이 아니라, 인스턴스에 추가된 속성들은 그 인스턴스만 사용할 수 있습니다.</p>
-
-<pre><code class="javascript"> var s1 = new Shape();
-s1.move(3, 3);
-
-s1.isShape = true;
-
-var s2 = new Shape();  
-console.log (s2.isShape) // undefined  
-console.log (typeof s2.isShape === "undefined") // true  
-</code></pre>
-
-<p>(3). <code>Rectangle</code> 이라는 새로운 생성자를 정의하고 있습니다. 그리고 이 생성자 내에서 <code>Shape.call(this)</code> 를 호출하여, <code>new Rectangle()</code> 을 통해 만들어지는 모든 인스턴스가 <code>Shape</code> 처럼 <code>this.x</code> 와 <code>this.y</code> 를 가지고, 0으로 초기화 하도록 합니다. 이 과정이 끝나면 다음과 같은 결과가 나옵니다.</p>
-
-<pre><code class="javascript">function Rectangle() {  
-    Shape.call(this);
-}
-
-var r1 = new Rectangle();  
-console.log (r1.x); // 0  
-console.log (r2.y); // 0  
-</code></pre>
-
-<p>그러나 이 시점에서 <code>r1</code> 은 <code>move</code> 란 메소드를 사용할 수 없습니다. <code>Shape.move</code> 는 있지만 이 <code>move</code> 메소드를 상속받은것은 아닙니다. <code>Rectangle</code> 은 단지 <code>this.x</code>, <code>this.y</code> 란 멤버변수를 상속받은 것 뿐입니다.</p>
-
-<pre><code class="javascript">console.log (r1.move); // undefined  
-</code></pre>
-
-<p>(4). 드디어 <code>Rectangle.prototye</code> 에 <code>Shape.prototype</code> 을 연결해 주어 <code>r1</code> 에서도 <code>Shape.prototype</code> 에 정의된 메소드들을 사용할 수 있게끔 해줍니다. </p>
-
-<pre><code class="javascript">r1.move(2, 2);  
-console.log(r1.x); // 2  
-console.log(r1.y); // 2  
-</code></pre>
-
-<p>여기서 Rectangle.prototype = Shape.prototype 을 하지않고 새롭게 Object.create 해주는 이유는, <code>Rectangle.prototype</code> 에 새로운 속성을 추가했을때, <code>Shape.prototype</code> 에 추가되도록 하지 않기 위함입니다. 다시 말해, <code>Rectangle</code> 에 추가한 것은, <code>Rectangle</code> 에만 추가되라는 것이지요.  </p>
-
-<p><code>Rectangle.prototype = new Shape();</code> 처럼 <code>new</code> 를 사용하게 되면, 생성자를 호출하게 되어 <code>Rectangle.prototype</code> 에 인스턴스 변수인 <code>this.x</code> 와 <code>this.y</code> 가 추가됩니다.   이것은 우리가 원하지 않은 동작이기에, 일반적으로 <code>new</code> 를 이용해서 프로토타입을 생성하지 않습니다.</p>
-
-<p>(5). <code>Object.create(Shape.prototype)</code> 으로 생성한 객체는 <code>constructor</code> 값으로 <code>Shape</code> 를 가지고 있습니다. 이 객체를 이제, <code>Rectangle.prototype</code> 에서 사용하므로 값을 변경해 줍니다. </p>
-
-<h3 id="__proto__"><strong>proto</strong></h3>
-
-<p><code>__proto__</code> 속성은 자바스크립트에서 상속의 핵심입니다. 모든 객체들은 자신의 속성을 찾다가 실패하면, <code>__proto__</code> 를 통해 더 검색을 시도합니다. 무슨말인고 하니, 다음과 같은 코드가 있을때</p>
-
-<pre><code class="javascript">var r1 = new Rectangle();
-
-r1.move(1, 1);  
-</code></pre>
-
-<p>실제로 <code>Rectangle</code> 은 <code>move</code> 라는 메소드를 인스턴스 멤버로도, 프로토타입 멤버로도 가지고 있지 않습니다. 다시 말해서, 아래와 같은 코드를 작성한 적이 없단 말이지요.</p>
-
-<pre><code class="javascript">// Method per instance
-function Rectangle() {  
-    this.move = function(_x, _y) { this.x = _x; this.y = _y; };
-}
-
-// Method for specific instance
-r1.move = function(_x, _y) { this.x = _x; this.y = _y; };
-
-// Prototype method
-Rectangle.prototype.move = function(_x, _y) { this.x = _x; this.y = _y; };  
-</code></pre>
-
-<p>이런 작업을 해 준 적이 없는데, 어떻게 <code>move</code> 메소드를 찾는걸까요? 우리는 <code>move</code> 를 <code>Shape.prototype</code> 에만 추가했는데요! 비결은 아래와 같습니다.</p>
-
-<ol>
-<li><p><code>r1</code> 인스턴스 자체에 <code>move</code> 메소드가 인스턴스에 없기 때문에 <code>r1.__proto__</code> 에서 탐색하게 됩니다.</p></li>
-<li><p>인스턴스가 가지고 있는 <code>__proto__</code> 의 값은, 생성자의 프로토타입, 즉 <code>Rectangle.prototype</code> 입니다. 따라서 이곳을 검색합니다. 그러나 <code>Rectangle</code> 프로토타입에도 <code>move</code> 메소드는 없습니다.</p></li>
-<li><p><code>Rectangle.prototype.__proto__</code> 를 검색합니다. <code>Rectangle.prototype</code> 은 <code>Object.create(Shape.prototype)</code> 을 통해 생성되었고, 이것은 인스턴스 멤버가 없는 <code>Shape</code> 인스턴스 이기 때문에, <code>Rectangle.prototype.__proto__</code> 의 값은 <code>Shape.prototype</code> 이 됩니다. </p></li>
-<li><p><code>Shape.prototype</code> 에는 <code>move</code> 가 있기 때문에, 이를 실행합니다.</p></li>
-<li><p>만약 <code>Shape.prototype</code> 에도 <code>move</code> 가 없다면, <code>Shape.prototype.__proto__</code> 를 탐색합니다. 모든 객체는 Default 값으로 <code>Object</code> 를 상속받으며, <code>Shape</code> 도 마찬가지입니다. <code>Shape</code> 은 <code>Object</code> 를 상속받았기 때문에 <code>Shape.prototype.__proto__</code> 는 <code>Object.prototype</code> 을 가리킵니다. 여기서 메소드를 검색합니다.</p></li>
-<li><p>만약 <code>Object.prototype</code> 에도 없다면, <code>Object.prototype.__proto__</code> 를 검색하나, 이 값은 <code>null</code> 이기 때문에 멤버 검색에 실패하고 <code>undefined</code> 를 돌려줍니다.</p></li>
-</ol>
-
-<p>다른 예제지만, 이미지를 통해 보는것도 이해에 도움이 될 듯 하여 이미지를 같이 첨부합니다.</p>
-
-<p><br/>  </p>
-
-<p>  
-<img src='http://mckoss.com/jscript/Prototype.gif'  />  
-</p>  
-
-<p align="center">  
-(<a href='http://mckoss.com/jscript/object.htm' >http://mckoss.com/jscript/object.htm</a>)
-</p>  
-
-<p><br/></p>
-
-<h3 id="objectfunction">Object, Function</h3>
-
-<p>자바스크립트의 모든 함수는 <code>Function</code> 의 인스턴스입니다. 무슨 말인고 하니, 사용자가 정의한 함수들은 <code>__proto__</code> 값으로 <code>Function.prototype</code> 을 가진다는 뜻이지요.</p>
-
-<pre><code class="javascript">function example() {};
-
-example.__proto__ === Function.prototype; // true  
-</code></pre>
-
-<p>그리고 <code>Function</code> 은 <code>Object</code> 를 상속합니다. 다시 말해, </p>
-
-<pre><code class="javascript">example.__proto__.__proto__ == Object.prototype  
-</code></pre>
-
-<p>그리고 이전에 언급했듯이, <code>Object.prototype.__proto__</code> 는 <code>null</code> 입니다.</p>
-
-<pre><code class="javascript">Object.prototype.__proto__ === null // true  
-</code></pre>
-
-<p>그리고 <code>Object</code> 그 자체는, <code>Function</code> 을 상속합니다.</p>
-
-<pre><code class="javascript">Object.__proto__ === Function.prototype // true  
-</code></pre>
-
-<p>그래서 <code>Function</code> 과 <code>Object</code> 를 설명할때, 아래와 같은 그림으로 설명할 수 있습니다. 아래 그림에서 빨간 선으로 이어진 <code>[[Prototype]]</code> 은 <code>__proto__</code> 입니다.</p>
-
-<p><br/>  </p>
-
-<p align="center">  
-<img src='http://i.stack.imgur.com/rcGmc.png'  />  
-</p>  
-
-<p align="center">  
-(<a href='http://iwiki.readthedocs.org/en/latest/javascript/js_core.html' #inheritance'>http://iwiki.readthedocs.org/en/latest/javascript/js_core.html#inheritance</a>)
-</p>  
-
-<p><br/></p>
-
-<h3 id="prototypeinhertancevsclassicalinheritance">Prototype Inhertance vs Classical Inheritance</h3>
-
-<p>"그래요. 프로토타입 기반 상속이란 이런거군요!. 근데 이거 왜 하는건가요?"</p>
-
-<p>제 짧은 지식으로 어줍잖게 대답하는 것보다, 링크로 연결해드리는게 더 나을것 같아서 관련 링크를 적어놓습니다. 꼭 읽어보셨으면 좋겠습니다.</p>
-
-<ol>
-<li><p><a href='http://stackoverflow.com/questions/19633762/classical-inheritance-vs-protoypal-inheritance-in-javascript' >classical-inheritance-vs-protoypal-inheritance-in-javascript</a></p></li>
-<li><p><a href='http://aaditmshah.github.io/why-prototypal-inheritance-matters/' #toc_6">why-prototypal-inheritance-matters</a></p></li>
-<li><p><a href='http://stackoverflow.com/questions/2800964/benefits-of-prototypal-inheritance-over-classical' >benefits-of-prototypal-inheritance-over-classical</a></p></li>
-<li><p><a href='http://stackoverflow.com/questions/1450582/classical-vs-prototypal-inheritance' >classical-vs-prototypal-inheritance</a></p></li>
-</ol>
-
-<h3 id="newvsobjectcreate">new vs Object.create</h3>
-
-<p>위에서 잠깐 언급했듯이 일반적으로는 프로토타입 객체를 만들기 위해서 <code>Object.create()</code>를 사용한다고 했었습니다. <code>new</code> 대신에요. 왜 그런가 <code>Object.create</code> 의 동작을 한번 알아보겠습니다.</p>
-
-<ol>
-<li><code>Object.create</code> 는 첫 번째 인자로 프로토타입을 받습니다.  </li>
-<li>빈 객체를 하나 만들고, 이 객체의 <code>__proto__</code> 에 인자로 받은 프로토타입 객체를 연결합니다.  </li>
-<li>프로토타입이 연결된 객체를 리턴합니다.</li>
-</ol>
-
-<p>아마 코드는 아래와 비슷할 겁니다. 간단한 설명을 위해 두번째 인자는 생략하겠습니다.</p>
-
-<pre><code class="javascript">Object.prototype.create == function(proto) {  
-  var obj = {};
-  obj.__proto__ = proto;
-  return obj;
-}
-</code></pre>
-
-<p>따라서 어떠한 경우에도 생성자를 호출하지 않으므로 다음과 같은 코드가 생성자에 있을 경우 호출되지 않을겁니다.</p>
-
-<pre><code class="javascript">function Shape() {  
-  this.x = 0;
-  this.y = 0;
-
-  console.log("This is constructor for Shape");
-}
-
-var created = Object.create(Shape.prototype);  
-var newed  = new Shape(); // "This is constructor for Shape" 
-
-console.log( created.x ); // undefined  
-console.log( newed.x ); // 0;  
-</code></pre>
-
-<p><code>new</code> 를 이용해 생성한 객체만 생성자가 호출되어, <strong>"This is constructor for Shape"</strong> 가 출력되고 <code>this.x = 0</code> 이 실행됩니다. </p>
-
-<p><code>new Shape()</code> 의 로직은 아마 다음과 비슷할 겁니다. (더 자세한 내용은 <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new' >MDN: new Operator</a> 를 보시면 되겠습니다.)</p>
-
-<ol>
-<li>새로운 오브젝트를 생성하고,  </li>
-<li>이 오브젝트의 <code>__proto__</code> 에 생성자의 프로토타입 객체를 연결합니다.  </li>
-<li>생성자를 호출하고, 리턴합니다.</li>
-</ol>
-
-<pre><code class="javascript">// new Shape();
-
-{
-  var obj = {};
-  obj.__proto__ = Shape.prototype;
-  return Shape.apply(obj, arguments) || obj; 
-}
-</code></pre>
-
-<p>이렇게 <code>new</code> 연산자는 생성자를 호출하기 때문에, 새롭게 사용할 프로토타입 객체에 의도치 않은 속성이 추가될 수 있습니다. 위의 예에서 <code>Rectangle</code> 에서 새롭게 사용할 프로토타입 객체는, 다시 말해 <code>Rectangle.prototype</code> 에 들어갈 객체는 단순히 <code>__proto__</code> 값으로 <code>Shape.prototype</code> 만 가지고 있으면 됩니다. </p>
-
-<p>만약 <code>Object.create</code> 대신 <code>new</code> 를 사용하게 되면 <code>Rectangle.prototype.x</code> 와 <code>Rectangle.prototype.y</code> 가 <code>0</code> 으로 초기화되게 됩니다. 이는 원치 않았던 부작용입니다. 이런 이유에서 일반적인 경우에는 <code>new</code> 대신 <code>Object.create</code> 를 프로토타입 객체 생성에 사용해야 합니다. 아래처럼요</p>
-
-<pre><code class="javascript">// subclass extends superclass
-Rectangle.prototype = Object.create(Shape.prototype);  
-</code></pre>
-
-<h3 id="constructor">.constructor</h3>
-
-<p>모든 프로토타입 객체들은, <code>constructor</code> 란 프로퍼티가 있습니다. 이 값은 생성자를 가리킵니다. 그러므로 아래 코드는 <code>true</code> 를 출력합니다.</p>
-
-<pre><code class="javascript">Rectangle.prototype.constructor === Rectangle // true  
-</code></pre>
-
-<p>우리의 예제인 <code>Rectangle</code> 에서도 위에 있는 코드처럼 프로토타입의 <code>constructor</code> 값을 초기화 하고 있습니다. 왜 그래야 할까요?</p>
-
-<p>사실 <code>.constructor</code> 값은 별로 의미있는 값은 아닙니다. 만약 우리가 <code>constructor</code> 값으로 어떤 종류의 객체인지 판별한다면, 의미는 있겠지요. 그러나 일반적으로는 <code>instanceof</code> 를 사용합니다.</p>
-
-<pre><code class="javascript">function Shape() { this.x = 0; }
-
-var s1 = new Shape();
-
-console.log( s1.__proto__.constrctor === Shape) // true  
-console.log( s1 instanceof Shape) // true  
-</code></pre>
-
-<p>그럼 이렇게 <code>constructor</code> 를 비교하는 작업을 <code>instanceof</code> 내부에서 사용하느냐, 그것도 아닙니다. <code>instanceof</code> 는 <code>s1.__proto__</code> 와 <code>Shape.prototype</code> 을 비교합니다.</p>
-
-<p><code>.constructor</code> 는 사실 정말로 쓸모가 없을지도 모르겠습니다. 그러나 자바스크립트 표준이 프로토타입 객체의 <code>constructor</code> 프로퍼티는 생성자를 가르켜야 한다고 말하는 한, 적어도 세팅은 해주는게 나쁘지 않다는게 제 생각입니다. 아래는 관련된 논의입니다. </p>
-
-<p>Link : <strong><a href='http://stackoverflow.com/questions/4012998/what-it-the-significance-of-the-javascript-constructor-property' >What it the significance of the javascript constructor property</a></strong></p>
-
-<p>다시 우리의 예제로 돌아와서, 코드를 살펴보겠습니다.</p>
-
-<pre><code class="javascript">// subclass extends superclass
-Rectangle.prototype = Object.create(Shape.prototype); (1)  
-Rectangle.prototype.constructor = Rectangle; (2)  
-</code></pre>
-
-<p><code>Rectangle.prototype.constuctor</code> 를 다시 세팅해 주는 이유는, 이 값이 <code>Shape</code> 이기 때문입니다. <code>Rectangle.protoype</code> 은 <code>__proto__</code> 를 <code>Shape.prototype</code> 으로 가지는 오브젝트고, 따라서 (1) 라인에서 코드를 실행시켰을 때는 다음과 같은 결과가 나옵니다.</p>
-
-<p><code>console.log( Rectangle.prototype.constructor ); // Shape</code></p>
-
-<p>왜냐 하면 <code>Rectangle.prototype</code> 에는 <code>constructor</code> 가 없기 때문에 <code>Rectangle.prototype.__proto__</code> 에서 <code>constructor</code> 를 찾는데, <code>Rectangle.prototype.__proto__</code> 는 <code>Shape.prototype</code> 이기 때문이지요. </p>
-
-<p>기본적으로 우리가 생성자를 만들면, 자바스크립트는 다음과 같이 프로토타입 객체를 만들고 이 프로토타입 객체의 <code>constructor</code> 를 세팅해 줍니다.</p>
-
-<pre><code class="javascript">function Shape() { this.x = 0; }
-
-console.log( Shape.prototype.constructor ); // Shape;  
-</code></pre>
-
-<p><code>Rectangle.prototype.constructor</code> 는 본래 처음 <code>Rectangle</code> 생성자를 만들었을때는 <code>Rectangle</code> 이었겠지만, (1) 라인의 코드를 실행 시킨 순간 <code>Shape</code> 으로 변경되고, 더 정확히 이 값은 <code>Rectangle.prototype.__proto__.consturctor</code> 에서 옵니다. 결국 값이 바뀌었기 때문에 원래대로 돌려주어야 하므로 아래와 같은 코드를 작성해준 것입니다.</p>
-
-<pre><code class="javascript">Rectangle.prototype.constructor = Rectangle;  
-</code></pre>
-
-<p>자 이제, 아래 그림이 완벽히 이해되실 겁니다. </p>
-
-<p><br/>  </p>
-
-<p align="center">  
-<img src='http://i.stack.imgur.com/UfXRZ.png'  />  
-</p>  
-
-<p align="center">  
-(<a href='http://dmitrysoshnikov.com/ecmascript/javascript-the-core/' >http://dmitrysoshnikov.com/ecmascript/javascript-the-core/</a>)
-</p>  
-
-<p><br/></p>]]></description><link>http://1ambda.github.io/javascript-object-inheritance/</link><guid isPermaLink="false">57da5ecb-1d40-4b48-a3bb-09654e4574ac</guid><category><![CDATA[javascript]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 10 Aug 2014 03:54:29 GMT</pubDate></item></channel></rss>
+</code></pre>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-1/</link><guid isPermaLink="false">13422f6a-c277-4a2f-8db9-682eeaca0144</guid><category><![CDATA[scala]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 16 Sep 2014 12:00:01 GMT</pubDate></item></channel></rss>

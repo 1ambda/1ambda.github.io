@@ -67,7 +67,7 @@
 <body>
 
   
-  <script src="../../public/jquery.js?v=daa447b747"></script>
+  <script src="../../public/jquery.js?v=7140f5e5b7"></script>
 
   
 
@@ -85,6 +85,42 @@
 </header>
 
 <main class="site_width" role="main">
+  
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../mysql-derived-table">MySQL Derived Table, Correlated Query</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-08-19">Tuesday, August 19, 2014</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/mysql-derived-table/" data-disqus-identifier="20">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><h3 id="correlatedvsnoncorrelated"></h3></i>
+      <p>Correlated vs Non-Correlated 아래는 Non-Correlated 쿼리다. 즉 내부(Inner) 쿼리가 외부(Outer) 쿼리를 참조하지 않는다. SELECT name   FROM city   WHERE population &gt; (SELECT population                       FROM city                     WHERE name = 'new york'); 반면 아래는 Correlated 쿼리다. 내부 쿼리가 co.code 로 외부 쿼리를 참조한다. SELECT name   FROM country as co   WHERE EXISTS&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../mysql-derived-table">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
+  
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../javascript-object-inheritance">Javascript Inheritance</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-08-10">Sunday, August 10, 2014</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/javascript-object-inheritance/" data-disqus-identifier="13">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><h2 id="prototypeinheritance"></h2></i>
+      <p>Prototype Inheritance? 자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다. .constructor .__proto__ .prototype Object.create new Object, Function 먼저 예제부터 보시겠습니다. // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../javascript-object-inheritance">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
   
 
   <article class="margin_bottom_big">

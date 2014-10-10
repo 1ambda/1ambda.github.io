@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Programming Language, Week1</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Programming Language, Week1">
+  <meta name="twitter:description" content="Programming Language by Dan Grossman, Coursera Coursera PL 클래스인데 과제 마감기한도 까다롭고, 동료평가도 있고, 여러모로 조금 빡세다. 유일한 낙은 언어의 다양한 특징들을 탐구하기 위해 ML 을 사용하고 오오 갓 ML , emacs 를 사용한다는 건데.. 잘 버틸수 있을까 의심스럽다. 무려 첫 강의부터 대략 300분이 넘는 동영상을 올려주시는 교수님 -_-; 미국">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/programming-language-week1/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/programming-language-week1/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=7140f5e5b7"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-coursera tag-programming-language tag-ml tag-emacs">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/programming-language">programming language</a>, <a href="../tag/ml">ml</a>, <a href="../tag/emacs">emacs</a></h5>
+      <h1 class="margin_bottom_medium">Programming Language, Week1</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-10">Friday, October 10, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/programming-language-week1/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><strong>Programming Language</strong> by <em>Dan Grossman</em>, Coursera</p>
+
+<p><em>Coursera</em> PL 클래스인데 과제 마감기한도 까다롭고, 동료평가도 있고, 여러모로 조금 빡세다. 유일한 낙은 언어의 다양한 특징들을 탐구하기 위해 <strong>ML</strong> 을 사용하고 <del>오오 갓 ML</del> , emacs 를 사용한다는 건데.. 잘 버틸수 있을까 의심스럽다. 무려 첫 강의부터 대략 300분이 넘는 동영상을 올려주시는 교수님 -_-;</p>
+
+<p>미국 CS 전공자들은 모두 이렇게 빡세게 배우는가요 ㅠㅠ?</p>
+
+<p><code>SML/nj</code> 와 Emacs 에 <code>sml-mode</code> 설치 후 시작한다. <code>c-c, c-s</code> 는 <code>REPL</code> 을 켠다. </p>
+
+<h3 id="mlvariablebindingsandexpressions">ML Variable Bindings and Expressions</h3>
+
+<pre><code class="sml">(* This is a comment. *)
+
+val x = 34;  
+(*: static env: x : int *)
+(*: dynamic env: x --&gt; 34 *)
+val y = 35 : int;  
+val z = (x + y) + (y + 2);  
+</code></pre>
+
+<p>각 라인마다, <em>dynamic environment</em> 에 바인딩을 하나씩 추가한다. 따라서 세번 째 라인에서 <code>x</code> 와 <code>y</code> 를 <code>z</code> 를 바인딩하기 위해 사용할 수 있다.</p>
+
+<p>그리고, <em>dynamic env</em> 에 바인딩을 추가하기 전에 <em>static enviornment</em> 에 <em>Type</em> 을 추가한다. 맨 처음엔 <code>x: int</code> 가 추가되고 <code>y</code> 와 값이 바인딩 되기 전에는 <code>x: int, y: int</code> 가 <em>static env</em> 에 추가된다.</p>
+
+<p>따라서 매 라인마다 <em>type checking</em> 이 먼저 일어나고 그 후에야 프로그램이 <em>evaluated (excuted)</em> 된다. </p>
+
+<p><em>ML</em> 에서 <code>if</code> 는 다음과 같이 작성할 수 있다. 다르 언어와 비슷하다.</p>
+
+<pre><code class="sml">val abs_of_z = if z &lt; 0 then 0 - z else z;  
+</code></pre>
+
+<p>여기서 잠깐 <em>Syntax</em> 와 <em>Semantics</em> 를 정리하자면</p>
+
+<blockquote>
+  <p><strong>Syntax</strong> is just how you write something<br/></p>
+  
+  <p><strong>Semantics</strong> is what that something means<br/>
+  - <em>Type-checking</em> (before program runs)<br/>
+  - <em>Evaluation</em> (as program runs)  </p>
+</blockquote>
+
+<p><em>variable binding</em> 에서는, <em>type checking</em> 은 <em>static environment</em> 를 확장하고, <em>evaluation</em> 은 <em>dynamic environment</em> 를 확장한다.</p>
+
+<h3 id="rulesforexpressions">Rules for Expressions</h3>
+
+<p><em>expression</em> 은 <em>sub-expression</em> 을 가질 수 있기 때문에, <em>expression</em> 을 해석 하는데 있어서 3가지가 꼭 필요하다.</p>
+
+<p>(1) <strong>Syntax</strong> <br />
+(2) <strong>Type-checking rules:</strong> produces a type of fails <br />
+(2) <strong>Evaluation rules:</strong> produces a value</p>
+
+<p>다시 말하면 <em>Syntax</em> 와 <em>Semantics</em> 가 필요하단 이야기다.</p>
+
+<h4 id="variables">Variables</h4>
+
+<blockquote>
+  <p><strong>Syntax:</strong> sequence of letters, digits, _, not starting with digit</p>
+  
+  <p><strong>Type-checking:</strong> look up type in current statix env if
+  non there, fail</p>
+  
+  <p><strong>Evaluation:</strong> look up value in current dynamic env</p>
+</blockquote>
+
+<h4 id="addition">Addition</h4>
+
+<p>Addition 의 경우에는 <em>sub-exp</em> 가 있을 수 있다.</p>
+
+<blockquote>
+  <p><strong>Syntax:</strong> <code>e1</code> + <code>e2</code> where <code>e1</code> and <code>e2</code> are expressions</p>
+  
+  <p><strong>Type-checking:</strong> if <code>e1</code> and <code>e2</code> have type <em>int</em> then <em>int</em></p>
+  
+  <p><strong>Evaluation:</strong> if <code>e1</code> evaluates to <code>v1</code> and <code>e2</code> evaluates to <code>v2</code>, then sum of <code>v1</code> and <code>v2</code></p>
+</blockquote>
+
+<h4 id="values">Values</h4>
+
+<p>모든 <em>value</em> 는 <em>expression</em> 이다. 그러나 모든 <em>expression</em> 이 <em>value</em> 인 것은 아니다. 그리고,</p>
+
+<blockquote>
+  <p>Every value evaluates to itself in <strong>zero steps</strong></p>
+</blockquote>
+
+<p>참고로, <code>()</code> 는 <code>unit</code> 타입을 가진다.</p>
+
+<h4 id="conditional">Conditional</h4>
+
+<blockquote>
+  <p><strong>Syntax:</strong> if <code>e1</code> then <code>e2</code> else <code>e3</code> where if, then, and else are keywords and <code>e1</code> <code>e2</code> and <code>e3</code> are sub-expressions</p>
+  
+  <p><strong>Type-checking:</strong> <code>e1</code> must have type <code>bool</code>. <code>e2</code> and <code>e3</code> can have any type, but they must have the same type</p>
+  
+  <p><strong>Evaluation:</strong> first evaluate <code>e1</code> to <code>v1</code>, if it's true evaluate <code>e2</code> and that resut is the whole expressions's result else evaluate <code>e3</code></p>
+</blockquote>
+
+<h3 id="replanderrors">REPL and Errors</h3>
+
+<h4 id="use">use</h4>
+
+<p><code>use</code> 는 특정 파일을 읽어 <em>binding</em> 하고 <code>it: unit</code> 을 돌려주는데, 이건 무시해도 된다. 그리고 같은 파일을 <code>use</code> 할때는 항상 <code>REPL</code> 을 다시 시작하자. <code>C-d</code>, <code>C-c, C-s</code></p>
+
+<h4 id="error">Error</h4>
+
+<p>대부분의 에러는 <em>syntax</em>, <em>type-checking</em>, <em>evaluation</em> 의 문제다.</p>
+
+<h3 id="shadowing">Shadowing</h3>
+
+<p>같은 변수에 대한 <em>multiple binding</em> 은 <em>poor style</em> 이다. 그러나 이를 통해 <em>environment</em> 와 <em>binding</em> 이 어떻게 동작하는지 알 수 있다.</p>
+
+<pre><code class="sml">val a = 10;  
+val b = a * 2  
+val a = 5; (* this is not an assignment statement *)  
+(* a -&gt; 5, b -&gt; 20 *)
+val c = 2;  
+(* a -&gt; 5, b -&gt; 20, c -&gt; 20 *)
+</code></pre>
+
+<p><code>val a = 5</code> 문장은, 할당하는게 아니라 <code>a</code> 를 <em>shadowing</em> 한다. <em>ML</em> 에서는 <em>mutate</em> 할 수 없다. 매번 새롭게 <em>dynamic env</em> 를 만든다.</p>
+
+<pre><code class="sml">val d = a  
+(* ..., d -&gt; 5 *)
+val a =  a + 1  
+(* ..., a -&gt; 6 *)
+val f = a * 2  
+</code></pre>
+
+<p><code>use</code> 를 이용하면, 기존의 <code>a</code> 의 값이 <code>&lt;hidden-value&gt;</code> 로 나오는 것을 확인 할수 있다.</p>
+
+<pre><code class="sml">val a = 1;  
+val b = a;  
+val a = 2;  
+</code></pre>
+
+<p>다음과 같은 예제가 있을 때, <code>b</code> 는 <code>1</code> 이다. <em>eagerly evaluated</em> 되어 바인딩 후에는 <code>value</code> 를 만든 <em>expression</em> 과는 관련이 없어진다. 다시 말해  바인딩 후에는 <code>a</code> 와 <code>b</code>는 상관이 없다.</p>
+
+<p>그리고 위에서 언급 했듯이 <strong>ML</strong> 에서는 <em>assign to</em> 가 없고, 앞의 <code>a</code> 는 뒤의 <code>a</code> 에가 있는 <em>dynamic env</em> 에 의해서 가려질 뿐이다.</p>
+
+<p>그렇기 때문에 <em>REPL</em> 을 재시작 하지 않고서 같은 파일을 여러번 <code>use</code> 하면 문제가 생길 수 있다고 교수님이 누차 말한 것</p>
+
+<h3 id="functionsinformally">Functions Informally</h3>
+
+<pre><code class="sml">fun pow (x: int, y: int) =  
+  if y = 0
+  then 1
+  else x * pow(x, y-1)
+
+fun cube(x: int)  
+  pow(x, 3)
+</code></pre>
+
+<p>이 경우 두 함수 모두 타입은 <code>fn: int -&gt; int</code> 다. 타입을 이름 뒤에 사용하는것도 그렇고, 함수 타입도 그렇고 스칼라와 문법이 비슷한 것 같다.</p>
+
+<p><code>*</code> 가 타입에 있을때는 곱셈이 아니라 <code>,</code> 같은 역할을 한다. 따라서 다음과 같이 <code>pow</code> 를 호출할 수 있다.</p>
+
+<pre><code class="sml">val x : int * int = (2, 3)  
+val y = pow x  
+</code></pre>
+
+<p>참고로, 함수를 사용한 후 정의하는 것은 불가능하다. 따라서 사용하는 <em>expression</em> 위에 함수를 정의해야 한다.</p>
+
+<h4 id="recursion">Recursion</h4>
+
+<p>재귀에 대해서도 간단히 언급을 하는데, 문제를 간단한 방법으로 나누어 푸는 좋은 기술이라고..</p>
+
+<h3 id="functionsformally">Functions Formally</h3>
+
+<p>우리가 <strong>Function</strong> 이 무엇인지 PL 에서 정의하려면 위에서 언급했듯이 <em>syntax</em> 와 <em>semantics</em> 가 필요하다. </p>
+
+<blockquote>
+  <p><strong>Syntax:</strong> <code>fun x0 (x1: t1, ... , xn: tn) = e</code></p>
+  
+  <p><strong>Evaluation:</strong> A function is a value. <code>x0</code> is added to <em>dynamic env</em></p>
+  
+  <p><strong>Type-checking:</strong> <code>(t1 *, ..., * tn) -&gt; t</code></p>
+</blockquote>
+
+<p>타입체킹이 조금 복잡한데, <code>e</code> 가 <code>t</code> 타입을 가지는지 검사하고, 파라미터도 마찬가지로 올바른 타입을 가지는지 검사한다.</p>
+
+<p>다른 언어와 마찬가지로 <code>t1</code> 등의 파라미터는 <code>e</code> 를 위한 <em>environment</em> 에만 추가된다.</p>
+
+<p><code>x0</code> 이 <em>dynamic</em>, <em>static env</em> 에 추가되므로 이후의 코드에서 <em>recursion</em> 을 사용할 수 있다.</p>
+
+<h4 id="functioncalls">Function calls</h4>
+
+<p><em>Function calls</em> 의 <em>syntax</em> 는 <code>e0 (e1, ..., en)</code> 이다. 만약에 인자가 하나라면 괄호(parentheses) 는 없어도 된다.</p>
+
+<p>참고로 <strong>ML</strong> 에서는 <strong>variable numbers of arguments</strong> 를 함수에서 받을 수 없다. 인자의 개수가 정해져야 한다.</p>
+
+<p><em>type-checking</em> 의 경우에는 , <code>e0</code> 이 <code>(t1 * ... * tn) -&gt; t</code> 인지 검사하고 <code>en</code> 이 <code>tn</code> 타입을 가지면, <code>e0</code> 은 <code>t</code> 타입이다. </p>
+
+<p><em>Evaluation</em> 스텝은 다음과 같다.</p>
+
+<p>(1) evaluate <code>e0</code> to <code>fun x0(x1: t1, ... , x: tn) = e</code> <br />
+(2) evaluate arguments <code>e1</code>, ... , <code>en</code> to <code>v1</code>, ..., <code>vn</code> <br />
+(3) extend <em>dynamic env</em> mapping <code>x1</code> to <code>v1</code> , ... , <code>xn</code> to <code>vn</code></p>
+
+<p>두 번째 스텝에서는 <em>eager evaluation</em> 이 사용되는데 <code>pow(2, 2+2)</code> 같은 경우 인자가 <code>2, 4</code> 가 된다. </p>
+
+<p>세 번째 스텝에서는 <em>dynamic environment</em> 를 확장하는데, 현재 함수인 <code>x0</code> 과 인자들인 <code>xn</code> 을 포함하도록 한다. 따라서 <em>recursion</em> 이 가능하다.</p>
+
+<p>사실은 스칼라의 그것과 같은데 교재에 나온 설명이 너무 함축적이어서 이해하기가 어렵다.</p>
+
+<h3 id="pairsandothertuples">Pairs and Other Tuples</h3>
+
+<p>위에서 잠깐 보았던 <code>t1 * t2</code> 같은 것들이 <em>Pair</em> 다. 다른말로 <em>2-tuples</em> 라 부른다. </p>
+
+<p><em>Syntax</em> 는 <code>(e1, e2)</code> 로 <em>Type-checking</em> 은 <code>e1</code> 과 <code>e2</code> 가 올바른 타입을 가졌는지 검사한다.</p>
+
+<p><em>Pair</em> 에 접근할때는 <code>#1 e</code> 또는 <code>#2 e</code> 와 같은 <em>Syntax</em> 를 사용하고, <code>e</code>가 <code>t1 * t2</code> 타입인지, 그 후에 <code>#1 e</code> 가 <code>t1</code> 또는 <code>#2 e</code> 가 <code>t2</code> 타입을 가졌는지 검사한다.</p>
+
+<pre><code class="sml">fun su_two_pairs (pr1: int * int, pr2: int* int) =  
+  (#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)
+</code></pre>
+
+<p>의 경우에는 타입이 <code>(int * int) * (int * int) -&gt; int</code> 된다. 그리고 다른 언어와 마찬가지로 <em>tuple</em> 도 겹칠 수 있다.</p>
+
+<pre><code class="sml">val x1 = (7, (true, 9)) // int * (bool * int )  
+val x2 = #1 (#2 x1) // true  
+</code></pre>
+
+<h3 id="introducinglists">Introducing Lists</h3>
+
+<p><em>Tuple</em> 은 여러 타입을 가질 수 있지만, 정해진 갯수만큼의 element 만 저장할 수 있다. 반면 <em>List</em> 는 하나의 타입만 가져야 하지만, 원소의 갯수가 변할 수 이다.</p>
+
+<p>빈 리스트는 <code>[]</code> 와 같이 만든다. <code>[3, 4, 5]</code> 는 <code>int list</code> 다. <code>[(1+2), 3, 7]</code> 과 같이 초기화하면 <code>[3, 3, 7]</code> 이 나온다. 리스트는 그 자체로 <em>value</em> 다.</p>
+
+<p><code>::</code> 는 <em>cons</em> 라 발음하고, 다음과 같이 쓸 수 있다.</p>
+
+<pre><code class="sml">val x = [3, 4, 5]  
+val y = 2 :: x  
+</code></pre>
+
+<p><em>cons</em> 뒤에 오는것은 <code>List</code> 여야 한다. 리스트가 비었는지 검사하기 위해 <code>null</code> 을, <em>head</em> 를 얻기 위해 <code>hd</code> 를, <em>tail</em> 을 얻기 위해 <em>tl</em> 을 이용한다. 따라서 <code>tl [3, 4, 5]</code> 는 <code>[4, 5]</code> 를 돌려준다.</p>
+
+<p>그리고 다른 함수형 언어와 마찬가지로 <code>tl [9]</code> 는 <code>[]</code>(<em>nil</em>) 이다.</p>
+
+<p>리스트는 다양한 타입을 가질 수 있기 때문에 <code>(int * int) list</code> 같은 것도 타입이 될 수 있다. <code>[(3, 4), (5, 6)]</code> 처럼.</p>
+
+<p><code>null</code> 은 <code>fn: a list -&gt; bool</code> 타입이고, 
+<code>hd</code> 는 <code>fn: a list -&gt; a</code>, 
+<code>tl</code> 은 <code>fn: a list -&gt; a list</code></p>
+
+<p><code>[]: a list</code> 는 좀 특이한데, 다양한 타입이 될 수 있다. <code>3 :: []</code>, <code>false :: []</code> 이라던지.</p>
+
+<h3 id="listfunctions">List Functions</h3>
+
+<p>리스트를 조작하는 간단한 함수를 <em>ML</em> 로 몇 개 짜보자.</p>
+
+<pre><code class="sml">fun pow(x: int, y: int) =  
+    if y = 0 then 1 else x * pow(x, y - 1);
+
+fun cube(x: int) =  
+    pow(x, 3);
+
+fun sum_list(xs: int list) =  
+    if null xs
+    then 0
+    else hd xs + sum_list(tl xs)
+
+fun product_list(xs: int list) =  
+    if null xs
+    then 1
+    else hd xs * product_list(tl xs)
+
+fun countdown(x: int) =  
+    if x = 0
+    then []
+    else x :: countdown(x - 1)
+
+fun append(xs: int list, ys: int list) =  
+    if null xs
+    then ys
+    else (hd xs) :: append(tl xs, ys)
+
+fun sum_pair_list(xs: (int * int) list) =  
+    if null xs
+    then 0
+    else (#1 (hd xs)) + (#2 (hd xs)) + sum_pair_list(tl xs)
+
+fun firsts(xs: (int * int) list) =  
+    if null xs
+    then []
+    else #1 (hd xs) :: firsts(tl xs)
+
+fun seconds(xs: (int * int) list) =  
+    if null xs
+    then []
+    else #2 (hd xs) :: seconds(tl xs)
+
+fun sum_pair_list(xs: (int * int) list) =  
+    if null xs
+    then 0
+    else sum_list(firsts xs) + sum_list(seconds xs)
+
+fun factorial(n : int) =  
+    product_list(countdown(n))
+</code></pre>
+
+<p>참고로 <code>#</code> 이 <code>+</code> 이나 <code>::</code> 보다 우선순위가 높다.</p>
+
+<h4 id="listrecursion">List Recursion</h4>
+
+<p>재귀에 대해 생각할땐, 항상 명심해야 하는게 있는데 <strong>탈출 조건</strong> 이다. 따라서 empty-list 에 대해선 어떤걸 돌려줄지, non-empty-list 에 대해서는 무엇을 처리해야 할지 항상 생각해야 한다.</p>
+
+<h3 id="letexpressions">Let Expressions</h3>
+
+<p><code>let</code> 은 <em>local variable</em> 을 바인딩하는 법이다.</p>
+
+<blockquote>
+  <p><strong>Syntax:</strong> <code>let b1 b2 ... bn in e end</code>. Each <code>b1</code> is any <em>binding</em> and <code>e</code> is any expression</p>
+  
+  <p><strong>Type-checking:</strong> Type of whole let-expression is the type of e. Type-check each <code>b1</code> and <code>e</code> in a staic env that includes the previous bindings</p>
+  
+  <p><em>*Evaluation: *</em> evaluate each <code>b1</code> and <code>e</code> in a dynamic env that includes the previous bindings. Result of whole expression is result of evaluating <code>e</code></p>
+</blockquote>
+
+<pre><code class="sml">fun silly () =  
+    let
+      val x = 3
+    in
+      (let val x = 2 in x + 1 end) + (let val y = x + 1 in y + 1 end)
+    end
+</code></pre>
+
+<p>여기서 <em>Scope</em> 의 개념이 나온다.</p>
+
+<blockquote>
+  <p><strong>Scope:</strong> Where a binding is in the environment</p>
+</blockquote>
+
+<h4 id="nestedfunctions">Nested Functions</h4>
+
+<p><em>Function</em> 은 <em>binding</em> 이다. 따라서 <code>let</code> 내부에서 <em>local binding</em> 할 수 있다.</p>
+
+<pre><code class="sml">fun count_from_1 (x: int) =  
+    let
+    fun count (from: int, to: int) =
+        if from == to
+        then []
+        else from :: count(from + 1, to)
+    in
+    count(1, x)
+    end
+</code></pre>
+
+<p>이렇게 하면 <em>top-level</em> 에서 <code>count</code> 는 사라진다. 그리고 엄밀히 말해서 <code>count</code> 가 가진 <em>environment</em> 에는 <code>to</code> 가 있기 때문에, <code>to</code> 를 인자로 가질 필요가 없다.</p>
+
+<pre><code class="sml">fun count_from_1 (x: int) =  
+    let
+    fun count (from: int) =
+        if from = x
+        then []
+        else from :: count(from + 1)
+    in
+    count(1)
+    end
+</code></pre>
+
+<h3 id="letandefficiency">Let and Efficiency</h3>
+
+<p>가장 큰 숫자를 찾는 다음의 함수를 고려 해 보자</p>
+
+<pre><code class="sml">fun bad_max (xs : int list) =  
+  if null xs
+  then 0
+  else if null (tl xs)
+  then hd xs
+  else if hd sx &gt; bad_max(tl xs)
+  then hd xs
+  else bad_max(tl xs)
+</code></pre>
+
+<p>이 함수는 <code>[1, 2, ... , 30]</code> 과 같은 리스트에 굉장히 나쁜 성능 <em>exponentially (2^30)</em> 을 보여준다. <code>bad_max(tl xs)</code> 를 두번 호출하기 때문이다. 따라서 <code>max(tl xs)</code> 를 변수로 놓아 캐싱하면</p>
+
+<pre><code class="sml">fun good_max (xs: int list) =  
+    if null xs then 0
+    else if null (tl xs) then hd xs
+    else
+    let
+        val res = good_max(tl xs)
+    in
+        if hd xs &gt; res then hd xs
+        else res
+
+    end
+</code></pre>
+
+<p><code>bad_max</code> 의 <code>if-then-else</code> 가 10^-7 정도의 시간이 든다고 하면, <code>[1, 2, ..., 55]</code> 는 100년이 넘게 걸린다. 따라서 재귀를 구현하는데 있어서 <em>local binding</em> 은 필수다.</p>
+
+<h3 id="options">Options</h3>
+
+<p>참고로, <code>good_max</code> 는 리스트가 모두 음수일때 <code>0</code> 을 돌려준다. 이건 리스트가 비었을때 <code>0</code> 을 돌려주기 때문에 생기는 문제인데, <code>0</code> 말고 다른 무언갈 돌려줄 수 없을까?</p>
+
+<p><em>SML</em> 도 <em>Scala</em> 처럼 <em>Option</em> 을 지원한다.(물론 <em>SML</em> 이 먼저..) <code>NONE</code> 은 <code>a option</code> 타입이고, <code>SOME e</code> 는 <code>t option</code> 이다. <code>t</code> 는 <code>e</code> 의 타입.</p>
+
+<p><em>Option</em> 을 이용해 <code>max</code> 를 리팩토링 해 보면,</p>
+
+<pre><code class="sml">fun max1 (xs: int list) =  
+  if null xs NONE
+  else 
+    let val res = max(tl xs)    
+    in if isSome res andalso isVal res &gt; hd xs then res
+       else Some(hd xs) 
+    end
+</code></pre>
+
+<p>그런데, 이 <code>max1</code> 또한 문제가 있다. 사실 <code>[]</code> 는 리스트가 오름차순으로 구성되어있을때 (<code>[1, 2, 3, 4]</code>) 맨 마지막 호출에서만 오는데, 매번 <code>isSome</code> 으로 검사하니까 비효율적이다. 다시 리팩토링하면</p>
+
+<pre><code class="sml">fun max2 (xs: int list) =  
+    if null xs then NONE
+    else
+    let
+        fun max_non_empty(ys: int list) =
+        if null (tl ys) then hd ys
+        else
+            let val res = max_non_empty(tl ys)
+            in if hd xs &gt; res then hd ys
+               else res
+            end
+    in
+        SOME (max_non_empty xs)
+    end
+</code></pre>
+
+<p><del>교수님 <code>let in end</code> 는 제발그만 가..가독성이</del></p>
+
+<h3 id="booleansandcomparisonoperations">Booleans and Comparison Operations</h3>
+
+<p>다른 언어의 <em>&amp;&amp; (and)</em> 와 <em>|| (or)</em> <em>! (not)</em> 은 <em>SML</em> 에서는 <code>ansalso</code>, <code>orelse</code>, <code>not</code> 이다.</p>
+
+<p>그리고 <code>andalso</code>, <code>orelse</code> 연산자는 다른 언어처럼 <em>Short circuiting</em> 을 제공한다. 함수가 아니다.   </p>
+
+<p><code>andalso</code> 와 <code>orelse</code>, <code>not</code> 은 다음처럼 쓸 수도 있다.</p>
+
+<pre><code class="sml">(* andalso *)
+if e1  
+then e2  
+else false
+
+(* orelse *)
+if e1  
+then true  
+else e2
+
+(* not *)
+if e1  
+then false  
+else true  
+</code></pre>
+
+<p><code>if-then-else</code> 만 가지고도 할 수 있으나, 그냥 <code>andalso</code> 와 <code>orelse</code>, <code>not</code> 을 쓰는게 코드를 읽는 사람의 정신 건강에 좋다. </p>
+
+<h4 id="comparisons">Comparisons</h4>
+
+<p>비교의 경우엔 <code>==</code> 가 아니라 <code>=</code> 를 쓴다. <code>!=</code> 가 아니라 <code>&lt;&gt;</code> 를 쓴다. </p>
+
+<p>그리고 <code>3.0 &gt; 2</code> 와 같은 비교는 안된다.<code>3.0</code> 은 <code>real</code> 이고, <code>2</code> 는 <code>int</code> 다 <code>Real.fromInt</code> 를 이용하자.</p>
+
+<h3 id="nomutation">No Mutation</h3>
+
+<p>교수님이 <em>A valuable non-feature</em> 라고 이야기 하시는데, 기능이 없는게 장점이라고.. <em>SML</em> 에서는 아래의 두 코드가 같다. (<em>inditinguishable</em>)</p>
+
+<pre><code class="sml">fun sort_pair(pr: int * int) =  
+  if #1 pr &lt; #2 pr then pr
+  else (#2 pr, #1 pr)
+
+fun sort_pair(pr: int * int) =  
+  if #1 pr &lt; #2 pr then (#1 pr, #2pr)
+  else (#2 pr, #1 pr)
+</code></pre>
+
+<p>위가 더 나은 <em>style</em> 이라고 주장할 순 있지만, 다르다고 말할 순 없다. 그러나 <em>mutable compound data</em> 를 다루는 다른 언어에서는 위 두 함수는 다르다</p>
+
+<p>예를 들어서 <em>mutable data</em> 를 다루는 언어라 가정하고 다음의 코드를 고려 해 보자.</p>
+
+<pre><code class="sml">val x = (3, 4)  
+val y = sort_pair x
+
+(* somehow mutate #1 x to hold 5 *)
+
+val z = #1 y  
+</code></pre>
+
+<p>이제 <code>z</code> 의 값은 무엇일까? <code>sort_pair</code> 구현에 따라 다르다. <code>then</code> 에서 <code>pr</code> 을 돌려줬다면, <code>5</code> 일거고, <code>(#1 pr, #2 pr)</code> 을 돌려줬다면 <code>3</code> 일거다. 그러나 <em>ML</em> 에선 문제가 안된다. <em>immutable</em> 하니까. <del>오오 immutable 오오</del></p>
+
+<blockquote>
+  <p>But <strong>without mutation</strong>, we can implement either way <br/><br/>
+  - No code can ever distinguishe aliasing vs identical copies <br />
+  - No need to think about aliasing: focus on other things <br />
+  - Can use aliasing, which saves space, without danger</p>
+</blockquote>
+
+<p><em>ML</em> 에서는 <code>tl</code> 이 상수 시간내에 이뤄진다. 첫번째 원소를 제외한 나머지를 가리키기만 하면 되니까. 어차피 그 데이터는 <em>immutable</em> 이니까 그냥 쓰기만 하면 된다. 변경이 필요하면, 그 때 새로 만들면 된다.</p>
+
+<h3 id="javamutation">Java Mutation</h3>
+
+<pre><code class="java">public String[] getAllowedUsers() {  
+  // return a references of allowedUsers
+}
+</code></pre>
+
+<p><code>allowedUsers</code> 자체가 <code>private</code> 여도, 다음과 같은 코드에 취약하다.</p>
+
+<pre><code class="java">p.getAllowedUsers()[0] = p.currentUser();  
+p.useTheResource();  
+</code></pre>
+
+<p>따라서 위의 <code>getAllowedUsers</code> 는 <em>copy</em> 를 돌려줘야한다. </p>
+
+<p><em>ML</em> 같은 <em>immutable</em> 한 언어에서는 <em>Reference (Alias)</em> vs <em>Copy</em> 는 문제가 안된다.</p>
+
+<h3 id="piecesofalanguage">Pieces of a Language</h3>
+
+<p>언어를 배울때는 다음의 다섯가지를 고려해야한다.</p>
+
+<p>(1) <strong>Syntax:</strong> How do you write language constructs? <br />
+(2) <strong>Semantics:</strong> What do programs mean? (Evaluation rules) <br />
+(3) <strong>Idioms:</strong> What are typical patterns for using language features to express your computation <br />
+(4) <strong>Libraries:</strong> What facilities does the language provide <strong>standard</strong>? <br />
+(5) <strong>Tools:</strong> What do language implementations provide to make your job easier? (REPL debugger..)  </p>
+
+<p>다시 말하면 다섯가지를 모두 배워야 한다. 언어의 코어부터 그 확장인 라이브러리와 툴까지. 그러나 이 코스에서는 <em>Semantics</em> 와 <em>Idioms</em> 에 집중한다. <em>ML</em> 을 고른것도 그 이유고, 이걸 잘 이해하게 되면 <em>Libraries</em> 가 어떻게 구성되었는지 더 잘 이해할 수 있다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>처음엔 재귀가 어려웠는데, 시간이 지날수록 재귀가 얼마나 재밌고 강력한지 알게 된다. 함수를 <em>building block</em> 처럼 조립하는것도 너무 재밌고</p>
+
+<p>Lisp 을 이용했으면 개인적 취향에 맞아 더 재밌게 배울 수 있었을텐데. 나중에 수업이 모두 끝났을때 <em>ML</em> 을 고른 이유를 느낄 수 있었으면 좋겠다.</p>
+
+<p>그리고 Emacs <em>sml-mode</em> 가 좀.. 음.. 빈약한데 더 좋은걸 찾아야겠다. <em>MELPA</em> 엔 없던데.. 테스팅 프레임워크도 좀 찾아서 해보고. </p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '41';
+  var disqus_url = 'http://1ambda.github.io/programming-language-week1/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
