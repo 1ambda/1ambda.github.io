@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 21 Oct 2014 05:42:33 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 3]]></title><description><![CDATA[<p>지난 시간엔 <em>Regression</em> 을 해결하기 위해 <em>graident descent</em> 알고리즘을 도입했었다. <em>learning rate</em>, <em>vectorization</em> 등에 대해서 알아 보기도 했고. 이번시간엔 <em>classification</em> 과 <em>regulrzation</em> 에 대해서 배워 본다. </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 22 Oct 2014 13:42:39 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 3]]></title><description><![CDATA[<p>지난 시간엔 <em>Regression</em> 을 해결하기 위해 <em>graident descent</em> 알고리즘을 도입했었다. <em>learning rate</em>, <em>vectorization</em> 등에 대해서 알아 보기도 했고. 이번시간엔 <em>classification</em> 과 <em>regulrzation</em> 에 대해서 배워 본다. </p>
 
 <p>이 수업이 재밌는 이유는 수식을 증명하는 것보다 수식속에 숨겨진 내용들을 직관적으로 이해할 수 있게 설명하기 때문이다. <del>그러나 교수님 과제는 제발 그만</del></p>
 
@@ -151,7 +151,7 @@
 
 <p align="center">(<a href='http://www.holehouse.org/' >http://www.holehouse.org/</a>)</p>
 
-<p>그러기 위해서는 <em>gradient descent</em> 이외에도 다음의 알고리즘을 고려할 수 있다.</p>
+<p>이 값들을 이용해서 <em>gradient descent</em> 대신 다음의 알고리즘을 사용할 수 있다.</p>
 
 <p>(1) Conjugate gradient <br />
 (2) BFGS <br />
@@ -279,7 +279,7 @@ initialTheta= zeros(2,1);
 
 <p><em>linear regression</em> 과 마찬가지로 <code>0(theta)</code> 를 0과 1로 분리해 <em>regularization term</em> 을 추가하면 된다. 다른점은 <code>h(x)</code> 가 <em>sigmoid function</em> 의 형태라는 것.</p>
 
-<p>그리고 <em>gradient descent</em> 를 풀기 위해 <em>octave</em> 에서 제공하는 알고리즘들을(<em>conjugate</em>, <em>BFGS</em>, <em>L-BFGS</em> 등) 을 <code>fminunc</code> 이용해서 사용할 수 있다. 이를 위해 언급 했듯이 <code>jval</code> 과 <code>0(theta)</code> 에 대한 <code>graident</code> 를 돌려주는 <em>cost function</em> 알 만들어야 하는데, <em>regularzation term</em> 이 추가되었으므로 해당하는 값을 더해서 각 <code>0</code> 에 대한 <em>gradient</em> 를 계산하는 식을 만들어주면 된다.</p>
+<p>그리고 <em>gradient descent</em> 를 풀기 위해 <em>octave</em> 에서 제공하는 알고리즘들을(<em>conjugate</em>, <em>BFGS</em>, <em>L-BFGS</em> 등) 을 <code>fminunc</code> 이용해서 사용할 수 있다. 이를 위해 언급 했듯이 <code>jval</code> 과 <code>0(theta)</code> 에 대한 <code>graident</code> 를 돌려주는 <em>cost function</em> 을 만들어야 하는데, <em>regularzation term</em> 이 추가되었으므로 해당하는 값을 더해서 각 <code>0</code> 에 대한 <em>gradient</em> 를 계산하는 식을 만들어주면 된다.</p>
 
 <p><img src='http://www.holehouse.org/mlclass/07_Regularization_files/Image%20' [16].png" align="center" />  </p>
 
@@ -289,7 +289,7 @@ initialTheta= zeros(2,1);
 
 <h3 id="summary">Summary</h3>
 
-<p>3주째에는 <em>Classification</em> 과 <em>Regularzation</em> 에 대해서 배웠다. 수업은 어렵지 않다. 과제가 문제지 ㅠㅠ 교수님. 파이썬으로 과제를 내주셨으면 좀 더 배우는 맛이 있었을텐데요!</p>
+<p>3주째에는 <em>Classification</em> 과 <em>Regularization</em> 에 대해서 배웠다. 수업은 어렵지 않다. 과제가 문제지 ㅠㅠ 교수님. 파이썬으로 과제를 내주셨으면 좀 더 배우는 맛이 있었을텐데요!</p>
 
 <h3 id="references">References</h3>
 
