@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Machine Learning, Week 4</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Machine Learning, Week 4">
+  <meta name="twitter:description" content="지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 Neural Network (신경망) 을 건들다가 놀랍게도 그것이 logistic regression 과 연관이 있으며 n 이 매우 클 경우의 classification 문제를 해결할 수 있다는 것을 배운다. Non-Linear Hypotheses 다음과 같은 트레이닝 셋이 있을때, 두 집단을 classification 하는 hypothesis">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/machine-learning-week-4/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/machine-learning-week-4/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=0cfc2b0458"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-coursera tag-machine-lerning tag-classification tag-neural-network">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/machine-lerning">machine lerning</a>, <a href="../tag/classification">classification</a>, <a href="../tag/neural-network">neural network</a></h5>
+      <h1 class="margin_bottom_medium">Machine Learning, Week 4</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-23">Thursday, October 23, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/machine-learning-week-4/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 <em>Neural Network (신경망)</em> 을 건들다가 놀랍게도 그것이 <em>logistic regression</em> 과 연관이 있으며 <code>n</code> 이 매우 클 경우의 <em>classification</em> 문제를 해결할 수 있다는 것을 배운다.</p>
+
+<h3 id="nonlinearhypotheses">Non-Linear Hypotheses</h3>
+
+<p>다음과 같은 트레이닝 셋이 있을때, 두 집단을 <em>classification</em> 하는 <em>hypothesis</em> 를 찾는다고 하자. </p>
+
+<p><img src="http://www.holehouse.org/mlclass/08_Neural_Networks_Representation_files/Image.png" align="center" />  </p>
+
+<p align="center">(<a href='http://www.holehouse.org'>http://www.holehouse.org</a>)</p>
+
+<p><code>x1</code> 과 <code>x2</code> 만으로는 찾을 수 없으니, 더 많은 <em>feature</em>  <code>x1^2, x1x2, x2^2</code> 를 도입한다 하자. 트레이닝 셋에 적합한 가설을 찾을수는 있겠지만, 항상 좋은건 아니다.</p>
+
+<p>(1) 우선 지난 시간에 언급했듯이 <em>Overfitting</em> 이 발생할 수 있고 <br />
+(2) <em>feature</em> 수가 <code>n</code> 이라 할때, 모든 <em>quadratic feature</em> 를 도입하면 <em>feature</em> 수가 <code>O(n^2)</code> (<code>n^2/2</code>)만큼 늘어난다. (아래 그림 참조) 다시 말해서 계산 비용이 엄청나게 비싸진다.</p>
+
+<p><img src="http://img.blog.csdn.net/20140507021224421" align="center" />  </p>
+
+<p align="center">(<a href='http://blog.csdn.net/feliciafay'>http://blog.csdn.net/feliciafay</a>)</p>
+
+<p>그리고 <em>feature</em> 수를 줄이기 위해 <code>x1^2, x2^2, x3^2 ...</code> 등 <em>quadratic feature</em> 만을 도입하고 나머지 <em>parameter</em> 를 버리면, <em>hypothesis</em> 가 트레이닝셋에 잘 안맞을 수 있다 (<em>underfirt</em>)</p>
+
+<p>만약 <em>feature</em> 를 <em>cubic</em> 까지 도입하면 <em>feature</em> 수가 <code>O(n^3)</code> 으로 늘어나 계산시간은 어마어마하게 걸린다. 따라서 차수를 늘려 문제를 해결하려는 방법은 <code>n</code> 이 클때 좋은 방법이 아니다. 게다가 일반적으로 대부분의 문제들은 <code>n</code> 이 큰편이다.</p>
+
+<p>자동차 이미지 인식 문제를 고려해 보자. 이미지는 픽셀이므로, 50 * 50 픽셀로 구성된 경우 <code>n = 2500</code> 이다.</p>
+
+<p><img src="http://img.blog.csdn.net/20140507021231812" align="center" />  </p>
+
+<p align="center">(<a href='http://blog.csdn.net/feliciafay'>http://blog.csdn.net/feliciafay</a>)</p>
+
+<p>이건 그레이스케일의 경우고 만약 RGB 라면 여기에 3을 곱해서 <code>n = 7500</code> 이 된다. <em>quadratic</em> 이면 <code>7500^2 / 2</code>, 대략 3 millions 개의 <em>feature</em> 를 가지게 된다. 이쯤되면 답이 없다. <code>n</code> 이 큰 <em>classification</em> 에 대해 사용할 수 있는 다른 방법은 없을까?</p>
+
+<h3 id="modelrepresentation">Model Representation</h3>
+
+<p>잠깐 눈을 돌려 <em>Neural Networks</em> 에 대해 이야기 해 보자. 다양한 알고리즘을 개발하는 대신  스스로 학습하는 뇌를 모방한 알고리즘을 개발할 수 있다면 진짜 AI 를 구현할 수 있지 않을까? 라는 질문에서 <em>Neural networks</em> 는 출발한다.</p>
+
+<p>뇌를 모방한 알고리즘을 만들려면, 인간의 뇌가 어떻게 작동하는지 알아야한다. 뇌는 <em>Neuron</em> 이라는 단위의 집합으로 구성되었는데, 요로코롬 생겼다.</p>
+
+<p><img src="http://home.agh.edu.pl/~vlsi/AI/intro/neuron.png" align="center" />  </p>
+
+<p align="center">(<a href='http://home.agh.edu.pl/~vlsi/AI/intro/'>http://home.agh.edu.pl/~vlsi/AI/intro/</a>)</p>  
+
+<p><br/></p>
+
+<p>여기서 <em>Dendrite</em> 라는 부분이 <strong>input</strong> 이고, <em>Axon</em> 이 <strong>output</strong> 이다. 이걸 모델링하면,</p>
+
+<p><img src="http://img.blog.csdn.net/20140507021238515" align="center" />  </p>
+
+<p align="center">(<a href='http://blog.csdn.net/feliciafay'>http://blog.csdn.net/feliciafay</a>)</p>
+
+<p>위 그림에서 좌측에 있는 <code>x1, x2, x3</code> 가 <em>input</em> 이라 보면 되고, <code>h0(x)</code> 는 이전처럼 <code>0^T * x</code> 에 <em>sigmoid function</em> 을 적용한 것이다. 그리고 <em>neural network</em> 에서 <em>parameter</em> 대신 <code>0(theta)</code> 를 <strong>weights</strong> 라 부르기도 한다. <code>x0</code> 은 값이 <code>1</code> 이고, <em>bias unit</em> 이라 부르는데 편의상 그리기도 하고 안그리기도 한다. <del>교수님 뜻대로 하소서</del>
+<br/><br/></p>
+
+<p>여기까지는 단일 <em>neuron</em> 을 모델링 한것이고, <em>neural network</em> 는 여러개의 <em>neuron</em> 들이 합쳐진 것이다. 간단히 그려보면, </p>
+
+<p><img src="http://img.blog.csdn.net/20140507021247656" align="center" />  </p>
+
+<p align="center">(<a href='http://blog.csdn.net/feliciafay'>http://blog.csdn.net/feliciafay</a>)</p>
+
+<p>여기서 <em>layer 1</em> 은 <em>input layer</em>, 마지막인 <em>layer 3</em>은 <em>output layer</em> 다. 그리고 가운데 있는 레이어들, 여기서는 <em>layer2</em>, <strong>hidden layer</strong> 라 부른다. 디버깅이 아니라면 <em>hidden layer</em> 에서 산출되는 값들을 관측하려고 할 필요는 없다. <em>hidden layer</em> 는 하나 이상일 수 있다. 실제 계산 과정을 보면</p>
+
+<p><img src="http://img.blog.csdn.net/20140507021254640" align="center" />  </p>
+
+<p align="center">(<a href='http://blog.csdn.net/feliciafay'>http://blog.csdn.net/feliciafay</a>)</p>
+
+<p><code>ai^j</code> 는, <code>j</code> 번째 <em>hidden layer</em> 에서 <code>i</code> 번째 <em>unit</em> 이다. <code>0(theta)^j</code> 는 <em>layer j</em> 와 <em>layer j+1</em> 사이에서 사용되는 <em>weights</em> 다. 이때 <em>hidden layer</em> 의 각 <em>unit</em> 마다 <em>input</em> 을 위한 <em>weight</em> 를 가지고 있다고 하면 위의 그림에서 <code>0</code> 의 <em>dimension</em> 은 <code>3 * 4</code> 다. (<em>bias unit</em> <code>x0</code> 포함)</p>
+
+<blockquote>
+  <p>If network has <code>s_j</code> units in layer <code>j</code>, <code>s_j+1</code> units in layer <code>j+1</code>, then <code>0^j</code> will be dimension <code>s_j+1 * (s_j + 1)</code></p>
+</blockquote>
+
+<p>이제 <em>output layer</em> 를 잘 보면 이 레이어의 <em>input</em> 은 <code>a^(2)</code> 고, <em>weight</em> 로 <code>0^2</code> 를 가지고 있다. 따라서 <code>h0(x)</code> 는 위의 식처럼 된다.</p>
+
+<h3 id="forwardpropagation">Forward Propagation</h3>
+
+<p>위 그림처럼 <code>x</code> 를 받아, <code>h0(x)</code> 를 계산하는 방법을 <em>forward propagation</em> 이라 부르는데 <em>vectorization</em> 을 이용해서 간단히 해 보자.</p>
+
+<p><img src="http://www.try2go.com/wp-content/uploads/2014/08/forward-propogation.jpg" align="center" />  </p>
+
+<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/'>http://www.try2go.com/201408/neural-networks-1/</a>)</p>
+
+<p><em>sigmoid fucntion</em> <code>g</code> 내부의 수식을 <code>z</code> 라 부르고 <code>a^(1) = x</code> 라 두면, 우측처럼 수식이 심플해진다. <code>z^(2) = 0^(1) * a^(1)</code> 이고, 여기에 <em>sigmoid function</em> 을 적용하면 <code>a^(2)</code> 가 나온다. 여기에 <em>bias unit</em> <code>a_0^(2) = 1</code> 을 더해 <code>a^(2)</code> 를 4차원 벡터로 만들면 다시 <code>z^(3)</code> 를 계산할 수 있다. 
+<br/><br/></p>
+
+<p>자, 이제 왜 <em>neural network</em> 를 뜬금없이 공부하다가 <em>forward propagation</em> 의 <em>vectorization</em> 까지 고려했는지를 밝힐 시간이다! 위 그림에서 <code>a^(1)</code> 즉, <em>layer 1</em> 을 가려버리면 아래와 같은데</p>
+
+<p><img src="http://www.try2go.com/wp-content/uploads/2014/08/learn-features.jpg" align="center" />  </p>
+
+<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/'>http://www.try2go.com/201408/neural-networks-1/</a>)</p>
+
+<p>이때 <code>h0(x)</code> 를 계산하는 식을 구해보면, <em>logistic regression</em> 과 똑같다. <del>오오 머신러닝 오오</del> </p>
+
+<p><strong>결국, <em>neural network</em> 가 하는 일은 <em>logistic regression</em> 이다.</strong> 단지  <em>hidden layer</em> 에서 <code>x1, x2, x3</code> 를 적당한 <em>weight</em> 로 훈련시켜 새로운 <em>feature</em> <code>a1^(2),  a2^(2), a3^(2)</code> 를 만들어 내고, 그걸로 <em>logistic regression</em> 을 할 뿐이다. </p>
+
+<p>다시 한번 정리하자면 <em>neural network</em> 는 <em>feature</em> 를 훈련시켜 다른 값을 가진  <em>feature</em> 로 바꾸는 과정을 통해 <em>hypothesis</em> 를 매우 고차의 다항식으로 만들지 않고도 <code>n</code> 이 매우 큰 경우의 <em>classification</em> 을 풀 수 있도록 한다. 항상 같은 개수의 <em>feature</em> 만 나오는건 아니고, 더 줄이거나 좀 더 늘릴 수도 있다. 아래의 그림을 보자.</p>
+
+<p><img src="http://alphaism.files.wordpress.com/2012/11/selection_001.png?w=630" align="center" />  </p>
+
+<p align="center">(<a href='http://alphaism.wordpress.com/'>http://alphaism.wordpress.com/</a>)</p>
+
+<h3 id="examples">Examples</h3>
+
+<p>먼저 간단히 <em>AND</em> 연산을 <em>neural network</em> 로 구현한다 하자. </p>
+
+<p><img src="http://www.try2go.com/wp-content/uploads/2014/08/and.jpg" align="center" />  </p>
+
+<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/'>http://www.try2go.com/201408/neural-networks-1/</a>)</p>
+
+<p>위 그림처럼 <code>z^(2) = -30 + 20x1 + 20x2</code> 라면, 우측 표 처럼 각각 <code>h0(x)</code> 값이 나오고, <em>sigmoid function</em> 은 <code>4.6</code> 정도일때 <code>y ~= 0.99</code> 이므로 <code>g(+10)</code> 은 거의 <code>1</code>, <code>g(-10)</code> 은 거의 <code>0</code> 이라 볼 수 있다.</p>
+
+<p><em>XNOR</em> 은 <em>AND</em> <em>~ AND ~</em> 그리고 <em>OR</em> 을 조합하면 만들 수 있다. 아래 그림을 보자.</p>
+
+<p><img src="http://www.holehouse.org/mlclass/08_Neural_Networks_Representation_files/Image%20[17].png" align="center" />  </p>
+
+<p align="center">(<a href='http://www.holehouse.org'>http://www.holehouse.org</a>)</p>
+
+<p>결국 <em>neural network</em> 는 각 <em>hidden layer</em> 에서 함수를 이용해 이전 단계의 결과에 어떤 처리를 가해 복잡한 일들을 해낼 수 있는 것이다.</p>
+
+<h3 id="multiclassclassification">Multiclass Classification</h3>
+
+<p>이제 <em>multi-class</em> 를 고려해 보자.</p>
+
+<p><img src="http://www.try2go.com/wp-content/uploads/2014/08/one-vs-all.jpg" align="center" />  </p>
+
+<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/'>http://www.try2go.com/201408/neural-networks-1/</a>)</p>
+
+<p>위 그림처럼 4개의 클래스가 있을 때, <em>output</em> 인 <code>h(x)</code> 를 <code>4 * 1</code> vector 로 만들도록 하고, 각 클래스에 대해서 <code>[1; 0; 0; 0], [0; 1; 0; 0], [0; 0; 1; 0], [0; 0; 0; 1]</code> 이 되도록 훈련시키면 된다. 기본적인 아이디어는 <em>one vs all method</em> 와 같다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://blog.csdn.net/feliciafay/article/details/25171147">http://blog.csdn.net/feliciafay</a> <br />
+(2) <a href="http://www.holehouse.org/mlclass/08_Neural_Networks_Representation.html">http://www.holehouse.org</a> <br />
+(3) <a href="http://home.agh.edu.pl/~vlsi/AI/intro/">http://home.agh.edu.pl/~vlsi/AI/intro/</a> <br />
+(4) <a href="http://www.try2go.com/201408/neural-networks-1/">http://www.try2go.com/201408/neural-networks-1/</a> <br />
+(5) <a href="http://alphaism.wordpress.com/2012/11/13/neural-network-algorithm/">http://alphaism.wordpress.com/</a></p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '47';
+  var disqus_url = 'http://1ambda.github.io/machine-learning-week-4/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
