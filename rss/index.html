@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 24 Oct 2014 07:28:43 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 4]]></title><description><![CDATA[<p>지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 <em>Neural Network (신경망)</em> 을 건들다가 놀랍게도 그것이 <em>logistic regression</em> 과 연관이 있으며 <code>n</code> 이 매우 클 경우의 <em>classification</em> 문제를 해결할 수 있다는 것을 배운다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 24 Oct 2014 07:31:23 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 4]]></title><description><![CDATA[<p>지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 <em>Neural Network (신경망)</em> 을 건들다가 놀랍게도 그것이 <em>logistic regression</em> 과 연관이 있으며 <code>n</code> 이 매우 클 경우의 <em>classification</em> 문제를 해결할 수 있다는 것을 배운다.</p>
 
 <h3 id="nonlinearhypotheses">Non-Linear Hypotheses</h3>
 
@@ -18,7 +18,7 @@
 
 <p align="center">(<a href='http://blog.csdn.net/feliciafay' >http://blog.csdn.net/feliciafay</a>)</p>
 
-<p>그리고 <em>feature</em> 수를 줄이기 위해 <code>x1^2, x2^2, x3^2 ...</code> 등 <em>quadratic feature</em> 만을 도입하고 나머지 <em>parameter</em> 를 버리면, <em>hypothesis</em> 가 트레이닝셋에 잘 안맞을 수 있다 (<em>underfirt</em>)</p>
+<p>그리고 <em>feature</em> 수를 줄이기 위해 <code>x1^2, x2^2, x3^2 ...</code> 등 <em>quadratic feature</em> 만을 도입하고 나머지 <em>parameter</em> 를 버리면, <em>hypothesis</em> 가 <em>underfit</em> 할 수 있다.</p>
 
 <p>만약 <em>feature</em> 를 <em>cubic</em> 까지 도입하면 <em>feature</em> 수가 <code>O(n^3)</code> 으로 늘어나 계산시간은 어마어마하게 걸린다. 따라서 차수를 늘려 문제를 해결하려는 방법은 <code>n</code> 이 클때 좋은 방법이 아니다. 게다가 일반적으로 대부분의 문제들은 <code>n</code> 이 큰편이다.</p>
 
@@ -125,8 +125,6 @@
 <p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/' >http://www.try2go.com/201408/neural-networks-1/</a>)</p>
 
 <p>위 그림처럼 4개의 클래스가 있을 때, <em>output</em> 인 <code>h(x)</code> 를 <code>4 * 1</code> vector 로 만들도록 하고, 각 클래스에 대해서 <code>[1; 0; 0; 0], [0; 1; 0; 0], [0; 0; 1; 0], [0; 0; 0; 1]</code> 이 되도록 훈련시키면 된다. 기본적인 아이디어는 <em>one vs all method</em> 와 같다.</p>
-
-<h3 id="summary">Summary</h3>
 
 <h3 id="references">References</h3>
 
