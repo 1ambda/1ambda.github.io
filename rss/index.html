@@ -1,5 +1,624 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 24 Oct 2014 07:31:23 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 4]]></title><description><![CDATA[<p>지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 <em>Neural Network (신경망)</em> 을 건들다가 놀랍게도 그것이 <em>logistic regression</em> 과 연관이 있으며 <code>n</code> 이 매우 클 경우의 <em>classification</em> 문제를 해결할 수 있다는 것을 배운다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 25 Oct 2014 15:15:02 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Functional Programming in Scala, Chapter 6]]></title><description><![CDATA[<p>지난 시간에는 <em>referential transparency (참조투명성)</em> 과 함수형 언어에서의 귀납법인 <em>structural induction</em> 에 대해서 배우고, 몇 개의 예제를 증명했었다. </p>
+
+<p>이번 시간에는 스칼라의 컬렉션인 <code>Seq</code>, <code>Set</code>, <code>Map</code> 을 알아보고 마지막 챕터에서는 여기에 <em>higher-order function</em> 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. <del>one-liner 의 절정을 보여주시는 교수님</del></p>
+
+<p>(번역이 서툴러 어중간한 의역을 하느니 단어를 그대로 사용하고 필요할 경우 원문을 첨부한다)</p>
+
+<h3 id="othercollections">Other Collections</h3>
+
+<h4 id="vector">Vector</h4>
+
+<p><code>List</code> 는 처음 원소는 <code>O(1)</code> 로 빠르게 접근하지만, 중간이나 마지막 원소에 대해서는 조금 느린편이다. 만약에 중간이나 마지막 원소에 대한 탐색을 빠르게 하고싶다면 다른 <em>sequence implementation</em> 인 <code>Vector</code> 를 사용하면 된다. <code>Vector</code> 는 다른 원소들에 대한 접근이 <em>evenly balanced</em> 하다. </p>
+
+<blockquote>
+  <p>This one has more evenly balanced access pattern then <code>List</code>.</p>
+</blockquote>
+
+<p><code>Vector</code> 는 <code>2^5 = 32</code> 개의 원소를 가진 리스트의 트리로 구현된다. 따라서 처음 단계에서는 <code>2^5</code> 개를 저장할 수 있고, 그 다음 단계에서는 <code>2^5 * 2^5 = 2^10</code>, 그 다음 단계에서는 <code>2^15</code> 를 저장할 수 있다. <code>2^5</code> 의 배수만큼 증가하는 것이다. <em>binary tree</em> 에서 자식의 갯수가 <code>2</code> 개가 아니라 <code>32</code> 개라고 생각하면 된다.</p>
+
+<p>이런 이유로, 원소를 탐색하는데 걸리는 시간은 <code>log_32 (N)</code> (<em>32 based-log</em>) 라 보면 된다. <em>random access</em> 에 대해서는 <code>List</code> 보다 훨씬 낫다.</p>
+
+<p><code>Vector</code> 의 또 다른 장점은 <code>map</code>, <code>for</code> 같은 <em>bulk operator</em> 에 대해서 빠른 연산이 가능하다는 것이다. 이것은 원소들이 32개씩 뭉쳐있기 때문에 <em>single cache line</em> 에 있을 확률이 높아진다. 리스트의 경우에는 콘셀이 같은 <em>cache line</em> 에 있으리라는 보장이 없기 때문에 <code>Vector</code> 보다 <em>locality</em> 가 떨어진다.</p>
+
+<p>그럼 <code>List</code> 가 필요없을까? 그렇지 않다. <code>head</code>, <code>tail</code> 과 같은 연산을 할때 빠르다. 깊이가 깊은 <code>Vector</code> 구조에서, <code>head</code> 나 <code>tail</code> 의 경우 몇 번의 연산이 필요한지 생각해보면 쉽게 이해할 수 있다.</p>
+
+<p>(1) <code>map</code>, <code>for</code> 과 같은 <em>bulk operation</em> 은 <code>Vector</code> 가 <br />
+(2) <code>tail</code>, <code>head</code> 는 <code>List</code> 가 더 빠르다.  </p>
+
+<p><code>Vector</code> 는 대부분의 <code>List</code> 연산을 사용할 수 있는데 예외가 하나 있다. 바로 <code>::</code> 콘싱은 <code>List</code> 를 위한 연산이기 때문이다.</p>
+
+<p>따라서 <code>Vector</code> 에서는 원소 추가나, 패턴 매칭을 위해 <code>x +: xs</code>, <code>x :+ x</code> 를 사용하면 된다.</p>
+
+<p><code>Vector</code> 는 <code>List</code> 처럼 <em>immutable</em> 이기 때문에 원소를 추가하면 기존의 데이터는 변경되지 않는다. 따라서 가장 깊은 깊이에 새로운 <code>Vector</code> 를 추가하고 그 벡터를 가리키는 상위 벡터, ..., 루트 벡터까지 만드는 비용은 <code>log32(N)</code> 이 된다. 물론 이건 <em>object creation</em> 비용이다.</p>
+
+<h4 id="sequence">Sequence</h4>
+
+<p><code>Vector</code>, <code>List</code>, <code>Range</code> 는 <code>Seq</code> 의 <em>sub-type</em> 다. <code>Seq</code> 이외에도 <code>Set</code>, <code>Map</code> 등이 있으며 <code>Seq, Set, Map</code> 은 <code>Iterable</code> 의 <em>sub-type</em> 이다. <em>hierarchy</em> 를 살펴보면,</p>
+
+<p><a href='http://docs.scala-lang.org/resources/images/collections.png' > <br />
+<img src='http://docs.scala-lang.org/resources/images/collections.png'  align="center" /></a>  </p>
+
+<p align="center">(<a href='http://docs.scala-lang.org/' >http://docs.scala-lang.org</a>)</p>
+
+<p><a href='http://docs.scala-lang.org/resources/images/collections.immutable.png' > <br />
+<img src='http://docs.scala-lang.org/resources/images/collections.immutable.png'   align="center" /> <br />
+</a>  </p>
+
+<p align="center">(<a href='http://docs.scala-lang.org/' >http://docs.scala-lang.org</a>)</p>
+
+<p><code>Array</code> 와 <code>String</code> 은 점선으로 연결된 걸 볼 수 있는데 이건 두 클래스가 <code>Java</code> 에서 왔기 때문이다. 스칼라 클래스는 아니지만 스칼라의 <code>Seq</code> 로 볼 수 있다. (<em>View</em>) 따라서 다음과 같은 코드는 정상 동작한다.</p>
+
+<pre><code class="scala">"Hello World" filter { c =&gt; c.isUpper }  
+</code></pre>
+
+<h4 id="range">Range</h4>
+
+<p>다른 <code>Seq</code> 구현체로는 <code>Range</code> 가 있다. <code>Range</code> 는 <em>evenly spaced intergers</em> 를 나타낸다. </p>
+
+<pre><code class="scala">val r: Range = 1 until 5 // Range(1, 2, 3, 4)  
+val s: Range = 1 to 5 // Range(1, 2, 3, 4)  
+1 to 10 by 3  
+6 to 1 by -2  
+</code></pre>
+
+<p>그렇기에 <code>Range</code> 는 <em>upper bound, lower bound, step value</em> 를 클래스의 멤버로 가지고 있다.</p>
+
+<h4 id="sequenceoperations">Sequence Operations</h4>
+
+<p><code>Seq</code> 에 대해서 <code>exists</code>, <code>forall</code>, <code>zip</code>, <code>unzip</code>, <code>flatMap</code>, <code>sum</code>, <code>product</code>, <code>max</code> 등을 사용할 수 있다.</p>
+
+<p><code>zip</code> 은 두개의 <code>Seq</code> 의 각 원소를 <code>pair</code> 로 묶는거고, <code>unzip</code> 은 각 <code>pair</code> 를 푼다.</p>
+
+<pre><code class="scala">scala&gt; a  
+res13: scala.collection.immutable.Range.Inclusive = Range(1, 2, 3, 4, 5)
+
+scala&gt; b  
+res14: List[Char] = List(h, e, l, l, o)
+
+scala&gt; a zip b  
+res15: scala.collection.immutable.IndexedSeq[(Int, Char)] = Vector((1,h), (2,e), (3,l), (4,l), (5,o))
+
+scala&gt; a zip b unzip  
+res16: (scala.collection.immutable.IndexedSeq[Int], scala.collection.immutable.IndexedSeq[Char]) = (Vector(1, 2, 3, 4, 5),Vector(h, e, l, l, o))  
+</code></pre>
+
+<p><br/></p>
+
+<p><code>flatMap</code> 은 각 원소에 <code>map</code> 을 적용한 뒤, 풀어 헤친다. 예를 들어</p>
+
+<pre><code class="scala">scala&gt; "HelloWorld" flatMap { c =&gt; List('.', c) }  
+res17: String = .H.e.l.l.o.W.o.r.l.d  
+</code></pre>
+
+<p><code>flatMap</code> 은 맵을 두번하면 할 때 자주 쓰인다. 예를 들어  <code>n</code>, <code>m</code> 에 대해 <em>combinator (조합)</em> 을 찾을때 <code>flatMap</code> 을 사용하면 <code>Vector</code> 의 <code>Vector</code> 가 아니라 <code>Vector</code> 만 얻는다.</p>
+
+<pre><code class="scala">1 to m flatMap { x =&gt; 1 to n map { y =&gt; (x, y) } }  
+</code></pre>
+
+<p>벡터에 대해 스칼라 곱을 하고 싶다면, <code>zip</code> 을 이용할 수 있다. <code>zip</code> 을 이용하면 두 <code>Seq</code> 의 <code>pair</code> 가 나오므로, 곱한 후 <code>sum</code> 하자.</p>
+
+<pre><code class="scala">(xs zip ys).map(xy =&gt; xy._1 * xy._2).sum
+</code></pre>
+
+<p>그런데, <code>zip</code> 해서 나오는 <code>pair</code> 에 패턴매칭을 적용할 수 있으므로</p>
+
+<pre><code class="scala">(xs zip ys).map { case(x, y) =&gt; x * y }.sum
+</code></pre>
+
+<p>참고로, <code>x =&gt; match { case ... }</code> 은 <code>{ case ... }</code> 으로 바로 줄여쓸 수 있다. </p>
+
+<h3 id="combinatorialsearchandforexpression">Combinatorial Search and For-Expression</h3>
+
+<h4 id="handlingnestedsequences">Handling Nested Sequences</h4>
+
+<p>보다 작은 두 수 <code>i, j (1 &lt;= j &lt; i &lt; n)</code> 에 대해서 <code>i + j</code> 가 소수인 <code>i, j</code> 를 찾는다고 하자. </p>
+
+<blockquote>
+  <p>Given a positive integer <code>n</code>, find all pairs of positive integers <code>i</code> and <code>j</code> with <code>1 &lt;= j &lt; i &lt; n</code> such that <code>i + j</code> is prime</p>
+</blockquote>
+
+<p>이렇게 코드를 작성해 볼 수 있다.</p>
+
+<pre><code class="scala">1 until 5 flatMap { i =&gt; 1 until i map { j =&gt; (i, j) }}
+
+res36: scala.collection.immutable.IndexedSeq[(Int, Int)] = Vector((2,1), (3,1), (3,2), (4,1), (4,2), (4,3))  
+</code></pre>
+
+<p>재밌는 사실은 <code>Range</code> 를 사용했음에도 <code>Vector</code> 가 나온다는 점이다. 더 정확히는 <code>IndexedSeq</code> 다. 무슨 일이 일어난 걸까? <code>Range</code> 는 <code>Pair</code> 를 원소로 가질 수 없기 때문에 상위 타입인 <code>IndexedSeq</code> 를 가지게 되고, 이것의 구체적 타입인 <code>Vector</code> 가 된다.</p>
+
+<p><a href='http://docs.scala-lang.org/resources/images/collections.immutable.png' > <br />
+<img src='http://docs.scala-lang.org/resources/images/collections.immutable.png'   align="center" /> <br />
+</a>  </p>
+
+<p align="center">(<a href='http://docs.scala-lang.org/' >http://docs.scala-lang.org</a>)</p>
+
+<p><code>flatMap</code> 을 안쓰면 <code>Vector</code> 의 <code>Vector</code> 가 나오는데, 여기에 <code>foldRight Seq[Int]() (_ ++ _)</code> 을 사용하거나 아니면 <code>flatten</code> 을 사용할 수도 있다.</p>
+
+<pre><code class="scala">(1 until 5 { i =&gt; 1 until i map { j =&gt; (i, j) }}).flatten
+</code></pre>
+
+<p>결국 <code>flatMap</code> 은 <code>map</code> 후 <code>flatten</code> 을 적용한 결과를 돌려줌을 알 수 있다. 이제 여기에 <code>filter</code> 를 적용하면 처음에 주어졌던 문제를 해결할 수 있다.</p>
+
+<pre><code class="scala">    1 until n flatMap { i =&gt; 1 until i map {j =&gt; (i, j)} } filter { case (i, j) =&gt; isPrime(i + j)}
+</code></pre>
+
+<h4 id="forexpression">For-Expression</h4>
+
+<p><code>map</code> 과 같은 <em>higher-order function</em> 은 <em>expressive</em> 한데 읽기가 좀 힘들때가 있다. 스칼라에서는 이를 위해 <code>for</code> 을 제공한다. 다음의 두 문자을 보자. 완전히 동일하다.</p>
+
+<pre><code class="scala">case class Person(name: String, age: Int)
+
+for (p &lt;- persons if p.age &gt; 20) yield p.name  
+persons filter (p =&gt; p.age &gt; 20) map (p =&gt; p.name)  
+</code></pre>
+
+<p><code>for</code> 는 <em>imperative language</em> 의 그것과 비슷하긴 한데, 스칼라의 <code>for</code> 은 무언갈 변경하지 않고 새로운 <code>List</code> 를 <code>yield</code> 를 통해 생성한다.</p>
+
+<p><code>for (s) yield e</code> 문법을 좀 자세히 살펴보자.</p>
+
+<blockquote>
+  <p>where <code>s</code> is a sequence of <em>generators</em> and <em>filters</em>, and <code>e</code> is an expression whose value is returned by an iteration</p>
+</blockquote>
+
+<p><em>generator</em> 는 <code>p &lt;- e</code> 형태의 <em>form</em> 인데 <code>p</code> 는 <em>pattern</em> 이고 <code>e</code> 는 <em>value</em> 로 <em>collection</em> 을 가진 <em>expression</em> 이다.</p>
+
+<p><em>filter</em> 는 <code>Boolean</code> <em>expression</em> 을 가지는 <em>form</em> 이다.</p>
+
+<p><code>for</code> 루프 여러개 중첩하는 것처럼 <em>generator</em> 가 여러개 일 수 있는데, 이 경우 마지막에 오는 <em>generator</em> 가 여러번 돈다. </p>
+
+<blockquote>
+  <p>If there are several generators in the sequence, the last generators vary faster than the first.</p>
+</blockquote>
+
+<p>그리고 <code>( s )</code> 대신에 <code>{ s }</code> 를 사용할 수도 있는데, 이러면 세미콜론 없이 <em>filter</em> 와 <em>generator</em> 를 여러줄에 걸쳐서 작성할 수 있다.</p>
+
+<p>이제 처음에 나왔던 문제를 <code>for</code> 로 작성해 보자.</p>
+
+<pre><code class="scala">for {  
+  i &lt;- 1 until n
+  j &lt;- 1 until i
+  if isPrime(i + j)
+} yield (i, j)
+</code></pre>
+
+<p>읽기도 쉬워졌다. <del>flatMap 따위</del> </p>
+
+<p>이제 아까 나왔던 벡터간 스칼라 곱을 하는 함수를 다시 작성해 보면</p>
+
+<pre><code class="scala">def scalaProduct(xs: List[Double], ys: List[Double] =  
+    (for ((x, y) &lt;- xs zip ys) yield (x * y)).sum
+</code></pre>
+
+<p>해보면 알겠지만 <code>for { x &lt;- xs; y &lt;- ys } yield x * y sum</code> 은 안된다. 루프가 중첩되기 때문이다.</p>
+
+<h3 id="combinatorialsearchexample">Combinatorial Search Example</h3>
+
+<p>자 이제 <code>Seq</code> 말고 <code>Set</code> 에 대해서 알아보자. <code>Seq</code> 의 대부분의 연산도 사용할 수 있고, 비슷비슷허다. <code>Seq</code> 와 <code>Set</code> 은 <code>Iterable</code> 의 <em>sub-type</em> 이므로 <code>Iterable</code> 스칼라독을 보면 어떤 연산을 사용할 수 있는지 확인 할 수 있다.</p>
+
+<p><code>Seq</code> 와의 차이점은 다음과 같다.</p>
+
+<p>(1) <code>Set</code> 은 순서가 없다. <br />
+(2) <code>Set</code> 은 중복된 원소를 가질 수 없다. <br />
+(3) <code>contain</code> 이 <em>fundamental operation</em> 이다.  </p>
+
+<pre><code class="scala">val a = 1 to 4 toSet
+
+scala&gt; a  
+res53: scala.collection.immutable.Set[Int] = Set(1, 2, 3, 4)
+
+scala&gt; a map (_ / 2)  
+res54: scala.collection.immutable.Set[Int] = Set(0, 1, 2)  
+</code></pre>
+
+<h4 id="nqueensproblem">N-Queens Problem</h4>
+
+<p>이제 <code>Set</code> 을 이용해 좀 문제를 풀어보자.</p>
+
+<blockquote>
+  <p>The n-queens problem is to place <code>n</code> queens on a chess board so that no queen is threatened by another <br/></p>
+  
+  <p>In other words, there can't be two queens in the same row, column, or diagonal</p>
+</blockquote>
+
+<p>모든 조합을 뽑아내고, 열을 <code>List</code> 로 표현하고, 그 순서를 행이라 한 뒤 모든 조합을 뽑아내 <code>Set</code> 에 넣으면 자동으로 중복된 결과가 제거된다. 로직은 다음과 같다.</p>
+
+<p>(1) 내게 <code>placeQueens</code> 라는 1 개의 퀸을 위치시킬 수 있는 함수가 있다. <br />
+(2) <code>n = 1, 2, ... , n</code> 으로 <code>placeQueens</code> 를 재귀적으로 호출해 가며 이전 단계에서 얻은 퀸들을 이용하여 하나의 퀸을 새롭게 배치한다. <br />
+(3) 각 단계에서는 새 퀸을 배치할 수 있는지 없는지 검사할 <code>isSafe</code> 함수가 필요하다.  </p>
+
+<p>이게 <em>Recursion</em> 에서 문제를 풀 때 기본적으로 필요한 생각인 것 같다. <strong>문제를 작게 잘라 매번 <code>1/n</code> 씩 해결할 수 있다면</strong> 이라 가정 한 뒤 <code>1/n</code> 문제를 풀기 위한 함수와 <code>1/n</code> 문제의 종료조건을 정의하는 것. 우리의 경우엔 그 함수가 <code>isSafe</code> 였다.</p>
+
+<pre><code class="scala">  def nQueens(n: Int): Set[List[Int]] = {
+
+    def isSafe(col: Int, queens: List[Int]): Boolean = {
+      val row = queens.length // where new queen will be placed
+      val queensWithRow = (row - 1 to 0 by -1) zip queens
+      queensWithRow forall {
+        case (r, c) =&gt; col != c &amp;&amp; math.abs(col - c) != row - r
+      }
+    }
+
+    def placeQueens(k: Int): Set[List[Int]] =
+      if (k == 0) Set(List())
+      else
+        for {
+          queens &lt;- placeQueens(k - 1)
+          col &lt;- 0 until n
+          if isSafe(col, queens)
+        } yield col :: queens
+
+    placeQueens(n)
+  }
+</code></pre>
+
+<p><em>diagonal</em> 을 어떻게 검사할까가 고민이 될 수 있겠는데, 사실 생각해보면 쉽다. 컬럼의 차이와 행의 차이가 같으면 <em>diagonal</em> 인 것.</p>
+
+<p>여기에 출력하기 위한 함수를 요로코롬 만들고 출력하면</p>
+
+<pre><code class="scala">  def showQueens(queens: List[Int]) = {
+    val lines =
+      for {
+        col &lt;- queens.reverse
+      } yield Vector.fill(queens.length)("[ ]").updated(col, "[*]").mkString
+
+    "\n\n" + (lines.mkString("\n"))
+  }
+
+
+[ ][ ][*][ ]
+[*][ ][ ][ ]
+[ ][ ][ ][*]
+[ ][*][ ][ ],
+
+[ ][*][ ][ ]
+[ ][ ][ ][*]
+[*][ ][ ][ ]
+[ ][ ][*][ ]
+</code></pre>
+
+<p><code>nQueens(8) take 3 map show</code> 처럼 응용도 가능하다.</p>
+
+<h3 id="querieswithfor">Queries with For</h3>
+
+<p>지난 시간에 배운 <code>for</code> 는 <code>SQL</code> 과 비슷한데 좀 더 자세히 살펴보자. 다음과 같은 <em>case class</em> 가 있다고 하자.</p>
+
+<pre><code class="scala">case class Book(title: String, authors: List[String])  
+</code></pre>
+
+<p>이제 다음과 같은 코드를 이용해 쿼리처럼 질의할 수 있다.</p>
+
+<pre><code class="scala">for {  
+  b &lt;- books
+  a &lt;- b.authros
+  if a startWith "Bird")
+} yield b.title
+
+for {  
+  b &lt;- books
+  if b.title indexOf "Programming" &gt;= 0
+} yield b.title
+
+for {  
+  b1 &lt;- books
+  b2 &lt;- books
+  if b1 != b2
+  a1 &lt;- b1.authors
+  a2 &lt;- b2.authors
+  if a1 == a2
+} yield a1
+</code></pre>
+
+<p>세번째 <code>for</code> 문은 약간 문제가 있는데 내용이 똑같고 순서만 다른 <code>List</code> 를 만들 수 있다 따라서 중복을 피하기 위해 <code>&lt;</code> 를 비교로 사용하자.</p>
+
+<pre><code class="scala">for {  
+  b1 &lt;- books
+  b2 &lt;- books
+  if b1.title &lt; b2.title
+  a1 &lt;- b1.authors
+  a2 &lt;- b2.authors
+  if a1 == a2
+} yield a1
+</code></pre>
+
+<p>근데 만약에 같은 작가가 3개의 책을 출판했다면? <code>title</code> 이 <code>a &lt; b &lt; c</code> 와 같은 순서를 가지므로 <code>(a, b), (a, c), (b, c)</code> 처럼 비교되어 3번 출력된다. </p>
+
+<p>중복을 제거하기 위해 <code>distint</code> 를 사용할 수 있다. 더 좋은 방법은 <code>Set</code> 을 사용하면 된다.</p>
+
+<h3 id="translationoffor">Translation of For</h3>
+
+<p><code>for</code> 을 이용하면 <code>map, flatMap, filter</code> 를 쉽게 구현할 수 있는데</p>
+
+<pre><code class="scala">def mapFun[T, U](xs: List[T], f: T =&gt; U): List[U] =  
+  for (x &lt;- xs) yield f(x)
+
+def flatMap[T, U](xs: List[T], f: T =&gt; Iterable[U]): List[U] =  
+  for (x &lt;- xs; y &lt;- f(x)) yield y
+
+def filter[T](xs: List[T], p: T =&gt; Boolean): List[T] =  
+  for (x &lt;- xs; if (p(x)) yield x  
+</code></pre>
+
+<p>사실 스칼라 컴파일러는 <code>for</code> 을 <code>map</code>, <code>flatMap</code>, <em>lazy variant of <code>filter</code></em> 로 바꿔치기한다.</p>
+
+<blockquote>
+  <p>Scala compiler expresses <code>for</code> expressions in terms of <code>map</code>, <code>flatMap</code> and a <em>lazy variant of <code>filter</code></em></p>
+</blockquote>
+
+<p>예를 들어 <code>for (x &lt;- e1) yield e2</code> 는 <code>e1.map(x =&gt; e2)</code> 로 바꾼다</p>
+
+<pre><code class="scala">for (x &lt;- e1 if f; s) yield e2  
+</code></pre>
+
+<p><code>f</code> 가 <em>filter</em> 고 <code>s</code> 가 <em>sequence of generators and filters</em> 라면 다음과 같이 번역된다.</p>
+
+<pre><code class="scala">for (x &lt;- e1.withFilter(x =&gt; f); s) yield e2  
+</code></pre>
+
+<p>여기서 <code>withFilter</code> 는 바로 적용되는 것이 아니라, 뒤 따라오는 <code>map</code> 또는 <code>flatMap</code> 등에 적용된다고 보면 된다. 원문을 첨부하면</p>
+
+<blockquote>
+  <p>You can think of <code>withFilter</code> as a variant of <code>filter</code> that does not produce an intermediate list, but instead filters the following <code>map</code> or <code>flatMap</code> function application</p>
+</blockquote>
+
+<pre><code class="scala">for (x &lt;- e1; y &lt;- e2; s) yield e3  
+</code></pre>
+
+<p>이건 다음처럼 번역된다.</p>
+
+<pre><code class="scala">e1.flatMap(x =&gt; for (y &lt;- e2; s) yield e3)  
+</code></pre>
+
+<p>그리고 내부의 <code>for</code> 가 다시 한번 더 번역된다.</p>
+
+<pre><code class="scala">for {  
+  i &lt;- 1 until n
+  j &lt;- 1 until i
+  if isPrime(i + j)
+} yield (i, j)
+</code></pre>
+
+<p>이것은</p>
+
+<pre><code class="scala">(1 until n) flatMap(i =&gt;
+  (1 until i).withFilter(j =&gt; isPrime(i + j))
+  .map(j =&gt; (i, j)))
+</code></pre>
+
+<p>이제 아까 <em>lazy variant of <code>filter</code></em> 어쩌구 하던 내용을 이해할 수 있는데, 중간에 <code>withFilter</code> 는 <code>1 until i</code> 에 적용 되는것이 아니라 <code>map</code> 이 만들어낸 <em>pair</em> <code>(i, j)</code> 에 대해 적용된다.</p>
+
+<p>다시 말해 <code>for</code> 문에서 <code>if</code> <em>guard</em> 는 나중에 적용되는 <code>withFilter</code> 다.</p>
+
+<pre><code class="scala">for (b &lt;- books; a &lt;- b.authros if a startsWith "Bird") yield b.title  
+</code></pre>
+
+<p>요건 이렇게 번역된다.</p>
+
+<pre><code class="scala">b.flatMap(b =&gt; b.authors.withFilter(a =&gt; a.startsWith "Bird").map(x =&gt; x.title)  
+</code></pre>
+
+<p><code>for</code> 는 다양한 컬렉션에도 적용할 수 있는데 이는 <code>for</code> 가 <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 이 3개의 함수를 기반으로 만들어졌기 때문이다. 따라서 커스텀 타입에도 이 3개의 함수를 만들면 <code>for</code> 를 사용할 수 있다.</p>
+
+<p>이런 이유로 데이터베이스 클라이언트가 <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 같은 메소드를 정의하면 <code>for</code> 을 이용해 쿼리할 수 있다.</p>
+
+<p>이것이 바로 <em>ScalaQuery</em> 나 <em>Slick</em> 같은 스칼라 데이터베이스 프레임워크가 사용하는 방법이다. <em>LINQ</em> 도 비슷한 개념이다.</p>
+
+<h3 id="maps">Maps</h3>
+
+<p>자 이제 <code>Seq</code>, <code>Set</code> 을 살펴보았으니 <code>Map</code> 을 알아보자. </p>
+
+<p><code>Map</code> 은 <code>Iterable</code> 일뿐만 아니라 <code>Function</code> 이다. 그래서 함수 호출하듯이 <em>Key</em> 를 인자로 주어 호출하면 <em>Value</em> 를 얻을 수 있다. 그러나 없는 <em>Key</em> 에 대해서 호출하면 <code>NoSuchElementException</code> 이 발생한다.</p>
+
+<p>예외 대신에 있는지 없는지 알려면 <code>get</code> 을 이용하면 된다. 없으면 <code>None</code> 있으면 <code>Option[Value]</code> 를 돌려준다.</p>
+
+<h4 id="optiontype">Option Type</h4>
+
+<p><code>Option</code> 은 <em>Trait</em> 인데</p>
+
+<pre><code class="scala">trait Option[+A]  
+case class Some[+A](value: A) extend Option[A]  
+object None extend Option[Nothing]  
+</code></pre>
+
+<p><em>covaraint</em> 기 때문에 <code>Option[Type]</code> 에 <code>None</code> 을 넣을 수 있다. <code>None</code> 은 <code>Option[Nothing]</code> 이므로 모든 <code>Option</code> 의 하위타입이다.  참고로 <code>get</code> 의 결과에 패턴매칭을 이용할 수 있다.</p>
+
+<h4 id="sortedandgroupby">Sorted and GroupBy</h4>
+
+<p><em>SQL Query</em> 처럼 <code>sorted</code> 와 <code>groupBy</code> 를 이용할 수 있다.</p>
+
+<pre><code class="scala">scala&gt; fruit  
+res70: List[String] = List(apple, pear, orange, pineapple)
+
+scala&gt; fruit.sorted  
+res71: List[String] = List(apple, orange, pear, pineapple)
+
+scala&gt; fruit.sortWith(_.length &lt; _.length)  
+res72: List[String] = List(pear, apple, orange, pineapple)
+
+scala&gt; fruit.groupBy(_.head)  
+res73: scala.collection.immutable.Map[Char,List[String]] = Map(p -&gt; List(pear, pineapple), a -&gt; List(apple), o -&gt; List(orange))  
+</code></pre>
+
+<p><code>groupBy</code> 는 컬렉션을 <em>discriminator</em> 를 이용해 <code>Map</code> 으로 파티셔닝한다.</p>
+
+<p><em>Ploynomials (다항식)</em> 을 <code>Map</code> 을 이용해 표현해 보자. 다항식은 각 차수가 한개씩 있고, 상수도 하나씩 붙어 있으므로 <code>Map</code> 으로 표현하기에 적합하다.</p>
+
+<pre><code class="scala">  class Poly(val terms: Map[Int, Double]) {
+    def + (other: Poly): Poly = new Poly(terms ++ other.terms)
+    override def toString = {
+      (for((exp, coeff) &lt;- terms.toList.sorted.reverse) yield  coeff + "x^" + exp) mkString " + "
+    }
+  }
+</code></pre>
+
+<p>이렇게 만들면 제대로 된 계산이 안된다. 왜냐하면 <code>Map</code> 의 <code>++</code> 오른쪽에 오는 <code>Map</code> 에 똑같은 <em>key</em> 를 가지고 있는 원소가 있으면 덮어 쓰기 때문이다. 다항식에서 차수가 같으면 <em>coefficient (계수)</em> 를 덧셈해야 하는데 덮어씌우면 올바른 계산이 아니다. 따라서 <code>other.terms</code> 에 같은 <em>Key</em> 를 가진 원소가 있나 없나 계산해서 있으면 현재 <code>terms</code> 와 계수를 더한 새로운 <code>pair</code> 를 돌려줘야 한다. (<code>Map</code> 의 원소는 <code>pair</code> 다) </p>
+
+<pre><code class="scala">  class Poly(val terms: Map[Int, Double]) {
+    def + (other: Poly): Poly = 
+    new Poly(terms ++ (other.terms map adjust))
+
+    def adjust(term: (Int, Double)): (Int, Double) = {
+
+      val (exp, coeff) = term
+
+      terms.get(exp) match {
+        case None =&gt; term
+        case Some(coeff1) =&gt; (exp, coeff + coeff1)
+      }
+    }
+
+    override def toString = {
+      (for{
+        (exp, coeff) &lt;- terms.toList.sorted.reverse
+      } yield  coeff + "x^" + exp) mkString " + "
+    }
+  }
+</code></pre>
+
+<h4 id="defaultvalues">Default Values</h4>
+
+<p><code>Map</code> 은 <em>partial function</em> 이기 때문에 없는 <em>Key</em> 에 대해 <code>Map</code> 을 호출하면 예외가 발생한다.</p>
+
+<p><code>Map</code> 에 <code>withDefaultValue</code> 를 적용하면 <em>total function</em> 으로 바꿀 수 있다. <code>Poly</code> 에 적용해 보자.</p>
+
+<pre><code class="scala">  class Poly(val terms0: Map[Int, Double]) {
+    val terms = terms0 withDefaultValue 0.0
+    def + (other: Poly): Poly = new Poly(terms ++ (other.terms map adjust))
+    def adjust(term: (Int, Double)): (Int, Double) = {
+
+      val (exp, coeff) = term
+      (exp, coeff + terms(exp))
+    }
+    override def toString = {
+      (for{
+        (exp, coeff) &lt;- terms.toList.sorted.reverse)}
+      yield coeff + "x^" + exp) mkString " + "
+    }
+  }
+</code></pre>
+
+<p>음. 다 좋은데 생성할 때 <code>Map</code> 을 주는 대신 여러개의 <code>Pair</code> 를 주고 <code>Map</code> 으로 바꾸면 좀 더 나을것 같다. 다음의 생성자를 추가하자.
+    def + (other:Poly): Poly = 
+    new Poly((other.terms foldLeft terms)(addTerm))
+    def addTerm(ts: Map[Int, Double], t: (Int, Double)): Map[Int, Double] = {
+      val (exp, coeff) = t
+      ts + (exp -> (coeff + terms(exp)))
+    }</p>
+
+<pre><code class="scala">def this(arg: (Int, Double)*) = this(arg.toMap)  
+</code></pre>
+
+<p>그리고 <code>++</code> 대신 <code>fold</code> 를 이용하면 <code>Map</code> 을 생성하지 않고 바로 기존의 <code>terms</code> 에 원소를 추가하기 때문에 더 효율적이다.</p>
+
+<pre><code class="scala">    def + (other:Poly): Poly = 
+    new Poly((other.terms foldLeft terms)(addTerm))
+    def addTerm(ts: Map[Int, Double], t: (Int, Double)): Map[Int, Double] = {
+      val (exp, coeff) = t
+      ts + (exp -&gt; (coeff + terms(exp)))
+    }
+</code></pre>
+
+<p>아래는 테스트 케이스</p>
+
+<pre><code class="scala">  "(x^2 + 3x) + (-2x + 7)" should "be x^2 + x + 7" in {
+    val p1 = new Poly(2-&gt;1, 1-&gt;3)
+    val p2 = new Poly(1-&gt;(-2), 0-&gt;7)
+    val p3 = new Poly(2-&gt;1, 1-&gt;1, 0-&gt;7)
+
+    assert((p1 + p2).terms == p3.terms)
+  }
+</code></pre>
+
+<h3 id="puttingthepiecestogether">Putting the Pieces Together</h3>
+
+<p>이번엔 전화번호를 알파벳으로 바꾸는 예제를 통해서 스칼라의 컬렉션과 고차함수가 얼마나 <em>expressive</em> 한지 알아본다.</p>
+
+<p>여기 나온 예제는 7 가지 언어로 이미 실험이 되었는데 스크립트 언어는 대략 100 라인, C 나 C++ 같은 언어는 대략 200-300 라인정도가 나왔다고 한다. (2000년)</p>
+
+<pre><code class="scala">  val mnem = Map(
+    '2' -&gt; "ABC",
+    '3' -&gt; "DEF",
+    '4' -&gt; "GHI",
+    '5' -&gt; "JKL",
+    '6' -&gt; "MNO",
+    '7' -&gt; "PQRS",
+    '8' -&gt; "TUV",
+    '9' -&gt; "WXYZ")
+</code></pre>
+
+<p>이런 맵이 있다고 하자. <code>7225247386</code> 을 인코딩 하면 여러가지 경우가 나오겠지만, 그 중 하나는 <code>SCALA IS FUN</code> 이어야 한다. <del>교수님 센스보소</del></p>
+
+<pre><code class="scala">  val path = "/home/anster/github/coursera-scala/src/main/scala/coursera/chapter6/linux.words"
+  val in = Source.fromFile(path)
+  // java's iterator doesn't have groupBy
+  val words = in.getLines.toList filter { _ forall { _.isLetter }}
+
+  val mnem = Map(
+    '2' -&gt; "ABC",
+    '3' -&gt; "DEF",
+    '4' -&gt; "GHI",
+    '5' -&gt; "JKL",
+    '6' -&gt; "MNO",
+    '7' -&gt; "PQRS",
+    '8' -&gt; "TUV",
+    '9' -&gt; "WXYZ")
+
+  // A to Z -&gt; 2 to 9
+  val charCode = mnem flatMap { case(k, v) =&gt; v map { c =&gt; (c, k) } }
+  // or for ((digit, str) &lt;- mnem; ltr &lt;- str) yield ltr -&gt; digit
+
+  // "Java" -&gt; "5282"
+  def wordCode(word: String): String = word.toUpperCase map charCode
+
+  // "5282" -&gt; List("Java", "Kava", ...), "1111" -&gt; List()
+  val wordsForNum: Map[String, Seq[String]] =
+    words groupBy wordCode withDefaultValue Seq()
+
+  // return all ways to encode a number as a list of words
+  def encode(number: String): Set[List[String]] =
+    if (number.isEmpty) Set(List())
+    else {
+      (for {
+        split &lt;- 1 to number.length
+        word &lt;- wordsForNum(number take split)
+        rest &lt;- encode(number drop split)
+      } yield word :: rest).toSet
+    }
+
+  def printEncoded(number: String) = {
+    encode(number) map { _ mkString " "} map println
+  }
+
+  def translate(number: String): Set[String] = {
+    encode(number) map { _ mkString " " }
+  }
+
+  translate("7225247386") foreach { println _ }
+</code></pre>
+
+<p>군더더기 없이 깔끔하다. <del>스칼라는 넉넉하게 50라인에서 끝납니다요</del></p>
+
+<p><code>encode</code> 가 좀 난해하긴 한데, 경우의 수를 모두 찾아내야 하므로 길이를 모두 짤라 <code>wordForNum</code> 에 넣고 각 길이마다 인코딩을 할 수 있는지 검사한 후 나머지도 <code>encode</code> 함수에 넣어 모든 경우의 수를 찾는다. 주의할 부분은 <code>wordsForNum(number take split)</code> 에서 없는 경우가 나올 수 있으니 <code>withDefaultValue Seq()</code> 로 처리하면 된다. 그리고 <code>1 to number.length</code> 가 <code>Range</code> 이기 때문에 리턴 타입이 <code>IndexedSeq</code> 다. 타입 에러를 해결하기 위해 <code>toSet</code> 을 사용한다. </p>
+
+<h3 id="summary">Summary</h3>
+
+<p>마지막 <em>6.7 Putting the Pieces Toghther</em> 챕터를 보면서 스칼라는 정말 <em>expressive</em> 하다는걸 느낀다. 교수님 말로는 <em>immutable collection</em> 은</p>
+
+<p>(1) <em>easy to use:</em> <strong>few steps to do the job</strong> <br />
+(2) <em>concise:</em> <strong>one word replaces a whole loop</strong> <br />
+(3) <em>safe:</em> <strong>type checker is really good at catching erros</strong> <br />
+(4) <em>fast:</em> <strong>collection ops are tuned, can be parallelized</strong> <br />
+(5) <em>universal:</em> <strong>one vocabulary to work on all kinds of collections</strong></p>
+
+<p><del>내 컴퓨터에서 돌아가는 <em>SBT</em> 를 보면 스칼라가 빠른지는 의문이지만</del></p>
+
+<p>그리고 항상 느끼는 점이지만, <em>Problem</em> = <em>Algorithm</em> + <em>Data Structure</em> 다. 자료구조를 잘 선택하면 알고리즘이 간단해진다. <del>그래서 둘 다 배워야 하는거고 크흑</del>  </p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://docs.scala-lang.org/overviews/collections/overview.html' >http://docs.scala-lang.org</a></p>
+
+<p>2014-10-25, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-6/</link><guid isPermaLink="false">d4f41772-52eb-4a9c-a778-d73f962245b5</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[collection]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 24 Oct 2014 14:07:21 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 4]]></title><description><![CDATA[<p>지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 <em>Neural Network (신경망)</em> 을 건들다가 놀랍게도 그것이 <em>logistic regression</em> 과 연관이 있으며 <code>n</code> 이 매우 클 경우의 <em>classification</em> 문제를 해결할 수 있다는 것을 배운다.</p>
 
 <h3 id="nonlinearhypotheses">Non-Linear Hypotheses</h3>
 
@@ -4251,200 +4870,4 @@ r max s // r max s
 (all other special characters)
 </code></pre>
 
-<p>identifier 의 첫글자가 미리 정의된 테이블에 있다면 우선순위가 정해지는 룰이다.</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-2/</link><guid isPermaLink="false">20cff111-9852-407f-9222-acac9d6733e0</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Sep 2014 16:09:24 GMT</pubDate></item><item><title><![CDATA[Scala for the Impatient, Chapter 1, 2, 3]]></title><description><![CDATA[<h3 id="chapter1">Chapter 1</h3>
-
-<p>(1). 스칼라의 REPL 은 엄밀히 말해서 인터프리터가 아니다. 입력받은 코드를 자바 바이트코드로 컴파일 한 후 자바 가상머신에서 실행시킨뒤 결과를 돌려준다.</p>
-
-<p>(2). 스칼라는 문자열을 위한 추가적인 연산들을 제공하기 위해 <code>java.lang.String</code> 오브젝트를 <code>StringOps</code> 오브젝트로 변환한다. <code>"Hello".intersect("World")</code> 가 그 예다. 따라서 ScalaDoc 을 보려면 <code>SpringOps</code> 클래스를 살펴보는 편이 정신 건강에 좋다.</p>
-
-<p>마찬가지로 <code>Int</code>, <code>Double</code> 등에도 편의 메소드를 추가한 <code>RichInt</code>, <code>RichDouble</code>, <code>RichChar</code> 등을 제공한다. <code>1.to(10)</code> 에서 <code>1</code> 은 <code>RichInt</code> 로 변환된 뒤에 <code>to</code> 메소드를 적용한다.</p>
-
-<p>참고로 스칼라에서는 숫자간 타입 변환을 위해 캐스팅이 아니라 메소드를 사용한다. <code>99.44.toInt</code>, <code>99.toChar</code>, <code>"99.44".toDouble</code></p>
-
-<p>(3). 스칼라에는 <code>++</code> 연산자가 없다.</p>
-
-<p>(4). 스칼라에는 Static Method 대신 <strong>Singleton Object</strong> 와 <strong>Companion Object</strong> 가 있다.</p>
-
-<p>(5). 오브젝트를 수정하지 않는, 인자가 없는 메소드는 괄호를 사용하지 않는다. </p>
-
-<p><code>"Hello".distinct</code> </p>
-
-<p>(6). ScalaDoc 에서 <strong>implicit</strong> 로 태그된 메소드는 자동변환이다. 예를들어 <code>BigInt</code> 오브젝트는 필요할때 자동으로 <code>int</code> 와 <code>long</code> 을 <code>BigInt</code> 로 바꾼다.</p>
-
-<h3 id="chapter2">Chapter 2</h3>
-
-<p>(1). 스칼라에서는 <strong>구문(Statement)</strong> 이 아니라 모든 것을 <strong>식(Expression)</strong> 으로 취급한다. 그런데, <code>else</code> 가 없는 <code>if</code> 문은 값이 없을 수 있는데, 스칼라에서는 <code>Unit</code> 클래스를 도입해서 해결한다. <code>Unit</code> 은 <strong>값 없음</strong> 을 뜻하는 <code>()</code> 을 값으로 가진다.</p>
-
-<p>(2). 스칼라에서 <strong>할당(assignment)</strong> 은 <code>Unit</code> 타입의 값을 가진다. 따라서 할당을 묶어서 사용하지 않는다.</p>
-
-<p><code>x = y = z = 1 // no</code></p>
-
-<p>(3) <code>for</code> 루프에서 인덱스가 필요하면, <code>until</code> 을 사용하면 된다.</p>
-
-<pre><code class="scala">val str = "lambda"  
-var sum = 0  
-for (index &lt; - 0until str.length)  
-  sum += index
-</code></pre>
-
-<p>(4). <code>return</code> 이 없는 삶에 익숙해지자, 익명함수를 사용할 경우 리턴값이 쓸모가 없다. <code>break</code> 쯤으로 여기는 것이 마음 편하다.</p>
-
-<p>(5). 재귀 함수는 타입을 반드시 명시해야 한다. <strong>ML</strong> 이나 <strong>하스켈</strong> 같은 일부 언어는 <strong><a href='http://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system' >힌들리-밀너</a></strong> 알고리즘을 이용하여 재귀함수의 타입을 추론할 수 있지만, 이 알고리즘은 객체지향과는 잘 안맞는다.</p>
-
-<p>(6). 가변인자가 필요하면, <code>*</code> 를 사용하자. 배열을 풀어헤치기 위해 사용하는 <code>_*</code> 는 <strong>Splat operator</strong> 다</p>
-
-<pre><code class="scala">def sum(args: Int*) = {  
-  var sum = 0;
-  for(arg &lt;- args) sum += arg
-  sum
-}
-
-sum(1 to 5: _*)
-
-def recursiveSum(args: Int*): Int = {  
-  if (args.length == 0) 0
-  else args.head + recursiveSum(args.tail : _*)
-}
-</code></pre>
-
-<p>참고로, <code>Object</code> 타입의 가변인자를 받으면 <code>42.asInstanceOf[AnyRef]</code> 처럼 직접 변환해야 한다.</p>
-
-<p>(7). <strong>=</strong> 가 없는 함수는 <strong>Unit</strong> 리턴 타입을 가지며, <strong>프로시저</strong> 라 불린다. 값을 리턴하지 않기 때문에, 사이드 이펙트만를 위해 사용한다. 프로시저에서 <code>Unit</code> 을 직접 명시할수도 있다.</p>
-
-<pre><code class="scala">def proc(str: String) {  
-  ...
-  ... // side effect
-  ...
-}
-</code></pre>
-
-<p>(8). <code>lazy val</code> 을 이용하면, <code>def</code> 처럼 해당 변수가 사용되기 전까지 평가되지 않는다.</p>
-
-<pre><code class="scala">lazy val words = scala.io.Source.fromFile("words.txt").mkString  
-</code></pre>
-
-<p>그런데, <code>lazy</code> 로 선언되면 값을 접근할때 마다 스레드세이프하게 초기화가 되었는지 확인하는 검사가 필요하므로 비용이 든다.</p>
-
-<p>(8). 스칼라에는 체크예외가 없다. 모두 런타임 예외다. 그리고, <code>throw</code> 는 <code>Nothing</code> 을 값으로 가지는데, <code>if</code> 문에서는 <code>Nothing</code> 대신 다른 분기의 타입으로 식의 값이 정해진다.</p>
-
-<h3 id="chapter3">Chapter 3</h3>
-
-<p>(1). 고정길이 배열이 필요하면 <code>Array</code> 로 사용하면 된다. 만약 초기값이 필요없으면 <code>new</code> 를 사용하고, 아니면 <code>new</code> 를 제외한다.</p>
-
-<pre><code class="scala">val nums = new Array[Int](10)  
-val strs = Array[String]("Hello", "World")  
-</code></pre>
-
-<p>고정 배열은 JVM 내부에서 자바의 일반 배열로 처리된다.</p>
-
-<p>(2). 가변빌이 배열이 필요하면 <code>ArrayBuffer</code> 를 사용하면 된다. 자바의 <code>ArrayList</code> 라 보면 된다. </p>
-
-<pre><code class="scala">val ab = ArrayBuffer[Int]()  
-ab += 1  
-ab += (2, 3)  
-ab ++= Array(4, 5)  
-</code></pre>
-
-<p><code>ArrayBuffer</code> 끝에 원소를 삽입하고 삭제하는건 성능이 괜찮지만, 중간에 삽입하고 삭제하면 기존의 원소를 옮겨야 하므로 성능이 떨어진다는 점에 주의하자. </p>
-
-<p>만약 <code>Array</code> 를 <code>ArrayBuffer</code> 로 만들려면 <code>toBuffer</code> 메소드를, <code>ArrayBuffer</code> 를 <code>Array</code> 로 만들려면 <code>toArray</code> 를 호출하면 된다.</p>
-
-<p>(3). <code>until</code> 은 <code>RichInt</code> 클래스에 속한다. 만약 0부터 10까지 2씩 건너뛰고 싶으면</p>
-
-<p><code>0 to (10, 2)</code> </p>
-
-<p>거꾸로 순회하고 싶으면</p>
-
-<p><code>(0 to 10).reverse</code></p>
-
-<p>(4). 만약 <code>ArrayBuffer</code> 에 있는 음수 중, 처음 것만 제외하고 모두 삭제하고 싶을때 Flag 를 사용하면 다음과 같은 코드를 만들 수 있다.</p>
-
-<pre><code class="scala">val first = true  
-val n = arr.length  
-var i = 0
-
-while(i &lt; n) {  
-  if (arr(i) &gt;= 0) i += 1
-  else {
-    if (first) { first = false; i += 1}
-    else {
-      arr.remove(i); n -= 1
-    }
-  }
-}
-</code></pre>
-
-<p>그런데, 배열 버퍼 중간에 있는 원소를 삭제하는건 비효율적이기 때문에, 차라리 인덱스를 보존하고 한꺼번에 옮겨 자르는 편이 더 낫다.</p>
-
-<pre><code class="scala">val indexes = for(i until arr.length if arr(i) &gt;= 0 || first) yield {  
-  if (a &lt; 0) first = false;
-  i
-}
-
-for(j until indexes.length) {  
-  arr(j) == arr(indexes(j))
-}
-
-arr.trimEnd(arr.length - indexes.length)  
-</code></pre>
-
-<p>(4). <strong>for comprehension</strong> 의 <code>guard</code> 와 <code>yield</code> 를 사용하든, <strong>collection</strong> 의 <code>filter</code> 와 <code>map</code>을 사용하든 하는일은 같다.</p>
-
-<p>(5). <code>ArrayBuffer</code> 나 <code>Array</code> 는 <code>max</code>, <code>min</code>, <code>sum</code> 과 같은 메소드 들을 가지고 있다. 그리고 <code>min</code>, <code>max</code> 혹은 <code>scala.util.Sorting.quickSort</code> 에 들어갈 컬렉션의 원소타입들은 반드시 비교 연산을 가지고 있어야 하는데, <strong>숫자</strong>, <strong>문자열</strong>, <strong>Ordered Trait</strong> 을 가지는 타입이 해당된다.</p>
-
-<p>(6). 컬렉션의 원소를 이쁘게 출력하고 싶으면 <code>mkString</code> 을 이용하자.</p>
-
-<pre><code class="scala">Array(1, 2, 3).mkString(" and ")  
-// "1 and 2 and 3"
-Array(1, 2, 3).mkString("&lt;", ", ", "&gt;")  
-//  "&lt;1, 2, 3&gt;"
-</code></pre>
-
-<p>(7) <code>Array</code> 의 <code>toString</code> 은 <code>ArrayBuffer</code> 와는 달리 쓸모가 없다.</p>
-
-<pre><code class="scala">scala&gt; Array(1, 2, 3).toString  
-// res28: String = [I@412d54b3
-</code></pre>
-
-<p>(8). ScalaDoc 을 여행하다보면 기기묘묘한 것들을 만날 수 있다.</p>
-
-<p><code>def appendAll(xs: TraversableOnce[A]): Unit</code> 같은 경우, <code>xs</code> 는 <code>TraversableOnce</code> 트레이트를 구현하는 콜렉션이라 보면 된다.. 스칼라의 모든 컬렉션은  <code>TraversableOnce</code> 또는 흔하게 볼 수 있는 컬렉션의 트레이트로 <code>TraversableIterable</code> 이 있다.</p>
-
-<p><code>def += (elem: A): ArrayBuffer.this.type</code> 의 경우 체이닝이 가능하도록 자기 자신을 리턴하는 메소드다. 이를테면 <code>b += 4 += 5.</code> 처럼</p>
-
-<p><code>def copyToArray[B &gt;: A] (xs: Array[B]): Unit</code> 의 경우 <code>ArrayBuffer[A]</code> 의 모든 원소를 <code>Array[B]</code> 로 복사하는데 <code>B</code>는 <code>A</code> 의 하위 타입이다. <code>ArrayBuffer[Int]</code>,   <code>Array[Any]</code> 처럼</p>
-
-<p>(9). 자바처럼 당연히 컬럼이 고정되지 않은 다차원 배열도 만들 수 있다. </p>
-
-<pre><code class="scala">val triangle = new Array[Array[Int]](10)  
-for(i &lt;- 0 to triangle.length)  
-  triangle(i) = new Array[Int](i + 1)
-</code></pre>
-
-<p>만약 컬럼이 고정된 다차원 배열을 만든다면 <code>ofDim</code> 메소드를 이용하면 된다. 접근하려면 괄호를 두번 사용한다.</p>
-
-<pre><code class="scala">val matrix = Array.ofDim[Double](3, 4)
-
-maxtric(0)(1)  
-</code></pre>
-
-<p>(10). 스칼라 배열은 자바 배열로 구현되므로, 당연히 주고 받을 수 있다. <code>java.util.List</code> 를 받거나 리턴하는 자바 메소드를 호출하면 스칼라 코드에서 <code>ArrayList</code> 를 사용할 수 있지만, 이것 대신 <code>scala.collection.JavaConversions</code> 에 속한 메소드들을 임포트하면, 스칼라 버퍼를 자동으로 자바 리스트로 변환할 수 있다. </p>
-
-<p>아래 예제에서 자바의 <code>java.lang.ProcessBuilder</code> 는 <code>List&lt;String&gt;</code> 을 받는 생성자를 가지고 있는데, <code>JavaConversions.bufferAsJavaList</code> 를 임포트하면 스칼라 버퍼가 <code>java.util.List</code> 인터페이스를 구현한 자바 클래스 오브젝트로 감싸진다.</p>
-
-<pre><code class="scala">iport scala.collection.JavaConversions.bufferAsJavaList  
-import scala.collection.mutable.ArrayBuffer
-
-val command = ArrayBuffer("ls", "-al" "/home/user")  
-val processBuilder(command)  
-</code></pre>
-
-<p>반대로 자바 메소드가 <code>java.util.List</code> 리턴하면 <code>Buffer</code> 로 자동으로 변환할 수 있다. 아래 예제에서 <code>cmd == command</code> 다. 바로 <code>ArrayBuffer</code> 로 받지 않는다는 점에 주의하자. <code>Buffer</code> 만 보장한다.</p>
-
-<pre><code class="scala">import scala.collection.JavaConversions.asScalaBuffer  
-import scala.collection.mutable.ArrayBuffer  
-sd  
-val cmd: Buffer[String] = pb.command()  
-</code></pre>
-
-<p>참고로, 스칼라의 컬렉션은 <code>immutable</code> 이 기본이고, 자바의 컬렉션은 <code>mutable</code> 이 기본이다.</p>]]></description><link>http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/</link><guid isPermaLink="false">d3535bd4-9f25-4ff0-bec0-74124cfc98fd</guid><category><![CDATA[scala]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 26 Sep 2014 10:31:09 GMT</pubDate></item></channel></rss>
+<p>identifier 의 첫글자가 미리 정의된 테이블에 있다면 우선순위가 정해지는 룰이다.</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-2/</link><guid isPermaLink="false">20cff111-9852-407f-9222-acac9d6733e0</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Sep 2014 16:09:24 GMT</pubDate></item></channel></rss>

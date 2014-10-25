@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Functional Programming in Scala, Chapter 6</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Functional Programming in Scala, Chapter 6">
+  <meta name="twitter:description" content="지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. one-liner 의 절정을 보여주시는 교수님 (번역이 서툴러 어중간한 의역을 하느니">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-6/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/functional-programming-in-scala-chapter-6/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=32357a12d5"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala tag-coursera tag-functional-programming tag-collection">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala">scala</a>, <a href="../tag/coursera">coursera</a>, <a href="../tag/functional-programming">functional programming</a>, <a href="../tag/collection">collection</a></h5>
+      <h1 class="margin_bottom_medium">Functional Programming in Scala, Chapter 6</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-24">Friday, October 24, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/functional-programming-in-scala-chapter-6/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>지난 시간에는 <em>referential transparency (참조투명성)</em> 과 함수형 언어에서의 귀납법인 <em>structural induction</em> 에 대해서 배우고, 몇 개의 예제를 증명했었다. </p>
+
+<p>이번 시간에는 스칼라의 컬렉션인 <code>Seq</code>, <code>Set</code>, <code>Map</code> 을 알아보고 마지막 챕터에서는 여기에 <em>higher-order function</em> 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. <del>one-liner 의 절정을 보여주시는 교수님</del></p>
+
+<p>(번역이 서툴러 어중간한 의역을 하느니 단어를 그대로 사용하고 필요할 경우 원문을 첨부한다)</p>
+
+<h3 id="othercollections">Other Collections</h3>
+
+<h4 id="vector">Vector</h4>
+
+<p><code>List</code> 는 처음 원소는 <code>O(1)</code> 로 빠르게 접근하지만, 중간이나 마지막 원소에 대해서는 조금 느린편이다. 만약에 중간이나 마지막 원소에 대한 탐색을 빠르게 하고싶다면 다른 <em>sequence implementation</em> 인 <code>Vector</code> 를 사용하면 된다. <code>Vector</code> 는 다른 원소들에 대한 접근이 <em>evenly balanced</em> 하다. </p>
+
+<blockquote>
+  <p>This one has more evenly balanced access pattern then <code>List</code>.</p>
+</blockquote>
+
+<p><code>Vector</code> 는 <code>2^5 = 32</code> 개의 원소를 가진 리스트의 트리로 구현된다. 따라서 처음 단계에서는 <code>2^5</code> 개를 저장할 수 있고, 그 다음 단계에서는 <code>2^5 * 2^5 = 2^10</code>, 그 다음 단계에서는 <code>2^15</code> 를 저장할 수 있다. <code>2^5</code> 의 배수만큼 증가하는 것이다. <em>binary tree</em> 에서 자식의 갯수가 <code>2</code> 개가 아니라 <code>32</code> 개라고 생각하면 된다.</p>
+
+<p>이런 이유로, 원소를 탐색하는데 걸리는 시간은 <code>log_32 (N)</code> (<em>32 based-log</em>) 라 보면 된다. <em>random access</em> 에 대해서는 <code>List</code> 보다 훨씬 낫다.</p>
+
+<p><code>Vector</code> 의 또 다른 장점은 <code>map</code>, <code>for</code> 같은 <em>bulk operator</em> 에 대해서 빠른 연산이 가능하다는 것이다. 이것은 원소들이 32개씩 뭉쳐있기 때문에 <em>single cache line</em> 에 있을 확률이 높아진다. 리스트의 경우에는 콘셀이 같은 <em>cache line</em> 에 있으리라는 보장이 없기 때문에 <code>Vector</code> 보다 <em>locality</em> 가 떨어진다.</p>
+
+<p>그럼 <code>List</code> 가 필요없을까? 그렇지 않다. <code>head</code>, <code>tail</code> 과 같은 연산을 할때 빠르다. 깊이가 깊은 <code>Vector</code> 구조에서, <code>head</code> 나 <code>tail</code> 의 경우 몇 번의 연산이 필요한지 생각해보면 쉽게 이해할 수 있다.</p>
+
+<p>(1) <code>map</code>, <code>for</code> 과 같은 <em>bulk operation</em> 은 <code>Vector</code> 가 <br />
+(2) <code>tail</code>, <code>head</code> 는 <code>List</code> 가 더 빠르다.  </p>
+
+<p><code>Vector</code> 는 대부분의 <code>List</code> 연산을 사용할 수 있는데 예외가 하나 있다. 바로 <code>::</code> 콘싱은 <code>List</code> 를 위한 연산이기 때문이다.</p>
+
+<p>따라서 <code>Vector</code> 에서는 원소 추가나, 패턴 매칭을 위해 <code>x +: xs</code>, <code>x :+ x</code> 를 사용하면 된다.</p>
+
+<p><code>Vector</code> 는 <code>List</code> 처럼 <em>immutable</em> 이기 때문에 원소를 추가하면 기존의 데이터는 변경되지 않는다. 따라서 가장 깊은 깊이에 새로운 <code>Vector</code> 를 추가하고 그 벡터를 가리키는 상위 벡터, ..., 루트 벡터까지 만드는 비용은 <code>log32(N)</code> 이 된다. 물론 이건 <em>object creation</em> 비용이다.</p>
+
+<h4 id="sequence">Sequence</h4>
+
+<p><code>Vector</code>, <code>List</code>, <code>Range</code> 는 <code>Seq</code> 의 <em>sub-type</em> 다. <code>Seq</code> 이외에도 <code>Set</code>, <code>Map</code> 등이 있으며 <code>Seq, Set, Map</code> 은 <code>Iterable</code> 의 <em>sub-type</em> 이다. <em>hierarchy</em> 를 살펴보면,</p>
+
+<p><a href="http://docs.scala-lang.org/resources/images/collections.png"> <br />
+<img src="http://docs.scala-lang.org/resources/images/collections.png" align="center" /></a>  </p>
+
+<p align="center">(<a href='http://docs.scala-lang.org'>http://docs.scala-lang.org</a>)</p>
+
+<p><a href="http://docs.scala-lang.org/resources/images/collections.immutable.png"> <br />
+<img src="http://docs.scala-lang.org/resources/images/collections.immutable.png"  align="center" /> <br />
+</a>  </p>
+
+<p align="center">(<a href='http://docs.scala-lang.org'>http://docs.scala-lang.org</a>)</p>
+
+<p><code>Array</code> 와 <code>String</code> 은 점선으로 연결된 걸 볼 수 있는데 이건 두 클래스가 <code>Java</code> 에서 왔기 때문이다. 스칼라 클래스는 아니지만 스칼라의 <code>Seq</code> 로 볼 수 있다. (<em>View</em>) 따라서 다음과 같은 코드는 정상 동작한다.</p>
+
+<pre><code class="scala">"Hello World" filter { c =&gt; c.isUpper }  
+</code></pre>
+
+<h4 id="range">Range</h4>
+
+<p>다른 <code>Seq</code> 구현체로는 <code>Range</code> 가 있다. <code>Range</code> 는 <em>evenly spaced intergers</em> 를 나타낸다. </p>
+
+<pre><code class="scala">val r: Range = 1 until 5 // Range(1, 2, 3, 4)  
+val s: Range = 1 to 5 // Range(1, 2, 3, 4)  
+1 to 10 by 3  
+6 to 1 by -2  
+</code></pre>
+
+<p>그렇기에 <code>Range</code> 는 <em>upper bound, lower bound, step value</em> 를 클래스의 멤버로 가지고 있다.</p>
+
+<h4 id="sequenceoperations">Sequence Operations</h4>
+
+<p><code>Seq</code> 에 대해서 <code>exists</code>, <code>forall</code>, <code>zip</code>, <code>unzip</code>, <code>flatMap</code>, <code>sum</code>, <code>product</code>, <code>max</code> 등을 사용할 수 있다.</p>
+
+<p><code>zip</code> 은 두개의 <code>Seq</code> 의 각 원소를 <code>pair</code> 로 묶는거고, <code>unzip</code> 은 각 <code>pair</code> 를 푼다.</p>
+
+<pre><code class="scala">scala&gt; a  
+res13: scala.collection.immutable.Range.Inclusive = Range(1, 2, 3, 4, 5)
+
+scala&gt; b  
+res14: List[Char] = List(h, e, l, l, o)
+
+scala&gt; a zip b  
+res15: scala.collection.immutable.IndexedSeq[(Int, Char)] = Vector((1,h), (2,e), (3,l), (4,l), (5,o))
+
+scala&gt; a zip b unzip  
+res16: (scala.collection.immutable.IndexedSeq[Int], scala.collection.immutable.IndexedSeq[Char]) = (Vector(1, 2, 3, 4, 5),Vector(h, e, l, l, o))  
+</code></pre>
+
+<p><br/></p>
+
+<p><code>flatMap</code> 은 각 원소에 <code>map</code> 을 적용한 뒤, 풀어 헤친다. 예를 들어</p>
+
+<pre><code class="scala">scala&gt; "HelloWorld" flatMap { c =&gt; List('.', c) }  
+res17: String = .H.e.l.l.o.W.o.r.l.d  
+</code></pre>
+
+<p><code>flatMap</code> 은 맵을 두번하면 할 때 자주 쓰인다. 예를 들어  <code>n</code>, <code>m</code> 에 대해 <em>combinator (조합)</em> 을 찾을때 <code>flatMap</code> 을 사용하면 <code>Vector</code> 의 <code>Vector</code> 가 아니라 <code>Vector</code> 만 얻는다.</p>
+
+<pre><code class="scala">1 to m flatMap { x =&gt; 1 to n map { y =&gt; (x, y) } }  
+</code></pre>
+
+<p>벡터에 대해 스칼라 곱을 하고 싶다면, <code>zip</code> 을 이용할 수 있다. <code>zip</code> 을 이용하면 두 <code>Seq</code> 의 <code>pair</code> 가 나오므로, 곱한 후 <code>sum</code> 하자.</p>
+
+<pre><code class="scala">(xs zip ys).map(xy =&gt; xy._1 * xy._2).sum
+</code></pre>
+
+<p>그런데, <code>zip</code> 해서 나오는 <code>pair</code> 에 패턴매칭을 적용할 수 있으므로</p>
+
+<pre><code class="scala">(xs zip ys).map { case(x, y) =&gt; x * y }.sum
+</code></pre>
+
+<p>참고로, <code>x =&gt; match { case ... }</code> 은 <code>{ case ... }</code> 으로 바로 줄여쓸 수 있다. </p>
+
+<h3 id="combinatorialsearchandforexpression">Combinatorial Search and For-Expression</h3>
+
+<h4 id="handlingnestedsequences">Handling Nested Sequences</h4>
+
+<p>보다 작은 두 수 <code>i, j (1 &lt;= j &lt; i &lt; n)</code> 에 대해서 <code>i + j</code> 가 소수인 <code>i, j</code> 를 찾는다고 하자. </p>
+
+<blockquote>
+  <p>Given a positive integer <code>n</code>, find all pairs of positive integers <code>i</code> and <code>j</code> with <code>1 &lt;= j &lt; i &lt; n</code> such that <code>i + j</code> is prime</p>
+</blockquote>
+
+<p>이렇게 코드를 작성해 볼 수 있다.</p>
+
+<pre><code class="scala">1 until 5 flatMap { i =&gt; 1 until i map { j =&gt; (i, j) }}
+
+res36: scala.collection.immutable.IndexedSeq[(Int, Int)] = Vector((2,1), (3,1), (3,2), (4,1), (4,2), (4,3))  
+</code></pre>
+
+<p>재밌는 사실은 <code>Range</code> 를 사용했음에도 <code>Vector</code> 가 나온다는 점이다. 더 정확히는 <code>IndexedSeq</code> 다. 무슨 일이 일어난 걸까? <code>Range</code> 는 <code>Pair</code> 를 원소로 가질 수 없기 때문에 상위 타입인 <code>IndexedSeq</code> 를 가지게 되고, 이것의 구체적 타입인 <code>Vector</code> 가 된다.</p>
+
+<p><a href="http://docs.scala-lang.org/resources/images/collections.immutable.png"> <br />
+<img src="http://docs.scala-lang.org/resources/images/collections.immutable.png"  align="center" /> <br />
+</a>  </p>
+
+<p align="center">(<a href='http://docs.scala-lang.org'>http://docs.scala-lang.org</a>)</p>
+
+<p><code>flatMap</code> 을 안쓰면 <code>Vector</code> 의 <code>Vector</code> 가 나오는데, 여기에 <code>foldRight Seq[Int]() (_ ++ _)</code> 을 사용하거나 아니면 <code>flatten</code> 을 사용할 수도 있다.</p>
+
+<pre><code class="scala">(1 until 5 { i =&gt; 1 until i map { j =&gt; (i, j) }}).flatten
+</code></pre>
+
+<p>결국 <code>flatMap</code> 은 <code>map</code> 후 <code>flatten</code> 을 적용한 결과를 돌려줌을 알 수 있다. 이제 여기에 <code>filter</code> 를 적용하면 처음에 주어졌던 문제를 해결할 수 있다.</p>
+
+<pre><code class="scala">    1 until n flatMap { i =&gt; 1 until i map {j =&gt; (i, j)} } filter { case (i, j) =&gt; isPrime(i + j)}
+</code></pre>
+
+<h4 id="forexpression">For-Expression</h4>
+
+<p><code>map</code> 과 같은 <em>higher-order function</em> 은 <em>expressive</em> 한데 읽기가 좀 힘들때가 있다. 스칼라에서는 이를 위해 <code>for</code> 을 제공한다. 다음의 두 문자을 보자. 완전히 동일하다.</p>
+
+<pre><code class="scala">case class Person(name: String, age: Int)
+
+for (p &lt;- persons if p.age &gt; 20) yield p.name  
+persons filter (p =&gt; p.age &gt; 20) map (p =&gt; p.name)  
+</code></pre>
+
+<p><code>for</code> 는 <em>imperative language</em> 의 그것과 비슷하긴 한데, 스칼라의 <code>for</code> 은 무언갈 변경하지 않고 새로운 <code>List</code> 를 <code>yield</code> 를 통해 생성한다.</p>
+
+<p><code>for (s) yield e</code> 문법을 좀 자세히 살펴보자.</p>
+
+<blockquote>
+  <p>where <code>s</code> is a sequence of <em>generators</em> and <em>filters</em>, and <code>e</code> is an expression whose value is returned by an iteration</p>
+</blockquote>
+
+<p><em>generator</em> 는 <code>p &lt;- e</code> 형태의 <em>form</em> 인데 <code>p</code> 는 <em>pattern</em> 이고 <code>e</code> 는 <em>value</em> 로 <em>collection</em> 을 가진 <em>expression</em> 이다.</p>
+
+<p><em>filter</em> 는 <code>Boolean</code> <em>expression</em> 을 가지는 <em>form</em> 이다.</p>
+
+<p><code>for</code> 루프 여러개 중첩하는 것처럼 <em>generator</em> 가 여러개 일 수 있는데, 이 경우 마지막에 오는 <em>generator</em> 가 여러번 돈다. </p>
+
+<blockquote>
+  <p>If there are several generators in the sequence, the last generators vary faster than the first.</p>
+</blockquote>
+
+<p>그리고 <code>( s )</code> 대신에 <code>{ s }</code> 를 사용할 수도 있는데, 이러면 세미콜론 없이 <em>filter</em> 와 <em>generator</em> 를 여러줄에 걸쳐서 작성할 수 있다.</p>
+
+<p>이제 처음에 나왔던 문제를 <code>for</code> 로 작성해 보자.</p>
+
+<pre><code class="scala">for {  
+  i &lt;- 1 until n
+  j &lt;- 1 until i
+  if isPrime(i + j)
+} yield (i, j)
+</code></pre>
+
+<p>읽기도 쉬워졌다. <del>flatMap 따위</del> </p>
+
+<p>이제 아까 나왔던 벡터간 스칼라 곱을 하는 함수를 다시 작성해 보면</p>
+
+<pre><code class="scala">def scalaProduct(xs: List[Double], ys: List[Double] =  
+    (for ((x, y) &lt;- xs zip ys) yield (x * y)).sum
+</code></pre>
+
+<p>해보면 알겠지만 <code>for { x &lt;- xs; y &lt;- ys } yield x * y sum</code> 은 안된다. 루프가 중첩되기 때문이다.</p>
+
+<h3 id="combinatorialsearchexample">Combinatorial Search Example</h3>
+
+<p>자 이제 <code>Seq</code> 말고 <code>Set</code> 에 대해서 알아보자. <code>Seq</code> 의 대부분의 연산도 사용할 수 있고, 비슷비슷허다. <code>Seq</code> 와 <code>Set</code> 은 <code>Iterable</code> 의 <em>sub-type</em> 이므로 <code>Iterable</code> 스칼라독을 보면 어떤 연산을 사용할 수 있는지 확인 할 수 있다.</p>
+
+<p><code>Seq</code> 와의 차이점은 다음과 같다.</p>
+
+<p>(1) <code>Set</code> 은 순서가 없다. <br />
+(2) <code>Set</code> 은 중복된 원소를 가질 수 없다. <br />
+(3) <code>contain</code> 이 <em>fundamental operation</em> 이다.  </p>
+
+<pre><code class="scala">val a = 1 to 4 toSet
+
+scala&gt; a  
+res53: scala.collection.immutable.Set[Int] = Set(1, 2, 3, 4)
+
+scala&gt; a map (_ / 2)  
+res54: scala.collection.immutable.Set[Int] = Set(0, 1, 2)  
+</code></pre>
+
+<h4 id="nqueensproblem">N-Queens Problem</h4>
+
+<p>이제 <code>Set</code> 을 이용해 좀 문제를 풀어보자.</p>
+
+<blockquote>
+  <p>The n-queens problem is to place <code>n</code> queens on a chess board so that no queen is threatened by another <br/></p>
+  
+  <p>In other words, there can't be two queens in the same row, column, or diagonal</p>
+</blockquote>
+
+<p>모든 조합을 뽑아내고, 열을 <code>List</code> 로 표현하고, 그 순서를 행이라 한 뒤 모든 조합을 뽑아내 <code>Set</code> 에 넣으면 자동으로 중복된 결과가 제거된다. 로직은 다음과 같다.</p>
+
+<p>(1) 내게 <code>placeQueens</code> 라는 1 개의 퀸을 위치시킬 수 있는 함수가 있다. <br />
+(2) <code>n = 1, 2, ... , n</code> 으로 <code>placeQueens</code> 를 재귀적으로 호출해 가며 이전 단계에서 얻은 퀸들을 이용하여 하나의 퀸을 새롭게 배치한다. <br />
+(3) 각 단계에서는 새 퀸을 배치할 수 있는지 없는지 검사할 <code>isSafe</code> 함수가 필요하다.  </p>
+
+<p>이게 <em>Recursion</em> 에서 문제를 풀 때 기본적으로 필요한 생각인 것 같다. <strong>문제를 작게 잘라 매번 <code>1/n</code> 씩 해결할 수 있다면</strong> 이라 가정 한 뒤 <code>1/n</code> 문제를 풀기 위한 함수와 <code>1/n</code> 문제의 종료조건을 정의하는 것. 우리의 경우엔 그 함수가 <code>isSafe</code> 였다.</p>
+
+<pre><code class="scala">  def nQueens(n: Int): Set[List[Int]] = {
+
+    def isSafe(col: Int, queens: List[Int]): Boolean = {
+      val row = queens.length // where new queen will be placed
+      val queensWithRow = (row - 1 to 0 by -1) zip queens
+      queensWithRow forall {
+        case (r, c) =&gt; col != c &amp;&amp; math.abs(col - c) != row - r
+      }
+    }
+
+    def placeQueens(k: Int): Set[List[Int]] =
+      if (k == 0) Set(List())
+      else
+        for {
+          queens &lt;- placeQueens(k - 1)
+          col &lt;- 0 until n
+          if isSafe(col, queens)
+        } yield col :: queens
+
+    placeQueens(n)
+  }
+</code></pre>
+
+<p><em>diagonal</em> 을 어떻게 검사할까가 고민이 될 수 있겠는데, 사실 생각해보면 쉽다. 컬럼의 차이와 행의 차이가 같으면 <em>diagonal</em> 인 것.</p>
+
+<p>여기에 출력하기 위한 함수를 요로코롬 만들고 출력하면</p>
+
+<pre><code class="scala">  def showQueens(queens: List[Int]) = {
+    val lines =
+      for {
+        col &lt;- queens.reverse
+      } yield Vector.fill(queens.length)("[ ]").updated(col, "[*]").mkString
+
+    "\n\n" + (lines.mkString("\n"))
+  }
+
+
+[ ][ ][*][ ]
+[*][ ][ ][ ]
+[ ][ ][ ][*]
+[ ][*][ ][ ],
+
+[ ][*][ ][ ]
+[ ][ ][ ][*]
+[*][ ][ ][ ]
+[ ][ ][*][ ]
+</code></pre>
+
+<p><code>nQueens(8) take 3 map show</code> 처럼 응용도 가능하다.</p>
+
+<h3 id="querieswithfor">Queries with For</h3>
+
+<p>지난 시간에 배운 <code>for</code> 는 <code>SQL</code> 과 비슷한데 좀 더 자세히 살펴보자. 다음과 같은 <em>case class</em> 가 있다고 하자.</p>
+
+<pre><code class="scala">case class Book(title: String, authors: List[String])  
+</code></pre>
+
+<p>이제 다음과 같은 코드를 이용해 쿼리처럼 질의할 수 있다.</p>
+
+<pre><code class="scala">for {  
+  b &lt;- books
+  a &lt;- b.authros
+  if a startWith "Bird")
+} yield b.title
+
+for {  
+  b &lt;- books
+  if b.title indexOf "Programming" &gt;= 0
+} yield b.title
+
+for {  
+  b1 &lt;- books
+  b2 &lt;- books
+  if b1 != b2
+  a1 &lt;- b1.authors
+  a2 &lt;- b2.authors
+  if a1 == a2
+} yield a1
+</code></pre>
+
+<p>세번째 <code>for</code> 문은 약간 문제가 있는데 내용이 똑같고 순서만 다른 <code>List</code> 를 만들 수 있다 따라서 중복을 피하기 위해 <code>&lt;</code> 를 비교로 사용하자.</p>
+
+<pre><code class="scala">for {  
+  b1 &lt;- books
+  b2 &lt;- books
+  if b1.title &lt; b2.title
+  a1 &lt;- b1.authors
+  a2 &lt;- b2.authors
+  if a1 == a2
+} yield a1
+</code></pre>
+
+<p>근데 만약에 같은 작가가 3개의 책을 출판했다면? <code>title</code> 이 <code>a &lt; b &lt; c</code> 와 같은 순서를 가지므로 <code>(a, b), (a, c), (b, c)</code> 처럼 비교되어 3번 출력된다. </p>
+
+<p>중복을 제거하기 위해 <code>distint</code> 를 사용할 수 있다. 더 좋은 방법은 <code>Set</code> 을 사용하면 된다.</p>
+
+<h3 id="translationoffor">Translation of For</h3>
+
+<p><code>for</code> 을 이용하면 <code>map, flatMap, filter</code> 를 쉽게 구현할 수 있는데</p>
+
+<pre><code class="scala">def mapFun[T, U](xs: List[T], f: T =&gt; U): List[U] =  
+  for (x &lt;- xs) yield f(x)
+
+def flatMap[T, U](xs: List[T], f: T =&gt; Iterable[U]): List[U] =  
+  for (x &lt;- xs; y &lt;- f(x)) yield y
+
+def filter[T](xs: List[T], p: T =&gt; Boolean): List[T] =  
+  for (x &lt;- xs; if (p(x)) yield x  
+</code></pre>
+
+<p>사실 스칼라 컴파일러는 <code>for</code> 을 <code>map</code>, <code>flatMap</code>, <em>lazy variant of <code>filter</code></em> 로 바꿔치기한다.</p>
+
+<blockquote>
+  <p>Scala compiler expresses <code>for</code> expressions in terms of <code>map</code>, <code>flatMap</code> and a <em>lazy variant of <code>filter</code></em></p>
+</blockquote>
+
+<p>예를 들어 <code>for (x &lt;- e1) yield e2</code> 는 <code>e1.map(x =&gt; e2)</code> 로 바꾼다</p>
+
+<pre><code class="scala">for (x &lt;- e1 if f; s) yield e2  
+</code></pre>
+
+<p><code>f</code> 가 <em>filter</em> 고 <code>s</code> 가 <em>sequence of generators and filters</em> 라면 다음과 같이 번역된다.</p>
+
+<pre><code class="scala">for (x &lt;- e1.withFilter(x =&gt; f); s) yield e2  
+</code></pre>
+
+<p>여기서 <code>withFilter</code> 는 바로 적용되는 것이 아니라, 뒤 따라오는 <code>map</code> 또는 <code>flatMap</code> 등에 적용된다고 보면 된다. 원문을 첨부하면</p>
+
+<blockquote>
+  <p>You can think of <code>withFilter</code> as a variant of <code>filter</code> that does not produce an intermediate list, but instead filters the following <code>map</code> or <code>flatMap</code> function application</p>
+</blockquote>
+
+<pre><code class="scala">for (x &lt;- e1; y &lt;- e2; s) yield e3  
+</code></pre>
+
+<p>이건 다음처럼 번역된다.</p>
+
+<pre><code class="scala">e1.flatMap(x =&gt; for (y &lt;- e2; s) yield e3)  
+</code></pre>
+
+<p>그리고 내부의 <code>for</code> 가 다시 한번 더 번역된다.</p>
+
+<pre><code class="scala">for {  
+  i &lt;- 1 until n
+  j &lt;- 1 until i
+  if isPrime(i + j)
+} yield (i, j)
+</code></pre>
+
+<p>이것은</p>
+
+<pre><code class="scala">(1 until n) flatMap(i =&gt;
+  (1 until i).withFilter(j =&gt; isPrime(i + j))
+  .map(j =&gt; (i, j)))
+</code></pre>
+
+<p>이제 아까 <em>lazy variant of <code>filter</code></em> 어쩌구 하던 내용을 이해할 수 있는데, 중간에 <code>withFilter</code> 는 <code>1 until i</code> 에 적용 되는것이 아니라 <code>map</code> 이 만들어낸 <em>pair</em> <code>(i, j)</code> 에 대해 적용된다.</p>
+
+<p>다시 말해 <code>for</code> 문에서 <code>if</code> <em>guard</em> 는 나중에 적용되는 <code>withFilter</code> 다.</p>
+
+<pre><code class="scala">for (b &lt;- books; a &lt;- b.authros if a startsWith "Bird") yield b.title  
+</code></pre>
+
+<p>요건 이렇게 번역된다.</p>
+
+<pre><code class="scala">b.flatMap(b =&gt; b.authors.withFilter(a =&gt; a.startsWith "Bird").map(x =&gt; x.title)  
+</code></pre>
+
+<p><code>for</code> 는 다양한 컬렉션에도 적용할 수 있는데 이는 <code>for</code> 가 <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 이 3개의 함수를 기반으로 만들어졌기 때문이다. 따라서 커스텀 타입에도 이 3개의 함수를 만들면 <code>for</code> 를 사용할 수 있다.</p>
+
+<p>이런 이유로 데이터베이스 클라이언트가 <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 같은 메소드를 정의하면 <code>for</code> 을 이용해 쿼리할 수 있다.</p>
+
+<p>이것이 바로 <em>ScalaQuery</em> 나 <em>Slick</em> 같은 스칼라 데이터베이스 프레임워크가 사용하는 방법이다. <em>LINQ</em> 도 비슷한 개념이다.</p>
+
+<h3 id="maps">Maps</h3>
+
+<p>자 이제 <code>Seq</code>, <code>Set</code> 을 살펴보았으니 <code>Map</code> 을 알아보자. </p>
+
+<p><code>Map</code> 은 <code>Iterable</code> 일뿐만 아니라 <code>Function</code> 이다. 그래서 함수 호출하듯이 <em>Key</em> 를 인자로 주어 호출하면 <em>Value</em> 를 얻을 수 있다. 그러나 없는 <em>Key</em> 에 대해서 호출하면 <code>NoSuchElementException</code> 이 발생한다.</p>
+
+<p>예외 대신에 있는지 없는지 알려면 <code>get</code> 을 이용하면 된다. 없으면 <code>None</code> 있으면 <code>Option[Value]</code> 를 돌려준다.</p>
+
+<h4 id="optiontype">Option Type</h4>
+
+<p><code>Option</code> 은 <em>Trait</em> 인데</p>
+
+<pre><code class="scala">trait Option[+A]  
+case class Some[+A](value: A) extend Option[A]  
+object None extend Option[Nothing]  
+</code></pre>
+
+<p><em>covaraint</em> 기 때문에 <code>Option[Type]</code> 에 <code>None</code> 을 넣을 수 있다. <code>None</code> 은 <code>Option[Nothing]</code> 이므로 모든 <code>Option</code> 의 하위타입이다.  참고로 <code>get</code> 의 결과에 패턴매칭을 이용할 수 있다.</p>
+
+<h4 id="sortedandgroupby">Sorted and GroupBy</h4>
+
+<p><em>SQL Query</em> 처럼 <code>sorted</code> 와 <code>groupBy</code> 를 이용할 수 있다.</p>
+
+<pre><code class="scala">scala&gt; fruit  
+res70: List[String] = List(apple, pear, orange, pineapple)
+
+scala&gt; fruit.sorted  
+res71: List[String] = List(apple, orange, pear, pineapple)
+
+scala&gt; fruit.sortWith(_.length &lt; _.length)  
+res72: List[String] = List(pear, apple, orange, pineapple)
+
+scala&gt; fruit.groupBy(_.head)  
+res73: scala.collection.immutable.Map[Char,List[String]] = Map(p -&gt; List(pear, pineapple), a -&gt; List(apple), o -&gt; List(orange))  
+</code></pre>
+
+<p><code>groupBy</code> 는 컬렉션을 <em>discriminator</em> 를 이용해 <code>Map</code> 으로 파티셔닝한다.</p>
+
+<p><em>Ploynomials (다항식)</em> 을 <code>Map</code> 을 이용해 표현해 보자. 다항식은 각 차수가 한개씩 있고, 상수도 하나씩 붙어 있으므로 <code>Map</code> 으로 표현하기에 적합하다.</p>
+
+<pre><code class="scala">  class Poly(val terms: Map[Int, Double]) {
+    def + (other: Poly): Poly = new Poly(terms ++ other.terms)
+    override def toString = {
+      (for((exp, coeff) &lt;- terms.toList.sorted.reverse) yield  coeff + "x^" + exp) mkString " + "
+    }
+  }
+</code></pre>
+
+<p>이렇게 만들면 제대로 된 계산이 안된다. 왜냐하면 <code>Map</code> 의 <code>++</code> 오른쪽에 오는 <code>Map</code> 에 똑같은 <em>key</em> 를 가지고 있는 원소가 있으면 덮어 쓰기 때문이다. 다항식에서 차수가 같으면 <em>coefficient (계수)</em> 를 덧셈해야 하는데 덮어씌우면 올바른 계산이 아니다. 따라서 <code>other.terms</code> 에 같은 <em>Key</em> 를 가진 원소가 있나 없나 계산해서 있으면 현재 <code>terms</code> 와 계수를 더한 새로운 <code>pair</code> 를 돌려줘야 한다. (<code>Map</code> 의 원소는 <code>pair</code> 다) </p>
+
+<pre><code class="scala">  class Poly(val terms: Map[Int, Double]) {
+    def + (other: Poly): Poly = 
+    new Poly(terms ++ (other.terms map adjust))
+
+    def adjust(term: (Int, Double)): (Int, Double) = {
+
+      val (exp, coeff) = term
+
+      terms.get(exp) match {
+        case None =&gt; term
+        case Some(coeff1) =&gt; (exp, coeff + coeff1)
+      }
+    }
+
+    override def toString = {
+      (for{
+        (exp, coeff) &lt;- terms.toList.sorted.reverse
+      } yield  coeff + "x^" + exp) mkString " + "
+    }
+  }
+</code></pre>
+
+<h4 id="defaultvalues">Default Values</h4>
+
+<p><code>Map</code> 은 <em>partial function</em> 이기 때문에 없는 <em>Key</em> 에 대해 <code>Map</code> 을 호출하면 예외가 발생한다.</p>
+
+<p><code>Map</code> 에 <code>withDefaultValue</code> 를 적용하면 <em>total function</em> 으로 바꿀 수 있다. <code>Poly</code> 에 적용해 보자.</p>
+
+<pre><code class="scala">  class Poly(val terms0: Map[Int, Double]) {
+    val terms = terms0 withDefaultValue 0.0
+    def + (other: Poly): Poly = new Poly(terms ++ (other.terms map adjust))
+    def adjust(term: (Int, Double)): (Int, Double) = {
+
+      val (exp, coeff) = term
+      (exp, coeff + terms(exp))
+    }
+    override def toString = {
+      (for{
+        (exp, coeff) &lt;- terms.toList.sorted.reverse)}
+      yield coeff + "x^" + exp) mkString " + "
+    }
+  }
+</code></pre>
+
+<p>음. 다 좋은데 생성할 때 <code>Map</code> 을 주는 대신 여러개의 <code>Pair</code> 를 주고 <code>Map</code> 으로 바꾸면 좀 더 나을것 같다. 다음의 생성자를 추가하자.
+    def + (other:Poly): Poly = 
+    new Poly((other.terms foldLeft terms)(addTerm))
+    def addTerm(ts: Map[Int, Double], t: (Int, Double)): Map[Int, Double] = {
+      val (exp, coeff) = t
+      ts + (exp -> (coeff + terms(exp)))
+    }</p>
+
+<pre><code class="scala">def this(arg: (Int, Double)*) = this(arg.toMap)  
+</code></pre>
+
+<p>그리고 <code>++</code> 대신 <code>fold</code> 를 이용하면 <code>Map</code> 을 생성하지 않고 바로 기존의 <code>terms</code> 에 원소를 추가하기 때문에 더 효율적이다.</p>
+
+<pre><code class="scala">    def + (other:Poly): Poly = 
+    new Poly((other.terms foldLeft terms)(addTerm))
+    def addTerm(ts: Map[Int, Double], t: (Int, Double)): Map[Int, Double] = {
+      val (exp, coeff) = t
+      ts + (exp -&gt; (coeff + terms(exp)))
+    }
+</code></pre>
+
+<p>아래는 테스트 케이스</p>
+
+<pre><code class="scala">  "(x^2 + 3x) + (-2x + 7)" should "be x^2 + x + 7" in {
+    val p1 = new Poly(2-&gt;1, 1-&gt;3)
+    val p2 = new Poly(1-&gt;(-2), 0-&gt;7)
+    val p3 = new Poly(2-&gt;1, 1-&gt;1, 0-&gt;7)
+
+    assert((p1 + p2).terms == p3.terms)
+  }
+</code></pre>
+
+<h3 id="puttingthepiecestogether">Putting the Pieces Together</h3>
+
+<p>이번엔 전화번호를 알파벳으로 바꾸는 예제를 통해서 스칼라의 컬렉션과 고차함수가 얼마나 <em>expressive</em> 한지 알아본다.</p>
+
+<p>여기 나온 예제는 7 가지 언어로 이미 실험이 되었는데 스크립트 언어는 대략 100 라인, C 나 C++ 같은 언어는 대략 200-300 라인정도가 나왔다고 한다. (2000년)</p>
+
+<pre><code class="scala">  val mnem = Map(
+    '2' -&gt; "ABC",
+    '3' -&gt; "DEF",
+    '4' -&gt; "GHI",
+    '5' -&gt; "JKL",
+    '6' -&gt; "MNO",
+    '7' -&gt; "PQRS",
+    '8' -&gt; "TUV",
+    '9' -&gt; "WXYZ")
+</code></pre>
+
+<p>이런 맵이 있다고 하자. <code>7225247386</code> 을 인코딩 하면 여러가지 경우가 나오겠지만, 그 중 하나는 <code>SCALA IS FUN</code> 이어야 한다. <del>교수님 센스보소</del></p>
+
+<pre><code class="scala">  val path = "/home/anster/github/coursera-scala/src/main/scala/coursera/chapter6/linux.words"
+  val in = Source.fromFile(path)
+  // java's iterator doesn't have groupBy
+  val words = in.getLines.toList filter { _ forall { _.isLetter }}
+
+  val mnem = Map(
+    '2' -&gt; "ABC",
+    '3' -&gt; "DEF",
+    '4' -&gt; "GHI",
+    '5' -&gt; "JKL",
+    '6' -&gt; "MNO",
+    '7' -&gt; "PQRS",
+    '8' -&gt; "TUV",
+    '9' -&gt; "WXYZ")
+
+  // A to Z -&gt; 2 to 9
+  val charCode = mnem flatMap { case(k, v) =&gt; v map { c =&gt; (c, k) } }
+  // or for ((digit, str) &lt;- mnem; ltr &lt;- str) yield ltr -&gt; digit
+
+  // "Java" -&gt; "5282"
+  def wordCode(word: String): String = word.toUpperCase map charCode
+
+  // "5282" -&gt; List("Java", "Kava", ...), "1111" -&gt; List()
+  val wordsForNum: Map[String, Seq[String]] =
+    words groupBy wordCode withDefaultValue Seq()
+
+  // return all ways to encode a number as a list of words
+  def encode(number: String): Set[List[String]] =
+    if (number.isEmpty) Set(List())
+    else {
+      (for {
+        split &lt;- 1 to number.length
+        word &lt;- wordsForNum(number take split)
+        rest &lt;- encode(number drop split)
+      } yield word :: rest).toSet
+    }
+
+  def printEncoded(number: String) = {
+    encode(number) map { _ mkString " "} map println
+  }
+
+  def translate(number: String): Set[String] = {
+    encode(number) map { _ mkString " " }
+  }
+
+  translate("7225247386") foreach { println _ }
+</code></pre>
+
+<p>군더더기 없이 깔끔하다. <del>스칼라는 넉넉하게 50라인에서 끝납니다요</del></p>
+
+<p><code>encode</code> 가 좀 난해하긴 한데, 경우의 수를 모두 찾아내야 하므로 길이를 모두 짤라 <code>wordForNum</code> 에 넣고 각 길이마다 인코딩을 할 수 있는지 검사한 후 나머지도 <code>encode</code> 함수에 넣어 모든 경우의 수를 찾는다. 주의할 부분은 <code>wordsForNum(number take split)</code> 에서 없는 경우가 나올 수 있으니 <code>withDefaultValue Seq()</code> 로 처리하면 된다. 그리고 <code>1 to number.length</code> 가 <code>Range</code> 이기 때문에 리턴 타입이 <code>IndexedSeq</code> 다. 타입 에러를 해결하기 위해 <code>toSet</code> 을 사용한다. </p>
+
+<h3 id="summary">Summary</h3>
+
+<p>마지막 <em>6.7 Putting the Pieces Toghther</em> 챕터를 보면서 스칼라는 정말 <em>expressive</em> 하다는걸 느낀다. 교수님 말로는 <em>immutable collection</em> 은</p>
+
+<p>(1) <em>easy to use:</em> <strong>few steps to do the job</strong> <br />
+(2) <em>concise:</em> <strong>one word replaces a whole loop</strong> <br />
+(3) <em>safe:</em> <strong>type checker is really good at catching erros</strong> <br />
+(4) <em>fast:</em> <strong>collection ops are tuned, can be parallelized</strong> <br />
+(5) <em>universal:</em> <strong>one vocabulary to work on all kinds of collections</strong></p>
+
+<p><del>내 컴퓨터에서 돌아가는 <em>SBT</em> 를 보면 스칼라가 빠른지는 의문이지만</del></p>
+
+<p>그리고 항상 느끼는 점이지만, <em>Problem</em> = <em>Algorithm</em> + <em>Data Structure</em> 다. 자료구조를 잘 선택하면 알고리즘이 간단해진다. <del>그래서 둘 다 배워야 하는거고 크흑</del>  </p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://docs.scala-lang.org/overviews/collections/overview.html">http://docs.scala-lang.org</a></p>
+
+<p>2014-10-25, <strong>Functional Programming in Scala</strong>, Coursera</p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '48';
+  var disqus_url = 'http://1ambda.github.io/functional-programming-in-scala-chapter-6/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>

@@ -67,7 +67,7 @@
 <body>
 
   
-  <script src="../../public/jquery.js?v=0cfc2b0458"></script>
+  <script src="../../public/jquery.js?v=32357a12d5"></script>
 
   
 
@@ -85,6 +85,24 @@
 </header>
 
 <main class="site_width" role="main">
+  
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../scala-for-the-impatient-chapter-1-2-3">Scala for the Impatient, Chapter 1, 2, 3</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-26">Friday, September 26, 2014</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/scala-for-the-impatient-chapter-1-2-3/" data-disqus-identifier="29">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><h3 id="chapter1"></h3></i>
+      <p>Chapter 1 (1). 스칼라의 REPL 은 엄밀히 말해서 인터프리터가 아니다. 입력받은 코드를 자바 바이트코드로 컴파일 한 후 자바 가상머신에서 실행시킨뒤 결과를 돌려준다. (2). 스칼라는 문자열을 위한 추가적인 연산들을 제공하기 위해 java.lang.String 오브젝트를 StringOps 오브젝트로 변환한다. "Hello".intersect("World") 가 그 예다. 따라서 ScalaDoc 을 보려면 SpringOps 클래스를 살펴보는&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../scala-for-the-impatient-chapter-1-2-3">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
   
 
   <article class="margin_bottom_big">
@@ -154,24 +172,6 @@
       <p><p></p></i>
       <p>2014-09-16, Functional Programming in Scala, Coursera 1.1 Programming Paradigms Imperative Programming modifying mutable variables   using assignment   and control str such as if-then-else, loop breakl continue, return   절차적인 프로그래밍은 폰 노이만 구조랑 비슷한데,  Mutable var = memory cells   variable deferences = load instructions   var assginment = store instsruction   control structure = jumps   그런데 이런&hellip;</p>
       <h5><a class="text book small uppercase color c_blue" href="../../functional-programming-in-scala-chapter-1">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-  
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="../../mysql-derived-table">MySQL Derived Table, Correlated Query</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-08-19">Tuesday, August 19, 2014</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/mysql-derived-table/" data-disqus-identifier="20">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><h3 id="correlatedvsnoncorrelated"></h3></i>
-      <p>Correlated vs Non-Correlated 아래는 Non-Correlated 쿼리다. 즉 내부(Inner) 쿼리가 외부(Outer) 쿼리를 참조하지 않는다. SELECT name   FROM city   WHERE population &gt; (SELECT population                       FROM city                     WHERE name = 'new york'); 반면 아래는 Correlated 쿼리다. 내부 쿼리가 co.code 로 외부 쿼리를 참조한다. SELECT name   FROM country as co   WHERE EXISTS&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="../../mysql-derived-table">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
     </section>
   </article>
 
