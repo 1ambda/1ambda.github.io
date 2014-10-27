@@ -1,5 +1,464 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 25 Oct 2014 15:15:02 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Functional Programming in Scala, Chapter 6]]></title><description><![CDATA[<p>지난 시간에는 <em>referential transparency (참조투명성)</em> 과 함수형 언어에서의 귀납법인 <em>structural induction</em> 에 대해서 배우고, 몇 개의 예제를 증명했었다. </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 27 Oct 2014 14:40:11 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[하스켈로 배우는 함수형 언어 1]]></title><description><![CDATA[<p>먼저 이 글은 <strong>edx</strong> 의 <em>FP101.x (Introduction to Functional Programming)</em> 수업을 기반으로 작성되었음을 알려드립니다.</p>
+
+<p>시작에 앞서서, 하스켈을 설치하려면 <a href='http://www.haskell.org/platform/linux.html' >Haskell Platform</a> 을 설치하신 후 터미널에서 <code>ghci</code> 를 입력하면 됩니다. 하스켈 플랫폼은 하스켈 구현체로 <a href='http://www.haskell.org/ghc/' >Glasgow Haskell Compiler, <em>GHC</em></a> 를 포함하고 있습니다. <code>ghci</code> 를 입력하면 하스켈 인터프리터를 사용할 수 있습니다.</p>
+
+<p>깔기 귀찮으시다면 <a href='https://www.fpcomplete.com/' >https://www.fpcomplete.com/</a> 여기서 웹으로 코드를 작성하고 컴파일 할 수 있습니다.</p>
+
+<h3 id="basics">Basics</h3>
+
+<p>먼저 <code>sum [1..10]</code> 을 인터프리터에 입력하면 1부터 10 까지의 합, <code>55</code> 을 돌려줍니다. <code>sum</code> 은 리스트의 원소를 모두 합한 값을 구하는 함수고 <code>[1..10]</code> 은 1-10 을 포함하는 리스트를 생성합니다.</p>
+
+<p>이제 인터프리터를 잠깐 끈 후에 <em>quick-sort</em> 함수를 파일에 작성한 뒤 로드해 봅시다. 아참, <code>ghci</code> 를 종료하려면 <code>ctrl + d</code> 를 입력합니다.</p>
+
+<pre><code class="haskell">-- quicksort.hs
+
+f [] = []  
+f (x:xs) = f ys ++ [x] ++ zs  
+           where
+             ys = [a | a &lt;- xs, a &lt;= x]
+             zs = [b | b &lt;- xs, b &gt; x]
+</code></pre>
+
+<p>수학 표기법 같은데, 놀랍게도 잘 동작합니다. 다시 <code>ghci</code> 실행하고 <code>:load quicksort.hs</code> 를 입력합니다. 그러면 우리가 작성한 <code>f</code> 함수가 인터프리터에 로드 됩니다. <em>퀵-소트</em> 를 사용할 수 있다는 뜻이죠.</p>
+
+<pre><code>ghci &gt; f [3, 2, 9, 5, 4]  
+[2, 3, 4, 5, 9]
+</code></pre>
+
+<p>제대로 정렬 되는걸 확인할 수 있습니다. 매번 인터프리터를 종료했다가 다시 실행시키긴 귀찮으니 파일을 다시 수정했을때 <code>:reload</code> 명령어를 사용해서 다시 로드합니다. 이외에도 다른 명령어를 보고싶다면 <code>ghci</code> 에 <code>:help</code> 를 입력해보세요.</p>
+
+<p>이제 대충 어떻게 돌아가는지 알았으니 기본적인 함수를 좀 알아볼까요? 다른 함수형 언어처럼 하스켈도 <code>List</code> 에 대한 기본적인 연산들이 있습니다.</p>
+
+<pre><code class="haskell">head [2, 3, 4] -- 2  
+tail [2, 3, 4] -- [3, 4]
+
+head [2] -- []  
+tail [2] -- []
+
+init [2, 3, 4] -- [2, 3]  
+last [2, 3, 4] -- 4
+
+take 2 [2, 3, 4] -- [2, 3]  
+drop 2 [2, 3, 4] -- [4]  
+</code></pre>
+
+<p>리스트 원소에 접근하려면 <code>!!</code> 를 이용합니다. 다른 언어와 마찬가지로 <code>0</code> 부터 인덱스가 시작합니다. </p>
+
+<pre><code class="haskell">[1, 2, 3, 4] !! 1 -- 2
+[1, 2, 3, 4] !! 2 -- 3
+[1, 2, 3, 4, 5] !! 2 -- 3
+[1, 2, 3, 4, 5] !! 0 -- 1
+</code></pre>
+
+<p>하스켈의 리스트는 자료구조의 그것처럼, <code>n</code> 번째 원소에 접근하려면 <code>O(n)</code> 의 비용이 듭니다. 그런 이유에서 리스트의 원소를 구하는 <code>length</code> 도 <code>O(n)</code> 의 비용이 듭니다. 자바의 배열과는 좀 다르죠? </p>
+
+<p>이제 리스트에 대한 몇 가지 연산을 더 알아봅시다.</p>
+
+<pre><code class="haskell">product [1, 2, 3, 4, 5] -- 120  
+[1, 2, 3] ++ [4, 5] -- [1, 2, 3, 4, 5]
+reverse [1, 2, 3, 4] -- [4, 3, 2, 1]  
+</code></pre>
+
+<p><code>++</code> 는 <em>append</em> 연산입니다. 앞에 온 리스트에, 뒤에 온 리스트를 붙여줍니다. </p>
+
+<h3 id="functionapplication">Function Application</h3>
+
+<p>이제 함수를 사용하는 법을 좀 알아볼까요? 일반적으로 <code>f</code> 라는 함수에 파라미터 <code>a</code> 를 적용하려면 <code>f(a)</code> 이렇게 쓸 텐데요. 하스켈에선 <code>f a</code> 라고 작성해도 됩니다. 왜냐하면 함수의 우선순위가 다른 연산자들보다 높거든요</p>
+
+<blockquote>
+  <p>Function application is assumed to have higer priority than all other operators</p>
+</blockquote>
+
+<p>이런 이유에서 <code>f a + b</code> 는 <code>f(a) + b</code> 입니다. <code>f(a + b)</code> 를 의도했다면 <code>f(a + b)</code> 라고 쓰셔야 합니다.</p>
+
+<pre><code class="haskell">f x -- f(x)  
+f x y -- f(x, y)  
+f (g x) -- f(g(x))  
+f x (g y) -- f(x g(y))  
+f x * g y -- f(x) * g(y)  
+</code></pre>
+
+<p>이제 좀 스크립트에 다른 함수를 작성해 볼까요?</p>
+
+<pre><code class="haskell">-- test.hs
+
+double x = x + x  
+quadruple x = double (double x)  
+</code></pre>
+
+<p><code>double</code> 은 <em>function</em> 이고 왼쪽에 오는 <code>x</code> 는 <em>argument</em> 입니다. <code>=</code> 뒤에 오는건 함수의 <em>body</em> 로 함수가 무슨일을 하는지 기록한 것이죠.</p>
+
+<p>이제 <code>:load test.hs</code> 후 <code>take (double 2) [1, 2, 3, 4, 5, 6]</code>을 입력하면 <code>[1, 2, 3, 4]]</code> 를 돌려줄겁니다. 다른 함수를 좀 더 만들어 봅시다.</p>
+
+<pre><code class="haskell">-- test.hs
+
+factorial n = product [1..n]  
+avg ns = sum ns `div` length ns  
+</code></pre>
+
+<p><code>factorial</code> 은 별로 놀랍지 않죠? 그런데 평균을 구하는 <code>avg</code> 는 문법이 좀 신기합니다. <code>ns</code> 는 리스트입니다. <code>sum</code> 을 적용해야 하니까요. 그리고 끝에 <code>s</code> 를 붙이는건 관례인데, 일반적으로 변수 끝에 <code>s</code> 를 붙이면 리스트란 뜻입니다. <code>ns</code> 란 이름은 <em>정수 리스트</em> 라고 알려주는 것이지요. </p>
+
+<p><code>sum ns</code> 는 <code>ns</code> 의 합을 구하고, <code>length ns</code> 는 <code>ns</code> 의 길이를 구합니다. <code>div</code> 함수를 <em>back-quote</em> 감싼 것은 함수가 두개의 파라미터를 가질때 가운데 위치할 수 있도록 해 줍니다. </p>
+
+<p>그래서 <em>back quote</em> 로 감싼  함수를 만나면 하스켈 컴파일러는 <strong>"왼쪽과 오른쪽에 있는 것들을 파라미터로 가지는 함수"</strong> 임을 깨닫죠. 이런 문법은 <code>3 / 5</code> 처럼 함수를 <em>operator (연산자)</em> 쓰듯이 사용할 수 있게 해줍니다. 따라서 위에 나온 코드의 본래 모양은 이렇습니다.</p>
+
+<pre><code class="haskell">avg ns = div (sum ns) (length ns)  
+</code></pre>
+
+<blockquote>
+  <p><em>x <code>f</code> y</em> is just <strong>syntatic sugar</strong> for <em><code>f</code> x y</em></p>
+</blockquote>
+
+<p>아참 그리고 함수의 이름은 소문자로 시작해야 합니다. <code>Avg</code> 는 함수 이름으로 쓸 수 없어요. 그리고 <code>nss</code> 처럼 변수 이름이 <code>s</code> 두개로 끝나면, 그건 리스트의 리스트라는 것을 뜻합니다. 물론 관례죠. 필수는 아닙니다. 그러나 우리가 작성하는건 남들이 볼 수도 있으니 따라주는 편이 좋습니다.</p>
+
+<p>그리고 변수의 정의에 대해 <em>layout</em> 을 지키면 <code>{}</code> 블럭을 안 사용해도 됩니다. 예를 들어 다음의 두 코드는 똑같은 코드입니다.</p>
+
+<pre><code class="haskell">a = b + c  
+    where
+      b = 1
+      c = 2
+d = a * 2
+
+a = b + c  
+    where
+      { b = 1
+      c = 2 }
+d = a * 2  
+</code></pre>
+
+<h3 id="booleantuple">Boolean, Tuple</h3>
+
+<p>하스켈은 대 소문자를 구분하기 때문에 <em>Boolean false</em> 를 얻을려면 <code>False</code> 를 입력해야 합니다.</p>
+
+<pre><code class="haskell">False || True -- True  
+</code></pre>
+
+<p>괄호로 감싼 두개의 값들을 <em>tuple</em> 이라 부릅니다. <em>list</em> 는 같은 종류만 담을 수 있지만 <em>tuple</em> 은 달라도 상관 없지요. <code>fst</code>, <code>snd</code> 는 <em>tuple</em> 에서 첫 번째 와 두 번째 값을 돌려주는 함수입니다.</p>
+
+<pre><code class="haskell">fst (1, "Hello") -- 1  
+snd (1, "Hello") -- "Hello"  
+fst (snd (1, (2, 3))) -- 2  
+</code></pre>
+
+<p>아참, <code>ghci</code> 에서 <code>:t</code> 을 입력하면 <em>expression</em> 의 타입을 알 수 있습니다. <code>:t False</code>, <code>:t length</code>, <code>:t head</code>, <code>:t (1, "Hello")</code> 등을 입력해보세요.</p>
+
+<h3 id="types">Types</h3>
+
+<p>다른 언어처럼 하스켈도 타입이 있습니다. <code>False</code> 와 <code>True</code> 은 <code>Bool</code> 타입이죠. <code>ghci</code> 에서 <code>:t False</code> 를 입력하면 <code>False :: Bool</code> 이란 결과를 돌려줍니다. <code>e :: t</code> 는 <code>e</code> 가 <code>t</code> 타입을 가지고 있다는 뜻입니다.</p>
+
+<p>모든 <em>expression (식)</em> 은 타입을 가지고 있습니다. 하스켈 컴파일러는 컴파일 타임에 <em>type inference (타입 추론)</em> 을 통해서 타입을 찾아냅니다. 만약 함수의 타입과 불일치하는 인자가 파라미터로 넘겨진다면 타입 에러가 발생하는 것이지요.</p>
+
+<p>하스켈에서 문자열을 나타내는 타입인 <code>String</code> 은 사실 문자 하나를 의미하는 <code>Char</code> 의 리스트입니다. </p>
+
+<p>그리고 <em>fixed-precision integer</em> 를 의미하는 <code>Int</code> 이외에도  파이썬 처럼 <em>arbitrary-precision integer</em> 를 위한 <code>Integer</code> 타입이 있습니다. 실수는 <code>Float</code> 타입을 이용해 나타냅니다.</p>
+
+<p>앞서 언급했듯이 <em>Tuple</em> 과 달리 <em>List</em> 는 같은 타입만 가질 수 있습니다. 그래서  <code>[False, False, True]</code> 의 경우  <code>[Bool]</code> 타입입니다. 문자열은 문자의 리스트이므로 <code>String</code> 타입은 <code>[Char]</code> 입니다. 스트링의 리스트는 <code>[String]</code> 이고 더 정확히는 <code>[[Char]]</code> 입니다.</p>
+
+<p>그리고 아까는 <em>Tuple</em> 을 두개의 원소만 가질 수 있다고 했지만 사실은 두개 이상의 원소를 가질 수 있습니다 <code>n</code> 개의 원소를 가진 <em>tuple</em> 을 <em>n-tuple</em> 이라 부릅니다. 예를 들어 이런 <em>tuple</em> 도 있을 수 있습니다.</p>
+
+<pre><code class="haskell">(False, 'a', True) :: (Bool, Char, Bool)
+(True, ['a', 'b']) :: (Bool, [Char])
+</code></pre>
+
+<h3 id="functiontype">Function Type</h3>
+
+<p>함수는 한 타입의 값을 다른 타입의 값으로 매핑합니다.</p>
+
+<blockquote>
+  <p>A <em>function</em> is a mapping from values of one type to values of another types</p>
+</blockquote>
+
+<p>예를 들어 <code>:t not</code> 을 <code>ghci</code> 에서 입력하면 아래처럼 출력됩니다. 
+<code>not</code> 함수는 <code>Bool</code> 타입을 받아 <code>Bool</code> 타입을 돌려준다는 뜻입니다.</p>
+
+<pre><code class="haskell">not :: Bool -&gt; Bool  
+</code></pre>
+
+<p>이제 파일에 타입까지 같이 명시해서 함수를 작성해 봅시다.</p>
+
+<pre><code class="haskell">add :: (Int, Int) -&gt; Int  
+add (x, y) = x + y
+
+zeroto :: Int -&gt; [Int]  
+zeroto n :: [0..n]  
+</code></pre>
+
+<p>함수가 만약 <em>tuple</em> 을 인자로 받으면 괄호가 필요합니다.</p>
+
+<h3 id="curriedfunction">Curried Function</h3>
+
+<p>여기서 잠깐 <em>Currying</em> 을 설명할 텐데요, 하스켈에서 빠질 수 없는 부분이니 이해가 어렵다면 다른 글을 찾아서라도 이해를 하시는 편이 좋습니다.</p>
+
+<p><em>Currying</em> 의 기본 개념은 이렇습니다. 함수가 <code>(Int, Int) -&gt; Int</code> 타입이라면 <strong>계산을 끝내기 위해 두개의 정수를 받아</strong> 하나의 <code>Int</code> 를 돌려줄겁니다. </p>
+
+<p>다시 한번 반복하자면, 계산을 끝내기 위해서는 두개의 정수가 필요합니다. 그렇다면 하나의 정수만 받고, 나머지는 계산이 필요한 시점에 받으면 안될까요?</p>
+
+<pre><code class="haskell">Int -&gt; (Int -&gt; Int)  
+</code></pre>
+
+<p>바꿔 말해서, 인자 하나를 받아서 계산을 일정부분 해 내고, 나머지는 <strong>인자를 하나 더 받아 계산을 마무리 해 돌려주는 함수</strong> 를 리턴해도 괜찮지 않을까요? 나머지 계산은 그 함수에서 할거니까, 결국 인자 2개로 계산을 해 내는 건 똑같으니까요.</p>
+
+<p>이게 <em>Currying</em> 의 기본 개념입니다. 다시 말해서 다음의 두 타입은 같은 일을 한다는 거죠.</p>
+
+<pre><code class="haskell">(Int, Int) -&gt; (Int)
+
+-- same as
+Int -&gt; (Int -&gt; Int)  
+</code></pre>
+
+<p>이게 언제 유용할까요? 인자를 부분적으로 채운 함수가 필요할 때를 생각 해 봅시다. </p>
+
+<pre><code class="haskell">add :: Int -&gt; (Int -&gt; Int)  
+add x y = (x + y)
+
+add3 = add 3  
+add3 4 -- 7  
+</code></pre>
+
+<p>3을 미리 더 해놓은 <code>add3</code> 이란걸 만들어서 써먹었습니다. 이렇게 <em>Currying</em> 을 활용할 수 있죠. <code>:t</code> 를 입력하면 <code>Int -&gt; Int</code> 를 확인할 수 있습니다. <code>:take 5</code> 도 <em>curried function</em> 이죠.</p>
+
+<p><strong>결국 <em>Currying</em> 은 <code>n</code> 개의 인자를 가진 함수를 <code>n-1</code> 개의 부분적으로 계산된 함수로 바꿀 때</strong> 쓸 수 있습니다. 단지 <code>n</code> 개의 파라미터만 가진 <strong>하나의 함수</strong> 보다 <strong>여러 개의 부분적인 함수</strong>를 만들어 놓으면 재활용 할 수 있으므로 훨씬 좋죠. 인자에 함수를 넘길 수 있는 함수형 언어에서는 함수를 재활용 할 수 있다는 건 정말 좋은 일입니다..</p>
+
+<p>하스켈에서는 <em>Currying</em> 을 아주 중요하게 여깁니다. 얼마나 중요하게 생각하는지, 함수 타입에 괄호가 없으면 자동으로 <em>curried function</em> 이 되게끔 해 놓았지요. 아래의 두 함수는 같습니다.</p>
+
+<pre><code class="haskell">add :: Int -&gt; (Int -&gt; Int)
+
+-- same as
+
+add :: Int -&gt; Int -&gt; Int  
+</code></pre>
+
+<p>다시 말해 함수의 타입은 <em>right-associative (우측 결합)</em> 입니다. 반대로 함수의 호출은 <em>left-associative (좌측 결합)</em> 이죠.</p>
+
+<pre><code class="haskell">add 3 4
+
+-- same as
+
+(add 3) 4
+</code></pre>
+
+<p>그래서 그냥 함수 타입에 괄호를 안쓰시고 인자의 갯수가 <code>n</code> 개라면 이 함수를 호출 할 때 <code>n-1</code> 개의 <em>curried function</em> 을 호출하신다고 생각하면 됩니다.</p>
+
+<h3 id="generics">Generics</h3>
+
+<p><em>polymorphic</em> 은 <em>of many form (다양한 형태의)</em> 라는 뜻입니다. 프로그래밍에선 주로 다양한 타입을 이야기 할때 사용한 용어인데요, <code>length</code> 같은 경우 타입을 보면 이렇습니다.</p>
+
+<pre><code class="haskell">length :: [a] -&gt; Int  
+</code></pre>
+
+<p><code>a</code> 라는 타입은 없으므로 여기선 <strong>아무 타입이나</strong> 와도 된다는 뜻입니다. 다시 말해 <code>length</code> 는 <em>polymorphic function</em> 입니다. 다양한 타입을 취할 수 있는 함수죠. <code>length</code> 는 사실 무슨 타입이 오든 관심이 없습니다. 갯수를 세는데만 정신이 팔려있는 함수지요.</p>
+
+<p>여기서 <code>a</code>는 <em>type variable</em> 이라 부릅니다. <code>a</code> 가 아니라 <code>b</code>, <code>c</code> 등 소문자이기만 하면 됩니다.</p>
+
+<p>참고로 프로그래밍에서 <em>polymorphism</em> 은 <em>generics</em> 와 <em>sub-typing</em> 의 두 가지 개념을 모두 포함하는 용어입니다. <em>generics</em> 는 <em>type parameterization</em> 을, <em>sub-typing</em> 은 <em>type-hierarchy</em> 를 의미하지요.</p>
+
+<p>이제 몇 가지 <em>polymorphic function</em> 을 살펴봅시다.</p>
+
+<pre><code class="haskell">*Main&gt; :t fst
+fst :: (a, b) -&gt; a  
+*Main&gt; :t head
+head :: [a] -&gt; a  
+*Main&gt; :t take
+take :: Int -&gt; [a] -&gt; [a]  
+*Main&gt; :t zip
+zip :: [a] -&gt; [b] -&gt; [(a, b)]
+
+*Main&gt; [1, 2, 3] `zip` ['a', 'b', 'c']
+[(1,'a'),(2,'b'),(3,'c')]
+</code></pre>
+
+<p><em>polymorphic function</em> 이 특정 타입에 대해 제한 되었는 것을 하스켈에서는 <em>overloaded</em> 되었다고 부릅니다. 다시 말해 특정타입에만 해당 함수를 사용할 수 있다는 거죠. 이게 <em>C++</em> 에서의 <em>오버로딩</em> 과는 좀 의미가 다릅니다. </p>
+
+<blockquote>
+  <p>It really means that you're restricting the types of the parameters.</p>
+</blockquote>
+
+<p>숫자에 대해서만 사용할 수 있는 <code>sum</code> 을 좀 살펴볼까요?</p>
+
+<pre><code class="haskell">sum :: Num =&gt; [a] -&gt; a  
+</code></pre>
+
+<p><code>sum</code> 은 정수나 실수에 대해 모두 사용할 수 있지만 문자열에 대해서는 불가능합니다. 이게 바로 <em>overloaded</em> 된 것이죠. 그 부분이 바로 <code>Num =&gt;</code> 이 의미하는 바입니다.</p>
+
+<p>하스켈은 <em>overloading</em> 에 사용할 수 있는 다양한 타입 클래스가 있습니다. <code>Num</code>, <code>Eq</code>, <code>Ord</code> 등이 그것이죠. <code>ghci</code> 에서 <code>==</code> 를 타입 검사 해볼까요? 아참, <code>==</code> 은 <code>:t (==)</code> 로 검사해야합니다.</p>
+
+<pre><code class="haskell">*Main&gt; :t (&lt;) -- Ordered types
+(&lt;) :: Ord a =&gt; a -&gt; a -&gt; Bool
+*Main&gt; :t (==) -- Equality types
+(==) :: Eq a =&gt; a -&gt; a -&gt; Bool
+*Main&gt; :t (+) -- Numeric types
+(+) :: Num a =&gt; a -&gt; a -&gt; a
+</code></pre>
+
+<p>예를 들어 다음의 <code>palindrome</code> 함수 타입을 잘 보세요.</p>
+
+<pre><code class="haskell">palindrome xs = reverse xs == xs
+
+:t palindrome -- Eq [a] =&gt; [a] -&gt; Bool
+</code></pre>
+
+<p>다시 말해서 <code>[a]</code> 가 비교가 가능한 <code>Eq</code> 타입이어야 한다는 뜻입니다.</p>
+
+<h3 id="basicclasses">Basic Classes</h3>
+
+<p><code>Eq</code> 는 해당 클래스가 비교할 수 있음을, <code>Ord</code> 는 순서가 있음을 나타냅니다. 기본 타입인 <code>Bool</code>, <code>Char</code>, <code>String</code>, <code>Int</code>, <code>Integer</code>, <code>Float</code> 와 <code>Tuple</code>, <code>List</code> 는 모두 <code>Ord</code> 와 <code>Eq</code> 클래스의 인스턴스입니다. 참고로 하스켈에서 <em>Not equal</em> 은 <code>/=</code> 입니다.</p>
+
+<p><code>(&gt;)</code>, <code>(&gt;=)</code>, <code>(&lt;)</code>, <code>(&lt;=)</code>, <code>max</code>, <code>min</code> 등이 <code>Ord</code> 클래스에 대해 적용할 수 있는 함수입니다. 그리고 <code>String</code>, <code>Tuple</code>, <code>List</code> 는 <em>사전 편찬 순서 (lexicographically)</em> 를 기준으로 비교됩니다. </p>
+
+<h3 id="showabletype">Showable Type</h3>
+
+<p>다른 언어의 <code>toString</code> 이 그렇듯이, <code>Show</code> 클래스의 인스턴스들은 <code>show</code> 함수를 이용하면 <code>String</code> 형태로 출력됩니다.</p>
+
+<pre><code class="haskell">:t show -- Show a =&gt; a -&gt; String
+show False -- "False"  
+show [1, 2, 3] -- "[1, 2, 3]"  
+</code></pre>
+
+<h3 id="readabletype">Readable Type</h3>
+
+<p><code>Read</code> 타입 인스턴스들은 <code>read</code> 함수를 이용해 <code>String</code> 으로부터 얻어질 수 있습니다. </p>
+
+<pre><code class="haskell">:t read -- Read a =&gt; String -&gt; a
+
+read "False" :: Bool  
+read "[1, 2, 3]" :: [Int] -- [1, 2, 3]  
+</code></pre>
+
+<h3 id="integralfractionalrational">Integral, Fractional, Rational</h3>
+
+<p>단순히 숫자 클래스로 <code>Num</code> 만 있는건 아니고 정수나, 분수, 유리수 등을 나타내는 다양한 클래스가 있고 여기에 적용할 수 있는 함수가 있고, 불가능한 함수가 있습니다. 예를 들어 <code>mod</code> 나 <code>div</code> 는 <code>Integral</code> 에만 적용 가능합니다. <code>(/)</code> 는 <code>Fractional</code> 에만 적용 가능합니다.</p>
+
+<h3 id="guardedequations">Guarded Equations</h3>
+
+<p><code>if</code> 대신에 더 좀 편하게 사용할 수 있는 <em>guarded equation</em> 이 있습니다. <strong>다른 계산 없이</strong> <code>if</code> 만 바로 사용한다면 다음과 같이 바꿔 쓸 수 있죠.</p>
+
+<pre><code class="haskell">abs n = if n &gt;= 0 then n else -n  
+signum n = if n &gt; 0 then 1 else  
+             if n &lt; 0 then -1 else 0
+
+-- same as
+
+abs n | n &gt;= 0 = n  
+      | otherwise = -n 
+
+signum n | n &gt; 0 = 1  
+         | n &lt; 0 = -1
+         | otherwise = 0 
+</code></pre>
+
+<h3 id="patternmatching">Pattern Matching</h3>
+
+<p><em>Scala</em> 나 <em>C#</em> 과는 다르게 하스켈은 패턴매칭을 바로 이용합니다. <code>case</code> 나 <code>switch</code> 없이요! 예를 들어</p>
+
+<pre><code class="haskell">not :: Bool -&gt; Bool  
+not False = True  
+not True = False  
+</code></pre>
+
+<p>패턴 매칭은 위에서 부터 순서대로 적용됩니다. 예를 들어 <code>not False = False</code> 가 코드에 제일 위에 있다면 항상 <code>False</code> 만 돌려줄거에요. 우울한 일이 될겁니다.</p>
+
+<p>이제 2개의 피 연산자를 갖는 연산자 <code>&amp;&amp;</code> 를 패턴매칭을 이용해 만들어 볼까요? 좌 우에 피 연산자를 가지는 함수를 만들기 위해서는 <code>(*)</code> 처럼 괄호로 감싸면 됩니다. </p>
+
+<pre><code class="haskell">(&amp;&amp;) :: Bool -&gt; Bool -&gt; Bool
+
+True &amp;&amp; True = True  
+False &amp;&amp; False = False  
+False &amp;&amp; True = False  
+True &amp;&amp; False = False  
+</code></pre>
+
+<p>더 간단히는 <code>_</code> 를 이용할 수 있죠. <em>wild card pattern</em> 이라고 부릅니다. <code>_</code> 는 <em>아무거나 (Anything)</em> 이라고 생각하시면 됩니다. 스칼라를 배우셨다면 익숙하신 기호죠! $</p>
+
+<pre><code class="haskell">(&amp;&amp;) :: Bool -&gt; Bool -&gt; Bool
+True &amp;&amp; True = True  
+_ &amp;&amp; _ = False  
+</code></pre>
+
+<p>그러나 위 정의보다 더 효율적인 <code>(&amp;&amp;)</code> 를 만드는 방법이 있습니다. 위 패턴매칭에서 둘 다 <code>True</code> 일 경우 우측 <code>True</code> 는 사실 평가할 필요가 없습니다. 매칭 시켜봤자 어차피 <code>True</code> 니까요.</p>
+
+<pre><code class="haskell">True &amp;&amp; b = b  
+False &amp;&amp; _ = False  
+</code></pre>
+
+<p>이 경우 패턴매칭에서 <code>b</code> 는 변수입니다. 왼쪽 피연산자가 <code>False</code> 일 경우도 우측 피 연산자 <code>_</code> 를 <em>evaluation (평가)</em> 하지 않고 바로 <code>False</code> 를 줍니다. 다시 말해 더 효율적이란 뜻이지요.</p>
+
+<p>아참 그리고 패턴매칭에서 동일한 변수를 두번 사용할수 없습니다. <code>b &amp;&amp; b = b</code> 는 에러를 내뿜습니다. 주의하세요</p>
+
+<h3 id="listpatterns">List Patterns</h3>
+
+<p>함수형 언어에서는 리스트가 주된 자료구조 이기 때문에 패턴매칭에 리스트를 사용할 수 있다면 프로그래머의 삶을 편하게 만들 수 있습니다. </p>
+
+<p><code>:</code> 는 <em>Cons</em> 라 부르는 연산자인데요, <code>[1, 2, 3, 4]</code> 는 <code>1 : 2 : 3 : 4 : []</code> 더 정확히는 <code>1 : (2 : ( 3: (4 : []))))</code> 입니다. 즉 원소와 뒤에오는 리스트를 연결해주는 것이죠. 요로코롬 패턴매칭에 활용할 수 있습니다.</p>
+
+<pre><code class="haskell">head (x : _) = x  
+tail (_ : xs) = xs  
+</code></pre>
+
+<p><code>head</code> 나 <code>tail</code> 모두 패턴이 <em>비어있지 않은 리스트</em> 이므로 빈 리스트가 인자로 올때는 에러가 납니다. 그리고, 함수 적용의 우선순위가 다른 연산자들 보다 높기 때문에 <code>head x:_</code> 는 <code>(head x) : _</code> 가 되어 에러가 납니다. 괄호를 잊지마세요.</p>
+
+<h3 id="lambdaexpression">Lambda Expression</h3>
+
+<p><em>lambda (람다)</em> 는 이제 유명합니다. <em>Java 8</em> 에도 추가되었으니 인기있는 대부분의 언어는 람다를 가지고 있죠. 익명함수라고 불리기도 하는데, 하스켈에선 <code>\</code> 를 이용해 람다를 표시합니다. 이를테면, <code>\x -&gt; x + 1</code> 처럼요. 람다가 왜 유용하나면</p>
+
+<p>(1) <em>currying</em> 을 이용해 정의된 함수를 좀더 의미있게 표현할 수 있습니다.</p>
+
+<blockquote>
+  <p>Lambda expressions can be used to give a formal meaning to functions defined using <em>currying</em></p>
+</blockquote>
+
+<p>이를테면 다음의 두 함수는 동일합니다. 아래 람다를 이용해 정의한 식이 함수를 리턴하는 함수라는 의미가 더 강하죠.</p>
+
+<pre><code class="haskell">add x y = x + y
+
+-- same as
+
+add = \x -&gt; (\y -&gt; x + y)
+
+const :: a -&gt; b -&gt; a  
+const x _ = x
+
+-- same as
+
+const :: a -&gt; (b -&gt; a)  
+const x  
+</code></pre>
+
+<p>(2) 람다를 이용하면 컴퓨터 과학의 가장 큰 난제중 하나인 <em>naming (명명)</em> 을 피할 수 있습니다!</p>
+
+<pre><code class="haskell">odds n = map f [0..n]  
+          where
+        f x = x `mod` 2 /= 0
+
+odds1 n = map (\x -&gt; x `mod` 2 /= 0) [0..n]  
+</code></pre>
+
+<h3 id="sections">Sections</h3>
+
+<p><em>in-fix operator</em> 는 괄호를 더해 맨 앞으로 끌어올 수 있습니다.</p>
+
+<blockquote>
+  <p>An operator written between its two arguments can be converted int a curried function written before its two arguments by using parentheses.</p>
+</blockquote>
+
+<pre><code class="haskell">1 + 2 -- 3
+
+-- same as
+
+(+) 1 2 -- 3
+</code></pre>
+
+<p>이렇게 연산자를 앞으로 옮길 수 있게 되면 피 연산자 하나와 괄호를 엮을 수 있습니다. <code>(x+)</code> 또는 <code>(+x)</code> 처럼요. 이렇게 피연산와 연산자가 괄호로 묶인 것을 <em>section</em> 이라 부릅니다. <code>x + y</code> 를 이용하면 두개의 섹션을 만들 수 있습니다. <code>(x+)</code> 와 <code>(+y)</code> 입니다.</p>
+
+<p><em>section (섹션)</em> 은 언제 유용할까요? 우리는 섹션을 이용하면 람다를 만들어 주는 대신에 좀 더 의미있는 <em>partiall applied function (부분 함수)</em> 를 만들 수 있습니다.</p>
+
+<p>이를테면 <code>double (k (/2))</code> 처럼요</p>
+
+<p>이외에도 섹션은 연산자의 타입을 기술하거나 <code>(&amp;&amp;) ::</code>, 연산자가 다른 함수의 인자로 들어갈때 필요합니다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Programming Haskell</em></p>]]></description><link>http://1ambda.github.io/haskell-intro1/</link><guid isPermaLink="false">f011324c-e0cc-44ef-97ae-7aa23d60adc6</guid><category><![CDATA[programming language]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 27 Oct 2014 09:18:37 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 6]]></title><description><![CDATA[<p>지난 시간에는 <em>referential transparency (참조투명성)</em> 과 함수형 언어에서의 귀납법인 <em>structural induction</em> 에 대해서 배우고, 몇 개의 예제를 증명했었다. </p>
 
 <p>이번 시간에는 스칼라의 컬렉션인 <code>Seq</code>, <code>Set</code>, <code>Map</code> 을 알아보고 마지막 챕터에서는 여기에 <em>higher-order function</em> 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. <del>one-liner 의 절정을 보여주시는 교수님</del></p>
 
@@ -4425,449 +4884,4 @@ class Nil[T] extends List[T] {
   else if (n == 0) list.head
   else nth(n - 1, list.tail)
 }
-</code></pre>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-3/</link><guid isPermaLink="false">3853d556-1f59-4c73-b4b3-8ec4ffb80c4a</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 30 Sep 2014 12:26:11 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 2]]></title><description><![CDATA[<p>2014-09-27, <strong>Functional Programming in Scala</strong>, Coursera</p>
-
-<h3 id="21higherorderfunctions">2.1 Higher-Order Functions</h3>
-
-<h4 id="higherorderfunctions">Higher-Order Functions</h4>
-
-<p>Functional PL 에서는 함수를 <em>first-class</em> 로 다루는데, 이는 함수를 파라미터로 넘기거나 결과로 리턴할 수 있다는 소리다. </p>
-
-<p>이렇게 함수를 파라미터로 받거나, 혹은 함수를 리턴하는 함수를 <strong>Higher order functions</strong> 라 부른다.</p>
-
-<h4 id="functiontypes">Function Types</h4>
-
-<blockquote>
-  <p>type A => B is the type of a function that thaks an arg of type A and return a result of type B.</p>
-</blockquote>
-
-<h4 id="anonymousfunctions">Anonymous Functions</h4>
-
-<blockquote>
-  <p>The type of the parameter can be omittered if it can be infferred by the compiler</p>
-</blockquote>
-
-<h3 id="22currying">2.2 Currying</h3>
-
-<p>2.1 에서 우리는 <strong>Higher Order Functions</strong> 를 만들었다. 다음과 같은 Tail-Recursive 버전의 <code>sum</code> 이 있다고 하자.</p>
-
-<pre><code class="scala">def TailRecursiveSum(f: Int =&gt; Int, a: Int, b: Int): Int = {  
-  def loop(a: Int, acc: Int): Int = {
-    if (a &gt; b) acc
-    else loop(a + 1, f(a) + acc)
-  }
-  loop(a, 0);
-}
-
-def sumInts(a: Int, b: Int) =  sum(x =&gt; x, a, b)  
-def sumCubes(a: Int, b: Int) =  sum(x =&gt; x * x * x, a, b)  
-def sumFactorials(a: Int, b: Int) =  sum(fact, a, b)  
-</code></pre>
-
-<pre><code>
-</code></pre>
-
-<p><code>a</code> 와 <code>b</code>는 <code>sumInts</code> 와 <code>sumCubes</code> 로 부터 <code>sum</code> 으로 변하지 않고 넘어간다. 제거할 수 없을까? <br />
-답은 간단하다. <code>sum</code> 이 <code>a, b</code> 를 받는 함수를 리턴하면 된다.</p>
-
-<pre><code class="scala">def sum(f: Int =&gt; Int): (Int, Int) =&gt; Int = {  
-  def sumF(a: Int, b: Int): Int = {
-    def loop(a: Int, acc: Int): Int = {
-      if (a &gt; b) acc
-      else loop(a + 1, f(a) +  acc)
-    }
-    loop(a, 0)
-  }
-  sumF
-}
-</code></pre>
-
-<p>그러면 이렇게 인자를 숨길 수 있다.</p>
-
-<pre><code class="scala">def sumInts = Currying.sum(x =&gt; x)  
-assert(sumInts(1, 10) == 55)  
-</code></pre>
-
-<p><code>sum</code> 이 인자로 받은 <code>f</code> 를 적용한 새로운 함수 <code>sumF</code> 를 돌려주므로 다음과 같이 호출도 가능하다.</p>
-
-<pre><code class="scala">def cube = (x: Int) =&gt; x * x * x  
-sum(cube)(1, 10)  
-</code></pre>
-
-<p>함수를 리턴하는 함수는 유용하기 때문에, 스칼라에서는 이를 위한 특별한 문법을 제공한다. 다음의 두 함수 <code>sum1</code>과 <code>sum2</code> 는 동일하다.</p>
-
-<pre><code class="scala">def sum1(f: Int =&gt; Int): (Int, Int) =&gt; Int = {  
-  def sumF(a: Int, b: Int): Int = {
-    if (a &gt; b) 0
-    else f(a) + sum(a + 1, b)
-  }
-}
-
-def sum2(f: Int =&gt; Int)(a: Int, b: Int): Int = {  
-  if (a &gt; b) 0
-  else f(a) + sum2(f)(a + 1, b)
-}
-</code></pre>
-
-<h4 id="expansionofmultipleparameterlists">Expansion of Multiple Parameter Lists</h4>
-
-<p><code>def f(args1)...(argsn) = E</code> 가 있을때 이건 다음과 같이 함수로 감싸고 그 함수를 다시 돌려주면, 원 함수 <code>f</code> 에서 파라미터를 하나 줄일 수 있다.</p>
-
-<p><code>def f(args1)...(argsn-1) = { def g(argn) = E; g }</code> 만약 익명함수로 표현한다면,</p>
-
-<p><code>def f(args1)...(argsn-1) = (argsn =&gt; E)</code> 와 같이 표현할 수 있다. 따라서 이와 같이 함수로 감싸 원 함수 <code>f</code> 에서 파라미터를 반복적으로 줄이다 보면 </p>
-
-<p><code>def f(args1)...(argsn) = E</code> 는 인자를 1개씩 받는 N개의 익명함수로 표현할 수 있다.</p>
-
-<p><code>def f = (args1 =&gt; (args2 =&gt; ...(argn =&gt; E) ...))</code> 이러한 스타일을 <strong>currying</strong> 이라 부른다.</p>
-
-<h4 id="morefunctiontypes">More Function Types</h4>
-
-<p>그렇다면, 위에서 본 <code>sum</code> 함수의 타입은 무엇일까? <code>def sum(f: Int =&gt; Int)(a: Int, b: Int): Int</code></p>
-
-<p><code>(Int =&gt; Int) =&gt; Int, Int =&gt; Int</code> 로 표현할 수 있다. 근데 스칼라에서 <strong>functional types associate to the right.</strong> 이므로,</p>
-
-<p><code>(Int =&gt; Int) =&gt; (Int, Int =&gt; Int)</code> 와 동일하다.</p>
-
-<h4 id="exercise">Exercise</h4>
-
-<blockquote>
-  <p>(1). Write a <code>product</code> function that calculates the product of the value of a function for the points on a given interval</p>
-</blockquote>
-
-<pre><code class="scala">def product(f: Int =&gt; Int)(a: Int, b: Int): Int = {  
-  if (a &gt; b) 1
-  else f(a) * product(f)(a + 1, b)
-}
-</code></pre>
-
-<blockquote>
-  <p>(2). Write <code>factorial</code> in terms of <code>product</code></p>
-</blockquote>
-
-<pre><code class="scala">def factorial(n: Int): Int = {  
-  product(x =&gt; x)(1, n)
-}
-</code></pre>
-
-<blockquote>
-  <p>(3). Can you write a more general funtion, which generalizes both <code>sum</code> and <code>product</code> </p>
-</blockquote>
-
-<pre><code class="scala">def mapReduce(f: Int =&gt; Int, combine: (Int, Int) =&gt; Int, init: Int)(a: Int, b: Int): Int = {  
-  if (a &gt; b) init
-  else combine(f(a), mapReduce(f, combine, init)(a + 1, b))
-}
-
-def sumUsingMapReduce(f: Int =&gt; Int)(a: Int, b: Int) =  
-  mapReduce(f, (x: Int, y: Int) =&gt; x + y, 0)(a, b)
-
-def productUsingMapReduce(f: Int =&gt; Int)(a: Int, b: Int) =  
-  mapReduce(f, (x: Int, y: Int) =&gt; x * y, 1)(a, b)
-</code></pre>
-
-<h3 id="23examplefindingfixedpoints">2.3 Example: Finding Fixed Points</h3>
-
-<h4 id="findingafixedpointofafunction">Finding a fixed point of a function</h4>
-
-<blockquote>
-  <p>A number is called a <strong>fixed point</strong> of a function f  if <code>f(x) = x</code> </p>
-</blockquote>
-
-<p>어떤 <code>f</code> 들에 대해서는 <code>f(x)</code> 를 반복적으로 적용하면서 변하지 않거나 변화량이 충분히 작아질때를 찾아 <strong>fixed point</strong> 를 찾을 수 있다.</p>
-
-<p>1장에서 만들었던 제곱근을 구하는 함수로 돌아가 보자. 사실 이 함수는 <strong>fixed point</strong> 와 관련이 있다. <code>sqrt(x) = y</code> 라고 했을때 <code>y * y = x</code> 이므로 <code>y = x / y</code> 다. 따라서 <code>sqrt(x)</code> 는 함수 <code>y = x / y</code> 를 꾸준히 적용해서 찾아낼 수 있으므로 <code>y = x / y</code> 의 <strong>fixed point</strong> 다.</p>
-
-<p>다음과 같은 <code>fixedPoint</code> 함수가 있다고 하자.</p>
-
-<pre><code class="scala">val tolerance = 0.0001 // = 1.0E-4  
-def isCloseEnough(x: Double, y: Double) = {  
-  abs((x - y) / x) / x &lt; tolerance
-}
-
-def fixedPoint(f: Double =&gt; Double)(firstGuess: Double): Double = {  
-  def iterate(guess: Double): Double = {
-    val next = f(guess)
-    if (isCloseEnough(guess, next)) next
-    else iterate(next)
-  }
-  iterate(firstGuess)
-}
-</code></pre>
-
-<p>이 함수를 이용해서 </p>
-
-<p><code>sqrt(x: Int) = fixedPoint(y =&gt; x / y)(1.0)</code> </p>
-
-<p>와 같은 제곱근을 구하는 함수를 만들어 볼 수 있겠다. 그러나 <code>sqrt(2)</code>
- 를 실행하면 <code>guess</code> 값이 <code>1.0</code>과 <code>2.0</code> 사이를 널뛰기 하면서 무한 루프를 돈다.</p>
-
-<p>이건 <code>guess</code> 값이 너무나 많이 변하기 때문인데, <code>f</code> 를 적용하는 시퀀스에서 연속적인 두개의 <code>guess</code> 값의 평균을 구하는 <code>f</code> 를 만듦으로서 이 문제를 피할 수 있다. (잘못된 해석일 수 있으므로 원문을 첨부한다.)</p>
-
-<pre><code class="scala">One way to control such oscillations is to prevent the estimation from varying too much. This is done by averaging successive values of the original sequence  
-</code></pre>
-
-<h4 id="functionsasreturnvalues">Functions as return values</h4>
-
-<p>여태까지는 함수를 인자로 사용했을때 언어에서 어떤 이점을 얻을 수 있는가에 대한 설명이었고, 이제부터는 함수를 리턴값으로 사용할때의 장점을 알아 보자. </p>
-
-<p>아까와 같이 averaging 함으로써 stabilizing 하는 기법을 <strong>Average Damping</strong> 이라 부르는데, 아래와 같은 함수를 만들어서 인자로 넘길 수 있다.</p>
-
-<p><code>def avgDamp(f: Double =&gt; Double)(x: Doube) = (x + f(x)) / 2</code></p>
-
-<p>따라서 <code>sqrt</code> 함수는 다음과 같이 새로 작성할 수 있다.</p>
-
-<pre><code class="scala">def avgDamp(f: Double =&gt; Double)(x: Double) = (x + f(x)) / 2  
-def sqrt(x: Double): Double = fixedPoint(avgDamp(y =&gt; x / y))(1)  
-</code></pre>
-
-<p><code>avgDamp</code> 는 <code>x</code> 를 다시 인자로 받는 함수를 돌려준다. 원래라면 <code>def</code> 를 이용해서 새로 함수를 만들고 리턴했어야 하나, 스칼라에서 지원해주는 문법을 이용해서 <code>(x: Double)</code> 을 추가하는 것 만으로 편하게 만들었다.</p>
-
-<p>이번장에선 Higher order function 을 이용해서 함수를 combine 하면 더 강력한 <strong>abstraction(추상화)</strong> 를 얻을 수 있다는 법을 배웠다. 비록 이 방법이 항상 좋은건  아니지만 배우면 다 쓸데가 있기 마련이다.</p>
-
-<p>덤으로 하나 더 정리하자면, <strong>Currying</strong> 은 함수의 인자를 반복적으로 쪼개어 익명 함수로 만든 뒤 재활용 할 수 있도록 만드는 기술이라 보면 된다. 왜냐면 N개의 인자가 있다고 가정할때, 이전에는 1개의 함수에 다양한 인자를 줘야했지만, 커링을 이용하면 N개의 함수로 쪼갤 수 있고, 각각의 리턴되는 함수를 저장할 수 있으므로 각각을 재활용 할 수 있다.</p>
-
-<h3 id="25functionsanddata">2.5 Functions and Data</h3>
-
-<p>이번 장에서는 클래스를 사용한다. 유리수 계산을 하기 위해 <code>def add(n1: Int, d1: Int, n2: Int, d2: Int): Int</code> 와 같은 함수를 만드는 것이 아니라, 데이터를 추상화 하기 위한 방법으로 다음과 같은 클래스를 만들 수 있다.</p>
-
-<pre><code class="scala">class Rational(x: Int, y: Int) {  
-  def numer = x
-  def denom = y
-
-  def add(that: Rational) = {
-    new Rational(
-      numer * that.denom + that.numer * denom,
-      denom * that.denom
-    )
-  }
-}
-</code></pre>
-
-<p>참고로, 스칼라는 <strong>type</strong> 과 <strong>value</strong> 를 서로 다른네임스페이스에서 관리하기 때문에 충돌할 걱정을 할 필요가 없다.</p>
-
-<h4 id="exercise">Exercise</h4>
-
-<blockquote>
-  <p>(1). In your worksheet, add a method <code>neg</code> to class Rational that is used like this <code>x.neg // -x</code></p>
-  
-  <p>(2). Add a method sub to subtract two rational numbers</p>
-  
-  <p>(3). With the values of x, y, z as given in the previous slide, what is the result of <code>x - y - z</code></p>
-</blockquote>
-
-<pre><code class="scala">class Rational(x: Int, y: Int) {  
-  def numer = x
-  def denom = y
-
-  def add(that: Rational) = {
-    new Rational(
-      numer * that.denom + that.numer * denom,
-      denom * that.denom
-    )
-  }
-
-  def sub(that: Rational) = {
-    add(that.neg)
-  }
-
-  def neg = new Rational(-numer, denom)
-}
-</code></pre>
-
-<h3 id="26morefunwithrationals">2.6 More Fun With Rationals</h3>
-
-<p>이전에 만든 <code>Rational</code> 클래스는 약분된 형태로 표현되지 않기 때문에 이런 기능을 추가할 필요가 있다.</p>
-
-<blockquote>
-  <p>reduce them to their smallest numerator and denominator by dividing both with a divisor</p>
-</blockquote>
-
-<p>다양한 방법으로 구현할 수 있겠지만, 가장 쉬운 방법은 <code>Rational</code> 오브젝트가 생성될때 약분 하는 방법이다. </p>
-
-<pre><code class="scala">  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
-  private val g = abs(gcd(x, y))
-
-  def numer = x / g
-  def denom = y / g
-</code></pre>
-
-<h4 id="selfreference">Self-reference</h4>
-
-<p>그리고, <code>less</code>, <code>max</code> 와 같은 함수도 만들어 볼 수 있다. <code>max</code> 가 <strong>self-referencing</strong> 을 위해 <code>this</code> 키워드를 사용한다는 점에 주목하자.</p>
-
-<pre><code class="scala">  def less(that: Rational) = numer * that.denom &lt; that.numer * denom
-  def max(that: Rational) = if (this.less(that)) that else this
-</code></pre>
-
-<h4 id="precondition">Pre-condition</h4>
-
-<p><code>new Rational(1, 0)</code> 을 시도하면 <code>0</code> 으로 나눌수 없기 때문에 에러를 뿜는다. 검사하기 위해 <code>require</code> 함수를 사용할 수 있다.</p>
-
-<p><code>require(y &gt; 0, "denum must be != 0</code></p>
-
-<p><code>assert</code> 도 사용할 수 있는데, <code>require</code> 와는 차이가 있다. <code>AssertionError</code> 가 나오고, <code>require</code> 에서는 <code>IllegalArgumentException</code> 이 나온다. 그래서 서로 다른 의도로 쓰이게끔 만들어졌다는걸 알 수 있다. (오역이 있을 수 있기 때문에 원문을 첨부한다.)</p>
-
-<blockquote>
-  <p>The reflects a difference in intent </br><br/>
-  - <code>require</code> is used to enforce a precondition on the caller of a function <br/>
-  - <code>assert</code> is used as to check the code of the function itself</p>
-</blockquote>
-
-<p>만약 예외를 테스트한다면 <code>scalatest</code> 에서는 <code>intercept</code> 를 이용하면 된다.</p>
-
-<pre><code class="scala">  "Rational(1, 0)" should "throw IllegalArgumentException" in {
-    intercept[IllegalArgumentException] {
-      new Rational(1, 0)
-    }
-  }
-</code></pre>
-
-<h4 id="constructor">Constructor</h4>
-
-<p>스칼라에서는 암시적(implicitly) 인 생성자를 도입했는데, 다시 말해 코드상에 없어도 <strong>Primary Constructor</strong> 가 존재하는데, 이 <strong>Primary Constructor</strong> 는 클래스의 파라미터를 받아서 클래스 바디의 모든 문장을 실행한다. 만약 다른 생성자를 만들고 싶으면, 다음과 같이 작성하면 된다.</p>
-
-<p><code>def this(x: Int) = this(x, 1)</code></p>
-
-<p>우측에 나오는 <code>this</code> 는 <strong>implicit primary constructor</strong> 다.</p>
-
-<h4 id="exercise">Exercise</h4>
-
-<blockquote>
-  <p>Modify the <code>Rational</code> class so that rational numbers are kept unsimplified internally, but the simplification is applied when numbers are converted to strings. Do clients observe the same behavior when interacting with rational class? </br></p>
-</blockquote>
-
-<p>primary constructor 에서 약분을 하지 않고, <code>toString</code> 에서 약분을 할때 과연 제대로 되겠느냐인데, 답은 <strong>아니오</strong> 다. integer overflow 를 생각하면 쉽다. 최대한 약분할 수 있을때 먼저 해버리는것이 낫다. 커다란 수 <code>a</code> ... <code>z</code> 에 대해서 연산 해버리면, 마지막 <code>toString</code> 에서만 약분이 될텐데. 제대로 되지 않을 가능성이 있다.</p>
-
-<blockquote>
-  <p>Yes for small sizes of denominators and nominators and small numbers of operations</p>
-</blockquote>
-
-<h3 id="27evaluationandoperators">2.7 Evaluation and Operators</h3>
-
-<h4 id="classesandsubstitutions">Classes and Substitutions</h4>
-
-<p>(단어 오역이 있을 수 있어서 용어를 그대로 씀)</p>
-
-<p>함수에서 <strong>subtitution</strong> 에 기반한 <strong>compuation model</strong> 을 이용했는데, 사실 이건 클래스를 인스턴스 할때도 똑같이 적용된다. 즉 <code>new C(x1, ... ,xn)</code> 은 <code>new C(v1, ..., vn)</code> 과 같다.</p>
-
-<p>그렇다면, 다음과 같이 클래스가 인자 n 개를 받는 함수를 정의했을때 <code>def f(y1, ... , yn) = b</code> 이런 식은 어떻게 평가될까?</p>
-
-<p><code>new C(v1, ..., vm).f(w1, ... , wn)</code></p>
-
-<p>(1). 클래스의 <strong>formal parameter</strong> <code>x1, ..., xn</code> 이 <strong>actual parameter</strong> <code>v1, ... , vm</code> 으로 <strong>substitution</strong> 된다.<br/></p>
-
-<p>(2). 함수 <code>f</code> 의 <strong>formal parameter</strong> <code>y1, ... , yn</code> 이 <strong>actual parameter</strong> <code>w1, ... , wn</code> 으로 <strong>substitution</strong> 된다. <br/></p>
-
-<p>(3) <code>new Class(v1, ... , vm)</code> 이 <code>this</code> 로 치환되고</p>
-
-<p>(4) <code>f</code> 의 바디 <code>b</code> 가 평가된다.</p>
-
-<p>따라서 이를 식으로 표현하면, 다음과 같이 쓸 수 있다.</p>
-
-<p><code>[v1/x1, ... , vm/xm][w1/y1, ... , wn/yn][new C(v1, ..., vm)/this]b</code> </p>
-
-<p>그러면, 예제를 통해서 살펴보자.</p>
-
-<pre><code class="scala">new Rational(1, 2).less(new Rational(2, 3))  
-</code></pre>
-
-<p>이건 다음과 같이 평가된다.</p>
-
-<pre><code class="scala">[1/2, 2/y][new Rational(2, 3)/that][new Rational(1, 2)/this] this.numer * that.denom &lt; that.numer * this denom
-</code></pre>
-
-<p>결국 이건 아래와 같다.</p>
-
-<pre><code class="scala">new Rational(1, 2).numer * new Rational(2, 3).denom &lt; new Rational(2, 3).numer * new Rational(1, 2).denom
-
-// 1 * 3 &lt; 2 * 2
-// true
-</code></pre>
-
-<h4 id="operators">Operators</h4>
-
-<p><code>Int</code> 의 경우에는 <code>+</code> 를 사용하면 <code>3 + 5</code> 와 같이 표현할 수 있지만 <code>Rational</code> 의 경우에는 <code>r.add(r2)</code> 와 같이 사용해야 했다. 뭔가 불편하다.</p>
-
-<p>스칼라에는 이런 문제를 해결하기 위해 <strong>Infix Notation</strong> 이 있다. 함수의 인자가 하나라면, 괄호를 생략하는 것이다. 바이너리 오퍼레이터처럼 보일 수 있도록.</p>
-
-<pre><code class="scala">r add s // r.add(s)  
-r less s // r less s  
-r max s // r max s  
-</code></pre>
-
-<h4 id="relaxedidentifiers">Relaxed Identifiers</h4>
-
-<p>스칼라에서는 <strong>operator</strong> 또한 <strong>identifier</strong> 가 될 수 있다. 스칼라에서 <strong>identifier</strong> 룰은 아래와 같다</p>
-
-<blockquote>
-  <p>(1). <strong>Alphanumeric:</strong> starting with a letter, followed by a sequence of letters or numbers <br/></p>
-  
-  <p>(2). <strong>Symbolic:</strong> starting with an operator symbol, followed by other character operator symbols <br/></p>
-  
-  <p>(3). The underscore character <code>_</code> counts as a letter <br/></p>
-  
-  <p>(4). Alphanumeric identifiers can also end in an underscore, followed by some operator symbols</p>
-</blockquote>
-
-<p>따라서 <code>*</code>, <code>+?%&amp;</code>, <code>vector_++</code>, <code>counter_=</code> 모두 유효한 identifier 들이다. </p>
-
-<p>이제 이런 symbolic identifier 들을 이용해서 <code>Rational</code> 클래스의 함수 이름들을 산술연산 처럼 보이도록 변경해 보자.</p>
-
-<pre><code class="scala">class Rational(x: Int, y: Int) {  
-  require(y &gt; 0, "denom != 0")
-
-  // secondary constructor
-  def this(x: Int) = this(x, 1)
-
-  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
-  private val g = abs(gcd(x, y))
-
-  def numer = x / g
-  def denom = y / g
-
-  def &lt; (that: Rational) = numer * that.denom &lt; that.numer * denom
-  def max(that: Rational) = if (this &lt; that) that else this
-
-  def + (that: Rational) = {
-    new Rational(
-      numer * that.denom + that.numer * denom,
-      denom * that.denom
-    )
-  }
-
-  def - (that: Rational) = {
-    this + -that
-  }
-
-  def unary_- = new Rational(-numer, denom)
-}
-</code></pre>
-
-<p>재밌는 점은 <code>neg</code> 를 <strong>unary operator</strong> <code>-</code> 로 만들기 위해 <code>unary_</code> 를 이용해서 <code>unary_-</code> 로 정의했다는 것이다. </p>
-
-<p>참고로, return 값을 주기 위해서 <code>unary-_: Rational</code> 과 같이 정의하면 에러가 난다. <code>:</code> 가 포함된 identifier 로 인식하기 때문에 <code>unary-_ :</code> 로 스페이스를 꼭 주어야 한다.</p>
-
-<h4 id="precedencerules">Precedence Rules</h4>
-
-<p>그렇다면 <code>x * x + y</code> 와 같은 경우 <code>*</code> 가 먼저 계산되어야 하는데, 이런건 어떻게 해결할까? 우리가 만든건 정수 연산자가 아니라 함수인데.</p>
-
-<p>이를 위해 스칼라는 다음과 같은 룰을 만들어 두었다.</p>
-
-<blockquote>
-  <p>The precedence of an operator is determined by its first character. The following table lists the characters in increasing order of priority precedence</p>
-</blockquote>
-
-<pre><code class="scala">(all letters) // Alphanumeric
-|
-^
-&amp;
-&lt; &gt;  
-= !
-:
-+ -
-* / %
-(all other special characters)
-</code></pre>
-
-<p>identifier 의 첫글자가 미리 정의된 테이블에 있다면 우선순위가 정해지는 룰이다.</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-2/</link><guid isPermaLink="false">20cff111-9852-407f-9222-acac9d6733e0</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Sep 2014 16:09:24 GMT</pubDate></item></channel></rss>
+</code></pre>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-3/</link><guid isPermaLink="false">3853d556-1f59-4c73-b4b3-8ec4ffb80c4a</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 30 Sep 2014 12:26:11 GMT</pubDate></item></channel></rss>
