@@ -1,5 +1,394 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 07 Nov 2014 05:59:00 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 5]]></title><description><![CDATA[<p>지난시간엔 왜 <em>neural network</em> 를 사용하는지 알아보았다. 데이터의 차수가 매우 클 때 <em>logistic regression</em> 으로는 성능이 떨어지거나 <em>overfitting</em> 의 문제가 발생할 수 있다는 사실을 알게 되었고, 마지막엔 <em>multi class</em> 문제를 어떻게 해결할지도 잠깐 논의 해봤다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 08 Nov 2014 10:14:27 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graphs, The Contraction Algorithm]]></title><description><![CDATA[<p>이번엔 지난시간에 배운 <em>randomized algorithm</em> 을 새로운 <em>domain</em> 인 그래프에 적용해 보고, <em>contraction algorithm</em> 이 무엇인지 알아본다.</p>
+
+<h3 id="graphs">Graphs</h3>
+
+<p>용어 정리부터 시작하자. <em>edge</em> <code>(E)</code> 는 <em>pair of vertices</em> 와 같은 말이다. <code>(E)</code> 는 <em>directed or undirected</em> 일 수 있으므로 <em>unordered pair</em> 또는 <em>ordered pair</em> 일 수 있다. <em>directed edges</em> 는 다른말로 <em>arcs</em> 라 부르기도 한다.</p>
+
+<p><em>cut</em> 은 그래프를 비어있지 않은 두개의 그룹으로 분리하는 것을 말한다.</p>
+
+<blockquote>
+  <p>A cut of a graph <code>(V, E)</code> is a partition of <code>V</code> into two non-empty sets <code>A</code> and <code>B</code></p>
+</blockquote>
+
+<p>따라서 <em>vertice</em> 가 <code>n</code> 개라면 <code>2^n - 2</code> 개의 <em>cut</em> 을 만들 수 있다.</p>
+
+<h3 id="minimumcutproblem">Minimum Cut Problem</h3>
+
+<p><em>crossing edge</em> 를 최소로 하는 <em>cut</em> 을 찾는 문제다. 이걸 어디다 쓸 수 있을까?</p>
+
+<p>(1) identify network bottlenecks / weaknesses <br />
+(2) community detection in social network  </p>
+
+<p>두 사람 혹은 집단간 강하게 결합되고 나머지와는 약하게 결합된 부분(<em>mimimum cut</em>) 을 찾으면 두 개체간 관련성이 있다고 볼 수 있다.    </p>
+
+<p>(3) image segmentation  </p>
+
+<p>이미지를 <em>2D grid</em> 라 <em>grid edge</em> 를 만들어 <em>same object</em> 에서 왔을 가능성을 나타내는 가중치를 부여해 <em>min cut</em> 을 하면 쓸모 없는 부분이 잘려나간다.</p>
+
+<h3 id="graphrepresentation">Graph representation</h3>
+
+<p>그래프가 <em>sparse graphs</em>, <em>dense graphs</em> 냐에 따라 알고리즘이 성능이 잘 나올수도 있고 아닐수도 있기 때문에 이 두 가지를 구분해 보자.</p>
+
+<p><code>n</code> 을 <em>the number of vetices</em>, <code>m</code> 을 <em>the number of edges</em> 라 하자. 대부분의 경우에 <code>m</code> 은 <code>Omega(n)</code>, <code>O(n^2)</code> 이다.</p>
+
+<p><em>sparse graph</em> 는 <code>m</code> 이 <code>O(n)</code> 에 가깝고 <em>dense graphs</em> 는 <code>m</code> 이 <code>O(n^2)</code> 에 가깝다.</p>
+
+<h3 id="adjacencymatrix">Adjacency Matrix</h3>
+
+<p>그래프를 자료구조로 표현하는 몇 가지 방법이 있는데 <em>Adjacency matrix (인접행렬)</em> 의 경우에는 노드 수, <code>n</code> 에 대해 <code>n x n</code> 의 행렬 <code>A</code> 를 만들어서 <code>A_ij</code> 를 <code>i</code> 노드와 <code>j</code> 노드가 연결되었다면 값을 <code>1</code> 채운다</p>
+
+<p>몇 가지 변형이 있을 수 있는데 <em>parallel edges</em> 가 허용된다면 <code>A_ij</code> 는 연결된 엣지 수 일 수 있고, <code>A_ij</code> 에 가중치를 담는 경우도 있다. <em>directed graph</em> 면 <code>i -&gt; j</code> 냐 <code>j -&gt; i</code> 냐에 따라 <code>-1 or +1</code> 을 값으로 사용할 수 있다.</p>
+
+<p>어떤 경우든 <em>adjacency matrix</em> 방식 자체는 <em>edge</em> 수와는 관계 없이 <em>vertice</em> 수의 제곱에 비례하는 공간이 필요하다. 따라서 <em>sparse graphs</em> 에서는 사용하지 않는 편이 낫다.</p>
+
+<h3 id="adjacencylist">Adjacency List</h3>
+
+<p><em>Adjacency list (인접 리스트)</em> 로 그래프를 표현할 경우엔 </p>
+
+<p>(1) array (or list) of vertices (<code>theta(n)</code>) <br />
+(2) array (or list) of edges (<code>theta(m)</code>) <br />
+(3) each edge points to its endpoint (<code>theta(m)</code>) <br />
+(4) each vertex points edges (<code>theta(m)</code>)</p>
+
+<p>(4) 의 경우 <em>undirected graph</em> 라면 명확한데, <em>directed graph</em> 의 경우에는 <em>tail</em> 만 저장 한다던지 몇가지 방법을 쓸 수 있다. </p>
+
+<p>그럼 <em>adjacency list</em> 는 얼마의 공간을 차지할까? (3) 의 경우는 위에 표시했듯이 (<code>theta(m)</code>) 인데, 각각의 <em>edge</em> 는 2 개의 <em>vertex</em> 를 저장하지만 <code>2</code> 는 상수 취급한다.</p>
+
+<p>(4) 가 노드마다 간선 수가 달라 계산이 어려울 수 있는데, (3) 과 1:1 대응이라 보면 된다. 노드가 가리키는 간선이나, 간선이 가리키는 노드나 수는 같다. 따라서 (<code>theta(m)</code>) 이므로 전체 메모리 사용은 (<code>theta(m + n)</code>) 이다. </p>
+
+<p>그러면 인접 행렬과 인접 행렬중 어떤게 더 나을까? 둘 다 장단이 있지만 <em>graph search</em> 는 단연 인접 행렬이 더 낫고, 요즘엔 <em>node</em> 는 정말 많은 반면 <em>edge</em> 는 좀 적기 때문에 인접 리스트가 더 낫다.</p>
+
+<p>간단히 웹만 생각해봐도 노드 자체는 엄청나게 많은 반면 간선은 적다. 만약 인접 행렬로 그래프를 표현하면 노드 수의 제곱에 비례하는 메모리가 필요한데, 이건 리소스 문제를 겪을 수 있다.</p>
+
+<h3 id="randomcontractionalgorithm">Random Contraction Algorithm</h3>
+
+<p><em>min cut</em> 을 해결하기 위해 <em>quick sort</em>, <em>randomized selection</em> 에서 보았던 랜덤 샘플링을 이용할건데, 이 문제는 랜덤 샘플링이 그래프 문제에도 얼마나 효과적인지 보여준다. 알고리즘은 이렇다.</p>
+
+<p>(1) while there are more than 2 vertices <br />
+(2) pick a remaining edge <code>(u, v)</code> uniformly at random <br />
+(3) merge (or "contract") <code>u</code> and <code>v</code> into a single vertex <br />
+(4) remove self-loops <br />
+(5) return cut represented by final 2 vertices  </p>
+
+<p>해보면 알겠지만 이 알고리즘은 <em>min cut</em> 을 답으로 제공할 수도, 아닐 수도 있다. 따라서 문제는, <em>What is prob of success?</em> 를 계산하는 것으로 바뀐다.</p>
+
+<h3 id="analysiscontractionalgorithm">Analysis: Contraction Algorithm</h3>
+
+<p>분석 전에 몇 가지 용어를 정의하고 가자. <em>graph</em> <code>G = (V, E)</code> 에 대해 <code>n</code> 개의 <em>vertices</em>, <code>m</code> 개의 <em>edges</em> 가 있다. 그리고 <em>minimum cut</em> <code>(A, B)</code> 는 <code>G</code> 를 두개의 비어있지 않은 그룹 <code>A</code>, <code>B</code> 로 나눈다. 그리고 <code>k</code> 를 <code>(A, B)</code> 의 <em>crossing edges</em> 숫자라 하자. 그리고 이들 <em>crossing edges</em> 를 <code>F</code> 라 부르자.</p>
+
+<p>만약에 <code>F</code> 중 하나의 <em>edge</em> 가 <em>contraction</em> 알고리즘 중에 선택 된다면 <code>(A, B)</code> 는 섞여버린다. </p>
+
+<p>따라서 이터레이션 동안 <code>A</code> 내부에 있는 <em>vertex</em> 끼리만, 그리고 <code>B</code> 내부에 있는 <em>vertex</em> 끼리만 <em>contraction</em> 이 일어나야 한다. 그래야만 <em>minimum cut</em> 을 찾을 수 있다.</p>
+
+<p>따라서 올바른 <code>(A, B)</code> 를 아웃풋으로 얻을 확률은 <code>F</code> 중 어느 <em>edge</em>도 선택되지 않을 확률과 같다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5Boutput%20%5C%20is%20%5C%20%28A%2C%20B%29%5D%20%3D%20P_r%5Bnever%5C%20contracts%5C%20an%5C%20edge%5C%20of%20F%5D'  alt="" /></p>
+
+<p><del>Tex 에 맛들려서 이미지를 추가한건 아니요!</del></p>
+
+<p><code>S_i</code> 를 <code>F</code> 에 있는 <em>edge</em> 가 이터레이션 <code>i</code> 에서 <em>contracted</em> 되는 <em>event (사건)</em> 이라 하자. 그럼 우리의 목표는 다음의 확률을 계산하는 것이다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%20%5Ccap%20%5Cneg%20S_2%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20S_%7Bn-2%7D%5D'  alt="" /></p>
+
+<p>증명에 사용할 재미난 그래프의 특징이 하나 있다. 모든 <em>vertex</em> 의 <em>incident edges, degree</em> 의 값은 <code>k</code> 보다 크거나 같다. 왜냐하면 모든 <em>vertex</em> 는 그 자신과 나머지를 분리하는 <em>cut</em> 을 가지는데, 이게 <code>k</code> 라면 <em>min cut</em> 이고 아니라면 <code>k</code> 보다 크기 때문이다.    </p>
+
+<blockquote>
+  <p>degree of each vertex is at least <code>k</code></p>
+</blockquote>
+
+<p>그리고 모든 <em>vertex</em> 의 <em>degree</em> 는 <code>2m</code>, 즉 모든 <em>edge</em> 수의 2배이기 때문에 아래 식은 참이고, </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bv%7Ddegree%28v%29%20%3D%202m'  alt="" /></p>
+
+<p>위 식과 각 <em>degree</em> 합은 <code>kn</code> 보다 크거나 같으므로 <code>2m</code> 도 <code>kn</code> 보다 크거나 같다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?2m%20%5Cgeq%20kn'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?m%20%5Cgeq%20%28kn/2%29'  alt="" /></p>
+
+<p>여기서 처음 이터레이션에서 <code>F</code> 내에 있는 <em>edge</em> 가 선택될 확률인 <code>P(S_1) = k / m</code> 이기 때문에 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%7B2%20%5Cover%20n%7D%20%5Cgeq%20%7Bk%20%5Cover%20m%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5BS_1%5D%20%5Cleq%20%7B2%20%5Cover%20n%7D'  alt="" /></p>
+
+<p>이제 <code>P(S_1)</code> 을 구했으니, 두번째 이터레이션에서 <code>F</code> 내에 있는 <em>edge</em> 가 선택되지 않을 확률을 구해보자. 조건부 확률 공식을 이용하면, </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%20%5Ccap%20%5Cneg%20S_2%5D%20%3D%20P_r%5B%5Cneg%20S_2%20%7C%20%5Cneg%20S_1%5D%20' *%20P_r%5B%5Cneg%20S_1%5D" alt="" /></p>
+
+<p>이때 <code>P(~S_1)</code> 이 <code>n/2</code> 보다 작거나 같으므로</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%5D%20%5Cgeq%20%281%20-%20%7B2%20%5Cover%20n%7D%29'  alt="" /></p>
+
+<p>나머지 <code>P(~S_2 | ~S_1)</code> 을 구하려다 보니 남아있는 <em>edge</em> 가 얼만지 알 수가 없다. </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_2%20%7C%20%5Cneg%20S_1%5D%20%3D%201%20-%7Bk%20%5Cover%20number%20%5C%20of%5C%20remaining%20%5C%20edges%7D'  alt="" /></p>
+
+<p>그런데, 본래의 그래프가 모든 <em>vertex</em> 에 대해 <em>at least</em> <code>k</code> 개의 <em>edge</em> 를 가졌으면 <em>contracted</em> 된 그래프도 모든 <em>vertex</em> 에 대해 <em>at least</em> <code>k</code> 개의 <em>edge</em> 를 가져야 한다. (우리는 <code>F</code> 내의 <em>edge</em> 를 선택하지 않았기 때문)</p>
+
+<p>따라서 <em>remaining edge</em> 는 <code>1/2 * k * (n-1)</code> 보다 크다. (1/2 은 <code>n</code> 으로 <em>edge</em> 수를 세면 두번씩 카운팅하기 때문에 필요)</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%7Bnumber%20%5C%20of%5C%20remaining%20%5C%20edges%7D%20%5Cgeq%201/2%20' *%20k%20*%20%28n-1%29" alt="" /></p>
+
+<p><em>denominator</em> 의 <em>lower bound</em> 를 구했기 때문에 <em>fraction</em> 의 <em>upper bound</em> 를 구한셈이 된다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_2%20%7C%20%5Cneg%20S_1%5D%20%5Cgeq%201%20-%7B2%20%5Cover%20n%20-%201%7D'  alt="" /></p>
+
+<p>이제 규칙성이 보인다. 우리가 구하려는 값은 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%20%5Ccap%20%5Cneg%20S_2%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20S_%7Bn-2%7D%5D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%3D%20P_r%5B%5Cneg%20S_1%5D%20' *%20P_r%5B%5Cneg%20S_2%20%7C%20S_1%5D%20*%20P_r%5B%5Cneg%20S_3%20%7C%20%5Cneg%20S_2%20%5Ccap%20%5Cneg%20S_1%5D%20*%20%5Ccdots%20*%20P_r%5B%5Cneg%20S_%7Bn-2%7D%20%7C%20%5Cneg%20S_1%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20S_%7Bn-3%7D%5D" alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cgeq%20%281%20-%20%7B2%20%5Cover%20n%7D%29' *%281%20-%20%7B2%20%5Cover%20%28n%20-%201%29%7D%29*%281%20-%20%7B2%20%5Cover%20%28n%20-%202%29%7D%29*%5Ccdots*%20%281%20-%20%7B2%20%5Cover%20%28n%20-%20%28n-4%29%29%7D%29%20*%20%281%20-%20%7B2%20%5Cover%20%28n%20-%20%28n-3%29%29%7D%29" alt="" /></p>
+
+<p>정리하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%3D%20%7B2%20%5Cover%20n%20%5C%20%28n-1%29%7D%20%5Cgeq%20%7B1%20%5Cover%20n%5E2%7D'  alt="" /></p>
+
+<p>따라서 <em>contraction</em> 알고리즘이 성공할 확률은 <code>n</code> 이 크면 굉장히 낮다. 근데 이게 <em>brute-force</em> 에 비하면 놀랍게도 굉장히 높은 성공률이다. </p>
+
+<p>본래 <code>n</code> 개의 <em>vertex</em> 가 있으면 모든 <em>cut</em> 을 다 해 보려면 <code>2^n</code> 의 시도가 필요하다. 따라서 <em>contraction</em> 알고리즘은 꽤 높은 확률을 보장하는 알고리즘이다. </p>
+
+<p><code>T_i</code> 를 <code>i</code> 번째 <em>trial</em> 에서 <em>min cut</em> 을 찾아낼 확률이라 하자. <code>N</code> 번의 <em>trial</em> 동안 <em>min cut</em> 을 찾지 못할 확률은, 매 <em>trial</em> 이 독립적이기 때문에 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20T_1%20%5Ccap%20%5Cneg%20T_2%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20T_N%20%5Ccap%20%5D%20%3D%20%5Cprod_%7Bi%20%3D%201%7D%5EN%20P_r%5B%5Cneg%20T_i%5D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cprod_%7Bi%20%3D%201%7D%5EN%20P_r%5B%5Cneg%20T_i%5D%20%5Cleq%20%281%20-%20%7B1%20%5Cover%20n%5E2%20%7D%29%5EN'  alt="" /></p>
+
+<p>이 때 <code>1 + x &lt;= e^x</code> 란 사실을 이용하면 좀 더 간단한 <em>upper bound</em> 를 찾으 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20n%5E2%20%7D%29%5EN%20%5Cleq%20%28e%5E%7B-1%20%5Cover%20n%5E2%7D%29%5EN'  alt="" /></p>
+
+<p>이때 <code>N = n^2</code> 이라면 <code>N</code> 번째까지 실패할 확률은 <code>1/e</code> 보다 작거나 같다. 만약에 <code>N = n^2 lnn</code> 이면 <code>1/n</code> 까지 내려간다.</p>
+
+<p>따라서 단순히 계산을 반복하는 것만으로도 성공 확률을 <code>1/n^2</code> 에서 <code>1 - 1/n</code> 까지 올릴 수 있다.</p>
+
+<p><em>running time</em> 은 <code>Omega(n^2 * m)</code> 쯤 된다. <code>n^2</code> 정도의 <em>trial</em> 이 필요하고 매 <em>trial</em> 마다 <code>m</code> 의 <em>edge</em> 를 살펴봐야 한다.</p>
+
+<p>여전히 느리다. 이후에는 단순히 <em>trial</em> 을 늘리는 것 뿐만 아니라 다양한 옵티마이제이션 기법을 활용하는법을 배워보자. 거의 <code>O(n^2)</code> 까지 줄일 수 있다.</p>
+
+<h3 id="countingminimumcuts">Counting Minimum Cuts</h3>
+
+<p>그래프를 그려보면 알겠지만 <em>min cut</em> 은 한개가 아니라 여러개 일 수 있다. 그러면 <code>n</code> 개의 <em>vertice</em> 를 가진 그래프에서 최대로 가질 수 있는 <em>min cut</em> 은 몇개 일까? </p>
+
+<p>그래프에서 각 노드마다 <em>edge</em> 가 하나밖에 없을땐 <code>n-1</code> 이고, 아무리 <em>cut</em> 이 많아봐야 <code>2^n - 2</code> 보다 적으니까 이 사이에 있는건 분명하다.</p>
+
+<p>답은 <em>n choose 2</em>, <code>(n * (n - 1)) / 2</code> 다.</p>
+
+<p>먼저 <em>lower bound</em> 부터 보자. <em>n-cycle</em> 그래프를 보면 2개를 끊으면 되므로 <code>nC2</code> 다. </p>
+
+<p>따라서 <code>n</code> 개의 <em>vectice</em> 를 가진 모든 그래프 중에서 가장 많은 <em>min-cut</em> 을 가진 그래프들은 적어도 이것보다는 많은 <em>min-cut</em> 을 가져야 한다.</p>
+
+<p><em>upper bound</em> 를 보자. <code>(A1, B1), (A2, B2), ..., (At, Bt)</code> 만큼의 <em>min cut</em> 이 있다 하자. 이 때 특정 <em>min cut</em> 인 <code>(Ai, Bi)</code> 가 나올 확률은 위의 증명을 다시 보면 <code>1/n^2</code> 보다 큰 <code>2/(n(n-1))</code> 이다. 이건 <code>nC2</code> 를 뒤집은 수다.</p>
+
+<p>다시 말해서 <em>min cut</em> 을 뽑아낼 확률이</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P%5Boutput%5C%20%3D%5C%20%28A_i%2C%20B_i%29%5D%20%5Cgeq%20%7B2%20%5Cover%20n%28n-1%29%7D%20%3D%20%7B1%20%5Cover%20%5Cbinom%7Bn%7D%7B2%7D%7D'  alt="" /></p>
+
+<p>이 때 <code>S_i</code> 를 <code>(A_i, B_i)</code> 가 나오는 사건이라 하면 <code>S_i</code> 각각은 <em>disjoint</em> 다.</p>
+
+<p>중요하니까 다시 한번 반복하면, <code>S_i</code> 는 <em>disjoin</em> 고 이로인해 모든 <code>S_i</code> 를 합하면 <code>1</code> 이다. 따라서 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%7Bt%20%5Cover%20%5Cbinom%7Bn%7D%7B2%7D%7D%20%5Cleq%201'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%7Bt%7D%20%5Cleq%20%5Cbinom%7Bn%7D%7B2%7D'  alt="" /></p>
+
+<p>이건 <em>upper bound</em> 다. <em>lower bound</em> 와 같으므로 모든 <code>n</code> 개의 <em>vertice</em> 를 가진 그래프는 최대 <code>nC2</code> 의 <em>min cut</em> 을 가진다.</p>
+
+<h3 id="conditionalprob">Conditional Prob</h3>
+
+<p>중간에 잠깐 조건 부 확률과 독립성, 그리고 기대값에 대해 나오는데 반-직관적인 예제를 교수님이 소개해 주셔서 적어볼까 한다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?X_1%2C%20X_2%20%5Cin%20%5C%7B%200%2C%201%20%5C%7D%20%5C%20and%20%5C%20X_3%20%3D%20X_1%20%5Coplus%20X_3'  alt="" /></p>
+
+<p>일때 <code>X_1</code> 과 <code>X_3</code> 는 독립이고, <code>X_1, X_3</code> 와 <code>X_2</code> 는 독립이 아니다. 기대값을 이용하면 쉽게 증명이 가능하다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?E%5BX_1%2C%20X_2%2C%20X_3%5D%20%5Cneq%20E%5BX_1%2C%20X_2%5D%20' *%20E%5BX_3%5D" alt="" /></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong>  </p>]]></description><link>http://1ambda.github.io/graphs-the-contraction-algorithm/</link><guid isPermaLink="false">29f4c654-dc5f-4724-b30c-760a534e17c2</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[randomization]]></category><category><![CDATA[graph]]></category><category><![CDATA[contraction]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 08 Nov 2014 05:00:35 GMT</pubDate></item><item><title><![CDATA[Randomized Selection]]></title><description><![CDATA[<h3 id="intuition">Intuition</h3>
+
+<p>중복이 없는 <code>n</code> 개의 원소를 가진 배열에서 <code>i</code> 번째로 큰 원소를 얻고 싶다고 하자. 간단한 방법은 먼저 정렬을 한 뒤 거기서 <code>i</code> 번째 원소를 고르면 된다. 이 방법을 <em>reduction</em> 이라 부르는데 <em>selection</em> 문제를 <em>sorting</em> 문제로 바꾸어 푼 것이다. 이 경우 정렬에 머지소트를 사용한다면 <code>O(n logn)</code> 만큼의 시간이 걸릴 것이다.</p>
+
+<p><em>selection</em> 문제는 <code>O(n)</code> 시간 안에 <em>deterministic</em> 하게 해결할 수 있다. 지난시간에 잠깐 논의했던 <em>randomization</em> 을 이용하면 된다. 어떻게 그럴 수 있을까? 저기서 정렬을 더 개선할 수 없다는건 모두가 알고 있는 사실인데</p>
+
+<p><em>quick sort</em> 를 수정해서 <em>pivot</em> 을 <em>median of medians</em> 로 고르면 된다. <del>아니 의사양반 이게 무슨 개소리요!</del></p>
+
+<p>더 정확히 말해서 이 문제는 <strong>정렬 문제가 아니기 때문에</strong> 더 개선할 여지가 있다. <em>pivot</em> <code>P</code> 를 기준으로 좌측이나 우측 한쪽만 선택하면 되는 <em>selection</em> 문제다.</p>
+
+<p><em>worst case</em> 는 당연히 매 재귀호출마다 문제 수가 1씩 줄어드는 경우이므로 <code>O(n^2)</code> 일테다. 만약에, <em>bast case</em> 로 문제가 절반씩 줄어든다면? <em>master method</em> 를 이용하면 <code>a = 1, b = 2, d = 1</code> 에서 <code>T(n) = O(n^1)</code> 이다.</p>
+
+<p><img src='https://acrocontext.files.wordpress.com/2014/01/master-method.png?w=300&amp;h=160'  alt="" /></p>
+
+<p>그럼 이제 문제는 어떻게 사이즈를 <code>1/2</code> 로, 더 정확히는 <em>median</em> 을 <em>pivot</em> 으로 삼느냐다.</p>
+
+<h3 id="analysis">Analysis</h3>
+
+<p><em>randomized selection</em> 문제를 풀기 위해 구현한 함수를 <code>rSelect</code> 라 하자. 매 재귀마다 문제 사이즈가 <code>n</code> 이라고 하면, 각 재귀에서의 <code>rSelect</code> 의 연산은 <code>c * n</code> 보다 작거나 같다. (<code>c</code> 는 상수)</p>
+
+<p>이제 본격적인 분석전에  잠깐 <em>notation</em> 을 하나 만들고 가면 <code>phase j</code> 는 문제의 사이즈가 <code>(3/4)^j+1 * n</code> 과 <code>(3/4)^j * n</code> 사이에 있는 <code>rSelect</code> 다. 따라서 문제의 사이즈가 <code>n</code> 부터 <code>3/4</code> 가 되기 전까지의 모든 <code>rSelect</code> 는 <code>phase 0</code> 에 있다.</p>
+
+<p>그리고 <code>Xj</code> 를 <code>phase j</code> 에 있는 <code>rSelect</code> 호출의 수라 정의하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20%5Csum_%7Bphase%20j%7D%20X_j%20' *%20c%20*%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20n" alt="" /></p>
+
+<p>이렇게 정의해 놓으면 재밌는 조건을 하나 쓸 수 있다. 바로 <em>pivot</em> 이 <code>25%-75%</code> 사이로 분할만 해주면, 다시 말해서 반으로 갈린 문제 중 작은 한쪽이 적어도 <code>25%</code> 가 넘으면 현재 <em>phase</em> 가 끝난다. 그럼 이제 전체 알고리즘의 기대값을 구하기 위해 <em>linearity of expectation</em> 을 이용해서 <code>E(Xj)</code> 를 구하면 된다. </p>
+
+<p><code>25-75%</code> 로 피벗이 걸릴 확률 <code>P(25-75%) = 1/2</code> 이고 그럴때의 <code>Xj = 1</code> 이다. 반면 두번째에 피벗이 제대로 걸릴 확률은 <code>1/4</code> 이고, 세번째에 피벗이 제대로 걸릴 확률은 <code>1/2^3</code> 이다.</p>
+
+<p>기대값은 이 모든 각각 확률변수값과 그 확률의 곱이므로 계산하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%7B1%20%5Cover%202%7D%20&plus;%20%7B1%20%5Cover%202%5E2%7D%20&plus;%20%7B1%20%5Cover%202%5E3%7D%20&plus;%20%5Ccdots%20%5Cleq%202'  alt="" /></p>
+
+<p>이것 말고 더 재밌는 계산법도 있다. 자세한 건 강의 내용을 참조 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?E%28X_j%29%20%3D%201%20&plus;%20%7B1%20%5Cover%202%7D%20' *%20E%28X_j%29" alt="" /></p>
+
+<p>이제 <em>average running</em> 타임을 구하기 위해 <code>T(n)</code> 의 평균을 구하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20E%5Bc%20' *%20n%20*%20%5Csum_%7Bphase%20j%7D%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20X_j%5D" alt="" /></p>
+
+<p>여기서 <em>linearity of expectation (기대값의 선형성)</em> 을 이용하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20' *%20n%20*%20%5Csum_%7Bphase%20j%7D%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20E%28X_j%29" alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20' *%20n%20*%20%5Csum_%7Bphase%20j%7D%202%20*%20%28%7B3%20%5Cover%204%7D%29%5Ej" alt="" /></p>
+
+<p>무한급수 공식을 적용하면,</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20' *%20n%20*%204" alt="" /></p>
+
+<p><del>얼마나 멋진가?</del></p>
+
+<h3 id="deterministicselection">Deterministic Selection</h3>
+
+<p>만약에 <em>randomization</em> 을 이용할 수 없다면? 그럼 이제 문제는 <em>good pivot</em>, 즉 <code>50/50</code> 에 최대한 가깝게 잘라내는 <em>pivot</em> 을 찾아야 한다. <em>median of medians</em> 를 이용하면 해낼 수 있다.</p>
+
+<p><em>deterministic selection</em> 알고리즘을 구현한 함수를 <code>dSelect</code> 라 부르면</p>
+
+<pre><code>dSelect(array A, length n, order statistic i)  
+</code></pre>
+
+<p>(1) Break <code>A</code> into groups of 5, sort each group <br />
+(2) C = the <code>n/5</code> "middle elements" <br />
+(3) p = <code>dSelect(C, n/5, n/10)</code>, recursivly computes median of C <br />
+(4) Partition <code>A</code> around <code>p</code> <br />
+(5) if <code>j = i</code> return <code>p</code> <br />
+(6) if <code>j &lt; i</code> return <code>dSelect(1st part of A, j-1, i)</code> <br />
+(7) if <code>j &gt; i</code> return <code>dSelect(2nd part of A, j-j, i-j)</code>  </p>
+
+<p><code>4-7</code> 스텝은 <em>randomized selection</em> 과 똑같다. 더 복잡해진 부분은 앞의 <code>1-3</code> 스텝에서 피벗을 고르는 일이다.</p>
+
+<p>퍼포먼스를 다시 이야기 해 보자 <em>randomized selection</em> 은 <em>pivot</em> 이 정말 나쁘게 선택되면 <code>O(n^2)</code> 이 될 수 있다. </p>
+
+<p>반면 <em>deterministic selection</em> 은 모든 경우에 <code>O(n)</code> 을 보장한다. 그러나 실제로는 <em>randomized</em> 보다 성능이 나쁜데, 이유는 알고리즘에서 볼 수 있듯이 새로운 배열 <code>C</code> 가 필요하고 (<em>not in-place</em>), 표기법에는 상수가 생략되는데 <em>deterministic selection</em> 은 이 상수가 꽤나 커질 수 있다.</p>
+
+<h3 id="analysis">Analysis</h3>
+
+<p>이제 좀 더 자세히 살펴보자.</p>
+
+<p>(1) Break <code>A</code> into groups of 5, sort each group  </p>
+
+<p>이건 얼마의 시간이 걸릴까? 주어진 배열을 5개씩 짜르고, 각각의 그룹을 정렬하는데 걸리는 시간은? <code>O(n)</code> 이다.</p>
+
+<p>먼저 <code>n = 120</code> 이라 하자. 정렬에 <em>merge sort</em> 를 사용하면 <em>merge sort</em> 연산 수 공식은</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?6n%20' *%20log_2%28n&plus;1%29" alt="" /></p>
+
+<p>따라서 잘려진 5개짜리를 정렬하는데 걸리는 시간은 <code>30 * log_2(6)</code> 에서, 이 값은 적어도 120 보다는 작음을 알 수 있다. 따라서 전체 그룹의개수 <code>n/5</code> 를 곱하면, <code>24n</code> 으로 <code>O(n)</code> 임을 알 수 있다. 비록 상수가 좀 크긴 하지만</p>
+
+<p>(2) C = the <code>n/5</code> "middle elements" <br />
+(3) p = <code>dSelect(C, n/5, n/10)</code>, recursivly computes median of C <br />
+(4) Partition <code>A</code> around <code>p</code> <br />
+(5) if <code>j = i</code> return <code>p</code> <br />
+(6) if <code>j &lt; i</code> return <code>dSelect(1st part of A, j-1, i)</code> <br />
+(7) if <code>j &gt; i</code> return <code>dSelect(2nd part of A, j-j, i-j)</code>  </p>
+
+<p>(2), (4) 는 <code>O(n)</code> 임을 알 수 있고, (3) 은 <code>T(n/5)</code> 다. 문제는 (6), (7) 이다. 둘 중에 하나만 호출되긴 하지만 선택되는 <em>pivot</em> <code>p</code> 에 따라서 문제의 사이즈가 달라진다. 모르니까 <code>T(?)</code> 라 두자 그러면 <em>determinitic selection</em> 의 <em>running time</em> 은</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%28%3F%29'  alt="" /></p>
+
+<p>간단한 가설을 세워보자. </p>
+
+<blockquote>
+  <p><strong>두번째 <code>dSelect</code> 호출의 input size 는 <code>7/10 * n</code> 보다 작거나 같다</strong></p>
+</blockquote>
+
+<p>그러면 수식을 이렇게 바꿀 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%287n/10%29'  alt="" /></p>
+
+<p>(2) 에서 <em>medians</em> 를 찾고, 이걸 (3)에서 재귀에 한번 더 넘기면 <em>median of medians</em> 을 찾게된다. 이게 어떤 효과가 있냐면, 모든 원소를 5개씩 짤라 아래에서 위로 정렬, <em>medians</em> 는 좌에서 우로 정렬하면 다음과 같은 행렬이 나오는데</p>
+
+<p><img src='http://i.imgur.com/gaOxb1A.jpg?1'  alt="" title="" /><p align="center">(<a href='http://functionspace.org/articles/19' >http://functionspace.org/articles/19</a>)</p></p>
+
+<p>모든 원소 중 좌측 하단에 있는 <code>30%</code> 는 <em>median of medians</em> 보다 분명히 작다. 그리고 우측 상단 <code>30%</code> 는 <em>medians of medians</em> 보다 분명히 크다. 따라서 나머지 40% 값이 어쨌던건 간에 적어도 <code>30-70%</code> 분할은 해주므로 문제의 사이즈가 (6) 스텝에서 <code>7n/10</code> 보다 작거나 같다는 것을 분명히 보장해준다. 따라서 아래 식은 참이다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%287n/10%29'  alt="" /></p>
+
+<p>쉽게 <em>master method</em> 를 이용하고 싶은데 문제가 서로 다른 사이즈로 분할되니까 사용할 수 없다. <em>induction</em> 을 이용하자. 아래가 참임을 보이면 된다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20an'  alt="" /></p>
+
+<p>우선 <em>base case</em> 는 <code>T(1) = 1</code> 이므로 <code>T(1) &lt;= a (where a &gt;= 1)</code> 에서 참이다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%287n/10%29'  alt="" /></p>
+
+<p>이제 위 식에서 <em>induction hypothesis</em> 를 이용하고, 정리하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20a%28n/5%29%20&plus;%20a%287n/10%29'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20n%20' *%20%289a/10%29" alt="" /></p>
+
+<p>이 때 <code>c</code> 는 상수이므로 <code>c = a / 10</code> 이라 하면 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20an'  alt="" /></p>
+
+<p>따라서 <em>deterministic selection</em> 의 성능은 <code>O(n)</code> 이다.</p>
+
+<h3 id="lowerboundforsorting">lower bound for sorting</h3>
+
+<p><em>comparison-based sorting</em> 의 <em>lower bound</em> 는 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%0A%5COmega%20' (n*log%20n)" alt="" /></p>
+
+<p>여기 해당되는 정렬들은 <em>merge sort, quick sort, heap sort</em> 등이 있다. 이런 정렬들은 데이터가 어떠할 것이라는 가정 없이 정렬을 해낸다. </p>
+
+<p>반면 데이터의 분포를 안다면 <em>bucket sort</em> 같은 경우 <em>linear time</em> 으로 해결할 수 있다. <em>counting sort</em> 나 <em>radix sort</em> 같은 정렬도 데이터에 대한 정보(정수)라는 것을 이미 알고 있는 경우이므로 <code>O(n)</code> 으로 정렬 가능하다.</p>
+
+<p>데이터에 대한 정보를 모른다고 해 보자. <code>1, 2, ..., n</code> 까지의 데이터를 가지고 있다면 이 데이터들이 배열 안에 담겨있을 수 있는 경우의 수는 <code>n!</code> 이다.</p>
+
+<p><code>n!</code> 개의 모든 종류의 인풋에 대해서 <code>k</code> 번만큼, 혹은 그보다 더 적게 비교가 일어난다고 하자. 그럼 모든 <code>n!</code> 종류의 인풋에 대해서 <code>2^k</code> 개의 서로 다른 <em>execution</em> 이 생긴다.</p>
+
+<blockquote>
+  <p>Suppose algorithm always makes &lt;= k comparisons to correctly sort these <code>n!</code> inputs. Across all <code>n!</code> possile inputs algorithms exhibits &lt;= <code>2^k</code> distinct executions</p>
+</blockquote>
+
+<p>쉽게 생각해서 <code>k-bit</code> 문자열이 있을때 이걸로 얻을 수 있는 문자열은 <code>2^k</code> 개수다. 즉 어떤 문자는 없을수도 있다.</p>
+
+<p>비둘기 집 원리를 생각해 보자. 우리는 <code>n!</code> 비둘기가 있고, <code>2^k</code> 개의 비둘기 집이 있다. 만약에 <code>k</code> 가 작아 <code>2^k &lt; n!</code> 이면 서로 다른 두개의 인풋에 대해서 같은 종류의 <em>execution</em> 을 공유 한다는 뜻이다. 따라서 둘 중 하나는 제대로 정렬되고, 나머지 하나는 제대로 정렬되지 않는다. </p>
+
+<p>따라서 <code>2^k &gt;= n!</code> 이다. 이때 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?n%21%20%5Cgeq%20n%20' *%20%28n-1%29%20*%20%28n-2%29%20%5Ccdots%20%28n/2%29%20%5Cgeq%20%28n/2%29%5E%7B%28n/2%29%7D" alt="" /></p>
+
+<p>이므로 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?2%5Ek%20%5Cgeq%20%28n/2%29%5E%7Bn/2%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?k%20%5Cgeq%20%28n/2%29' *%20log_2%28n/2%29" alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?k%20%5Cgeq%20%5COmega%28n' *logn%29" alt="" /></p>
+
+<p><code>k</code> 가 연산 수 이므로 <em>comparison-based sorting</em> 의 <em>lower bound</em> 는 <code>Omega(n logn)</code> 이다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
+(2) <a href='http://functionspace.org/articles/19' >http://functionspace.org/articles/19</a></p>]]></description><link>http://1ambda.github.io/randomized-selection/</link><guid isPermaLink="false">fa03e2ba-fcfe-46a0-987a-4a8137bba43f</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[quick sort]]></category><category><![CDATA[selection]]></category><category><![CDATA[randomization]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 07 Nov 2014 08:17:47 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 5]]></title><description><![CDATA[<p>지난시간엔 왜 <em>neural network</em> 를 사용하는지 알아보았다. 데이터의 차수가 매우 클 때 <em>logistic regression</em> 으로는 성능이 떨어지거나 <em>overfitting</em> 의 문제가 발생할 수 있다는 사실을 알게 되었고, 마지막엔 <em>multi class</em> 문제를 어떻게 해결할지도 잠깐 논의 해봤다.</p>
 
 <p>이번에는 <em>back propagation</em>, <em>gradient checking</em> 에 대해서 배워보자.</p>
 
@@ -9,7 +398,7 @@
 
 <p><code>L</code> 을 레이어의 수, <code>s_l</code> 을 해당 레이어의 유닛 수라 하자. 그러면 <em>bianry classification</em> 에서 <code>S_L = 1</code> 이다. 아웃풋 레이어의 유닛 수를 더 간단히 <code>K</code> 라 하자. </p>
 
-<p>이제 <em>neural network 에 대한 *cost function</em> 을 볼건데 먼저 <em>binary classification</em> 의 <em>regularized cost function</em> 식을 다시 보자.</p>
+<p>이제 <em>neural network</em> 에 대한 <em>cost function</em> 을 볼건데 먼저 <em>binary classification</em> 의 <em>regularized cost function</em> 식을 다시 보자.</p>
 
 <p><img src='http://3.bp.blogspot.com/-qNym-oCdMIg/Trd03YeslWI/AAAAAAAAApQ/GUfXiJ3vpUE/s400/Screen+shot+2011-11-07+at+3.03.55+AM.png'  alt="http://aimotion.blogspot.kr/" /></p>
 
@@ -4571,773 +4960,4 @@ J = 1 / (2*m) * sum(sqrErros);
 (2) <a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a> <br />
 (3) <a href='http://spin.atomicobject.com/2014/06/24/gradient-descent-linear-regression/' >http://spin.atomicobject.com</a> <br />
 (4) <a href='http://www.holehouse.org/mlclass/01_02_Introduction_regression_analysis_and_gr.html' >http://www.holehouse.org/mlclass/</a> <br />
-(5) <a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-2/</link><guid isPermaLink="false">78e8635f-a298-477a-8823-0c2738c21251</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[gradient descent]]></category><category><![CDATA[normal equation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 08 Oct 2014 10:50:00 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 4]]></title><description><![CDATA[<p>2014-10-07, <strong>Functional Programming in Scala</strong>, Coursera</p>
-
-<h2 id="typesandpatternmatching">Types and Pattern Matching</h2>
-
-<h3 id="functionsasobjects">Functions as Objects</h3>
-
-<blockquote>
-  <p>In fact function values are treated as objects in Scala</p>
-</blockquote>
-
-<pre><code class="scala">trait Function1[A, B] {  
-  def apply(x: A): B
-}
-</code></pre>
-
-<p>결국, <code>function</code> 은 <code>apply</code> 메소드를 가진 오브젝트다.</p>
-
-<p>예를 들어서 <code>(x: Int) =&gt; x * x</code> 는 다음과 같이 <code>Function1</code> ` <em>trait</em> 를 구현한 클래스 된다.</p>
-
-<pre><code class="scala">{
-  class AnonFun extends Function1[Int, Int] (
-    def apply(x: Int) = x * x
-  }
-
-  new AnonFun
-}
-
-// or using anonymous class syntax
-// trait can be instanciated
-
-new Function1[Int, Int] {  
-  def apply(x: Int) = x * x
-}
-</code></pre>
-
-<p>따라서 이런 정의를 보면, <code>f(a, b)</code> 는 <code>f.apply(a, b)</code> 다. 그런데 만약 메소드인 <code>def apply</code> 자체도 오브젝트일까? 그렇지 않다. 만약 <code>apply</code> 자체도 오브젝트라면, 그 오브젝트도 <code>apply</code> 메소드를 가지고 있어야 하고, 또 다시 그렇게 반복될 수 있다.</p>
-
-<h4 id="functionsandmethods">Functions and Methods</h4>
-
-<p>따라서 <code>def f(x: Int): Int = ...</code> 메소드 자체는 <strong>Function</strong> 이 아니다. (<em>Method != Function</em>) 그러나 </p>
-
-<blockquote>
-  <p>If <code>f</code> is used in a place where a <code>Function</code> type is expected, it is converted automatically to the function value</p>
-</blockquote>
-
-<p>예를 들어, <code>(x: Int) = f(x)</code> 는 다음과 같이 확장된다.</p>
-
-<pre><code class="scala">new Function1[Int Int] {  
- def apply(x: Int) = f(x)
-}
-</code></pre>
-
-<p>이렇게 <em>Method</em> 가 <em>Function</em> 으로 변환되는 과정을 <em>lambda calculus</em> 에서는 <strong>eta-expansion</strong> 이라 부른다. </p>
-
-<p>그리고 위에서 보았겠지만 <code>apply</code> 메소드는, 오브젝트에 있을때 오브젝트 이름 자체로 호출될 수 있도록 해준다. 예를들어 지난 시간에 만들었던 <code>List</code> <em>trait</em> 에 대해서,</p>
-
-<pre><code class="scala">trait List[T] {  
-  def isEmpty: Boolean
-  def head: T
-  def tail: List[T]
-}
-
-class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
-  def isEmpty = false
-}
-
-class Nil[T] extends List[T] {  
-  def isEmpty = true
-  def head = throw new NoSuchElementException("Nil.head")
-  def tail = throw new NoSuchElementException("Nil.tail")
-}
-</code></pre>
-
-<p>아래와 같은 호출을 원한다면</p>
-
-<pre><code class="scala">val e = List()  
-val e3 = List(3)  
-val e34 = List(3, 4)  
-</code></pre>
-
-<p>다음과 같이 <code>List</code> <em>Object</em> 와 <code>apply</code> <em>Method</em> 를 정의할 수 있다. </p>
-
-<pre><code class="scala">object List {  
-  def apply() = new Nil
-  def apply(x: Int) = new Cons(x, new Nil)
-  def apply(x: Int, y: Int) = new Cons(x, new Cons(y, new Nil))
-}
-</code></pre>
-
-<h3 id="subtypingandgenerics">Subtyping and Generics</h3>
-
-<p>지난시간에는 <em>Polymorphism</em> 의 두가지 형태에 대해 배웠었다. 하나는 <strong>Subtyping</strong> 이고, 다른 하나는 <strong>Generics</strong> 다. 기억을 더듬어 보면</p>
-
-<blockquote>
-  <p><strong>Subtyping:</strong> Instance of a subclass can be passed to a base class <br />
-  <strong>Generics:</strong> Instance of a function or class are created  by type parameterazation</p>
-</blockquote>
-
-<p>이 중에서 <em>subtyping</em> 은 OOP 에서 먼저 온 것이고, <em>generics</em> 는 <em>FP</em> 에서 먼저 온 것이라는 이야기 까지 했다.</p>
-
-<h4 id="typebounds">Type Bounds</h4>
-
-<p><code>assertAllPos</code> 메소드가 있다고 하자. <code>IntSet</code> 을 취해서, 모든 Element 가 양수면 <code>IntSet</code> 을 리턴하고 아니면 예외를 던진다. 다음과 같이 정의할 수 있겠다.</p>
-
-<p><code>def assertAllPos(s: IntSet): IntSet</code></p>
-
-<p>근데, 만약에 이 메소드가 <code>Empty</code> 를 받으면 <code>Empty</code> 를, <code>NonEmpty</code> 를 받으면 <code>NonEmpty</code> 를 돌려주게 하려면 어떻게 해야할까? 메소드를 2개를 더 만들어야 할까? <em>Type Bound</em> 를 이용해 문제를 해결할 수 있다.</p>
-
-<p><code>def assertAllPos[S &lt;: IntSet](r: S): S = ...</code></p>
-
-<p>여기서 <code>S &lt;: IntSet</code> 은 <code>S</code> 가 <code>IntSet</code> 의 서브타입임을 말하고, 이것을 <strong>Upper bound</strong> 라 부른다(<code>IntSet</code> 기준). 즉 <code>S</code> 의 상위 타입을 지정하는 것이다. </p>
-
-<p>반대로 <code>S :&gt; IntSet</code> 도 있을 수 있다. 이것은 <strong>Lower bound</strong> 라 부르며(<code>IntSet</code> 기준), 이 메소드가 <code>IntSet</code> 의 상위 타입 <code>S</code> 를 이용한다는 것을 컴파일 타임에 지정한다. <code>S</code> 는 <code>IntSet</code>, <code>AnyRef</code>, <code>Any</code> 가 될 수 있다. 정리 하자면,</p>
-
-<blockquote>
-  <p><code>S &lt;: T</code> means: <strong>S is a subtype of T</strong> <br />
-  <code>S :&gt; T</code> means: <strong>S is a supertype of T, or T is a subtype of S</strong></p>
-</blockquote>
-
-<p><strong>Mixed Bound</strong> 도 있다. <code>[S &gt;: NonEmpty &lt;: IntSet]</code></p>
-
-<h4 id="covariance">Covariance</h4>
-
-<p>그런데, <code>NonEmpty &lt;: IntSet</code> 일때 <code>List[NonEmpty] &lt;: List[IntSet]</code> 이면, <strong>Covariant</strong> 하다고 말한다. 직관적으로 보면 그럴듯 하다. </p>
-
-<p>이거 정말 문제가 없을까? <code>List</code> 말고 자바의 <code>Array</code> 를 예로 들어보자.</p>
-
-<pre><code class="java">NonEmpty[] a =  
-  new NonEmpty[]{new NonEmpty(1, Empty, Empty)}
-
-IntSet[] b = a  
-b[0] = Empty  
-NonEmpty s = a[0]  
-</code></pre>
-
-<p><code>b[0] = Empty</code> 가 문제가 된다. 여기서 런타임 예외가 발생하는데, 자바에서는 배열이 생성될때, 이 배열이 어떤 타입으로 생성되었는지 내부적으로 태그를 붙인다. 그런데, <code>NonEmpty</code> 로 태그가 붙은 배열에 호환되지 않는 <code>Empty</code> 를 넣고 있기 때문이다.</p>
-
-<p>자바 1.5 이전에는 Generics 가 없었기 때문에 정렬을 위해서는 <code>sort(Object[] a)</code> 처럼 주어야 했는데, 이를 위해서는 자바의 배열이 <strong>Covariant</strong> 여야 했다.</p>
-
-<h4 id="theliskovsubstitutionprinciple">The Liskov Substitution Principle</h4>
-
-<p><strong>Liskov Substitution Princile(리스코프 치환원칙)</strong> 은 언제 한 타입이 다른 타입의 서브타입이 될 수 있는지 말해준다.</p>
-
-<blockquote>
-  <p>If <code>A &lt;: B</code>, then everything one can to do with a value of type <code>B</code> one should also be able to do with a value of type <code>A</code></p>
-</blockquote>
-
-<p>자 이제, Scala 에서 위의 코드를 작성하면 어디서 에러가 나는지 확인 해 보자.</p>
-
-<pre><code class="scala">val a: Array[NonEmpty] = Array(new NonEmpty(1, Empty, Empty))  
-val b Array[IntSet] = a  
-b(0) = Empty  
-val s: NonEmpty = a(0)  
-</code></pre>
-
-<p><code>val b: Array[IntSet] = a</code> 에서 컴파일 타임 에러가 난다. 왜냐하면 Scala 의 <code>Array</code> 는 <strong>Not</strong> <em>covariant</em> 이기 때문이다.</p>
-
-<h3 id="variance">Variance</h3>
-
-<p>어떤 타입은 <em>covariant</em> 고 어떤 타입은 그렇지 않은걸까? 엄격히 말해서, elements 들의 <em>mutation</em> 을 허용하는 타입은 <em>not-covariant</em> 여야 한다. </p>
-
-<p>반면 <em>immutable types</em> 은 조건이 갖춰지면 <em>covariant</em> 일 수 있다. 위에서 <code>List</code> 는 되고, <code>Array</code>는 안되었던 것처럼.</p>
-
-<p><code>C[T]</code> 가 있고, <code>A &lt;: B</code> 일때 다음과 같은 정의를 내릴 수 있다.</p>
-
-<ul>
-<li><code>C[A] &lt;: C[B]</code> 이면, <strong>C is covariant</strong>, <code>C[+A]</code> 로 표시</li>
-<li><code>C[A] &gt;: C[B]</code> 이면, <strong>C is contravariant</strong>, <code>C[-A]</code> 로 표시  </li>
-<li><code>C[A]</code> 와 <code>C[B]</code> 가 상관이 없으면, <strong>C is non-variant</strong>, , <code>C[A]</code> 로 표시</li>
-</ul>
-
-<p>그렇다면 다음과 같은 두개의 타입이 있을때, 어떤것이 서브타입이고 어떤  것이 슈퍼타입일까?</p>
-
-<pre><code class="scala">type A = IntSet =&gt; NonEmpty  
-type B = NonEmpty =&gt; IntSet  
-</code></pre>
-
-<p>설명을 조금 자세히 하면, 함수의 파라미터는 <em>Contravariant</em> 하고, 함수의 리턴타입은 <em>Covariant</em> 하다. <code>Function1[-A, +B]</code> 를 보면 알 수 있다. 따라서 <code>A &lt;: B</code> 다. 왜 그럴까? 여기 <a href='https://twitter.github.io/scala_school/type-basics.html' #variance">Scala School</a> 의 예제를 좀 보자.</p>
-
-<pre><code class="scala">class Animal {  
-  val sound = "rustle" 
-  def name = "animal"
-}
-
-class Bird extends Animal {  
-  override val sound = "call"
-  def name = "bird"
-}
-class Chicken extends Bird {  
-  override val sound = "cluck" 
-  def name = "chicken"
-}
-</code></pre>
-
-<p>이때, <code>val getTweet: (Bird =&gt; String)</code> 에 <code>(c: Chicken =&gt;  c.chicken</code> 과 같이 넘겨주고, 나중에 <code>getTweet(new Bird)</code> 를 호출하면 에러가 난다. 반면 <code>a: Animal =&gt; a.name</code> 을 주고, <code>getTweek(new Bird)</code> 는 상관 없다. 어차피 <code>Bird</code> 는 <code>Animal</code> 이니까</p>
-
-<p>따라서 함수의 파라미터는 현재와 같은 타입이거나, 혹은 그 슈퍼타입이어야 한다, 다시말해서 <strong>Contravariant</strong> 해야 한다.</p>
-
-<h4 id="variancechecks">Variance Checks</h4>
-
-<p><code>Array</code> 의 경우 <code>update</code> 연산이 문제가 될 수 있다는걸 위에서 논의 했었는데, 이걸 정리하자면</p>
-
-<blockquote>
-  <p>*The problematic combination is <br />
-  <strong>the covariant type parameter T</strong> <br />
-  <strong>which appears in parameter position of method <code>update</code></strong></p>
-</blockquote>
-
-<p>즉 <em>covariant</em> 타입 <code>T</code> 가 <code>update</code> 연산에 나타날때 문제가 된다. 그래서 Scala 는 컴파일 타임에 이런 문제가 생기지 않는지 검사를 한다.</p>
-
-<blockquote>
-  <p><em>covariant</em> type parameters can only appear in method results <br />
-  <em>contravariant</em> type parameters can only appear in method parameters <br />
-  <em>invariant</em> type parameters can appear anywhere  </p>
-</blockquote>
-
-<p><code>Function1</code> <em>Trait</em> 는 그래서 사실 이런 모양이다.</p>
-
-<pre><code class="scala">package scala  
-trait Function1[-T, +U] {  
-  def apply(x: T): U
-}
-</code></pre>
-
-<p><code>T</code> 는 <em>contravariant</em> 이므로 파라미터에만, <code>U</code> 는 <em>covaraint</em> 이므로 리턴타입에만 나타난다. 이제 지난시간에 만들었던 <code>Nil</code> 클래스를 <em>Object</em> 로 만들어 보자.</p>
-
-<pre><code class="scala">trait List[+T] {  
-  def isEmpty: Boolean
-  def head: T
-  def tail: List[T]
-}
-
-class Cons[T](val head: T, val tail: List[T]) extends List[T] {  
-  def isEmpty = false
-}
-
-object Nil extends List[Nothing] {  
-  def isEmpty = true
-  def head = throw new NoSuchElementException("Nil.head")
-  def tail = throw new NoSuchElementException("Nil.tail")
-}
-</code></pre>
-
-<p><code>Nil</code> 이 <code>List[Nothing]</code> 을 상속하게 해, 모든 리스트의 서브타입이 될 수 있도록 했다. 그러나 이것만으로는 부족하다. <code>trait List[T]</code> 로 만들면, <code>List[Something]</code> 과 <code>List[Nothing]</code> 과는 아무 관련이 없는 <em>non-variant</em> 다. 따라서 <code>List[+T]</code> 로 만들어, <code>List[Nothing] &lt;: List[Something]</code> 이 되도록 해야한다.</p>
-
-<p>이제, 다음과 같은 <code>prepend</code> 메소드를 고려 해 보자.</p>
-
-<pre><code class="scala">trait List[+T] {  
-  ...
-  def preprend(elem: T): List[T] = new Cons(elem, this)
-  ...
-}
-</code></pre>
-
-<p>이 경우에는 <em>covariant</em> <code>T</code> 가 파라미터에 나오므로, 컴파일이 실패한다. 그러나 우리의 <code>List</code> 는 <em>immutable</em> 한데, 이 경우 파라미터에 <code>T</code> 가 나오면 안되나?</p>
-
-<h4 id="prependviolateslsp">Prepend Violates LSP</h4>
-
-<pre><code class="scala">val xs = new List[IntSet]  
-xs.prepend(Empty)
-
-val ys = new List[NonEmpty]  
-xs.prepend(Empty) // compilation fail  
-</code></pre>
-
-<p>따라서, <code>List[IntSet]</code> 으로 할 수 있는걸 <code>List[NonEmpty]</code>로 할 수 없으니, <strong>LSP</strong> 에 따라서, <code>List[NonEmpty]</code> 는 <code>List[IntSet]</code> 의 서브타입이 될 수 없다.</p>
-
-<p><code>List</code> 는 <em>covariant</em> 하고, <code>update</code> 연산이 있는것도 아니므로 <code>immutable</code> 한데, <code>prepend</code> 메소드의 타입체킹이 문제다. 어떻게 하면 <em>covaraint</em> 타입 <code>T</code> 를 메소드 파라미터로 나타나게 할 수 있을까? <strong>Lower Bound</strong> 를 이용하면 된다.</p>
-
-<pre><code class="scala">def prepend[U :&gt; T](elem: U): List[U] = new Cons(elem, this)  
-</code></pre>
-
-<p>이 경우 <code>List[NonEmpty].prepend(Empty)</code> 의 리턴값은 <code>List[IntSet]</code> 이 될것이다. 따라서 룰을 정리하면</p>
-
-<blockquote>
-  <p>(1) <strong>covariant type parameters</strong> may appear in <strong>lower bounds</strong> of method type parameters <br />
-  (2) <strong>contravariant type parameters</strong> may appear in <strong>upper bounds</strong> of method</p>
-</blockquote>
-
-<h3 id="objectseverywhere">Objects Everywhere</h3>
-
-<h4 id="pureobjectorientation">Pure Object Orientation</h4>
-
-<p><em>Pure OO language</em> 는 모든 <em>value</em> 가 <em>object</em> 다. 스칼라는 얼핏 보기에 <em>primitive type</em> 을 사용하는 것 같지만 잘 보면 <code>scala.Boolean</code>, <code>scala.Int</code> 처럼 기본 타입이 클래스화 되어있다. (참고로 <code>Int</code> 는 성능을 위해 32-bit Integer 로 되어있다.)</p>
-
-<p><code>scala.Boolean</code> 대신, 직접 만든 <code>Boolean</code> 을 사용해 보자.</p>
-
-<pre><code class="scala">abstract class cBoolean {
-
-  def IfThenElse[T](t: T, e: T): T
-
-  def &amp;&amp;(other: cBoolean) = IfThenElse(other, False)
-  def ||(other: cBoolean) = IfThenElse(True, other)
-  def unary_! : cBoolean = IfThenElse(False, True)
-
-  def ==(other: cBoolean) = IfThenElse(other, other.unary_!)
-  def !=(other: cBoolean) = IfThenElse(other.unary_!, other)
-
-  def &lt;(other: cBoolean) = IfThenElse(False, other)
-  def &gt;(other: cBoolean) = IfThenElse(other.unary_!, False)
-}
-
-object True extends cBoolean {  
-  def IfThenElse[T](t: T, e:T) = t
-}
-
-object False extends cBoolean {  
-  def IfThenElse[T](t: T, e:T) = e
-}
-</code></pre>
-
-<p>그럼 과연, <em>primitive type</em> 없이 언어의 모든 부분을 클래스와 오브젝트로 구성하는것이 가능할까? <code>Boolean</code> 은 우리가 <code>cBoolean</code> 으로 대체했다. <code>Int</code> 부터 더 자그마한 <code>Nat</code>, 즉 자연수 범위부터 시작해보자.</p>
-
-<blockquote>
-  <p>Can it be represented as a class from first principles (i.e not using primitie ints)</p>
-</blockquote>
-
-<pre><code class="scala">abstract class Nat {  
-  def isZero: Boolean
-  def predecessor: Nat
-  def successor = new Succ(this)
-  def + (that: Nat): Nat
-  def - (that: Nat): Nat
-}
-
-object Zero extends Nat {  
-  def isZero = true
-  def predecessor = throw new RuntimeException("Zero.predecessor");
-  def + (that: Nat) = that
-  def - (that: Nat) = {
-    if (that.isZero) this
-    else throw new RuntimeException("Zero.-")
-  }
-}
-
-class Succ(n: Nat) extends Nat {  
-  def isZero = false
-  def predecessor: Nat = n
-  def + (that: Nat) = new Succ(n + that)
-  def - (that: Nat) = if(that.isZero) this else n - that.predecessor
-}
-</code></pre>
-
-<p>숫자가 없을때 숫자를 추상화(abstraction) 할 방법을 찾아야 하는데, 놀랍게도 인스턴스의 중첩을, 숫자로 표현했다. 개인적으로 기가막힌다. 4강 초반부에서 집합을 predicate function 의 접합(<code>||</code>, <code>&amp;&amp;</code>)으로 표현했을때도 놀라웠는데.. </p>
-
-<p>위 코드에서 <code>Succ.-</code> 메소드 같은 경우 <code>new Succ(n - that)</code> 을 할 수 있는데, <code>n</code> 이 <code>Zero</code> 즉, 현재 <code>Succ</code> 인스턴스가 1인 경우를 고려해야 한다. 이 경우 런타임 예외가 발생하므로, <code>n - that.predecessor</code> 가 적절하다. 여기에 <code>that</code> 이 <code>Zero</code> 일 경우를 고려하면 된다.</p>
-
-<p>테스트를 작성할 경우 <code>Zero</code> 를 제외하고는 나머지는 다 인스턴스라서, 비교가 어렵다. 그래서 다음과 같은 연속적인 <code>predecessor</code> 를 호출할 수 있는데,</p>
-
-<pre><code class="scala">  val one = Zero.successor
-  val two = one + one
-  val three = two + one
-  val four = three + one
-
-  "One + One" should "be Two" in {
-    assert(two.predecessor.predecessor == Zero)
-  }
-
-  "two + two" should "be four" in {
-    assert(four.predecessor.predecessor.predecessor.predecessor == Zero)
-  }
-</code></pre>
-
-<p>아래와 같은 테스트용 유틸리티 함수를 만들면 편하다. (아니면 <code>==</code>를 오버라이딩 하거나.)</p>
-
-<pre><code class="scala">  def number = {
-    def count(n: Int, succ: Nat): Int = {
-      if (succ == Zero) n
-      else count(n + 1, succ.predecessor)
-    }
-
-    count(0, this)
-  }
-</code></pre>
-
-<p>이렇게, 실제 타입에 대한 <em>primitive value</em> 없이 <em>abstraction</em> 만으로 타입을 구성할 수 있다. 위에서 구현한 <code>Nat</code> 클래스를 기술적으로는 <strong>Peano numbers</strong> 라 부른다. 다시 말해서,</p>
-
-<blockquote>
-  <p>The properties of the natural numbers can e derived from the <strong>Peano axioms</strong></p>
-</blockquote>
-
-<p>자세한건 <a href='http://en.wikipedia.org/wiki/Natural_number' #Peano_axioms">여기</a>로</p>
-
-<h3 id="decomposition">Decomposition</h3>
-
-<p>프로그래밍의 많은 부분이 <em>Decomposition</em> 이다. 타입을 비교하고 타입에 따라 처리하는 일들. 다음과 같은 아주 자그마한 컴파일러가 있다고 해 보자. </p>
-
-<pre><code class="scala">object Decomposition {  
-  def eval(e: Expr): Int = {
-    if (e.isNumber) e.numValue
-    else if (e.isSum) eval(e.leftOp) + eval(e.rightOp)
-    else throw new Error(s"unknown Expr $e")
-  }
-}
-
-trait Expr {  
-  def isNumber: Boolean
-  def isSum: Boolean
-  def numValue: Int
-  def leftOp: Expr
-  def rightOp: Expr
-}
-
-class Number(n: Int) extends Expr {  
-  def isNumber = true
-  def isSum = false
-  def numValue = n
-  def leftOp = throw new Error("Number.leftOp")
-  def rightOp = throw new Error("Number.righOp")
-}
-
-class Sum(l: Expr, r: Expr) extends Expr {  
-  def isNumber = false
-  def isSum = true
-  def numValue = throw new Error("Sum.numValue")
-  def leftOp = l
-  def rightOp = r
-}
-</code></pre>
-
-<p>다음과 같은 테스트코드를 작성하면, 잘 돌아간다.</p>
-
-<pre><code class="sclaa">  import Decomposition._
-
-  "Sum(Number(3), Number(4))" should "be eql 7" in {
-    val three = new Number(3)
-    val four = new Number(4)
-    val sum = new Sum(three, four)
-
-    assert(eval(sum) == 7)
-  }
-</code></pre>
-
-<p>위에서, <code>isNumber</code> 과 같은 것들을 <strong>Classification</strong>, <code>rightOp</code>, <code>numValue</code> 같은 것들을 <strong>Accessor</strong> 라 부른다. </p>
-
-<p>문제는 만약 <code>Prod</code> 나 <code>Var</code> 같은 클래스들이 <code>Expr</code> 을 상속했을 때 새로운 <strong>Classification</strong> 과 <strong>Accessor</strong> 를 작성 해야 한다는 거다. 무려 <strong>25</strong> 개나! 단 두개의 클래스만 추가했을 뿐인데..</p>
-
-<p>일반적으로 새롭게 클래스를 정의했을때 메소드는 <em>quadratic</em> 으로 증가한다. 이건 큰 문제다. </p>
-
-<p>이걸 해결하는 한가지 방법은, <em>Type Cast</em> 와 <em>Type Test</em> 를 이용하는거다. 자바에서 사용하는 아래의 두 메소드는</p>
-
-<pre><code class="java">x instansceOf T  
-(T) x
-</code></pre>
-
-<p>스칼라에서 다음과 같다.</p>
-
-<pre><code>x.isInstanceOf[T]  
-x.asInstanceOf[T]  
-</code></pre>
-
-<p>이 방법을 이용하면 <code>eval</code> 함수에서 <code>if (e.isInstanceOf[Number])</code> 와 같이 비교할 수 있기 때문에 <em>Classification Method</em> 가 필요없다. 그러나, 타입캐스팅에 실패했을 경우 런타임 에러가 발생할 수 있다. 다른 방법은 없을까?</p>
-
-<h4 id="objectorienteddecomposition">Object-Oriented Decomposition</h4>
-
-<p>다른 한 가지 방법은, <code>eval</code> 에서 타입체킹을 하는게 아니라 각 클래스에 <code>eval</code> 메소드를 만드는거다.</p>
-
-<pre><code class="scala">trait Expr {  
-  def eval: Int
-}
-</code></pre>
-
-<p>이 방법의 문제는 <code>Expr</code> 에 새로운 메소드를 추가했을때 <em>Hierarchy</em> 내에 있는 모든 클래스에 같은 메소드를 작성해야 한다는 것이다.</p>
-
-<p>게다가 <code>a * b + a * c</code> 를 <code>a * (b + 3)</code> 로 축약하기가 어렵다. 이건 <em>Non-local simplification</em> 이기 때문에, sub-tree 를 모두 테스트하고 접근해야한다. <em>OO Decomposition</em> 은 <code>eval</code> 메소드 구현엔 좋지만, 이런 점에선 문제가 있다.</p>
-
-<h3 id="patternmatching">Pattern Matching</h3>
-
-<p>우리는 <em>Decomposition</em> 을 해결하기 위해서 3가지 방법을 시도해봤다.</p>
-
-<p>(1) <em>Classification</em> and <em>acess</em> methods: <strong>quadratic explosion</strong> <br />
-(2) <em>Type tests</em> and <em>Type casts</em>: <strong>unsafe</strong>, <strong>low-level</strong> <br />
-(3) <em>OO Decomposition</em>: <strong>need to touch all classes to add a new method</strong>, <strong>does not work always</strong>  </p>
-
-<h4 id="functionaldecompositionwithpatternmatching">Functional Decomposition with Pattern Matching</h4>
-
-<p>사실 <em>Classification</em> 이나 <em>Access</em> 의 목적은 다음의 두가지라 봐도 충분하다.</p>
-
-<blockquote>
-  <p>(1) Which subclass was used? <br />
-  (2) What were the arugmnets of the constructor?</p>
-</blockquote>
-
-<p>따라서 Scala 에서는 <strong>Pattern Matching</strong>, 그리고 그 과정에서 사용하는 <strong>Case class</strong> 를 통해 <em>Decomposition</em> 을 우아하게 자동화 한다. </p>
-
-<pre><code class="scala">trait Expr  
-case class Number(n: Int) extends Expr  
-case class Sum(l: Expr, r: Expr) extends Expr
-
-def eval(e: Expr): Expr = {  
-  e match {
-    case Number(n) =&gt; n
-    case Sum(e1, e2) =&gt; eval(e1) + eval(e2)
-  }
-}
-</code></pre>
-
-<p>(1) 패턴에서 사용하는 <em>Variable(변수)</em> 는 소문자로 시작해야 한다. 
-(2) <em>Variable</em> 은 두번 사용될 수 없다. <code>Sum(a, a)</code> 는 잘못된 패턴이다. <br />
-(3) <em>Constant(상수)</em> 는 대문자로 시작해야 하는데, 예외는 <code>null</code>, <code>true</code>, <code>false</code> </p>
-
-<p><code>Expr</code> <em>Trait</em> 내부에 <code>eval</code> 을 삽입하는 것도 가능하다</p>
-
-<pre><code class="scala">trait Expr {  
-  def eval: Int = {
-    this match {
-      case Number(n) =&gt; n
-      case Sum(e1, e2) =&gt; e1.eval + e2.eval
-    }
-  }
-}
-</code></pre>
-
-<p><em>Object-Oriented Decomposition</em> 과 <em>Functional Decomposition</em> 모두 장단이 있는데, 만약 메소드를 많이 만드는 경우라면 <em>Functional Decomposition</em> 이 더 우월하다. 매 클라스마다 메소드를 만들 필요가 없기 때문이다. 반대로, 클래스를 많이 만드는 경우라면, <em>OO Decomposition</em> 이 더 낫다. 클래스를 만들때마다 매번 <code>eval</code> 함수를 수정 할 필요 없기 <code>eval</code> 을 가진 클래스를 만들면 된다.</p>
-
-<h3 id="lists">Lists</h3>
-
-<p>Scala 에서 <code>List</code> 와 <code>Array</code> 는 크게 두가지 면에서 다르다, 먼저 <code>List</code> 는 <em>immutable</em> 이고, <em>recursive</em> 인 반면 <code>Array</code> 는 <em>mutable</em>, <em>flat</em> 하다.</p>
-
-<pre><code class="scala">List("apple", "oranges", "pears")  
-"apple" :: ("oranges" :: ("pears" :: Nil))
-
-List()  
-Nil  
-</code></pre>
-
-<h4 id="rightassociativity">Right Associativity</h4>
-
-<p>좀 더 편하게 하기 위해서, Scala 는 다음과 같은 문법을 제공한다.</p>
-
-<pre><code class="scala">A :: (B :: C)  
-A :: B :: C  
-</code></pre>
-
-<p>이는 Scala 에서 <code>:</code> 로 끝나는 <em>operator</em> 는 <strong>Right-associative</strong> 이기 때문이다.</p>
-
-<p>또한 <code>:</code> 로 끝나는 <em>operator</em> 에서는, 우측에 오는것이 본래의 <em>operand</em> 다</p>
-
-<blockquote>
-  <p>Operators ending in <code>:</code> are also difference in the they are seen as method calls of the right-hand operand</p>
-</blockquote>
-
-<p>따라서 다음의 세 라인은 모두 같다.</p>
-
-<pre><code class="scala">1 :: 2 :: 3 :: 4 :: Nil  
-1 :: (2 :: (3 :: (4 :: Nil)))  
-Nil.::(4).::(3).::(2).::(1)  
-</code></pre>
-
-<p>그러므로 <code>::</code> 를 <code>prepend</code> 메소드라 보면 된다.</p>
-
-<h4 id="listpatterns">List Patterns</h4>
-
-<p><code>::</code>(Cons) 연산자를 이용하면 다음과 같은 패턴이 가능하다.</p>
-
-<pre><code class="scala">1 :: 2 :: xs  
-x :: Nil  
-List(x) // same as x :: nil  
-List() // Nil  
-List(2 :: xs)  
-</code></pre>
-
-<h4 id="sortinglists">Sorting Lists</h4>
-
-<p><strong>Insertion Sort</strong> 는 재귀를 이용하면 다음과 같이 구현할 수 있다.</p>
-
-<pre><code class="scala">  def isort(xs: List[Int]): List[Int] = {
-    xs match {
-      case Nil =&gt; List()
-      case y :: ys =&gt; insert(y, isort(ys))
-    }
-  }
-
-  def insert(x: Int, xs: List[Int]): List[Int] = {
-    xs match {
-      case Nil =&gt; List(x)
-      case y :: ys =&gt; {
-        if (x &lt; y)  x :: xs
-        else y :: insert(x, ys)
-      }
-    }
-  }
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='https://twitter.github.io/scala_school/type-basics.html' #variance'>https://twitter.github.io/scala_school/type-basics.html#variance</a>  </p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-4/</link><guid isPermaLink="false">fa146b4b-9c91-4762-ae3f-55f9179f16d9</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[variant]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 07 Oct 2014 08:06:00 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 1]]></title><description><![CDATA[<p><strong>Machine Learning</strong> by Andrew Ng, <em>Coursera</em></p>
-
-<h3 id="whatismachinelearning">What is Machine Learning?</h3>
-
-<blockquote>
-  <p>Field of study that gies computers the abiliry to learn without being explicitly programmed. (1959, Arthur Samuel)</p>
-  
-  <p><strong>Well-posed Learning Problem:</strong> A computer program is said to <em>learn</em> from experience E with respect to some task T and some performance measure P, if its performance on T, as measured by P, improves with experience E (1998, Tom Michell)</p>
-</blockquote>
-
-<p>체크메이트를 예로 들면, 수천번의 체스 게임은 <em>E</em> 에 해당하고 게임 속에서 체크메이트는 <em>T</em> 에, <em>P</em> 는 다음 게임에서 이길 확률로 볼 수 있다.</p>
-
-<p>다른 예로, 이메일을 분류하는 스팸검사기가 있다고 할때 </p>
-
-<ul>
-<li><em>E</em>: Wathing you label emails as spam or not spam.  </li>
-<li><em>T</em>: Classifying emails as spam or not spam.  </li>
-<li><em>P</em>: The number(or fraction) of emails correctly classified as spam/not spam.  </li>
-</ul>
-
-<h3 id="supervisedlearning">Supervised Learning</h3>
-
-<blockquote>
-  <p><strong>Given the rihgt answer</strong> for each example in the data</p>
-</blockquote>
-
-<p>즉, 주어진 정답이 있을때 사용할 수 있다. 이런 문제들은 많은데, <em>Regression</em> 이나 <em>Classification</em> 등이 있다.</p>
-
-<ul>
-<li><strong>Regression:</strong> Predict continuous valued output  </li>
-<li><strong>Classification:</strong> Discrete valued output (0 or 1)  </li>
-</ul>
-
-<p>단순히 1개 혹은 2개의 attribute 를 사용할 수 있지만, infinite number of features(attribute) 를 사용하는 <em>Support Vector Machine</em> 같은 알고리즘도 있다.</p>
-
-<h3 id="unsupervisedlearning">Unsupervised Learning</h3>
-
-<p>즉 모든 데이터에 attribute 는 있지만 주어진 정답이 없을때 사용한다. 다시 말해서, 여러 집단으로 분류될때 미리 컴퓨터에게 이건 <code>type1</code> 이야 등의 정보를 제공하지 않는다. </p>
-
-<p>예를 들어서, 다음의 두가지 예는 <em>Unsupervised leanring</em> 이 아니라 <em>Supervised learning</em> 이다.</p>
-
-<blockquote>
-  <p>(1) <strong>Given email labeled as spam/not spam</strong>, learn a spam filter<br/><br/>
-  (2) <strong>Given a dataset of patients diagnosed as either having diabetes or not</strong>, learn to classify new patients as having diabetes or not</p>
-</blockquote>
-
-<p><strong>Clustering</strong> 이라 불리는데, DNS Clustering, Social network analysis, market segmentation 등에 쓰인다.</p>
-
-<p><strong>Cocktail party problem</strong> 은 2명이 동시에 말하고, 이걸 서로 다른 위치에 있는 마이크가 녹음한다고 할 때 이 소리를 구분할 수 있는가 하는 문제다. 이것 또한 <em>Unsupervised lerning</em> 으로 해결할 수 있다.</p>
-
-<h3 id="modelrepresentation">Model Representation</h3>
-
-<p><img src='http://mercris.files.wordpress.com/2012/07/genericmlatwork.png'  />  </p>
-
-<p align="center">(<a href='http://mercris.files.wordpress.com/2012/07/genericmlatwork.png' >http://mercris.files.wordpress.com/2012/07/genericmlatwork.png</a>)</p>
-
-<p><em>Traning Set</em> 을 넣고 <em>Learning Algorithm</em> 을 돌리면 <em>Hypothesis</em> 가 나오는데, 이건 사실 함수라 보면 된다. 여기에 새로운 <em>Input X</em> 를 넣으면 <em>Estimated Y</em> 가 나온다.</p>
-
-<p>참고로, 변수가 하나인 <em>Linear regression</em> 은 <strong>Univariate linear regression</strong> 이라 부른다.</p>
-
-<h3 id="costfunction">Cost Function</h3>
-
-<p>예를 들어서 다음과 같은 데이터셋이 있을때, </p>
-
-<p><img src='http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584'  align="center" />  </p>
-
-<p align="center"><a href='http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584' >http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584</a></p>
-
-<p><em>H(hypothesis)</em> 가 다음처럼 나온다면 </p>
-
-<p><img src='http://s0.wp.com/latex.php?latex=h_%7B%5Ctheta%7Dx+%3D+%5Ctheta_%7B0%7D+%2B+%5Ctheta_%7B1%7Dx&amp;bg=ffffff&amp;fg=333333&amp;s=0'  align="center" /></p>
-
-<p>여기서 <code>0 (Theta)</code> 는 <em>parameter</em> 라고 부른다. 
-문제는, 상수를 어떻게 찾느냐인데, 아이디어는 간단하다. training set <code>(x, y)</code> 에 가까운 <code>h(x)</code> 를 찾으면 된다.</p>
-
-<p>따라서 다음과 같은 식을 만들 수 있고,</p>
-
-<p><img src='http://s0.wp.com/latex.php?latex=J%28%5Ctheta_%7B0%7D%2C+%5Ctheta_%7B1%7D%29+%3D+%5Cdfrac+%7B1%7D%7B2m%7D+%5Csum+%5Climits_%7Bi%3D1%7D%5E%7Bm%7D+%28h_%7B%5Ctheta%7D+%28x%5E%7B%28i%29%7D%29+-+y%5E%7B%28i%29%7D%29%5E2&amp;bg=ffffff&amp;fg=333333&amp;s=0'  align="center" /> </p>
-
-<p><code>J(01, 02)</code> 를 최소화 하는 <code>(01, 02)</code> 를 찾으면 된다. 이 식을 <strong>cost function</strong> 또는 <strong>squred error function</strong> 이라 부른다. 여기서 <code>1/2m</code> 으로 나누는 이유에 대해 좀 궁금해서 구글링 해봤는데, <code>1/m</code> 으로 나누는 이유는 <em>squared error</em> 에 대해 <em>mean</em> 을 얻기 위한거고, <code>1/2</code> 로 다시 나누는 이유는 미분했을때 나오는 <code>2</code> 를 제거하기 위해서다. <a href='http://stackoverflow.com/questions/21099289/cant-understand-the-cost-function-for-linear-regression' >SO 답변</a> 을 첨부하면,</p>
-
-<blockquote>
-  <p>The cost function is</p>
-  
-  <p>J(theta<em>0, theta</em>1) = 1/(2m) * sum<em>(i=1)^m [ h</em>theta(x^i) - y^i ]^2
-  By h<em>theta(x^i) we denote what model outputs for x^i, so h</em>theta(x^i) - y^i is its error (assuming, that y^i is a correct output).</p>
-  
-  <p>Now, we calculate the square of this error [ h_theta(x^i) - y^i ]^2 (which removes the sign, as this error could be both positive and negative) and sum it over all samples, and to <strong>bound it somehow we normalize it - simply by dividing by m,</strong> so we have mean (because we devide by number of samples) squared (because we square) error (because we compute an error):</p>
-  
-  <p>1/m * sum<em>(i=1)^m [ h</em>theta(x^i) - y^i ]^2
-  <strong>This 2 which appears in the front is used only for simplification of the derivative</strong>, because when you will try to minimize it, you will use the steepest descent method, which is based on the derivative of this function. Derivative of a^2 is 2a, and our function is a square of something, so this 2 will cancel out. This is the only reason of its existance.</p>
-</blockquote>
-
-<p>이 <em>cost function</em> 은 <em>regression</em> 문제를 위해 자주 쓰이는 기법이다. </p>
-
-<h3 id="costfunctionintuition1">Cost Function: Intuition 1</h3>
-
-<p><em>Cost function</em> 에서 만약에 <code>0_0</code> 이 제로라면 <code>0_1</code> 만 찾으면 된다. 따라서 다음과 같은 실제 데이터에서</p>
-
-<p><img src='http://cfile3.uf.tistory.com/image/2275174452D612AE06C75B'  />  </p>
-
-<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
-
-<p><code>J(0_1)</code> 을 찾아보면, 다음과 같은 이차함수가 나온다.</p>
-
-<p><img align="center" src='http://cfile29.uf.tistory.com/image/234E894A52D6113D1F8267'  />  </p>
-
-<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
-
-<p>당연히 이차함수이므로, 기울기가 0이 되는 지점은 <code>J(0_1)</code> 을 미분해서 찾으면 된다. (이래서 아까 1/2가 있던 것)</p>
-
-<h3 id="costfunctionintuition2">Cost Function: Intuition 2</h3>
-
-<p><em>Parameter</em> 가 <code>0_1</code> 만 있었을때는, (<code>0_0</code> = 0) <code>J(0_1)</code> 이 이차함수였지만, <code>J(0_0, 0_1)</code> 일때는 다음과 같은 모양을 보여준다.</p>
-
-<p><img align="center" src='http://cfile2.uf.tistory.com/image/2232CA4C52D611111DDFCD'  />  </p>
-
-<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
-
-<p>여기서 <code>J(0_0, 0_1)</code> 값을 제외하고 <code>(0_0, 0_1)</code> 을 평면으로 나타내면 아래 사진에서 우측과 같은 여러 궤도가 나온다.</p>
-
-<p><img src='http://cfile24.uf.tistory.com/original/2107074652D6134E0ECB0F'  align="center" />  </p>
-
-<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
-
-<p>여기서 같은 궤도에 있는 <code>(0_0, 0_1)</code> 쌍은, 같은 <code>J</code> 함수를 만든다. 그리고 재밌는 사실은 궤도가 가장 좁은 타원의 중심에 있는 <code>(0_0, 0_1)</code> 가 가장 작은 <code>J(0_0, 0_1)</code> 를 만들어 낸다.</p>
-
-<h3 id="gradientdescent">Gradient Descent</h3>
-
-<p><em>Gradient Descent</em> 알고리즘은 <em>Linear Regression</em> 에만 쓸 수 있는건 아니고, 범용적인 알고리즘이다. <em>cost function</em> 의 최소값을 찾기 위해 사용할 수 있는데, 다음과 같은 <code>J</code> 가 있을때,</p>
-
-<p><img src='http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5'  align="center" />  </p>
-
-<p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p>
-
-<p>높이를 비교해 가며 점점 낮은쪽으로 이동해 가면서 <code>J</code> 의 최소값을 찾을 수 있다. 식은 다음과 같은데,</p>
-
-<p><img src='http://2.bp.blogspot.com/-AdV-O-MoZHE/TtLibFTaf9I/AAAAAAAAAVM/aOxUGP7zl98/s1600/gradient+descent+algorithm+OLS.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://econometricsense.blogspot.kr/2011_11_01_archive.html' >http://econometricsense.blogspot.kr/2011_11_01_archive.html</a>)</p>
-
-<p>여기서 <code>:=</code> 는 <em>assignment</em> 다. <code>a(alpha)</code> 는 <em>learning rate</em> 라 부른다. 이때 <code>(0_0, 0_1)</code> 은 동시에 업데이트 되야한다. <strong>(Simultaneous update)</strong></p>
-
-<h3 id="gradientdescentintuition">Gradient Descent: Intuition</h3>
-
-<p>이제 저 식을 분해하기 위해 <code>J(0_1)</code> 처럼 <em>parameter</em> 하나만 놓고 보면, 이차원 함수가 나올테다. 만약 현재 <code>0_1</code> 이 이차함수의 최저점 우측에 있다면, <code>J(0_1)</code> 을 미분한 값<strong>(Slope, 기울기)</strong> 에 양수 <code>a</code> 를 곱한 값을 <code>0_1</code> 에서 뻬면서 갱신하면 <code>0_1</code> 은 점점 최저점 쪽으로 간다, </p>
-
-<p>반대로 <code>0_1</code> 이 <code>J(0_1)</code> 의 좌측에 위치한다면 우측으로 이동하고, 아래는 그걸 요약한 그림이다.</p>
-
-<p><img src='http://i.ytimg.com/vi/ud4o8AYe9tI/hqdefault.jpg'  align="center" /></p>
-
-<p>따라서 <em>learning late</em> <code>a</code> 가 너무 작으면 <em>Gradient descent</em> 가 너무 느려진다. 왜냐하면 <code>0</code> 의 차이가 점점 작이지기 때문에 최저점에 도착할때 까지 너무 많은 step 이 필요하다.</p>
-
-<p>반대로 너무 크면 최저점을 넘어갈 수 있다. 심지어 최저점에서 점점 더 멀어질 수 있다.</p>
-
-<blockquote>
-  <p>if <code>a</code> is too small, <em>gradient descent</em> can be slow <br/><br/>
-  if <code>a</code> is too large, <em>gradient desscent</em> can overshoot the minimum, It may fail to converge, or even diverge</p>
-</blockquote>
-
-<p>그런데 이 <em>gradient descent</em> 알고리즘의 문제는 <strong>local optimum</strong> 수 있다는 점이다. 왜냐하면 <strong>local optimum</strong> 에서도 <code>J</code> 의 derivative 가 <code>0</code> 이기 때문이다.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Extrema_example.svg/2000px-Extrema_example.svg.png'  align="center" /><p align="center"><a href='http://en.wikipedia.org/wiki/Backpropagation' >http://en.wikipedia.org/wiki/Backpropagation</a></p></p>
-
-<h3 id="gradientdescentforlinearregression">Gradient Descent For Linear Regression</h3>
-
-<p>이제 <em>cost function</em> 을 <em>gradient descent</em> 에 집어넣고, 정리하자. <code>0_0(Theta zero)</code>, 과 <code>0_1(Theta one)</code> 대해서 시그마 내부 제곱을 각각 미분해서 정리하면,</p>
-
-<p><img src='http://pingax.com/wp-content/uploads/2013/11/Convergence-300x107.png'   align="center" />  </p>
-
-<p align="center">(<a href='http://pingax.com/linear-regression-with-r-step-by-step-implementation-part-1/' >http://pingax.com/linear-regression-with-r-step-by-step-implementation-part-1/</a>)</p>
-
-<p>참고로 <strong>Convex function</strong> 은 <em>Bowl shaped</em> 처럼 <em>local optima</em> 가 없는 <code>h</code>(Hypothesis) 를 말한다. 따라서 <em>convex function</em> 을 선택할 수 있다면, 하는편이 낫다.</p>
-
-<p><strong>Batch</strong> <em>gradient descent</em> 는 모든 training example 을 사용하는 <em>gradient descent</em> 를 말한다. (시그마에서)</p>
-
-<p>어떤 경우에는 <em>gradient descent</em> 같은 interative algorithm 없이도 <code>min J(0_0, 0_1)</code> 를 풀 수 있다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://mercris.wordpress.com/' >http://mercris.wordpress.com/</a> <br />
-(2) <a href='http://mapository.tistory.com/' >http://mapository.tistory.com/</a> <br />
-(3) <a href='http://econometricsense.blogspot.kr/' >http://econometricsense.blogspot.kr</a> <br />
-(4) <a href='http://pingax.com/' >http://pingax.com/</a></p>]]></description><link>http://1ambda.github.io/machine-learning-week-1/</link><guid isPermaLink="false">bf54bf16-5f85-4773-bc9c-658c74a10ecf</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 06 Oct 2014 03:59:07 GMT</pubDate></item></channel></rss>
+(5) <a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-2/</link><guid isPermaLink="false">78e8635f-a298-477a-8823-0c2738c21251</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[gradient descent]]></category><category><![CDATA[normal equation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 08 Oct 2014 10:50:00 GMT</pubDate></item></channel></rss>
