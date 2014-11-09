@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 08 Nov 2014 10:14:27 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graphs, The Contraction Algorithm]]></title><description><![CDATA[<p>이번엔 지난시간에 배운 <em>randomized algorithm</em> 을 새로운 <em>domain</em> 인 그래프에 적용해 보고, <em>contraction algorithm</em> 이 무엇인지 알아본다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 09 Nov 2014 00:08:09 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graphs, The Contraction Algorithm]]></title><description><![CDATA[<p>이번엔 지난시간에 배운 <em>randomized algorithm</em> 을 새로운 <em>domain</em> 인 그래프에 적용해 보고, <em>contraction algorithm</em> 이 무엇인지 알아본다.</p>
 
 <h3 id="graphs">Graphs</h3>
 
@@ -66,7 +66,7 @@
 <p><em>min cut</em> 을 해결하기 위해 <em>quick sort</em>, <em>randomized selection</em> 에서 보았던 랜덤 샘플링을 이용할건데, 이 문제는 랜덤 샘플링이 그래프 문제에도 얼마나 효과적인지 보여준다. 알고리즘은 이렇다.</p>
 
 <p>(1) while there are more than 2 vertices <br />
-(2) pick a remaining edge <code>(u, v)</code> uniformly at random <br />
+(2) pick a remaining vertices <code>(u, v)</code> uniformly at random <br />
 (3) merge (or "contract") <code>u</code> and <code>v</code> into a single vertex <br />
 (4) remove self-loops <br />
 (5) return cut represented by final 2 vertices  </p>
@@ -414,7 +414,7 @@
 
 <p>문제는 시그마 <code>K</code> 부분인데, <code>K</code> 가 이 신경망에서 클래스의 개수 라는 점을 고려하면 <code>y_k</code> 는 <code>[0; 0; 1; 0; ...]</code> 에서 <code>k</code> 번째 값, <code>(h0)_k</code> 또한 <code>k</code> 번째 <em>output unit</em> 의 값 이라 보면 된다.</p>
 
-<p>원래 <em>cost function</em> 정의 자체가 우리가 가진 <em>hypothesis</em> 로 구한 값과 본래의 값 <code>y</code> 와의 차이를 알려주는 것이므로 <code>K</code> 개의 클래스가 있을때는 모든 클래스 값의 합과, 본래의 <em>k-dimensional vector</em> <code>y</code> 값의 합을 최소화 하는 것으로 <em>neural network</em> 의 <em>cost function</em> 을 정의할 수 있다.</p>
+<p>원래 <em>cost function</em> 정의 자체가 우리가 가진 <em>hypothesis</em> 로 구한 값과 본래의 값 <code>y</code> 와의 차이를 알려주는 것이므로 <code>K</code> 개의 클래스가 있을때는 각 클래스 위치의 값과 본래의 <em>k-dimensional vector</em> <code>y</code> 값의 해당 포지션의 차이를 모두 합한 값을 구하는 것이라 <em>neural network</em> 의 <em>cost function</em>  정의할 수 있다.</p>
 
 <h3 id="backpropagationalgorithm">Backpropagation: Algorithm</h3>
 

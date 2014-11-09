@@ -135,7 +135,7 @@
 
 <p>문제는 시그마 <code>K</code> 부분인데, <code>K</code> 가 이 신경망에서 클래스의 개수 라는 점을 고려하면 <code>y_k</code> 는 <code>[0; 0; 1; 0; ...]</code> 에서 <code>k</code> 번째 값, <code>(h0)_k</code> 또한 <code>k</code> 번째 <em>output unit</em> 의 값 이라 보면 된다.</p>
 
-<p>원래 <em>cost function</em> 정의 자체가 우리가 가진 <em>hypothesis</em> 로 구한 값과 본래의 값 <code>y</code> 와의 차이를 알려주는 것이므로 <code>K</code> 개의 클래스가 있을때는 모든 클래스 값의 합과, 본래의 <em>k-dimensional vector</em> <code>y</code> 값의 합을 최소화 하는 것으로 <em>neural network</em> 의 <em>cost function</em> 을 정의할 수 있다.</p>
+<p>원래 <em>cost function</em> 정의 자체가 우리가 가진 <em>hypothesis</em> 로 구한 값과 본래의 값 <code>y</code> 와의 차이를 알려주는 것이므로 <code>K</code> 개의 클래스가 있을때는 각 클래스 위치의 값과 본래의 <em>k-dimensional vector</em> <code>y</code> 값의 해당 포지션의 차이를 모두 합한 값을 구하는 것이라 <em>neural network</em> 의 <em>cost function</em>  정의할 수 있다.</p>
 
 <h3 id="backpropagationalgorithm">Backpropagation: Algorithm</h3>
 
