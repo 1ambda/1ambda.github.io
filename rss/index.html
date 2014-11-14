@@ -1,5 +1,1078 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 09 Nov 2014 06:09:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graphs, The Contraction Algorithm]]></title><description><![CDATA[<p>이번엔 지난시간에 배운 <em>randomized algorithm</em> 을 새로운 <em>domain</em> 인 그래프에 적용해 보고, <em>contraction algorithm</em> 이 무엇인지 알아본다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 14 Nov 2014 11:12:46 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 6]]></title><description><![CDATA[<p>지난시간엔 <em>back propagation</em> 구현해 보고 여기에 적용할 수 있는 소소한 것들 <em>random initialization</em> 과 <em>gradient checking</em> 등도 알아 보았다.</p>
+
+<p>머신러닝을 단순히 아는것과, 실전에서 사용할 수 있다는 건 큰 차이가 있다. 이번 시간에는 실전에서 필요한 여러가지 팁들에 대해 설명한다. 후반부에서는 스팸 분류기를 통해 간단한 머신러닝 시스템을 설계해 본다.</p>
+
+<h3 id="diagnostics">Diagnostics</h3>
+
+<p><img src='http://chart.apis.google.com/chart?cht=tx&amp;chl=J' (%5Ctheta)%20%3D%20%7B1%20%5Cover%202m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20(h_%5Ctheta(x%5E%7B(i)%7D%20-%20y%5E%7B(i)%7D)%5E2%20%2B%20%5Clambda%5Csum_%7Bj%3D1%7D%5Em%20%5C%20%5Ctheta_j%5E2%5D" alt="" /></p>
+
+<p>집 가격에 대한 <em>linear regression</em> 가설을 세웠는데, <em>error</em> 가 좀 큰 것을 발견했다고 하자. 몇 가지 방법이 있다. 어떻게 해야할까?</p>
+
+<p>(1) Get more training examples <br />
+(2) Try smaller sets of features <br />
+(3) Try getting additional features <br />
+(4) Try adding polynomial features <br />
+(5) Try decreasing <em>lambda</em> <br />
+(5) Try increasing <em>lambda</em>  </p>
+
+<p>이중에서 (1), 더 많은 트레이닝 셋을 구하는건 별로 도움이 안 될 수도 있다. </p>
+
+<p>이제 알고리즘이 정상적으로 동작하는지를 진단하는 <em>machine learing diagnostic</em> 을 알아보자. <em>gradient checking</em> 이 그랬던 것처럼, 구현하는데는 좀 시간이 걸려도 디버깅에 드는 시간을 많이 줄여준다.</p>
+
+<blockquote>
+  <p>A diagnostic can sometimes rule out certain courses of action (changes to your learning algorithm) as being unlikely to improve its performance significantly</p>
+</blockquote>
+
+<h3 id="evaluatingahypothesis">Evaluating a hypothesis</h3>
+
+<p>이전 강의들에서 언급 했듯이 <em>low training error</em> 를 갖는 <em>hypothesis (가설)</em> 이 항상 좋은 건 아니다. <em>overfitting</em> 이 발생하는 경우가 많다.</p>
+
+<p>그리고 <em>feature</em> 가 많으면 많을 수록 <em>plotting</em> 하기는 더 힘들기 때문에 가설을 평가할 다른 방법을 찾아야 한다. </p>
+
+<p>가설을 평가할 수 있는 하나의 방법으로 전체 <em>training set</em> 을 <code>70% / 30%</code> 로 분리해 <code>70%</code> 은 <em>training set</em> 으로 나머지 <code>30%</code> 는 <em>test set</em> 으로 활용할 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/09/1360378105_8286.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>테스트셋과 트레이닝셋은 랜덤하게 분리하는 편이 좋다. 바꿔 말하면, 이미 정렬되어 있을 경우에는 랜덤하게 다시 배열하여 트레이닝셋과 테스트셋을 구분하는 편이 좋다.</p>
+
+<p><em>linear regressoin</em> 에 트레이닝 셋과 테스트셋을 분리하는 과정을 알아 보면</p>
+
+<p>(1) <code>0(theta)</code> 를 트레이닝 셋에 대해 학습시켜 트레이닝 에러를 최소화 하는 <code>J(0)</code> 를 찾는다. <br />
+(2) 학습된 <code>0(theta)</code> 에 대해 테스트 셋을 돌려 <em>test error</em> 를 찾는다.</p>
+
+<p>그럼 <em>linear regression</em> 말고 <em>classification</em> 에는 어떻게 적용할까?</p>
+
+<p>마찬가지로 <code>0(theta)</code> 에 대해 <code>J(0)</code> 를 찾고, 여기에 <code>J_test(0)</code> 를 돌려 테스트 셋의 에러를 찾는다.</p>
+
+<p>아니면 아래 그림에서 볼 수 있듯이 <em>misclassification error</em> 를 이용해도 된다. 보면 알겠지만 같은 정의다. <code>y = 0</code> 일때 <code>h(x) &lt; 0.5</code> 이어야 하고, <code>y = 1</code> 일때 <code>h(x) =&gt; 0.5</code> 이어야 하기 때문에 엇갈리게 나온 경우 <code>err</code> 함수에서 <code>1</code> 을 리턴해, 이 값을 모두 합한 뒤 전체 테스트 셋의 숫자로 나누면 테스트 셋의 에러율이 나온다.s</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/09/1360378588_2059.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<h3 id="modelselection">Model Selection</h3>
+
+<p>당연한 이야기지만 <em>training set</em> 에 가설이 <em>well fit</em> 되어있기 때문에 트레이닝셋에 포함되지 않은 새로운 경향의 데이터를 만나면 에러가 많이 생길 수 있다.</p>
+
+<blockquote>
+  <p>Once parameters were fir to some set of data (training set), the error of the parameters as measured on that data (the training error <code>J(0)</code>) is likely to be lower than the actual generalization error.</p>
+</blockquote>
+
+<p><code>d</code> 를 <em>degree of polynomial (가설의 다항식 차수)</em> 이라 하자. 그럼 <code>d = 1, 2, .. , 10</code> 중에 어떤 걸 택하는 게 좋을까?</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/09/1360380082_1392.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>각각에서 나오는 파라미터 벡터를 <code>0^(1), 0^(2), ...</code> 이라 하자. 그리고 여기서 나오는 테스트 셋의 에러를 <code>J_test(0^(1))</code>, <code>J_test(0^(2))</code> 등이라 하면 이 값을 모두 조사해 최소로 나오는 <code>d</code> 를 가진 모델을 택한다. </p>
+
+<p>그러나 문제는 이렇게 선택한 모델이 <em>optimistic estimate of generalization error</em> 라는 점이다. 테스트 셋에 대해서 가장 적은 에러를 모델이 보여준다 해도 실제 데이터에 대해 그러리라는 보장은 없다. 다른 모델이 더 나은 결과를 보여줄 수도 있기 때문이다.</p>
+
+<h3 id="trainvalidationtestsets">Train / Validation / Test Sets</h3>
+
+<p>이 문제를 해결하기 위해 전체 <em>training set</em> 을 <em>60%/20%/20%</em> 로 나누어 각각을 <em>training set</em>, <em>cross validation set (CV)</em>, <em>test set</em> 이라 하자. 그리하여 각각의 에러를 구할 수 있다. </p>
+
+<p>여기서 <em>CV</em> 에 대한 <em>error</em> 가 최저인 모델을 택하면 이 모델은 <em>test set</em> 에 대해서는 <em>fit</em> 되어 있지 않기 때문에 <em>test error</em> 가 <em>estimate generalization error</em> 라 볼 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/10/1360459807_7333.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>다시 정리해 보면 먼저 <code>0</code> 를 <em>training set</em> 에 대해 학습 시켜 <code>0</code> 값을 얻은 뒤, <em>cross validation (CV)</em> 에 대해 <em>error</em> 를 구해 가장 작은 값을 갖는 모델을 고른다.</p>
+
+<p>이제 이 모델에 대해서 <em>test error</em> 를 구하면 이 모델은 테스트 셋에 대해서 <em>fit</em> 되지도, 가장 적은 에러를 가지는지 검사되지도 않은 데이터이므로 일반적인 에러값에 대한 추정치라 볼 수 있다.</p>
+
+<p>일반적으로 <em>CV error</em> 는 <em>test error</em> 보다 더 작은 값을 가지는데, 이는 선택한 모델의 <code>0</code> 가 <em>CV set</em> 에 대해 최저치를 갖도록 <em>fit</em> 되어있기 때문이다.</p>
+
+<h3 id="diagnosingbiasvsvariance">Diagnosing Bias vs Variance</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/10/1360461366_4352.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>그림에서 볼 수 있듯이 <code>d=1</code> 인 경우엔 <em>underfit</em>, <code>d=4</code> 인 경우엔 <em>overfit</em> 이 발생한다. 다른말로 각각 <em>high bias</em>, <em>high variance</em> 라 부른다.</p>
+
+<p>아래와 같이 가로 축을 <code>d</code>, 세로 축을 <code>error</code> 라 하면 <code>d</code> 가 증가할 수록 <em>training error</em> 는 0 에 가까워진다. 반면 <em>CV set</em> 에 대해서는 하나의 <code>d</code> 만 최저치를 가지고 나머지는 그 보다 높기 때문에 아래와 같은 그래프를 그릴 수 있다.</p>
+
+<p><img src='http://my.csdn.net/uploads/201207/28/1343484056_3257.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>이 그래프가 시사하는 바는, </p>
+
+<p>(1) <em>underfit</em> 할 경우 <code>d</code> 가 작으므로 <code>J_train(0)</code> 는 매우 크고, <code>J_cv(0)</code> 는 그의 거의 비슷한 값을 가지게 된다. (<em>bias problem</em>) <br />
+(2) <em>overfit</em> 할 경우 <code>d</code> 가 크므로 <code>J_train(0)</code> 는 매우 작고, <code>J_cv(0)</code> 는 그보다는 훨씬 크다. (<em>variance problem</em>)  </p>
+
+<p>따라서 <code>J_train(0)</code> 값이 <code>J_cv(0)</code> 과 얼마나 비슷한지 비교함으로써 <em>overfit</em> 혹은 <em>underfit</em> 되는지 판단할 수 있다.</p>
+
+<p><img src='http://my.csdn.net/uploads/201207/28/1343484595_6134.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><a href='http://www.4four.us/article/2010/11/bias-variance-tradeoff' >여기</a> 서 <em>bias vs varance</em> 의 이해를 위해 인용을 좀 하자면,</p>
+
+<blockquote>
+  <p>Bias, 즉 선입관이 크면, (좋게 말해서) 줏대가 있고 (나쁘게 말해서) 고집이 세기 때문에 새로운 경험을 해도 거기에 크게 휘둘리지 않는다. 평소 믿음과 다른 결과가 관찰되더라도 한두 번 갖고는 콧방귀도 안 뀌며 생각의 일관성을 중시한다. (High Bias, Low Variance) 반대로 선입관이 작으면, (좋게 말하면) 사고가 유연하고 (나쁘게 말하면) 귀가 얇기 때문에 개별 경험이나 관찰 결과에 크게 의존한다. 새로운 사실이 발견되면 최대한 그걸 받아들이려고 하는 것이다. 그래서 어떤 경험을 했느냐에 따라서 최종 형태가 왔다갔다한다. (High Variance, Low Bias)</p>
+</blockquote>
+
+<h3 id="regularizationandbiasvariance">Regularization and Bias / Variance</h3>
+
+<p><em>regularization</em> 이 끼어들면 <code>lambda</code> 를 <em>bias vs variance</em> 문제에서 고려해야 한다. 아래 그림을 보자.</p>
+
+<p><img src='http://my.csdn.net/uploads/201207/28/1343485336_9809.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><em>lambda</em> 가 크면 당연히 <em>high bias</em>, 매우 작으면 <em>high variance</em> 다. 그러면 중간 값을 찾아야 한다는건 알겠는데, 어느정도가 적당한 값일까?</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/10/1360461577_6101.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>이 전과 비교했을때 <code>J(0)</code> 에 <em>regularization term</em> 이 추가되었지만 <code>J_train(0)</code> 이나 <code>J_cv(0)</code>, <code>J_test(0)</code> 에는 <em>regularization term</em> 이 없다는 점에 유의하자.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/10/1360461899_5163.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>모델을 선택했다면 <em>lambda</em> 를 천천히 증가시켜가면서 각각에 대해 <code>0(theta)</code> 를 구한다. 그리고 이 값을 이용해 구한 <code>J_cv(0)</code> 가 가장 적은 에러 값을 가지는 <em>lambda</em> 를 구하면 된다. <em>model selection</em> 과 비슷하다.</p>
+
+<p><em>lambda</em> 과 <em>CV error</em>, <em>training error</em> 간 관계를 알아보자면 아래와 같다. 위에서 언급 했듯이 <em>lambda</em> 가 크면 <em>bias</em>, 0 에 가까우면 <em>variance</em> 임을 확인할 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/10/1360462458_2256.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>bias</em> 와 <em>variance</em>, 그리고 <em>lambda</em> 의 관계는 아래 그래프에서도 확인할 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201210/12/1350026192_9384.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<h3 id="learningcurves">Learning Curves</h3>
+
+<p>전체 트레이닝 셋의 사이즈 <code>m</code> 이 커질때 에러는 어떻게 되는가 그래프로 한번 보자.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552101_5795.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>간단히 생각해 보면 <code>m</code> 의 사이즈가 클수록 <em>training set</em> 의 에러는 점점 늘어나고, <code>m</code> 이 커지면 커질수록 <em>generalize</em> 가 가능하므로 <em>CV error</em> 는 점점 줄어든다.</p>
+
+<p><em>high bias</em> 인 경우 처음엔 <em>training error</em> 이 매우 크다가, <code>m</code> 이 클수록 <em>training error</em> 의 증가율이 작아지므로</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552417_8655.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>이 그림이 시사하는 바는 </p>
+
+<blockquote>
+  <p><em>high bias</em> 알고리즘이라면 <code>m</code> 이 을 많이 수집한다 해도 <code>J_cv(0)</code> 의 감소율이 적기 때문에 별 도움이 되지 못한다. 다시 말해 <code>m</code> 을 많이 투입해도 얻어지는 <em>training error</em> 와 <em>CV error</em> 의 차이는 미미하다.</p>
+</blockquote>
+
+<p>반면 <em>high variance</em> 의 경우에는 <code>m</code> 이 크면 클수록 <em>training error</em> 의 증가율이 점점 줄어들고, <em>overfit</em> 이기 때문에 <em>CV error</em> 는 <em>training set</em> 과 차이가 많이 난다. 그래프는</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552431_2697.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>결국</p>
+
+<blockquote>
+  <p><em>high variance</em> 일 경우 <code>m</code> 을 많이 투입하면 할수록 낮은 <em>CV error</em> 를 얻는데 도움이 된다.</p>
+</blockquote>
+
+<p>다시 말해 이 두가지 경우는 <em>training error</em> 와 <em>CV error</em> 의 차이가 꽤 클때는 <code>m</code> 을 높이면 낮은 <em>CV error</em> 를 적은 비용으로 얻을 수 있다는 뜻이다.</p>
+
+<h3 id="applyingtoneuralnetwork">Applying to Neural Network</h3>
+
+<p>이제 처음에 나왔던 6가지 경우를 고려해 보자.</p>
+
+<p>(1) Get more training examples -> <em>fixing high variance</em> <br />
+(2) Try smaller sets of features -> <em>fixing high variance</em> <br />
+(3) Try getting additional features -> <em>fixing high bias</em> <br />
+(4) Try adding polynomial features -> <em>fixing high bias</em> <br />
+(5) Try decreasing <em>lambda</em> -> <em>fixing high bias</em> <br />
+(5) Try increasing <em>lambda</em> -> <em>fixing high variance</em>  </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552523_3279.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>bias vs variance</em> 문제를 <em>neural network</em> 에 적용시켜보자. </p>
+
+<p>(1) 작은 사이즈의 신경망이라면 계산 비용은 저렴한 대신 <em>underfit</em> 할 수 있다. <br />
+(2) 큰 사이즈의 신경망이라면 계산 비용은 비싸고 <em>overfit</em> 할 수 있다. 따라서 <em>regurarization</em> 을 이용해 <em>overfit</em> 되는 정도를 줄일 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552606_9371.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<h3 id="machinelearningsystemdesign">Machine Learning System Design</h3>
+
+<p>간단한 스팸 분류기를 작성한다고 하자. <em>supervised learning</em> 을 위해서</p>
+
+<p>(1) <code>x</code> = features of email (<em>choose 100 words indicative of spam or not</em>) <br />
+(2) <code>y</code> = spam <code>1</code> or not spam <code>0</code>  </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360804751_1943.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>각 단어가 이메일 본문에 등장했는지 아닌지를 각 <em>feature</em> 의 값으로 사용한다. (<code>1</code> or <code>0</code>)</p>
+
+<p>일반적으로는 100개를 수동으로 고르는게 아니라, 스팸에서 많이 사용된 단어를 <code>n</code> 개 골라 사용한다.</p>
+
+<p>그럼 <em>low error</em> 를 얻기 위해서는 무엇을 해야할까?</p>
+
+<p>(1) Collect lots of data : 항상 도움이 되진 않는다. <br />
+(2) Develop sophisticated features based on email routing information <br />
+(3) Develop sophisticated features for message body. e.g should "discount" and "discounts" be treated as the same word? <br />
+(4) Develop sophisticated algorithm to detect misspelings e.g m0rtgage  </p>
+
+<p>등등 의 다양한 방법을 고안할 수 있다. 이 중 무엇을 선택해야 할까? 좀 더 체계적인 방법은 없을까? 여기 몇 가지 가이드라인이 있다.</p>
+
+<blockquote>
+  <ol>
+  <li>Start with a simple algorithm that can implement quickly. Implement it and test it on your corss-validation data.</li>
+  <li>Plot learning curves to decide if more data, more features, etc. are likely to help.</li>
+  <li>Error analysis: manually examine the examples (in corss validation set) that your algorithm made errors on. See if you spot any systematic trend in what type of examples it is making errors on.</li>
+  </ol>
+</blockquote>
+
+<h3 id="erroranalysis">Error Analysis</h3>
+
+<p><em>error analysis</em> 하는 방법은 <em>CV error</em> 를 발견했을 때, 각각의 에러를 수동으로 검사하면서 분류하는 것이다.</p>
+
+<p>이메일의 타입이 무엇인지, 혹은 어떤 <em>feature</em> 가 알고리즘에서 이 이메일을 분류하는데 도움이 될만한지 생각해 본다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360804909_5716.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>error analysis</em> 가 에러가 나타난 이유에 대한 어떤 경향을 제공할 수 있기 때문에 간단히 먼저 구현해 보고 분석 해 보는것도 나쁘지 않다.</p>
+
+<p><em>error analysis</em> 는 실제로 분석 결과를 새로운 알고리즘에 적용했을때 <em>performace</em> 가 더 좋을지 알려주지 않는다. 따라서 해보고 <em>numerical evaluation</em> 을 비교해 본다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360804976_1060.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<h3 id="skewedclasses">Skewed Classes</h3>
+
+<p>암을 진단한다고 하자. <em>logistic regression</em> 을 구현했고, 놀랍게도 <em>test error</em> 가 <code>1%</code> 라고 하자.</p>
+
+<p>근데, 만약에 환자중에 <code>0.5%</code> 만 암환자라면, 차라리 모두 암이 아니라고 진단하는 다음의 함수가 더 에러가 낮다.</p>
+
+<pre><code class="matlab">function y = predictCancer(x)  
+  y = 0; 
+return  
+</code></pre>
+
+<p>이렇게 확률이 희박한 <em>class</em> 를 <strong>skewed class</strong> 라 부른다. 또 한가지 사실을 알 수 있는데, <em>error</em> 가 낮다고 해서 항상 좋은 알고리즘이 아니라는 사실이다. <code>y = 0</code> 은 <code>99.5</code> 의 정확도를 보여주지만 알고리즘이 아니다. 에러값 말고 다른 평가방법이 필요하다!</p>
+
+<h3 id="precisionrecall">Precision / Recall</h3>
+
+<p>그림을 먼저 보자. 예측 여부와 실제 값에 따라서 <code>2 x 2</code> 매트릭스를 붙일 수 있다. </p>
+
+<p><img src='http://my.csdn.net/uploads/201208/06/1344228190_4576.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>여기서 <em>precision</em> 과 <em>recall</em> 이란 개념을 끌어낼 수 있는데</p>
+
+<blockquote>
+  <p><em>*Precision: *</em> Of All patients where we predicted y = 1, what fraction actually has cancer?</p>
+  
+  <p><em>*Recall: *</em> Of all patients that actually have cancer, what fraction did we correctly detect as having cancer?</p>
+</blockquote>
+
+<p>다시 말해 <em>precision</em> 은 우리가 암이 있다고 진단한 환자중 실제 암이 있는 환자의 비율이고, <em>recall</em> 은 실제 암이 있는 환자 중 우리가 암이 있다고 진단한 환자의 비율이다.</p>
+
+<p>위의 함수처럼 <code>y = 0</code> 으로 진단하는 경우 <em>true positive</em> = <code>0</code> 이므로 <em>recall</em> = <code>0</code> 이다.</p>
+
+<p>단순히 <em>error</em> 만으로 판단하는 것은 위의 예처럼 잘못된 판단일 수 있다. 따라서 <em>skewed class</em> 가 있더라도 <em>precision</em> 과 <em>recall</em> 을 보면 알고리즘에 속임수가 있는지, 없는지를 파악할 수 있다.</p>
+
+<h3 id="tradingoffprecisionandrecall">Trading off Precision and Recall</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360805261_5122.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>일반적으로 <code>h(x) &gt;= 0.5</code> 일경우에 <code>1</code> 을, <code>h(x) &lt; 0.5</code> 일 경우에 <code>0</code> 을 예측하는데, 이 수치를 좀 더 올려 <code>0.7</code> 이상 또는 미만으로 예측한다 해 보자.</p>
+
+<p>이 경우 좀 더 확실한 환자만 암이라 진단하므로 <em>precision</em> 은 올라가는 반면 <em>recall</em> 은 내려간다. </p>
+
+<p>거꾸로 수치를 <code>0.3</code> 으로 낮추면 덜 확실해도 그냥 암이라 우기므로 <em>recall</em> 은 높아지겠지만 예측한 것중 실제 환자를 의미하는 <em>precision</em> 값은 떨어진다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360805315_5777.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>위 그림을 보면 <em>threshold</em> 에 따라서 <em>recall</em> 과 <em>precision</em> 값이 얼추 반비례하는 걸 볼 수 있다. 디테일에 따라서 구체적인 그래프의 모양은 다를 수 있다.</p>
+
+<p>그럼 이제 문제는, <em>threshold</em> 를 고를 수 있느냐, 다시 말해 어느 <em>(precision, recall)</em> 쌍이 더 좋은가 하는 문제다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360805419_2578.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>단순히 평균을 쓰면 <code>y = 1</code> 로 예측하는 것과 같은 알고리즘들이 높은 값을 얻을 수 있다. 예를 들어 위 그림에서 <em>algorithm 3</em> 가 그렇듯이.</p>
+
+<p>따라서 단순히 평균을 하기 보다는 <em>F1 score</em> 를 많이 쓴다.</p>
+
+<p><img src='http://my.csdn.net/uploads/201208/06/1344234475_3823.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>따라서 <em>CV set</em> 에 대해 높은 <em>F1 score</em> 를 가지는 <em>threshold</em> 를 택함으로써 좋은 알고리즘을 고를 수 있다.</p>
+
+<h3 id="dataformachinelearning">Data for Machine Learning</h3>
+
+<p>지금까지는 <em>evaluation</em> 에 대한 논의었고, <em>data</em> 에 대한 이야기를 좀 더 해 보자. 앞에서는 단순히 데이터가 많다고 해서 좋다는 뉘앙스로 이야기를 했지만 실제 특정 상황에서, 특정 알고리즘은 다량의 데이터를 이용하면 좋은 성능을 내기도 한다. 실제 그런가 보자. 4개의 서로 다른 알고리즘을 트레이닝 셋 사이즈를 늘려가며 정확도를 비교한 결과다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360806606_8278.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<blockquote>
+  <p><em>"It's not who has the best algorithm that wins, It's who has the most data."</em></p>
+</blockquote>
+
+<p>항상 그렇지는 않다. 집 값을 예측 할 때 <em>feature</em> 로 사이즈 하나만 준다면 정확하게 예측하기란 불가능하다. 양이 문제가 아니고 집 값을 예측하기에 충분한 정보가 필요하다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360807112_1041.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>많은 수의 <em>parameter</em> 가 있다. 하자. <em>low bias</em> 기 때문에 <code>J_train(0)</code> 는 작을 것이다. (<em>not underfit</em>)</p>
+
+<p>그리고 여기에 <em>parameter</em> 보다 훨씬 많은 <em>training set</em> 을 사용한다면, <em>overfit</em> 하지 않는다 볼 수 있다. 따라서 <em>underfit</em> 도 아니고 <em>overfit</em> 도 아니므로</p>
+
+<p><code>J_test(0)</code> 는 <code>J_train(0)</code> 에 근사한 값을 가진다 볼 수 있다. 결국 작은 <code>J_test(0)</code> 을 얻을 수 있다.</p>
+
+<p>정리하자면, 충분한 양의 정보를 가지고 있고 (<em>large parameters</em>), 큰 사이즈의 데이터를 대상으로 알고리즘을 훈련 시킨다면 상당히 좋은 성능을 뽑아낼 수 있다는 훈훈한 이야기. (거꾸로 말하면, 반복하지만, 데이터만 많다고, 혹은 파라미터만 많다고 좋은 결과를 얻을 수 없다는 이야기)</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
+(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
+(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a> <br />
+(4) <a href='http://www.4four.us/article/2010/11/bias-variance-tradeoff' >http://www.4four.us</a></p>]]></description><link>http://1ambda.github.io/machine-learning-week-6/</link><guid isPermaLink="false">58386046-1a88-4f88-b8dc-b5c6c76aa5cb</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[precision]]></category><category><![CDATA[bias]]></category><category><![CDATA[learning curves]]></category><category><![CDATA[recall]]></category><category><![CDATA[variance]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 14 Nov 2014 05:00:50 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 3]]></title><description><![CDATA[<p>하스켈에서 <em>repetition (반복)</em> 은 <em>recursion</em> 을 통해 표현됩니다. 간단한 재귀부터 시작해서 <em>mutual recursion</em> 까지 알아보고, <em>Higher order function</em> (특히 <code>fold</code>) 에 대해 배운 뒤 적용을 위해 <em>church numerals</em> 를 구현해보고, 마지막으로 간단한 문자열 전송기를 모델링 해 보겠습니다.</p>
+
+<h3 id="tailcall">Tail call?</h3>
+
+<p><em>recursion</em> 을 주로 사용한다면 <em>stack</em> 이 많이 쌓일 수 있습니다. 이런 문제를 해결해 주는 것이 <em>tail call elimination</em> 입니다.</p>
+
+<p>간단한 재귀 함수를 만들어서 스택이 어떻게 변하나 한번 보죠.</p>
+
+<pre><code class="haskell">factorial 0 = 1  
+factorial n = n * factorial(n - 1)  
+</code></pre>
+
+<p>이 때 <code>factorial 3</code> 을 평가한다면</p>
+
+<pre><code class="haskell">factorial 3  
+3 * factorial 2  
+3 * (2 * factorial 1)  
+3 * (2 * (1 * factorial 0))  
+3 * (2 * (1 * 1))  
+3 * (2 * 1)  
+3 * 2  
+6  
+</code></pre>
+
+<p>이렇게 각 단계가 확장되면서 <code>n</code> 이 매우 클 경우 마지막 단계에서 연산의 길이가 엄청나게 길어집니다. 함수 한번 호출당 스택이 하나씩 생긴다고 보면 어마어마한 스택이 생기는 것이죠. </p>
+
+<p>다행히도 하스켈은 <em>tail recursion optimization (꼬리 재귀 최적화)</em> 를 가지고 있습니다. 꼬리 재귀에 대한 이야기는 나중에 더 이야기 하도록 하지요.</p>
+
+<h3 id="recursiononlists">Recursion on Lists</h3>
+
+<p>리스트는 같은 타입을 여러개 저장할 수 있기 때문에 <em>recursion</em> 을 사용하기 적합하죠.</p>
+
+<p>리스트 내의 모든 원소의 곱을 구하는 <code>product</code> 함수를 만들어 볼까요? 하스켈에 원래 있지만, 재미삼아 만들어 봅시다. 이름은 충돌이 안나게 <code>productC</code> 라 부릅시다.</p>
+
+<pre><code class="haskell">productC :: [Int] -&gt; Int  
+productC [] = 1  
+productC (n : ns) = n * productC ns  
+</code></pre>
+
+<p><code>length</code> 와 <code>reverse</code> 도 만들어 봅시다.</p>
+
+<pre><code class="haskell">lengthC :: [a] -&gt; Int  
+lengthC [] = 0  
+lengthC (x : xs) = 1 + length xs
+
+reverseC :: [a] -&gt; [a]  
+reverseC [] = []  
+reverseC (x : xs) = reverse(xs) ++ [x]  
+</code></pre>
+
+<p>조금 더 복잡한 <code>zip</code>, <code>drop</code> 함수나 <code>++</code> 연산자도 어렵지 않습니다. </p>
+
+<pre><code class="haskell">zipC :: [a] -&gt; [b] -&gt; [(a, b)]  
+zipC [] _ = []  
+zipC _ [] = []  
+zipC (x:xs) (y:ys) = (x, y) : zip xs ys
+
+dropC :: Int -&gt; [a] -&gt; [a]  
+dropC 0 xs = xs  
+dropC _ [] = []  
+dropC n (x:xs) = drop (n-1) xs
+
+(++) :: [a] -&gt; [a] -&gt; [a]
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+</code></pre>
+
+<h3 id="quicksort">Quick sort</h3>
+
+<p>퀵소트 알고리즘은 간단합니다. 매 함수 호출에서, <em>pivot</em> 이라 불리는 리스트 내 원소를 고른 후 <em>pivot</em> 좌측에는 그 보다 작은 수를, 우측에는 <em>pivot</em> 보다 큰 수를 배치합니다. 그리고 <em>pivot</em> 을 제외한 좌측 과 우측에 대해 재귀 호출을 하지요.</p>
+
+<p><img src='https://sadakurapati.files.wordpress.com/2013/10/qsort_2.png?w=902&amp;h=617'  alt="" /></p>
+
+<p align="center">(<a href='https://sadakurapati.wordpress.com/' >https://sadakurapati.wordpress.com</a>)</p>
+
+<p>지난 강의에서 배운 <em>list comprehension</em> 을 이용하면 매우 간단하게 <em>quick sort</em> 를 만들 수 있습니다.</p>
+
+<pre><code class="haskell">qsort :: [Int] -&gt; [Int]  
+qsort [] = []  
+qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger  
+               where
+                 smaller = [a | a &lt;- xs, a &lt;= x]
+                 larger = [b | b &lt;- xs, b &gt; x]
+</code></pre>
+
+<p>위 코드에서는 매 재귀마다 인자로 받는 리스트의 첫번째 원소 <code>x</code> 를  <em>pivot</em> 으로 사용했습니다.</p>
+
+<p><img src='http://media-cache-ec0.pinimg.com/736x/11/09/78/11097867a0e6c772c36285d97d94623b.jpg'  alt="" /></p>
+
+<h3 id="recursion">Recursion</h3>
+
+<p>위의 예에서 보았듯이 자기 자신을 호출하는 함수 패턴을 <em>recursion (재귀)</em> 라 부릅니다. 언제 유용할까요? 재귀를 이용하면 <em>induction (귀납법)</em> 을 이용해 함수의 성질을 증명할 수 있습니다. 제대로 동작하는지, 의도 했던대로 동작하는지 등을요.</p>
+
+<blockquote>
+  <p>Properties of functions defined using recursion can be proved using the simple but powerful mathematical technique of <strong>induction</strong></p>
+</blockquote>
+
+<h3 id="mutialrecursion">Mutial recursion</h3>
+
+<p><em>mutual recursion</em> 은 서로 다른 두개의 함수가 상호간 재귀를 이용해 정의되는 방식입니다. </p>
+
+<p><code>odd</code> 와 <code>even</code> 함수를 <em>mutual recursion</em> 을 이용해 정의할 수 있습니다. 일반적으로는 효율성을 위해  2로 나눈 나머지를 이용해 정의하지만, 양수에 대해서는 아래와 같이 <em>mutual recursion</em> 으로 만들 수 있죠.</p>
+
+<pre><code class="haskell">even :: Int -&gt; Bool  
+even 0 = True  
+even n = oddC (n-1)
+
+odd :: Int -&gt; Bool  
+odd 0 = False  
+odd n = evenC (n-1)  
+</code></pre>
+
+<p>비슷하게 리스트에서 짝수번째, 혹은 홀수번째 원소들만 돌려주는 <code>evens</code> 와 <code>odds</code> 함수도 <em>mutual recursion</em> 을 이용해 정의할 수 있습니다. <code>evens</code> 는 0번째 부터 돌려줍니다. <code>odds</code> 는 턴을 넘기는데 쓰고 실제 작업은 <code>evens</code> 에서 한다고 생각하면 금방 이해할 수 있습니다.</p>
+
+<pre><code class="haskell">evens :: [a] -&gt; [a]  
+evens [] = []  
+evens (x:xs) = x : odds xs
+
+odds :: [a] -&gt; [a]  
+odds [] = []  
+odds (_:xs) = evens xs  
+</code></pre>
+
+<h3 id="adviceonrecursion">Advice on recursion</h3>
+
+<p>재귀는 자전거 타기와 비슷합니다. 처음엔 불가능해 보이는데 한번 시도해보면 정말 쉽게 탈 수 있죠. 여기 재귀를 만드는데 도움이 될만한 5가지 스텝이 있습니다. <code>init</code> 함수를 예로 들어 설명하겠습니다.</p>
+
+<p>(1) define the type  </p>
+
+<pre><code class="haskell">init :: [a] -&gt; [a]  
+</code></pre>
+
+<p>(2) enumerate the cases  </p>
+
+<pre><code class="haskell">init (x:xs) =  
+</code></pre>
+
+<p>(3) define the simple case  </p>
+
+<pre><code class="haskell">init (x:xs) | null xs = []  
+            | otherwise = 
+</code></pre>
+
+<p>(4) define the other cases  </p>
+
+<pre><code class="haskell">init (x:xs) | null xs = []  
+            | otherwise = x : init xs
+</code></pre>
+
+<p>(5) generalise and simplify</p>
+
+<pre><code class="haskell">init :: [a] -&gt; [a]  
+init [_] = []  
+init (x:xs) = x : init xs  
+</code></pre>
+
+<h3 id="examples">Examples</h3>
+
+<p>예제 몇 가지를 좀 더 살펴봅시다. 먼저 곱셈 연산입니다.</p>
+
+<pre><code class="haskell">(*) :: Int -&gt; Int -&gt; Int
+m * 0 = 0  
+m * n = m + (m * (n - 1))  
+</code></pre>
+
+<p>정렬된 리스트에 원소를 삽입하는 <code>insert</code> 함수입니다. 바로 다음에 만들 <code>isort</code> (<em>insertion sort</em>) 를 구현한 함수에서 사용합니다.</p>
+
+<pre><code class="haskell">insert :: Ord a =&gt; a -&gt; [a] -&gt; [a]  
+insert x [] = [x]  
+insert x (y:ys) | x &lt;= y = x : y : ys  
+                | otherwise = y : insert x ys
+
+isort :: Ord a =&gt; [a] -&gt; [a]  
+isort [] = []  
+isort (x:xs) = insert x (isort xs)  
+</code></pre>
+
+<p>이번엔 <em>merge sort</em> 입니다.</p>
+
+<pre><code class="haskell">merge :: Ord a =&gt; [a] -&gt; [a] -&gt; [a]  
+merge [] ys = ys  
+merge xs [] = xs  
+merge (x:xs) (y:ys) =  
+  if x &lt;= y then x : merge xs (y: ys) else y : merge (x:xs) ys
+
+halve :: [a] -&gt; ([a], [a])  
+halve xs = splitAt (length xs `div` 2) xs
+
+msort :: Ord a =&gt; [a] -&gt; [a]  
+msort [] = []  
+msort [x] = [x]  
+msort xs = merge (msort ys) (msort zs)  
+           where (ys, zs) = halve xs
+</code></pre>
+
+<h3 id="higherorderfunction">Higher-order function</h3>
+
+<p><em>higher-order function</em> 은 함수를 인자로 받아 다시 함수를 돌려주는 함수를 말합니다. <del>응?</del></p>
+
+<blockquote>
+  <p>A function is called <em>higher-order</em> if it takes a function as an argument or returns a function as a result</p>
+</blockquote>
+
+<pre><code class="haskell">twice :: (a -&gt; a) -&gt; a -&gt; a  
+twice f x = f (f x)  
+</code></pre>
+
+<p><code>twice</code> 는 인자 <code>x</code> 에 <code>f</code> 를 두번 적용한 뒤 값을 돌려줍니다. 더 정확히는 <em>curried function</em> 이므로 <code>twice f</code> 는 앞으로 뭘 인자로 받을지 모르지만 <code>f</code> 를 두번 적용하는 함수를 돌려줍니다.</p>
+
+<p>이런 <em>higher-order function (고차함수)</em> 가 언제 유용할까요?</p>
+
+<blockquote>
+  <ol>
+  <li><p><strong>Common programming idioms</strong> can be encoded as functions within the language itself.</p></li>
+  <li><p><strong>Domain specific languages</strong> can be defined as collections of higher-order functions.</p></li>
+  <li><p><strong>Algebraic properties</strong> of higher-order functions can be used to reason about programs.</p></li>
+  </ol>
+</blockquote>
+
+<h3 id="map">map</h3>
+
+<p>먼저 <code>map</code> 함수를 살펴봅시다.</p>
+
+<pre><code class="haskell">map :: (a -&gt; b) -&gt; [a] -&gt; [b]
+
+map (+1) [1, 3, 5, 7]  
+-- [2, 4, 6, 8]
+</code></pre>
+
+<p>이 <code>map</code> 함수는 우리가 이전에 배웠던 <em>list comprehension</em> 으로 똑같이 작성할 수 있습니다.</p>
+
+<pre><code class="haskell">map f xs = [f x | x &lt;- xs]  
+</code></pre>
+
+<p>아니면 <em>recursive function</em> 으로 작성할 수도 있습니다.</p>
+
+<pre><code class="haskell">map f [] = []  
+map f (x:xs) = f x : map f xs  
+</code></pre>
+
+<h3 id="filter">filter</h3>
+
+<p><code>filter</code> 도 고차함수입니다. <code>filter</code> 는 <em>predicate</em> 즉, <code>(a -&gt; Bool)</code> 을 받아 <code>True</code> 인 원소만 모아 돌려줍니다.</p>
+
+<pre><code class="haskell">filter :: (a -&gt; Bool) -&gt; [a] -&gt; [a]
+
+filter even [1..10]  
+-- [2, 4, 6, 8, 10]
+</code></pre>
+
+<p><code>filter</code> 도 마찬가지로 <em>list comprehension</em> 과 <em>recursive function</em> 두 가지 버전으로 작성될 수 있습니다.</p>
+
+<pre><code class="haskell">filter p xs = [x | x &lt;- xs, p x]
+
+filter p [] = []  
+filter p (x:xs)  
+  | p x = x : filter p xs
+  | otherwise = filter p xs
+</code></pre>
+
+<p>단순히 <em>list comprehension</em> 으로 작성하는 것 보다, <em>recursive function</em> 으로 작성하면 위에서 볼 수 있듯이 공통점을 파악할 수 있습니다. 그러면 한단계 더 추상화 할 수 있지요. <code>filter</code> 와 <code>map</code> 의 공통점이 보이시나요?</p>
+
+<h3 id="foldr">foldr</h3>
+
+<p>위의 두 가지 예에서 <code>filter</code>, <code>map</code> 모두 빈 리스트와 그렇지 않은 리스트를 구분했습니다. 그리고 각각의 원소에 대해서 연산을 수행했지요. </p>
+
+<pre><code class="haskell">f [] = v  
+f (x:xs) = x pred f xs  
+</code></pre>
+
+<p>빈 원소라면 특정 값 <code>v</code> 를 돌려주고 아니라면 원소 <code>x</code> 에 <code>pred</code>를 적용하고, 나머지 <em>tail</em> <code>xs</code> 에 <code>f</code> 를 적용합니다. 비슷한 예제를 살펴볼까요?</p>
+
+<pre><code class="haskell">-- v = 0, pred = +
+sum [] = 0  
+sum (x:xs) = x + sum xs
+
+-- v = 1, pred = *
+product [] = 1  
+product (x:xs) = x * product xs
+
+-- v = True, pred = &amp;&amp;
+and [] = True  
+and (x:xs) = x &amp;&amp; and xs  
+</code></pre>
+
+<p>따라서 다음과 같이 <code>foldr</code> (<em>fold right</em>) 을 이용해 정의할 수 있습니다.</p>
+
+<pre><code class="haskell">sum = foldr (+) 0
+
+product = foldr (*) 1
+
+or = foldr (||) False
+
+and = foldr (&amp;&amp;) True  
+</code></pre>
+
+<p>위에서 대략적인 정의를 봤지만, 더 엄밀하게 <code>foldr</code> 은 이렇게 정의할 수 있습니다.</p>
+
+<pre><code class="haskell">foldr :: (a -&gt; b-&gt; b) -&gt; b -&gt; [a] -&gt; b  
+foldr f v [] = []  
+foldr f v (x:xs) = f x (foldr f v xs)  
+</code></pre>
+
+<p>보면 알겠지만, 리스트의 <em>the right-most (가장 우측)</em> 부터 연산합니다. 그래서 <em>fold right</em> 라는 이름이 붙었지요. 그림으로 보자면</p>
+
+<p><img src='http://www.pling.org.uk/cs/funimg/foldr.png'  alt="" /></p>
+
+<p align="center">(<a href='http://www.pling.org.uk/cs/fun.html' >http://www.pling.org.uk/cs/fun.html</a>)</p>
+
+<pre><code class="haskell">sum [1, 2, 3]  
+foldr (+) 0 [1, 2, 3]  
+foldr (+) 0 (1:(2:(3:[])))  
+1 + (2 + (3 + 0))  
+</code></pre>
+
+<p>콘싱 <code>:</code> 하고 비슷합니다. 이 부분에 연산자를 집어넣고, <code>[]</code> 에 초기값 <code>v</code> 를 넣는다고 생각하면 이해하기 쉽습니다.</p>
+
+<p><code>length</code> 도 비슷한 패턴을 가지고 있기 때문에 <code>foldr</code> 로 바꿀 수 있습니다.</p>
+
+<pre><code class="haskell">length :: [a] -&gt; Int  
+length [] = 0  
+length (x:xs) = 1 + length xs
+
+length = foldr (\_ n -&gt; 1 + n) 0  
+</code></pre>
+
+<p>이렇게 바꿀 수 있는 이유는</p>
+
+<pre><code class="haskell">length [1, 2, 3]  
+length (1: (2: (3:[])))  
+1 + (1 + (1 + 0)))  
+</code></pre>
+
+<p>여기서 각 <code>:</code> 을 <code>\_ n -&gt; 1 + n</code> 으로 바꾸면 되기 때문입니다.</p>
+
+<pre><code class="haskell">reverse [] = []  
+reverse (x:xs) reverse xs ++ [x]  
+</code></pre>
+
+<p>이제 위 <code>reverse</code> 함수도 <code>foldr</code> 을 이용할 수 있습니다.</p>
+
+<pre><code class="haskell">reverse = foldr (\x xs -&gt; xs ++ [x]) []  
+</code></pre>
+
+<p>처음의 <code>filter</code>, <code>map</code> 도 이렇게 정의할 수 있습니다.</p>
+
+<pre><code class="haskell">foldr :: (a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b  
+foldr f v [] = v  
+foldr f v (x:xs) = f x (foldr f v xs)
+
+filter :: (a -&gt; Bool) -&gt; [a] -&gt; [a]  
+filter p xs = foldr (\x acc -&gt; if p x then x : acc else acc) [] xs
+
+map :: (a -&gt; b) -&gt; [a] -&gt; [b]  
+map p xs = foldr (\x acc -&gt; p x : acc) [] xs  
+</code></pre>
+
+<p><code>foldr</code> 을 이용하면 몇 가지 장점이 있습니다.</p>
+
+<blockquote>
+  <ol>
+  <li><p>Some recursive functions on lists, such as sum, are <strong>simpler</strong> to define using foldr.</p></li>
+  <li><p>Properties of functions defined using foldr can ben proved using algebraic properties of foldr, such as <strong>fusion</strong> and the <strong>banana split</strong> rule.</p></li>
+  <li><p>Advanced program <strong>optimizations</strong> can be simpler if foldr is used in place of explicit recursion.</p></li>
+  </ol>
+</blockquote>
+
+<p>여기서 <em>fusion</em> 은, 하나의 <code>foldr</code> 은 리스트를 순회하면서 새로운 리스트를 리턴하고, 다른 <code>foldr</code> 을 그 결과에 사용할 때 <em>intermediate list</em> 를 생성하는 것 없이 계산을 해 낸다는 뜻입니다.</p>
+
+<blockquote>
+  <p>In particular <strong>fusion</strong> means that I have two functions. One that uses <code>foldr</code> to traverse one list and return another list. And if I do another <code>foldr</code> on the result of that I can fuse these two together, such that the <strong>intermediate list is never constructed</strong>. So program can be optimized.</p>
+</blockquote>
+
+<p>다른 고차함수들을 좀 살펴봅시다.</p>
+
+<h3 id="composition">composition</h3>
+
+<p><code>(.)</code> 은 함수를 <em>composition (합성)</em> 해 줍니다. </p>
+
+<pre><code class="haskell">(.) :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)
+f . g = \x -&gt; f(g x)  
+</code></pre>
+
+<p>예를 들어</p>
+
+<pre><code class="haskell">odd :: Int -&gt; Bool  
+odd = not . even  
+</code></pre>
+
+<p><em>compoisition</em> 을 사용할때는 괄호와 나머지 인자를 제거하여 함수의 정의를 간단히 할 수 있습니다.</p>
+
+<pre><code class="haskell">twice f x = f (f x)
+
+-- same as
+twice f = f f  
+</code></pre>
+
+<h3 id="allany">all, any</h3>
+
+<p>모든 원소에 대해 <code>p</code> 를 적용한 결과가 참인지를 돌려주는 <code>all</code> 은 다음처럼 정의할 수 있습니다.</p>
+
+<pre><code class="haskell">all :: (a -&gt; Bool) -&gt; [a] -&gt; Bool  
+all p xs = and [p x | x &lt;- xs]  
+</code></pre>
+
+<p>이번엔 <em>list comprehension</em> 을 사용했습니다. <code>foldr</code> 과의 차이는, <code>foldr</code> 은 모든 순회 가능한 데이터 타입에 적용 가능한 반면 <em>list comprehension</em> 은 리스트에만 사용할 수 있습니다. 위 예제를 <code>foldr</code> 로 바꾸면</p>
+
+<pre><code class="haskell">all :: (a -&gt; Bool) -&gt; [a] -&gt; Bool  
+all p xs = foldr (\x acc -&gt; p x &amp;&amp; acc) True xs  
+</code></pre>
+
+<p><code>any</code> 도 만들 수 있습니다.</p>
+
+<pre><code class="haskell">import Data.Char
+
+any :: (a -&gt; Bool) -&gt; [a] -&gt; Bool  
+any p xs = or [p x | x &lt;- xs]
+
+-- same as
+any p xs = or (map p xs)  
+</code></pre>
+
+<h3 id="takewhiledropwhile">takeWhile, dropWhile</h3>
+
+<p><code>takeWhile</code> 은 <em>predicate</em> 가 참인 원소까지만 돌려줍니다. 예를 들어</p>
+
+<pre><code class="haskell">takeWhile :: (a -&gt; Bool) -&gt; [a] -&gt; [a]  
+takeWhile p [] = []  
+takeWhile p (x:xs) | p x = x : takeWhile p xs  
+                    | otherwise = [] 
+
+takeWhile isAlpha "abc def"  
+-- "abc"
+</code></pre>
+
+<p>반면 <code>dropWhile</code> 은 <em>predicate</em> 를 적용한 결과가 참인 원소를 모두 버리고 나머지만 돌려줍니다. 예를 들어</p>
+
+<pre><code class="haskell">dropWhile :: (a -&gt; Bool) -&gt; [a] -&gt; [a]  
+dropWhile p [] = []  
+dropWhile p (x:xs) | p x = dropWhile p xs  
+                    | otherwise = x:xs
+
+dropWhile isAlpha "fp 101"  
+-- " 101" 
+</code></pre>
+
+<h3 id="churchnumerals">Church Numerals</h3>
+
+<blockquote>
+  <p><strong>Church Numerals</strong> give us a way to <em>abstract</em> over the concrete representation of a number by means of <strong>functions</strong> and <strong>unction application</strong>.</p>
+</blockquote>
+
+<p>숫자 <code>n</code> 은 <em>zero</em> 에 <code>n</code> 번의 <code>s</code> <em>function application</em> 을 통해 정의합니다. </p>
+
+<pre><code class="haskell">zero = \s z -&gt; z  
+one = \s z -&gt; s z  
+two = \s z -&gt; s (s z)
+
+-- same as
+two = \s z -&gt; (s . s) z
+
+-- we can remove z
+two = \s -&gt; s . s  
+</code></pre>
+
+<p>여기서 데이터 <code>z</code> 자체는 아무것도 정해진 것이 없습니다. 다시 말해 어떤 타입이든 가져다 쓸 수 있다는 뜻이지요.</p>
+
+<p>우리가 숫자 3을 표현하기 위해 <code>1</code>을 세번 더해 <code>3</code> 을 표시하든, 아니면 <code>*</code> 를 세번 컨싱하든 상관 없다는 뜻 입니다.</p>
+
+<pre><code class="haskell">zero = \s z -&gt; z  
+one = \s z -&gt; s z  
+two = \s -&gt; s . s
+
+-- church to int
+c2i x = x (+1) 0
+
+c2i zero  
+-- 0
+
+c2i one  
+-- 1
+
+c2i two  
+-- 2
+</code></pre>
+
+<p><em>* (에스터리스크)</em> 의 개수로 숫자를 정의해 봅시다.</p>
+
+<pre><code class="haskell">-- church to int
+c2s x = x ('*' :) ""
+
+c2s zero  
+-- ""
+
+c2s one  
+-- "*"
+
+c2s two  
+-- "**"
+</code></pre>
+
+<p>이제 연산자를 만들어 봅시다. 덧셈부터 시작해 보죠! <code>c2i</code> 에 <code>x</code> 를 넣어 만들어낸 <em>수 (Number)</em> 를 <code>x'</code> 라 하고 <code>y</code> 를 넣어 만든 수를 <code>y'</code> 라 합시다. </p>
+
+<pre><code class="haskell">x' = c2i x  
+y' = c2i y  
+</code></pre>
+
+<p>그러면 덧셈은 이렇게 정의할 수 있습니다.</p>
+
+<pre><code class="haskell">x' + y' = c2i (add x y)  
+</code></pre>
+
+<p>증명해 봅시다.</p>
+
+<pre><code class="haskell">x' + y'  
+= c2i x + c2i y
+= x (+1) 0 + c2i y -- 0 is substituted
+= x (+1) (c2i y)
+= x (+1) (y (+1) 0)
+= (\s z -&gt; x s (y s z)) (+1) 0 -- by beta expension
+</code></pre>
+
+<p>보면 알겠지만 <code>c2i y</code> 나 <code>0 + c2i y</code> 나 같습니다. 따라서 <code>0</code>을 지우고 <code>x c2i</code> 의 베이스 값으로 <code>(c2i y)</code> 를 사용할 수 있죠.</p>
+
+<p>그리고 마지막 치환은 <code>s</code> 와 <code>z</code> 를 <code>(+1)</code> 과 <code>0</code> 으로 취하는 <em>lambda</em> 를 구할 수 있습니다. <code>\s z -&gt; x s (y s z)</code> 를 <code>add</code> 라 부르면</p>
+
+<pre><code class="haskell">x' + y' = (add x y) (+1) 0  
+= c2i (add x y)
+</code></pre>
+
+<p>결국 <em>addtion</em> 은</p>
+
+<pre><code class="haskell">add x y = \s z -&gt; x s (y s z)
+
+c2i (add one two)  
+-- 3
+</code></pre>
+
+<p><em>multiplication (곱셈)</em>은 어떻게 만들까요? 간단한 예제부터 시작해 <em>intuition</em> 을 얻어보도록 합시다.</p>
+
+<pre><code class="haskell">two = \s -&gt; s . s  
+three = \s -&gt; s . s . s  
+</code></pre>
+
+<p>결국 <code>n</code> 번째 수란건 <code>s</code> <em>successor function</em> 을 <code>n</code> 번 만큼 수행한거지요. 그럼 <code>a * b</code> 의 곱셈은 <code>b</code> 번 적용한 <em>successor</em> 를 <code>a</code> 번 적용하면 되므로</p>
+
+<pre><code class="haskell">mul = \s z -&gt; x (y s) z
+
+c2i (mul two five)  
+-- 10
+</code></pre>
+
+<h3 id="examples">Examples</h3>
+
+<pre><code class="haskell">id :: a -&gt; a  
+id = \x -&gt; x
+
+compose :: [a -&gt; a] -&gt; (a -&gt; a)  
+compose = foldr (.) id  
+</code></pre>
+
+<p><code>id</code> 함수는 받은걸 그대로 돌려주기 때문에 <code>id . f</code>, <code>f . id</code> 는 <code>f</code> 입니다. 따라서 함수 리스트를 위한 <code>foldr</code> 의 초기값으로 <code>id</code> 를 사용할 수 있습니다.</p>
+
+<h3 id="stringtransmitter">String Transmitter</h3>
+
+<p>간단한 문자열 전송을 모델링한 코드를 작성해 봅시다.</p>
+
+<pre><code class="haskell">import Data.Char
+
+type Bit = Int
+
+bin2int :: [Bit] -&gt; Int  
+bin2int bits = sum [w * b | (w, b) &lt;- zip weights bits]  
+  where weights = iterate (*2) 1
+
+-- or
+-- bin2int bitis = foldr (\x acc -&gt; x + acc * 2) 0
+
+int2bin :: Int -&gt; [Bit]  
+int2bin 0 = []  
+int2bin n = n `mod` 2 : int2bin(n `div` 2)
+
+make8 :: [Bit] -&gt; [Bit]  
+make8 bits = take 8 (bits ++ repeat 0)
+
+encode :: String -&gt; [Bit]  
+encode = concat . map (make8 . int2bin . ord)
+
+chop8 :: [Bit] -&gt; [[Bit]]  
+chop8 [] = []  
+chop8 bits = take 8 bits : chop8 (drop 8 bits)
+
+decode :: [Bit] -&gt; String  
+decode = map (chr . bin2int) . chop8
+
+channel :: [Bit] -&gt; [Bit]  
+channel = id
+
+transmit :: String -&gt; String  
+transmit = decode . channel . encode  
+</code></pre>
+
+<p>재밌는 부분은 마지막 <code>channel</code> 부분인데요, <code>id</code> 함수를 써서 인코딩된 문자열이 바로 디코딩을 위해 전송된다는 것을 표현했습니다.</p>
+
+<p>위 코드 중에서 <code>int2bin</code> 과 <code>chop8</code> 은 헤드에 특정 연산을 수행하고, <code>tail</code> 에 나머지 연산을 수행 한 결과를 다시 재귀적으로 호출하는 패턴을 가지고 있는데요, <code>unfold</code> 함수로 추상화 할 수 있습니다. </p>
+
+<p>쉽게 말해서 <code>fold</code> 가 리스트를 <em>접어 (folding)</em> 원소 하나로 만든다면, <code>unfold</code> 는 리스트를 더 한단계 펼친다고 볼 수 있습니다.</p>
+
+<pre><code class="haskell">unfold p h t x  
+  | p x = []
+  | otherwise = h x : unfold p h t (t x)
+</code></pre>
+
+<p>그리하면 구현을</p>
+
+<pre><code class="haskell">type Bit = Int  
+int2bin :: Int -&gt; [Bit]  
+int2bin = unfold (== 0) (`mod` 2) (`div` 2)
+
+chop8 :: [Bit] -&gt; [[Bit]]  
+chop8 = unfold null (take 8) (drop 8)  
+</code></pre>
+
+<p><code>map</code> 과 <code>iterate</code> 도 구현할 수 있습니다.</p>
+
+<pre><code class="haskell">map2 f = unfold null (f . head) tail
+
+iterate' f = unfold (const False) id f -- const False is pred. always return False  
+</code></pre>
+
+<p>여기서 <code>const False</code> 는 항상 <code>False</code> 만 돌려주는 <em>predicate</em> 라 보시면 됩니다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br />
+(2) <a href='https://sadakurapati.wordpress.com/' >https://sadakurapati.wordpress.com</a> <br />
+(3) <em>Programming in Haskell, Chapter 6, 7</em> <br />
+(4) <a href='http://www.pling.org.uk/cs/fun.html' >http://www.pling.org.uk/cs/fun.html</a>  </p>]]></description><link>http://1ambda.github.io/haskell-intro3/</link><guid isPermaLink="false">6ae03a58-8478-4f0d-a716-75f09c81a985</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[recursion]]></category><category><![CDATA[church numerals]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 12 Nov 2014 02:10:13 GMT</pubDate></item><item><title><![CDATA[Foundations of Data Analysis, Week1]]></title><description><![CDATA[<p><em>edx</em> 수업. R 을 이용해 실제 데이터에 학습한 통계 이론들을 적용하는 수업이다. <em>edx</em> 에서 제공하는 <em>discussion board</em> 대신에 <em>piazza board?</em> 이런것도 쓰고, <em>lab</em> 전에 비슷한 질문을 하는 <em>pre-lab</em> 도 있고.. 구성이 친절하다. 여러모로 신경을 많이 쓴듯 </p>
+
+<h3 id="classifyingvariables">Classifying Variables</h3>
+
+<p><em>population (모집단)</em> 의 각각을 <em>unit</em>, <em>subject</em> 라 부른다. <em>Galapagos Tortoises</em> 
+예제에서 <em>unit</em> 은 각각의 거북이들이다.</p>
+
+<p>연구자들이 갈라파고스 거북이들로부터 몇 가지 특징들을 뽑아내 도표로 만들었는데, 이런 특징들을 <em>varaible</em> 이라 부른다.</p>
+
+<p><em>variable</em> 은 종류에 따라서 <em>categorical</em>, <em>numerical</em> 로 구분한다. 다른말로는 <em>qualitative (= categorical)</em>, <em>quantitative (= numerical)</em> 이라 부르기도 한다.</p>
+
+<p>날씨나 등 껍질 종류 같은 경우는 <em>qualitative variable</em> 이고 <em>number of individuals repatriated</em> 는 <em>quantitative variable</em> 이다. 저 속성이 뭔 소린가 했는데, 갈라파고스 거북이들은 섬의 중앙에서 보호를 받고 자라다가 나중에 야생으로 돌아간다고.. 그 숫자를 의미하는것이 <em>number of indiviaudls repatriated</em> 다.</p>
+
+<p><em>complete counting</em> 혹은 <em>census (인구조사)</em> 같은 경우는 대부분의 경우 힘들기 때문에 <em>population</em> 에서 일부를 떼어낸 <em>sample</em> 을 이용하게 된다.</p>
+
+<blockquote>
+  <p>It is common to use a smaller, representative group from the population, called a <em>sample</em></p>
+</blockquote>
+
+<h3 id="errors">Errors</h3>
+
+<p><em>sample</em> 이 <em>population</em> 을 대표하지 못할 수도 있기 때문에, 완벽히 <em>parameter (모수)</em> 를 추정하는 것은 어렵다. 그래서 통계학자들은 <em>point estimate</em> 나 <em>interval estimiate</em> 를 사용한다. 예를 들면</p>
+
+<blockquote>
+  <p><em>"I am 95% confident that the true number of tortoises is actually between 561 and 1075."</em></p>
+</blockquote>
+
+<p><em>true paramter</em> 와 샘플로부터 얻어진 <em>statistic</em> 간 차이는 <em>sampling error</em> 라 부른다.</p>
+
+<p>갈라파고스 거북이를 조사 할 때 밀집 지역에서만 거북이를 골라낸다고 하자. 그리고 그 샘플을 전체 지역에 대한 통계값을 얻을 때 사용하면 너무 높은 값이 나올 수 있다. 이런 종류의 오류를 <em>bias</em> 라 부른다. 다행히도 통계학자들이 <em>bias</em> 를 피할 수 있는 다양한 도구들을 준비 해 놓았으니 배우기만 하면 된다.</p>
+
+<h3 id="levelsofmeasurement">Levels of Measurement</h3>
+
+<p>아까는 <em>variable</em> 을 간단히 두 종류로 나누어 봤지만 더 자세하게 나눌 수 있다. </p>
+
+<blockquote>
+  <p>A <strong>nominal measurement</strong> is one in which the values of the variable are names. The names of the different species of Galapagos tortoises are an example of a nominal measurement</p>
+  
+  <p>An <strong>ordinal measurement</strong> involves collecting information of which the order is somehow significant. The name of this level is derived from the use of ordinal numbers for ranking. If we measured the different species of tortoise from the largest population to the smallest, this would be an example of ordinal measurement.</p>
+  
+  <p>With <strong>interval measurement</strong>, the distance between any two values has a specific meaning. An example commonly cited for interval measurement is temperature. A change of 1 degree is the same if the temperature goes from <code>0C</code> to <code>1C</code> as it is when the temperature goes from <code>40C</code> to <code>41C</code>. In addition, there is meaning to the values between the ordinal numbers. That is, a half of a degree has meaning.</p>
+  
+  <p>A <strong>Ratio measurement</strong> is the estimation of the ratio between a magnitude of a continuous quantity and a unit magnitude of the same kind. A variable measured at this level not only includes the concepts of order and interval, but also adds the idea of <code>nothingness</code>, or absolute zero. With the temperature scale of the previous example, <code>0C</code> is really an arbitrarily chosen number and does not represent the absence of tempertature. As a result, the ratio between temperature is relative, and <code>40C</code>, for example, is not twice as hot as <code>20C</code>.</p>
+</blockquote>
+
+<p>간단히 정리하자면 <em>nominal measurement</em> 는 이름으로 분류를 할 수 있는 경우다. </p>
+
+<p><em>ordinal measurement</em> 는 각 <em>unit</em> 간 순위, 순서를 매긴 것이다. 이 경우 값 자체가 1, 2, 3 같은 순서기 때문에 <em>unit</em> 간 차이는 아무런 의미도 없다.</p>
+
+<p><em>interval measurement</em> 는 두 값간 <em>distance (차이)</em> 가 의미를 가지는 경우다. 온도를 잘 보면 40도와 39도의 차이 1은, 1도와 0도의 차이 와 같다. 그리고 <em>interval measurement</em> 에서는 각 <em>unit</em> 사이의 값들도 의미가 있다. (ex. 0.5도)</p>
+
+<p>마지막으로 <em>ratio measurement</em> 는 <em>nothingness</em> 혹은 <em>absolute zero</em> 가 존재하는 값이다. 켈빈 온도의 경우 20K 는 40K 의 1/2 이다. 반면 섭씨 온도의 경우 20C 가 40C 보다 1/2 덥다고 말할 수가 없다. </p>
+
+<p>이렇게 <em>nominal, ordinal, interval, ratio</em> 로 구분하는 방법을 <em>Stevens' Theory</em> 라 부른다. 단순히 <em>numerical, categorical</em> 로 구분하는 것 보다 좀 더 자세히 분류할 수 있다.</p>
+
+<p>몇 가지 예제를 좀 더 살펴보자면</p>
+
+<p>(1) 학생들의 <em>gender, race, political opinions</em> 등은 모두 <em>nominal measurement</em> 다. <br />
+(2) 학생들의 학년(7, 8, 9) 를 수집한다면 <em>ordinal measurement</em> 다. <br />
+(3) SAT 수학 점수를 모은다면, 그건 <em>interval measurement</em> 다. (아마 상대평가인가 봄) <br />
+(4) 나이, 키, 몸무게, 점수(0-100) 등을 수집한다면 <em>ratio measurement</em> 다.</p>
+
+<p><em>nominal</em> 에서 <em>ratio</em> 로 갈수록 값들이 점점 복잡해진다. </p>
+
+<p><img src='https://dr282zn36sxxg.cloudfront.net/datastreams/f-d%3A92ba1471fd7e4ab92e330423cc7653fc15f9e1808cbbd03f8cdad61a%2BIMAGE%2BIMAGE.1'  alt="" /></p>
+
+<p align="center">(<a href='http://www.ck12.org/statistics' >http://www.ck12.org/statistics</a></p>
+
+<p>이렇게 데이터를 구분하는 이유는, 각각 에 쓸 수 있는 <em>Tool</em> 이 다르기 때문이다. 어떤 툴은 <em>categorical variable</em> 에 유용할 수도 있고, 그렇지 않은 툴도 있기 마련이다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>UT.7.01x Foundations of Data Analysis</em> <br />
+(2) <a href='http://www.ck12.org/statistics/Levels-of-Measurement/lesson/Levels-of-Measurement/' >http://www.ck12.org/statistics</a></p>]]></description><link>http://1ambda.github.io/foundations-of-data-analysis-week1/</link><guid isPermaLink="false">7a56ea31-f2e1-4117-a5db-5140868a8668</guid><category><![CDATA[edx]]></category><category><![CDATA[statistics]]></category><category><![CDATA[R]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 12 Nov 2014 01:51:36 GMT</pubDate></item><item><title><![CDATA[Graphs, The Contraction Algorithm]]></title><description><![CDATA[<p>이번엔 지난시간에 배운 <em>randomized algorithm</em> 을 새로운 <em>domain</em> 인 그래프에 적용해 보고, <em>contraction algorithm</em> 이 무엇인지 알아본다.</p>
 
 <h3 id="graphs">Graphs</h3>
 
@@ -4006,958 +5079,4 @@ if <code>P(xs)</code> holds, then <code>P(x :: xs)</code> also holds</p>
 
 <p>(1) <a href='http://stackoverflow.com/questions/6559996/scala-list-concatenation-vs' >scala-list-concatenation-vs</a></p>
 
-<p>2014-10-14, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-5/</link><guid isPermaLink="false">a94afb0b-63a0-4cd9-8a0e-2224ff29fea2</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 14 Oct 2014 10:48:03 GMT</pubDate></item><item><title><![CDATA[Analysis of Algorithms]]></title><description><![CDATA[<p><strong>Analysis of Algorithms</strong>, by <em>Kevin Wayne</em>, <em>Robert Sedgewick</em> in Coursera </p>
-
-<p>알고리즘을 분석해야 하는 이유는 </p>
-
-<p>(1) Predict performance <br />
-(2) Compare algorithms <br />
-(3) Provide guarantees <br />
-(4) Understand theoretical basis  </p>
-
-<p>그 중에서도 <em>performance bug</em> 를 피하는 것이 무엇보다 중요하다. 이를 통해 내 알고리즘이 <em>practical large input</em> 에 적용할 수 있을까? 고민하는 것이, 알고리즘 분석의 주된 동기다.</p>
-
-<h3 id="observations">Observations</h3>
-
-<p>주어진 배열에서 3개를 골라 더했을때 0이 나오는 <em>3-Sum</em> 문제를 고려해 보자. </p>
-
-<pre><code class="java">for (int i = 0; i &lt; N; i++)  
-  for(int j = i + 1; j &lt; N; j++)
-    for(int k = j + 1; k &lt; N; k++) 
-      if (array[i] + array[j] + array[k] == 0)
-        count++;        
-</code></pre>
-
-<p>입력 대비 출력 시간을 <em>log-log plot</em> 으로 만들어, <code>y = a * N^b</code> 를 얻을 수 있다. 이것 보다 더 빠르게 찾는 방법은 <em>input</em> 을 두배씩 늘려가면서 로그 비율을 찾는 방법인데, <em>Doubling hypothesis</em> 라 부른다. 이 경우 <code>b</code> 가 3이 나오는걸 확인할 수 있다.</p>
-
-<p>샘플 데이터가 다음과 같다고 하자. (Matlab format)</p>
-
-<pre><code class="matlab">x = [  
-1000;  
-2000;  
-4000;  
-8000;  
-16000;  
-32000;  
-64000]
-
-y = [  
-0.0;  
-0.0;  
-0.1;  
-0.3;  
-1.3;  
-5.1;  
-20.5]  
-</code></pre>
-
-<p>이 경우 수가 클때, 4배씩 증가하므로 <em>2-based log ratio</em> 는 <code>2</code> 다. 따라서 <code>a * N^b</code> 에서 <code>b</code> 를 2로 가정하면, <code>5.1 / 32000^2</code> 하면, 대략 <code>5.0 * 10^-9</code></p>
-
-<h3 id="mathematicalmodels">Mathematical Models</h3>
-
-<p>사실 <em>Running time</em> 에 있어서 연산의 수행 시간은 컴퓨터마다, 또 연산마다 다르므로 이것을 제하고 <em>operation number</em>, <em>frequency</em> 의 곱을 <em>input number</em> <code>N</code> 을 이용하여 표현한 모델을 이용할 수 있다. 예를 들어 <em>1-Sum</em> 코드의 경우</p>
-
-<pre><code class="java">int count = 0;  
-for (int i = 0; i &lt; N; i++)  
-  if (array[i] == 0)
-    count++;
-</code></pre>
-
-<blockquote>
-  <p>variable declaration = 2 <br />
-  assignment = 2 <br />
-  less then compare = N + 1 <br />
-  equal to compare = N <br />
-  array access = N <br />
-  increment = N to 2N</p>
-</blockquote>
-
-<p><em>2-Sum</em> 코드의 경우 </p>
-
-<pre><code class="java">int count = 0;  
-for (int i = 0; i &lt; N; i++)  
-  for(int j = i + 1; j &lt; N; j++)
-    if (array[i] + array[j] == 0)
-      count++;
-</code></pre>
-
-<blockquote>
-  <p>variable declaration = 2 + N 
-  assignment = 2 + N
-  less then compare = 1/2 * (N + 1) * (N + 2) <br />
-  equal to compare = 1/2 * N * (N - 1) <br />
-  array access = N * (N - 1) <br />
-  increment = 1/2 * N * (N - 1) to N * (N - 1)</p>
-</blockquote>
-
-<p>세 보면 알겠지만 정말 귀찮다. 세야할 연산의 종류도 많고. 그렇기 때문에, <em>running-time</em> 을 간단히 추정하기 위해</p>
-
-<p>(1) Use some basic operation as a proxy for running time <br />
-(2) tilde notation: ignore lower order terms  </p>
-
-<p>따라서 <em>2-Sum</em> 의 경우 유효한 연산을 배열 접근으로 잡으면, 연산 회수는 <code>~N^2</code> 이고 <em>3-Sum</em> 은 <code>~ 1/6 * N^3</code> 이다.</p>
-
-<p><em>discrete sum</em> 을 편하게 계산하는 법이 있는데, 시그마를 적분으로 바꿔, 계산하면 된다. 따라서 <code>1 + 2 + ... + N</code> 은 <code>1/2 * N</code>, <code>1 + 1/2 + 1/3 + ... + 1/N</code> 은 <code>ln N</code>, </p>
-
-<p><em>3-Sum</em> 의 <em>triple loop</em> 는 <code>N * 1/2 N* 1/3 N</code> 이므로, <code>~1/6 N</code> 이다. 여기에 3번의 Array Access 가 일어나므로 곱하면 <em>3-Sum</em> 은 <code>~1/2 N</code>이다.</p>
-
-<pre><code class="java">int sum = 0;  
-for (int i = 0; i &lt; N; i++)  
-  for (int j = i; j &lt; N; j++)
-    for (int k = 1; k &lt; N; k = k * 2)
-      if (a[i] + a[j] &gt;= a[k]) sum++;
-</code></pre>
-
-<p>모든 <em>triple loop</em> 가 <code>~n^3</code> 을 가지는건 아니다. 위의 코드의 경우 <code>~ 1/2 N^2 * 3 lg  N</code> 이다.</p>
-
-<h3 id="orderofgrowthclassification">Order of Growth Classification</h3>
-
-<p><code>1</code> &lt; <code>lg N</code> &lt; <code>N</code> &lt; <code>N lg N</code> &lt; <code>N^2</code> &lt; <code>N^3</code> &lt; <code>2^N</code> 우측으로 갈 수록 알고리즘의 성능이 나쁘다. 일반적으로는 <code>N lg N</code> 이 쓸 수 있는 알고리즘이다. 좀 더 알아보자면, </p>
-
-<blockquote>
-  <p><strong>log N:</strong> N 이 절반으로 나누어지는 <em>binary search</em> 등 <br />
-  <strong>N log N:</strong>, <em>divide and conquer: merge sort</em> 등 <br />
-  <strong>2^N:</strong> 서브트리를 모두 검사하는 <em>exhaustive search</em> 등  </p>
-</blockquote>
-
-<p>알고리즘의 성능을 비교하기 위해 <code>T(2N) / T(N)</code> 을 구할 수 있는데, </p>
-
-<p>(1) <code>N</code> 은 <code>2</code> (따라서 lg 2 = 1 이므로, <code>N^1</code> 이다.) <br />
-(2) <code>N^2</code> 은 <code>4</code> <br />
-(3) <code>N^3</code> 같은 경우 <code>8</code> 이다. 
-(4) <code>2^N</code> 은 <code>T(N)</code> 이다.</p>
-
-<p>잠깐 <code>~lg N</code> 의 복잡도를 가지는 <em>Binary Search</em> 에 대해 이야기 해 보자.</p>
-
-<h4 id="binarysearch">Binary Search</h4>
-
-<p>이진트리에 대해 재밌는 사실이 하나 있다. 이진트리가 나온건 1946년인데, 놀랍게도 버그가 없는 버전은 1962년에 처음 나왔다. 그리고 자바의 <code>Arrays.binarySerach()</code> 도 2006년에 버그가 발견되었다. 아래의 코드에서 만약 <code>arr</code> 에 <code>[1]</code> 을 넣고, <code>key</code> 에 <code>1</code> 을 주면 어떻게 될지 한번 생각 해 보자.</p>
-
-<pre><code class="java">public static int binarySearch(int[] arr, int key) {  
-  int low = 0, high = arr.length - 1;
-
-  while (low &lt;= high) {
-    int mid = low + (high - low) / 2;
-
-    if (key &lt; arr[mid]) high = mid - 1; // 3-way compares
-    else if (key &gt; arr[mid]) low = mid + 1;
-    else return mid
-  }
-
-  return -1;
-}
-</code></pre>
-
-<p><em>binary search</em> 를 <em>2-way compare</em> 로 구현하면, 다시 말해 <code>if-else</code> 만 이용하면 <code>1 + lg N</code> 의 복잡도를 가지게 된다. 이는 <code>T(N) &lt;= 1 + T(N/2)</code> , <code>T(N) &lt;= 1 + 1 + T(N/4)</code>, ... <code>T(N) = 1 + 1 + ... + T(N/N)</code> 이기 때문이다.</p>
-
-<p><em>binary search</em> 가 <code>1 + lg N</code> 이라는 사실을 이용하면 <em>3-Sum</em> 을 <code>N^2 lg N</code> 으로 개선할 수 있다.</p>
-
-<p>(1) sorting: <code>N^2</code> <br />
-(2) binary search for <code>-(arr[i] + arr[j])</code>  : <code>N^2 log N</code>  </p>
-
-<p>두번째 스탭에서 <code>i</code>, <code>j</code> 에 대해 이진탐색을 시도하므로 <code>N^2 * log N</code> 이다.</p>
-
-<h3 id="theoryofalgorithms">Theory of Algorithms</h3>
-
-<p>이제 <strong>Best case(lower bound on cost)</strong>, <strong>Worst case(upper bound on cost)</strong>, <strong>Average case(expected cost)</strong> 를 고려 해 보자</p>
-
-<p>이를 위해 새로운 <em>notation</em> 을 도입할 수 있다. 교수님이 해주시는 설명을 솔직히 못 알아 듣겠다. 그냥 <em>big theta</em>, <em>big omega</em>, <em>big oh</em> 에 대해 구글링 해서 나오는 <a href='http://stackoverflow.com/questions/471199/what-is-the-difference-between-%CE%98n-and-on' >SO 답변</a> 을 참조했다.</p>
-
-<p>먼저 <strong>asymptotic</strong> 이란 말을 이해해야 하는데 한국어로 표현하면 <em>점근적</em> 정도가 된다. <del>m 은 묵음</del></p>
-
-<blockquote>
-  <p>If an algorithm is of Θ(g(n)), it means that the running time of the algorithm as n (input size) gets larger is proportional to g(n).</p>
-  
-  <p>If an algorithm is of O(g(n)), it means that the running time of the algorithm as n gets larger is at most proportional to g(n).</p>
-  
-  <p>More technically, O(n) represents upper bound. Θ(n) means tight bound. Ω(n) represents lower bound.</p>
-</blockquote>
-
-<p>우리가 어떤 알고리즘이 <code>O(n)</code> 이라고 할 때 <code>O(n^2)</code>, 혹은 <code>O(n^3)</code> 이라고 말할 수 있다. <em>upper bound</em> 니까. 하지만 어떤 알고리즘(<code>f(n)</code>) 이 <code>Θ(n)</code> 일때, <code>Θ(n^2)</code> 이라 말할 순 없다. 그리고 <em>Big-Oh</em> 와 <em>Big-theta</em> 가 존재 해야 <em>Big-omega</em> 가 존재한다.</p>
-
-<blockquote>
-  <p>f(x) = Θ(g(x)) iff f(x) = O(g(x)) and f(x) = Ω(g(x))</p>
-</blockquote>
-
-<p>이런 표기법을 이용하는 이유는, 다시 말해서 <em>Theory of algorithm</em> 의 목적은 <em>optimal algorithm</em> 을 찾는데 있다. </p>
-
-<p><em>1-sum</em> 을 예로 들어 보자. <em>upper bound</em> 는, 모든 원소를 찾는 것이다. 따라서 <code>O(n)</code>.  적어도 모든 원소를 한번씩은 다 뒤져봐야 하므로, <em>lower bound</em> 는 <code>Ω(n)</code> 이다. 따라서 두개가 <em>constant factor</em> 내에서 같으므로 <code>Θ(n)</code> 이다.</p>
-
-<p><em>3-sum</em> 을 고려해 보자. <em>upper bound</em> 는 <code>O(n^2 * lg n)</code> 이다. <em>lower bound</em> 는 확실힌 모르겠지만 적어도 모든 원소를 한번씩은 훑어야 하므로 <code>Ω(n)</code> 다. <a href='http://cstheory.stackexchange.com/questions/14585/lower-bounds-for-3sum-with-a-free-cache' >여기</a> 보면 <em>3-sum</em> 의 <em>lower bound</em> 에 관한 논의가 있다.</p>
-
-<p>따라서 <em>3-sum</em> 에 대한 확실한 <em>lower bound</em> 를 모르므로, <em>upper bound</em> 와의 갭이 있고, 아직까진 <em>optimal algorithm</em> 이 무엇인지 알 수 없다.</p>
-
-<p>따라서 알고리즘을 디자인하는 접근 방법은,</p>
-
-<p>(1) Develop an algorithm <br />
-(2) Prove a lower bound</p>
-
-<p>그리하여, <em>lower bound</em> 와 <em>upper bound</em> 사이의 갭이 있다면 <em>lower bound</em> 를 증가시키는 새로운 알고리즘이 여지가 있다. 그걸 찾아내면서 <em>lower bound</em> 를 올려가면 <em>optimal algorithm</em> 을 찾을 수 있다. </p>
-
-<p>1970년대에는 <em>upper bound</em> 를 줄여왔지만, </p>
-
-<p>(1) 너무 <em>worst case</em> 에만 집중헀고 <br />
-(2) 이제 더 정확한 성능 측정을 위해서 <em>to within a constant factor</em> 보다 더 좋은 무언가가 필요하다.</p>
-
-<p>그리고 많은 사람들이 <em>Big o</em> 를 <em>approximate model of running time</em> 으로 번역하는 실수를 저질렀는데, 이 수업에서는 <em>Big o</em> 대신 <em>tilde(~)</em> 를 사용하겠다.</p>
-
-<p><img src='http://qlx.is.quoracdn.net/main-ce94d194dc6a85d3.png'  align="center" /></p>
-
-<p align="center">If</p>
-
-<p><img src='http://qlx.is.quoracdn.net/main-30ac99d6624fcf8c.png'  align="center" /></p>
-
-<h3 id="memory">Memory</h3>
-
-<p>자바에서는 다음과 같은 오버헤드가 있다.</p>
-
-<p>(1) <code>N</code> 개의 1차원 배열을 만들때는 <em>Type * N + 24 Bytes</em> <br />
-(2) <em>Object</em> 는 <em>16 Bytes</em> <br />
-(3) <em>Reference</em> 는 <em>8 Bytes</em> <br />
-(4) 각 오브젝트는 <em>8 Bytes</em> 단위로 패딩된다.</p>
-
-<p><strong>String</strong> 은 조금 더 복잡한데,</p>
-
-<p>오브젝트 오버헤드, <code>char</code> 배열 오버헤드(<code>2N + 24</code>)와 함께 <code>offset</code>, <code>count</code>, <code>hash</code> 를 <code>int</code> 타입으로 가지므로 <em>12 Bytes</em> 와 패딩이 포함된다.</p>
-
-<p><em>inner class</em> 가 있다면 <em>Object</em> 에 <em>8 bytes</em> 의 메모리가 더 필요하다.</p>
-
-<pre><code class="java">public class WeightedQuickUnionUF {  
-  private int[] id;
-  private int[] sz;
-  private int count;
-
-  ...
-}
-</code></pre>
-
-<p>위 클래스를 인스턴스로 가지고 있을 경우엔 <code>N</code> 에 대해서</p>
-
-<p>(1) 16 bytes <em>object overhead</em> <br />
-(2) 8 + (4N + 24) for each <em>int[] array</em> <br />
-(3) 4 bytes for <code>count</code> <br />
-(4) 4 bytes padding</p>
-
-<p>따라서 <code>8N + 88</code> 이므로 <code>~8 N</code> 이다.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p><strong>Empirical analysis</strong> 은 실제로 프로그램을 돌려 성능을 얻은 다음 가설을 새워 예측하는 방법이다. 반면 <strong>Mathematical analysis</strong> 는 알고리즘을 분석해 연산 횟수에 기반한 모델을 새우는 방법이다. </p>
-
-<blockquote>
-  <p>Emplirical analysis model enables us to <strong>make predictions</strong> and necessary to validate mathematical models</p>
-  
-  <p>Mathematical analysis model enables us to <strong>explain behavior</strong> and is independent of a particular system. </p>
-</blockquote>]]></description><link>http://1ambda.github.io/analysis-of-algorithms/</link><guid isPermaLink="false">3e2611a4-8600-4397-bef5-ea6d0245d660</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 11 Oct 2014 06:35:32 GMT</pubDate></item><item><title><![CDATA[Programming Language, Week1]]></title><description><![CDATA[<p><strong>Programming Language</strong> by <em>Dan Grossman</em>, Coursera</p>
-
-<p><em>Coursera</em> PL 클래스인데 과제 마감기한도 까다롭고, 동료평가도 있고, 여러모로 조금 빡세다. 유일한 낙은 언어의 다양한 특징들을 탐구하기 위해 <strong>ML</strong> 을 사용하고 <del>오오 갓 ML</del> , emacs 를 사용한다는 건데.. 잘 버틸수 있을까 의심스럽다. 무려 첫 강의부터 대략 300분이 넘는 동영상을 올려주시는 교수님 -_-;</p>
-
-<p>미국 CS 전공자들은 모두 이렇게 빡세게 배우는가요 ㅠㅠ?</p>
-
-<p><code>SML/nj</code> 와 Emacs 에 <code>sml-mode</code> 설치 후 시작한다. <code>c-c, c-s</code> 는 <code>REPL</code> 을 켠다. </p>
-
-<h3 id="mlvariablebindingsandexpressions">ML Variable Bindings and Expressions</h3>
-
-<pre><code class="sml">(* This is a comment. *)
-
-val x = 34;  
-(*: static env: x : int *)
-(*: dynamic env: x --&gt; 34 *)
-val y = 35 : int;  
-val z = (x + y) + (y + 2);  
-</code></pre>
-
-<p>각 라인마다, <em>dynamic environment</em> 에 바인딩을 하나씩 추가한다. 따라서 세번 째 라인에서 <code>x</code> 와 <code>y</code> 를 <code>z</code> 를 바인딩하기 위해 사용할 수 있다.</p>
-
-<p>그리고, <em>dynamic env</em> 에 바인딩을 추가하기 전에 <em>static enviornment</em> 에 <em>Type</em> 을 추가한다. 맨 처음엔 <code>x: int</code> 가 추가되고 <code>y</code> 와 값이 바인딩 되기 전에는 <code>x: int, y: int</code> 가 <em>static env</em> 에 추가된다.</p>
-
-<p>따라서 매 라인마다 <em>type checking</em> 이 먼저 일어나고 그 후에야 프로그램이 <em>evaluated (excuted)</em> 된다. </p>
-
-<p><em>ML</em> 에서 <code>if</code> 는 다음과 같이 작성할 수 있다. 다르 언어와 비슷하다.</p>
-
-<pre><code class="sml">val abs_of_z = if z &lt; 0 then 0 - z else z;  
-</code></pre>
-
-<p>여기서 잠깐 <em>Syntax</em> 와 <em>Semantics</em> 를 정리하자면</p>
-
-<blockquote>
-  <p><strong>Syntax</strong> is just how you write something<br/></p>
-  
-  <p><strong>Semantics</strong> is what that something means<br/>
-  - <em>Type-checking</em> (before program runs)<br/>
-  - <em>Evaluation</em> (as program runs)  </p>
-</blockquote>
-
-<p><em>variable binding</em> 에서는, <em>type checking</em> 은 <em>static environment</em> 를 확장하고, <em>evaluation</em> 은 <em>dynamic environment</em> 를 확장한다.</p>
-
-<h3 id="rulesforexpressions">Rules for Expressions</h3>
-
-<p><em>expression</em> 은 <em>sub-expression</em> 을 가질 수 있기 때문에, <em>expression</em> 을 해석 하는데 있어서 3가지가 꼭 필요하다.</p>
-
-<p>(1) <strong>Syntax</strong> <br />
-(2) <strong>Type-checking rules:</strong> produces a type of fails <br />
-(2) <strong>Evaluation rules:</strong> produces a value</p>
-
-<p>다시 말하면 <em>Syntax</em> 와 <em>Semantics</em> 가 필요하단 이야기다.</p>
-
-<h4 id="variables">Variables</h4>
-
-<blockquote>
-  <p><strong>Syntax:</strong> sequence of letters, digits, _, not starting with digit</p>
-  
-  <p><strong>Type-checking:</strong> look up type in current statix env if
-  non there, fail</p>
-  
-  <p><strong>Evaluation:</strong> look up value in current dynamic env</p>
-</blockquote>
-
-<h4 id="addition">Addition</h4>
-
-<p>Addition 의 경우에는 <em>sub-exp</em> 가 있을 수 있다.</p>
-
-<blockquote>
-  <p><strong>Syntax:</strong> <code>e1</code> + <code>e2</code> where <code>e1</code> and <code>e2</code> are expressions</p>
-  
-  <p><strong>Type-checking:</strong> if <code>e1</code> and <code>e2</code> have type <em>int</em> then <em>int</em></p>
-  
-  <p><strong>Evaluation:</strong> if <code>e1</code> evaluates to <code>v1</code> and <code>e2</code> evaluates to <code>v2</code>, then sum of <code>v1</code> and <code>v2</code></p>
-</blockquote>
-
-<h4 id="values">Values</h4>
-
-<p>모든 <em>value</em> 는 <em>expression</em> 이다. 그러나 모든 <em>expression</em> 이 <em>value</em> 인 것은 아니다. 그리고,</p>
-
-<blockquote>
-  <p>Every value evaluates to itself in <strong>zero steps</strong></p>
-</blockquote>
-
-<p>참고로, <code>()</code> 는 <code>unit</code> 타입을 가진다.</p>
-
-<h4 id="conditional">Conditional</h4>
-
-<blockquote>
-  <p><strong>Syntax:</strong> if <code>e1</code> then <code>e2</code> else <code>e3</code> where if, then, and else are keywords and <code>e1</code> <code>e2</code> and <code>e3</code> are sub-expressions</p>
-  
-  <p><strong>Type-checking:</strong> <code>e1</code> must have type <code>bool</code>. <code>e2</code> and <code>e3</code> can have any type, but they must have the same type</p>
-  
-  <p><strong>Evaluation:</strong> first evaluate <code>e1</code> to <code>v1</code>, if it's true evaluate <code>e2</code> and that resut is the whole expressions's result else evaluate <code>e3</code></p>
-</blockquote>
-
-<h3 id="replanderrors">REPL and Errors</h3>
-
-<h4 id="use">use</h4>
-
-<p><code>use</code> 는 특정 파일을 읽어 <em>binding</em> 하고 <code>it: unit</code> 을 돌려주는데, 이건 무시해도 된다. 그리고 같은 파일을 <code>use</code> 할때는 항상 <code>REPL</code> 을 다시 시작하자. <code>C-d</code>, <code>C-c, C-s</code></p>
-
-<h4 id="error">Error</h4>
-
-<p>대부분의 에러는 <em>syntax</em>, <em>type-checking</em>, <em>evaluation</em> 의 문제다.</p>
-
-<h3 id="shadowing">Shadowing</h3>
-
-<p>같은 변수에 대한 <em>multiple binding</em> 은 <em>poor style</em> 이다. 그러나 이를 통해 <em>environment</em> 와 <em>binding</em> 이 어떻게 동작하는지 알 수 있다.</p>
-
-<pre><code class="sml">val a = 10;  
-val b = a * 2  
-val a = 5; (* this is not an assignment statement *)  
-(* a -&gt; 5, b -&gt; 20 *)
-val c = 2;  
-(* a -&gt; 5, b -&gt; 20, c -&gt; 20 *)
-</code></pre>
-
-<p><code>val a = 5</code> 문장은, 할당하는게 아니라 <code>a</code> 를 <em>shadowing</em> 한다. <em>ML</em> 에서는 <em>mutate</em> 할 수 없다. 매번 새롭게 <em>dynamic env</em> 를 만든다.</p>
-
-<pre><code class="sml">val d = a  
-(* ..., d -&gt; 5 *)
-val a =  a + 1  
-(* ..., a -&gt; 6 *)
-val f = a * 2  
-</code></pre>
-
-<p><code>use</code> 를 이용하면, 기존의 <code>a</code> 의 값이 <code>&lt;hidden-value&gt;</code> 로 나오는 것을 확인 할수 있다.</p>
-
-<pre><code class="sml">val a = 1;  
-val b = a;  
-val a = 2;  
-</code></pre>
-
-<p>다음과 같은 예제가 있을 때, <code>b</code> 는 <code>1</code> 이다. <em>eagerly evaluated</em> 되어 바인딩 후에는 <code>value</code> 를 만든 <em>expression</em> 과는 관련이 없어진다. 다시 말해  바인딩 후에는 <code>a</code> 와 <code>b</code>는 상관이 없다.</p>
-
-<p>그리고 위에서 언급 했듯이 <strong>ML</strong> 에서는 <em>assign to</em> 가 없고, 앞의 <code>a</code> 는 뒤의 <code>a</code> 에가 있는 <em>dynamic env</em> 에 의해서 가려질 뿐이다.</p>
-
-<p>그렇기 때문에 <em>REPL</em> 을 재시작 하지 않고서 같은 파일을 여러번 <code>use</code> 하면 문제가 생길 수 있다고 교수님이 누차 말한 것</p>
-
-<h3 id="functionsinformally">Functions Informally</h3>
-
-<pre><code class="sml">fun pow (x: int, y: int) =  
-  if y = 0
-  then 1
-  else x * pow(x, y-1)
-
-fun cube(x: int)  
-  pow(x, 3)
-</code></pre>
-
-<p>이 경우 두 함수 모두 타입은 <code>fn: int -&gt; int</code> 다. 타입을 이름 뒤에 사용하는것도 그렇고, 함수 타입도 그렇고 스칼라와 문법이 비슷한 것 같다.</p>
-
-<p><code>*</code> 가 타입에 있을때는 곱셈이 아니라 <code>,</code> 같은 역할을 한다. 따라서 다음과 같이 <code>pow</code> 를 호출할 수 있다.</p>
-
-<pre><code class="sml">val x : int * int = (2, 3)  
-val y = pow x  
-</code></pre>
-
-<p>참고로, 함수를 사용한 후 정의하는 것은 불가능하다. 따라서 사용하는 <em>expression</em> 위에 함수를 정의해야 한다.</p>
-
-<h4 id="recursion">Recursion</h4>
-
-<p>재귀에 대해서도 간단히 언급을 하는데, 문제를 간단한 방법으로 나누어 푸는 좋은 기술이라고..</p>
-
-<h3 id="functionsformally">Functions Formally</h3>
-
-<p>우리가 <strong>Function</strong> 이 무엇인지 PL 에서 정의하려면 위에서 언급했듯이 <em>syntax</em> 와 <em>semantics</em> 가 필요하다. </p>
-
-<blockquote>
-  <p><strong>Syntax:</strong> <code>fun x0 (x1: t1, ... , xn: tn) = e</code></p>
-  
-  <p><strong>Evaluation:</strong> A function is a value. <code>x0</code> is added to <em>dynamic env</em></p>
-  
-  <p><strong>Type-checking:</strong> <code>(t1 *, ..., * tn) -&gt; t</code></p>
-</blockquote>
-
-<p>타입체킹이 조금 복잡한데, <code>e</code> 가 <code>t</code> 타입을 가지는지 검사하고, 파라미터도 마찬가지로 올바른 타입을 가지는지 검사한다.</p>
-
-<p>다른 언어와 마찬가지로 <code>t1</code> 등의 파라미터는 <code>e</code> 를 위한 <em>environment</em> 에만 추가된다.</p>
-
-<p><code>x0</code> 이 <em>dynamic</em>, <em>static env</em> 에 추가되므로 이후의 코드에서 <em>recursion</em> 을 사용할 수 있다.</p>
-
-<h4 id="functioncalls">Function calls</h4>
-
-<p><em>Function calls</em> 의 <em>syntax</em> 는 <code>e0 (e1, ..., en)</code> 이다. 만약에 인자가 하나라면 괄호(parentheses) 는 없어도 된다.</p>
-
-<p>참고로 <strong>ML</strong> 에서는 <strong>variable numbers of arguments</strong> 를 함수에서 받을 수 없다. 인자의 개수가 정해져야 한다.</p>
-
-<p><em>type-checking</em> 의 경우에는 , <code>e0</code> 이 <code>(t1 * ... * tn) -&gt; t</code> 인지 검사하고 <code>en</code> 이 <code>tn</code> 타입을 가지면, <code>e0</code> 은 <code>t</code> 타입이다. </p>
-
-<p><em>Evaluation</em> 스텝은 다음과 같다.</p>
-
-<p>(1) evaluate <code>e0</code> to <code>fun x0(x1: t1, ... , x: tn) = e</code> <br />
-(2) evaluate arguments <code>e1</code>, ... , <code>en</code> to <code>v1</code>, ..., <code>vn</code> <br />
-(3) extend <em>dynamic env</em> mapping <code>x1</code> to <code>v1</code> , ... , <code>xn</code> to <code>vn</code></p>
-
-<p>두 번째 스텝에서는 <em>eager evaluation</em> 이 사용되는데 <code>pow(2, 2+2)</code> 같은 경우 인자가 <code>2, 4</code> 가 된다. </p>
-
-<p>세 번째 스텝에서는 <em>dynamic environment</em> 를 확장하는데, 현재 함수인 <code>x0</code> 과 인자들인 <code>xn</code> 을 포함하도록 한다. 따라서 <em>recursion</em> 이 가능하다.</p>
-
-<p>사실은 스칼라의 그것과 같은데 교재에 나온 설명이 너무 함축적이어서 이해하기가 어렵다.</p>
-
-<h3 id="pairsandothertuples">Pairs and Other Tuples</h3>
-
-<p>위에서 잠깐 보았던 <code>t1 * t2</code> 같은 것들이 <em>Pair</em> 다. 다른말로 <em>2-tuples</em> 라 부른다. </p>
-
-<p><em>Syntax</em> 는 <code>(e1, e2)</code> 로 <em>Type-checking</em> 은 <code>e1</code> 과 <code>e2</code> 가 올바른 타입을 가졌는지 검사한다.</p>
-
-<p><em>Pair</em> 에 접근할때는 <code>#1 e</code> 또는 <code>#2 e</code> 와 같은 <em>Syntax</em> 를 사용하고, <code>e</code>가 <code>t1 * t2</code> 타입인지, 그 후에 <code>#1 e</code> 가 <code>t1</code> 또는 <code>#2 e</code> 가 <code>t2</code> 타입을 가졌는지 검사한다.</p>
-
-<pre><code class="sml">fun su_two_pairs (pr1: int * int, pr2: int* int) =  
-  (#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)
-</code></pre>
-
-<p>의 경우에는 타입이 <code>(int * int) * (int * int) -&gt; int</code> 된다. 그리고 다른 언어와 마찬가지로 <em>tuple</em> 도 겹칠 수 있다.</p>
-
-<pre><code class="sml">val x1 = (7, (true, 9)) // int * (bool * int )  
-val x2 = #1 (#2 x1) // true  
-</code></pre>
-
-<h3 id="introducinglists">Introducing Lists</h3>
-
-<p><em>Tuple</em> 은 여러 타입을 가질 수 있지만, 정해진 갯수만큼의 element 만 저장할 수 있다. 반면 <em>List</em> 는 하나의 타입만 가져야 하지만, 원소의 갯수가 변할 수 이다.</p>
-
-<p>빈 리스트는 <code>[]</code> 와 같이 만든다. <code>[3, 4, 5]</code> 는 <code>int list</code> 다. <code>[(1+2), 3, 7]</code> 과 같이 초기화하면 <code>[3, 3, 7]</code> 이 나온다. 리스트는 그 자체로 <em>value</em> 다.</p>
-
-<p><code>::</code> 는 <em>cons</em> 라 발음하고, 다음과 같이 쓸 수 있다.</p>
-
-<pre><code class="sml">val x = [3, 4, 5]  
-val y = 2 :: x  
-</code></pre>
-
-<p><em>cons</em> 뒤에 오는것은 <code>List</code> 여야 한다. 리스트가 비었는지 검사하기 위해 <code>null</code> 을, <em>head</em> 를 얻기 위해 <code>hd</code> 를, <em>tail</em> 을 얻기 위해 <em>tl</em> 을 이용한다. 따라서 <code>tl [3, 4, 5]</code> 는 <code>[4, 5]</code> 를 돌려준다.</p>
-
-<p>그리고 다른 함수형 언어와 마찬가지로 <code>tl [9]</code> 는 <code>[]</code>(<em>nil</em>) 이다.</p>
-
-<p>리스트는 다양한 타입을 가질 수 있기 때문에 <code>(int * int) list</code> 같은 것도 타입이 될 수 있다. <code>[(3, 4), (5, 6)]</code> 처럼.</p>
-
-<p><code>null</code> 은 <code>fn: a list -&gt; bool</code> 타입이고, 
-<code>hd</code> 는 <code>fn: a list -&gt; a</code>, 
-<code>tl</code> 은 <code>fn: a list -&gt; a list</code></p>
-
-<p><code>[]: a list</code> 는 좀 특이한데, 다양한 타입이 될 수 있다. <code>3 :: []</code>, <code>false :: []</code> 이라던지.</p>
-
-<h3 id="listfunctions">List Functions</h3>
-
-<p>리스트를 조작하는 간단한 함수를 <em>ML</em> 로 몇 개 짜보자.</p>
-
-<pre><code class="sml">fun pow(x: int, y: int) =  
-    if y = 0 then 1 else x * pow(x, y - 1);
-
-fun cube(x: int) =  
-    pow(x, 3);
-
-fun sum_list(xs: int list) =  
-    if null xs
-    then 0
-    else hd xs + sum_list(tl xs)
-
-fun product_list(xs: int list) =  
-    if null xs
-    then 1
-    else hd xs * product_list(tl xs)
-
-fun countdown(x: int) =  
-    if x = 0
-    then []
-    else x :: countdown(x - 1)
-
-fun append(xs: int list, ys: int list) =  
-    if null xs
-    then ys
-    else (hd xs) :: append(tl xs, ys)
-
-fun sum_pair_list(xs: (int * int) list) =  
-    if null xs
-    then 0
-    else (#1 (hd xs)) + (#2 (hd xs)) + sum_pair_list(tl xs)
-
-fun firsts(xs: (int * int) list) =  
-    if null xs
-    then []
-    else #1 (hd xs) :: firsts(tl xs)
-
-fun seconds(xs: (int * int) list) =  
-    if null xs
-    then []
-    else #2 (hd xs) :: seconds(tl xs)
-
-fun sum_pair_list(xs: (int * int) list) =  
-    if null xs
-    then 0
-    else sum_list(firsts xs) + sum_list(seconds xs)
-
-fun factorial(n : int) =  
-    product_list(countdown(n))
-</code></pre>
-
-<p>참고로 <code>#</code> 이 <code>+</code> 이나 <code>::</code> 보다 우선순위가 높다.</p>
-
-<h4 id="listrecursion">List Recursion</h4>
-
-<p>재귀에 대해 생각할땐, 항상 명심해야 하는게 있는데 <strong>탈출 조건</strong> 이다. 따라서 empty-list 에 대해선 어떤걸 돌려줄지, non-empty-list 에 대해서는 무엇을 처리해야 할지 항상 생각해야 한다.</p>
-
-<h3 id="letexpressions">Let Expressions</h3>
-
-<p><code>let</code> 은 <em>local variable</em> 을 바인딩하는 법이다.</p>
-
-<blockquote>
-  <p><strong>Syntax:</strong> <code>let b1 b2 ... bn in e end</code>. Each <code>b1</code> is any <em>binding</em> and <code>e</code> is any expression</p>
-  
-  <p><strong>Type-checking:</strong> Type of whole let-expression is the type of e. Type-check each <code>b1</code> and <code>e</code> in a staic env that includes the previous bindings</p>
-  
-  <p><em>*Evaluation: *</em> evaluate each <code>b1</code> and <code>e</code> in a dynamic env that includes the previous bindings. Result of whole expression is result of evaluating <code>e</code></p>
-</blockquote>
-
-<pre><code class="sml">fun silly () =  
-    let
-      val x = 3
-    in
-      (let val x = 2 in x + 1 end) + (let val y = x + 1 in y + 1 end)
-    end
-</code></pre>
-
-<p>여기서 <em>Scope</em> 의 개념이 나온다.</p>
-
-<blockquote>
-  <p><strong>Scope:</strong> Where a binding is in the environment</p>
-</blockquote>
-
-<h4 id="nestedfunctions">Nested Functions</h4>
-
-<p><em>Function</em> 은 <em>binding</em> 이다. 따라서 <code>let</code> 내부에서 <em>local binding</em> 할 수 있다.</p>
-
-<pre><code class="sml">fun count_from_1 (x: int) =  
-    let
-    fun count (from: int, to: int) =
-        if from == to
-        then []
-        else from :: count(from + 1, to)
-    in
-    count(1, x)
-    end
-</code></pre>
-
-<p>이렇게 하면 <em>top-level</em> 에서 <code>count</code> 는 사라진다. 그리고 엄밀히 말해서 <code>count</code> 가 가진 <em>environment</em> 에는 <code>to</code> 가 있기 때문에, <code>to</code> 를 인자로 가질 필요가 없다.</p>
-
-<pre><code class="sml">fun count_from_1 (x: int) =  
-    let
-    fun count (from: int) =
-        if from = x
-        then []
-        else from :: count(from + 1)
-    in
-    count(1)
-    end
-</code></pre>
-
-<h3 id="letandefficiency">Let and Efficiency</h3>
-
-<p>가장 큰 숫자를 찾는 다음의 함수를 고려 해 보자</p>
-
-<pre><code class="sml">fun bad_max (xs : int list) =  
-  if null xs
-  then 0
-  else if null (tl xs)
-  then hd xs
-  else if hd sx &gt; bad_max(tl xs)
-  then hd xs
-  else bad_max(tl xs)
-</code></pre>
-
-<p>이 함수는 <code>[1, 2, ... , 30]</code> 과 같은 리스트에 굉장히 나쁜 성능 <em>exponentially (2^30)</em> 을 보여준다. <code>bad_max(tl xs)</code> 를 두번 호출하기 때문이다. 따라서 <code>max(tl xs)</code> 를 변수로 놓아 캐싱하면</p>
-
-<pre><code class="sml">fun good_max (xs: int list) =  
-    if null xs then 0
-    else if null (tl xs) then hd xs
-    else
-    let
-        val res = good_max(tl xs)
-    in
-        if hd xs &gt; res then hd xs
-        else res
-
-    end
-</code></pre>
-
-<p><code>bad_max</code> 의 <code>if-then-else</code> 가 10^-7 정도의 시간이 든다고 하면, <code>[1, 2, ..., 55]</code> 는 100년이 넘게 걸린다. 따라서 재귀를 구현하는데 있어서 <em>local binding</em> 은 필수다.</p>
-
-<h3 id="options">Options</h3>
-
-<p>참고로, <code>good_max</code> 는 리스트가 모두 음수일때 <code>0</code> 을 돌려준다. 이건 리스트가 비었을때 <code>0</code> 을 돌려주기 때문에 생기는 문제인데, <code>0</code> 말고 다른 무언갈 돌려줄 수 없을까?</p>
-
-<p><em>SML</em> 도 <em>Scala</em> 처럼 <em>Option</em> 을 지원한다.(물론 <em>SML</em> 이 먼저..) <code>NONE</code> 은 <code>a option</code> 타입이고, <code>SOME e</code> 는 <code>t option</code> 이다. <code>t</code> 는 <code>e</code> 의 타입.</p>
-
-<p><em>Option</em> 을 이용해 <code>max</code> 를 리팩토링 해 보면,</p>
-
-<pre><code class="sml">fun max1 (xs: int list) =  
-  if null xs NONE
-  else 
-    let val res = max(tl xs)    
-    in if isSome res andalso isVal res &gt; hd xs then res
-       else Some(hd xs) 
-    end
-</code></pre>
-
-<p>그런데, 이 <code>max1</code> 또한 문제가 있다. 사실 <code>[]</code> 는 리스트가 오름차순으로 구성되어있을때 (<code>[1, 2, 3, 4]</code>) 맨 마지막 호출에서만 오는데, 매번 <code>isSome</code> 으로 검사하니까 비효율적이다. 다시 리팩토링하면</p>
-
-<pre><code class="sml">fun max2 (xs: int list) =  
-    if null xs then NONE
-    else
-    let
-        fun max_non_empty(ys: int list) =
-        if null (tl ys) then hd ys
-        else
-            let val res = max_non_empty(tl ys)
-            in if hd xs &gt; res then hd ys
-               else res
-            end
-    in
-        SOME (max_non_empty xs)
-    end
-</code></pre>
-
-<p><del>교수님 <code>let in end</code> 는 제발그만 가..가독성이</del></p>
-
-<h3 id="booleansandcomparisonoperations">Booleans and Comparison Operations</h3>
-
-<p>다른 언어의 <em>&amp;&amp; (and)</em> 와 <em>|| (or)</em> <em>! (not)</em> 은 <em>SML</em> 에서는 <code>ansalso</code>, <code>orelse</code>, <code>not</code> 이다.</p>
-
-<p>그리고 <code>andalso</code>, <code>orelse</code> 연산자는 다른 언어처럼 <em>Short circuiting</em> 을 제공한다. 함수가 아니다.   </p>
-
-<p><code>andalso</code> 와 <code>orelse</code>, <code>not</code> 은 다음처럼 쓸 수도 있다.</p>
-
-<pre><code class="sml">(* andalso *)
-if e1  
-then e2  
-else false
-
-(* orelse *)
-if e1  
-then true  
-else e2
-
-(* not *)
-if e1  
-then false  
-else true  
-</code></pre>
-
-<p><code>if-then-else</code> 만 가지고도 할 수 있으나, 그냥 <code>andalso</code> 와 <code>orelse</code>, <code>not</code> 을 쓰는게 코드를 읽는 사람의 정신 건강에 좋다. </p>
-
-<h4 id="comparisons">Comparisons</h4>
-
-<p>비교의 경우엔 <code>==</code> 가 아니라 <code>=</code> 를 쓴다. <code>!=</code> 가 아니라 <code>&lt;&gt;</code> 를 쓴다. </p>
-
-<p>그리고 <code>3.0 &gt; 2</code> 와 같은 비교는 안된다.<code>3.0</code> 은 <code>real</code> 이고, <code>2</code> 는 <code>int</code> 다 <code>Real.fromInt</code> 를 이용하자.</p>
-
-<h3 id="nomutation">No Mutation</h3>
-
-<p>교수님이 <em>A valuable non-feature</em> 라고 이야기 하시는데, 기능이 없는게 장점이라고.. <em>SML</em> 에서는 아래의 두 코드가 같다. (<em>inditinguishable</em>)</p>
-
-<pre><code class="sml">fun sort_pair(pr: int * int) =  
-  if #1 pr &lt; #2 pr then pr
-  else (#2 pr, #1 pr)
-
-fun sort_pair(pr: int * int) =  
-  if #1 pr &lt; #2 pr then (#1 pr, #2pr)
-  else (#2 pr, #1 pr)
-</code></pre>
-
-<p>위가 더 나은 <em>style</em> 이라고 주장할 순 있지만, 다르다고 말할 순 없다. 그러나 <em>mutable compound data</em> 를 다루는 다른 언어에서는 위 두 함수는 다르다</p>
-
-<p>예를 들어서 <em>mutable data</em> 를 다루는 언어라 가정하고 다음의 코드를 고려 해 보자.</p>
-
-<pre><code class="sml">val x = (3, 4)  
-val y = sort_pair x
-
-(* somehow mutate #1 x to hold 5 *)
-
-val z = #1 y  
-</code></pre>
-
-<p>이제 <code>z</code> 의 값은 무엇일까? <code>sort_pair</code> 구현에 따라 다르다. <code>then</code> 에서 <code>pr</code> 을 돌려줬다면, <code>5</code> 일거고, <code>(#1 pr, #2 pr)</code> 을 돌려줬다면 <code>3</code> 일거다. 그러나 <em>ML</em> 에선 문제가 안된다. <em>immutable</em> 하니까. <del>오오 immutable 오오</del></p>
-
-<blockquote>
-  <p>But <strong>without mutation</strong>, we can implement either way <br/><br/>
-  - No code can ever distinguishe aliasing vs identical copies <br />
-  - No need to think about aliasing: focus on other things <br />
-  - Can use aliasing, which saves space, without danger</p>
-</blockquote>
-
-<p><em>ML</em> 에서는 <code>tl</code> 이 상수 시간내에 이뤄진다. 첫번째 원소를 제외한 나머지를 가리키기만 하면 되니까. 어차피 그 데이터는 <em>immutable</em> 이니까 그냥 쓰기만 하면 된다. 변경이 필요하면, 그 때 새로 만들면 된다.</p>
-
-<h3 id="javamutation">Java Mutation</h3>
-
-<pre><code class="java">public String[] getAllowedUsers() {  
-  // return a references of allowedUsers
-}
-</code></pre>
-
-<p><code>allowedUsers</code> 자체가 <code>private</code> 여도, 다음과 같은 코드에 취약하다.</p>
-
-<pre><code class="java">p.getAllowedUsers()[0] = p.currentUser();  
-p.useTheResource();  
-</code></pre>
-
-<p>따라서 위의 <code>getAllowedUsers</code> 는 <em>copy</em> 를 돌려줘야한다. </p>
-
-<p><em>ML</em> 같은 <em>immutable</em> 한 언어에서는 <em>Reference (Alias)</em> vs <em>Copy</em> 는 문제가 안된다.</p>
-
-<h3 id="piecesofalanguage">Pieces of a Language</h3>
-
-<p>언어를 배울때는 다음의 다섯가지를 고려해야한다.</p>
-
-<p>(1) <strong>Syntax:</strong> How do you write language constructs? <br />
-(2) <strong>Semantics:</strong> What do programs mean? (Evaluation rules) <br />
-(3) <strong>Idioms:</strong> What are typical patterns for using language features to express your computation <br />
-(4) <strong>Libraries:</strong> What facilities does the language provide <strong>standard</strong>? <br />
-(5) <strong>Tools:</strong> What do language implementations provide to make your job easier? (REPL debugger..)  </p>
-
-<p>다시 말하면 다섯가지를 모두 배워야 한다. 언어의 코어부터 그 확장인 라이브러리와 툴까지. 그러나 이 코스에서는 <em>Semantics</em> 와 <em>Idioms</em> 에 집중한다. <em>ML</em> 을 고른것도 그 이유고, 이걸 잘 이해하게 되면 <em>Libraries</em> 가 어떻게 구성되었는지 더 잘 이해할 수 있다.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p>처음엔 재귀가 어려웠는데, 시간이 지날수록 재귀가 얼마나 재밌고 강력한지 알게 된다. 함수를 <em>building block</em> 처럼 조립하는것도 너무 재밌고</p>
-
-<p>Lisp 을 이용했으면 개인적 취향에 맞아 더 재밌게 배울 수 있었을텐데. 나중에 수업이 모두 끝났을때 <em>ML</em> 을 고른 이유를 느낄 수 있었으면 좋겠다.</p>
-
-<p>그리고 Emacs <em>sml-mode</em> 가 좀.. 음.. 빈약한데 더 좋은걸 찾아야겠다. <em>MELPA</em> 엔 없던데.. 테스팅 프레임워크도 좀 찾아서 해보고. </p>]]></description><link>http://1ambda.github.io/programming-language-week1/</link><guid isPermaLink="false">30e30421-f55b-48df-b96b-a19a661c143f</guid><category><![CDATA[coursera]]></category><category><![CDATA[programming language]]></category><category><![CDATA[ml]]></category><category><![CDATA[emacs]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 10 Oct 2014 06:26:00 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 2]]></title><description><![CDATA[<p><strong>Machine Learning</strong> by Andrew Ng, <em>Coursera</em></p>
-
-<h2 id="linearregressionwithmultiplevariables">Linear Regression with Multiple Variables</h2>
-
-<h3 id="mutiplefeatures">Mutiple Features</h3>
-
-<p>변수가 적을때는 <em>Hypothesis</em> 가 간단하다. 많으면 어떻게 될까? <em>Feature</em> 가 <code>N+1</code> 개라면,</p>
-
-<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_2.png?w=300&amp;h=19'  align="center" />  </p>
-
-<p align="center"><a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com</a></p>
-
-<p>편의상 <code>x_0 = 1</code> 이라 두면, <em>Hypothesis</em> 는 <em>Zero-based index</em> 인 <code>n+1</code> 벡터 <code>h</code> 와 <code>x</code> 의 곱이다. 따라서 <code>h(x) = h_t * x</code> 로 표기할 수 있다. 이걸 <strong>Mutivariate linear regression</strong> 이라 부른다.</p>
-
-<h3 id="gradientdescentformultiplevariables">Gradient Descent for Multiple Variables</h3>
-
-<p><em>Cost function</em> 은 다음과 같다. 변수의 subscript 는 <code>j</code> 번째 <em>Feature</em> 를, superscript 는 <code>i</code> 번째 데이터임을 말한다.</p>
-
-<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_6.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a>)</p>  
-
-<p><br/></p>
-
-<p>다음은 <em>Gradient Descent</em> 알고리즘을 구하는 정의다.</p>
-
-<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_7.png?w=300&amp;h=104'  align="center" />  </p>
-
-<p align="center">(<a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a>)</p>  
-
-<p><br/></p>
-
-<p>따라서</p>
-
-<p><img src='http://bt22dr.files.wordpress.com/2013/05/04_8.png?w=630&amp;h=354'  align="center" />  </p>
-
-<p align="center">(<a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a>)</p>
-
-<h3 id="featurescaling">Feature Scaling</h3>
-
-<p><em>Feature</em> 간 데이터 크기가 많이 차이가 나면, <em>Gradient Descent</em> 에서 등고선 간 간격이 좁으므로, <em>Global optima</em> 를 찾는데 오래걸릴 수 있다. 따라서 <em>Feature</em> 값을 <code>m</code> 으로 나누거나  -1 과 1 사이로 <em>scaliing</em> 할 수 있다. 거꾸로 말하면, <em>Feature scaling</em> 을 이용하면 <em>Gradient descent</em> 가 결과값을 더 빠르게 찾는다.</p>
-
-<p><img src='http://i.stack.imgur.com/4RBjR.png'  align="center" /></p>
-
-<p>또한 <strong>Mean normalization</strong> 을 이용할 수 있는데, 모든 <em>feature</em> 에서 평균을 빼서, 평균을 0 으로 만드는 방법이다.</p>
-
-<p>더 일반적인 방법은 <em>mean normalization</em> 을 하고, 거기에 <code>max-min</code> 또는 <em>standard deviation</em> 으로 나누는 방법이다.</p>
-
-<h3 id="learningrate">Learning Rate</h3>
-
-<p>디버깅 팁 중 하나는, 우리가 작성한 <em>Gradient descent</em> 알고리즘이 매 <em>interation</em> 마다 줄어들어야 한다는 것이다.</p>
-
-<p><img src='http://d37rcl8t6g8sj5.cloudfront.net/wp-content/uploads/gradient_descent_error_by_iteration.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://spin.atomicobject.com/' >http://spin.atomicobject.com</a>)</p>
-
-<p>그리고, 어느 지점에선가 <em>converged</em> 되는지 검사하기 위해 <em>automatic convergence test</em> 를 사용할 수 있다. 예를 들어 한 이터레이션에서, 10^-3 보다 적게 줄어드는지 검사한다거나.</p>
-
-<p>만약에 <em>gradient descent</em> 값이 증가하면, 더 작은 <em>learning rate</em> 를 사용해라. 그렇다고 너무 작은 값을 사용하면 <em>gradient descent</em> 가 느리게 수렴할 수 있다. <em>learning rate</em> 가 너무 크면, 심지어 수렴하지 않을 수도 있다.</p>
-
-<p>따라서 <em>learning rate</em> 를 <code>0.001</code>, <code>0.003</code>, <code>0.01</code>, <code>0.03</code>, <code>0.1</code>, <code>0.3</code>, <code>1</code> 처럼 작은 것부터 선택하되, 천천히 늘려가는 것이 좋다.</p>
-
-<h3 id="polynomialregression">Polynomial Regression</h3>
-
-<p>집값을 예측하기 위해 두개의 <em>feature</em>, <code>frontage</code> 와 <code>depth</code> 가 있다고 하자. 두 값을 곱해 <code>area</code> 라는 새로운 <em>feature</em> 를 만들면, <em>Hypothesis</em> 가 간단해진다. 따라서 기존의 <em>feature</em> 를 이용 할 수 있는지도 잘 알아보는 게 좋다.</p>
-
-<p>자 이제, 집 값(Housing prices) 을 예측하기 위해 <em>Size(Area)</em> 라는 <em>feature</em> 를 이용한다 하자. <em>training set</em> 이 다음과 같을때, </p>
-
-<p><img src='http://www.holehouse.org/mlclass/01_02_Introduction_regression_analysis_and_gr_files/Image.png'  align="center" />  </p>
-
-<p align="center"><a href='http://www.holehouse.org/mlclass' >http://www.holehouse.org/mlclass</a></p>  
-
-<p><br/></p>
-
-<p><em>hypothesis</em> 를 <em>quadratic</em> 로 세우면 어느 지점부터는 예측된 값이 감소하므로 <em>traning set</em> 과 일치하지 않는다. 따라서 <em>cubic</em> 다항식을 이용해 볼 수 있겠는데, <em>feature</em> 가 <code>size</code> 하나 뿐이므로, <em>hypothesis</em> 는 <code>size</code> 를 이용한 삼차식이 되겠다.</p>
-
-<p><img src='http://www.holehouse.org/mlclass/04_Linear_Regression_with_multiple_variables_files/Image%20' [10].png" align="center" />  </p>
-
-<p align="center"><a href='http://www.holehouse.org/mlclass' >http://www.holehouse.org/mlclass</a></p>
-
-<p>이 경우 <code>size</code> 하나로 3개의 <em>feature</em> 를 만들었으니, <em>scaling</em> 이 문제가 될 수 있다.</p>
-
-<p>이 전에 앞서서 <em>feature</em> 가 두개인 <em>hypothesis</em> (quadratic) 은 말이 안된다고 했는데, 두개지만 <em>square</em> 모델을 사용하면 우리가 가진 <em>training set</em> 과 얼추 맞아 떨어지는 모델을 찾을 수 있다. 그림이 없어서 대충 식을 첨부하면,</p>
-
-<p><code>h(x) = y0 + y1(size) + y2 * square(size)</code></p>
-
-<p>여기서 <code>y</code> 는 강의에서 말하는 <code>0(theta)</code> 라 보면 된다.</p>
-
-<h3 id="nomalequation">Nomal Equation</h3>
-
-<p><em>gradient descent</em> 는 반복하면서 특정 값에 수렴해 가는 알고리즘 이었지만 <strong>normal equation</strong> 은 그냥 <code>J(0)</code> 식을 풀어버려 값을 찾아낸다.</p>
-
-<p>예를 들어서 <code>J(0)</code> 가 <code>0(theta)</code> 에 대해  <em>quadratic</em> 이면, <code>0</code> 에 대해 미분해서 최저점을 찾아내면 된다. 문제는, <code>0</code> 가 여러개 일때, 모든 <code>0_j</code> 에 대해 <em>cost function</em> 을 풀어야 한다는 것이다. <em>partial derivative</em> 를 이용해서 해를 찾으면 된다.</p>
-
-<p><img src='http://www.longhaiqiang.com/wp-content/uploads/2013/08/Snip20130817_44.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>)</p>  
-
-<p><br/></p>
-
-<p>행렬을 이용할 수도 있다. 자세한 건 강의 내용을 보자, <em>design matrix</em> 라고 부르는 <code>X</code> 를 만들어서 아래의 식을 구하면 된다. 사실 <code>X</code> 는 그냥 <em>feature</em> 들을 있는 그대로 행렬로 만들면 된다. 맨 앞에 <code>x0</code> 만 추가해서. </p>
-
-<p><img src='http://www.longhaiqiang.com/wp-content/uploads/2013/08/Snip20130817_41.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>)</p>
-
-<p>참고로, 저 식을 <em>Octave</em> 에서는 다음과 같이 계산한다.</p>
-
-<pre><code class="octave">pinv(X`*X)*X`*y  
-</code></pre>
-
-<p><br/></p>
-
-<p><em>normal equation</em> 을 이용할때는 <em>feature scaling</em> 을 하지 않아도 괜찮다. <em>gradient descent</em> 와 비교해 보자면,</p>
-
-<blockquote>
-  <p><strong>Gradient Descent:</strong> <br/>
-  (1) <em>learning rate</em> 를 골라야 한다. 
-  (2) <em>feature scaling</em> 을 해야할 필요가 있다. <br />
-  (3) <em>interation</em> 을 해야하므로 알고리즘이 제대로 돌아가는지 체크해야할 필요가 있다. <br />
-  (4) 대신 <code>n</code> 이 커도 잘 돌아간다.</p>
-  
-  <p><strong>Normal Equation:</strong> <br/>
-  (1) <em>learning rate</em> 를 고를 필요가 없다. <br />
-  (2) <em>feature scaling</em> 을 해야할 필요가 없다. <br />
-  (3) <em>interation</em> 을 하지 않는다. <br />
-  (4) <code>n</code> 이 커질경우 굉장히 느려지고 <code>(X^TX)^-1)</code> 을 계산해야 한다.</p>
-</blockquote>
-
-<p>따라서 <code>n</code> 이 너무 크지 않으면, 100~1000 정도까지는, <em>normal equation</em> 을 쓰는편이 낫다.</p>
-
-<h3 id="nomalequationnoninvertibility">Nomal Equation Noninvertibility</h3>
-
-<p>만약에, 우리가 가진 <code>X</code> 가 <em>non-invertible</em> 하다면 어떻게 될까? <em>invertible matrix</em> 란, 아래를 만족시키는 <code>B</code> 가 존재하는 행렬이다. <code>I</code> 는 <em>identity matrix</em> 다.</p>
-
-<p><img src='http://upload.wikimedia.org/math/7/3/3/7334597613ae1773c19e1ed1289349db.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Invertible_matrix' >http://en.wikipedia.org/wiki/Invertible_matrix</a>)</p>
-
-<p>만약 저런 <code>B</code> 가 존재하지 않아 <em>non-invertible</em> 한 행렬을 <strong>sigular matrix</strong>, <strong>degenerate matrix</strong> 라 부른다.</p>
-
-<p>우리가 계산해야 할 행렬이 <em>non-invertible</em> 이라면, 두 가지 경우가 있을 수 있는데, </p>
-
-<p>(1) Redundant features(linearly dependent) e.g <code>x1 = (3.28) * x2</code> <br />
-(2) too many features e.g <code>m &lt;= n</code></p>
-
-<p>이럴 때는 몇몇 <em>feature</em> 를 삭제하고, <em>regulaization</em> 을 하면 된다. </p>
-
-<h3 id="costfunctionoctave">Cost Function: Octave</h3>
-
-<p><em>cost function</em> 을 구현 해 보면</p>
-
-<pre><code class="matlab">function J = costFunctionJ(X, y, theta)
-
-m = size(X, 1) % number of training examples  
-predictions= X * theta; % predictions of hypothesis on all m examples  
-sqrErros = (predictions-y).^2;
-
-J = 1 / (2*m) * sum(sqrErros);  
-</code></pre>
-
-<p><em>R</em> 이나 이런것들은 행렬연산이 참 쉬운것 같다.</p>
-
-<h3 id="vectorization">Vectorization</h3>
-
-<p><em>Vectorization</em> 을 이용하면, <code>for loop</code> 을 제거할 수 있는데, 예를 들어</p>
-
-<p><img src='http://i.ytimg.com/vi/jRr2XuZOWB8/hqdefault.jpg'  align="center" /></p>
-
-<p>이건 행렬 곱셈이 한번에 이루어진다는 것을 이용한 방법이다. 따라서 <em>gradient descent</em> 알고리즘에서 <code>theta</code> 를 <code>for-loop</code> 으로 구하는 것이 아니라, <em>vectorization</em> 을 이용하면 한번에 계산할 수 있다.</p>
-
-<p>이게 그림을 구하기가 어려운데, 아래첨자(sub-script) 를 이렇게 기술한다고 하자. <code>x_0</code> 그럼, <em>grandient descent</em> 알고리즘 식에서 <em>learning rate</em> 뒷부분이 <em>vector</em> 가 되는데 그 이유는 <code>theta</code> 와 마찬가지로 <code>j</code> 에 대한 나열이기 때문이다.</p>
-
-<p><img src='http://2.bp.blogspot.com/-ZxJ87cWjPJ8/TtLtwqv0hCI/AAAAAAAAAV0/9FYqcxJ6dNY/s1600/gradient+descent+algorithm+OLS.png'  align="center" /></p>
-
-<p>구글에 검색하니까 1번으로 뜨는게 <em>vectorization(parallel computing)</em> 이더라. 병렬 연산에 많이 사용되나보다.</p>
-
-<h3 id="refenrences">Refenrences</h3>
-
-<p>(1) <a href='http://stats.stackexchange.com/questions/111467/is-it-necessary-to-scale-the-target-value-in-addition-to-scaling-features-for-re' >StackExchange</a> <br />
-(2) <a href='http://bt22dr.wordpress.com/' >http://bt22dr.wordpress.com/</a> <br />
-(3) <a href='http://spin.atomicobject.com/2014/06/24/gradient-descent-linear-regression/' >http://spin.atomicobject.com</a> <br />
-(4) <a href='http://www.holehouse.org/mlclass/01_02_Introduction_regression_analysis_and_gr.html' >http://www.holehouse.org/mlclass/</a> <br />
-(5) <a href='http://www.longhaiqiang.com/' >http://www.longhaiqiang.com/</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-2/</link><guid isPermaLink="false">78e8635f-a298-477a-8823-0c2738c21251</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[gradient descent]]></category><category><![CDATA[normal equation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 08 Oct 2014 10:50:00 GMT</pubDate></item></channel></rss>
+<p>2014-10-14, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-5/</link><guid isPermaLink="false">a94afb0b-63a0-4cd9-8a0e-2224ff29fea2</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 14 Oct 2014 10:48:03 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Foundations of Data Analysis, Week1</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Foundations of Data Analysis, Week1">
+  <meta name="twitter:description" content="edx 수업. R 을 이용해 실제 데이터에 학습한 통계 이론들을 적용하는 수업이다. edx 에서 제공하는 discussion board 대신에 piazza board? 이런것도 쓰고, lab 전에 비슷한 질문을 하는 pre-lab 도 있고.. 구성이 친절하다. 여러모로 신경을 많이 쓴듯  Classifying Variables population (모집단) 의 각각을 unit, subject 라 부른다. Galapagos Tortoises  예제에서 unit">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/foundations-of-data-analysis-week1/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/foundations-of-data-analysis-week1/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=f3c40159ad"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-edx tag-statistics tag-r">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/edx">edx</a>, <a href="../tag/statistics">statistics</a>, <a href="../tag/r">R</a></h5>
+      <h1 class="margin_bottom_medium">Foundations of Data Analysis, Week1</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-12">Wednesday, November 12, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/foundations-of-data-analysis-week1/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><em>edx</em> 수업. R 을 이용해 실제 데이터에 학습한 통계 이론들을 적용하는 수업이다. <em>edx</em> 에서 제공하는 <em>discussion board</em> 대신에 <em>piazza board?</em> 이런것도 쓰고, <em>lab</em> 전에 비슷한 질문을 하는 <em>pre-lab</em> 도 있고.. 구성이 친절하다. 여러모로 신경을 많이 쓴듯 </p>
+
+<h3 id="classifyingvariables">Classifying Variables</h3>
+
+<p><em>population (모집단)</em> 의 각각을 <em>unit</em>, <em>subject</em> 라 부른다. <em>Galapagos Tortoises</em> 
+예제에서 <em>unit</em> 은 각각의 거북이들이다.</p>
+
+<p>연구자들이 갈라파고스 거북이들로부터 몇 가지 특징들을 뽑아내 도표로 만들었는데, 이런 특징들을 <em>varaible</em> 이라 부른다.</p>
+
+<p><em>variable</em> 은 종류에 따라서 <em>categorical</em>, <em>numerical</em> 로 구분한다. 다른말로는 <em>qualitative (= categorical)</em>, <em>quantitative (= numerical)</em> 이라 부르기도 한다.</p>
+
+<p>날씨나 등 껍질 종류 같은 경우는 <em>qualitative variable</em> 이고 <em>number of individuals repatriated</em> 는 <em>quantitative variable</em> 이다. 저 속성이 뭔 소린가 했는데, 갈라파고스 거북이들은 섬의 중앙에서 보호를 받고 자라다가 나중에 야생으로 돌아간다고.. 그 숫자를 의미하는것이 <em>number of indiviaudls repatriated</em> 다.</p>
+
+<p><em>complete counting</em> 혹은 <em>census (인구조사)</em> 같은 경우는 대부분의 경우 힘들기 때문에 <em>population</em> 에서 일부를 떼어낸 <em>sample</em> 을 이용하게 된다.</p>
+
+<blockquote>
+  <p>It is common to use a smaller, representative group from the population, called a <em>sample</em></p>
+</blockquote>
+
+<h3 id="errors">Errors</h3>
+
+<p><em>sample</em> 이 <em>population</em> 을 대표하지 못할 수도 있기 때문에, 완벽히 <em>parameter (모수)</em> 를 추정하는 것은 어렵다. 그래서 통계학자들은 <em>point estimate</em> 나 <em>interval estimiate</em> 를 사용한다. 예를 들면</p>
+
+<blockquote>
+  <p><em>"I am 95% confident that the true number of tortoises is actually between 561 and 1075."</em></p>
+</blockquote>
+
+<p><em>true paramter</em> 와 샘플로부터 얻어진 <em>statistic</em> 간 차이는 <em>sampling error</em> 라 부른다.</p>
+
+<p>갈라파고스 거북이를 조사 할 때 밀집 지역에서만 거북이를 골라낸다고 하자. 그리고 그 샘플을 전체 지역에 대한 통계값을 얻을 때 사용하면 너무 높은 값이 나올 수 있다. 이런 종류의 오류를 <em>bias</em> 라 부른다. 다행히도 통계학자들이 <em>bias</em> 를 피할 수 있는 다양한 도구들을 준비 해 놓았으니 배우기만 하면 된다.</p>
+
+<h3 id="levelsofmeasurement">Levels of Measurement</h3>
+
+<p>아까는 <em>variable</em> 을 간단히 두 종류로 나누어 봤지만 더 자세하게 나눌 수 있다. </p>
+
+<blockquote>
+  <p>A <strong>nominal measurement</strong> is one in which the values of the variable are names. The names of the different species of Galapagos tortoises are an example of a nominal measurement</p>
+  
+  <p>An <strong>ordinal measurement</strong> involves collecting information of which the order is somehow significant. The name of this level is derived from the use of ordinal numbers for ranking. If we measured the different species of tortoise from the largest population to the smallest, this would be an example of ordinal measurement.</p>
+  
+  <p>With <strong>interval measurement</strong>, the distance between any two values has a specific meaning. An example commonly cited for interval measurement is temperature. A change of 1 degree is the same if the temperature goes from <code>0C</code> to <code>1C</code> as it is when the temperature goes from <code>40C</code> to <code>41C</code>. In addition, there is meaning to the values between the ordinal numbers. That is, a half of a degree has meaning.</p>
+  
+  <p>A <strong>Ratio measurement</strong> is the estimation of the ratio between a magnitude of a continuous quantity and a unit magnitude of the same kind. A variable measured at this level not only includes the concepts of order and interval, but also adds the idea of <code>nothingness</code>, or absolute zero. With the temperature scale of the previous example, <code>0C</code> is really an arbitrarily chosen number and does not represent the absence of tempertature. As a result, the ratio between temperature is relative, and <code>40C</code>, for example, is not twice as hot as <code>20C</code>.</p>
+</blockquote>
+
+<p>간단히 정리하자면 <em>nominal measurement</em> 는 이름으로 분류를 할 수 있는 경우다. </p>
+
+<p><em>ordinal measurement</em> 는 각 <em>unit</em> 간 순위, 순서를 매긴 것이다. 이 경우 값 자체가 1, 2, 3 같은 순서기 때문에 <em>unit</em> 간 차이는 아무런 의미도 없다.</p>
+
+<p><em>interval measurement</em> 는 두 값간 <em>distance (차이)</em> 가 의미를 가지는 경우다. 온도를 잘 보면 40도와 39도의 차이 1은, 1도와 0도의 차이 와 같다. 그리고 <em>interval measurement</em> 에서는 각 <em>unit</em> 사이의 값들도 의미가 있다. (ex. 0.5도)</p>
+
+<p>마지막으로 <em>ratio measurement</em> 는 <em>nothingness</em> 혹은 <em>absolute zero</em> 가 존재하는 값이다. 켈빈 온도의 경우 20K 는 40K 의 1/2 이다. 반면 섭씨 온도의 경우 20C 가 40C 보다 1/2 덥다고 말할 수가 없다. </p>
+
+<p>이렇게 <em>nominal, ordinal, interval, ratio</em> 로 구분하는 방법을 <em>Stevens' Theory</em> 라 부른다. 단순히 <em>numerical, categorical</em> 로 구분하는 것 보다 좀 더 자세히 분류할 수 있다.</p>
+
+<p>몇 가지 예제를 좀 더 살펴보자면</p>
+
+<p>(1) 학생들의 <em>gender, race, political opinions</em> 등은 모두 <em>nominal measurement</em> 다. <br />
+(2) 학생들의 학년(7, 8, 9) 를 수집한다면 <em>ordinal measurement</em> 다. <br />
+(3) SAT 수학 점수를 모은다면, 그건 <em>interval measurement</em> 다. (아마 상대평가인가 봄) <br />
+(4) 나이, 키, 몸무게, 점수(0-100) 등을 수집한다면 <em>ratio measurement</em> 다.</p>
+
+<p><em>nominal</em> 에서 <em>ratio</em> 로 갈수록 값들이 점점 복잡해진다. </p>
+
+<p><img src="https://dr282zn36sxxg.cloudfront.net/datastreams/f-d%3A92ba1471fd7e4ab92e330423cc7653fc15f9e1808cbbd03f8cdad61a%2BIMAGE%2BIMAGE.1" alt="" /></p>
+
+<p align="center">(<a href='http://www.ck12.org/statistics'>http://www.ck12.org/statistics</a></p>
+
+<p>이렇게 데이터를 구분하는 이유는, 각각 에 쓸 수 있는 <em>Tool</em> 이 다르기 때문이다. 어떤 툴은 <em>categorical variable</em> 에 유용할 수도 있고, 그렇지 않은 툴도 있기 마련이다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>UT.7.01x Foundations of Data Analysis</em> <br />
+(2) <a href="http://www.ck12.org/statistics/Levels-of-Measurement/lesson/Levels-of-Measurement/">http://www.ck12.org/statistics</a></p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '56';
+  var disqus_url = 'http://1ambda.github.io/foundations-of-data-analysis-week1/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
