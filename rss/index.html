@@ -1,5 +1,372 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 14 Nov 2014 11:12:46 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 6]]></title><description><![CDATA[<p>지난시간엔 <em>back propagation</em> 구현해 보고 여기에 적용할 수 있는 소소한 것들 <em>random initialization</em> 과 <em>gradient checking</em> 등도 알아 보았다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 15 Nov 2014 11:12:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graph Search and Connectivity￼]]></title><description><![CDATA[<p>기본적인 그래프 탐색 방법 <em>DFS</em>, <em>BFS</em> 에 대해 배우고 약간씩 응용하여 <em>shortest path</em>, <em>conncected components</em>, <em>topological order</em>, <em>strongly connected components</em> 등을 찾는 방법을 배운다. </p>
+
+<p>마지막 부분에선 웹이 어떻게 생겼을까 잠깐 고민해 본다.</p>
+
+<h3 id="graphsearch">Graph Search</h3>
+
+<p>그래프 탐색은 다양하게 활용할 수 있다.</p>
+
+<p>(1) check if a network is connected <br />
+(2) driving directoin (shortest path) <br />
+(3) formulate a plan (e.g how to fill in a sudoku puzzle) <br />
+(4) compute the <em>"pieces"</em> of a graph (e.g clustering)</p>
+
+<p>그래프를 탐색하는데는 <em>"재 방문하지 않는다"</em> 등 여러 조건이 붙으면서 다양한 방법이 있을 수 있겠지만 여기서는 단순히 모든 <em>vertex</em> 를 방문하는 일반적인 그래프 탐색 알고리즘 (<em>generic algorithm</em>) 에 대해 먼저 이야기 해 보자.</p>
+
+<p>이렇게 먼저 일반적인 알고리즘을 정의해 보는 이유는, <em>BFS</em> 와 <em>DFS</em> 를 증명할때 먼저 정의한 일반적인 알고리즘의 특수한 경우임을 파악하여 이미 증명된 결과를 활용할 수 있기 때문이다.</p>
+
+<blockquote>
+  <p>Goals: <strong>find everything findable from a given start vertex</strong>, <code>O(m + n)</code></p>
+</blockquote>
+
+<p>여기서 <em>findable</em> 이란 말은 두 점 <code>(s, e)</code> 사이에 <em>path (경로)</em> 가 있냐는 질문과 동일하다. 경로가 없으면 <em>findable</em> 이 아니다.</p>
+
+<p>목표로 하는 복잡도가 <code>O(m + n)</code> 인데, 이것은 정점의 수 <code>n</code> 이나 엣지수 <code>m</code> 중 더 큰 수를 따라간다고 이해하면 된다. 알고리즘은 이렇다.</p>
+
+<pre><code>initially `s` explored, all other vertices are unexplored  
+while possible:  
+  choose an edge `(u, v)` with `u` explored and `v` unexplored  
+  mark `v` explored  
+</code></pre>
+
+<p><em>generic graph search algorithm</em> 이 끝났을때 <code>v</code> 가 <em>explored</em> 라면 그래프 <code>G</code> 가 <code>s -&gt; v</code> 인 <em>path</em> 가 존재한다. 이를 귀납법으로 증명해 보자.</p>
+
+<p>귀납법이므로 먼저 증명하려는 바를 부정하여 알고리즘이 종료 되었을 때 <code>G</code> 에서 <code>(s -&gt; v)</code> 로 가는 경로가 없다고 하자. </p>
+
+<p>알고리즘 초기 단계에서 <code>s</code> 만 <em>explored</em> 고 나머지는 <em>unexplored</em> 다. 매 탐색마다 <code>(u, w)</code> 를 찾아내며 <em>unexplored</em> <code>w</code> 를 <em>explored</em> 로 마킹한다. </p>
+
+<p><code>(s, v)</code> 사이 경로가 없다면, 어떤 <code>w</code> 가 <em>unexplored</em> 인 <code>(u, w)</code> 가 알고리즘이 끝났을때 존재해야 한다. <code>w</code> 가 <code>v</code> 일수도, <code>u</code> 가 <code>s</code> 일수도 있다.</p>
+
+<p>그러나 이 경우 <em>unexplored</em> <code>w</code> 가 존재하면 알고리즘이 절대 종료될 수 없다. 결국 모순이므로 <code>s -&gt; v</code> <em>path</em> 가 없다는 것이 잘못되었다.</p>
+
+<h3 id="bfsvsdfs">BFS vs DFS</h3>
+
+<p>사실 그래프 탐색 문제는 <em>crossing edge</em> 문제와 같다. 한쪽을 <em>explored</em>, 다른쪽을 <em>unexplored</em> 라 놓고 각 <em>vertex</em> 들을 잇는 <em>crossing edge</em> 를 고르는 문제다.</p>
+
+<p><em>BFS</em> 는 기본적으로 <em>queue</em> 를 사용하면 <code>O(m + n)</code> 이다. 그리고</p>
+
+<p>(1) explore nodes in <em>"layers"</em> <br />
+(2) can compute <em>"shortest path"</em> <br />
+(3) can compute connected components of an undirected graph  </p>
+
+<p><em>DFS</em> 는 <em>stack</em> 을 이용하면 <code>O(m + n)</code> 이다. 그리고</p>
+
+<p>(1) explore aggressively like a maze, backtrack only when necessary <br />
+(2) compute topological ordering of directed acyclic graph <br />
+(3) compute connected components in directed graphs</p>
+
+<h3 id="breadthfirstsearch">Breadth-First Search</h3>
+
+<p><em>BFS</em> 는 <em>shortest path</em> 를 계산할 수 있고 <em>undirected graph</em> 의 <em>connected components</em> 를 구할 수 있다. 그리고 복잡도는 <code>O(m + n)</code> 이다.</p>
+
+<p>함수를 <code>BFS(graph G, start-vertex s)</code> 라 하면 시작단계에서는 모든 그래프 노드가 <em>unexplored</em> 다.</p>
+
+<p>(1) mark <code>s</code> as explored <br />
+(2) Let <code>Q</code> - queue data structure <strong>(FIFO)</strong>, initialied with <code>s</code> <br />
+(3) while <code>Q</code> is not empty: <br />
+- remove the first node of <code>Q</code>, call it <code>v</code> <br />
+- for each edge <code>(v, w)</code>, if <code>w</code> unexplored mark <code>w</code> as explored and add <code>w</code> to Q</p>
+
+<p>시작 점 <code>s</code> 를 <em>layer 0</em> 이라 부르면 <em>layer 1</em> 은 <em>layer 0</em> 에서 갈 수 있는 지점이다. 모두 저장하고, 큐에서 하나 꺼내 <em>layer 2</em> 를 계산해서 다시 집어넣고, 이 과정을 반복한다. 알고리즘 중에 이미 방문했는지를 검사하기 때문에 같은 노드를 두번 이상 방문하지 않는다.</p>
+
+<p>알고리즘이 종료되었을때 <code>v</code> 가 <em>explored</em> 라면 <code>s -&gt; v</code> 인 <em>path</em> 가 존재한다. 증명은 간단한데 <em>BFS</em> 가 <em>generic search algorithm</em> 의 <em>spcial case</em> 이기 때문이다. </p>
+
+<p><em>BFS</em> 알고리즘을 잘 보면 <em>generic algorithm</em> 처럼 <code>(u, w)</code>, <code>w</code> 는 <em>unexplored</em> 인 <em>edge</em> 를 찾는데, 이 때 <em>BFS</em> 는 한 레이어에서 다음 레이어로 갈 수 있는 <em>edge</em> 만 찾는다는 점이 다르다.</p>
+
+<p><em>running time</em> 은 <code>O(n_s + m_s)</code> 다. 여기서 <code>n_s</code> 는 <code>s</code> 에서 갈 수 있는 <em>node</em> 의 숫자고 <code>m_s</code> 는 <code>s</code> 에서 갈 수 있는 <em>edge</em> 수다.</p>
+
+<p><code>while</code> 루프 알고리즘을 다시 보면</p>
+
+<pre><code>while `Q` is not empty:  
+  remove the first node of `Q`, call it `v`  
+  for each edge `(v, w)`:
+    if `w` is unexplored:
+      mark `w` as explored
+      add `w` to Q
+</code></pre>
+
+<p>한 <em>vertex</em> 는 아무리 많아봐야 큐에 한번 들어가고,  이 때마다 이 <em>vertex</em> 에서 갈 수 있는 <em>edge</em> 를 검사하지만, 결국 아무리 많아봐야 한 <em>edge</em> 당 두번씩만 검사되고, 검사하는 <code>for</code> 구문은 <code>O(1)</code> 이기 때문에 <code>O(m + n)</code> 이다.</p>
+
+<h3 id="shortestpath">Shortest Path</h3>
+
+<p>생각해보면 굉장히 쉽다. <code>s</code> 부터 시작해서 <code>v</code> 까지의 거리를 찾는 경우 <code>s = v</code> 면 각 노드의 <code>dist</code> 값을 <code>0</code> 으로, 아니면 무한히 큰 값으로 한다. </p>
+
+<p><em>BFS</em> 에서 레이어마다 하나씩 넘어갈때 마다 <code>dist</code> 값을 1씩 증가시키는데, 이때 이미 <code>dist</code> 값이 있는 경우 그 값보다 적으면 새로운 <code>dist</code> 값을 기록하고, 아니면 기록하지 않는다.</p>
+
+<p>따라서 알고리즘이 종료되었을때 <code>dist(v) = i</code> 라면 <code>v</code> 는 <code>i</code> 번째 레이어에 있다. 바꿔말하면 <em>shortest path <code>(s, v)</code></em> 는 <code>i</code> 개의 <em>edge</em> 를 가지고 있다는 뜻이다.</p>
+
+<h3 id="undirectedconnectivity">Undirected Connectivity</h3>
+
+<p><em>undirected connectivity</em> 는 그래프에서 서로 연결된 부분 집합을 찾는 문제다. 용어부터 정의하고 가자면</p>
+
+<blockquote>
+  <p>equivalence classes of the relation <code>u ~ v</code> &lt;=> <code>E(u, v)</code> path in <code>G</code></p>
+</blockquote>
+
+<p><em>equivalence class</em> 는 처음봤는데 위키에 보니 다음의 3 가지 속성을 만족한다고 한다.</p>
+
+<blockquote>
+  <p>For every element <code>a</code> in X, <code>a ~ a</code> <strong>(reflexivity)</strong> <br />
+  For every two elements <code>a</code> and <code>b</code> in X, if <code>a ~ b</code>, then <code>b ~ a</code> <strong>(symmetry)</strong> <br />
+  For every three elements <code>a</code>, <code>b</code>, and <code>c</code> in X, if <code>a ~ b</code> and <code>b ~ c</code>, then <code>a ~ c</code> <strong>(transitivity)</strong></p>
+</blockquote>
+
+<p><em>connected component</em> 를 어디다 쓸 수 있을까? </p>
+
+<p>네트워크에 대해 적용해 보면, 네트워크가 끊어졌는지를 <em>connected component</em> 를 구해서 두개 이상이 나오는지로 판단할 수 있다.</p>
+
+<p><em>clustering</em> 에도 쓸 수 있다. 만약 두 유전자나, 웹페이지가 비슷한지를 비교해서 <em>connected component</em> 로 만들면 구별되는 특징을 가진 집단을 만들 수 있다.</p>
+
+<p><em>clustering</em> 하는 다른 알고리즘이 많음에도 <em>BFS</em> 는 <em>linear time</em> 이기 때문에 <em>clustering</em> 에 충분히 쓸만하다.</p>
+
+<p><em>undirected</em> 그래프에서 <em>BFS</em> 를 이용하면 <em>conncected component</em> 를 구하는 알고리즘은 이렇다.</p>
+
+<pre><code>all node unexplored // assume labelled 1 to n
+
+for i = 1 to n  
+  if i not yet explored
+    BFS(G, i)
+</code></pre>
+
+<p>따라서 <code>BFS</code> 를 수행할 때 마다 <em>connected component</em> 가 하나씩 나온다고 말할 수 있다. </p>
+
+<p>성능은 마찬가지로 <code>O(m + n)</code> 이다. 왜냐하면 부의 <code>if</code> 나 <code>for</code> 그리고 모든 노드를 <em>unexplored</em> 로 초기화 하는 부분도 <code>O(n)</code> 이고, 각 노드 하나씩에 대해서 방문하지 않았을 때만 <em>BFS</em> 를 수행하는데 <em>BFS</em> 는 <em>edge</em> 에 대해서는 <code>O(1)</code> 이고, 모든 <em>edge</em> 를 검사하므로 <em>BFS</em> 의 전체 성능은 <code>O(m)</code> 이다. 따라서 <code>O(m + n)</code></p>
+
+<h3 id="depthfirstsearch">Depth-First Search</h3>
+
+<blockquote>
+  <p>explore aggressively, and backtrack when necessary</p>
+</blockquote>
+
+<p><em>BFS</em> 로도 <code>O(m +n)</code> 시간 내에 탐색하고 <em>shortest path</em>, <em>connected component</em> 를 찾는데 왜 <em>DFS</em> 가 필요할까?</p>
+
+<p>(1) can computes a topological ordering of a directed acyclic graph <br />
+(2) strongly conncected components of directed graphs</p>
+
+<p><em>BFS</em> 는 못하는 이 두 가지 문제를 <code>O(m + n)</code> 으로 해결할 수 있다.</p>
+
+<p>코드는 비슷한데 <em>queue</em> 대신 <em>stack</em> 을 쓰도록 하고, 재귀버전으로 작성해 보자.</p>
+
+<pre><code>DFS(graph G, start-vertex s)
+
+mark s as explored
+
+for every edge (s, v):  
+  if v is unexplored
+    DFS(G, v)
+</code></pre>
+
+<p><em>DFS</em> 가 종료 됐을때 <code>v</code> 가 <em>explored</em> 라면 <code>s -&gt; v</code> 인 <em>path</em> 가 있다. 이는 <em>DFS</em> 가 위에서 본 <em>generic search algorithm</em> 의 특별한 케이스임을 생각하면 쉽게 알 수 있다.     </p>
+
+<p>성능은 <em>BFS</em> 와 같이 <code>O(n_s  m_s)</code> 인데, 각 <em>vertex</em> 는 아무리 많아봐야 한번, <em>edge</em> 는 아무리 많아봐야 두번씩 체크하고 <em>edge</em> 내부에서의 연산은 <code>O(1)</code> 이기 때문이다.</p>
+
+<h3 id="topologicalsort">Topological Sort</h3>
+
+<p>정의부터 보면</p>
+
+<blockquote>
+  <p>A <strong>toplogical ordering</strong> of a <em>directed graph</em> <code>G</code> is a labelling <code>f</code> of <code>G</code>'s nodes such that <br />
+  1. the <code>f(v)</code>'s are the set <code>{1, 2, 3, ..., n}</code> <br />
+  2. <code>(u, v)</code> in <code>G</code> => <code>f(u)</code> &lt; <code>f(v)</code></p>
+</blockquote>
+
+<p>이미지로 보면 더 이해하기 쉽다.</p>
+
+<p><img src='http://www.stoimen.com/blog/wp-content/uploads/2012/12/3.-Topological-Sort-Order.png'  alt="" /></p>
+
+<p align="center">(<a href='http://www.stoimen.com/' >http://www.stoimen.com</a>)</p>
+
+<p>왜 <em>topological sort</em> 가 필요할까? <em>precedence constraints</em> 가 있는 <em>sequence</em> 에서 나올 수 있는 모든 경우의 수를 파악하기에 좋다. 예를 들어 선수과목이 있을때 이수 가능한 스케쥴이라던가, 일정이라던가.</p>
+
+<blockquote>
+  <p>Sequence taks while respecting all precedence constraints</p>
+</blockquote>
+
+<p>단, <em>topological sort</em> 를 하기 위한 조건이 하나 있는데 <em>directed cycle</em> 이 없어야 한다. 다시 말해 <em>acyclic</em> 이어야 한다.</p>
+
+<blockquote>
+  <p>If <code>G</code> has directed cycle, then no topological ordering</p>
+</blockquote>
+
+<p><em>directed graph</em> 에서 <em>outgoing edge</em> 가 없는 것을 <em>sink vertex</em> 라 하자. 그러면 <em>directed acyclic graph, DAG</em> 는 최소한 하나의 <em>sink vertex</em> 를 가지고 있다.</p>
+
+<p>증명은 <em>contradiction</em> 을 이용하자. <em>sink vertex</em> 가 없다고 하면, 쭈욱 방문하다 보면 하나의 <em>vertex</em> 를 두번 이상 방문하게 되고, 그건 <em>cyclic</em> 이므로 <em>acyclic</em> 이란 조건에 위배되므로 모순이다. 따라서 <em>DAG</em> 에서는 최소한 하나의 <em>sink vertex</em> 가 있다.</p>
+
+<p><em>topological sort</em> 의 알고리즘은 </p>
+
+<pre><code>let v be a sink vertex of G  
+set f(v) = n  
+recurse on G - {v}  
+</code></pre>
+
+<p><code>G - {v}</code> 도 <em>DAG</em> 이다. 왜냐하면 <em>DAG</em> 에서 <em>sink vertex</em> 를 제거해도 <em>DAG</em> 이기 때문에 매 재귀마다 <code>G</code> 는 <em>DAG</em> 가 된다. 이 때 제거하는 <em>sink vertex</em> 에 전체 노드 수 <code>n</code> 을 매기기 때문에 최종적으로는 <code>1, .., n</code> 을 가진 <em>toplogical order</em> 을 계산할 수 있다.</p>
+
+<p>이제 <em>DFS</em> 를 이용해 <em>toplogical sort (위상 정렬)</em> 을 해보자.</p>
+
+<pre><code>DFS(graph G, start-vertex s)  
+- mark s explored  
+- for every edge (s, v):
+    if v not yet explored:
+      DFS(G, v)
+- set f(s) = current_label // sink vertex
+- current_label--
+
+DFS-Loop(graph G)  
+- mark all nodes unexplored
+- current_label = n // to keep track of ordering
+- for each vertex v in G:
+    if v not yet explored:
+      DFS(G, v)
+</code></pre>
+
+<p><em>running time</em> 은 <code>O(m + n)</code> 이다. <em>node</em> 마다 <code>O(1)</code>, <em>edge</em> 마다 <code>O(1)</code> 이고 <em>node</em> 나 <em>edge</em> 는 두번 방문하지 않기 때문에 (<em>directed graph</em>) <code>O(m + n)</code></p>
+
+<p>위상정렬을 하는지는 <code>(u, v)</code> 가 <em>edge</em> 라면 <code>f(u) &lt; f(v)</code> 임을 보이면 된다.</p>
+
+<p><code>u</code> 먼저 방문되었을 경우에는 <code>v</code> 가 먼저 끝나 <code>n</code> 이 할당되기 때문에 <code>f(u) &lt; f(v)</code> 다.</p>
+
+<p>만약에 <code>v</code> 가 <code>u</code> 보다 먼저 방문되면 <code>u</code> 가 방문되기도 전에 <code>v</code> 에 대한 방문이 끝나므로 <code>f(u) &lt; f(v)</code> 다.</p>
+
+<h3 id="stronglyconnectedcomponents">Strongly Connected Components</h3>
+
+<p>먼저 정의부터 보면 </p>
+
+<blockquote>
+  <p><strong>Strongly conncected components (SCCs)</strong> of a directed graph <code>G</code> are the equivalence classes of the relation. <code>u ~ v</code> means path <code>u -&gt; v</code> and <code>v -&gt; u</code> in G</p>
+</blockquote>
+
+<p><em>directed graph</em> 는 방향성이 있기 때문에 단순히 <em>component</em> 를 구한다고 해서 <em>equivalence classes</em> 가 되지 않는다. 서로 순환이 될 수 있는, cyclic  인 <em>component</em> 를 찾아야 한다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/5/5c/Scc.png'  alt="" /></p>
+
+<p align="center">(<a href='http://commons.wikimedia.org/' >http://commons.wikimedia.org</a>)</p>
+
+<p><em>SCC</em> 는 <em>cycle</em> 이기 때문에 <em>DFS</em> 만 돌려도 나올 <strong>수</strong> 있다. 그런데, 만약 전체로 갈 수 있는 노드에서 <em>DFS</em> 를 돌려버리면 모든 <em>SCC</em> 가 합쳐진 형태가 나온다. 다시 말해서 단순 DFS 를 모든 노드에 대해 돌리는 것으로는 <em>SCC</em> 를 얻을 수도, 못 얻을 수도 있다는 소리다. <em>Kosaraju's Two-Pass Algorithm</em> 으로 해결할 수 있다.</p>
+
+<h3 id="kosarajus2passalgorithm">Kosaraju's 2-pass algorithm</h3>
+
+<p><code>O(m + n)</code> 으로 <em>SCC</em> 를 구하는 것을 보장한다. 어떻게 그럴까? <em>SCC</em> 를 찾을 때 <em>DFS</em> 를 돌릴려면 <strong>특정 노드의 순서</strong>로 <em>DFS</em> 를 돌려야 한다. 그렇지 않으면 <em>SCC</em> 가 나오지 않는다. <em>Kosaraju algorithm</em> 은 이 순서를 찾아준다. </p>
+
+<pre><code>Let G_rev = G with all arcs reversed  
+run DFS-Loop on G_rev // compute "magical ordering"  
+run DFS-Loop on G // discover SCCs  
+</code></pre>
+
+<p>좀 더 자세히 보면 <code>f(v)</code> 를 각 <em>vertex</em> 에 대해 <em>finishing time</em> 이라 보면, 두번째 <code>DFS-Loop</code> 에서 <code>f(v)</code> 의 <em>decreasing order</em> 로 <code>DFS</code> 를 여러번 돌리면 <em>SCC</em> 를 찾아준다. 각 함수의 구현을 보면</p>
+
+<pre><code>DFS-Loop(graph G)
+
+global variable t = 0 // # of nodes processed so far  
+global variable s = NULL // current source vertex
+
+// assume nodes labelled 1 to n
+for i = n to 1 by -1:  
+  if i not yet explored:
+    s := i
+    DFS(G, i)
+</code></pre>
+
+<pre><code>DFS(graph G, node i)
+
+mark i as explored  
+set leader(i) := node s
+
+for each arc (i, j) in G:  
+  if j not yet explored:
+    DFS(G, j)
+
+t++  
+set f(i) := t  
+</code></pre>
+
+<p>첫번째 <code>DFS-Loop</code> 에서는 <em>edge</em> 가 뒤집어져 있다. 함수가 끝나면 각 노드마다 <code>f(t)</code> 를 계산 해 주는데, 이게 사실 <em>SCC</em> 기준으로 보면 같은 <em>SCC</em> 내에서는 외부와의 연결고리가 없는 내부 노드가 가장 낮은 <code>f(t)</code> 를 가지게 된다. </p>
+
+<p>이제 두번째 <code>DFS-Loop</code> 를 돌리기 위해 <em>edge</em> 를 다시 뒤집어서 보면 가장 높은 <code>f(t)</code> 값을 가지는 노드가 가장 먼저 <em>DFS</em> 를 돌려야 할 노드가 된다. 그리고 <em>leader</em> 는 각 <em>SCC</em> 를 얻기 위해 <em>DFS</em> 를 시작해야 할 지점이 된다.</p>
+
+<p><em>running time</em> 은 <code>2 x DFS</code> 기 때문에 <code>O(m + n)</code> 이다. 첫 번째 노드에서 얻은 <em>finisihing time</em> <code>f(t)</code> 를 정렬하면 <code>O(n logn)</code> 이기 때문에 정렬 없이 <em>decreasing</em> 순서로 <em>DFS</em> 를 돌게 해줘야 한다.</p>
+
+<h3 id="analysis">Analysis</h3>
+
+<p>분석에 앞서서 간단한 성질을 먼저 이끌어 내자. 그래프를 변형해 <em>node</em> 각각을 <em>SCC</em> 로 만든 <em>meta-graph</em> 를 생각 해 보자. 이 <em>meta graph</em> 는 <em>DAG</em> 다. 왜냐하면 모든 <em>cycle</em> 있는 그래프는 <em>SCC</em> 로 포함되었기 때문이다.</p>
+
+<p>따라서 <code>G</code> 나, 여기서 <em>edge, arc</em> 를 뒤집은 <code>G_rev</code> 나 같은 <em>SCC</em> 를 가지고 있다.</p>
+
+<p>이 때 <code>G</code> 에서 서로 인접한 <em>SCC</em> <code>C1 -&gt; C2</code> 에 대해서 <em>edge</em> <code>(i, j)</code> 가 있다고 해 보자. (<code>i -&gt; j</code>)</p>
+
+<p>그러면 <code>G_rev</code> 로 계산한 <code>max f(C1) &lt; max f(C2)</code> 임을 알 수 있다. 다시 말해 <code>C2</code> 가 먼저 <em>DFS</em> 를 돌려야 하는 <em>SCC</em> 인데, 먼저 돌려야 할 수록 더 높은 <em>finishing time</em> <code>f(t)</code> 를 가진다. </p>
+
+<p>이건 쉽게 보일 수 있는데, <code>G_rev</code> 에서는 <em>arc</em> 가 반대 방향이 되므로 더 큰 <em>SCC</em> <code>C1</code> 이, 다시 말해 더 나중에 계산해야 할 <em>SCC</em> 가 더 작은 <em>SCC</em> 가 되므로 먼저 계산이 끝나 더 작은 <code>max f(t)</code> 를 가지게 된다. </p>
+
+<p>증명은 <code>C1 union C2</code> 의 첫번째 노드가 <code>C1</code> 에 있을 때 <code>C2</code> 에 있을때로 각각 나눠서 참임을 보이면 쉽다.</p>
+
+<p>알고리즘을 다시 보면</p>
+
+<pre><code>DFS-Loop(graph G)
+
+global variable t = 0 // # of nodes processed so far  
+global variable s = NULL // current source vertex
+
+// assume nodes labelled 1 to n
+for i = n to 1 by -1:  
+  if i not yet explored:
+    s := i
+    DFS(G, i)
+</code></pre>
+
+<pre><code>DFS(graph G, node i)
+
+mark i as explored  
+set leader(i) := node s
+
+for each arc (i, j) in G:  
+  if j not yet explored:
+    DFS(G, j)
+
+t++  
+set f(i) := t  
+</code></pre>
+
+<p><code>DFS</code> 를 한번 돌릴 때 마다 <em>SCC</em> 가 하나씩 발견된다. 우선 <em>sink SCC</em> 가 가장 높은 <code>f(t)</code> 값을 가지게 되므로 가장 먼저 <em>DFS</em> 를 돌게 된다. 그리고 <em>SCC</em> 는 <em>cyclic</em> 이므로 하나의 <em>SCC</em> 만 찾고 끝남을 보장한다. 다음으로 높은 <code>f(t)</code> 값을 가지는 <em>SCC</em> 를 찾고, 더이상 <em>SCC</em> 를 찾지 못할 때 까지 반복하고 알고리즘이 끝나는걸 확인할 수 있다.</p>
+
+<p>처음엔 잘 몰랐는데 <em>leader</em> 가 해당 <em>SCC</em> 에서 가장 높은 <code>f(t)</code> 값을 가지는 <em>node</em> 다.</p>
+
+<h3 id="structureoftheweb">Structure of the Web</h3>
+
+<p><em>vertices</em> 를 웹페이지라 보고 <em>edges</em> 를 하이퍼링크라 보면 웹을 <em>directed graph</em> 이해할 수 있다.</p>
+
+<p>그럼 웹은 어떻게 생겼을까? 사람들이 첫번째로 웹이 어떻게 생겼는지 확인하기 위해 시도한 방법은 <em>crawling</em>, 즉 링크를 따라가며 모든 웹페이지를 긁는 방식이었다.</p>
+
+<p>그래서 실제로 해보니 2000 년도에는 <em>200 milions</em> 의 <em>node</em>, <em>1 bilion</em> 의 <em>edge</em> 가 있었다고 한다.</p>
+
+<p>그럼 이게 어떻게 생겼을까? <em>one big scc</em> 일거라 보는 관점이 있다. 한쪽에선 오래된 웹페이지들이 있고, 더 뻗어나가지 않는다. 이쪽을 <em>out</em> 이라 보면 반대편에서는 새로운 웹페이지들이 생겨 기존의 웹페이지에 <em>edge</em> 를 붙여 나가는 <em>in</em> 부분이 있다고 할 수 있다. 몇몇 부분에는 전혀 연결이 되지 않은 부분이 있을 수 있다.</p>
+
+<p><img src='http://bparsia.files.wordpress.com/2009/11/bowtieweb.png?w=600&amp;h=364'  alt="" /></p>
+
+<p align="center">(<a href='http://bparsia.wordpress.com/' >http://bparsia.wordpress.com</a>)</p>
+
+<p>웹의 <em>core</em> 부분은 <em>well connected</em> 되어 있는데 <em>small world property</em> 를 가지고 있다. 무슨말이냐면 모든 노드가 각각 서로 연결되어 있진 않지만 연결을 많이 가지고 있는 특정 몇몇 노드에 의해 모든 노드가 연결된다는 뜻이다. 결국 서로 연결되는데 몇 <em>hop</em> 안걸린다 볼 수 있다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Small-world-network-example.png/330px-Small-world-network-example.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Small-world_network' >http://en.wikipedia.org/wiki/Small-world_network</a>)</p>  
+
+<p><img src='http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2_files/image002.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://web.mit.edu/' >http://web.mit.edu</a>  
+)</p>
+
+<p>요즘의 연구들은 웹 그래프가 어떤식으로 진화하는지, 정보들이 어떤식으로 전파되는지 등을 중점으로 하고 있다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
+(2) <a href='http://en.wikipedia.org/wiki/Equivalence_class' >Equivalence class</a> <br />
+(3) <a href='http://www.stoimen.com/blog/2012/12/10/computer-algorithms-topological-sort-revisited/' >http://www.stoimen.com</a> <br />
+(4) <a href='http://commons.wikimedia.org/wiki/File:Scc.png' >http://commons.wikimedia.org/wiki/File:Scc.png</a> <br />
+(5) <a href='http://bparsia.wordpress.com/2009/11/24/does-rest-explain-the-bowtie-gross-structure-of-the-web/' >http://bparsia.wordpress.com</a> <br />
+(6) <a href='http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2.htm' >http://web.mit.edu</a> <br />
+(7) <a href='http://en.wikipedia.org/wiki/Small-world_network' >http://en.wikipedia.org/wiki/Small-world_network</a></p>]]></description><link>http://1ambda.github.io/graph-search-and-connectivity/</link><guid isPermaLink="false">dcb3c85a-c903-4dab-bb88-b408099fb092</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[graph]]></category><category><![CDATA[BFS]]></category><category><![CDATA[DFS]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 15 Nov 2014 04:29:52 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 6]]></title><description><![CDATA[<p>지난시간엔 <em>back propagation</em> 구현해 보고 여기에 적용할 수 있는 소소한 것들 <em>random initialization</em> 과 <em>gradient checking</em> 등도 알아 보았다.</p>
 
 <p>머신러닝을 단순히 아는것과, 실전에서 사용할 수 있다는 건 큰 차이가 있다. 이번 시간에는 실전에서 필요한 여러가지 팁들에 대해 설명한다. 후반부에서는 스팸 분류기를 통해 간단한 머신러닝 시스템을 설계해 본다.</p>
 
@@ -4566,517 +4933,4 @@ initialTheta= zeros(2,1);
 (3) <a href='http://blog.csdn.net/abcjennifer/' >http://blog.csdn.net/abcjennifer/</a> <br />
 (4) <a href='http://www.holehouse.org/' >http://www.holehouse.org/</a>  </p>
 
-<p><strong>Machine Learning</strong> by Andrew Ng, <em>Coursera</em></p>]]></description><link>http://1ambda.github.io/machine-learning-week-3/</link><guid isPermaLink="false">a123e443-ef68-426f-81a1-2af9b381d733</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[regularization]]></category><category><![CDATA[classification]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 15 Oct 2014 13:18:03 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 5]]></title><description><![CDATA[<p>지난주엔 Scala 가 <em>리스코프 치환 원칙</em> 을 지키기 위해 어떻게 <em>Variance(공변성)</em> 을 문법적으로 지원하는지 알아보았다. 직접 <code>List</code> 컨테이너를 구현해 보면서 함수의 인자는 <em>Covariant</em>, 리턴타입은 <em>Contravariant</em> 란 것도 알게 되었고, <code>Nil</code> 을 만들기 위해 <code>Nothing</code> 을 어떻게 엮을 수 있는지도 직접 확인해 보았다. 마지막으로, 프로그래머가 가장 많이 작성하는 로직인 <em>Decomposition</em> 을 <em>Pattern Matching</em> 을 이용해 더 우아하게 작성하는법도 배웠다. <del>오오 추상화 오오</del></p>
-
-<p>이번시간에도 <code>List</code> 를 가지고 놀면서 <em>Reduce</em> 의 개념과 Scala 의 <em>Implicit</em> 키워드가 어떤 역할을 하는지 배워본다. </p>
-
-<h3 id="morefunctionsonlists">More Functions on Lists</h3>
-
-<p><code>List.last</code> 는 마지막 원소를 돌려준다. <code>head</code> 나 <code>tail</code> 같은 경우는 상수 시간 내에 리턴되지만, <code>last</code> 는 어떨까? </p>
-
-<pre><code class="scala">def last[T](l: List[T]): T = xs match {  
-  case List() =&gt; throw new Error('last of empty list')
-  case List(x) =&gt; x
-  case y :: ys =&gt; last(ys)
-}
-</code></pre>
-
-<p>그러므로 길이 <code>n</code> 에 비례하는 성능을 보여준다.</p>
-
-<blockquote>
-  <p><code>last</code> takes steps proportional to the length of the list</p>
-</blockquote>
-
-<p>마찬가지로 마지막 원소를 제외하고 나머지를 돌려주는 <code>Last.init</code> 경우도 같은 성능을 보여준다. 이렇게 구현할 수 있다.</p>
-
-<pre><code class="scala">  def init[T](xs: List[T]): List[T] = xs match {
-    case List() =&gt; throw new Error("init of empty list")
-    case List(x) =&gt; List()
-    case y :: ys =&gt; y :: init(ys)
-  }
-</code></pre>
-
-<p><code>concat</code> 은 어떨까? <code>xs</code> 를 받아서 <code>ys</code> 앞에 붙이는 함수다. <code>prepend</code> 함수라 보면 되겠는데, 지난 시간에 논의했었던 <code>:::</code> 랑 같다. </p>
-
-<p>지난 시간에 언급 했듯이 <code>xs ::: ys</code> 처럼 <code>:</code> 로 끝나는 연산자는 우측에 오는것이 실제 좌측 피연산자다. <code>ys .::: (xs)</code> 와 같다.</p>
-
-<pre><code class="scala">  def concat[T](xs: List[T], ys: List[T]): List[T] = xs match {
-    case List() =&gt; ys
-    case z :: zs =&gt; z :: concat(zs, ys)
-  }
-</code></pre>
-
-<p>이제, <code>reverse</code> 를 구현 해 보자.</p>
-
-<pre><code class="scala">  def reverse[T](xs: List[T]): List[T] = xs match {
-    case List() =&gt; xs
-    case y :: ys =&gt; reverse(ys) ++ List(y)
-  }
-</code></pre>
-
-<p><code>reverse</code> 도 마찬가지로 길이 <code>n</code> 에 <em>quadratic</em> 한 성능을 보여준다. 이는 <code>reverse</code> 내부에서 <code>++</code> 을 사용하기 때문이다. 이는 더 개선할 수 있는데, 후에 논의하겠다.</p>
-
-<p>참고로, <code>++</code> 와 <code>:::</code> 는 하는일은 같으나, <code>:::</code> 는 <code>List</code> 에만 적용 가능하고 <code>++</code> 는 다른 <em>Traversal</em> 에도 적용 가능하다. <a href='http://stackoverflow.com/questions/6559996/scala-list-concatenation-vs' >여기</a> 참조</p>
-
-<p>이제 <code>removeAt</code> 을 구현 해 보자.</p>
-
-<pre><code class="scala">  def removeAt[T](n: Int, xs: List[T]): List[T] = 
-    (xs take n) ::: (xs drop n + 1)
-</code></pre>
-
-<p><code>flatten</code> 은 다음과 같이 작성할 수 있다.</p>
-
-<pre><code class="scala">  def flatten(xs: List[Any]): List[Any] = xs match {
-    case List() =&gt; xs
-    case List(y :: ys) =&gt; y :: flatten(ys) 
-    case y :: ys =&gt; y :: flatten(ys)
-  }
-</code></pre>
-
-<h3 id="pairsandtuples">Pairs and Tuples</h3>
-
-<p><code>(3, "example")</code> 과 같은 형태를 <em>Pair</em> 라 부르는데, 이건 사실 <em>Tuple</em> 의 특별한 형태다.</p>
-
-<p><code>(T1, ..., Tn)</code> 은 <code>scala.Tuplen[T1, ..., Tn]</code> 의 <em>parameterized type</em> 이고, <em>expression</em>  <code>(e1, ..., en)</code> 은 사실 <code>scala.Tuplen(e1, ..., en)</code> 과 동일하다.</p>
-
-<p>그리고 <em>tuple</em> 의 패턴 <code>(p1, ..., pn)</code> 은 <em>constructor pattern</em> <code>scala.Tuplen(p1, ..., pn)</code> 과 같다. <code>TupleN</code> 클래스를 구경 해 보자.</p>
-
-<pre><code class="scala">case class Tuple2[T1, T2](_: +T1, _2: +T2) {  
-  override def toString = "(" + _1 + "," + _2 + ")"
-}
-</code></pre>
-
-<p>멤버를 접근할 때 <code>_1</code>, <code>_2</code> 와 같은 식으로 접근하므로, 패턴 매칭에서</p>
-
-<p><code>val (label, value) = pair</code> 는 사실 다음과 같다.</p>
-
-<pre><code class="scala">val label = pair._1  
-val value = pair._2  
-</code></pre>
-
-<p><em>Tuple</em> 의 패턴 매칭을 이용하면, 다음과 같이 중첩된 <em>case</em> 를 사용하는 <em>merge sort</em> 함수를</p>
-
-<pre><code class="scala">  def msort(xs: List[Int]): List[Int] = {
-    val n = xs.length / 2
-
-    if (n == 0) xs
-    else {
-      def merge(xs: List[Int], ys: List[Int]): List[Int] = xs match {
-        case Nil =&gt; ys
-        case x :: xs1 =&gt; ys match {
-          case Nil =&gt; xs
-          case y :: ys1 =&gt; {
-            if (x &gt; y) y :: merge(xs, ys1)
-            else x :: merge(xs1, ys)
-          }
-        }
-      }
-
-      val (left, right) = xs splitAt n
-      merge(msort(left), msort(right))
-    }
-  }
-</code></pre>
-
-<p>요로코롬 바꿀 수 있다. <del>오오 패턴매칭 오오</del></p>
-
-<pre><code class="scala">  def msort(xs: List[Int]): List[Int] = {
-    val n = xs.length / 2
-
-    if (n == 0) xs
-    else {
-      def merge(xs: List[Int], ys: List[Int]): List[Int] =
-        (xs, ys) match {
-          case (xs, Nil) =&gt; xs
-          case (Nil, ys) =&gt; ys
-          case (x :: xs1, y :: ys1) =&gt;
-            if (x &gt; y) y :: merge(xs, ys1)
-            else x :: merge(xs1, ys)
-        }
-
-      val (left, right) = xs splitAt n
-      merge(msort(left), msort(right))
-    }
-  }
-</code></pre>
-
-<h3 id="implicitparameters">Implicit Parameters</h3>
-
-<p><code>Int</code> 뿐만 아니라 우리가 만든 <code>msort</code> 함수를 더 범용적으로 활용할 수 있도록, <em>Currying</em> 을 이용하자.</p>
-
-<pre><code class="scala">  def msort[T](xs: List[T])(lt: (T, T) =&gt; Boolean): List[T] = {
-    val n = xs.length / 2
-
-    if (n == 0) xs
-    else {
-      def merge(xs: List[T], ys: List[T]): List[T] =
-        (xs, ys) match {
-          case (xs, Nil) =&gt; xs
-          case (Nil, ys) =&gt; ys
-          case (x :: xs1, y :: ys1) =&gt;
-            if (lt(x, y)) x :: merge(xs1, ys)
-            else y :: merge(xs, ys1)
-        }
-
-      val (left, right) = xs splitAt n
-      merge(msort(left)(lt), msort(right)(lt))
-    }
-  }
-</code></pre>
-
-<p>아래는 테스트코드</p>
-
-<pre><code class="scala">  "msort" should "return an ordered list" in {
-    val xs = List(4, 2, 7, 1, 11, 9, 3)
-    val ys = List(10, 9, 8, 7, 6)
-
-    assert(msort(xs)((x: Int, y: Int) =&gt; x &lt; y) == List(1, 2, 3, 4, 7, 9, 11))
-    assert(msort(ys)((x: Int, y: Int) =&gt; x &lt; y) == List(6, 7, 8, 9, 10))
-  }
-</code></pre>
-
-<p>참고로 <code>msort</code> 에 <code>Int</code> 인자를 주는 경우, <code>x: Int, y: Int</code> 처럼 타입을 명시하지 않아도 알아서 <code>xs</code> 를 보고 추론한다.</p>
-
-<h4 id="parameterizationwithordered">Parameterization with Ordered</h4>
-
-<p>사실은 <code>scala.math.Othering[T]</code> 에 <em>ordering</em> 을 나타낼 수 있는 클래스가 있다. 이를 활용하면 <code>msort</code> 를 다음과 같이 리팩토링 할 수 있다. </p>
-
-<pre><code class="scala">  def msort[T](xs: List[T])(ord: Ordering[T]): List[T] = {
-    val n = xs.length / 2
-
-    if (n == 0) xs
-    else {
-      def merge(xs: List[T], ys: List[T]): List[T] =
-        (xs, ys) match {
-          case (xs, Nil) =&gt; xs
-          case (Nil, ys) =&gt; ys
-          case (x :: xs1, y :: ys1) =&gt;
-            if (ord.lt(x, y)) x :: merge(xs1, ys)
-            else y :: merge(xs, ys1)
-        }
-
-      val (left, right) = xs splitAt n
-      merge(msort(left)(ord), msort(right)(ord))
-    }
-  }
-</code></pre>
-
-<p>테스트 코드는,</p>
-
-<pre><code class="scala">  "msort" should "return an ordered list" in {
-    val xs = List(4, 2, 7, 1, 11, 9, 3)
-    val ys = List(10, 9, 8, 7, 6)
-    val zs = List("pineapple", "apple", "banana", "watermelon")
-
-    assert(msort(xs)(Ordering.Int) == List(1, 2, 3, 4, 7, 9, 11))
-    assert(msort(ys)(Ordering.Int) == List(6, 7, 8, 9, 10))
-    assert(msort(zs)(Ordering.String) == List("apple", "banana", "pineapple", "watermelon"))
-  }
-</code></pre>
-
-<p>다 좋은데, <code>Ordering.Int</code> 인자 자체를 숨겨버렸으면 좋겠다. <code>msort</code> 의 <code>ord</code> 파라미터를 다음과 같이 변경하자. <code>(implicit ord: Ordering[T])</code></p>
-
-<pre><code class="scala">  def msort[T](xs: List[T])(implicit ord: Ordering[T]): List[T] = {
-    val n = xs.length / 2
-
-    if (n == 0) xs
-    else {
-      def merge(xs: List[T], ys: List[T]): List[T] =
-        (xs, ys) match {
-          case (xs, Nil) =&gt; xs
-          case (Nil, ys) =&gt; ys
-          case (x :: xs1, y :: ys1) =&gt;
-            if (ord.lt(x, y)) x :: merge(xs1, ys)
-            else y :: merge(xs, ys1)
-        }
-
-      val (left, right) = xs splitAt n
-      merge(msort(left), msort(right))
-    }
-  }
-</code></pre>
-
-<p>테스트 코드는 아래와 같다.</p>
-
-<pre><code class="scala">  "msort" should "return an ordered list" in {
-    val xs = List(4, 2, 7, 1, 11, 9, 3)
-    val ys = List(10, 9, 8, 7, 6)
-    val zs = List("pineapple", "apple", "banana", "watermelon")
-
-    assert(msort(xs) == List(1, 2, 3, 4, 7, 9, 11))
-    assert(msort(ys) == List(6, 7, 8, 9, 10))
-    assert(msort(zs) == List("apple", "banana", "pineapple", "watermelon"))
-  }
-</code></pre>
-
-<p>놀랍게도, 파라미터가 사라져버렸다. ~오오 스칼라 오오~ <code>implicit</code> 하나만 추가했을 뿐인데! <code>implicit</code> 를 파라미터 타입에 추가하면 아래처럼 해석된다.</p>
-
-<p>타입 <code>T</code> 인 <code>implicit</code> 파라미터에 대해서,</p>
-
-<p>(1) <code>implicit</code> 이며 <br />
-(2) <code>T</code> 와 호환 가능한 타입을 가지고 있고 <br />
-(3) <em>function call</em> 내에서 찾을 수 있거나 <br />
-(4) 혹은 <code>T</code> 와 관련된 <em>companion object</em> 내에 있는</p>
-
-<p><em>single definition (most specific)</em> 이 있는지 컴파일러가 찾는다. 파라미터로 사용하고 아니면, 에러를 뿜는다. </p>
-
-<p>즉 위의 코드의 경우 <code>Ordering[String]</code> 와 <code>Ordering[Int]</code> 는 어딘가에 <code>implicit</code> 로 처리되어 이미 존재한다. </p>
-
-<h3 id="higherorderlistfunctions">Higher-Order List Functions</h3>
-
-<p><code>List</code> 에 사용하는 메소드들은 종종 <em>반복된 패턴 (recurring patterns)</em> 을 가지는데, 3가지로 요약해 보면 아래와 같다.</p>
-
-<blockquote>
-  <p>(1) transformaing each element in a list ina certain way <br />
-  (2) retrieving a list of all elements satisfying a criterion <br />
-  (3) combining the elements of a list using an operator</p>
-</blockquote>
-
-<p>함수형 언어는, <em>higher-order function</em> 이용해서 <em>generic function</em> 을 만들 수 있다.</p>
-
-<h4 id="map">Map</h4>
-
-<p>리스트의 모든 원소에 함수 <code>f</code> 를 <em>적용 (Applying)</em> 하는 <em>고차 함수 (Higher-Order Function)</em> 은 <code>map</code> 이다.</p>
-
-<pre><code class="scala">abstract class List[T] {  
-  ...
-  def map[T](f: T =&gt; U): List[U] = this match {
-    case Nil =&gt; this
-    csae x :: xs =&gt; f(x) :: xs.map(f)
-  }
-  ...
-}
-</code></pre>
-
-<p>실제로 <code>map</code> 은 좀 더 복잡한데, <em>tail-recursion</em> 과 다양한 종류의 <em>collection</em> 을 지원하기 위함이다.</p>
-
-<h4 id="filter">Filter</h4>
-
-<pre><code class="scala">abstract class List[T] {  
-  ...
-  def filter(p: T =&gt; Boolean): List[T] = this match {
-    case Nil =&gt; this
-    case x :: xs =&gt; if (p(x)) x :: xs.filter(p) else xs.filter(p)
-  }
-  ...
-}
-</code></pre>
-
-<p>이외에도 <code>filterNot</code> 과 <code>partition</code>이 있다. <code>partition</code> 은 <code>filter</code> 와  <code>filterNot</code> 의 결과를 둘 다 돌려준다.</p>
-
-<p><code>takeWhile</code> 은 일치하지 않는 곳에서 <em>filtering</em> 을 멈추고, 그 전까지의 결과를 돌려준다. 반대로 <code>dropWhile</code> 은 <code>takeWhile</code> 에서 취해진 결과 이외의 나머지를 돌려준다. </p>
-
-<pre><code class="scala">scala&gt; val zs = List(2, -4, 1, 4, 7)  
-zs: List[Int] = List(2, -4, 1, 4, 7)
-
-scala&gt; zs partition(x =&gt; x &gt; 0)  
-res38: (List[Int], List[Int]) = (List(2, 1, 4, 7),List(-4))
-
-scala&gt; zs dropWhile(x =&gt; x &gt; 0)  
-res39: List[Int] = List(-4, 1, 4, 7)
-
-scala&gt; zs takeWhile(x =&gt; x &gt; 0)  
-res40: List[Int] = List(2)
-
-scala&gt; zs span(x =&gt; x &gt; 0)  
-res41: (List[Int], List[Int]) = (List(2),List(-4, 1, 4, 7))  
-</code></pre>
-
-<p><code>takeWhile</code>, <code>dropWhile</code> 을 이용하면 다음과 같은 <code>pack</code> 함수도 만들 수 있다.</p>
-
-<pre><code class="scala">  def pack[T](xs: List[T]): List[List[T]] = xs match {
-    case Nil =&gt; Nil
-    case x :: xs1 =&gt; 
-      xs.takeWhile(y =&gt; y == x) :: pack(xs.dropWhile(y =&gt; y == x))
-  }
-</code></pre>
-
-<p>아래는 테스트코드</p>
-
-<pre><code class="scala">  val ts = List("a", "a", "b", "c", "c", "a")
-  val ss = List(List("a", "a"), List("b"), List("c", "c"), List("a"))
-
-  "pack" should "return a packed list" in {
-    assert(pack(ts) == ss)
-  }
-</code></pre>
-
-<h3 id="reductionoflists">Reduction of Lists</h3>
-
-<p><code>reduce</code> 는 리스트의 모든 원소에 특정 연산을 수행해 하나의 결과를 만들어 내고 싶을 때 사용한다.</p>
-
-<pre><code class="scala">  def sum(xs: List[Int]) = (0 :: xs) reduceLeft((x, y) =&gt; x + y)
-  def product(xs: List[Int]) = (1 :: xs) reduceLeft((x, y) =&gt; x * y)
-</code></pre>
-
-<p>사실 <code>reduceLeft</code>, <code>reduceRight</code> 를 기억하는 쉬운 방법은, <em>왼쪽으로 / 오른쪽으로 기운 트리</em> 를 기억하는 것이다. </p>
-
-<p><img src='https://joelneely.files.wordpress.com/2011/03/foldleftplain.jpg?w=219&amp;h=325'  align="center" />  </p>
-
-<p align="center"><a href='https://joelneely.wordpress.com/' >https://joelneely.wordpress.com/</a></p>
-
-<p><code>reduce</code> 와 비슷하지만 초기 인자를 받아 <em>empty-list</em> 에 대해서도 호출될 수 있는 <code>fold</code> 가 있다.</p>
-
-<pre><code class="scala">abstract class List[T] {  
-  ...
-  def reduceLeft(op (T, T) =&gt; T): T = this match {
-    case Nil =&gt; throw new Error("Nil.reduceLeft")
-    case x :: xs =&gt; (xs foldLeft x)(op)
-  }
-
-  def foldLeft[U](z: U)(op: (U, T) =&gt; U): U = this match {
-    case Nil =&gt; z
-    case x :: xs =&gt; (xs foldLeft op(z, x))(op)
-  }
-  ...
-}
-</code></pre>
-
-<p><br/> <br />
-<code>foldRight</code> 는 <em>오른쪽으로 기운 트리</em> 를 생각하면 된다.</p>
-
-<p><img src='https://joelneely.files.wordpress.com/2011/03/foldrightplain.jpg?w=219&amp;h=325'  align="center" />  </p>
-
-<p align="center"><a href='https://joelneely.wordpress.com/' >https://joelneely.wordpress.com/</a></p>
-
-<pre><code class="scala">def reduceRight(op: (T, T) =&gt; T): T = this match {  
-  case Nil =&gt; throw new Error("Nil.reduceRight")
-  case x :: Nil =&gt; x
-  case x :: xs =&gt; op(x, xs.reduceRight(op))
-}
-
-def foldRight[U](z: U)(op: (T, U) =&gt; U): U = this match {  
-  case Nil =&gt; z
-  case x :: xs =&gt; op(x, (xs foldRight z)(op))
-}
-</code></pre>
-
-<p><code>foldLeft</code> 와 <code>foldRight</code> 는 같은 일을 하긴 하는데, 때때로는 둘 중 하나만 적절한 경우도 있다. 예를 들어</p>
-
-<pre><code class="scala">def concat[T](xs: List[T], ys: List[T]): List[T] =  
-  (xs foldRight ys)(_ :: _)
-</code></pre>
-
-<p><code>foldRight</code> 대신에 <code>foldLeft</code> 가 오면 어떻게 될까? <em>타입 에러</em> 가 발생한다. <code>3 :: List(4)</code> 는 가능해도 <code>List(3) :: 4</code> 는 불가능하기 때문이다. </p>
-
-<h3 id="reasoningaboutconcat">Reasoning About Concat</h3>
-
-<blockquote>
-  <p>We would like to verify that concatenation is associative, and that it admits the empty list <code>Nil</code> as neutral element to the left and to the right</p>
-</blockquote>
-
-<p>이번장에서는 <em>natural indction</em> 과 비슷한 <em>structural induction</em> 을 이용해 함수형 프로그래밍에서 어떻게 함수의 정확성을 증명할 수 있는지 배운다.</p>
-
-<p>함수형 프로그래밍에선 <em>side-effect</em> 가 없기 때문에, <em>reduction step</em> 이 전체나, 부분이나 동일하게 적용된다. 이걸 다른말로 <em>참조 투명성 (referential transparency)</em> 라고 부른다. 혹시 몰라 원문을 첨부 하자면,</p>
-
-<blockquote>
-  <p>Note that a proof can freely apply reduction steps as equalities to some part of a term <br/></p>
-  
-  <p>That works because pure functional programs don't have side effects so that a term is equivalent to the terms to the term to which it reduces.</p>
-  
-  <p>This principle is called referential transparency.</p>
-</blockquote>
-
-<h4 id="structuralinduction">Structural Induction</h4>
-
-<p><em>property</em> <code>P(xs)</code> 를 모든 <code>xs</code> 에 대해 증명하기 위해</p>
-
-<p>(1) show that <code>P(Nil)</code> holds (Base case) <br />
-(2) for a list <code>xs</code> and some element <code>x</code>, show the <em>induction step:</em> <br />
-if <code>P(xs)</code> holds, then <code>P(x :: xs)</code> also holds</p>
-
-<p>우리는 <code>(xs ++ ys) ++ zs = xs ++ (ys ++ zs)</code> 를 증명하고 싶다. 이를 위한 <code>concat</code> 함수는</p>
-
-<pre><code class="scala">def concat[T](xs: List[T], ys: List[T]) = xs match {  
-  case List() =&gt; ys
-  case x :: xs1 =&gt; x :: concat(xs1, ys)
-}
-</code></pre>
-
-<p>이 <code>concat</code> 의 정의로 부터 두 가지 사실을 뽑아낼 수 있다. (distill two defining clauses)</p>
-
-<p>(1) <code>Nil ++ ys = ys</code> <br />
-(2) <code>(x :: xs1) ++ ys = x :: (xs1 ++ ys)</code></p>
-
-<p>이제 먼저 <em>Base-case</em> 인 <code>Nil</code> 에 대해 먼저 참임을 보이면 된다.</p>
-
-<p><code>(Nil ++ ys) ++ zs = Nil ++ (ys ++ zs)</code> </p>
-
-<blockquote>
-  <p>좌변은 (1) 에 의해 <code>ys ++ zs</code> 이고
-  우변도 (1) 에 의해 <code>ys ++ zs</code> 이다.</p>
-</blockquote>
-
-<p>이제 <code>P(xs)</code> 가 참일때 <code>P(x :: xs)</code> 임을 보이면 된다. 먼저 좌변부터 하면</p>
-
-<p>= <code>((x :: xs) ++ ys) ++ zs</code> by (2) <br />
-= <code>(x :: (xs ++ ys)) ++ zs</code> by (2) <br />
-= <code>x :: ((xs ++ ys) ++ zs)</code> by (2) <br />
-= <code>x :: (xs ++ (ys ++ zs))</code> by <em>induction hypothesis</em> (<code>P(xs)</code>) </p>
-
-<p>우변을 정리하면,</p>
-
-<p>= <code>(x :: xs) ++ (ys ++ zs)</code> by (2) <br />
-= <code>x :: (xs ++ (ys ++ zs))</code>  </p>
-
-<p>우변과 좌변이 같으므로, <code>P</code> 는 성립한다.</p>
-
-<h3 id="alargerequationalproofonlists">A Larger Equational Proof on Lists</h3>
-
-<p>이제 <code>reverse</code> 의 <code>xs.reverse.reverse = xs</code> 라는 속성을 증명해 보자. 다음 2개의 <em>clause</em> 를 알고 있다. (교수님이, 좀 더 <em>amenable</em> 하기 때문에 비 효율적인 정의를 골랐다고 하심.)</p>
-
-<p>(1) <code>Nil.reverse</code> = <code>Nil</code> <br />
-(2) <code>(x :: xs).reverse</code> = <code>xs.reverse</code> ++ <code>List(x)</code>  </p>
-
-<p><em>Base-case</em> 는 패스하고, 바로 <code>x :: xs</code> 에 대한 것 부터 들어가면 좌변은  </p>
-
-<p><code>(x :: xs).reverse.reverse</code> <br />
-= <code>(xs.reverse ++ List(x)).reverse</code></p>
-
-<p>우변은</p>
-
-<p><code>x :: xs</code> <br />
-= <code>x :: xs.reverse.reverse</code>  </p>
-
-<p>이걸로는 할 수 있는게 없으므로 <code>xs.reverse</code> 를 <code>ys</code> 라 놓으면</p>
-
-<p><code>(ys ++ List(x)).reverse</code> = <code>x :: ys.reverse</code> 를 증명하면 된다. <em>Auxiliary Equation</em> 인데, 먼저 <em>Base-case</em> 부터 참임을 보이면 </p>
-
-<p>좌변은</p>
-
-<p><code>(Nil ++ List(x)).reverse</code> <br />
-= <code>List(x).reverse</code> // ++ clause 1 <br />
-= <code>(x :: Nil).reverse</code> // List Definition <br />
-= <code>Nll.reverse ++ List(x)</code> // reverse clause 2 <br />
-= <code>Nil ++ List(x)</code> // reverse clause 1 <br />
-= <code>x :: Nil</code> // List Definition  </p>
-
-<p>우변은</p>
-
-<p><code>x :: Nil.reverse</code> <br />
-= <code>x :: Nil</code> // reverse clause 1  </p>
-
-<p>이제 <code>((y :: ys) ++ List(x)).reverse</code> 와 <code>x :: (y :: ys).reverse</code> 가 같음을 보이면 된다.</p>
-
-<p><code>((y :: ys) ++ List(x)).reverse</code> <br />
-= <code>(y :: (ys ++ List(x)).reverse</code> // ++ clause 2 <br />
-= <code>(ys ++ List(x)).reverse ++ List(y)</code>  // reverse clause 2 <br />
-= <code>(x :: ys.reverse) ++ List(y)</code>  // <em>induction hypothesis</em> <br />
-= <code>x :: (ys.reverse ++ List(y)</code>  // reverse clause 2 <br />
-= <code>x :: (y : ys).reverse</code> </p>
-
-<p>이것은 우변 <code>x :: (y :: ys).reverse</code> 와 동일하므로 <em>Auxiliary equation</em> 이 성립하고, 본래의 성질 <code>xs = xs.reverse.reverse</code> 도 성립한다.</p>
-
-<h4 id="exercise">Exercise</h4>
-
-<p><code>map</code> 을 증명하라고 주시는데, 못해먹겠다 -_-; 패쓰!</p>
-
-<h3 id="summary">Summary</h3>
-
-<p><em>Reduction</em>, <em>Fold</em>, <em>referential transparency</em> 그리고 <em>structural induction</em> 에 대해서 배웠다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://stackoverflow.com/questions/6559996/scala-list-concatenation-vs' >scala-list-concatenation-vs</a></p>
-
-<p>2014-10-14, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-5/</link><guid isPermaLink="false">a94afb0b-63a0-4cd9-8a0e-2224ff29fea2</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 14 Oct 2014 10:48:03 GMT</pubDate></item></channel></rss>
+<p><strong>Machine Learning</strong> by Andrew Ng, <em>Coursera</em></p>]]></description><link>http://1ambda.github.io/machine-learning-week-3/</link><guid isPermaLink="false">a123e443-ef68-426f-81a1-2af9b381d733</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[regularization]]></category><category><![CDATA[classification]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 15 Oct 2014 13:18:03 GMT</pubDate></item></channel></rss>
