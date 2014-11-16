@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 15 Nov 2014 11:12:34 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graph Search and Connectivity￼]]></title><description><![CDATA[<p>기본적인 그래프 탐색 방법 <em>DFS</em>, <em>BFS</em> 에 대해 배우고 약간씩 응용하여 <em>shortest path</em>, <em>conncected components</em>, <em>topological order</em>, <em>strongly connected components</em> 등을 찾는 방법을 배운다. </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 16 Nov 2014 01:02:03 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Graph Search and Connectivity￼]]></title><description><![CDATA[<p>기본적인 그래프 탐색 방법 <em>DFS</em>, <em>BFS</em> 에 대해 배우고 약간씩 응용하여 <em>shortest path</em>, <em>conncected components</em>, <em>topological order</em>, <em>strongly connected components</em> 등을 찾는 방법을 배운다. </p>
 
 <p>마지막 부분에선 웹이 어떻게 생겼을까 잠깐 고민해 본다.</p>
 
@@ -374,7 +374,7 @@ set f(i) := t
 
 <p><img src='http://chart.apis.google.com/chart?cht=tx&amp;chl=J' (%5Ctheta)%20%3D%20%7B1%20%5Cover%202m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20(h_%5Ctheta(x%5E%7B(i)%7D%20-%20y%5E%7B(i)%7D)%5E2%20%2B%20%5Clambda%5Csum_%7Bj%3D1%7D%5Em%20%5C%20%5Ctheta_j%5E2%5D" alt="" /></p>
 
-<p>집 가격에 대한 <em>linear regression</em> 가설을 세웠는데, <em>error</em> 가 좀 큰 것을 발견했다고 하자. 몇 가지 방법이 있다. 어떻게 해야할까?</p>
+<p>집 가격에 대한 <em>linear regression</em> 가설을 세웠는데 <em>error</em> 가 좀 큰 것을 발견했다. 어떻게 해야할까?</p>
 
 <p>(1) Get more training examples <br />
 (2) Try smaller sets of features <br />
@@ -383,9 +383,9 @@ set f(i) := t
 (5) Try decreasing <em>lambda</em> <br />
 (5) Try increasing <em>lambda</em>  </p>
 
-<p>이중에서 (1), 더 많은 트레이닝 셋을 구하는건 별로 도움이 안 될 수도 있다. </p>
+<p>이중에서 더 많은 트레이닝 셋을 추가하는 것은 별로 도움이 안 될 수도 있다. (이유는 뒷 부분에서 논의한다.)</p>
 
-<p>이제 알고리즘이 정상적으로 동작하는지를 진단하는 <em>machine learing diagnostic</em> 을 알아보자. <em>gradient checking</em> 이 그랬던 것처럼, 구현하는데는 좀 시간이 걸려도 디버깅에 드는 시간을 많이 줄여준다.</p>
+<p>알고리즘의 정상 동작여부를 파악할 수 있는 몇 가지 판별법을 알아보자. <em>gradient checking</em> 이 그랬던 것처럼, 구현하는데는 좀 시간이 걸려도 디버깅에 드는 시간을 많이 줄여준다.</p>
 
 <blockquote>
   <p>A diagnostic can sometimes rule out certain courses of action (changes to your learning algorithm) as being unlikely to improve its performance significantly</p>
@@ -393,17 +393,15 @@ set f(i) := t
 
 <h3 id="evaluatingahypothesis">Evaluating a hypothesis</h3>
 
-<p>이전 강의들에서 언급 했듯이 <em>low training error</em> 를 갖는 <em>hypothesis (가설)</em> 이 항상 좋은 건 아니다. <em>overfitting</em> 이 발생하는 경우가 많다.</p>
+<p><em>low training error</em> 를 갖는 <em>hypothesis (가설)</em> 이 항상 좋은 건 아니다. <em>overfitting</em> 이 발생할 수 있기 때문이다.</p>
 
-<p>그리고 <em>feature</em> 가 많으면 많을 수록 <em>plotting</em> 하기는 더 힘들기 때문에 가설을 평가할 다른 방법을 찾아야 한다. </p>
+<p>그리고 <em>feature</em> 가 많을 수록 <em>plotting</em> 하기 힘들기 가설을 평가할 다른 방법을 찾아야 한다. 단순히 그리는 것 만으로 모든 가설을 평가하긴 어렵다.</p>
 
-<p>가설을 평가할 수 있는 하나의 방법으로 전체 <em>training set</em> 을 <code>70% / 30%</code> 로 분리해 <code>70%</code> 은 <em>training set</em> 으로 나머지 <code>30%</code> 는 <em>test set</em> 으로 활용할 수 있다.</p>
+<p>한가지 평가 방법으로 전체 <em>training set</em> 을 <code>70% / 30%</code> 로 분리해 <code>70%</code> 은 <em>training set</em> 으로 나머지 <code>30%</code> 는 <em>test set</em> 으로 활용할 수 있다. (<em>참고로 테스트셋과 트레이닝셋은 랜덤하게 분리하는 편이 좋다.</em>)</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/09/1360378105_8286.png'  alt="" /></p>
 
 <p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>테스트셋과 트레이닝셋은 랜덤하게 분리하는 편이 좋다. 바꿔 말하면, 이미 정렬되어 있을 경우에는 랜덤하게 다시 배열하여 트레이닝셋과 테스트셋을 구분하는 편이 좋다.</p>
 
 <p><em>linear regressoin</em> 에 트레이닝 셋과 테스트셋을 분리하는 과정을 알아 보면</p>
 
@@ -412,9 +410,9 @@ set f(i) := t
 
 <p>그럼 <em>linear regression</em> 말고 <em>classification</em> 에는 어떻게 적용할까?</p>
 
-<p>마찬가지로 <code>0(theta)</code> 에 대해 <code>J(0)</code> 를 찾고, 여기에 <code>J_test(0)</code> 를 돌려 테스트 셋의 에러를 찾는다.</p>
+<p>마찬가지로 <code>0(theta)</code> 에 대해 <code>J(0)</code> 를 찾고, 여기에 <code>J_test(0)</code> 를 돌려 테스트 에러를 찾는다.</p>
 
-<p>아니면 아래 그림에서 볼 수 있듯이 <em>misclassification error</em> 를 이용해도 된다. 보면 알겠지만 같은 정의다. <code>y = 0</code> 일때 <code>h(x) &lt; 0.5</code> 이어야 하고, <code>y = 1</code> 일때 <code>h(x) =&gt; 0.5</code> 이어야 하기 때문에 엇갈리게 나온 경우 <code>err</code> 함수에서 <code>1</code> 을 리턴해, 이 값을 모두 합한 뒤 전체 테스트 셋의 숫자로 나누면 테스트 셋의 에러율이 나온다.s</p>
+<p>아니면 아래 그림에서 볼 수 있듯이 <em>misclassification error</em> 를 이용해도 된다. 보면 알겠지만 같은 정의다. <code>y = 0</code> 일때 <code>h(x) &lt; 0.5</code> 이어야 하고, <code>y = 1</code> 일때 <code>h(x) =&gt; 0.5</code> 이어야 하기 때문에 엇갈리게 나온 경우 <code>err</code> 함수에서 <code>1</code> 을 리턴해, 이 값을 모두 합한 뒤 전체 테스트 셋의 숫자로 나누면 테스트 에러값을 구할 수 있다.</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/09/1360378588_2059.png'  alt="" /></p>
 
@@ -436,11 +434,11 @@ set f(i) := t
 
 <p>각각에서 나오는 파라미터 벡터를 <code>0^(1), 0^(2), ...</code> 이라 하자. 그리고 여기서 나오는 테스트 셋의 에러를 <code>J_test(0^(1))</code>, <code>J_test(0^(2))</code> 등이라 하면 이 값을 모두 조사해 최소로 나오는 <code>d</code> 를 가진 모델을 택한다. </p>
 
-<p>그러나 문제는 이렇게 선택한 모델이 <em>optimistic estimate of generalization error</em> 라는 점이다. 테스트 셋에 대해서 가장 적은 에러를 모델이 보여준다 해도 실제 데이터에 대해 그러리라는 보장은 없다. 다른 모델이 더 나은 결과를 보여줄 수도 있기 때문이다.</p>
+<p>그러나 문제는 이렇게 선택한 모델이 <em>optimistic estimate of generalization error</em> 라는 점이다. 테스트 셋에 대해서 가장 적은 에러를 모델이 보여준다 해도 실제 데이터에 대해 똑같이 적은 에러를 보여주리라고 확신할 수 없다.</p>
 
 <h3 id="trainvalidationtestsets">Train / Validation / Test Sets</h3>
 
-<p>이 문제를 해결하기 위해 전체 <em>training set</em> 을 <em>60%/20%/20%</em> 로 나누어 각각을 <em>training set</em>, <em>cross validation set (CV)</em>, <em>test set</em> 이라 하자. 그리하여 각각의 에러를 구할 수 있다. </p>
+<p>이 문제를 해결하기 위해 <em>training set</em> 을 <em>60%/20%/20%</em> 로 나누어 각각을 <em>training set</em>, <em>cross validation set (CV)</em>, <em>test set</em> 이라 하자. 그리하여 각각의 에러를 구할 수 있다. </p>
 
 <p>여기서 <em>CV</em> 에 대한 <em>error</em> 가 최저인 모델을 택하면 이 모델은 <em>test set</em> 에 대해서는 <em>fit</em> 되어 있지 않기 때문에 <em>test error</em> 가 <em>estimate generalization error</em> 라 볼 수 있다.</p>
 
