@@ -1,5 +1,816 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 18 Nov 2014 11:27:23 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Process Mining, Week1]]></title><description><![CDATA[<p>매 10분마다 새롭게 생성되는 데이터의 양은 2003년까지의 모든 데이터를 합한 것보다 더 많다고 한다. 이 데이터 속에는 무궁무진한 가치가 있다고 하여 어떤 사람들은 데이터를 기름이라 비유하기도 한다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 20 Nov 2014 17:44:02 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[하스켈로 배우는 함수형 언어 4]]></title><description><![CDATA[<p>이번시간엔 모나드를 배웁니다. <del>네. 올것이 왔습니다.</del> 간단한 파서를 구현하는 것 부터 시작해 보겠습니다.</p>
+
+<h3 id="whatisaparser">What is a Parser</h3>
+
+<p><strong>Parser (파서)</strong> 란 텍스트 조각을 분석하여 <em>syntaxtic structure</em> 를 만들어 내는 프로그램(코드)를 말합니다.</p>
+
+<p>많은 프로그램들이 자신만의 파서를 가지고 있습니다. <em>GHC</em> 는 <em>haskell</em> , <em>UNIX</em> 는 <em>shell script</em>, <em>explorer</em> 는 <em>HTML</em> 분석합니다.</p>
+
+<h3 id="theparsertype">The Parser Type</h3>
+
+<pre><code class="haskell">type Parser = String -&gt; Tree  
+</code></pre>
+
+<p>하스켈 같은 함수형 언어에서 파서는 함수라 볼 수 있습니다. 문자열을 받아서 <em>Tree (트리)</em> 를 만들어 주는 함수처럼요.</p>
+
+<p>때때로 입력된 문자열이 이상하다면 파서가 제대로 동작하지 않을수도 있습니다. 그럴때 분석되지 않은 문자열을 돌려주려면 이런 형태여야 합니다.</p>
+
+<pre><code class="haskell">type Parser = String -&gt; (Tree, String)  
+</code></pre>
+
+<p>어떤 문자열들은 여러가지로 해석될 수도 있겠지요. 그럼 리스트를 돌려줘야겠네요.</p>
+
+<pre><code class="haskell">type Parser = String -&gt; [(Tree, String)]  
+</code></pre>
+
+<p>꼭 파서가 트리를 만들 필요는 없지 않을까요? 문자열이 <code>1 + 2</code> 라면 이 값을 더한 <code>3</code> 을 돌려줄 수도 있을겁니다.</p>
+
+<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]  
+</code></pre>
+
+<p>이번 강의에서는 복잡한 파서를 구현하기 보다 파서가 무슨일을 하는지에 집중할 것이므로 파서의 타입을 심플하게 가져가겠습니다. 파서가 문자열을 분석하는데 실패하면 <code>[]</code>  성공하면 <em>singleton list</em> 를 돌려주겠습니다.</p>
+
+<h3 id="basicparsers">Basic Parsers</h3>
+
+<p>먼저 문자열에서 첫 번째 원소를 소비하고, 나머지를 돌려주는 간단한 <code>item</code> 파서를 만들어 봅시다. 이 파서는 빈 문자열에 대해서는 <code>[]</code> 를 돌려줍니다.</p>
+
+<pre><code class="haskell">module Lecture7 where
+
+type Parser a = String -&gt; [(a, String)]
+
+item :: Parser Char  
+item = \xs -&gt; case xs of  
+               [] -&gt; []
+               (x:xs) -&gt; [(x, xs)]
+</code></pre>
+
+<p>실행하면 이런 결과를 얻습니다.</p>
+
+<pre><code class="haskell">&gt; item "hello world"
+-- [('h',"ello world")]
+
+&gt; item ""
+-- []
+</code></pre>
+
+<p>항상 <code>[]</code> 만 돌려주는 <code>failure</code> 파서와 <code>a -&gt; Parser a</code> 타입의 <code>return</code> 도 만들어 봅시다. 하나는 항상 실패하고, 다른 하나는 항상 성공하는 파서입니다.</p>
+
+<pre><code class="haskell">failure :: Parser a  
+failure = \xs -&gt; []
+
+return :: a -&gt; Parser a  
+return v = \xs -&gt; [(v, xs)]
+
+&gt; failure "hello world!"
+-- []
+
+&gt; (return "hello") " world"
+-- [("hello"," world")]
+
+&gt; (return "hello") ""
+-- [("hello","")]
+</code></pre>
+
+<p>이제 두 개의 파서를 붙이는 함수 <code>(+++)</code> 를 만들어 봅시다. <code>p +++ q</code> 에 대해 파서 <code>p</code> 가 성공하면 <code>p</code> 의 리턴값을, <code>p</code> 가 실패하면 <code>q</code> 가 처리하게 합시다. 위에서 항상 성공하는 파서 <code>return v</code> 와 항상 실패하는 파서 <code>failure</code> 를 여기다 붙이며 어떻게 될지도 한번 생각해 보는것도 좋습니다.</p>
+
+<pre><code class="haskell">(+++) :: Parser a -&gt; Parser a -&gt; Parser a
+p +++ q = \xs -&gt; case p xs of  
+                  [] -&gt; parse q xs
+                  [(y, ys)] -&gt; [(y, ys)]
+
+parse :: Parser a -&gt; String -&gt; [(a, String)]  
+parse p xs = p xs  
+</code></pre>
+
+<p>여기서 <code>parse</code> 는 그냥 <em>readable</em> 한 코드를 만들기 위해 사용했다고 보면 됩니다. 파서와 텍스트를 받아서 그 적용한 결과를 돌려줍니다.</p>
+
+<pre><code class="haskell">&gt; parse (return '1') "234"
+-- [('1',"234")]
+
+&gt; parse failure "abcd"
+-- []
+
+&gt; parse (failure +++ (return '1')) "abcd"
+-- [('1',"abcd")]
+
+&gt; parse (item +++ return 'd') "abc"
+-- [('a', "bc")]
+</code></pre>
+
+<h3 id="monad">Monad</h3>
+
+<p>여기서 잠깐 생각해 볼 거리가 있습니다. "<em>parser</em> 가 대체 무슨일을 하고 있는가?"</p>
+
+<p>파서의 타입을 잘 보면 원본 타입 <code>String</code> 을 받아, 여기서 부가적인 작업을 해서 <code>a</code> 타입을 만들고, 다시 본래 타입인 <code>String</code> 더해 튜플로 만들어 돌려줍니다. 다시 말해 파서는 <em>한 타입을 받아 부가적인 정보를 만들어 본래 타입에 붙여주는 함수</em> 라 볼 수 있습니다.</p>
+
+<p>파서의 연결을 도와주는 함수는 <code>(+++)</code> 무엇일까요? <em>부가적인 정보를 붙여주는 파서 를 <strong>합성</em></strong> 해 주는 역할을 합니다.</p>
+
+<p>지금 <code>(+++)</code> 의 규칙은 <code>p</code> 가 실패하면 <code>q</code> 를 적용하지만, 파서 <code>t, u, v</code> 를 받아 모두 적용한 뒤 결과를 돌려주는 연산자도 만들 수 있습니다.</p>
+
+<p><code>(+++)</code> 자체는 하나의 규칙을 의미하지만 자세히 보면 이외에도 다양한 규칙을 가진 합성 함수를 만들 수 있다는 것을 알 수 있습니다. </p>
+
+<p>부가적인 정보를 만들어 내는 함수와(파서), 이 파서간의 합성이 아주 중요한 키 포인트입니다. 그리고 이 파서가 바로 <em>monad</em> 입니다. <del>두둥</del></p>
+
+<blockquote>
+  <p>The parser type is a <strong>monad</strong>, a mathematical structure that has proved useful for modeling many different kinds of computations</p>
+</blockquote>
+
+<h3 id="sequencing">Sequencing</h3>
+
+<p>위에서는 두개의 파서를 엮어 하나로 만들긴 했지만 둘 중에 하나만 사용했죠. 둘 다 사용하진 않았습니다. 그럼 둘 이상의 파서를 엮어 하나의 파서를 만들려면 어떻게 해야할까요? 일단 생각해 볼 수 있는건 타입이 좀 다릅니다. </p>
+
+<p>서로 다른 두개의 파서 <code>Parser a</code> 와 <code>Parser b</code> 를 고려해 봅시다. </p>
+
+<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]
+
+Parser a  
+-- String -&gt; [(a, String)]
+
+Parser b  
+-- String -&gt; [(b, String)]
+</code></pre>
+
+<p><code>Parser a</code> 의 출력은 <code>[(a, String)]</code>, 이기 때문에 다른 파서 <code>Parser b</code> 의 입력 <code>String</code> 이 될 수 없습니다. </p>
+
+<p>그리고 여기서 한 가지 더 중요한 사실은, <code>Parser a</code> 가 <code>String</code> 을 이용해 만든 타입 <code>a</code> 의 부가정보를 <code>Parser b</code> 에 손실 없이 넘겨줘야 한다는 사실입니다. 그래야만 파서를 조합한 의미가 있지요.</p>
+
+<p>정리하자면 <code>Parser a</code> 를 받아 <code>Parser b</code> 를 돌려주는 <em>파서 조합함수</em> 를 만들 것인데,  부가정보 <code>a</code> 의 보존을 위해 이 함수 내부에서 <code>a -&gt; Parser b</code> 타입의 중간 함수가 필요합니다. <strong>이 중간 함수가 어디에서 어떤 일을 할지가 구현해야 할 부분이자, 가장 중요한 부분</strong>입니다. 파서 종류에 따라 원본 데이터 (여기서는 <code>String</code>) 을 조작하는 방법이 다르기 때문입니다. 거꾸로 말하면 <em>다양한 종류의 파서가 있다는 말</em> 입니다.</p>
+
+<p>함수의 이름은 <code>&gt;&gt;=</code> 라 짓겠습니다. <em>bind</em> 라 읽습니다. 타입은</p>
+
+<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]
+
+parse :: Parser a -&gt; String -&gt; [(a, String)]  
+parse p xs = p xs
+
+(&gt;&gt;=) :: Parser a -&gt; (a -&gt; Parser b) -&gt; Parser b
+</code></pre>
+
+<p>구현은 </p>
+
+<pre><code class="haskell">p &gt;&gt;= q = \xs -&gt; case p xs of  
+                  [] -&gt; []
+                  (y, ys) -&gt; parse (q y) ys
+</code></pre>
+
+<p>즉 <code>&gt;&gt;=</code> 는 <code>Parser a</code> 의 처리 결과가 <code>[]</code> 이면 <code>[]</code> 을 돌려줍니다. 올바르게 처리되었을 경우에는 <code>Parser a</code> 의 결과로 얻어진 부가정보 <code>a</code> 타입에 대해 <code>a -&gt; Parser b</code> 타입의 함수인 <code>y</code> 에게 넘겨 <code>Parser b</code> 를 받고 결과적으로는 <code>\xs -&gt; parse k ys</code> 를 돌려줍니다. (<code>k :: parser b</code>) 그런데, 여기서 <code>parse k ys</code> 의 결과가 <code>[(b, String)]</code> 이기 때문에 <code>\xs -&gt; parse k ys</code> 는 <code>Parser b</code> 라 볼 수 있습니다. </p>
+
+<p>최종적으로는 <code>Parser a</code> 를 이용해 <code>Parser b</code> 를 만들어 냈습니다.</p>
+
+<p>예제를 한번 보시죠. <code>Parser Char</code> 을 이용해 <code>Parser (Char, Char)</code> 을 만들어 볼 수 있습니다.</p>
+
+<pre><code class="haskell">return :: a -&gt; Parser a  
+return v = \xs -&gt; [(v, xs)]
+
+(&gt;&gt;=) :: Parser a -&gt; (a -&gt; Parser b) -&gt; Parser b
+p &gt;&gt;= q = \xs -&gt; case p xs of  
+                   [] -&gt; []
+                   (y, ys) -&gt; parse (q, y) ys
+
+-- consume only one Char
+parseTwice :: Parser (Char, Char)  
+parseTwice = item &gt;&gt;= \x -&gt; return (x, x)  
+</code></pre>
+
+<pre><code class="haskell">parseTwice "5BEAF"  
+-- [((5, 5), "BEAF")] 
+</code></pre>
+
+<p><code>item</code> 과 <code>return (x, x)</code> 두개의 파서를 조합해서 <code>parseTwice</code> 라는 새로운 파서를 만들었습니다. 조금 더 붙여볼까요?</p>
+
+<pre><code class="haskell">ignore2 :: Parser (Char, Char)  
+ignore2 = item &gt;&gt;= \x -&gt; item &gt;&gt;= \y -&gt; item &gt;&gt;= \z -&gt; return (x, z)
+
+&gt; ignore2 "2A371"
+-- [(('2','3'),"71")]
+</code></pre>
+
+<h3 id="do">Do</h3>
+
+<p>위에서 보았듯이 같은 원본 타입 <code>String</code> 을 가지는 같은 종류의 파서(모나드)는 계속 연결할 수 있습니다. <code>p1, ..., pn</code> 을 파서라 하고 <code>v1, ..., vn</code> 을 파서가 만드는 부가정보라 할 때 다음과 같이 일반화 할 수 있습니다.</p>
+
+<pre><code class="haskell">p1 &gt;&gt;= \v1 -&gt;  
+p2 &gt;&gt;= \v2 -&gt;  
+p3 &gt;&gt;= \v3 -&gt;  
+...
+pn &gt;&gt;= \vn -&gt;  
+return (f v1 v2 ... vn)  
+</code></pre>
+
+<p>하스켈에선 조금 더 편한 문법을 지원하는데요 바로 <code>do</code> 구문입니다.</p>
+
+<pre><code class="haskell">do v1 &lt;- p1  
+   v2 &lt;- p2
+   ...
+   vn &lt;- pn
+   return (f v1 v2 ... vn)
+</code></pre>
+
+<h3 id="monadicaxioms">Monadic Axioms</h3>
+
+<p>이 때 <code>do</code> 구문을 활용하는 파서(모나드) <code>pn</code> 에 대해서는 미리 <code>&gt;&gt;=</code> 과 <code>return</code> 이 구현되어 있어야 합니다. 우리도 위에서 두 가지 함수를 사용했습니다. </p>
+
+<p>하스켈에서는 모나드 클래스가 따로 있습니다. 그리고 모든 모나드 클래스의 인스턴스는 최소한 <code>&gt;&gt;=</code> 와 <code>return</code> 을 구현해야 합니다. 우리가 위에서 구현했던 파서를 잠깐 보면</p>
+
+<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]
+
+return :: a -&gt; Parser a  
+return v = \xs -&gt; [(v, xs)]
+
+(&gt;&gt;=) :: Parser a -&gt; (a -&gt; Parser b) -&gt; Parser b
+p &gt;&gt;= q = \xs -&gt; case parse p xs of  
+                  [] -&gt; []
+                  [(y, ys)] -&gt; parse (q y) ys
+</code></pre>
+
+<p><code>return</code> 은 <code>a</code> 를 받아 파서를 돌려줍니다. <code>&gt;&gt;=</code> 는 파서(모나드)를 결합하지요.</p>
+
+<p>아까 다양한 파서(모나드)가 있을 수 있다고 말했던 것 기억 나시죠? 많은 종류의 모나드에 대해  최소한 <code>return</code> 과 <code>&gt;&gt;=</code> 를 구현해야 하는데, 이때 지켜져야 할 <em>axioms (공리)</em> 가 있습니다.</p>
+
+<p>(1) <code>m &gt;&gt;= return</code> == <code>m</code> (<em>right unit</em>) <br />
+(2) <code>return x &gt;&gt;= f</code> == <code>f x</code> (<em>left unit</em>) <br />
+(3) <code>(m &gt;&gt;= f) &gt;&gt;= g</code> == <code>m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)</code> (<em>associativity</em>)  </p>
+
+<h3 id="sowhymonad">So, Why Monad?</h3>
+
+<p>근데, 이런 복잡한 모나드가 왜 중요한걸까요? 바로 <em>부가정보</em> 를 만들면서 본래의 타입을 유지하기 때문입니다. </p>
+
+<p>본래 순수 함수형 프로그래밍에선 콘솔 출력 같은 <em>side-effect</em> 를 만들 수 없습니다. 그러나 모나드를 이용하면 <strong>부가정보 (= <em>side-effect</em>)</strong> 와 <strong>연산 부분 (<em>purely functional</em>)</strong> 를 분리할 수 있습니다.</p>
+
+<p>실제 하스켈에서도 <em>IO Monad</em> 를 통해 입출력을 할 수 있죠.</p>
+
+<h3 id="monadagain">Monad, Again</h3>
+
+<p>그러면 실제로 하스켈에서 제공하는 모나드를 클래스를 사용해 봅시다. 코드를 조금 변경해야합니다.</p>
+
+<pre><code class="haskell">module Lecture7 where
+
+import Control.Monad
+
+-- ref: http://www.cs.nott.ac.uk/~gmh/Parsing.lhs
+newtype Parser a = P (String -&gt; [(a, String)])
+
+instance Monad Parser where  
+  return v = P $ \inp -&gt; [(v, inp)]
+  p &gt;&gt;= f = P $ \inp -&gt; case parse p inp of
+                         [] -&gt; []
+                         [(v, out)] -&gt; parse (f v) out
+
+item :: Parser Char  
+item = P $ \inp -&gt; case inp of  
+                    [] -&gt; []
+                    (x:xs) -&gt; [(x, xs)]
+
+parse                         :: Parser a -&gt; String -&gt; [(a,String)]  
+parse (P p) inp               =  p inp
+
+ignore2 :: Parser (Char, Char)  
+ignore2 = do x &lt;- item  
+             item
+             z &lt;- item
+             return (x, z)
+</code></pre>
+
+<p>실제 돌려보면,</p>
+
+<pre><code class="haskell">&gt; parse ignore2 "7A3BCEF"
+-- [(('7','3'),"BCEF")]
+</code></pre>
+
+<h3 id="monadplus">MonadPlus</h3>
+
+<p>아까 작성했었던 파서 <code>failure</code>, <code>(+++)</code> 기억 나시나요? <code>failure</code> 는 항상 실패하는 파서를, <code>(+++)</code> 는 첫번째 파서와 두번째 파서를 붙여 둘 중 성공하는 하나의 파서만 선택하는 합성 파서입니다.</p>
+
+<p>하스켈에선 이런 두 가지 특징을 구현한 모나드를 <code>MonadPlus</code> 라 부릅니다. 다시 말해 <code>MonadPlus</code> 에는 기본적인 <code>return</code> 이나 <code>&gt;&gt;=</code> 이외에도 위 두 가지가 더 구현되어 있다는 말이죠. </p>
+
+<p><code>MonadPlus</code> 에서는 <code>failure</code> 대신 <code>mzero</code> 를 <code>(+++)</code> 대신 <code>mplus</code> 란 이름을 사용합니다.</p>
+
+<pre><code class="haskell">instance MonadPlus Parser where  
+  mzero = P $ \_ -&gt; []
+  p `mplus` q = P $ \inp -&gt; case parse p inp of
+                             [] -&gt; parse q inp
+                             [(v, out)] -&gt; [(v, out)]
+
+failure :: Parser Char  
+failure = mzero
+
+(+++) :: Parser a -&gt; Parser a -&gt; Parser a
+p +++ q = p `mplus` q  
+</code></pre>
+
+<pre><code class="haskell">&gt; parse (item +++ return 'd') "abc"
+-- [('a',"bc")]
+
+&gt; parse (item +++ return 'd') ""
+-- [('d',"")]
+</code></pre>
+
+<h3 id="derivedprimitives">Derived Primitives</h3>
+
+<p>이제 파서를 엮어서 다양한 파서를 만들어 봅시다.</p>
+
+<pre><code class="haskell">import Data.Char
+
+sat :: (Char -&gt; Bool) -&gt; Parser Char  
+sat p = do x &lt;- item  
+           if p x then return x else failure
+
+digit :: Parser Char  
+digit = sat isDigit
+
+lower :: Parser Char  
+lower = sat isLower
+
+upper :: Parser Char  
+upper = sat isUpper 
+
+letter :: Parser Char  
+letter = sat isAlpha
+
+alphanum :: Parser Char  
+alphanum = sat isAlphaNum
+
+char :: Char -&gt; Parser Char  
+char x = sat (== x)  
+</code></pre>
+
+<p>여기서 <code>char</code> 을 이용하면 지정된 문자열이 있는지 검사하는 파서 <code>string</code> 을 만들 수 있습니다.</p>
+
+<pre><code class="haskell">string :: String -&gt; Parser String  
+string [] = return []  
+string (x:xs) = do char x  
+                   string xs
+                   return (x:xs)
+</code></pre>
+
+<p><code>string</code> 은 재귀를 이용해 작성했는데, 입력된 문자열이 모두 존재할 경우에만 <code>return</code> 하고 아니면 <code>[]</code> 를 돌려줍니다. (<code>do</code> 매크로는 중간에 <code>[]</code> 가 나오면 <code>[]</code> 를 바로 리턴합니다.)</p>
+
+<pre><code class="haskell">&gt; parse (string "google") "naver google yahoo"
+-- []
+
+&gt; parse (string "google") "google yahoo"
+-- [("google"," yahoo")]
+
+&gt; parse (string "google") "goo yahoo"
+-- []
+</code></pre>
+
+<p>그러면, <code>digit</code> 나 <code>letter</code> 같은 파서에 대해 동일한 파서를 여러번 사용하려면 어떻게 해야 할까요? <code>string</code> 처럼 재귀를 이용해 매번 파서를 만들어야 할까요?</p>
+
+<p>그렇지 않습니다. <em>mutual recursion</em> 을 이용해서 파서를 받아 여러번 적용해 주는 <code>many</code> 란 파서를 만들어 봅시다.</p>
+
+<pre><code class="haskell">many :: Parser a -&gt; Parser [a]  
+many p = many1 +++ return []
+
+many1 :: parser a -&gt; Parser [a]  
+many1 p = do x &lt;- p  
+             xs &lt;- many p
+             return (x:xs)
+</code></pre>
+
+<p><code>many</code> 는 <code>p</code> 을 0번 이상, <code>many1</code> 은 적어도 1번 이상 <code>p</code> 를 적용합니다. </p>
+
+<p><code>many</code> 를 활용하면 변수의 이름도 파싱할 수 있습니다. 변수의 이름은 첫 글자가 소문자로, 나머지는 알파벳 혹은 숫자로 구성되어 있다고 하면 이를 위한 파서 <code>ident</code> 는</p>
+
+<pre><code class="haskell">ident :: Parser String  
+ident = do x &lt;- lower  
+           xs &lt;- many alphanum
+           return (x:xs)
+
+&gt; parse ident "left = 3"
+-- [("left"," = 3")]
+</code></pre>
+
+<p>이제 뭔가 파서가 좀 쓸만해 보이죠? 자연수를 파싱하는 <code>nat</code> 와 스페이스를 파싱하는 <code>space</code> 를 만들어 보겠습니다.</p>
+
+<pre><code class="haskell">nat :: Parser Int  
+nat = do xs &lt;- many1 digit  
+         return (read xs)
+
+space :: Parser ()  
+space = do many (sat isSpace)  
+           return ()
+
+&gt; parse nat "123 abc"
+-- [(123," abc")]
+
+&gt; parse space "   abc"
+-- [((),"abc")]        
+</code></pre>
+
+<p>코드를 분석하는 파서를 만들때 스페이스를 주의해야 합니다. 예를 들어 <code>1+2</code> 와 <code>1 + 2</code> 는 같은 코드입니다. </p>
+
+<p>파서를 받아 앞 뒤로 붙은 스페이스를 제거하는 기능을 덧붙인 파서를 돌려주는 <code>token</code> 이란 함수를 만들어 봅시다. 그리고 나면 <code>token</code> 을 활용해 <code>identifier</code>, <code>natural</code>, <code>symbol</code> 을 만들겁니다.</p>
+
+<pre><code class="haskell">token :: Parser a -&gt; Parser a  
+token p = do space  
+             v &lt;- p
+             space
+             return v
+
+identifier :: Parser String  
+identifier = token ident
+
+natural :: Parser Int  
+natural = token nat
+
+symbol :: String -&gt; Parser String  
+symbol xs = token (string xs)  
+</code></pre>
+
+<p>이제 이걸 엮어서 숫자 리스트를 분석하는 파서를 만들어 봅시다.</p>
+
+<pre><code class="haskell">nlist :: Parser [Int]  
+nlist = do symbol "["  
+           n &lt;- natural
+           ns &lt;- many (do symbol ","
+                          natural)
+           symbol "]"
+           return (n:ns)
+
+
+&gt; parse nlist "[1, 2, 3]"
+-- [([1,2,3],"")]
+
+&gt; parse nlist "[1, 2]"
+-- [([1,2],"")]
+
+&gt; parse nlist "[1, 2"
+-- []
+
+&gt; parse nlist "[1 2"
+-- []
+
+&gt; parse nlist "[1,"
+-- []
+</code></pre>
+
+<p><del>모나드의 세계란 참으로 놀랍죠?</del></p>
+
+<h3 id="arithmeticexpressions">Arithmetic Expressions</h3>
+
+<p>이제 단순한 텍스트가 아니라, 코드를 분석해 보죠. 우선 작은 수식을 분석하는 파서를 작성해 봅시다. 우리가 작성할 파서는 정수에 대한 <code>*</code> 과 <code>+</code> 만 처리할 수 있습니다. 간단히 문법을 만들어 보면</p>
+
+<pre><code class="haskell">expr   ::= expr + expr | term  
+term   ::= term * term | factor  
+factor ::= (expr) | nat  
+nat    ::= 0 | 1 | 2 | ...  
+</code></pre>
+
+<p>처음보면 난해할 수 있습니다. 이 그림과 비교해가며 보세요. 완벽히 일치하진 않지만 대략적인 설명을 해줍니다.</p>
+
+<p><img src='http://www.csee.umbc.edu/courses/331/fall11/hw/hw2/parsetree.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://www.csee.umbc.edu/' >http://www.csee.umbc.edu</a>)</p>
+
+<p>그런데, 실제로 <code>2 + 3 + 4</code> 에 적용해보면, <code>(2 + 3) + 4</code> 과 <code>2 + (3 + 4)</code> 두 가지 방법으로 해석될 수 있습니다. 따라서 모호함을 제거하기 위해</p>
+
+<pre><code class="haskell">expr   ::= term + expr | term  
+term   ::= factor * term | factor  
+factor ::= (expr) | nat  
+nat    ::= 0 | 1 | 2 | ...  
+</code></pre>
+
+<p>이제 <code>2 + 3 + 4</code> 는 확실히 <code>2 + (3 + 4)</code> 입니다. 괴상한 문법을 하스켈로 옮기기 위해 조금  더 다듬어 보도록 하지요.</p>
+
+<p><code>term + expr | term</code> 은 사실 <code>term + (expr | e)</code> 과 동일합니다. (<code>e</code> 는 <strong>비었음</strong> 을 의미) <code>factor * term | factor</code> 도 <code>factor + (term | e)</code> 구요. 따라서</p>
+
+<pre><code class="haskell">expr   ::= term + (expr | e)  
+term   ::= factor + (term | e)  
+factor ::= (expr) | nat  
+nat    ::= 0 | 1 | 2 | ...  
+</code></pre>
+
+<p>이제 하스켈 코드로 옮길겁니다. 우리는 트리를 만드는 대신 바로바로 계산할 겁니다. </p>
+
+<pre><code class="haskell">expr :: Parser Int  
+expr = do t &lt;- term  
+          do symbol "+"
+             e &lt;- expr
+             return (t + e)
+           +++ return t
+
+term :: Parser Int  
+term = do f &lt;- factor  
+          do symbol "*"
+             t &lt;- term
+             return (t * f)
+           +++ return f
+
+factor :: Parser Int  
+factor = do symbol "("  
+            e &lt;- expr
+            symbol ")"
+            return e
+          +++ natural          
+</code></pre>
+
+<p><code>return t</code> 도 하나의 파서고, <code>+++</code> 로 둘 중 올바르게 작동하는 파서만 택함으로써 문법에서의 <code>|</code> 를 구현했습니다.</p>
+
+<p>이제 파싱된 결과를 해석하는 <code>eval</code> 함수를 만들어 봅시다.</p>
+
+<pre><code class="haskell">eval :: String -&gt; Int  
+eval xs = case parse expr xs of  
+           [(n, [])] -&gt; n
+           [(_, out)] -&gt; error ("ununsed input: " ++ out)
+           [] -&gt; error ("invalid input: " ++ xs)
+
+
+&gt; eval "2 * 3 + 4"
+-- 10
+
+&gt; eval "2 * (3 + 4)"
+-- 14
+
+&gt; eval "2 * 3 +"
+-- *** Exception: ununsed input: +
+
+&gt; eval "2 * 3 - 4"
+-- *** Exception: ununsed input: - 4
+
+&gt; eval "-4"
+-- *** Exception: invalid input: -4
+</code></pre>
+
+<h3 id="programmingwitheffects">Programming With Effects</h3>
+
+<p><a href='http://www.cs.nott.ac.uk/' ~gmh/monads">Programming With Effects</a> 는 <em>Programming in Haskell</em> 의 저자인 <strong>Graham Hutton</strong> 이 작성한 글입니다. 모나드에 대해 이보다 쉽고, 간결하게 설명한 글은 찾기 힘들죠. </p>
+
+<p><em>Programming with Effects</em> 를 참고하여 몇 가지 예제를 더 작성해 보면서 모나드에 더 익숙해져 봅시다.</p>
+
+<pre><code class="haskell">data Expr = Val Int | Div Expr Expr  
+</code></pre>
+
+<p>위와 같은 <code>Expr</code> 이 있다고 합시다. 평가하기 위해서 <code>eval</code> 함수를 만들고 실행해 봅시다.</p>
+
+<pre><code class="haskell">eval :: Expr -&gt; Int  
+eval (Val n) = n  
+eval (Div x y) = eval x `div` eval y
+
+&gt; eval (Val 3)
+-- 3
+
+&gt; eval (Div (Val 3) (Val 4))
+-- 0
+
+&gt; eval (Div (Val 8) (Val 4))
+-- 2
+
+&gt; eval (Div (Val 8) (Val 0))
+-- *** Exception: divide by zero
+</code></pre>
+
+<p><code>0</code> 으로 나누니 에러가 발생합니다. <code>expr</code> 이 <code>Val 0</code> 인지 아닌지를 판별할 필요가 있습니다. </p>
+
+<p>조금 더 고쳐보면</p>
+
+<pre><code class="haskell">import Prelude hiding (Maybe, Just, Nothing)
+
+data Expr = Val Int | Div Expr Expr  
+data Maybe a = Nothing | Just a
+
+safediv :: Int -&gt; Int -&gt; Maybe Int  
+safediv n m = if m == 0 then Nothing else Just (n `div` m)
+
+eval :: Expr -&gt; Maybe Int  
+eval (Val n) = Just n  
+eval (Div x y) = case eval x of  
+                  Nothing -&gt; Nothing
+                  Just n -&gt; case eval y of
+                             Nothing -&gt; Nothing
+                             Just m -&gt; safediv n m
+</code></pre>
+
+<p>너무 복잡합니다. <code>eval</code> 에서 <code>safediv</code> 에 인자를 넘기는 부분을 추상화하면</p>
+
+<pre><code class="haskell">seqn :: Maybe a -&gt; Maybe b -&gt; Maybe (a, b)  
+seqn _ Nothing = Nothing  
+seqn Nothing _ = Nothing  
+seqn (Just x) (Just y) = Just (x, y)
+
+apply :: (a -&gt; Maybe b) -&gt; Maybe a -&gt; Maybe b  
+apply f Nothing = Nothing  
+apply f (Just x) = f x
+
+eval :: Expr -&gt; Maybe Int  
+eval (Val n) = Just n  
+eval (Div x y) = apply f (eval x `seqn` eval y)  
+                 where f (n, m) = safediv n m
+</code></pre>
+
+<p>조금 더 간편해졌습니다. 그런데 만약 인자가 3개인 연산자에 대해 평가 방법을 정의한다면</p>
+
+<pre><code class="haskell">eval (Op x y z) =  
+  apply f (eval x `seqn` (eval y `seqn` eval z))
+  where f (a, (b, c)) =                 
+</code></pre>
+
+<p>괄호가 점점 중첩됩니다. 모든 것을 나중에 <code>seqn</code> 로 모든 결과를 모아 <code>f</code> 에서 처리하기 보다는 <code>Maybe a</code> 를 받아 <code>a -&gt; Maybe b</code> 를 바로 적용해 <code>Maybe b</code> 를 돌려주고, 이런식으로 순차적으로 처리하는 방식으로 바꿔봅시다.</p>
+
+<pre><code class="haskell">(&gt;&gt;=) :: Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b
+m &gt;&gt;= f = case m of  
+           Nothing -&gt; Nothing
+           Just x -&gt; f x
+
+eval :: Expr -&gt; Maybe Int  
+eval (Val x) = Just x  
+eval (Div x y) = eval x &gt;&gt;= \n -&gt;  
+                 eval y &gt;&gt;= \m -&gt; 
+                 safediv n m 
+</code></pre>
+
+<p>어디서 많이 보다싶은 식이죠? 바로 하스켈의 <code>do</code> 와 비슷합니다.</p>
+
+<p>하스켈에서 <code>Eq</code> 의 클래스의 정의는 이렇게 되어있습니다.</p>
+
+<pre><code class="haskell">class Eq a where  
+  (==) :: a -&gt; a -&gt; Bool
+  (/=) :: a -&gt; a -&gt; Bool
+
+  x /= y = not (x == y)
+</code></pre>
+
+<p>이 말은 <code>Eq</code> 클래스의 인스턴스가 되는 <code>a</code> 타입은 무조건 <code>==</code> 를 구현해야 한다는 뜻입니다. (<code>/=</code> 는 이미 구현되어 있는거 보이시죠?)</p>
+
+<p>마찬가지로 타입 <code>m</code> 으로 <em>parameterized</em> 된 <code>Monad</code> 클래스의 인스턴스 또한 다음의 두 함수를 구현해야 합니다.</p>
+
+<pre><code class="haskell">class Monad m where  
+  return :: a -&gt; m a
+  (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b
+</code></pre>
+
+<p>예를 들어 <code>Maybe</code> 같은 경우</p>
+
+<pre><code class="haskell">instance Monad Maybe where  
+  return x = Just x
+
+  Nothing &gt;&gt;= _ = Nothing
+  (Just x) &gt;&gt;= f = f x
+</code></pre>
+
+<h3 id="listmonad">List Monad</h3>
+
+<p><code>Maybe</code> 모나드를 잘 보면 <code>Nothing</code> 은 실패를, <code>Just x</code> 는 성공을 나타내는 연산으로 볼 수 있습니다. </p>
+
+<p>리스트 모나드는 이런 개념을 좀 더 일반화한 것입니다. 복수번의 성공이 있을 수 있죠.</p>
+
+<pre><code class="haskell">instance Monad [] where  
+  return x = [x]
+  xs &gt;&gt;= f = concat (map f xs)
+</code></pre>
+
+<p>이를 이용하면 <code>pairs</code> 와 같은 함수를 만들수 있습니다.</p>
+
+<pre><code class="haskell">pairs :: [a] -&gt; [b] -&gt; [(a, b])  
+pairs xs ys = do x &lt;- xs  
+                 y &lt;- ys
+                 return (x, y)
+
+&gt; pairs [1, 2, 3] [4, 5, 6]
+-- [(1,4),(1,5),(1,6),(2,4),(2,5),(2,6),(3,4),(3,5),(3,6)]                 
+</code></pre>
+
+<p><em>list comprehension</em> 구문과 비슷합니다. 실제로 <code>do</code> 와 <em>list comprehension</em> 모두 리스트의 <code>&gt;&gt;=</code> 를 이용합니다.</p>
+
+<h3 id="statemonad">State Monad</h3>
+
+<p>한 상태(State) 에서 다른 상태로 변환시켜주는 <em>state transformer</em> 의 타입은 이렇게 정의할 수 있을 겁니다.</p>
+
+<pre><code class="haskell">type ST = State -&gt; State  
+</code></pre>
+
+<p>그리고 상태가 변하면서 어떤 정보를 남겼을때의 타입을 이렇게 만들어 볼 수 있겠죠.</p>
+
+<pre><code class="haskell">type ST a = State -&gt; (a, State)  
+</code></pre>
+
+<p>어디서 많이 본것 같죠? 맞습니다. 위에서 본 <code>Parser</code> 입니다. <code>String -&gt; (a, String)</code> 이였으니까, <code>State</code> 가 <code>String</code> 이었던 거죠.</p>
+
+<pre><code class="haskell">instance Monad ST where  
+  return x = \s -&gt; (x, s)
+
+  st &gt;&gt;= f = \s -&gt; let (x, s') = st s
+                   in f x s'
+</code></pre>
+
+<p>누차 언급했듯이 <code>&gt;&gt;=</code> 는 모나드(연산)간 연결입니다. <code>st</code> 에 <code>s</code> 를 넣은 결과를 <code>(x, s')</code> 라 하면 다시 <code>f x</code> 에 <code>s</code> 를 넣어 연결할 수 있다는 뜻이지요.</p>
+
+<p>위에서는 <code>type</code> 을 사용했지만 실제로 이 키워드를 사용하면 클래스의 인스턴스가 될 수 없습니다. <code>ST</code> 를 <em>monadic type</em> 클래스의 인스턴스로 만들려면 <code>data</code> 나 <code>newtype</code> 을 이용할 수 있습니다. <code>data</code> 의 경우엔 <em>dummy constructor</em> 가 필요합니다. 여기선 <code>S</code> 가 되겠습니다. <em>dummy constructor</em> 의 런타임 오버헤드를 피하려면 <em>newtype</em> 을 이용하면 됩니다.</p>
+
+<p>그리고 이 예제에서는 <em>dummy constructor</em> 를 제거하기 위해 <code>apply</code> 함수를 만들어서 이용하겠습니다. </p>
+
+<p><code>State</code> 는 정수로 표시할겁니다. </p>
+
+<pre><code class="haskell">type State = Int  
+data ST a = S (State -&gt; (a, State))
+
+apply :: ST a -&gt; State -&gt; (a, State)  
+apply (S f) x = f x
+
+instance Monad ST where  
+  return x = S (\s -&gt; (x, s))
+  st &gt;&gt;= f = S (\s -&gt; let (x, s') = apply st s in apply (f x) s')
+</code></pre>
+
+<p>이제 예제에서 활용할 간단한 이진트리를 정의해 봅시다. 이진트리의 <em>leaf</em> 는 <code>a</code> 타입의 값을 가지고 있습니다.</p>
+
+<pre><code class="haskell">data Tree = Leaf a | Node (Tree a) (Tree b)
+
+-- example
+tree :: Tree Char  
+tree = Node (Node (Leaf 'a') (Leaf 'b')) (Leaf 'c')  
+</code></pre>
+
+<p>이제 <em>State</em> 를 받아 <code>+1</code> 을 더한 다음 <em>State</em> 를 돌려주는 <code>fresh</code> 를 만들어 봅시다.</p>
+
+<pre><code class="haskell">-- data ST a = S (State -&gt; (a, State))
+
+fresh :: ST Int  
+fresh = S (\n -&gt; (n, n + 1))  
+</code></pre>
+
+<p>즉 <code>fresh</code> 는 <em>State</em> 를 <code>1</code> 만큼 증가시키고 부가정보로 <em>current state</em> <code>n</code> 을 남깁니다. <code>fresh</code> 를 이용하면 위에서 만든 이진트리를 순회하면서 번호를 붙일 수 있습니다. 부가정보로 남는 <code>n</code> 을 <code>Leaf</code> 에다가 붙이는 것이죠. </p>
+
+<p>다음 <code>fresh</code> 의 입력은 이전 <code>fresh</code> 의 아웃풋인 <code>n + 1</code> 이기 때문에 서로 다른 두 노드가 같은 숫자를 가질 일은 없습니다.</p>
+
+<pre><code class="haskell">mlabel :: Tree a -&gt; ST (Tree (a, Int))  
+mlabel (Leaf x) = do n &lt;- fresh  
+                     return (Leaf (x, n))
+mlabel (Node l r) = do l' &lt;- mlabel l  
+                       r' &lt;- mlabel r
+                       return (Node l' r')
+
+label  :: Tree a -&gt; Tree (a,Int)  
+label t = fst (apply (mlabel t) 0)
+
+&gt; label tree
+-- Node (Node (Leaf ('a',0)) (Leaf ('b',1))) (Leaf ('c',2))
+</code></pre>
+
+<h3 id="iomonad">IO Monad</h3>
+
+<p>하스켈에서 입출력은 IO 모나드를 이용합니다. 무슨말인고 하니, 다음과 같은 <em>axioms</em> 를 구현한 <strong>IO 모나드</strong> 에 대해</p>
+
+<pre><code class="haskell">return  :: a -&gt; IO a  
+(&gt;&gt;=)   :: IO a -&gt; (a -&gt; IO b) -&gt; IO b
+getChar :: IO Char  
+putChar :: Char -&gt; IO ()  
+</code></pre>
+
+<p>다음처럼 <code>do</code> 구문을 이용해서 프로그램을 작성할 수 있다는 뜻입니다.</p>
+
+<pre><code class="haskell">getLine :: IO String  
+getLine = do x &lt;- getChar  
+             if x == '\n' then
+               return []
+             else
+               do xs &lt;- getLine
+                  return (x:xs)
+</code></pre>
+
+<p>IO 모나드는 <em>State 모나드</em> 라 볼 수 있습니다. <code>IO a</code> 는 타입 <code>a</code> 의 부가정보를 만들면서 <em>State</em> 를 변화시키는 것으로요</p>
+
+<pre><code class="haskell">type World = ...  
+type IO a = World -&gt; (a, World)  
+</code></pre>
+
+<p>여기서 입/출력이 수행되는 것은 <em>action</em> 에 의해 <code>World</code> 가 변경되는 것이라 볼 수 있습니다.</p>
+
+<h3 id="derivedprimitives">Derived Primitives</h3>
+
+<p>다양한 종류의 모나드에 대해 적용할 수 있는 함수를 만들 수 있습니다. </p>
+
+<p><code>liftM</code> 는 모나드에 대한 <code>map</code> 을 <code>join</code> 은 <code>concat</code> 을, <code>&gt;&gt;</code> 는 첫 번째 결과값을 다 버리고 두번째만 취하는 함수입니다. 마지막으로 <code>sequence</code> 는 모나드 익스프레션 리스트를  하나의 모나드 익스프레션으로 바꾸고, 그 결과를 리스트로 돌려줍니다. 타입을 보시면 이해가 빠를겁니다.</p>
+
+<pre><code class="haskell">liftM :: Monad m =&gt; (a -&gt; b) -&gt; m a -&gt; m b  
+liftM f mx = do x &lt;- mx  
+             return (f x)
+
+join :: Monad m =&gt; m (m a) -&gt; m a  
+join mmx = do mx &lt;- mmx  
+              x &lt;- mx
+              return x
+
+(&gt;&gt;) :: Monad m =&gt; m a -&gt; m b -&gt; m b
+mx &gt;&gt; my = do _ &lt;- mx  
+              y &lt;- my
+              return y
+
+sequence :: Monad m =&gt; [m a] -&gt; m [a]  
+sequence (mx:mxs) = do x &lt;- mx  
+                       xs &lt;- sequence mxs
+                       return (x:xs)
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <strong>DelftX FP 101x</strong> <br />
+(2) <a href='http://stackoverflow.com/questions/2607498/programming-in-haskell-error-in-sat-function' >error in sat function in "Programming in Haskell"</a> <br />
+(3) <a href='http://wiki.reeseo.net/Haskell/%EA%B3%B5%EC%8B%9D%20%EC%9E%85%EB%AC%B8%EC%84%9C%20%EB%B2%88%EC%97%AD%EB%AC%B8/9.%20%EB%AA%A8%EB%82%98%EB%93%9C%20' (Monads)">http://wiki.reeseo.net/Haskell</a> <br />
+(4) <a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' >Understanding Monads</a> <br />
+(5) <a href='http://www.csee.umbc.edu/courses/331/fall11/hw/hw2/' >http://www.csee.umbc.edu</a> <br />
+(6) <a href='http://www.cs.nott.ac.uk/' ~gmh/monads">Programming With Effects</a> by <em>Graham Hutton</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro4/</link><guid isPermaLink="false">1b0aad8b-73c3-4f02-9556-e14d8933cae4</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[functional parser]]></category><category><![CDATA[monad]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 19 Nov 2014 04:39:46 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week1]]></title><description><![CDATA[<p>매 10분마다 새롭게 생성되는 데이터의 양은 2003년까지의 모든 데이터를 합한 것보다 더 많다고 한다. 이 데이터 속에는 무궁무진한 가치가 있다고 하여 어떤 사람들은 데이터를 기름이라 비유하기도 한다.</p>
 
 <p><img src='https://farm9.staticflickr.com/8037/8008798697_d36feb328d_h_d.jpg'  alt="" /></p>
 
@@ -4874,137 +5685,4 @@ res73: scala.collection.immutable.Map[Char,List[String]] = Map(p -&gt; List(pear
 
 <p>(1) <a href='http://docs.scala-lang.org/overviews/collections/overview.html' >http://docs.scala-lang.org</a></p>
 
-<p>2014-10-25, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-6/</link><guid isPermaLink="false">d4f41772-52eb-4a9c-a778-d73f962245b5</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[collection]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 24 Oct 2014 14:07:21 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 4]]></title><description><![CDATA[<p>지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 <em>Neural Network (신경망)</em> 을 건들다가 놀랍게도 그것이 <em>logistic regression</em> 과 연관이 있으며 <code>n</code> 이 매우 클 경우의 <em>classification</em> 문제를 해결할 수 있다는 것을 배운다.</p>
-
-<h3 id="nonlinearhypotheses">Non-Linear Hypotheses</h3>
-
-<p>다음과 같은 트레이닝 셋이 있을때, 두 집단을 <em>classification</em> 하는 <em>hypothesis</em> 를 찾는다고 하자. </p>
-
-<p><img src='http://www.holehouse.org/mlclass/08_Neural_Networks_Representation_files/Image.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.holehouse.org/' >http://www.holehouse.org</a>)</p>
-
-<p><code>x1</code> 과 <code>x2</code> 만으로는 찾을 수 없으니, 더 많은 <em>feature</em>  <code>x1^2, x1x2, x2^2</code> 를 도입한다 하자. 트레이닝 셋에 적합한 가설을 찾을수는 있겠지만, 항상 좋은건 아니다.</p>
-
-<p>(1) 우선 지난 시간에 언급했듯이 <em>Overfitting</em> 이 발생할 수 있고 <br />
-(2) <em>feature</em> 수가 <code>n</code> 이라 할때, 모든 <em>quadratic feature</em> 를 도입하면 <em>feature</em> 수가 <code>O(n^2)</code> (<code>n^2/2</code>)만큼 늘어난다. (아래 그림 참조) 다시 말해서 계산 비용이 엄청나게 비싸진다.</p>
-
-<p><img src='http://img.blog.csdn.net/20140507021224421'  align="center" />  </p>
-
-<p align="center">(<a href='http://blog.csdn.net/feliciafay' >http://blog.csdn.net/feliciafay</a>)</p>
-
-<p>그리고 <em>feature</em> 수를 줄이기 위해 <code>x1^2, x2^2, x3^2 ...</code> 등 <em>quadratic feature</em> 만을 도입하고 나머지 <em>parameter</em> 를 버리면, <em>hypothesis</em> 가 <em>underfit</em> 할 수 있다.</p>
-
-<p>만약 <em>feature</em> 를 <em>cubic</em> 까지 도입하면 <em>feature</em> 수가 <code>O(n^3)</code> 으로 늘어나 계산시간은 어마어마하게 걸린다. 따라서 차수를 늘려 문제를 해결하려는 방법은 <code>n</code> 이 클때 좋은 방법이 아니다. 게다가 일반적으로 대부분의 문제들은 <code>n</code> 이 큰편이다.</p>
-
-<p>자동차 이미지 인식 문제를 고려해 보자. 이미지는 픽셀이므로, 50 * 50 픽셀로 구성된 경우 <code>n = 2500</code> 이다.</p>
-
-<p><img src='http://img.blog.csdn.net/20140507021231812'  align="center" />  </p>
-
-<p align="center">(<a href='http://blog.csdn.net/feliciafay' >http://blog.csdn.net/feliciafay</a>)</p>
-
-<p>이건 그레이스케일의 경우고 만약 RGB 라면 여기에 3을 곱해서 <code>n = 7500</code> 이 된다. <em>quadratic</em> 이면 <code>7500^2 / 2</code>, 대략 3 millions 개의 <em>feature</em> 를 가지게 된다. 이쯤되면 답이 없다. <code>n</code> 이 큰 <em>classification</em> 에 대해 사용할 수 있는 다른 방법은 없을까?</p>
-
-<h3 id="modelrepresentation">Model Representation</h3>
-
-<p>잠깐 눈을 돌려 <em>Neural Networks</em> 에 대해 이야기 해 보자. 다양한 알고리즘을 개발하는 대신  스스로 학습하는 뇌를 모방한 알고리즘을 개발할 수 있다면 진짜 AI 를 구현할 수 있지 않을까? 라는 질문에서 <em>Neural networks</em> 는 출발한다.</p>
-
-<p>뇌를 모방한 알고리즘을 만들려면, 인간의 뇌가 어떻게 작동하는지 알아야한다. 뇌는 <em>Neuron</em> 이라는 단위의 집합으로 구성되었는데, 요로코롬 생겼다.</p>
-
-<p><img src='http://home.agh.edu.pl/' ~vlsi/AI/intro/neuron.png" align="center" />  </p>
-
-<p align="center">(<a href='http://home.agh.edu.pl/' ~vlsi/AI/intro/'>http://home.agh.edu.pl/~vlsi/AI/intro/</a>)</p>  
-
-<p><br/></p>
-
-<p>여기서 <em>Dendrite</em> 라는 부분이 <strong>input</strong> 이고, <em>Axon</em> 이 <strong>output</strong> 이다. 이걸 모델링하면,</p>
-
-<p><img src='http://img.blog.csdn.net/20140507021238515'  align="center" />  </p>
-
-<p align="center">(<a href='http://blog.csdn.net/feliciafay' >http://blog.csdn.net/feliciafay</a>)</p>
-
-<p>위 그림에서 좌측에 있는 <code>x1, x2, x3</code> 가 <em>input</em> 이라 보면 되고, <code>h0(x)</code> 는 이전처럼 <code>0^T * x</code> 에 <em>sigmoid function</em> 을 적용한 것이다. 그리고 <em>neural network</em> 에서 <em>parameter</em> 대신 <code>0(theta)</code> 를 <strong>weights</strong> 라 부르기도 한다. <code>x0</code> 은 값이 <code>1</code> 이고, <em>bias unit</em> 이라 부르는데 편의상 그리기도 하고 안그리기도 한다. <del>교수님 뜻대로 하소서</del>
-<br/><br/></p>
-
-<p>여기까지는 단일 <em>neuron</em> 을 모델링 한것이고, <em>neural network</em> 는 여러개의 <em>neuron</em> 들이 합쳐진 것이다. 간단히 그려보면, </p>
-
-<p><img src='http://img.blog.csdn.net/20140507021247656'  align="center" />  </p>
-
-<p align="center">(<a href='http://blog.csdn.net/feliciafay' >http://blog.csdn.net/feliciafay</a>)</p>
-
-<p>여기서 <em>layer 1</em> 은 <em>input layer</em>, 마지막인 <em>layer 3</em>은 <em>output layer</em> 다. 그리고 가운데 있는 레이어들, 여기서는 <em>layer2</em>, <strong>hidden layer</strong> 라 부른다. 디버깅이 아니라면 <em>hidden layer</em> 에서 산출되는 값들을 관측하려고 할 필요는 없다. <em>hidden layer</em> 는 하나 이상일 수 있다. 실제 계산 과정을 보면</p>
-
-<p><img src='http://img.blog.csdn.net/20140507021254640'  align="center" />  </p>
-
-<p align="center">(<a href='http://blog.csdn.net/feliciafay' >http://blog.csdn.net/feliciafay</a>)</p>
-
-<p><code>ai^j</code> 는, <code>j</code> 번째 <em>hidden layer</em> 에서 <code>i</code> 번째 <em>unit</em> 이다. <code>0(theta)^j</code> 는 <em>layer j</em> 와 <em>layer j+1</em> 사이에서 사용되는 <em>weights</em> 다. 이때 <em>hidden layer</em> 의 각 <em>unit</em> 마다 <em>input</em> 을 위한 <em>weight</em> 를 가지고 있다고 하면 위의 그림에서 <code>0</code> 의 <em>dimension</em> 은 <code>3 * 4</code> 다. (<em>bias unit</em> <code>x0</code> 포함)</p>
-
-<blockquote>
-  <p>If network has <code>s_j</code> units in layer <code>j</code>, <code>s_j+1</code> units in layer <code>j+1</code>, then <code>0^j</code> will be dimension <code>s_j+1 * (s_j + 1)</code></p>
-</blockquote>
-
-<p>이제 <em>output layer</em> 를 잘 보면 이 레이어의 <em>input</em> 은 <code>a^(2)</code> 고, <em>weight</em> 로 <code>0^2</code> 를 가지고 있다. 따라서 <code>h0(x)</code> 는 위의 식처럼 된다.</p>
-
-<h3 id="forwardpropagation">Forward Propagation</h3>
-
-<p>위 그림처럼 <code>x</code> 를 받아, <code>h0(x)</code> 를 계산하는 방법을 <em>forward propagation</em> 이라 부르는데 <em>vectorization</em> 을 이용해서 간단히 해 보자.</p>
-
-<p><img src='http://www.try2go.com/wp-content/uploads/2014/08/forward-propogation.jpg'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/' >http://www.try2go.com/201408/neural-networks-1/</a>)</p>
-
-<p><em>sigmoid fucntion</em> <code>g</code> 내부의 수식을 <code>z</code> 라 부르고 <code>a^(1) = x</code> 라 두면, 우측처럼 수식이 심플해진다. <code>z^(2) = 0^(1) * a^(1)</code> 이고, 여기에 <em>sigmoid function</em> 을 적용하면 <code>a^(2)</code> 가 나온다. 여기에 <em>bias unit</em> <code>a_0^(2) = 1</code> 을 더해 <code>a^(2)</code> 를 4차원 벡터로 만들면 다시 <code>z^(3)</code> 를 계산할 수 있다. 
-<br/><br/></p>
-
-<p>자, 이제 왜 <em>neural network</em> 를 뜬금없이 공부하다가 <em>forward propagation</em> 의 <em>vectorization</em> 까지 고려했는지를 밝힐 시간이다! 위 그림에서 <code>a^(1)</code> 즉, <em>layer 1</em> 을 가려버리면 아래와 같은데</p>
-
-<p><img src='http://www.try2go.com/wp-content/uploads/2014/08/learn-features.jpg'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/' >http://www.try2go.com/201408/neural-networks-1/</a>)</p>
-
-<p>이때 <code>h0(x)</code> 를 계산하는 식을 구해보면, <em>logistic regression</em> 과 똑같다. <del>오오 머신러닝 오오</del> </p>
-
-<p><strong>결국, <em>neural network</em> 가 하는 일은 <em>logistic regression</em> 이다.</strong> 단지  <em>hidden layer</em> 에서 <code>x1, x2, x3</code> 를 적당한 <em>weight</em> 로 훈련시켜 새로운 <em>feature</em> <code>a1^(2),  a2^(2), a3^(2)</code> 를 만들어 내고, 그걸로 <em>logistic regression</em> 을 할 뿐이다. </p>
-
-<p>다시 한번 정리하자면 <em>neural network</em> 는 <em>feature</em> 를 훈련시켜 다른 값을 가진  <em>feature</em> 로 바꾸는 과정을 통해 <em>hypothesis</em> 를 매우 고차의 다항식으로 만들지 않고도 <code>n</code> 이 매우 큰 경우의 <em>classification</em> 을 풀 수 있도록 한다. 항상 같은 개수의 <em>feature</em> 만 나오는건 아니고, 더 줄이거나 좀 더 늘릴 수도 있다. 아래의 그림을 보자.</p>
-
-<p><img src='http://alphaism.files.wordpress.com/2012/11/selection_001.png?w=630'  align="center" />  </p>
-
-<p align="center">(<a href='http://alphaism.wordpress.com/' >http://alphaism.wordpress.com/</a>)</p>
-
-<h3 id="examples">Examples</h3>
-
-<p>먼저 간단히 <em>AND</em> 연산을 <em>neural network</em> 로 구현한다 하자. </p>
-
-<p><img src='http://www.try2go.com/wp-content/uploads/2014/08/and.jpg'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/' >http://www.try2go.com/201408/neural-networks-1/</a>)</p>
-
-<p>위 그림처럼 <code>z^(2) = -30 + 20x1 + 20x2</code> 라면, 우측 표 처럼 각각 <code>h0(x)</code> 값이 나오고, <em>sigmoid function</em> 은 <code>4.6</code> 정도일때 <code>y ~= 0.99</code> 이므로 <code>g(+10)</code> 은 거의 <code>1</code>, <code>g(-10)</code> 은 거의 <code>0</code> 이라 볼 수 있다.</p>
-
-<p><em>XNOR</em> 은 <em>AND</em> <em>~ AND ~</em> 그리고 <em>OR</em> 을 조합하면 만들 수 있다. 아래 그림을 보자.</p>
-
-<p><img src='http://www.holehouse.org/mlclass/08_Neural_Networks_Representation_files/Image%20' [17].png" align="center" />  </p>
-
-<p align="center">(<a href='http://www.holehouse.org/' >http://www.holehouse.org</a>)</p>
-
-<p>결국 <em>neural network</em> 는 각 <em>hidden layer</em> 에서 함수를 이용해 이전 단계의 결과에 어떤 처리를 가해 복잡한 일들을 해낼 수 있는 것이다.</p>
-
-<h3 id="multiclassclassification">Multiclass Classification</h3>
-
-<p>이제 <em>multi-class</em> 를 고려해 보자.</p>
-
-<p><img src='http://www.try2go.com/wp-content/uploads/2014/08/one-vs-all.jpg'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.try2go.com/201408/neural-networks-1/' >http://www.try2go.com/201408/neural-networks-1/</a>)</p>
-
-<p>위 그림처럼 4개의 클래스가 있을 때, <em>output</em> 인 <code>h(x)</code> 를 <code>4 * 1</code> vector 로 만들도록 하고, 각 클래스에 대해서 <code>[1; 0; 0; 0], [0; 1; 0; 0], [0; 0; 1; 0], [0; 0; 0; 1]</code> 이 되도록 훈련시키면 된다. 기본적인 아이디어는 <em>one vs all method</em> 와 같다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://blog.csdn.net/feliciafay/article/details/25171147' >http://blog.csdn.net/feliciafay</a> <br />
-(2) <a href='http://www.holehouse.org/mlclass/08_Neural_Networks_Representation.html' >http://www.holehouse.org</a> <br />
-(3) <a href='http://home.agh.edu.pl/' ~vlsi/AI/intro/">http://home.agh.edu.pl/~vlsi/AI/intro/</a> <br />
-(4) <a href='http://www.try2go.com/201408/neural-networks-1/' >http://www.try2go.com/201408/neural-networks-1/</a> <br />
-(5) <a href='http://alphaism.wordpress.com/2012/11/13/neural-network-algorithm/' >http://alphaism.wordpress.com/</a></p>]]></description><link>http://1ambda.github.io/machine-learning-week-4/</link><guid isPermaLink="false">02903e2d-5c8c-4abf-9635-da5747fd9c01</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[classification]]></category><category><![CDATA[neural network]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 23 Oct 2014 07:11:31 GMT</pubDate></item></channel></rss>
+<p>2014-10-25, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-6/</link><guid isPermaLink="false">d4f41772-52eb-4a9c-a778-d73f962245b5</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[collection]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 24 Oct 2014 14:07:21 GMT</pubDate></item></channel></rss>
