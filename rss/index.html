@@ -1,5 +1,1031 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 21 Nov 2014 10:51:38 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[하스켈로 배우는 함수형 언어 5]]></title><description><![CDATA[<p>키보드를 읽거나 화면에 무엇인가 쓰는 <em>intertactive program</em> 은 <em>side-effect</em> 를 만듭니다. 그런데, 하스켈은 <em>side-effect</em> 가 없지요. 그럼 입출력이 불가능한 것일까요? </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 24 Nov 2014 16:14:36 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Dijkstra, Heap, Red-Black Tree]]></title><description><![CDATA[<h3 id="dijkstrasshortestpathalgorithm">Dijkstra's Shortest-Path Algorithm</h3>
+
+<p><em>BFS</em> 는 <em>undirected graph</em> 에서 최단 경로를 찾지만, 이건 모든 <em>edge</em> 의 길이가 1일때만 그렇다. </p>
+
+<p>다익스트라(<em>dijkstra</em>, <em>데이크스트라</em>) 알고리즘은 <em>directed graph</em> 에서 <em>non-negative length</em> 에 대한 최단 경로를 찾아낼 수 있다.</p>
+
+<p>각 <em>edge</em> 가 음수라면, 모든 수에 특정 수를 더해 양수로 만들어도, 아니면 음수 그 자체로 다익스트라 알고리즘을 돌려도 최단 경로를 찾지 못한다. 다음의 그래프가 한 예다.</p>
+
+<pre><code>1 -&gt; 2 // length: 1  
+2 -&gt; 3 // length: -6  
+1 -&gt; 3 // length: -2  
+</code></pre>
+
+<p>금융거래를 보면 특정 거래를 <em>edge</em> 라 보고 대해 여기에 대하 이득과 손실을 각각 양수, 음수의 가중치를 가지는 그래프라 생각할 수 있는데, 여기엔 음수 가중치가 있으므로 다익스트라 알고리즘을 쓸 수 없다.</p>
+
+<p><a href='http://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm' >벨만 포드</a> 알고리즘을 써야한다.</p>
+
+<p>길이가 <code>n</code> 인 <em>edge</em> 를 길이가 <code>1</code> 인 <code>n</code> 개의 <em>edge</em> 로 늘려 <em>BFS</em> 를 쓸 수 없느냐 질문할 수도 있겠는데, 가중치가 상당히 크면 연산이 비효율적이 된다. (e.g 150000)</p>
+
+<h4 id="algorithm">Algorithm</h4>
+
+<p>사실 다익스트라 알고리즘은 방문한 점 <code>v</code> 와 방문하지 않은 점 <code>w</code> 에 대해  <em>edge</em> <code>(v -&gt; w)</code> 를 고르는 문제다. <code>l_vw</code> 를 <code>v -&gt; w</code> 의 거리라 하고 <code>A[v]</code> 를 시작점 부터 <code>v</code> 까지의 최단거리라 하면 <code>A[v] + l_vw</code> 를 최소로 하는 <em>edge</em> 를 고르면 된다.</p>
+
+<p>알고리즘은 이렇다. 시작점을 <code>s</code> 라 하면</p>
+
+<pre><code>X = {s} // vertices process so far  
+A = [s] // computed shortest path distances
+
+// V is not visited vertices set  
+
+while X != V  
+  // v in X, w not in X
+  // select the edge minimizing [A]v + l_vw
+  pick (v, w) 
+  X + w
+  A[w] = A[v] + l_vw
+</code></pre>
+
+<h4 id="correctness">Correctness</h4>
+
+<p>다익스트라 알고리즘이 <em>non-negative edge length</em> 를 가진 <em>directed graph</em> 에 대해 최단경로를 찾아낸다는 것을 증명하자. </p>
+
+<p><code>A</code> 를 다익스트라 알고리즘이 찾아 낸 경로, <code>L</code> 을 실제 최단거리라 할 때 <code>A[w*] = L[w*]</code> 임을 보이면 된다.</p>
+
+<p>귀납법을 이용해 먼저 가설을 세우면</p>
+
+<blockquote>
+  <p>Inductive hypothesis: all previous iterations correct</p>
+</blockquote>
+
+<p><em>base case</em> 인 시작점 <code>s</code> 에 대해 참임을 보이면 <code>A[s] = L[s] = 0</code> 이다.</p>
+
+<p>현재 <em>iteration</em> 에서 찾아낸 <em>edge</em> 를 <code>v* -&gt; w*</code> 라 하면, <code>A[w*] = L[v*] + l_v*w*</code> 이다.</p>
+
+<p>이 때 그래프 안에 있는 모든 <code>s -&gt; w*</code> 의 경로의 길이가 <code>L[v*] + l_v*w*</code> 보다 큼을 보이면 된다.</p>
+
+<p>그래프 내에 있는 <code>s -&gt; w*</code> 의 모든 경로 <code>p</code> 는 다음 형태를 가진다.</p>
+
+<p><code>s -&gt; y | -&gt; z -&gt; w*</code>
+<br/></p>
+
+<p>여기서 <code>s, y</code> 는 방문한 점이고 <code>z, w*</code> 는 방문하지 않은 점이다. </p>
+
+<p><code>s -&gt; y | -&gt; z -&gt; w*</code> 에 대해 <code>p</code> 의 길이는 다음 3개를 더한 것이다.</p>
+
+<p>(1) <code>l_sy &gt;= A[y] = L[y]</code> (<em>by induction hypothesis</em>) <br />
+(2) <code>l_yz</code> <br />
+(3) <code>l_zw &gt;= 0</code> </p>
+
+<p>즉, 모든 경로 <code>p</code> 의 길이 <code>l_sy + l_yz + l_zw*</code> 는 <code>L[y] + l_yz</code> 보다 크다. </p>
+
+<p>그런데, 다익스트라 알고리즘으로 고른 경로 <code>A[v*] + l_v*w*</code> 는 <code>L[y] + l_yz</code> 보다 작거나 같다. 왜냐하면 <code>A[v*], L[y], l_v*w*</code> 는 최단경로인데, <code>l_yz</code> 는 최단경로일 수도, 아닐수도 있다. </p>
+
+<p>따라서 우리 알고리즘으로 구한 거리가, 모든 경로 <code>p</code> 의 <em>lower bound</em> 보다 작거나 같다.</p>
+
+<h4 id="runningtime">Running time</h4>
+
+<p><em>naive implementation</em> 의 성능은 <code>O(mn)</code> 이다. <code>n - 1</code> 의 모든 <em>vertex</em> 를 살펴봐야 하고, 루프 내에서 러프하게 모든 <em>edge</em> 를 검사한다고 보면 된다.</p>
+
+<p>다익스트라 알고리즘은 <code>O(n)</code> 정도까지 개선할 수 있다. 알고리즘의 변경이 아니라, 자료구조를 <em>heap</em> 으로 변경함으로써! <em>heap</em> 은 <em>extract-min</em> 연산에 대해 <code>O(log n)</code> 이다.</p>
+
+<p>힙의 구조나 특성은 뒤에서 알아보기로 하고, 여기선 다익스트라 알고리즘에 어떻게 적용할지를 논의하자.</p>
+
+<p>(1) <em>heap</em> 내부 원소들은 방문하지 않은 원소들의 집합 <code>V - X</code> 라 하자. <code>X</code> 는 방문한 원소들의 집합. <br />
+(2) <code>V - X</code> 내의 원소 <code>v</code> 에 대해서 <code>key[v]</code> 는 <em>edge</em> <code>(u, v)</code> 에 대한 다익스트라 알고리즘의 스코어다. (<code>u</code> 는 방문한 점)</p>
+
+<p>따라서 <code>v</code> 의 키 값은 <code>X</code> 와 <code>V - X</code> 의 <em>crossing edge</em> <code>u -&gt; v</code> 중에서 가장 작은 <em>edge</em> 길이다.</p>
+
+<p>이때 <code>X</code> 내에 있지 않은 점 <code>v</code> 를 <code>X</code> 로 옮기면서 <code>v -&gt; w</code> 로 새로운 <em>crossing edge</em> 가 생기고, 이로인해 <code>w</code> 의 <em>key</em> 값이 변할 수 있다. 이를 해결하기 위한 <em>key</em> 업데이트 로직은</p>
+
+<pre><code>// v is extracted from heap and added to X
+for each edge (v, w)  
+  if w in heap
+    delete w from heap
+    recompute key[w] = min(key[w], A[v] + l_vw)
+    reinsert w into heap
+</code></pre>
+
+<p><em>running time</em> 은 <em>heap operation</em> 의 수로 결정되는데 각 연산 <code>O(log n)</code> 을</p>
+
+<p>(1) <code>n - 1</code> <em>extract min</em> -> <code>n</code> <br />
+(2) 그리고 <em>edge</em> 중심으로 보면, <code>(v, w)</code> 이 <em>edge</em> 가 재 계산될때는 <code>v</code> 가 <code>X</code> 에 추가될때다. 그 이후에는 <code>(v, w)</code> 는 <em>crossing edge</em> 가 되므로 <em>delete, insertion</em> 연산과 관련이 없어진다. 다시 말해 한 <em>edge</em> 당 <em>at most one insertion and deletion</em> 이 있다. -> <code>m</code>  </p>
+
+<p>따라서 <em>heap operation</em> 수는 <code>O(n + m)</code> 이다. 그런데, <em>path</em> 자체는 <em>weakly connected undirected graph</em> 이므로 <code>m ~= n</code> 이고 <code>O(m + n) = O(m)</code> 이라 볼 수 있다.</p>
+
+<p>결국 힙을 이용한 다익스트라 알고리즘은 <code>O(m log n)</code> 이다. 이건 <code>O(m * n)</code> 보다 어마어마하게 빠르다.</p>
+
+<h3 id="whatdatastructureshouldiuse">What data structure should I use?</h3>
+
+<p>위 예제에서도 봤듯이, 적절한 데이터 구조의 사용은 알고리즘의 성능을 개선하는데 도움이 된다.</p>
+
+<p>익히 아는 리스트, 큐 부터 시작해서 <em>bloom filter</em>, <em>union find</em> 등이 있는데, 이렇게 다양한 자료구조가 있는 이유는 우리가 하려는 <em>task</em> 가 다양하기 때문이다.</p>
+
+<p>많은 데이터 구조중 무엇을 선택해야 할까? <em>rule of thumb</em> 는</p>
+
+<blockquote>
+  <p><em>Choose the "minimal" data structure that supports all the operations that need.</em></p>
+</blockquote>
+
+<p>내게 필요한 것 이상의 과도한 연산을 제공하는 자료구조를 사용할 필욘 없다. 복잡한 연산이 있을수록, 자료구조는 더 복잡해지기 마련이다.</p>
+
+<h3 id="heap">Heap</h3>
+
+<p>자료구조에서 가장 먼저 생각해야 할 것은  <em>"어떤 operation 을 제공하는가?"</em>, <em>"running time 은 얼마인가?"</em> 다.</p>
+
+<p><em>Heap</em> 은 <em>key</em> 를 가진 <em>object</em>를 위한 <em>container</em> 다. <em>employer records</em>, <em>network edges</em>, <em>event manager</em> 등에 이용할 수 있다.</p>
+
+<p>힙의 기본 연산은 <em>insert</em> 와 <em>extract-min (or max)</em> 연산이다. 이 연산의 러닝타임은 <code>O(log n)</code> 이다. <code>n</code> 은 힙 내에 있는 오브젝트의 수다.</p>
+
+<p><code>n</code> 개의 <em>batch insertion</em> 에 대해 <em>heapify</em> 는 <code>O(n)</code>, 임의의 원소를 제거하는 <em>delete</em> 는 <code>O(log n)</code> 이다. 정리하면</p>
+
+<p>(1) <strong>insertion:</strong> <code>O(log n)</code> <br />
+(2) <strong>extract-min (or max):</strong> <code>O(log n)</code> <br />
+(3) <strong>heapify (batch):</strong> <code>O(n)</code> <br />
+(4) <strong>remove (arbitrary):</strong> <code>O(n)</code>  </p>
+
+<h4 id="application">Application</h4>
+
+<p>힙을 어디에 쓸까? 먼저 생각해 볼 수 있는건 <em>min value</em> 가 연속적으로 필요한 작업에 쓸 수 있다. </p>
+
+<p>(1) <em>heap sort</em> 는 힙에서 지속적으로 <em>min-value</em> 를 뽑아내서 정렬하는 방법이다. <code>O(n logn)</code> 의 성능을 보여준다. 이건 <em>merge sort</em> 나 <em>randomized quick-sort</em> 만큼 빠르다.</p>
+
+<p>잠깐 생각해 볼 거리가 있다. <em>quicksort</em> 챕터에서 언급 했듯이 <em>comparison-based sorting</em> 은 <code>O(n logn)</code> 보다 더 빠를 수 없다. 힙 또한 비교를 이용해 정렬을 하므로 이보다 좋은 성능을 내기는 어렵다.</p>
+
+<p>(2) 아까 힙을 <em>event manager</em> 에도 이용할 수 있고 했는데, <em>priority queue</em> 가 바로 그것이다. 각 게임 이벤트가 큐에 들어있다고 하면 여기서 <em>key</em> 는 각 <em>event</em> 의 발생시간이다. 다시 말해 발생시간이 먼저인 이벤트가 먼저 발생되도록 큐를 이용할 수 있다.</p>
+
+<p>(3) <em>median maintanence</em> 에도 힙을 이용할 수 있다. <code>x1, x2, ..., xn</code> 의 배열에 대해 <code>i</code> 번째 스텝에서는 <code>x1, ..., xi</code> 의 중앙값을 돌려주는 문제다. <code>O(i)</code> 로 하면 정말 쉽지만, 조건이 하나 있다. 바로 <code>O(log i)</code> 의 퍼포먼스를 내야하는것. 어떻게 할까?</p>
+
+<p>두개의 힙을 이용하면 쉽게 풀 수 있다. 데이터를 절반씩 나누어 <em>max heap</em>, <em>min heap</em> 각각에 나눠 담으면 된다. 그러면 각 힙의 루트가 중앙값이 될 수 있다.</p>
+
+<p>(4) 마지막으로 힙은 다익스트라 알고리즘의 성능을 개선하는데 사용할 수 있다. 위에서 보았듯이 <code>O(m logn)</code> 의 퍼포먼스를 보여준다.</p>
+
+<h4 id="implementationdetails">Implementation Details</h4>
+
+<p>힙을 배열 또는 트리로 보는 관점이 있는데, 여기선 쉬운 이해를 위해 트리로 설명한다. <em>rooted, binary, as complete as possible tree</em> 로 보면 된다. </p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/6/69/Min-heap.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Binary_heap' >http://en.wikipedia.org/wiki/Binary_heap</a>)</p>
+
+<p><em>min heap</em> 을 예로 들면, 부모는 항상 자식보다 작거나 같다. 따라서 루트는 모든 원소중 가장 작은 값을 가진다.</p>
+
+<p>힙을 배열로 구현한다고 하자. 인덱스가 1부터 시작할때 <code>parent(i)</code> 는 <code>i</code> 가 짝수면 <code>i/2</code>, 홀수면 <code>[i/2]</code> 가 될 것이다. 자식을 구하는건 더 쉽다. <code>i * 2</code> 와 <code>i * 2 + 1</code> 이다.</p>
+
+<p><em>insert</em> 의 구현을 생각해 보자. 힙은 가능한 <em>complete tree</em> 기 때문에, 위 그림에서 새로운 숫자가 입력했을때 새로 생길 노드의 위치는 <code>19</code> 의 왼쪽 자식이다. </p>
+
+<p>이렇게 완전 이진트리를 만드는 위치에 새로운 값을 삽입하고, 부모와 값을 비교해 가면서 값의 위치를 올려간다. 이 방법을 <em>bubble-up</em> 이라 부른다. 
+정리하면,</p>
+
+<p>(1) stick <code>k</code> at end of last level <br />
+(2) <strong>bubble-up</strong> <code>k</code> until heap property is restored  </p>
+
+<p><em>extract-min</em> 연산은 루트에 있는 수를 뽑아낸다. 이 위치에 마지막 노드를 넣고, <em>bubble-down</em> 함으로써 구현할 수 있다. 새롭게 루트가 된 노드를 내려가는 과정에서 왼쪽 자식, 오른쪽 자식과 모두 비교하여 가장 작은 수를 새로운 부모로 만들면 된다. 정리하면</p>
+
+<p>(1) delete <code>root</code> <br />
+(2) move last leaf to be new root <br />
+(3) iterlatively <strong>bubble-down</strong> until heap property has been restored  </p>
+
+<p>이 두 연산은 이진트리의 <code>n</code> 번째 깊이까지 내려갈 수 있으므로 퍼포먼스는 <code>O(log_2 n)</code> 이다.</p>
+
+<h3 id="balancedsearchtree">Balanced Search Tree</h3>
+
+<p><strong>sorted array</strong> 에 대한 연산을 먼저 생각해 보자. 이로부터 <em>balanced search tree</em> 로 이끌어 낼 수 있는 연산들이 있을테다. 참고로 <strong>sorted array</strong> 는 <em>static</em> 이기 때문에 <em>insertion, deletion</em> 이 없다.</p>
+
+<p>(1) <strong>Search:</strong> <code>O(logn)</code> <br />
+(2) <strong>Select:</strong> <code>O(1)</code> (given order statistic <code>i</code>) <br />
+(3) <strong>Min / Max:</strong> <code>O(1)</code> <br />
+(4) <strong>Predecessor / Successor:</strong> <code>O(1)</code> <br />
+(5) <strong>Rank:</strong> <code>O(logn)</code> <br />
+(6) <strong>Output in sorted order:</strong> <code>O(n)</code></p>
+
+<p>여기서 주어진 데이터가 몇 번째 데이터인지를 찾는 <em>rank</em> 는 <em>search</em> 와 똑같은 문제다. <em>binary search</em> 처럼 찾아가면서, 인덱스를 찾아내면 되기 때문이다.</p>
+
+<p>이제 <strong>balanced search tree</strong> 를 생각해보자. </p>
+
+<p>(1) <strong>Search:</strong> <code>O(logn)</code> <br />
+(2*) <strong>Select:</strong> <code>O(logn)</code> <br />
+(3*) <strong>Min / Max:</strong> <code>O(logn)</code> <br />
+(4*) <strong>Predecessor / Successor:</strong> <code>O(logn)</code> <br />
+(5) <strong>Rank:</strong> <code>O(logn)</code> <br />
+(6) <strong>Output in sorted order:</strong> <code>O(n)</code> <br />
+(7+) <strong>Insert:</strong> <code>O(logn)</code> <br />
+(8+) <strong>Delete:</strong> <code>O(logn)</code>  </p>
+
+<p><strong>sorted array</strong> 에 비해 <em>select, min or max, pred or succ</em> 연산이 <code>O(logn)</code> 이 되었고 <em>insert, delete</em> 연산이 새롭게 추가됐다. 쉽게 기억하려면 <em>sorted array</em> + <em>logarithmic insert, delete</em> 라 생각하면 된다.</p>
+
+<p>힙과 비교해보면, 두 자료구조 모두 <em>insert, delete</em> 를 <code>O(logn)</code> 이란 빠른 시간에 제공한다. 차이점은, 힙은 <em>min or max</em> 둘 중 하나만 매우 빠르게 제공한다는 것이다. 따라서 <em>priority queue, scheduler</em> 같은 기능을 구현한다면 <em>balanced search tree</em> 보단 힙이 더 좋은 선택이다.</p>
+
+<h3 id="binarysearchtree">Binary Search Tree</h3>
+
+<p><strong>binary search tree</strong> 를 쉽게 기억하는 방법은 <em>dynamic sorted array</em> 라 기억하는 것이다. <strong>sorted array</strong> 가 제공하는 풍부하고 빠른 연산에 <em>insert, delete</em> 를 추가한 것이 바로 <strong>binary search tree, BST</strong> 다.</p>
+
+<p>힙이 <em>vertically sorted</em> 라면 BST 는 <em>horizontally sorted</em> 다. 즉 왼쪽자식은 부모보다 항상 작고, 우측 자식은 부모보다 항상 크다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Binary_search_tree.svg/300px-Binary_search_tree.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org/</a>)</p>
+
+<p>이런 구조적 특성때문에 <em>search (탐색)</em> 을 <code>O(logn)</code> 으로 빠른 시간 내에 해낼 수 있다. 근데, 최악의 경우 노드가 일렬로 주-욱 이어져 있다면 <code>O(n)</code> 의 퍼포먼스를 보여준다.</p>
+
+<p><img src='http://epaperpress.com/sortsearch/images/fig33.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://epaperpress.com/' >http://epaperpress.com</a>)</p>
+
+<h4 id="implementation">Implementation</h4>
+
+<p>이제 연산의 구현을 좀 생각해 보자. </p>
+
+<p>(1) <em>insert, search</em> 는 비슷하다. 자신의 자리를 찾아 내려가다가, 해당 원소가 있으면 돌려주고 아니면 <code>NULL</code> 을 돌려주는 방법으로 <em>search</em> 를 구현할 수 있다. <em>insert</em> 도 값을 비교하면서 내려가다가 적절한 자리에 삽입하면 된다.</p>
+
+<p>(2) <em>max, min</em> 연산은 가장 좌측 노드, 가장 우측 노드를 돌려줌으로써 쉽게 구할 수 있다. </p>
+
+<p>(3) <em>pred, succ</em> 은 자신 다음으로 적거나, 자신 다음으로 큰 원소를 돌려주는 연산인데, 자신 기준으로 왼쪽 부트리에서 가장 우측에 있는 노드, 그리고 자신 기준으로 우측 부트리에서 가장 좌측에 있는 노드를 돌려주면 된다.</p>
+
+<p>(4) <em>in-order traversal</em> 연산은 노드를 오름차순 순서로 방문하는 연산이다. 이것 역시 쉽게 구현할 수 있는데</p>
+
+<pre><code>let r = root of search tree
+
+recurse left sub-tree  
+print current node  
+recurse right sub-tree  
+</code></pre>
+
+<p>노드당 한번만 출력하므로, 퍼포먼스는 <code>O(n)</code> 이다</p>
+
+<p>(5) <em>delete</em> 는 조금 복잡한데 3가지 경우를 고려해야 한다.</p>
+
+<ul>
+<li>자식이 없을 경우</li>
+<li>왼쪽 또는 오른쪽 자식만 있을 경우</li>
+<li>양쪽 자식이 다 있을 경우</li>
+</ul>
+
+<p>앞의 두 가지 경우는 어렵지 않은데, 양쪽 자식이 다 있을 경우는 조금 까다롭다. 이 경우는 지우려는 노드의 <em>successor</em> 나 <em>predecessor</em> 을 <code>l</code> 이라 하자. 지우려는 노드와 <code>l</code> 을 뒤 바꾸면, 이전 <code>l</code> 자리에 있던 노드는 <em>left</em> 또는 <em>right</em> 자식이 없으므로 하나의 자식만 있는 알고리즘을 이용해 제거하면 된다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Binary_search_tree_delete_3.svg/620px-Binary_search_tree_delete_3.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://commons.wikimedia.org/' >http://commons.wikimedia.org/</a>)</p>
+
+<p>(6) <em>select, rank</em> 연산은 트리에 추가적인 정보를 기록함으로써 쉽게 구할 수 있다.  각 트리마다 자기를 포함한 자식들의 노드 수를 저장하면 된다.</p>
+
+<p><img src='http://www.tcs.auckland.ac.nz/' ~georgy/teaching/1998/98-231FC/231-hand/btr-rank.gif" alt="http://www.tcs.auckland.ac.nz/~georgy/" /></p>
+
+<p align="center">(<a href='http://www.tcs.auckland.ac.nz/' ~georgy/'>http://www.tcs.auckland.ac.nz/~georgy/</a>)</p>
+
+<p>매 삭제와 삽입 연산마다 각 트리의 사이즈를 변경해야 하는데 어렵지 않다. 삽입이나 삭제시 마지막 노드 혹은 <em>predecessor, successor</em> 를 찾아가면서 매번 노드를 방문해야 하므로 이 때 마다 새롭게 값을 변경하면 된다.</p>
+
+<p><em>select, rank</em> 알고리즘은</p>
+
+<pre><code>start at root x  
+let y = left sub-tree  
+let z = right sub-tree  
+let a = size of y
+
+if a = i - 1 return x  
+if a &gt;= i, recurse y, i'th statistic  
+if a &lt; i, recurse z, (i - a - 1)'th statistic  
+</code></pre>
+
+<p>러닝타임은 <code>O(height)</code> 다.</p>
+
+<h3 id="redblacktree">Red-Black Tree</h3>
+
+<p>이진트리는 운이 나쁠경우 <code>O(n)</code> 의 연산 성능이 나오기 나온다. 따라서 트리의 높이를 최대 <code>O(logn)</code> 으로 제한해 연산 성능을 개선할 수 있다.</p>
+
+<p>이렇게 구조적인 제한을 이용해 성능을 개선하는 트리는 <em>red-black tree</em> 이외에도 <em>AVL tree</em>, <em>splay tree</em>, <em>B tree</em> 등이 있다. </p>
+
+<h4 id="invariants">Invariants</h4>
+
+<p><em>red-black tree</em> 는 다음의 제약 조건을 제외하면 이진트리와 동일하다.</p>
+
+<p>(1) each node is red or <code>black</code> <br />
+(2) root is <code>black</code> <br />
+(3) no 2 <code>reds</code> in a row  -> <code>red</code> node has only <code>black</code> children <br />
+(4) every <code>root - NULL</code> path  has same number of black nodes  </p>
+
+<p>여기서 <code>(4)</code> 는 <em>unsuccessful search</em> 를 생각하면 쉽다. 검색이 제대로 되지 않았을 경우 <code>NULL</code> 에서 중단하는데, 그때 까지의 모든 블랙 노드의 수가 다른 <em>unsuccessful search</em> 가 방문한 블랙 노드 수와 동일하다는 것이다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Red-black_tree_example.svg/750px-Red-black_tree_example.svg.png'  alt="http://en.wikipedia.org" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<p>예제를 통해 좀 살펴보자. <code>1 -&gt; 2 -&gt; 3</code> 의 이진트리가 있을 때, <code>2</code> 가 레드 노드라 하자. 그러면 규칙 <code>(4)</code> 를 위반한다. <em>unsuccessful search</em> 의 경우인 <code>0</code> 과 <code>4</code> 를 찾을때 블랙 노드의 개수가 다르다.</p>
+
+<h4 id="heightguarantee">Height Guarantee</h4>
+
+<p>위에서 언급한 제약조건이 실제로는 트리의 높이를 <code>height &lt;= 2 log_2(n + 1)</code> 로 보장한다. </p>
+
+<p>우선 살펴봐야 할 것은, 모든 <code>root-null</code> 경로가 <code>&gt;= k</code> 인 노드를 가지고 있다면, 그 트리는 <code>k</code> 깊이 까지는 완전 이진트리다.</p>
+
+<blockquote>
+  <p>If every <code>root-null</code> path has <code>&gt;= k</code> nodes, then tree includes (at the top) a perfectly balanced search tree of depth <code>k - 1</code></p>
+</blockquote>
+
+<p>이 것은 레드블랙트리만이 아니라 모든 이진트리에 적용된다. 이제 전체 노드 <code>n</code> 과 관계를 살펴 보자. </p>
+
+<p>이진트리이므로 노드의 수 <code>n &gt;= 2^k - 1</code> 과 <code>k</code> 에 대해 <code>k &lt;= log_2 (n+1)</code> 이다. </p>
+
+<p>아까 <code>k</code> 는 <code>root-null</code> 경로의 노드의 수 라고 했었다. 그리고 레드블랙트리의 (3), (4) 조건을 다시 생각해보면</p>
+
+<blockquote>
+  <p>(3) no 2 <code>reds</code> in a row  -> <code>red</code> node has only <code>black</code> children <br />
+  (4) every <code>root - NULL</code> path  has same number of black nodes  </p>
+</blockquote>
+
+<p>레드 블랙트리에서 모든 노드가 블랙이면, (4) 에 의해서 <code>root-null</code> 경로의 블랙 노드가 최대이므로 블랙 노드의 <em>upper bound</em> 는 <code>&lt;= log_2 (n+1)</code> 이다. 그리고 레드 블랙 트리에서 <code>root-null</code> 경로의 노드수가 깊이가 되므로 이때의 높이는 <code>log_2 (n+1)</code> 이다.</p>
+
+<p>다른 경우를 생각해 보자. 레드블랙트리의 <code>root-null</code> 경로에는 중간 중간 레드 노드가 낄 수 있는데, 레드 노드가 최대로 끼어있을때는 (3) 조건에 의해 블랙노드만큼이다. 이 때 블랙노드는 <em>upper bound</em> 에 의해 <code>&lt;= log_2 (n+1)</code> 이므로, 레드노드도 최대 <code>&lt;= log_2 (n+1)</code> 이다.</p>
+
+<p>따라서 레드블랙트리의 깊이는 최대 <code>&lt;= 2 * log_2 (n + )1</code> 이므로, 연산에 대해 <code>O(log n)</code> 을 보장한다.</p>
+
+<h4 id="rotation">Rotation</h4>
+
+<p>이진트리의 삽입, 삭제 연산은 레드블랙트리에서의 제약조건을 망가트릴 수 있다. 따라서 삭제와 삽입 연산에 부가적으로 구조를 유지하기 위한 작업이 필요하다. </p>
+
+<p>레드블랙트리 뿐만 아니라 <em>AVL tree</em> 나 다른 <em>balanced search tree</em> 도 구조를 유지해야 하는데, 여기에 공통적으로 사용하는 연산이 <em>rotation</em> 이다. 한번 알아보자.</p>
+
+<blockquote>
+  <p>Idea: locally rebalance sub-trees at a node in <code>O(1)</code> time.</p>
+</blockquote>
+
+<p>먼저 <em>left roation</em> 만 생각하자. 다음 그림에서 우측에 있는 트리를 좌측처럼 변경하는 것이다. <code>P</code> 가 <code>Q</code> 의 자식이 되도록 하는것이다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png'  alt="http://en.wikipedia.org/wiki/Tree_rotation" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Tree_rotation' >http://en.wikipedia.org/wiki/Tree_rotation</a>)</p>
+
+<p>여기서 <code>B</code> 의 원소는 <code>P</code> 보단 크고 <code>Q</code> 보다 작다. 따라서 <code>Q</code> 와 <code>P</code> 의 위치를 변경하면 <code>B</code> 는 <code>P</code> 의 오른쪽에 와야 한다. 이것이 <em>left rotation</em> 이다. 경로를 따라 왼쪽으로 한칸씩 밀려갔다고 생각하면 기억하기 쉽다.</p>
+
+<p><em>right rotation</em> 은 이것을 정확히 반대로 수행하면 된다. 좌측에 있는 트리에서 <code>P</code>, <code>Q</code> 를 경로를 따라 하나씩 우측으로 밀고, <code>B</code> 는 <code>C</code> 의 왼쪽으로 이동하면 된다.</p>
+
+<p>모든 연산은 포인터 변경으로 끝나므로 <code>O(1)</code> 이다. </p>
+
+<h4 id="insertion">Insertion</h4>
+
+<p>이제 <em>rotation</em> 을 이용해 <em>red-black tree</em> 에서 삽입 연산을 구현해 보자. 삽입과 삭제의 기본적인 아이디어는</p>
+
+<p>(1) 이진트리에서의 <em>insert</em> / <em>remove</em> 연산을 수행 한다. <br />
+(2) 레드, 블랙을 다시 색칠한다. <br />
+(3) <em>rotation</em> 을 수행한다.</p>
+
+<p>여기 (2) 단계에서 레드블랙트리의 구조가 망가질 수 있다. 새로운 노드를 레드로 만들면, 한 로우 내에 2개의 레드가 있을 수 없다는 규칙을 위반할 수 있고, 블랙으로 칠하면 <code>root-null</code> 경로의 블랙 노드의 수가 같아야 한다는 제약조건에 위배될 수 있다.</p>
+
+<p>두 가지 경우중, 레드로 칠하는 경우가 더 가벼운 작업일 것 같으니</p>
+
+<blockquote>
+  <p>새로운 노드가 들어오면 먼저 레드로 칠해본다.</p>
+</blockquote>
+
+<p>부모가 블랙이면 문제가 없다.</p>
+
+<blockquote>
+  <p>부모가 레드면?</p>
+</blockquote>
+
+<p>몇 가지 경우를 생각해봐야 한다. 우선 부모 <code>B</code> 가 레드면, 부모의 부모 <code>C</code> 는 블랙임이 확실하다. 이 때 만약,</p>
+
+<p>(1) <code>C</code> 가 <code>B</code> 말고 다른 자식 <code>D</code> 가 있다면 <code>B, C, D</code> 의 색을 반전시키면 된다. 그리고 새롭게 색을 반전시켰을 때 <code>C</code> 의 부모도 레드일 수 있다. 마찬가지로 <em>recoloring</em> 을 반복하면 된다. 색을 반전시켜도 (3) 또는 (4) 의 규칙을 위반하지 않는다. </p>
+
+<p>아주 만약에, 루트까지 반복해서 루트가 레드가 되었다면 루트를 블랙으로 다시 칠하면 된다. 루트는 모든것의 부모이므로 블랙이 되어도 <code>root-null</code> 경로 조건을 위반하지 않는다.</p>
+
+<p>따라서 연산비용은 <code>O(log n)</code> 이다.</p>
+
+<p><img src='http://cs.lmu.edu/' ~ray/images/rbtrecoloring.png" alt="" /></p>
+
+<p align="center">(<a href='http://cs.lmu.edu/' ~ray/notes/redblacktrees/'>http://cs.lmu.edu/~ray/notes/redblacktrees/</a>)</p>
+
+<p>그런데, 반복해서 이 방법을 사용하다가 <code>C</code> 가 다른 자식 <code>D</code> 를 가지고 있지 않거나, <code>D</code> 가 블랙일 수 있다. 그럴땐 다음 경우로 넘어가야 한다.</p>
+
+<p>(2) <code>C</code> 가 <code>B</code> 말고 다른 자식이 없거나 블랙인 자식을 가지면 <code>A</code> 가 좌측이냐 우측이냐에 따라 <code>right rotation</code>, <code>left-right rotation</code> 으로 해결할 수 있다. 마찬가지로 (3) 또는 (4) 를 위반하지 않는다.</p>
+
+<p><img src='http://cs.lmu.edu/' ~ray/images/rbrestructuring.png" alt="" /></p>
+
+<p align="center">(<a href='http://cs.lmu.edu/' ~ray/notes/redblacktrees/'>http://cs.lmu.edu/~ray/notes/redblacktrees/</a>)</p>
+
+<p>이 경우는 몇번의 로테이션으로 해결할 수 있으므로 <code>O(1)</code> 이다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
+(2) <a href='http://en.wikipedia.org/wiki/Binary_heap' >Wiki - Binary heap</a> <br />
+(3) <a href='http://en.wikipedia.org/wiki/Binary_search_tree' >Wiki - Binary search tree</a> <br />
+(4) <a href='http://epaperpress.com/sortsearch/bin.html' >http://epaperpress.com</a> <br />
+(5) <a href='http://commons.wikimedia.org/wiki/File:Binary_search_tree_delete_3.svg' >http://commons.wikimedia.org/</a> <br />
+(6) <a href='http://www.tcs.auckland.ac.nz/' ~georgy/teaching/1998/98-231FC/231-hand/test231.html">http://www.tcs.auckland.ac.nz/~georgy/</a> <br />
+(7) <a href='http://en.wikipedia.org/wiki/Red%E2%80%93black_tree' >Wiki - Red-black tree</a> <br />
+(8) <a href='http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png' >Wiki - Tree rotation</a></p>]]></description><link>http://1ambda.github.io/dijkstra-heap-balanced-tree/</link><guid isPermaLink="false">8d4c00c5-78fc-4a4d-97a1-cf0829c53396</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[heap]]></category><category><![CDATA[dijkstra]]></category><category><![CDATA[red-black tree]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 23 Nov 2014 14:23:37 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 7]]></title><description><![CDATA[<p>이번시간에 <em>Support Vector Machine, SVM</em> 을 배운다.</p>
+
+<h3 id="optimizationobjective">Optimization Objective</h3>
+
+<p>먼저 직관을 얻기 위해 <em>logistic regression</em> 의 <em>sigmoid function</em> 을 좀 보자.</p>
+
+<p><img src='http://my.csdn.net/uploads/201208/09/1344525027_7041.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><code>y = 1</code> 이면 <code>0^Tx &gt;&gt; 0</code> 이어야 <code>h(x)</code> 가 <code>1</code> 에 가까워 진다. </p>
+
+<p>이제 <em>cost function</em> 에 <code>h(x)</code> 를 넣자. 그리고 <code>m = 1</code> 인 트레이닝 셋에 대해서 보면</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360809698_1212.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>파란 그래프에서 볼 수 있듯이 <code>y = 1</code> 일때 <code>0^Tx &gt;&gt; 0</code> 이면 <em>cost</em> 가 상당히 낮아지는걸 볼 수 있다. 이 그래프를 좀 단순화 해서 <em>자주색</em> 그래프를 만들어 보자. 두개의 직선으로 만들었는데, 이 <em>cost function</em> 을 계산하면 상당히 근접한 값을 얻을 수 있고, 동시에 그래프가 단순해져 <em>computational advantage</em> 를 얻을 수 있다.</p>
+
+<p>각각 좌측, 우측에 있는 <em>cost function</em> 을 이렇게 쓴다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5C%20%5C%5Ccost_1%28z%29%5C%20%28y%20%3D%201%29%20%5C%5Ccost_0%28z%29%5C%20%28y%20%3D%200%29'  alt="" /></p>
+
+<p><em>logistic regression</em> 식 에서 <code>-log h(x)</code> 를 <code>cost_1(z)</code> 로, <code>-log(1 - h(x)))</code> 를 <code>cost_0(z)</code> 로 바꾸면 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%20m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7D%28-log%5C%20h_%5Ctheta%28x%5E%7B%28i%29%7D%29%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28-log%281%5C%20-%5C%20h_%7B%5Ctheta%7D%28x%5E%7B%28i%29%7D%29%29%29%5D%5C%20&plus;%20%5C%20%7B%5Clambda%20%5Cover%202m%7D%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2%20%5C%5Ccost_1%28z%29%5C%20%28y%20%3D%201%29%20%5C%5Ccost_0%28z%29%5C%20%28y%20%3D%200%29'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5C%5Ccost_1%28z%29%5C%20%28y%20%3D%201%29%20%5C%5Ccost_0%28z%29%5C%20%28y%20%3D%200%29%20%5C%5C%20min_%5Ctheta%20%5C%20%7B1%20%5Cover%20m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7Dcost_1%28%5Ctheta%5ETx%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28cost_0%28%5Ctheta%5ETx%29%29%5D%5C%20&plus;%20%5C%20%7B%5Clambda%20%5Cover%202m%7D%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
+
+<p>이 때, <code>1/m</code> 은 상수이므로 제거해도 어차피 똑같은 <code>0(theta)</code> 를 얻을 수 있다.</p>
+
+<p>그리고 식을 좀 간략히 적어보면 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20A%20&plus;%20%5Clambda%20B'  alt="" /></p>
+
+<p>여기서 <code>lambda</code> 가 하는 일은 <em>low cost ('A')</em> 와 <em>small parameter ('B')</em> 를 조절하는 일이다. 식을 좀 변경하면 이렇게도 볼 수 있다. 여기서 <code>C</code> 는 <code>1 / lambda</code> 과 같은 역할이라 보면 된다. </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20C%20&plus;%20%5Clambda%20B'  alt="" /></p>
+
+<p>아주 작은 수의 <code>lambda</code> 를 사용하면 파라미터 <code>B</code> 가 커지는데, 이것은 <code>C</code> 가 커져 <code>A</code> 를 낮추고 <code>B</code> 를 높이는 것과 똑같다. 반대로 <code>C</code> 가 작으면 <code>A</code> 가 커지고, <code>B</code> 가 작아진다.</p>
+
+<p>결국 <code>C</code> 를 쓰느냐 <code>lambda</code> 를 쓰느냐는, 어떤 항을 옵티마이제이션의 중심으로 두느냐다. 최적화된 파라미터를 찾는건 똑같다.</p>
+
+<p>식을 마지막으로 정리하면,</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20C%20%5C%20%5B%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7Dcost_1%28%5Ctheta%5ETx%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28cost_0%28%5Ctheta%5ETx%29%29%5D%5C%20&plus;%20%5C%20%7B1%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
+
+<p>결국 위 식 (<em>cost</em>) 를 최소화 하면, <code>y = 1</code> 일때 <code>0^Tx &gt;&gt; 0</code> 이 되므로 <code>h(x) == 1</code> 이란 뜻이다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360809865_3224.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<h3 id="largeminginintuition">Large Mingin Intuition</h3>
+
+<p><em>SVM</em> 은 <em>large margin classifier</em> 라 부르도 한다. 왜 그런게 한번 살펴보자.</p>
+
+<p>두 집단을 구분하는 초록색, 자주색, 검은색 직선을 생각해 보자.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360811170_6003.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>검은색 선이 가장 낫고, 자주색과 초록색은 두 집단을 분리하긴 하는데 썩 만족할만하게는 아니다. 검은 선과 평행하고 각 점까지의 거리가 최소인 파란선을 그리자. 이걸 <em>margin</em> 이라 부른다. 다시 말해서 <em>margin</em> 이 클수록 좋은 <em>classification</em> 이다.</p>
+
+<p><em>large margin</em> 하고 <em>SVM</em> 하고 무슨 상관일까? 그 전에 먼저 <code>C</code> 를 좀 살펴보자.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360811018_1834.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><code>z == 0^T x</code>, 의 범위를 생각해 보면 <code>y = 1</code> 일때 <code>z &gt;= 1</code> 이길 바란다. 반대로 <code>y = 0</code> 이면 <code>z &lt;= -1</code> 이면 <code>h(x)</code> 로 충분히 만족할 만한 값을 얻을 수 있다.</p>
+
+<p>이 때 <code>C</code> 가 매우 크면 <code>A</code> 즉, 아래의 식은 굉장히 작아진다. 거의 0 에 가깝게</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7Dcost_1%28%5Ctheta%5ETx%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28cost_0%28%5Ctheta%5ETx%29%29'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/14/1360811206_9816.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>두 집단에 대해서 <code>C</code> 가 매우 크면, 다시 말해 <code>A</code> 가 <code>0</code> 에 가까우면 <em>overfitting</em> 된다 볼 수 있으므로 자주색과 비슷한 라인을 찾아낸다. 자주색 선은 모든 샘플에 대해 <em>large margin</em> 을 가지고 있지만 그렇게 썩 좋은 <em>classification</em> 이라 볼 수는 없다.</p>
+
+<p>그러나 <code>C</code> 가 그렇게 크지 않으면 비 정상적인 샘플들은 조금 무시하고 검은색 선을 찾아낸다. 이게 <em>SVM</em> 이 작동하는 방식이다.</p>
+
+<h3 id="mathematicsbehindlargemarginclassification">Mathematics Behind Large Margin Classification</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360893984_1771.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360893988_7434.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>결국 <code>C</code> 가 아주 클 때 <code>A = 0</code> 이므로 <em>SVM</em> <em>cost fucntion</em> 을 최소화 하는 것은 아래 식과 동일하다. 그런데 이 식을 풀어 보면 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%20%5Cleft%20%5C%7C%20%5Ctheta%20%5Cright%20%5C%7C%5E2'  alt="" /></p>
+
+<p>그리고 <code>0(theta)</code> 와 <code>x</code> 를 벡터이므로 <code>0^T x^(i) = p^(i) * ||0||</code> 라 볼 수 있다. (여기서 <code>p^(i)</code> 는 <code>x</code> 의 <code>0</code> 로의 <em>projection</em> 된 선의 길이)</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta%5ETx%20%5C%5C%20%5C%5C%20%3D%20p%5E%7B%28i%29%7D%20%5Cleft%20%5C%7C%20%5Ctheta%20%5Cright%20%5C%7C'  alt="" /></p>
+
+<p>이제 이 식을 좀 활용해 보자. <code>C</code> 가 매우 클때는 <code>B</code> 만 최소화 하면 되는데</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
+
+<p>이 식 자체가 <em>large margin</em> 을 찾아낸다. 왜 그런가 보면</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360893992_3213.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>왼쪽 그래프의 계산 과정을 보면 <code>x1</code> 을 <code>0</code> 에 <em>projection</em> 해서 얻은 <code>p1</code> 이 매우 작다. 따라서 <code>p1 * ||0|| &gt;= 1</code> 에서 <code>||0||</code> 가 커야 전체 식이 1보다 커지는데, 이러면 식 <code>B</code> 를 최소화 할 수 없다. 마찬가지로 <code>p2</code> 는 매우 작은 음수고, <code>p2 * ||0|| &lt;= -1</code> 에서, <code>||0||</code> 가 매우 큰 음수여야 한다. 이 또한 <code>0</code> 를 크게 만드므로 식 <code>B</code> 가 작아지는 <code>0</code> 를 찾지 못한다. </p>
+
+<p>결국 <code>p</code> 가 커야만 <code>0</code> 가 작아지기 때문에 <code>p</code> 를 크게 하는 <code>0</code> 만 찾고, 이것은 <em>large margin</em> 이다. 따라서 초록색 같은 <em>low margin</em> 의 <code>0</code> 는 선택되지 않는다. </p>
+
+<p>정리하자면 <code>C</code> 가 매우 클때 <em>SVM</em> 은 <em>large magin</em> 을 찾고, 여기서 <code>C</code> 를 낮춤으로써 적당한 수준의 <em>classification</em> 을 얻을 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
+
+<h3 id="kernels">Kernels</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895849_6087.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><em>SVM</em> 으로 <em>non-linear decision boundary</em> 를 어떻게 찾아낼까? 단순히 <em>high polynomial features</em> 를 사용하는 것보다 더 나은 방법은 없을까? 고차 다항식은 이미지 처리 예제에서도 봤지만, 계산 비용이 너무 비싸다.</p>
+
+<p><em>kernel</em> 이란 개념이 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895854_4557.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>수동으로 몇몇 <em>landmark</em> <code>l1, l2, ...</code> 을 고른후 이 <em>landmark</em> 사이와의 거리로 새로운 <em>feature</em> <code>f</code> 를 만든다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?f_1%20%3D%20similarity%28x%2C%20l%5E%7B%281%29%7D%29%20%3D%20exp%20%28-%20%7B%7C%7Cx-l%5E%7B%281%29%7D%7C%7C%5E2%20%5Cover%202%5Csigma%5E2%7D%29'  alt="" /></p>
+
+<p>dl <em>similarity function</em> 을 <em>kernel function</em> 특히 여기서 사용한 수식은 <em>gaussian kernel</em> 이라 부른다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895859_5163.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><code>x</code> 와 <code>l</code> 이 상당히 가까우면 <code>f</code> 는 <code>1</code> 에 근접하고, 상당히 멀면 <code>0</code> 에 가까워진다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895862_8544.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>위 그림은 시그마에 따른 <code>f</code> 값의 변화를 보여주는데, 시그마가 작으면 작을수록 조금만 멀어도 <code>f</code> 값은 <code>0</code> 에 가까워진다. </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895867_6739.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>데이터가 <em>landmark</em> 중 하나에 라도 가까우면 적어도 하나의 <code>f</code> 가 1이 되어, <code>h(x)</code> 가 1 이되고 반면 모든 <em>landmark</em> 에 멀면 모든 <code>f</code> 가 0 이 되어 <code>h(x)</code> 가 0 이된다.</p>
+
+<p>그럼 이제, 문제는 어떻게 <em>landmark</em> 를 정할 것인가?</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899128_1431.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899133_9301.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><code>l1, ..., lm</code> 을 <code>x1, ..., xm</code> 라 하자. 즉 각 <em>training example</em> 이 <em>landmark</em> 가 된다. 이를 이용해 구한 <em>feature vector</em> <code>f^(i)</code> 중 하나는 <code>sim(x^i, l^i)</code> 이므로 1이 된다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899136_2691.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>따라서 주어진 <code>x</code> 에 대해 <code>m + 1</code> 의 벡터 <code>f</code> 를 구해 <code>0^Tf &gt;= 0</code> 이면 <code>y = 1</code> 이다. 그리고 이 때 <em>feature</em> 수가 <code>m</code> 이 되므로 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20C%20%5C%20%5Csum_%7By%3D1%7D%5Emcost_1%28%5Ctheta%5ETf%5E%7B%28i%29%7D%29%20&plus;%20%281-y%5E%7B%28i%29%7D%29cost_0%28%5Ctheta%5ETf%5E%7B%28i%29%7D%29%29%20&plus;%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5Em%5Ctheta_j%5E2'  alt="" /></p>
+
+<p>마지막 항을 좀 자세히 보면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bj%3D1%7D%5Ctheta_j%5E2%20%5C%5C%20%5C%5C%20%3D%20%5Ctheta%5ET%20%5Ctheta'  alt="" /></p>
+
+<p>인데 <em>SVM</em> 실제 구현에서는 가운데 <code>M</code> 매트릭스를 삽입해 좀더 효율적으로 돌아가도록 한다. 이 <code>M</code> 은 어떤 <em>kernel</em> 을 사용하는지에 따라 다르다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta%5ET%20M%20%5C%20%5Ctheta'  alt="" /></p>
+
+<p><em>logistic regression</em> 에 <em>kernel</em> 을 사용할 수도 있겠지만, 상당히 느리다. 반면 <em>SVM</em> 에서는 마지막 항을 위 처럼 수정할 수 있기에 빠르게 동작한다.</p>
+
+<h3 id="biasvsvarianceinsvm">Bias vs Variance in SVM</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899140_2255.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>(1) <code>C</code> 가 크면 <em>low bias</em>, <em>high variance</em>  (== <em>small <code>lambda</code></em>) <br />
+(2) <code>C</code> 가 작으면 <em>high bias</em>, <em>low variance</em>  (== <em>large <code>lambda</code></em>)  </p>
+
+<p><code>sigma</code> 가 크면 <code>f</code> 가 적게 변하기 때문에 인풋 <code>x</code> 에 대해서도 <em>high bias</em>, <em>low variance</em> 다.</p>
+
+<h3 id="usingansvm">Using an SVM</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901245_9359.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>라이브러리를 사용하더라도 <code>C</code> 와 어떤 <em>kernel</em> 을 사용할지는 골라야 한다.</p>
+
+<p><em>feature</em> 가 크고, 트레이닝셋이 작을때는 <em>overfitting</em> 될 수 있으므로 <em>linear kernel</em> 을 사용하는 편이 낫다.</p>
+
+<p>반면 <code>n</code> 이 작고, <code>m</code> 이 클 경우에는 <em>non-linear</em> 가설일 수 있으므로 <em>gaussian kernel</em> 을 사용할 수 있다. 그러면 <code>sigma</code> 를 골라야 한다. </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901242_6422.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><em>SVM</em> 라이브러리를 이용할때는 <code>kernel function</code> 을 직접 구현해야 한다. 이걸 이용해서 라이브러리는 <code>x</code> 에 대해 <code>f1, ..., fl</code> 을 계산한다.</p>
+
+<p>만약에 <em>feature</em> 의 스케일이 다르면, <code>x1 = 10000, x2 = 5, ...</code> <code>||x-l||^2</code> 값이 숫자가 큰 항에 의해 좌우될 수 있으므로 <em>feature scailing</em> 을 하는편이 좋다.</p>
+
+<h4 id="otherchoicesofkernel">Other choices of kernel</h4>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901245_9359.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p><em>SVM</em> 구현들이 계산을 최적화 하기위해 다양한 트릭을 이용한다. 이로 인해 모든 <em>similarity function</em> 유효한 커널이 되는건 아니고, <em>"Mercer's Theorem"</em> 을 만족해야만 한다. <del>인용하려 했는데 무슨말인지 모르겠음</del></p>
+
+<p>그렇다고 커널이 <em>linear</em> 와 <em>gaussian</em> 만 있는건 아니고 다양한 커널이 있다. 그림을 참조하자.</p>
+
+<h4 id="multiclassclassification">Multi-class classification</h4>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901253_5022.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>대부분의 <em>SVM</em> 라이브러리들은 <em>multi-class</em> 에 대한 함수를 제공한다. 그러나 이것들을 사용하는 대신 <em>one-vs-all</em> 방법을 사용할 수도 있다. <code>k</code> 개의 클래스가 있다면 <code>k</code> 개의 <em>SVM</em> 훈련시키면 된다.</p>
+
+<h4 id="logisticregressionvssvm">Logistic regression vs SVM</h4>
+
+<p><img src='http://my.csdn.net/uploads/201208/12/1344759226_6088.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
+
+<p>(1) <code>n &gt;= m</code> 이면 <em>logistic regression</em> 이나 <em>linear kernel</em> 이 낫다. <br />
+(2) <code>n</code> 이 작고, <code>m</code> 이 중간 사이즈면 <em>gaussian kernel</em> 을 <br />
+(3) <code>n</code> 이 작고 <code>m</code> 이 크면 <em>gaussian</em> 은 상당히 느려진다. <em>feature</em> 를 좀 수정하고, <em>logistic</em> 이나 <em>linear kernel</em> 을 이용한다.</p>
+
+<p><em>SVM</em> 의 장점은 다양한 <em>kernel</em> 을 <em>non-linear function</em> 을 훈련시키기 위해 사용할 수 있다는 점이다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
+(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
+(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-7/</link><guid isPermaLink="false">61eb3656-6495-48e4-a92f-2ba44cf1416d</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[SVM]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 22 Nov 2014 06:23:25 GMT</pubDate></item><item><title><![CDATA[Intro to Computational Thinking and Data Science 2]]></title><description><![CDATA[<blockquote>
+  <p>Computational systems are so very convenient for modeling behaviors of noisier, uncertain systems, <strong>especially in estimating the values of parameters of those systems</strong>.</p>
+</blockquote>
+
+<h3 id="montecarlosimulation">Monte Carlo Simulation</h3>
+
+<blockquote>
+  <p>Monte Carlo simulation is a method of <strong>estimating the value of an unknown quantity using the principles of inferential statistics</strong></p>
+</blockquote>
+
+<p>이전에 잠깐 <em>deterministic model</em> 과 <em>stochastic model</em> 언급 했었는데, 다시 한번 알아보자면</p>
+
+<blockquote>
+  <p>In <strong>deterministic models</strong>, the output of the model is  fully determined by the parameter values and the
+  initial conditions.</p>
+  
+  <p><strong>Stochastic models</strong> possess some inherent randomness. The same set of parameter values and initial conditions will lead to an ensemble of different outputs</p>
+</blockquote>
+
+<p>때때로 사람들이 <em>deterministic model</em> 은 <em>uncertainty</em> 를 다루지 않는다고 말하곤 하는데 이건 엄밀히 말하면 틀렸다. <em>deterministic model</em> 내부적으로는 <em>randomness</em> 가 없지만, 모델 외부에 <em>uncertainty</em> 가 있을 수 있다.  </p>
+
+<p>몬테 카를로 시뮬레이션이 바로 <em>deterministic model</em> 에 대해 <em>random input</em> 을 이용해 분포를 얻어내는 방법이다. </p>
+
+<blockquote>
+  <p>I have heard people say that "a stocahstic model handles uncertainty, a deterministic model doesn't". This is not strictly correct. The correct statement should be: 
+  a stochastic model has the capacity to handle then uncertainty in the inputs built into it, for a deterministic model, the uncertainties are extenal to the model. The uncertainties in the inputs to a deterministic model can be handled through use of a Monte Carlo simulation (note that this does not make it a stochastic model). This is computationally inefficient however.</p>
+</blockquote>
+
+<h3 id="findingpi">Finding PI</h3>
+
+<pre><code class="python">def stdDev(X):  
+    mean = sum(X) / float(len(X))
+    total = 0.0
+    for x in X:
+        total += (x - mean) ** 2
+    return (total / len(X)) ** 0.5
+
+
+def dropNeedles(num):  
+    inCircle = 0
+    for needles in xrange(1, num + 1, 1):
+        x = random.random()
+        y = random.random()
+
+        if (x*x + y*y) ** 0.5 &lt;= 1.0:
+            inCircle += 1
+
+    return 4 * (inCircle / float(num))
+
+
+def estimate(numOfNeedles, trials):  
+    estimates = []
+    for i in range(trials):
+        pi = dropNeedles(numOfNeedles)
+        estimates.append(pi)
+
+    sd = stdDev(estimates)
+    est = sum(estimates) / len(estimates)
+
+    return (est, sd)
+
+
+def simulate(precision, trials):  
+    numOfNeedles = 1000
+    sd = precision
+
+    # 95% of the values lie within precision of the mean
+    while sd &gt;= (precision / 2.0):
+        est, sd = estimate(numOfNeedles, trials)
+        print 'PI est =', est, "sd =", round(sd, 6), "needles =", numOfNeedles
+        numOfNeedles *= 2
+
+    return est
+
+
+random.seed(0)  
+simulate(0.005, 100)  
+</code></pre>
+
+<p>반지름이 1인 원 안에 바늘을 떨어트려, 해당 원 안에 있을 경우와 직사각형에 있을 경우의 비율에 직사각형의 넓이를 곱하면, 원의 넓이 즉 <code>PI</code> 값이 나온다.</p>
+
+<p>실제 돌려보면</p>
+
+<pre><code>PI est = 3.14844 sd = 0.047886 needles = 1000  
+PI est = 3.13918 sd = 0.035495 needles = 2000  
+PI est = 3.14108 sd = 0.02713 needles = 4000  
+PI est = 3.141435 sd = 0.016805 needles = 8000  
+PI est = 3.141355 sd = 0.0137 needles = 16000  
+PI est = 3.14131375 sd = 0.008476 needles = 32000  
+PI est = 3.141171875 sd = 0.007028 needles = 64000  
+PI est = 3.1415896875 sd = 0.004035 needles = 128000  
+PI est = 3.14174140625 sd = 0.003536 needles = 256000  
+PI est = 3.14155671875 sd = 0.002101 needles = 512000  
+</code></pre>
+
+<p><code>32000</code> 개와 <code>64000</code> 개의 바늘을 떨어트린 샘플을 보면 실제 샘플도 후자가 많고, 표준편차도 후자가 작음에도 실제 추정값은 더 나쁘게 나왔다.</p>
+
+<p>표준편차가 작으면 실제 값에 근접한 추정값이 나왔다는 뜻이 아닌가? </p>
+
+<blockquote>
+  <p>Having the small standard deviation doesn't mean we have a good estimate.</p>
+</blockquote>
+
+<p>그렇지 않다. 표준편차가 작다는 것이, 우리가 얻은 추정값이 실제 값과 같다는 뜻은 아니다.</p>
+
+<blockquote>
+  <p>All this means is that if we were to draw more samples from the same distribution, we can be reasonably confident that we would get a similar value.</p>
+</blockquote>
+
+<p>단지 같은 분포에서 더 많은 샘플을 이용하면 <em>현재 값과 비슷한 값 (!= 실제값)</em> 을 얻을 수 있다는 말이다.</p>
+
+<p>우리가 구한 값이 실제 <code>PI</code> 와 근사하다고 믿기 전에 3가지를 먼저 확인해야한다.</p>
+
+<p>(1) <strong>conceptual model</strong> (이 경우 <code>PI</code> 를 위한 계산) <br />
+(2) <strong>implementation</strong> <br />
+(3) <strong>enough samples</strong>  </p>
+
+<p>만약에 <code>4 * (inCircle / float(num)</code> 대신에 <code>2 * (inCircle / float(num)</code> 를 사용해 잘못된 <em>conceptual model</em> 을 가진다면 (버그라 볼 수도 있겠다.)</p>
+
+<pre><code>PI est = 1.57422 sd = 0.023943 needles = 1000  
+PI est = 1.56959 sd = 0.017748 needles = 2000  
+PI est = 1.57054 sd = 0.013565 needles = 4000  
+PI est = 1.5707175 sd = 0.008402 needles = 8000  
+PI est = 1.5706775 sd = 0.00685 needles = 16000  
+PI est = 1.570656875 sd = 0.004238 needles = 32000  
+PI est = 1.5705859375 sd = 0.003514 needles = 64000  
+PI est = 1.57079484375 sd = 0.002017 needles = 128000  
+</code></pre>
+
+<p>보면 알겠지만, 표준편차는 충분히 작음에도 우리가 구한 추정값이 <code>PI</code> 와는 상당히 다르다.</p>
+
+<blockquote>
+  <p>Whenever possible, one should attempt to validate results against realilty</p>
+</blockquote>
+
+<h3 id="normaldistribution">Normal Distribution</h3>
+
+<blockquote>
+  <p>Instead of estimating an unknown parameter by a single value, a <strong>confidence interval</strong> provides a range that is likely to contain the unknown value and a confidence level that the unknown value lays within that range</p>
+</blockquote>
+
+<h3 id="commonpatterninscienceandengineering">Common Pattern in Science and Engineering</h3>
+
+<p>보통 두 가지 작업이 있는데,</p>
+
+<p>(1) develop a hypothesis <br />
+(2) design an experiment, take measurements <br />
+(3) use computation to <br />
+- evaluate hypothesis, <br />
+- determin values of unknowns, <br />
+- predict consequences</p>
+
+<p>두가지는 <code>1 -&gt; 2</code> 순서일 수 있고, 때때로 뒤 바뀔 수도 있다. 예를 한번 살펴보면</p>
+
+<p>먼저 16세기에 <em>Hooke</em> 는 <em>"용수철에 가해진 힘은 그 길이에 비례한다는 가설"</em> 을 세웠다. 이를 증명하기 위해 실험을 고안했는데, 천장에 서로 다른 길이의 스프링을 연결하고 거기에 저울 추를 달았다.</p>
+
+<p>늘어난 길이 <code>x</code> 에 대해 용수철 상수 <code>k</code> 를 <code>kx = mg</code> 를 이용해 계산하면, 얼추 맞는다. 그런데 몇몇 샘플에 대해서는 용수철 상수 <code>k</code> 가 상당히 다르게 나온다. <code>[11.41, 14.49 ...]</code> 왜 그럴까? 용수철 상수가 매번 변한다는걸까? </p>
+
+<p>다음 데이터에 대해 그래프를 그려보면</p>
+
+<pre><code>Distance (m) Mass (kg)  
+0.0865 0.1  
+0.1015 0.15  
+0.1106 0.2  
+0.1279 0.25  
+0.1892 0.3  
+0.2695 0.35  
+0.2888 0.4  
+0.2425 0.45  
+0.3465 0.5  
+0.3225 0.55  
+0.3764 0.6  
+0.4263 0.65  
+0.4562 0.7  
+0.4502 0.75  
+0.4499 0.8  
+0.4534 0.85  
+0.4416 0.9  
+0.4304 0.95  
+0.437 1.0  
+</code></pre>
+
+<p><em>distance</em> 에 대한 예측 <code>ma / k</code> 와 실제 값이 일치하지 않는다. 이른바 <em>error (오류)</em> 가 있는 것인데, 이들 오류는 <em>small randomness</em> 에 대한 축적의 결과로 이루어 진 것이다.</p>
+
+<p>오류에 대한 <em>probabilty density function</em> 로 <code>y = x - 1 (-1 &lt;= x &lt; 0)</code>, <code>y = -x + 1 (0 &lt; x &lt;= 1)</code> 을 가정했을때 시뮬레이션을 좀 해보자. <code>random.triangular</code> 를 이용하면 <em>triangle distribution</em> 을 얻을 수 있다.</p>
+
+<pre><code class="python">def testErrors(ntrials=10000,npts=100):  
+    results = [0] * ntrials
+    for i in xrange(ntrials):
+        s = 0   # sum of random points
+        for j in xrange(npts):
+            s += random.triangular(-1,1)
+        results[i] =s
+    # plot results in a histogram
+    pylab.hist(results,bins=50)
+    pylab.title('Sum of 100 random points -- Triangular PDF (10,000 trials)')
+    pylab.xlabel('Sum')
+    pylab.ylabel('Number of trials')
+
+testErrors()  
+pylab.show()  
+</code></pre>
+
+<p>실행해 보면 에러의 합의 분포가 정규 분포와 비슷하다. 우리가 어떤 에러 분포를 고르든지 간에 <em>finite mean, variance</em> 를 가지고 있다면 에러의 분포는 정규분포다. </p>
+
+<p>실제 그런가 <code>random.triangular</code> 말고 <code>random.uniform</code> 을 이용해 보면 똑같이 정규분포를 얻는다. 이는 <em>central limit theorem (중심극한정리)</em> 를 의미하는데 위키에서 인용하면</p>
+
+<blockquote>
+  <p>동일한 확률분포를 가진 독립 확률 변수 n개의 평균값은 n이 적당히 크다면 정규분포에 가까워진다는 정리</p>
+</blockquote>
+
+<p>결국 우리가 이전에 스프링을 이용해 봤던 실험에서 발생한 에러는 <em>small random error</em> 의 <em>accumulation</em> 이므로, 우리는 이 에러의 분포를 정규분포라 말할 수 있다는 것이다.</p>
+
+<p><strong>결국 오차 역시 평균 주변에 몰려있는 값이므로, 참값을 상당히 높은 확률로 추측해 낼 수 있다.</strong></p>
+
+<blockquote>
+  <p>정규분포는 19세기의 가장 위대한 수학자인 가우스(C. F. Gauss, 1777-1855)에 의해 새롭게 해석된다. 가우스는 관측에 따른 오차의 정도가 대체로 평균값 주변에서 발생한다는 점에 착안하여 정규분포에 따른 확률 밀도 함수와 똑 같은 식을 얻을 수 있었다. 이것은 <strong>관측 오차 역시 정규분포를 따른다는 것으로, 이후 실험으로 구한 관측값에서 참값을 추정해내는 근본적인 원리</strong>로 자리잡게 된다. 이런 점에서 위의 종모양 곡선을 오차곡선(error curve)라고도 부른다.</p>
+</blockquote>
+
+<p><em>normal distribution</em> 의 식은 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%20-%20%5Cmu%29%5E2%20%5Cover%20%5Csigma%5E2%7D'  alt="" /></p>
+
+<p><code>mu = 0, sigma = 1</code> 인 경우에 <em>standard normal</em> 혹은 <em>unit normal</em> 이라 부른다.</p>
+
+<blockquote>
+  <p>So when observation errors are due to the accumlation of many small random perturbations</p>
+</blockquote>
+
+<p><img src='http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%29%5E2%20%5Cover%20%5Csigma%5E2%7D'  alt="" /></p>
+
+<p>다시 말해 작은 랜덤의 누적으로 발생한 관측 오차의 경우에는 <code>mu = 0</code> 이다. 그리고 식이 말해주는 바는, 큰 에러의 경우에는 확률이 <em>expnentially less likely</em> 하다는 것이다.</p>
+
+<p>이제 각 에러가 일어날 확률 곱을 다음과 같이 구할 수 있다. </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29'  alt="" /></p>
+
+<p>이때 이 값을 최대화한다는 것은 각 에러가 나올 확률이 가장 높아야 한다. 다시 말해서 가장 평균적인 에러만 나와야 한다는 뜻이다. 이 값의 최대를 구하는 것은 뒤집은 식의 최소값을 찾는 것과 같으므로</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min%20%5C%20%7B1%20%5Cover%20%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D'  alt="" /></p>
+
+<p>여기에 자연 로그를 씌우면 확률 변수의 곱이 덧셈으로 변한다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?ln%20%28%7B1%20%5Cover%20%5Cprod%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D%29%20%5C%5C%20%5C%5C%20%5C%5C%20%3D%20-%20%5Csum%20ln%20%28L_%7Berr%7D%28obs_i%20-%20pred_i%29%29'  alt="" /></p>
+
+<p>이 값을 최소화 하면 된다. 여기서 <em>pdf</em> 식을 적용하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min%20-%20%5Csum%20ln%20%28%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20e%5E%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%29'  alt="" /></p>
+
+<p>로그를 씌우면 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csum%20%5Bln%20%7B%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20&plus;%20ln%20%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%5D'  alt="" /></p>
+
+<p>이 때 다른 상수를 제외하고 실제 최소화 해야 할 부분만 고려하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min%20%5Csum%20%28obs_i%20-%20pred_i%29%5E2'  alt="" /></p>
+
+<p>따라서 이 값을 최소화 하면 <em>most likely observations</em> 가 된다. 이런 이유에서 오차 제곱의 합의 최소가 되는 파라미터가 바로 가장 신뢰할만한 파라미터가 된다.</p>
+
+<p><br/> <br />
+처음부터 정리하자면, 중심 극한 정리에 따라 에러의 분포가 어떠하든 간에 에러가 확률변수라면 이것의 평균은 정규분포다. 따라서 <em>pdf</em> 식을 적용할 수 있고 이때 <code>mean = 0</code> 이다.</p>
+
+<p>에러가 나올 확률의 곱이 최대이면, 모든 에러에 대해 보편적인 에러를 얻었다는 뜻이므로 이에 대해 식을 정리하면,</p>
+
+<p><em>sum of squared of erros (SSE, least square)</em> 를 최소화 하는 파라미터를 선택하면 가장 신뢰할 만한 관측 결과를 얻어낼 수 있다는 결론을 얻게된다.</p>
+
+<p><br/> <br />
+파이선에서는 <code>pylab.plotfit</code> 을 이용해 값을 최소화 하는 파라미터를 뽑아낼 수 있다. 예를 들어서 <code>y = ax + b</code> 의 합을 최소화 하는 <code>a, b</code> 를 찾으려면 </p>
+
+<pre><code class="python">a, b = pylab.ployfir(xvals, yvals, 1)  
+</code></pre>
+
+<p><code>y = ax^2 + bx + c</code> 에 대해서는</p>
+
+<pre><code class="python">a, b, c = pylab.polyfit(xvals, yvals, 2)  
+</code></pre>
+
+<h3 id="firingarrow">Firing Arrow</h3>
+
+<p>이제 위에서 얻은 개념을 다른 예제에 적용해보면서 가설이 얼마나 <em>잘 맞는가</em> 를 어떻게 측정할건지를 좀 생각해 보자. (<em>Measuring "goodness" of fit</em>)</p>
+
+<p>화살이 날라가는 거리에 따른 높이를 측정한 데이터다.</p>
+
+<pre><code>Distance (yds) height (ins) height height height  
+30  0 0 0 0  
+29 2.25 3.25 4.5 6.5  
+28 5.25 6.5 6.5 8.75  
+27 7.5 7.75 8.25 9.25  
+26 8.75 9.25 9.5 10.5  
+25 12 12.25 12.5 14.75  
+24 13.75 16 16 16.5  
+23 14.75 15.25 15.5 17.5  
+22 15.5 16 16.6 16.75  
+21 17 17 17.5 19.25  
+20 17.5 18.5 18.5 19  
+15 19.5 20 20.25 20.5  
+10 18.5 18.5 19 19  
+5 13 13 13 13  
+0 0 0 0 0  
+</code></pre>
+
+<pre><code class="python">def getTrajectoryData(fileName):  
+    dataFile = open(fileName, 'r')
+    distances = []
+    heights1, heights2, heights3, heights4 = [],[],[],[]
+    discardHeader = dataFile.readline()
+    for line in dataFile:
+        d, h1, h2, h3, h4 = line.split()
+        distances.append(float(d))
+        heights1.append(float(h1))
+        heights2.append(float(h2))
+        heights3.append(float(h3))
+        heights4.append(float(h4))
+    dataFile.close()
+    return (distances, [heights1, heights2, heights3, heights4])
+
+def tryFits(fName):  
+    distances, heights = getTrajectoryData(fName)
+    distances = pylab.array(distances)*36 # convert yard to
+    totHeights = pylab.array([0]*len(distances))
+    for h in heights:
+        totHeights = totHeights + pylab.array(h)
+    pylab.title('Trajectory of Projectile (Mean of 4 Trials)')
+    pylab.xlabel('Inches from Launch Point')
+    pylab.ylabel('Inches Above Launch Point')
+    meanHeights = totHeights/float(len(heights))
+    pylab.plot(distances, meanHeights, 'bo')
+    a,b = pylab.polyfit(distances, meanHeights, 1)
+    altitudes = a*distances + b
+    pylab.plot(distances, altitudes, 'r',
+               label = 'Linear Fit')
+    a,b,c = pylab.polyfit(distances, meanHeights, 2)
+    altitudes = a*(distances**2) + b*distances + c
+    pylab.plot(distances, altitudes, 'g',
+               label = 'Quadratic Fit')
+    pylab.legend()
+</code></pre>
+
+<p>위 코드를 돌려보면 이차함수가 일차함수보다 더 <em>fit</em> 한 걸 볼 수 있다. 그럼 문제는 매번 그래프로 그릴수도 없고 어떻게 측정할거냐 하는건데, <em>variabilty</em> 를 이용하는 방법이 있다. 다시 말해 에러가 얼마나 많이 변하냐는 것이다.</p>
+
+<p><em>variability of errors</em> 는 SEE, 즉 관측 데이터와 예측값 간 차이의 제곱의 합으로 구할 수 있다. 그리고 <em>variability of data</em> 는 관측값과 관측값의 평균의 차이의 제곱의 합으로 구할 수 있다. 그리고 이 두 변수간 비율로 모델이 얼마나 잘 맞는지를 판단할 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%7B%5Csigma_%7Berr%7D%5E2%20%5Cover%20%5Csigma_%7Bdata%7D%5E2%7D'  alt="" /></p>
+
+<p>이 값을 <code>R^2</code> 또는 <em>coefficient of determination</em> 이라 부른다. 이 값이 <code>1</code> 에 근접하면 모델이 데이터와 잘 맞고, <code>0</code> 에 가까우면 거의 안맞는다는 뜻이다.</p>
+
+<p>그러나 주의해야 할 점이 하나 있다. <code>R^2</code> 값이 높은 모델이라고 해서 좋은 모델이라는 뜻은 아니다. 지금 현재 가진 데이터에 <em>fit</em> 된다는 거지, 실제 데이터에 적용하면 어떻게 될지 모른다. <em>overfitting</em> 할 수도 있다는 이야기다.</p>
+
+<p>파이썬에서 <code>R^2</code> 를 구하는 함수를 만들면</p>
+
+<pre><code class="python">def rSquare(measured, estimated):  
+    """measured: one dimensional array of measured values
+       estimate: one dimensional array of predicted values"""
+    SEE = ((estimated - measured)**2).sum()
+    mMean = measured.sum()/float(len(measured))
+    MV = ((mMean - measured)**2).sum()
+    return 1 - SEE/MV
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br />
+(2) <a href='http://ko.wikipedia.org/wiki/%EC%A4%91%EC%8B%AC%EA%B7%B9%ED%95%9C%EC%A0%95%EB%A6%AC' >http://ko.wikipedia.org</a> <br />
+(3) <a href='http://www.financedoctor.co.kr/finance/view.php?f_idx=14587&amp;b_code=8&amp;m_code=0&amp;s_code=0' >http://www.financedoctor.co.kr</a> <br />
+(4) <a href='http://www.researchgate.net/post/What_is_the_difference_among_Deterministic_model_Stochastic_model_and_Hybrid_model' >www.researchgate.net/</a> <br />
+(5) <a href='http://www4.stat.ncsu.edu/' ~gross/BIO560%20webpage/slides/Jan102013.pdf">www4.stat.ncsu.edu</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-2/</link><guid isPermaLink="false">32cb7752-47f2-4ad2-a5cf-176453e06a7c</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[simulation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 21 Nov 2014 15:43:27 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 5]]></title><description><![CDATA[<p>키보드를 읽거나 화면에 무엇인가 쓰는 <em>intertactive program</em> 은 <em>side-effect</em> 를 만듭니다. 그런데, 하스켈은 <em>side-effect</em> 가 없지요. 그럼 입출력이 불가능한 것일까요? </p>
 
 <p>당연히 그렇지 않습니다. <strong>IO 모나드</strong> 를 사용할겁니다.</p>
 
@@ -4421,1084 +5447,4 @@ concat [[(x, y) | y &lt;- [4, 5, 6]] | x &lt;- [1, 2, 3]]
 <p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br />
 (2) Chapter 5, Programming in haskell <br />
 (3) <a href='http://ko.wikipedia.org/wiki/%EC%B9%B4%EC%9D%B4%EC%82%AC%EB%A5%B4_%EC%95%94%ED%98%B8' ><em>Caesar cipher</em></a> <br />
-(4) <a href='http://www.maritzresearch.com/maritzstats/HelpFiles/Formula_ChiSquareTest.htm' >http://www.maritzresearch.com</a></p>]]></description><link>http://1ambda.github.io/haskell-intro2/</link><guid isPermaLink="false">6893f28c-dffc-4c58-8195-730189d88711</guid><category><![CDATA[programming language]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 04 Nov 2014 16:26:11 GMT</pubDate></item><item><title><![CDATA[Intro to Computational Thinking and Data Science 1]]></title><description><![CDATA[<h3 id="simulationmodels">Simulation Models</h3>
-
-<p>Simulation attempts to build an <strong>experimental device</strong> called <em>model</em></p>
-
-<p>Simulation model is <em>descriptive, not prescriptive</em></p>
-
-<p>직역하자면 시뮬레이션은 실험가능한 도구인 모델을 만들어낸다. 모든 모델이 정확하진 않지만, 다시 말해 현상을 완벽하게 설명하진 못하지만, 어떤 모델들은 대략 비슷하게 사실을 예측해 낸다. 그런점에서 모델은 유용하다.</p>
-
-<p>(1) <strong>Deterministic simulations</strong> are completely defined by the model <em>rerunning the simulation will not change the result</em> <br />
-(2) <strong>Stochastic simulations</strong> include randomness. <em>Difference runs can generate different results</em>  </p>
-
-<h3 id="nondeterminism">Nondeterminism</h3>
-
-<p>*Casual nondeterminism: * Not every event is caused by previous events</p>
-
-<p>*Predictive nondeterminism: * Lack of knowledge about the world makes it impossible make accurate predictions about future states</p>
-
-<p>*Stachastic Processes: * An ongoing process where the next state might depend on both the previous states and <strong>some random element</strong></p>
-
-<pre><code class="python">def rollDie():  
-   """returns an int between 1 and 6"""
-
-def rollDie():  
-   """returns a random int between 1 and 6 """
-</code></pre>
-
-<p>위쪽 <code>rollDie</code> 는 <em>underdetermined</em> 인 반면 아래쪽은 <em>non-deterministric</em></p>
-
-<h3 id="hashtable">Hash Table</h3>
-
-<p><em>Many to One</em> 이기 때문에 <em>Collision</em> 이 생긴다. <strong>bucket</strong> 을 이용해서 같은 키값을 가진 것들을 같은 버켓에 저장하도록 하면 충돌을 어느정도는 예방할 수 있다. </p>
-
-<p>물론, 테이블이 커지면 충돌이 적어지고 탐색시간이 빨라지지만 메모리가 많이 들고, 테이블이 작아지면 충돌이 많아지고 탐색시간이 <em>linear search</em> 에 가깝게 느려지지만 메모리는 적게든다. <em>Time / Space trade off</em></p>
-
-<p>그리고 좋은 해쉬 함수는 <em>uniform distribution</em> 을 생성한다. 다시 말해서 모든 버킷은 같은 수의 데이터를 담고 있어야 한다.</p>
-
-<p>해시 테이블은 <em>time / space trade off</em> 를 극명하게 보여주는데, <em>collision</em> 이 하나도 없을 때 개당 <em>1 byte</em> 인 10^9 개의 원소를 담고자 한다면, 1GB 가 필요하다.</p>
-
-<p>그래서 해시 테이블을 만들 때는 가능한한 메모리가 허락하는 한도 내에서 최적화 할 필요가 있다. 다시 말하면 <em>table size</em> 와 <em>lookup time</em> 을 동시에 고려해야 한다는 뜻이다.</p>
-
-<p>버킷 내부에 <code>a</code> 개를 저장하면 원소를 검색하는데 <code>O(a)</code> 시간이 걸리지만 메모리는 <code>1/a</code> 배 만큼 줄어든다.</p>
-
-<p>이제 해쉬 함수의 성능을 <em>적어도 한번 충돌이 일어날 수 있는 확률</em> 로 표현해 보자. 한번도 충돌이 나지 않을 경우를 1 에서 빼면 된다.</p>
-
-<p>입력 원소 <code>K</code> 개에 대해, 해쉬함수가 <code>range(n)</code> 의 <em>uniform distribution</em> 을 만들때 <code>hash(k) = 1/n</code> 이다. 이 때 충돌이 한번도 일어나지 않을 확률은 <code>1 * (n-1)/n * (n-2)/n  * .. (n-(k-1))/n</code> 이다. 이 값을 1에서 빼면 <em>적어도 한번 충돌이 일어날 수 있는 확률</em>을 구할수 있다.</p>
-
-<h3 id="birthdayattack">Birthday Attack</h3>
-
-<p>일년이 365일 이라 하면, 얼핏 생각하기에 365명 정도는 모여야 생일이 같은 사람 있을 것 같은데 사실 그렇지 않다. 실제로는 23명만 모여도 생일이 같은 두사람이 있을 확률이 50%를 넘고, 57명이 모이면 99%를 넘는다.</p>
-
-<p>생일이 같은 두 사람을 찾는 것과 비슷하게, 암호학적 해시 결과가 같은 두 입력값을 자는 것 역시 모든 입력값을 계산하지 않앋 충분히 높은 확률로 해시 충돌을 찾을 수 있다. 이러한 암호 공격을 <em>birthday attack</em> 이라 부른다.</p>
-
-<p>바꿔 말하면 <em>birth day problem</em> 은 해시 버켓이 365개인 해시 테이블이라 봐도 무방하다.</p>
-
-<p><code>atLeastTwoSameBirthday</code> 함수는 <code>n + 1</code> 명이 있는 방 안에서 적어도 두명은 생일이 같을 확률을, <code>minNumOfPeopleProb</code> 는 인자로 받은 <code>p</code> 보다 큰, 생일이 같을 확률을 얻기 위한 최소한의 인원을 돌려준다.</p>
-
-<pre><code class="python">import operator
-
-
-def atLeastTwoSameBirthday(n):  
-    xs = range(365 - n, 365)
-    ys = map((lambda x: float(x) / 365), xs)
-    return 1 - reduce(operator.mul, ys)
-
-
-def minNumOfPeopleProb(p):  
-    for n in range(1, 365):
-        if atLeastTwoSameBirthday(n) &gt;= p:
-            return n
-
-    return n
-
-
-print atLeastTwoSameBirthday(29)  
-print atLeastTwoSameBirthday(249)  
-print minNumOfPeopleProb(0.99)  
-</code></pre>
-
-<h3 id="lowoflargenumbers">Low of Large Numbers</h3>
-
-<blockquote>
-  <p>In repeated <strong>independent tests</strong> with the same actual probabilty <em>p</em> of a particular outcome in each test, the chance of that the <em>fraction of times</em> that outcome occurs differs from p converges to zero as the number of trials goes to infinity</p>
-</blockquote>
-
-<p><em>low of large numbers</em> 는 <strong><code>|head - tail|</code> 이 0에 수렴한다</strong> 를 의미하지 않는다. 오히려 <code>|head - tail|</code> 는 특정 비율이다(<em>ratio</em>)</p>
-
-<p>이제 실제로 그러한지 시뮬레이션을 하기 위해 코드를 작성하면</p>
-
-<pre><code class="python">import pylab  
-import random
-
-
-def flipPlot(minExp, maxExp):  
-    ratios = []
-    diffs = []
-    xAxis = []
-
-    for exp in range(minExp, maxExp + 1):
-        xAxis.append(2 ** exp)
-
-    for flips in xAxis:
-        heads = 0
-        for n in range(flips):
-            if random.random() &lt; 0.5:
-                heads += 1
-
-        tails = flips - heads
-        ratios.append(heads / float(tails))
-        diffs.append(abs(heads - tails))
-
-    pylab.title('Diff between Heads and Tails')
-    pylab.xlabel("# of Flips")
-    pylab.ylabel("Abs(#Heads - #Tails)")
-    pylab.plot(xAxis, diffs)
-    pylab.figure()
-    pylab.title("Heads / Tails Ratios")
-    pylab.xlabel("# of Flips")
-    pylab.ylabel("Heads / Tails")
-    pylab.plot(xAxis, ratios)
-
-random.seed(0)  
-flipPlot(4, 20)  
-pylab.show()  
-</code></pre>
-
-<p>돌려서 나온 <code>|head - tail|</code> 의 그래프에서 선형 관계가 있다고 느낄 수 있는데 사실이 아니다. 우리는 x 축 값을 지수로 증가시켰기 때문에 우측에는 데이터가 별로 없는 반면 왼쪽에는 압축되어있다.</p>
-
-<p>선 대신에 점 형태로 그래프를 그리고 축에 로그를 씌우는 코드로 바꾸자.</p>
-
-<pre><code class="python">    #...
-
-    pylab.title('Diff between Heads and Tails')
-    pylab.xlabel("# of Flips")
-    pylab.ylabel('Abs(#Heads - #Tails)')
-    pylab.plot(xAxis, diffs, 'bo')
-    pylab.semilogx()
-    pylab.semilogy()
-    pylab.figure()
-    pylab.title('Heads / Tails Ratios')
-    pylab.xlabel('# of Flips')
-    pylab.ylabel('Heads / Tails')
-    pylab.semilogx()
-    pylab.plot(xAxis, ratios, 'ro')
-
-    #...
-</code></pre>
-
-<p><code>heads / tails</code> 는 1에 수렴하는걸 알 수 있다. 반면 <code>|heads - tails|</code> 는 완벽하진 않지만 선형의 그래프를 그리는걸 알 수 있다.</p>
-
-<p>여기서 한 가지 사실을 알 수 있다.</p>
-
-<blockquote>
-  <p>Never possible to be assured of perfec accuracy through samplings, unless you sample the entire population</p>
-</blockquote>
-
-<p>그렇다면 <em>sample</em> 에 대한 경향이 참일때, <em>population</em> 에 대한 경향이 참임을 증명하기 위해서 얼마나 많은 <em>sample</em> 을 살펴봐야 할까?</p>
-
-<blockquote>
-  <p>Depends upon the variance in the underlying distribution</p>
-</blockquote>
-
-<p>물론 우리는 <em>distribution</em> 을 볼 수 없다. 샘플만 가지고 있기 때문에. 그럼 샘플로 <em>variance</em> 를 얻어보자.</p>
-
-<blockquote>
-  <p>We measure the amount of variance in the outcomes of multiple trials</p>
-</blockquote>
-
-<p><em>standard deviation</em> 을 이용하자. 표준편차는 우리가 가진 샘플이 평균에 모여있는지, 아닌지를 알려주는 지표다. </p>
-
-<p>다시 말해서 <em>standard deviation</em> 이 작으면, 그래서 샘플의 평균에 샘플들이 대부분 모여있다는걸 알 수 있다면 작은 샘플에 대해서 얻은 어떤 경향이 <em>population</em> 에도 적용된다는 걸 알 수 있다.</p>
-
-<pre><code class="python">def flipPlot(minExp, maxExp, trials):  
-    meanRatios = []
-    meanDiffs = []
-    sdRatios = []
-    sdDiffs = []
-    xAxis = []
-
-    for exp in range(minExp, maxExp + 1):
-        xAxis.append(2 ** exp)
-
-    for flips in xAxis:
-        ratios = []
-        diffs = []
-
-        for t in range(trials):
-            heads, tails = runTrial(flips)
-            ratios.append(heads / float(tails))
-            diffs.append(abs(heads - tails))
-        meanRatios.append(sum(ratios) / trials)
-        meanDiffs.append(sum(diffs) / trials)
-        sdRatios.append(stdDev(ratios))
-        sdDiffs.append(stdDev(diffs))
-
-    pylab.title('Mean of Diff bet Heads and Tails ('+str(trials)+' Trials)')
-    pylab.xlabel("# of Flips")
-    pylab.ylabel('mean Abs(#Heads - #Tails)')
-    pylab.plot(xAxis, meanDiffs, 'bo')
-    pylab.semilogx()
-    pylab.semilogy()
-
-    pylab.figure()
-    pylab.title('SD of Diff bet Heads and Tails ('+str(trials)+' Trials)')
-    pylab.xlabel('# of Flips')
-    pylab.ylabel('SD Abs(#Heads - #Tails)')
-    pylab.plot(xAxis, sdDiffs, 'bo')
-    pylab.semilogx()
-    pylab.semilogy()
-
-    pylab.figure()
-    pylab.title('Mean Heads / Tails Ratios')
-    pylab.xlabel('# of Flips')
-    pylab.ylabel('mean Heads / Tails')
-    pylab.semilogx()
-    pylab.plot(xAxis, meanRatios, 'ro')
-
-    pylab.figure()
-    pylab.title('SD Heads / Tails Ratios')
-    pylab.xlabel('# of Flips')
-    pylab.ylabel('SD Heads / Tails')
-    pylab.semilogx()
-    pylab.semilogy()
-    pylab.plot(xAxis, sdRatios, 'ro')
-
-random.seed(0)  
-flipPlot(4, 20, 20)  
-pylab.show()  
-</code></pre>
-
-<p>이제 코드를 돌려보면, <code>heads / tails</code> 의 평균은 1로 수렴하는 것을, 표준편차는 <code>n</code> 이 커질수록 급격히 <code>0</code> 에 가까워지는걸 알 수 있다.</p>
-
-<p>반면 <code>|heads - tails|</code> 의 평균은 <code>n</code> 이 증가할수록 여전히 커지고, 표준편차도 증가한다. </p>
-
-<p>그럼, <code>n</code> 이 클수록 <code>|heads - tails|</code> 의 표준편차가 증가하므로 우리가 얻은 어떤 경향성이 <code>n</code> 이 클수록 더 믿지 못한다는 뜻일까?. </p>
-
-<p>당연히 그렇지 않다! <strong>표준편차는 그 자체로만 보아서는 안되고 평균과 연관지어 생각해야 한다.</strong> 평균이 100억일때, 표준편차가 100이라면 그건 데이터가 모여있음을 의미한다.</p>
-
-<p>결국 <em>평균</em> 이 매우 달라지는 테스트를 할 경우엔 <em>표준편차</em> 를 사용하는건 적절하지 못하다는 사실을 알 수 있다.</p>
-
-<h3 id="coefficientofvariation">coefficient of variation</h3>
-
-<p>그럼 평균이 달라지는경우 표준편차가 의미가 없다면, 어떤 값을 사용해야 <em>population</em> 의 <em>variance</em> 를 알 수 있을까? 표준편차를 평균으로 나눈 <em>coefficient of variance</em> 를 이용하면 된다. 일반적으로 이 값이 1 보다 작은지 아닌지를 기준으로 삼는다.</p>
-
-<p><img src='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/files_finger_exercises_pythonland.png'  alt="" />
-<img src='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/files_finger_exercises_montyland.png'  alt="" /></p>
-
-<p align="center">(<a href='http://courses.edx.org/courses/MITx/600.2_2x' >http://courses.edx.org/courses/MITx/600.2_2x</a>)</p>
-
-<p>위 두 도시의 스카이라인중 어떤 도시의 <em>coefficient of variance</em> 가 더 클까?</p>
-
-<p>한가지 더 생각해볼 문제가 있다. 다음의 두 변수는 CoV 를 계산하는 것이 의미가 있을까?</p>
-
-<p>(1) <em>Daily Temperature in Celsius for the city of Boston</em> <br />
-(2) <em>The X coordinate of a drunk in the random walk</em>  </p>
-
-<p>의미가 없다. <em>CoV</em> 가 의미있으려면, <em>true zero</em> 가 있어야 한다. 바꿔 말하면 <em>ratio scale</em> 에 대해서만 <em>CoV</em> 가 의미가 있다. 위 두 수치들은 양수 또는 음수값이 있기 때문에 <em>ratio scale</em> 이 아니다.</p>
-
-<h3 id="histogram">Histogram</h3>
-
-<p><em>pylab</em> 에서는 히스토그램을 어떻게 그릴까?</p>
-
-<pre><code class="python">import pylab  
-import random
-
-
-def exampleHist(n):  
-    xs = []
-    for x in range(n):
-        xs.append(random.random())
-
-    pylab.hist(xs, bins=11)
-    pylab.show()
-
-exampleHist(10000)  
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://ko.wikipedia.org/wiki/%EC%83%9D%EC%9D%BC_%EB%AC%B8%EC%A0%9C' >http://ko.wikipedia.org</a> <br />
-(2) <em>MIT 6.00.2 2x</em> in <strong>edx</strong></p>]]></description><link>http://1ambda.github.io/edx-600-2x-1/</link><guid isPermaLink="false">ea5cceae-c2b4-4745-9127-5cc8d042a92a</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[histograms]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 04 Nov 2014 09:19:14 GMT</pubDate></item><item><title><![CDATA[Divide and Conquer]]></title><description><![CDATA[<p><em>Divide and Conquer (분할 정복)</em> 을 배운다. <em>merge, quick sort</em> 를 배우고 이 과정에서 왜 <em>combine</em> 단계가 <code>O(n)</code> 이 되어야 하는지 알아본다. 뒷부분에서는 <em>Big O</em> 뿐만 아니라 <em>master method</em>, <em>decomposition approach</em> 를 이용해 성능을 분석한다.</p>
-
-<h3 id="divideandconquer">Divide and Conquer</h3>
-
-<p>각 level 의 문제 갯수는 <code>2^j (j = 0, 1, 2, ... , log2n)</code> 이고 문제의 사이즈는 <code>n / 2^j</code> 이므로 연산수를 <code>k</code> 라 하면, 각 레벨에서 연산 수는 <code>k * n</code>, 레벨의 <em>depth</em> 가 <code>log2n + 1</code> 이므로, </p>
-
-<p><em>merge sort</em> 같은 경우는 연산수 <code>k = 6</code> 에서 <code>6n (log2n + 1)</code></p>
-
-<p>Big O 는 <code>O(f(n))</code> 이라 했을때 <em>at most</em>, <code>f(n)</code> 에 proportional 하므로 upper 바운드. <br />
-반면 Omega 는 <code>omega(f(n))</code> 이라 했을 때 <em>at least</em> <code>f(n)</code> 에 proportional 하므로 lower 바운드.</p>
-
-<p>분할 정복의 핵심은 각 sub-problem 에서 연산 수를 o(n) 으로 맞출 수 있느냐 없느냐, 맞춘다면 nlogn 알고리즘이 되는 것이다. </p>
-
-<p>알고리즘은 3단계로 구성된다.</p>
-
-<p>(1) Divide <br />
-(2) Conquer sub problems <br />
-(3) combine (merge)  </p>
-
-<p>여기서 중요한건, combine 단계인데 이게 O(n) 이기만 하면 전체 알고리즘의 성능을 O(nlogn) 으로 보장할 수 있음.</p>
-
-<h3 id="mastermethodmotivation">Master Method: Motivation</h3>
-
-<p>T(n) 을 O(n) 으로 upper bound 를 구하긴 했지만 O(n) 연산 수 구하는게 좀 힘들다. 재귀 호출의 갯수나, 문제의 분할 사이즈로 O(n) 을 쉽게 구해보자.</p>
-
-<p>가우스 곱셈? 의 경우에 T(n) &lt;= 4 * T(n/2) + O(n)</p>
-
-<p>그러나 더 작아질 수 있음. (a+b)(c+d) 에서 ad+bc = (a+b)(c+d) - ad - bd 로 구할 수 있음</p>
-
-<p>즉 3개의 부분식만 구해도 됌.</p>
-
-<p>T(n) &lt;= 3 * T(n/2) + O(n)</p>
-
-<p>머지소트는 2 * T(n/2) + O(n) 쯤 되니까 가우스보다 더 낫긴 함. 그럼 가우스의 그것은 얼마일까?</p>
-
-<h4 id="mastermethod">Master Method</h4>
-
-<p><em>Master method</em> 는 재귀 문제의 러닝타임을 구하는데 <em>black box</em> 같은 역할을 한다. 대강의 코드만으로도 러닝타임을 추측할 수 있다.</p>
-
-<p>그러나 <em>master method</em> 는 가정을 하나 하는데, 바로 모든 문제가 같은 사이즈로 분할 된다는 것.</p>
-
-<blockquote>
-  <p>All sub priblems have equal size</p>
-</blockquote>
-
-<p><code>n</code> 이 충분히 작다면, <code>T(n)</code> 은 상수라 볼 수 있고 만약 <code>n</code> 이 충분히 크다면 <em>master method</em> 는 다음의 포맷을 가진다.</p>
-
-<p><img src='https://acrocontext.files.wordpress.com/2014/01/master-method.png?w=300&amp;h=160'  align="center" />  </p>
-
-<p align="center">(<a href='https://acrocontext.wordpress.com/' >https://acrocontext.wordpress.com</a>)</p>
-
-<p>여기서 <code>a</code> 는 재귀 함수 호출의 수고, <code>b</code> 는 분할된 문제의 사이즈다. <code>d</code> 는 <em>combine</em> 스텝에서 사용하는 함수의 러닝타임의 지수다. (<em>merge-sort</em> 에서 머징하는 함수라 보면 된다.)</p>
-
-<ul>
-<li><code>a</code>: number of recursive calls (<code>&gt;= 1</code>)  </li>
-<li><code>b</code>: input size shrinkage factor (<code>&gt; 1</code>)  </li>
-<li><code>d</code>: exponent in running time of <em>combine step</em> (<code>&gt;= 0</code>)</li>
-</ul>
-
-<p>이제 몇 가지 예제를 좀 살펴보자.</p>
-
-<p><em>merge sort</em> 의 경우는 <code>a = 2, b = 2, d = 1</code> 이므로 <code>2 = 2^1</code> 이어서 <code>O(n^1 * logn)</code> 즉 <code>O(nlogn)</code> 의 러닝타임을 가진다.</p>
-
-<p><em>binary search</em> 는 문제 수가 절반으로 줄긴 하나 반쪽만 사용하고, 매 재귀호출 마다 한번의 비교만 하므로 <code>a = 1, b = 2, d = 0</code> 이므로 <code>a = b^d</code> 는 <code>1 = 1^1</code> 이 되어 <code>O(nlogn)</code> 이 된다. </p>
-
-<p>가우스 곱셈은 <code>a = 3, b = 2, d = 1</code> 이므로 <code>O(n^log2_3)</code> 이 된다. 더 정확히는 <code>O(n^1.59)</code> <em>merge-sort</em> 보다 빠르진 않지만 <em>quadratic</em> 보단 빠르다.</p>
-
-<p><em>strassen</em> 행렬 곱셈은 어떨까? <code>a = 7, b = 2, d = 2</code> 에서 마찬가지로 <em>case 3</em> 이므로 <code>O(n^log2_7)</code> 이다. <code>O(n^2.81)</code> 쯤 되므로 <code>O(n^3)</code> 보다는 훨씬 낫다.</p>
-
-<p><em>merge-sort</em> 에서 <code>d = 2</code> 라면 <code>O(n^2)</code> 이 나온다. 사실 일반적으로 생각하기에는 <code>O(n^2 * logn)</code> 이 나올거 같은데, 사실 이건 <em>upper bound</em> 이므로 <code>O(n^2)</code> 이 좀 더 나은 <em>upper bound</em> 임을 알 수 있다. 이 사실은  <em>master method</em> 를 이용하면 수학적으로 더 근사한 값을 찾아낼 수 있다는걸 알려준다.</p>
-
-<h4 id="proofmastermethod">Proof: Master Method</h4>
-
-<p>재귀의 각 단계를 <code>j = 0, 1, 2, ... , logb_n (base b)</code> 라 하면 각 단계에서는 <code>a^j</code> 사이즈의 <em>sub-problem</em> 수와 <code>n / b^j</code> 사이즈의 문제가 있다. </p>
-
-<p>단계 <code>j</code> 에서의 연산은 <code>a^j * c * (n / b^j)^d</code> 즉 <em>문제의 수 x 각 문제의 사이즈와 일어나는 거기서 일어나는 연산 수</em> 로 정의할 수 있다. 수식을 <code>j</code> 로 다시 정리하면</p>
-
-<p>각 단계의 <em>sub problem</em> 에서 일어나는 연산은 <code>c * n ^d * (a / b^d)^j</code> 다. 따라서 전체 단계를 구하려면 여기에 시그마를 씌우면 된다.</p>
-
-<p>식을 좀 더 자세히 보면</p>
-
-<ul>
-<li><em><code>a</code>:</em> rate of sub problem proliferation <em>(RSP)</em> </li>
-<li><em><code>b^d</code>:</em> rate of work shirinkage <em>(RWS)</em></li>
-</ul>
-
-<p><code>d</code> 가 <code>n^d</code> 에도 섞여있어 좀 복잡하긴 한데 느낌만 알아보자면 <code>b = 2, d = 1</code> 일때는 <em>sub-problem</em> 당 문제가 1/2 씩 줄어든다. 하지만 <code>b = 2, d  = 2</code> 라면 문제의 수가 2배가 될때 문제 사이즈는 4배가 되고, <code>b^d = 4</code> 가 되어 1/4 만큼의 연산만 줄어든다. 따라서 <code>d</code> 가 커지는 건 생각보다 영향이 큰 걸 알 수 있다.</p>
-
-<p>위 식으로부터 다음의 관계를 이끌어 낼 수 있다.</p>
-
-<p>(1) if <em>RSP &lt; RWS</em>, then the amount of work is decreasing with the recursion level <code>j</code> <br />
-(2) if <em>RSP > RWS</em>, then the amount of work is increasing with the recursion level <code>j</code> <br />
-(3) if <em>RSP = RWS</em>, then the amount of work is same at every recursion level <code>j</code>  </p>
-
-<p>따라서 <code>(3)</code> 의 경우 각 단계에서의 연산이 <code>c* n^d * 1^j</code> 이므로 깊이 <code>logb_n (base b)</code> 을 곱하면 <code>O(n^d * logn)</code> 이다. <em>(<code>a</code>, <code>b</code> 는 문제의 사이즈와 관계가 없다 그리고 더 정확히는 시그마를 더하면 <code>O(n^d * (1 + logb_n)</code> 이다)</em> </p>
-
-<p><code>(2)</code> 의 경우 깊이가 깊어질 수록 각 단계에서의 연산이 급격하게 줄어들고, 루트에서의 (<code>j = 0</code>) 연산이 가장 크므로 루트에서의 연산을 <em>upper bound</em> 로 보면 <code>O(n^d)</code> 라 볼 수 있다. </p>
-
-<p>마지막으로 <code>(1)</code> 의 경우 깊이가 깊어질수록 연산이 늘어나고, 대충 생각하면 마지막 노드의 개수에 비례하는 <em>Big O</em> 를 가지리라는 생각을 해볼 수 있다. </p>
-
-<p>좀 더 수식에 대한 이해를 얻기 위해 수학적으로 접근해 보자.</p>
-
-<p><code>1 + r + r^2 + ... + r^k</code> 를 귀납법으로 풀면 <code>r^(k+1) - 1 / r - 1</code> 이란 값이 나온다. <code>(r != 1)</code> 이 때 </p>
-
-<p><code>r &lt; 1</code> 이고 <code>k</code> 가 충분히 크다면 이 식은 <code>1 / (1 - r)</code> 이라 보아도 된다. 다시 말해서 <code>k</code> 와는 관련 없는 상수라 보아도 된다는 뜻이다. 그리고 첫번 째 항이 다른 것들의 합보다 크다고 볼 수 있다.</p>
-
-<p><code>r &gt; 1</code> 이라 했을때, 우측 식 <code>r^(k+1) - 1 / r - 1</code> 은 <code>r^k * (1 + 1 / r - 1)</code> 보다 항상 작거나 같다는 사실을 알 수 있다 <em>(upper bound)</em> 다시 말해서 마지막 항 <code>r^k</code> 의 2배보다 작거나 같다는 사실을 알 수 있다. 이것도 <code>r = 2</code> 일때나 맥시멈 두배다. </p>
-
-<p>1 부터 256까지 더해봐도 512 보다 작거나 같다는 사실을 알 수 있다. 다시 말해서 마지막 항이 그 전 모든 항을 합한 것 보다 크다.</p>
-
-<p>이제 다시 <em>master method</em> 로 다시 돌아오자.</p>
-
-<p><code>c* n^d * sigma(j) (a / b^d)^j</code> (<code>j = 0 to logb_n</code>) 에서 <code>a / b^d</code> 를 <code>r</code> 이라 두자.</p>
-
-<p><em>RSP &lt; RWS (case 2)</em> 이면 <code>r &lt; 1</code> 이므로 시그마를 합해봐야 특정 상수다. <code>O(n^d)</code></p>
-
-<p>반대로 <em>RSP > RSW (case 3)</em> 이면 <code>r &gt; 1</code> 이므로 시그마를 합해봐야 <code>r^k * 상수</code> 보다 작거나 같으므로 가장 큰 항 <code>r^k</code> 는 <code>(a / b^d)^logb_n</code> 이다. 여기서 <code>b^(-dlogb_n)</code> 이 <code>n^-d</code> 라는 사실을 이용하면 <code>O(a^logb_n)</code>만 남는다.</p>
-
-<p>그런데, 재미있는 사실은 <code>logb_n</code> 이 마지막 단계이고, <code>a</code> 는 각 단계에서 분할되는 노드의 갯수이므로 <code>a^(logb_n)</code> 은 <em>recursion tree</em> 에서 <em>leave</em> 의 갯수다. </p>
-
-<p>다시 말해서 마지막 단계에서의 노드의 갯수에 연산이 비례한다. 근데 처음에 우리가 봤던건 <code>n^(logb_n)</code> 아니었던가? 사실 로그를 배우면 위 두 식은 같다는걸 알 수 있다.</p>
-
-<h3 id="quicksort">Quick Sort</h3>
-
-<p>퀵소트는 평균적으로 <code>O(n logn)</code> 성능을 보여주며 <em>in-place</em> 로 작동하는 인기있는 정렬 알고리즘이다.</p>
-
-<p><em>key idea</em> 는 <em>pivot</em> 을 중심으로 문제를 좌우로 분할하는 것이다.   <em>less than pivot</em> 들은 왼쪽에, <em>greater than pivot</em> 들은 우측에 놓음으로써 최소한 한번의 분할당 하나의 원소 <em>(pivot)</em> 은 자리를 잡는 다는 것을 보장한다.</p>
-
-<p>퀵소트의 매 호출당 일어나는 <em>partition (분할)</em> 은 다음의 두 특징을 가진다.</p>
-
-<p>(1) linear time, <code>O(n)</code> <br />
-(2) no extra memory</p>
-
-<p>대강의 로직은 이렇다. <code>Quicksort(array A, length n)</code> 에 대해서</p>
-
-<p>(1) if <code>n = 1</code> return <code>A</code> <br />
-(2) <code>p</code> = choose <code>Pivot(A, n)</code> <br />
-(3) partition <code>A</code> round <code>p</code> => <code>L, R</code> <br />
-(4) recursively solve <code>L</code>, <code>R</code></p>
-
-<p>보면 알겠지만 <em>combine</em> 혹은 <em>merge</em> 스텝이 전혀 없다. </p>
-
-<h4 id="partitioninplace">Partition: In-place</h4>
-
-<p><code>O(n)</code> 의 추가 메모리를 사용하면 연산시간 <code>O(n)</code> 을 구현하기 쉽다. 추가 메모리 없이 어떻게 <code>O(n)</code> 으로 <em>partitioning</em> 을 구현할 수 있을까?</p>
-
-<p>(1) 첫 번째 원소를 <em>pivot</em> 이라 놓고 <br />
-(2) <em>pivot</em> 다음의 원소를 <code>i</code>, <code>j</code> 가 가리키게 한다. <br />
-(3) <code>j</code> 보다 작은 원소들은 <em>partitioned</em> , 큰 원소는 <em>unpartitioned</em> 라 보고 <br />
-(4) <code>i</code> 보다 작은 원소들은 <em>pivot</em> 보다 작은 값, 큰 원소들은 <em>pivot</em> 보다 큰 값이다. <br />
-(5) <code>i &lt;= j</code> 이며, <code>i == j</code> 일때는 <code>j</code> 값을 증가시켜 원소를 비교 한뒤 <code>j</code> 에 있는 원소가 <code>i</code> 가 가리키는 원소보다 크면 <em>swap</em> 하고 <code>i += 1, j +=1</code> 아니면 <code>j += 1</code> 한다.</p>
-
-<p>이해가 쉽게 그림을 첨부하면</p>
-
-<p><img src='http://sadakurapati.files.wordpress.com/2013/10/qsort_1.png'  align="center" /> <br />
-<img src='http://sadakurapati.files.wordpress.com/2013/10/qsort_2.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://sadakurapati.wordpress.com/' >http://sadakurapati.wordpress.com</a>)</p>
-
-<p>이런 로직으로 <code>n</code> 개의 원소를 순회하면, <code>n-1</code> 번 만큼 <code>j</code> 순회를 하고 최악의 경우 <code>n-1</code> 번의 <em>swap</em> 과 <em>i += 1</em> 연산이 일어난다.  다시 말해 각 원소마다 <code>O(1)</code> 연산이므로, <em>partition</em> 연산은 <code>O(n)</code> 이라 보장할 수 있다.</p>
-
-<p><em>quick-sort</em> 는 귀납법으로 증명하기도 쉬운데, <code>P(n)</code> 이 1부터 <code>n</code> 까지의 정렬된 원소를 가지고 있는 배열이라고 하면, </p>
-
-<p><code>P(1)</code> 임은 자명하고, 문제의 수 <code>k</code> 에 대해 퀵소트가 <code>P(k)</code> 일때  <code>P(k+1)</code> 임을 보이면 <code>P(n)</code> 에 대해서도 참임을 알 수 있다.</p>
-
-<p>그런데, <code>P(k+1)</code> 에서 <em>pivot</em> 을 제외한 좌측과 우측의 사이즈를 <code>k1</code>, <code>k2</code> 라 하면 <code>k1, k2 &lt; k</code> 이다. 좌측 또는 우측이 없을 때라야 <code>k1 or k2 = k</code> 다. 이때 <code>P(k)</code> 가 참이므로 이보다 작거나 같은 <code>k1, k2</code> 의 문제 사이즈에 대해서도 참이다. 따라서 <code>P(k+1)</code> 도 참이다.</p>
-
-<h4 id="choosingagoodpivot">Choosing a good pivot</h4>
-
-<p>그럼 <em>pivot</em> 은 무엇을 기준으로 잡는게 좋을까? 어차피 비교에서 <code>i != p and j != p</code> 라면 구현에는 어느 위치에 잡던 문제가 없을것 같은데..</p>
-
-<p>만약에 <em>pivot</em> 이 첫 번째 원소이고, 입력이 이미 정렬이 된 배열이라면 성능이 어떻게 될까? 바로 <code>O(n^2)</code> 이다. 왜냐하면 이미 정렬이 되어있으므로 문제가 1/2 로 분할되지 않기 때문이다. 배열 사이즈만 1씩 줄어들면서 재귀호출이 반복된다.</p>
-
-<p>그럼 만약에, <em>pivot</em> 을 원소들의 <em>median (중앙값)</em> 으로 고른다면? 매 재귀마다 문제가 좌우로 분할되므로 <code>O(nlogn)</code> 이라 볼 수 있다.</p>
-
-<p>근데 생각해 볼 거리가 있다. <em>pivot</em> 을 구하는 함수의 비용은 어떻게 되는걸까? 이것 또한 <code>O(n)</code> 이므로 전체 <em>partition</em> 의 비용은 <code>O(n)</code> 이라 보아도 된다.</p>
-
-<h4 id="randomizedpivots">Randomized pivots</h4>
-
-<p>그럼 만약에 <em>pivot</em> 을 무작위로 고르면 어떻게 될까 생각해 보자. <em>pivot</em> 을 무작위로 선택했을 때 한쪽이 <code>25-75%</code> 로 분할될 확률은 1/2 이다. </p>
-
-<p>그리고 무작위로 <em>pivot</em> 을 선택했을때 첫번째 다음 재귀 호출에 넘겨질 배열의 길이의 기대값을 구하면, 다시 말해 <code>X</code> 를 <em>subproblem size</em> 라 했을때 <code>E(X)</code> 를 구하면</p>
-
-<p><code>1/n * (0 + 1 + ... + (n - 1)) = (n - 1) / 2</code> 다.</p>
-
-<p>여기서 잠깐 중요한 속성인 <em>linearity of expection</em> 을 설명하면 </p>
-
-<blockquote>
-  <p>모든 <em>random variable</em> <code>X</code> 의 합의 기대값은, 각 <code>X</code>의 기대값의 합과 같다.</p>
-</blockquote>
-
-<p><img src='http://www.opendatastructures.org/ods-java/img333.png'  align="center" />  </p>
-
-<p align="center">(<a href='http://www.opendatastructures.org/' >http://www.opendatastructures.org</a>)</p>
-
-<p><code>Xj(i)P(i)</code> 를 컬럼의 개수가 <code>j</code>, 행의 개수가 <code>i</code> 인 행렬의 원소로 보면 이 <em>linearity of expectation</em> 은 쉽게 이해할 수 있다. 이 속성은 꽤나 유용하다.</p>
-
-<p>예를 들어 두개의 주사위를 독립적으로 굴린다고 할 때 나오는 값인 <em>random variable</em> <code>X1, X2</code> 에 대한 기대값을 직접 구하려면 36개의 <em>sample space</em> 를 살펴봐야 하는데, 그러지 말고 하나를 굴렸을때의 값을 구해 이걸 2배 하면 된다. 하나를 굴렸을때는 6개의 <em>sample space</em> 만 살피면 되니 금방 구한다.</p>
-
-<p>로드 밸런싱문제에 <em>linearity of expectation</em> 을 적용해보자. <code>n</code>개의 서버가 있고 여기에 <code>n</code> 개의 프로세스를 랜덤하게 할당할때 한개의 서버에 할당될 프로세스의 기대값은 얼마일까? 다시 말해 평균적으로 몇개의 프로세스가 서버에 할당될까?</p>
-
-<p><em>sample space</em> 는 <code>n</code> 개의 항끼리의 곱에서 항의 개수를 구하는 문제와 같으므로 <code>n^n</code> 이다.</p>
-
-<p>이때 <code>Y</code> 를 첫 번째 서버에 할당된 프로세스 수의 합이라 하면 이때 <code>Y</code> 는 <code>sigma Xj (j = 1 to n, Xj = 1 or 0)</code>이다.</p>
-
-<p><code>E[Y]</code> 를 구하는 것이 본래의 문제인데 가능한 <code>Y</code> 값을 모두 구한 뒤에 각각의 확률을 곱해서 더하느니, <code>Y</code> 를 분해해 각각의 기대값을 구한 후 더하는게 훨씬 빠르다. (주사위 굴리기 문제처럼)</p>
-
-<p>다시 말해서, <code>Y</code> 가 여러개의 항으로 구성될때는 각각의 기대값을 구하는게 더 계산이 빠르다는것이 <em>lineariry of expectation</em> 의 본질이다.</p>
-
-<p>따라서 기대값을 시그마 뒤쪽으로 빼서 계산하면 <code>1</code> 이 나온다. 다시 말해 서버 하나당 평균적으로 1개의 프로세스를 가진다는 이야기.</p>
-
-<p>다시 이 확률 테크닉을 <em>randomized pivot</em> 을 선택하는 <em>merge sort</em> 에 적용하러 가 보자.</p>
-
-<h3 id="decompositionprinciple">Decomposition Principle</h3>
-
-<p>일단 랜덤 피벗을 가지는 퀵소트를 <em>master method</em> 로는 <em>Big O</em> 를 찾을 수가 없다는 사실을 알아 두자. 이는 입력한 배열이 일정하게 분할되지 않고 피벗때문에 랜덤하게 분할되지 때문이다.</p>
-
-<p>이제, 퀵 소트의 각 재귀에서 일어나는 연산 중 <em>comparison (비교)</em> 가 다른 연산보다 <em>dominant</em> 하다고 하면, 다시 말해서 비교하는 숫자에 의해 연산 수가 결정된다고 하자. 이건 생각해보면 사실인데, <em>partition</em> 과정에서 일어나는 비교가 각 <em>sub-problem</em> 에서의 연산 수를 결정한다.</p>
-
-<p>이렇게 하면 연산수의 기대값, 다시 말해서 <em>비교가 일어나는 회수의 평균으로</em>, 퀵소트의 평균 성능을 찾아낼 수 있다.</p>
-
-<p>그런데 입력 배열에 대한 전체 비교 수를 <code>C</code> 라 두면 <code>E(C)</code> 는 사실 구하기가 굉장히 어렵다. 그런데, <code>E(C)</code> 를 시그마 두번으로 분해할 수 있고, 심지어 가장 내부의 항은 <code>1</code> 또는 <code>0</code> 을 가지는 원소이다. 따라서 <em>linearity of expectation</em> 을 이용할 수 있다 <del>할렐루야</del> </p>
-
-<p>참고로 가장 내부의 항에 대해서 설명하자면, 전체 입력에서 두개의 원소를 골랐을 때 이 두개의 원소가 비교 되는 수다. 이 두개의 원소는 <code>i</code>, <code>j</code> 를 기준으로 구할 수 있으므로 <code>X_ij</code> 라 두면 <code>i, j</code> 에 각각에 대해 시그마를 씌울 수 있다. 이것이 <code>C</code> 이므로 <code>E(C)</code> 를 구하기는 상당히 복잡함을 알 수 있다. 그런데 <code>X_ij</code> 자체는 <code>0</code> 또는 <code>1</code> 만 가지는 값이니 이것에 대해 <code>E(X_ij)</code> 를 구하면 심플해진다. (수식을 적기 힘드니 자세한 내용은 강의 <em>Analysis I: A Decomposition Principle</em> 을 참조)</p>
-
-<p>따라서 <code>E(C)</code> 는 <code>sigma i &lt;- 1 to n-1, sigma j &lt;- i+1 to n P(X_ij = 1)</code> 이다. </p>
-
-<p>여기서 잠깐 이제 까지 나온 <em>decompositio principle</em> 을 설명하자면</p>
-
-<p>(1) 구하고자 하는 랜덤 변수 <code>Y</code> 를 정의하고 <br />
-(2) <code>Y</code> 를 더 간단한 랜덤 변수 <code>X</code> 의 합으로 정의하자. <code>X</code> 가 0 또는 1만 가지는 값이면 더 좋다. 
-(3) <em>linearity of expectation</em> 을 적용  </p>
-
-<p>다시 말해 알고리즘의 성능을 결정하는 <em>dominant operation</em> 을 확률변수로 표현할 수 있고, 더 간단한 확률 변수의 합으로 표현할 수 있다면 해해 여기에 <em>기대값의 선형성</em> 을 이용해 알고리즘의 평균적인 성능을 구할 수 있다는 뜻이다.</p>
-
-<p><code>sigma i &lt;- 1 to n-1, sigma j &lt;- i+1 to n P(X_ij = 1)</code> 다시 이 식으로 돌아오자. 여기에 적용할 수 있는 퀵소트의 특징이 있다. 여기서 <code>z_i</code> 를 정렬된 배열의 <code>i</code> 번쨰 원소라 했을때 <em>pivot</em> 이 될 수 있는 것은 <code>z_i, z_i+1, ... z_j-1, z_j</code> 다. 이때</p>
-
-<p>(1) <code>z_i</code> 또는 <code>z_j</code> 가 <em>pivot</em> 이 되면, 즉 가장 작은 수나 가장 큰 수가 <em>pivot</em> 이 되면 <code>z_i</code> 와 <code>z_j</code> 는 한번만 비교된다. (이후에는 다른 재귀로 넘어가 둘 중 하나의 수만 남음) <br />
-(2) <code>z_i+1</code>, ..., <code>z_j-1</code> 이 <em>pivot</em> 이 되면 <code>z_i</code> 와 <code>z_j</code> 는 절대로 비교되지 않는다. <em>pivot</em> 기준으로 큰 수와 작은수는 서로 비교되지 않으며 둘 다 피벗과만 비교된다. 이후에도 다른 파티션으로 나누어져 비교되지 않는다.</p>
-
-<p>따라서 각 <em>sub-problem</em> 에서 일어나는 비교가 일어날 확률은 <code>2 / (j - i + 1)</code> 이다. 다시 말해서 전체 원소 중에서 <code>z_i</code> 와 <code>z_j</code> 를 피벗으로 삼는 경우에만 비교가 일어난다.</p>
-
-<p>따라서 평균 연산 수 <code>E(C)</code> 는 <code>sigma i &lt;- 1 to n-1, sigma j &lt;- i+1 to n [2 / (j -i + 1)]</code> 이다.</p>
-
-<p>이때 <code>j = i +1</code> 부터 시작하므로 내부 시그마는 <code>1/2 + 1/3 + ... 1/n</code> 이다. 그리고 내부 시그마에서 <code>i</code> 가 사라졌으므로 외부 시그마 <code>i &lt;- 1 to n-1</code> 을 <code>n-1</code> 대신 대략 <code>n</code> 이라고 놓으면,</p>
-
-<p><code>E(C) &lt;= 2 * n * [sigma k &lt;- 2 to n (1/k)]</code> 다. </p>
-
-<p>이때 <code>sigma k &lt;- 2 to n (1/k)</code> &lt;= <code>ln n</code> 인데, 본래 식의 <code>k</code> 1 부터의 시그마보다 작으므로 이걸 적분으로 넓이를 구하면 <code>ln n - ln 1 =  ln n</code> 이다. </p>
-
-<p>따라서 <code>E(C) &lt;= 2 * n * ln n</code></p>
-
-<h3 id="notes">Notes</h3>
-
-<p>이하는 필기 노트입니다. </p>
-
-<h4 id="matrixmultiplication">matrix multiplication</h4>
-
-<p>단순히 brute force 로 3 for-loop 로 구현하면 당연히 o(n^3) -_-;</p>
-
-<p>스트라센 매트릭스 곱셈으로 구현하면 놀랍게도 n^2 </p>
-
-<h4 id="multiplication">Multiplication</h4>
-
-<ol>
-<li>define Input, output  </li>
-<li>assess performance</li>
-</ol>
-
-<p>can we do better strait forard?</p>
-
-<p>일반적인 곱셈(초등3학년)은 2n * n</p>
-
-<h4 id="karatsubamultiplication">Karatsuba Multiplication</h4>
-
-<p>a * c <br />
-b * d = 2652 <br />
-(a + b)(c + d) = 6164
-(a+b)(c+d) - a*c - b * d = 2840</p>
-
-<p>ad bc </p>
-
-<p>6164 + * 10000 <br />
-+ 2652
-+ 2840 * 100</p>
-
-<p>x = 10^n/2 a + b <br />
-y = 10^n/2 c + d</p>
-
-<p>x * y => 10^n ac + 10 n/2 (ad+bc) + bd <br />
-따라서 <em>Karatsuba multiplication</em> 은 <em>product</em> 문제를 ac, ad, bc, bd 의 곱으로 쪼갬.</p>
-
-<p>여기서도, ac, ad, bc, bd 를 모두 구하는 대신에</p>
-
-<p>(a+b)(c+d) - ac bd 를 빼면,  ac bd (a+b)(c+d) 3개만 구하면 된다.</p>
-
-<p>따라서 3개의 recursive multiplication 만 필요</p>
-
-<h4 id="closestpairs">Closest Pairs</h4>
-
-<p>brute force 는 n^2 인데, </p>
-
-<p>1D 의 closest pair 에서 sorting 하면 n^2 가 아니라 nlogn 이다.</p>
-
-<p>로직은 다음과 같다.</p>
-
-<p>문제를 반으로 잘라가면서 왼쪽에서 거리가 가장 짧은것 좌표 쌍, 오른쪽에서 가장 짧은것을 찾고, 각 영역에 좌표가 하나씩 있는 쌍도 검사 한다.</p>
-
-<p>(1) 주어진 배열을 P 라 하고 반으로 각각 좌우 Q, R 자른다. O(n) Q를 x 정렬한것을 Qx, y 축 기준으로 Qy, R도 Rx, Ry. 이건 전체 인풋 n 에 대해서 n logn <br />
-(2) ClosestPair(Qx, Qy), Closest(Rx, Ry) 해서 각각 좌 우에서 가장 짧은 거리를 가진 pair 쌍을 찾는다.  이걸 (p1, q1), (p2, q2)  라 하면 <br />
-(3) (p1, q1), (p2, q2) 의 거리를 구해 최소값인 d 를 찾는다 <br />
-(4) Closest(Px, Py, d) 해서 (p3 , q3) 가 있으면 찾아낸다. 여기서 찾은건 하나는 Q 하나는 R 에 있는 d 보다 작은 거리를 가진 점의 쌍 <br />
-(5) p1, p2, p3 쌍중 가장 작은 d 를 가진 것을 리턴 </p>
-
-<p>ClosestSplitPair</p>
-
-<p>(1) Px 의 가운데 점을 xBar 라 하면 이것 기준으로 -d, +d 의 x 값을 가진 점들을 Py 에서 찾아낸다. 정의에 의해서 x1 - x2 &lt;= d 이기 때문에 아무리 커봐야 xBar 기준으로 좌우 d 까지밖에 존재하지 못함. 이걸 Sy 라 부르자. 이건 Py 가 이미 정렬되어 있기 때문에 O(n) 시간. <br />
-(2) Sy 는 y 축 기준으로 이미 정렬되어 있는데, 여기서 Sy 의 원소를 루프로 돌면서 이것 기준으로 +7개 원소를 검사하면서 거리가 d 보다 작은것이 있는지 검사. 이것 또한 마찬가지로 d 의 정의와 두 점이 Q, R 에 있다는 점을 이용해서 증명이 가능함. </p>
-
-<p>y1 - y2 도 d 보다 작거나 같이 때문에 y 기준으로 정렬된 점을 기준으로 잡았을때, </p>
-
-<p>p 와 같은 왼편에 있는 것들은 p와의 거리가 d 보다 작을 수 없다. 왜냐하면 d 자체가 같은 사이드에 있는 것들의 최소 거리이기 때문. <br />
-이런점들을 아무리 많이 왼쪽에 구겨 넣어도 3개. p 포함하면 4개다. 마찬가지로 q 와 같은 편에 있는것들도 3개.</p>
-
-<p>따라서 운이 나쁠 경우 Sy 에서 p, q + 6개를 더 검사해야. </p>
-
-<p>직사각형을 그려보면 이해가 쉬움.</p>
-
-<p>Input 은 (x1, y1) ... (xn, yn) 의 pair n개 편의상 p1, p2, ... pn</p>
-
-<p>d(p<em>i, p</em>j) 는 두 point 사이 거리</p>
-
-<p>(1) 모든 점들을 x 기준으로 정렬했을때 가운데에 있는 점을 xBar 라 하면 S<em>y 는 xBard - d, xBar + d 사이에 있는 모든 점이다. 만약에 왼쪽에 있는 p, 오른쪽에 있는 q 가 존재한다면 이 둘은 S</em>y 사이에 있고 아래 증명에 에해서 x1, x2 사이 거리는 d 보다 작다.</p>
-
-<p>왜냐하면, p(x1, y1), q(x2, y2) 사이의 거리가 d 보다 작기 때문에 x1 - x2 &lt;= d 이다. </p>
-
-<p>(2) S_y 에서 p, q 가 존재한다면 그건 y 기준으로 7 원소 이내에 인접해 있다. </p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='https://acrocontext.wordpress.com/' >https://acrocontext.wordpress.com</a> <br />
-(2) <a href='http://sadakurapati.wordpress.com/2013/10/25/quicksort-a-practical-and-efficient-sorting-algorithm/' >http://sadakurapati.wordpress.com</a> <br />
-(3) <a href='http://www.opendatastructures.org/ods-java/1_3_Mathematical_Background.html' >http://www.opendatastructures.org</a></p>]]></description><link>http://1ambda.github.io/divide-and-conquer/</link><guid isPermaLink="false">30db0108-971b-46ea-8793-427ecb229117</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[divide and conquer]]></category><category><![CDATA[master method]]></category><category><![CDATA[merge sort]]></category><category><![CDATA[quick sort]]></category><category><![CDATA[decomposition principle]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 29 Oct 2014 13:02:22 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 1]]></title><description><![CDATA[<p>먼저 이 글은 <strong>edx</strong> 의 <em>FP101.x (Introduction to Functional Programming)</em> 수업을 기반으로 작성되었음을 알려드립니다.</p>
-
-<p>시작에 앞서서, 하스켈을 설치하려면 <a href='http://www.haskell.org/platform/linux.html' >Haskell Platform</a> 을 설치하신 후 터미널에서 <code>ghci</code> 를 입력하면 됩니다. 하스켈 플랫폼은 하스켈 구현체로 <a href='http://www.haskell.org/ghc/' >Glasgow Haskell Compiler, <em>GHC</em></a> 를 포함하고 있습니다. <code>ghci</code> 를 입력하면 하스켈 인터프리터를 사용할 수 있습니다.</p>
-
-<p>깔기 귀찮으시다면 <a href='https://www.fpcomplete.com/' >https://www.fpcomplete.com/</a> 여기서 웹으로 코드를 작성하고 컴파일 할 수 있습니다.</p>
-
-<h3 id="basics">Basics</h3>
-
-<p>먼저 <code>sum [1..10]</code> 을 인터프리터에 입력하면 1부터 10 까지의 합, <code>55</code> 을 돌려줍니다. <code>sum</code> 은 리스트의 원소를 모두 합한 값을 구하는 함수고 <code>[1..10]</code> 은 1-10 을 포함하는 리스트를 생성합니다.</p>
-
-<p>이제 인터프리터를 잠깐 끈 후에 <em>quick-sort</em> 함수를 파일에 작성한 뒤 로드해 봅시다. 아참, <code>ghci</code> 를 종료하려면 <code>ctrl + d</code> 를 입력합니다.</p>
-
-<pre><code class="haskell">-- quicksort.hs
-
-f [] = []  
-f (x:xs) = f ys ++ [x] ++ zs  
-           where
-             ys = [a | a &lt;- xs, a &lt;= x]
-             zs = [b | b &lt;- xs, b &gt; x]
-</code></pre>
-
-<p>수학 표기법 같은데, 놀랍게도 잘 동작합니다. 다시 <code>ghci</code> 실행하고 <code>:load quicksort.hs</code> 를 입력합니다. 그러면 우리가 작성한 <code>f</code> 함수가 인터프리터에 로드 됩니다. <em>퀵-소트</em> 를 사용할 수 있다는 뜻이죠.</p>
-
-<pre><code>ghci &gt; f [3, 2, 9, 5, 4]  
-[2, 3, 4, 5, 9]
-</code></pre>
-
-<p>제대로 정렬 되는걸 확인할 수 있습니다. 매번 인터프리터를 종료했다가 다시 실행시키긴 귀찮으니 파일을 다시 수정했을때 <code>:reload</code> 명령어를 사용해서 다시 로드합니다. 이외에도 다른 명령어를 보고싶다면 <code>ghci</code> 에 <code>:help</code> 를 입력해보세요.</p>
-
-<p>이제 대충 어떻게 돌아가는지 알았으니 기본적인 함수를 좀 알아볼까요? 다른 함수형 언어처럼 하스켈도 <code>List</code> 에 대한 기본적인 연산들이 있습니다.</p>
-
-<pre><code class="haskell">head [2, 3, 4] -- 2  
-tail [2, 3, 4] -- [3, 4]
-
-head [2] -- []  
-tail [2] -- []
-
-init [2, 3, 4] -- [2, 3]  
-last [2, 3, 4] -- 4
-
-take 2 [2, 3, 4] -- [2, 3]  
-drop 2 [2, 3, 4] -- [4]  
-</code></pre>
-
-<p>리스트 원소에 접근하려면 <code>!!</code> 를 이용합니다. 다른 언어와 마찬가지로 <code>0</code> 부터 인덱스가 시작합니다. </p>
-
-<pre><code class="haskell">[1, 2, 3, 4] !! 1 -- 2
-[1, 2, 3, 4] !! 2 -- 3
-[1, 2, 3, 4, 5] !! 2 -- 3
-[1, 2, 3, 4, 5] !! 0 -- 1
-</code></pre>
-
-<p>하스켈의 리스트는 자료구조의 그것처럼, <code>n</code> 번째 원소에 접근하려면 <code>O(n)</code> 의 비용이 듭니다. 그런 이유에서 리스트의 원소를 구하는 <code>length</code> 도 <code>O(n)</code> 의 비용이 듭니다. 자바의 배열과는 좀 다르죠? </p>
-
-<p>이제 리스트에 대한 몇 가지 연산을 더 알아봅시다.</p>
-
-<pre><code class="haskell">product [1, 2, 3, 4, 5] -- 120  
-[1, 2, 3] ++ [4, 5] -- [1, 2, 3, 4, 5]
-reverse [1, 2, 3, 4] -- [4, 3, 2, 1]  
-</code></pre>
-
-<p><code>++</code> 는 <em>append</em> 연산입니다. 앞에 온 리스트에, 뒤에 온 리스트를 붙여줍니다. </p>
-
-<h3 id="functionapplication">Function Application</h3>
-
-<p>이제 함수를 사용하는 법을 좀 알아볼까요? 일반적으로 <code>f</code> 라는 함수에 파라미터 <code>a</code> 를 적용하려면 <code>f(a)</code> 이렇게 쓸 텐데요. 하스켈에선 <code>f a</code> 라고 작성해도 됩니다. 왜냐하면 함수의 우선순위가 다른 연산자들보다 높거든요</p>
-
-<blockquote>
-  <p>Function application is assumed to have higer priority than all other operators</p>
-</blockquote>
-
-<p>이런 이유에서 <code>f a + b</code> 는 <code>f(a) + b</code> 입니다. <code>f(a + b)</code> 를 의도했다면 <code>f(a + b)</code> 라고 쓰셔야 합니다.</p>
-
-<pre><code class="haskell">f x -- f(x)  
-f x y -- f(x, y)  
-f (g x) -- f(g(x))  
-f x (g y) -- f(x g(y))  
-f x * g y -- f(x) * g(y)  
-</code></pre>
-
-<p>이제 좀 스크립트에 다른 함수를 작성해 볼까요?</p>
-
-<pre><code class="haskell">-- test.hs
-
-double x = x + x  
-quadruple x = double (double x)  
-</code></pre>
-
-<p><code>double</code> 은 <em>function</em> 이고 왼쪽에 오는 <code>x</code> 는 <em>argument</em> 입니다. <code>=</code> 뒤에 오는건 함수의 <em>body</em> 로 함수가 무슨일을 하는지 기록한 것이죠.</p>
-
-<p>이제 <code>:load test.hs</code> 후 <code>take (double 2) [1, 2, 3, 4, 5, 6]</code>을 입력하면 <code>[1, 2, 3, 4]]</code> 를 돌려줄겁니다. 다른 함수를 좀 더 만들어 봅시다.</p>
-
-<pre><code class="haskell">-- test.hs
-
-factorial n = product [1..n]  
-avg ns = sum ns `div` length ns  
-</code></pre>
-
-<p><code>factorial</code> 은 별로 놀랍지 않죠? 그런데 평균을 구하는 <code>avg</code> 는 문법이 좀 신기합니다. <code>ns</code> 는 리스트입니다. <code>sum</code> 을 적용해야 하니까요. 그리고 끝에 <code>s</code> 를 붙이는건 관례인데, 일반적으로 변수 끝에 <code>s</code> 를 붙이면 리스트란 뜻입니다. <code>ns</code> 란 이름은 <em>정수 리스트</em> 라고 알려주는 것이지요. </p>
-
-<p><code>sum ns</code> 는 <code>ns</code> 의 합을 구하고, <code>length ns</code> 는 <code>ns</code> 의 길이를 구합니다. <code>div</code> 함수를 <em>back-quote</em> 감싼 것은 함수가 두개의 파라미터를 가질때 가운데 위치할 수 있도록 해 줍니다. </p>
-
-<p>그래서 <em>back quote</em> 로 감싼  함수를 만나면 하스켈 컴파일러는 <strong>"왼쪽과 오른쪽에 있는 것들을 파라미터로 가지는 함수"</strong> 임을 깨닫죠. 이런 문법은 <code>3 / 5</code> 처럼 함수를 <em>operator (연산자)</em> 쓰듯이 사용할 수 있게 해줍니다. 따라서 위에 나온 코드의 본래 모양은 이렇습니다.</p>
-
-<pre><code class="haskell">avg ns = div (sum ns) (length ns)  
-</code></pre>
-
-<blockquote>
-  <p><em>x <code>f</code> y</em> is just <strong>syntatic sugar</strong> for <em><code>f</code> x y</em></p>
-</blockquote>
-
-<p>아참 그리고 함수의 이름은 소문자로 시작해야 합니다. <code>Avg</code> 는 함수 이름으로 쓸 수 없어요. 그리고 <code>nss</code> 처럼 변수 이름이 <code>s</code> 두개로 끝나면, 그건 리스트의 리스트라는 것을 뜻합니다. 물론 관례죠. 필수는 아닙니다. 그러나 우리가 작성하는건 남들이 볼 수도 있으니 따라주는 편이 좋습니다.</p>
-
-<p>그리고 변수의 정의에 대해 <em>layout</em> 을 지키면 <code>{}</code> 블럭을 안 사용해도 됩니다. 예를 들어 다음의 두 코드는 똑같은 코드입니다.</p>
-
-<pre><code class="haskell">a = b + c  
-    where
-      b = 1
-      c = 2
-d = a * 2
-
-a = b + c  
-    where
-      { b = 1
-      c = 2 }
-d = a * 2  
-</code></pre>
-
-<h3 id="booleantuple">Boolean, Tuple</h3>
-
-<p>하스켈은 대 소문자를 구분하기 때문에 <em>Boolean false</em> 를 얻을려면 <code>False</code> 를 입력해야 합니다.</p>
-
-<pre><code class="haskell">False || True -- True  
-</code></pre>
-
-<p>괄호로 감싼 두개의 값들을 <em>tuple</em> 이라 부릅니다. <em>list</em> 는 같은 종류만 담을 수 있지만 <em>tuple</em> 은 달라도 상관 없지요. <code>fst</code>, <code>snd</code> 는 <em>tuple</em> 에서 첫 번째 와 두 번째 값을 돌려주는 함수입니다.</p>
-
-<pre><code class="haskell">fst (1, "Hello") -- 1  
-snd (1, "Hello") -- "Hello"  
-fst (snd (1, (2, 3))) -- 2  
-</code></pre>
-
-<p>아참, <code>ghci</code> 에서 <code>:t</code> 을 입력하면 <em>expression</em> 의 타입을 알 수 있습니다. <code>:t False</code>, <code>:t length</code>, <code>:t head</code>, <code>:t (1, "Hello")</code> 등을 입력해보세요.</p>
-
-<h3 id="types">Types</h3>
-
-<p>다른 언어처럼 하스켈도 타입이 있습니다. <code>False</code> 와 <code>True</code> 은 <code>Bool</code> 타입이죠. <code>ghci</code> 에서 <code>:t False</code> 를 입력하면 <code>False :: Bool</code> 이란 결과를 돌려줍니다. <code>e :: t</code> 는 <code>e</code> 가 <code>t</code> 타입을 가지고 있다는 뜻입니다.</p>
-
-<p>모든 <em>expression (식)</em> 은 타입을 가지고 있습니다. 하스켈 컴파일러는 컴파일 타임에 <em>type inference (타입 추론)</em> 을 통해서 타입을 찾아냅니다. 만약 함수의 타입과 불일치하는 인자가 파라미터로 넘겨진다면 타입 에러가 발생하는 것이지요.</p>
-
-<p>하스켈에서 문자열을 나타내는 타입인 <code>String</code> 은 사실 문자 하나를 의미하는 <code>Char</code> 의 리스트입니다. </p>
-
-<p>그리고 <em>fixed-precision integer</em> 를 의미하는 <code>Int</code> 이외에도  파이썬 처럼 <em>arbitrary-precision integer</em> 를 위한 <code>Integer</code> 타입이 있습니다. 실수는 <code>Float</code> 타입을 이용해 나타냅니다.</p>
-
-<p>앞서 언급했듯이 <em>Tuple</em> 과 달리 <em>List</em> 는 같은 타입만 가질 수 있습니다. 그래서  <code>[False, False, True]</code> 의 경우  <code>[Bool]</code> 타입입니다. 문자열은 문자의 리스트이므로 <code>String</code> 타입은 <code>[Char]</code> 입니다. 스트링의 리스트는 <code>[String]</code> 이고 더 정확히는 <code>[[Char]]</code> 입니다.</p>
-
-<p>그리고 아까는 <em>Tuple</em> 을 두개의 원소만 가질 수 있다고 했지만 사실은 두개 이상의 원소를 가질 수 있습니다 <code>n</code> 개의 원소를 가진 <em>tuple</em> 을 <em>n-tuple</em> 이라 부릅니다. 예를 들어 이런 <em>tuple</em> 도 있을 수 있습니다.</p>
-
-<pre><code class="haskell">(False, 'a', True) :: (Bool, Char, Bool)
-(True, ['a', 'b']) :: (Bool, [Char])
-</code></pre>
-
-<h3 id="functiontype">Function Type</h3>
-
-<p>함수는 한 타입의 값을 다른 타입의 값으로 매핑합니다.</p>
-
-<blockquote>
-  <p>A <em>function</em> is a mapping from values of one type to values of another types</p>
-</blockquote>
-
-<p>예를 들어 <code>:t not</code> 을 <code>ghci</code> 에서 입력하면 아래처럼 출력됩니다. 
-<code>not</code> 함수는 <code>Bool</code> 타입을 받아 <code>Bool</code> 타입을 돌려준다는 뜻입니다.</p>
-
-<pre><code class="haskell">not :: Bool -&gt; Bool  
-</code></pre>
-
-<p>이제 파일에 타입까지 같이 명시해서 함수를 작성해 봅시다.</p>
-
-<pre><code class="haskell">add :: (Int, Int) -&gt; Int  
-add (x, y) = x + y
-
-zeroto :: Int -&gt; [Int]  
-zeroto n :: [0..n]  
-</code></pre>
-
-<p>함수가 만약 <em>tuple</em> 을 인자로 받으면 괄호가 필요합니다.</p>
-
-<h3 id="curriedfunction">Curried Function</h3>
-
-<p>여기서 잠깐 <em>Currying</em> 을 설명할 텐데요, 하스켈에서 빠질 수 없는 부분이니 이해가 어렵다면 다른 글을 찾아서라도 이해를 하시는 편이 좋습니다.</p>
-
-<p><em>Currying</em> 의 기본 개념은 이렇습니다. 함수가 <code>(Int, Int) -&gt; Int</code> 타입이라면 <strong>계산을 끝내기 위해 두개의 정수를 받아</strong> 하나의 <code>Int</code> 를 돌려줄겁니다. </p>
-
-<p>다시 한번 반복하자면, 계산을 끝내기 위해서는 두개의 정수가 필요합니다. 그렇다면 하나의 정수만 받고, 나머지는 계산이 필요한 시점에 받으면 안될까요?</p>
-
-<pre><code class="haskell">Int -&gt; (Int -&gt; Int)  
-</code></pre>
-
-<p>바꿔 말해서, 인자 하나를 받아서 계산을 일정부분 해 내고, 나머지는 <strong>인자를 하나 더 받아 계산을 마무리 해 돌려주는 함수</strong> 를 리턴해도 괜찮지 않을까요? 나머지 계산은 그 함수에서 할거니까, 결국 인자 2개로 계산을 해 내는 건 똑같으니까요.</p>
-
-<p>이게 <em>Currying</em> 의 기본 개념입니다. 다시 말해서 다음의 두 타입은 같은 일을 한다는 거죠.</p>
-
-<pre><code class="haskell">(Int, Int) -&gt; (Int)
-
--- same as
-Int -&gt; (Int -&gt; Int)  
-</code></pre>
-
-<p>이게 언제 유용할까요? 인자를 부분적으로 채운 함수가 필요할 때를 생각 해 봅시다. </p>
-
-<pre><code class="haskell">add :: Int -&gt; (Int -&gt; Int)  
-add x y = (x + y)
-
-add3 = add 3  
-add3 4 -- 7  
-</code></pre>
-
-<p>3을 미리 더 해놓은 <code>add3</code> 이란걸 만들어서 써먹었습니다. 이렇게 <em>Currying</em> 을 활용할 수 있죠. <code>:t</code> 를 입력하면 <code>Int -&gt; Int</code> 를 확인할 수 있습니다. <code>:take 5</code> 도 <em>curried function</em> 이죠.</p>
-
-<p><strong>결국 <em>Currying</em> 은 <code>n</code> 개의 인자를 가진 함수를 <code>n-1</code> 개의 부분적으로 계산된 함수로 바꿀 때</strong> 쓸 수 있습니다. 단지 <code>n</code> 개의 파라미터만 가진 <strong>하나의 함수</strong> 보다 <strong>여러 개의 부분적인 함수</strong>를 만들어 놓으면 재활용 할 수 있으므로 훨씬 좋죠. 인자에 함수를 넘길 수 있는 함수형 언어에서는 함수를 재활용 할 수 있다는 건 정말 좋은 일입니다..</p>
-
-<p>하스켈에서는 <em>Currying</em> 을 아주 중요하게 여깁니다. 얼마나 중요하게 생각하는지, 함수 타입에 괄호가 없으면 자동으로 <em>curried function</em> 이 되게끔 해 놓았지요. 아래의 두 함수는 같습니다.</p>
-
-<pre><code class="haskell">add :: Int -&gt; (Int -&gt; Int)
-
--- same as
-
-add :: Int -&gt; Int -&gt; Int  
-</code></pre>
-
-<p>다시 말해 함수의 타입은 <em>right-associative (우측 결합)</em> 입니다. 반대로 함수의 호출은 <em>left-associative (좌측 결합)</em> 이죠.</p>
-
-<pre><code class="haskell">add 3 4
-
--- same as
-
-(add 3) 4
-</code></pre>
-
-<p>그래서 그냥 함수 타입에 괄호를 안쓰시고 인자의 갯수가 <code>n</code> 개라면 이 함수를 호출 할 때 <code>n-1</code> 개의 <em>curried function</em> 을 호출하신다고 생각하면 됩니다.</p>
-
-<h3 id="generics">Generics</h3>
-
-<p><em>polymorphic</em> 은 <em>of many form (다양한 형태의)</em> 라는 뜻입니다. 프로그래밍에선 주로 다양한 타입을 이야기 할때 사용한 용어인데요, <code>length</code> 같은 경우 타입을 보면 이렇습니다.</p>
-
-<pre><code class="haskell">length :: [a] -&gt; Int  
-</code></pre>
-
-<p><code>a</code> 라는 타입은 없으므로 여기선 <strong>아무 타입이나</strong> 와도 된다는 뜻입니다. 다시 말해 <code>length</code> 는 <em>polymorphic function</em> 입니다. 다양한 타입을 취할 수 있는 함수죠. <code>length</code> 는 사실 무슨 타입이 오든 관심이 없습니다. 갯수를 세는데만 정신이 팔려있는 함수지요.</p>
-
-<p>여기서 <code>a</code>는 <em>type variable</em> 이라 부릅니다. <code>a</code> 가 아니라 <code>b</code>, <code>c</code> 등 소문자이기만 하면 됩니다.</p>
-
-<p>참고로 프로그래밍에서 <em>polymorphism</em> 은 <em>generics</em> 와 <em>sub-typing</em> 의 두 가지 개념을 모두 포함하는 용어입니다. <em>generics</em> 는 <em>type parameterization</em> 을, <em>sub-typing</em> 은 <em>type-hierarchy</em> 를 의미하지요.</p>
-
-<p>이제 몇 가지 <em>polymorphic function</em> 을 살펴봅시다.</p>
-
-<pre><code class="haskell">*Main&gt; :t fst
-fst :: (a, b) -&gt; a  
-*Main&gt; :t head
-head :: [a] -&gt; a  
-*Main&gt; :t take
-take :: Int -&gt; [a] -&gt; [a]  
-*Main&gt; :t zip
-zip :: [a] -&gt; [b] -&gt; [(a, b)]
-
-*Main&gt; [1, 2, 3] `zip` ['a', 'b', 'c']
-[(1,'a'),(2,'b'),(3,'c')]
-</code></pre>
-
-<p><em>polymorphic function</em> 이 특정 타입에 대해 제한 되었는 것을 하스켈에서는 <em>overloaded</em> 되었다고 부릅니다. 다시 말해 특정타입에만 해당 함수를 사용할 수 있다는 거죠. 이게 <em>C++</em> 에서의 <em>오버로딩</em> 과는 좀 의미가 다릅니다. </p>
-
-<blockquote>
-  <p>It really means that you're restricting the types of the parameters.</p>
-</blockquote>
-
-<p>숫자에 대해서만 사용할 수 있는 <code>sum</code> 을 좀 살펴볼까요?</p>
-
-<pre><code class="haskell">sum :: Num =&gt; [a] -&gt; a  
-</code></pre>
-
-<p><code>sum</code> 은 정수나 실수에 대해 모두 사용할 수 있지만 문자열에 대해서는 불가능합니다. 이게 바로 <em>overloaded</em> 된 것이죠. 그 부분이 바로 <code>Num =&gt;</code> 이 의미하는 바입니다.</p>
-
-<p>하스켈은 <em>overloading</em> 에 사용할 수 있는 다양한 타입 클래스가 있습니다. <code>Num</code>, <code>Eq</code>, <code>Ord</code> 등이 그것이죠. <code>ghci</code> 에서 <code>==</code> 를 타입 검사 해볼까요? 아참, <code>==</code> 은 <code>:t (==)</code> 로 검사해야합니다.</p>
-
-<pre><code class="haskell">*Main&gt; :t (&lt;) -- Ordered types
-(&lt;) :: Ord a =&gt; a -&gt; a -&gt; Bool
-*Main&gt; :t (==) -- Equality types
-(==) :: Eq a =&gt; a -&gt; a -&gt; Bool
-*Main&gt; :t (+) -- Numeric types
-(+) :: Num a =&gt; a -&gt; a -&gt; a
-</code></pre>
-
-<p>예를 들어 다음의 <code>palindrome</code> 함수 타입을 잘 보세요.</p>
-
-<pre><code class="haskell">palindrome xs = reverse xs == xs
-
-:t palindrome -- Eq [a] =&gt; [a] -&gt; Bool
-</code></pre>
-
-<p>다시 말해서 <code>[a]</code> 가 비교가 가능한 <code>Eq</code> 타입이어야 한다는 뜻입니다.</p>
-
-<h3 id="basicclasses">Basic Classes</h3>
-
-<p><code>Eq</code> 는 해당 클래스가 비교할 수 있음을, <code>Ord</code> 는 순서가 있음을 나타냅니다. 기본 타입인 <code>Bool</code>, <code>Char</code>, <code>String</code>, <code>Int</code>, <code>Integer</code>, <code>Float</code> 와 <code>Tuple</code>, <code>List</code> 는 모두 <code>Ord</code> 와 <code>Eq</code> 클래스의 인스턴스입니다. 참고로 하스켈에서 <em>Not equal</em> 은 <code>/=</code> 입니다.</p>
-
-<p><code>(&gt;)</code>, <code>(&gt;=)</code>, <code>(&lt;)</code>, <code>(&lt;=)</code>, <code>max</code>, <code>min</code> 등이 <code>Ord</code> 클래스에 대해 적용할 수 있는 함수입니다. 그리고 <code>String</code>, <code>Tuple</code>, <code>List</code> 는 <em>사전 편찬 순서 (lexicographically)</em> 를 기준으로 비교됩니다. </p>
-
-<h3 id="showabletype">Showable Type</h3>
-
-<p>다른 언어의 <code>toString</code> 이 그렇듯이, <code>Show</code> 클래스의 인스턴스들은 <code>show</code> 함수를 이용하면 <code>String</code> 형태로 출력됩니다.</p>
-
-<pre><code class="haskell">:t show -- Show a =&gt; a -&gt; String
-show False -- "False"  
-show [1, 2, 3] -- "[1, 2, 3]"  
-</code></pre>
-
-<h3 id="readabletype">Readable Type</h3>
-
-<p><code>Read</code> 타입 인스턴스들은 <code>read</code> 함수를 이용해 <code>String</code> 으로부터 얻어질 수 있습니다. </p>
-
-<pre><code class="haskell">:t read -- Read a =&gt; String -&gt; a
-
-read "False" :: Bool  
-read "[1, 2, 3]" :: [Int] -- [1, 2, 3]  
-</code></pre>
-
-<h3 id="integralfractionalrational">Integral, Fractional, Rational</h3>
-
-<p>단순히 숫자 클래스로 <code>Num</code> 만 있는건 아니고 정수나, 분수, 유리수 등을 나타내는 다양한 클래스가 있고 여기에 적용할 수 있는 함수가 있고, 불가능한 함수가 있습니다. 예를 들어 <code>mod</code> 나 <code>div</code> 는 <code>Integral</code> 에만 적용 가능합니다. <code>(/)</code> 는 <code>Fractional</code> 에만 적용 가능합니다.</p>
-
-<h3 id="guardedequations">Guarded Equations</h3>
-
-<p><code>if</code> 대신에 더 좀 편하게 사용할 수 있는 <em>guarded equation</em> 이 있습니다. <strong>다른 계산 없이</strong> <code>if</code> 만 바로 사용한다면 다음과 같이 바꿔 쓸 수 있죠.</p>
-
-<pre><code class="haskell">abs n = if n &gt;= 0 then n else -n  
-signum n = if n &gt; 0 then 1 else  
-             if n &lt; 0 then -1 else 0
-
--- same as
-
-abs n | n &gt;= 0 = n  
-      | otherwise = -n 
-
-signum n | n &gt; 0 = 1  
-         | n &lt; 0 = -1
-         | otherwise = 0 
-</code></pre>
-
-<h3 id="patternmatching">Pattern Matching</h3>
-
-<p><em>Scala</em> 나 <em>C#</em> 과는 다르게 하스켈은 패턴매칭을 바로 이용합니다. <code>case</code> 나 <code>switch</code> 없이요! 예를 들어</p>
-
-<pre><code class="haskell">not :: Bool -&gt; Bool  
-not False = True  
-not True = False  
-</code></pre>
-
-<p>패턴 매칭은 위에서 부터 순서대로 적용됩니다. 예를 들어 <code>not False = False</code> 가 코드에 제일 위에 있다면 항상 <code>False</code> 만 돌려줄거에요. 우울한 일이 될겁니다.</p>
-
-<p>이제 2개의 피 연산자를 갖는 연산자 <code>&amp;&amp;</code> 를 패턴매칭을 이용해 만들어 볼까요? 좌 우에 피 연산자를 가지는 함수를 만들기 위해서는 <code>(*)</code> 처럼 괄호로 감싸면 됩니다. </p>
-
-<pre><code class="haskell">(&amp;&amp;) :: Bool -&gt; Bool -&gt; Bool
-
-True &amp;&amp; True = True  
-False &amp;&amp; False = False  
-False &amp;&amp; True = False  
-True &amp;&amp; False = False  
-</code></pre>
-
-<p>더 간단히는 <code>_</code> 를 이용할 수 있죠. <em>wild card pattern</em> 이라고 부릅니다. <code>_</code> 는 <em>아무거나 (Anything)</em> 이라고 생각하시면 됩니다. 스칼라를 배우셨다면 익숙하신 기호죠! $</p>
-
-<pre><code class="haskell">(&amp;&amp;) :: Bool -&gt; Bool -&gt; Bool
-True &amp;&amp; True = True  
-_ &amp;&amp; _ = False  
-</code></pre>
-
-<p>그러나 위 정의보다 더 효율적인 <code>(&amp;&amp;)</code> 를 만드는 방법이 있습니다. 위 패턴매칭에서 둘 다 <code>True</code> 일 경우 우측 <code>True</code> 는 사실 평가할 필요가 없습니다. 매칭 시켜봤자 어차피 <code>True</code> 니까요.</p>
-
-<pre><code class="haskell">True &amp;&amp; b = b  
-False &amp;&amp; _ = False  
-</code></pre>
-
-<p>이 경우 패턴매칭에서 <code>b</code> 는 변수입니다. 왼쪽 피연산자가 <code>False</code> 일 경우도 우측 피 연산자 <code>_</code> 를 <em>evaluation (평가)</em> 하지 않고 바로 <code>False</code> 를 줍니다. 다시 말해 더 효율적이란 뜻이지요.</p>
-
-<p>아참 그리고 패턴매칭에서 동일한 변수를 두번 사용할수 없습니다. <code>b &amp;&amp; b = b</code> 는 에러를 내뿜습니다. 주의하세요</p>
-
-<h3 id="listpatterns">List Patterns</h3>
-
-<p>함수형 언어에서는 리스트가 주된 자료구조 이기 때문에 패턴매칭에 리스트를 사용할 수 있다면 프로그래머의 삶을 편하게 만들 수 있습니다. </p>
-
-<p><code>:</code> 는 <em>Cons</em> 라 부르는 연산자인데요, <code>[1, 2, 3, 4]</code> 는 <code>1 : 2 : 3 : 4 : []</code> 더 정확히는 <code>1 : (2 : ( 3: (4 : []))))</code> 입니다. 즉 원소와 뒤에오는 리스트를 연결해주는 것이죠. 요로코롬 패턴매칭에 활용할 수 있습니다.</p>
-
-<pre><code class="haskell">head (x : _) = x  
-tail (_ : xs) = xs  
-</code></pre>
-
-<p><code>head</code> 나 <code>tail</code> 모두 패턴이 <em>비어있지 않은 리스트</em> 이므로 빈 리스트가 인자로 올때는 에러가 납니다. 그리고, 함수 적용의 우선순위가 다른 연산자들 보다 높기 때문에 <code>head x:_</code> 는 <code>(head x) : _</code> 가 되어 에러가 납니다. 괄호를 잊지마세요.</p>
-
-<h3 id="lambdaexpression">Lambda Expression</h3>
-
-<p><em>lambda (람다)</em> 는 이제 유명합니다. <em>Java 8</em> 에도 추가되었으니 인기있는 대부분의 언어는 람다를 가지고 있죠. 익명함수라고 불리기도 하는데, 하스켈에선 <code>\</code> 를 이용해 람다를 표시합니다. 이를테면, <code>\x -&gt; x + 1</code> 처럼요. 람다가 왜 유용하나면</p>
-
-<p>(1) <em>currying</em> 을 이용해 정의된 함수를 좀더 의미있게 표현할 수 있습니다.</p>
-
-<blockquote>
-  <p>Lambda expressions can be used to give a formal meaning to functions defined using <em>currying</em></p>
-</blockquote>
-
-<p>이를테면 다음의 두 함수는 동일합니다. 아래 람다를 이용해 정의한 식이 함수를 리턴하는 함수라는 의미가 더 강하죠.</p>
-
-<pre><code class="haskell">add x y = x + y
-
--- same as
-
-add = \x -&gt; (\y -&gt; x + y)
-
-const :: a -&gt; b -&gt; a  
-const x _ = x
-
--- same as
-
-const :: a -&gt; (b -&gt; a)  
-const x  
-</code></pre>
-
-<p>(2) 람다를 이용하면 컴퓨터 과학의 가장 큰 난제중 하나인 <em>naming (명명)</em> 을 피할 수 있습니다!</p>
-
-<pre><code class="haskell">odds n = map f [0..n]  
-          where
-        f x = x `mod` 2 /= 0
-
-odds1 n = map (\x -&gt; x `mod` 2 /= 0) [0..n]  
-</code></pre>
-
-<h3 id="sections">Sections</h3>
-
-<p><em>in-fix operator</em> 는 괄호를 더해 맨 앞으로 끌어올 수 있습니다.</p>
-
-<blockquote>
-  <p>An operator written between its two arguments can be converted int a curried function written before its two arguments by using parentheses.</p>
-</blockquote>
-
-<pre><code class="haskell">1 + 2 -- 3
-
--- same as
-
-(+) 1 2 -- 3
-</code></pre>
-
-<p>이렇게 연산자를 앞으로 옮길 수 있게 되면 피 연산자 하나와 괄호를 엮을 수 있습니다. <code>(x+)</code> 또는 <code>(+x)</code> 처럼요. 이렇게 피연산와 연산자가 괄호로 묶인 것을 <em>section</em> 이라 부릅니다. <code>x + y</code> 를 이용하면 두개의 섹션을 만들 수 있습니다. <code>(x+)</code> 와 <code>(+y)</code> 입니다.</p>
-
-<p><em>section (섹션)</em> 은 언제 유용할까요? 우리는 섹션을 이용하면 람다를 만들어 주는 대신에 좀 더 의미있는 <em>partiall applied function (부분 함수)</em> 를 만들 수 있습니다.</p>
-
-<p>이를테면 <code>double (k (/2))</code> 처럼요</p>
-
-<p>이외에도 섹션은 연산자의 타입을 기술하거나 <code>(&amp;&amp;) ::</code>, 연산자가 다른 함수의 인자로 들어갈때 필요합니다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Programming Haskell</em></p>]]></description><link>http://1ambda.github.io/haskell-intro1/</link><guid isPermaLink="false">f011324c-e0cc-44ef-97ae-7aa23d60adc6</guid><category><![CDATA[programming language]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 27 Oct 2014 09:18:37 GMT</pubDate></item></channel></rss>
+(4) <a href='http://www.maritzresearch.com/maritzstats/HelpFiles/Formula_ChiSquareTest.htm' >http://www.maritzresearch.com</a></p>]]></description><link>http://1ambda.github.io/haskell-intro2/</link><guid isPermaLink="false">6893f28c-dffc-4c58-8195-730189d88711</guid><category><![CDATA[programming language]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 04 Nov 2014 16:26:11 GMT</pubDate></item></channel></rss>
