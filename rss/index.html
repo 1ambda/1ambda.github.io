@@ -1,5 +1,1245 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 24 Nov 2014 16:14:36 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Dijkstra, Heap, Red-Black Tree]]></title><description><![CDATA[<h3 id="dijkstrasshortestpathalgorithm">Dijkstra's Shortest-Path Algorithm</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 26 Nov 2014 16:42:57 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[하스켈로 배우는 함수형 언어 7]]></title><description><![CDATA[<p><em>the countdown problem</em> 은 프랑스 퀴즈 프로그램에서 유래한 문제입니다. 주어진 양수를 단 한번씩만 이용하여 특정 숫자를 만드는 문제입니다. 사용가능한 연산자는 <code>+, *, -, /</code> 입니다.</p>
+
+<p>예를 들어 <code>(25 - 10) * (50 + 1) = 765</code> 입니다. </p>
+
+<p>사람이 풀기엔 <em>search space</em> 가 좀 넓어서 답을 한번에 찾기 어렵지만, 컴퓨터는 무한한 인내심을 가지고 있기 때문에 풀기에 적합한 문제입니다.</p>
+
+<h3 id="evaluatingexpressions">Evaluating Expressions</h3>
+
+<p>이번시간엔 <em>bottom-up</em> 으로 접근해 볼까요? 먼저 연산자타입과 이를 적용하는 함수 <code>apply</code> 를 만들어보면</p>
+
+<pre><code class="haskell">data Op = Add | Sub | Mul | Div
+
+apply :: Op -&gt; Int -&gt; Int -&gt; Int  
+apply Add x y = x + y  
+apply Sub x y = x - y  
+apply Mul x y = x * y  
+apply Div x y = x `div` y  
+</code></pre>
+
+<p>그리고 우리가 가진건 양수이기 때문에, 연산의 결과가 양수인지 체크하기 위한 <code>valid</code> 함수를 만들어 보겠습니다. </p>
+
+<pre><code class="haskell">valid :: Op -&gt; Int -&gt; Int -&gt; Bool  
+valid Add _ _ = True  
+valid Sub x y = x &gt; y  
+valid Mul _ _ = True  
+valid Div x y = x `mod` y == 0  
+</code></pre>
+
+<p>이제 수식을 나타내는 <code>Expr</code> 타입과 평가하기 위한 <code>eval</code> 함수를 만들면</p>
+
+<pre><code class="haskell">data Expr = Val Int = App Op Expr Expr
+
+eval :: Expr -&gt; [Int]  
+eval (Val n) = [n | n &gt; 0]  
+eval (App o l r) = [apply o x y | x &lt;- eval l,  
+                                  y &lt;- eval r,
+                                  valid o x y]
+</code></pre>
+
+<p>여기선 연산이 실패했음을 나타내기 위해 <code>[]</code> 를 사용했습니다. <code>Maybe</code> 타입 대신 리스트를 쓸 때의 장점은, <em>list comprehension</em> 을 이용할 수 있다는 점이지요!</p>
+
+<h3 id="formalizingtheproblem">Formalizing The Problem</h3>
+
+<p>우리가 풀어야할 문제는 가능한 모든 조합을 탐색해야하기 때문에 다양한 조합을 만들기 위한 <code>choices</code> 함수를 만들겠습니다.</p>
+
+<pre><code class="haskell">-- subs [1, 2] -&gt; [[], [1], [2], [1, 2]]
+subs :: [a] -&gt; [[a]]  
+subs [] = [[]]  
+subs (x:xs) = yss ++ map (x:) yss  
+  where yss = subs xs
+
+-- interleave 1 [2, 3] -&gt; [[1, 2, 3], [2, 1, 3], [2, 3, 1]]
+interleave :: a -&gt; [a] -&gt; [[a]]  
+interleave x [] = [[x]]  
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
+
+-- perm [1, 2, 3] = [[1, 2, 3], [1, 3, 2], [2, 3, 1], ..]
+perm :: [a] -&gt; [[a]]  
+perm [] = [[]]  
+perm (x:xs) = concat (map (interleave x) (perm xs))
+
+-- choices [1, 2] -&gt; [[], [1], [2], [1, 2], [2, 1]]
+choices :: [a] -&gt; [[a]]  
+choices xs = concat (map (perm) (subs xs))  
+</code></pre>
+
+<p>여기서 <code>subs</code> 함수는 순서를 고려하지 않은 부분집합을, <code>perm</code> 는 순열을 돌려줍니다. <code>choices</code> 는 이 두 함수를 조합하여 부분집합의 순열리스트를 돌려줍니다.</p>
+
+<p>이제 입력한 수식이 정답인지 알려주는 <code>solution</code> 함수를 볼까요? 입력한 수식의 결과가 주어진 수 <code>n</code> 과 같아야 하고, 수식에 있는 숫자가 주어진 숫자들의 나열 <code>ns</code> 와 같아야 합니다.</p>
+
+<pre><code class="haskell">values :: Expr -&gt; [Int]  
+values (Val n) = [n]  
+values (App _ l r) = values l ++ values r
+
+solution :: Expr -&gt; [Int] -&gt; Int -&gt; Bool  
+solution e ns n = elem (values e) (choices ns) &amp;&amp; eval e == [n]  
+</code></pre>
+
+<h3 id="bruteforce">Brute Force</h3>
+
+<p>브루트 포스 방법으로 풀려면, 사용가능한 수들을 받아, 가능한 모든 수식을 돌려주면 됩니다.</p>
+
+<pre><code class="haskell">-- brute force
+split :: [a] -&gt; [([a], [a])]  
+split xs = [splitAt i xs | i &lt;- [1..(n-1)]]  
+  where n = length xs
+
+exprs :: [Int] -&gt; [Expr]  
+exprs [] = []  
+exprs [n] = [Val n]  
+exprs ns = [e | (ls, rs) &lt;- split ns  
+              , l &lt;- exprs ls
+              , r &lt;- exprs rs
+              , e &lt;- combine l r]
+
+combine :: Expr -&gt; Expr -&gt; [Expr]  
+combine l r = [App o l r | o &lt;- [Add, Sub, Mul, Div]]
+
+-- brute force solutions
+bSolutions :: [Int] -&gt; Int -&gt; [Expr]  
+bSolutions ns n = [e | ns' &lt;- choices ns  
+                     , e &lt;- exprs ns'
+                     , eval e == [n]]
+</code></pre>
+
+<p>아주아주아주아주 느립니다. 제 컴퓨터에서는 2분이 지나도 답이 안나오네요.</p>
+
+<pre><code class="haskell">&gt; length (Bolutions [1, 3, 7, 10, 25, 50] 765)
+</code></pre>
+
+<h3 id="fastversion">Fast version</h3>
+
+<p>어느부분을 고쳐야 더 빨라질까요? 한가지 개선할 부분은, <code>valid</code> 가 너무 늦게 호출된다는 점입니다. 우리가 어마어마한 식을 만드는 반면, 답이 780개란 사실은 대부분의 식이 값보다는 형태에 의해 필터링 된다는 뜻입니다. 따라서 <code>valid</code> 를 좀 더 땡길 수 있다면 계산이 훨씬 빨라질겁니다.</p>
+
+<pre><code class="haskell">eval :: Expr -&gt; [Int]  
+eval (Val n) = [n | n &gt; 0]  
+eval (App o l r) = [apply o x y | x &lt;- eval l,  
+                                  y &lt;- eval r,
+                                  valid o x y]
+
+exprs :: [Int] -&gt; [Expr]  
+exprs [] = []  
+exprs [n] = [Val n]  
+exprs ns = [e | (ls, rs) &lt;- split ns  
+              , l &lt;- exprs ls
+              , r &lt;- exprs rs
+              , e &lt;- combine l r]
+
+bSolutions :: [Int] -&gt; Int -&gt; [Expr]  
+bSolutions ns n = [e | ns' &lt;- choices ns  
+                     , e &lt;- exprs ns'
+                     , eval e == [n]]
+</code></pre>
+
+<p>이 부분을 좀 고쳐보겠습니다. </p>
+
+<pre><code class="haskell">results :: [Int] -&gt; [Result]  
+results [] = []  
+results [n] = [(Val n, n) | n &gt; 0]  
+results ns = [res | (ls, rs) &lt;- split ns  
+                  , lx &lt;- results ls
+                  , ry &lt;- results rs
+                  , res &lt;- combine' lx ry]
+
+combine' :: Result -&gt; Result -&gt; [Result]  
+combine' (l,x) (r, y) =  
+  [(App o l r, apply o x y) | o &lt;- [Add, Sub, Mul, Div]
+                            , valid o x y]
+
+fastSolutions :: [Int] -&gt; Int -&gt; [Expr]  
+fastSolutions ns n = [e | ns' &lt;- choices ns  
+                       , (e, m) &lt;- results ns'
+                       , m == n]
+</code></pre>
+
+<p>값을 평가하기 전에 먼저 <code>valid</code> 를 호출하고 계산된 값을 튜플에 저장해 놓았다가 나중에 비교합니다.</p>
+
+<pre><code class="haskell">&gt; length (Bolutions [1, 3, 7, 10, 25, 50] 765)
+-- 780
+</code></pre>
+
+<p>더 개선할 수 있을까요? 음.. 생각해보니 <code>x * y = y * x</code> 이기도 하고 <code>x * 1</code> 은 <code>x</code> 이기도 하네요. 이런것들을 좀 줄일수 있을겁니다. <code>valid</code> 함수를 고쳐보도록 하지요.</p>
+
+<pre><code class="haskell">valid :: Op -&gt; Int -&gt; Int -&gt; Bool  
+valid Add _ _ = True  
+valid Sub x y = x &gt; y  
+valid Mul _ _ = True  
+valid Div x y = x `mod` y == 0
+
+-- modified
+valid :: Op -&gt; Int -&gt; Int -&gt; Bool  
+valid Add x y = x &lt;= y  
+valid Sub x y = x &gt; y  
+valid Mul x y = x &lt;= y &amp;&amp; x /= 1 &amp;&amp; y /= 1  
+valid Div x y = x `mod` y == 0 &amp;&amp; y /= 1  
+</code></pre>
+
+<p><code>x &lt;= y</code> 로 만들어 중복을 제거하고 <code>x /= 1</code> 을 이용해 1을 곱한 수식을 제거했습니다. 결과가 정말 빠르게 나옵니다. </p>
+
+<p>책에서 말하기를 브루트 포스 방법은 44초, 그 다음버전은 4초, 마지막 버전은 0.44 초 만에 계산이 끝난다고 합니다. 연산 시간이 어마어마하게 줄어들었죠?</p>
+
+<pre><code class="haskell">&gt; length (Bolutions [1, 3, 7, 10, 25, 50] 765)
+-- 49
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <strong>DelftX FP 101x</strong> <br />
+(2) <em>Programming in Haskell</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro7/</link><guid isPermaLink="false">334d7896-68cf-4d8b-943c-0a31e6ce3dfb</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 16:22:28 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week2]]></title><description><![CDATA[<p>지난 주 수업을 듣고 보니, 이벤트 로그를 만들어서 악성 사용자나, 비 정상적인 유저의 행동으로 부터 모델을 만들어서 어뷰징을 막거나, 부족한점을 개선해 서비스의 품질을 높일수도 있겠단 생각이 들었다.</p>
+
+<p>근데 프로세스 마이닝에서 사용하는 이벤트 로그를 만들려면 <em>activity</em> 가 어떤 데이터가 되야할지 부터 정해야 하는데, 쉽지가 않다. 2주차에는 이런 고민들을 좀 해 보고, 프로세스 마이닝에서 사용하는 모델 표기법과 알파 알고리즘에 대해 논의한다.</p>
+
+<p><img src='http://www.triua.com/wp-content/uploads/business-process-modeling-automation.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.triua.com/' >http://www.triua.com/</a>)</p>  
+
+<p><br/></p>
+
+<h3 id="eventlogsandprocessmodels">Event Logs and Process Models</h3>
+
+<p>지난 시간에 <strong>Play-in</strong>, <strong>Play-out</strong>, <strong>Replay</strong> 에 대해 잠깐 언급했는데, 이 중에서 <strong>Play-in</strong> 은 사람들이 정해진 규칙에 의해서가 아니라, 실제로 따르는 프로세스를 찾아낼 수 있다.</p>
+
+<blockquote>
+  <p><strong>Process discovery:</strong> learning de facto process models from observed behavior</p>
+</blockquote>
+
+<p>그리고 <strong>Replay</strong> 는 <em>conformance checking</em>, <em>prediction</em>, <em>bottleneck analysis</em> 에 사용할 수 있다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter01introduction-110510153155-phpapp01/95/process-mining-chapter-1-introduction-17-728.jpg?cb=1305062721'  alt="" /></p>
+
+<p align="center">(www.procesmining.org)</p>
+
+<p>결국 <em>observed behavior</em> 의 기록인 <em>event-log</em> 를 모으는 것이 중요하다. 그런데, 모든 이벤트를 바로 <em>case id, activity name, timestamp</em> 로 매핑하긴 쉬운 일이 아니다.</p>
+
+<p>예를 들어 이메일에서 <em>activity</em> 는 무엇일까? <del>어렵다.</del> 다양한 답이 나올 수 있지만, 딱 맘에 드는 답을 찾기 어렵다.</p>
+
+<p><em>transactional information</em> 에서는 <em>event</em> 가 다양한 <em>state (상태)</em> 로 나타날 수 있다.</p>
+
+<p><img src='http://www.cubrid.org/files/attach/images/220547/971/295/thread-state-diagram.png'  alt="" /></p>
+
+<p align="center">(<a href='http://architects.dzone.com/' >http://architects.dzone.com</a>)</p>
+
+<p>한 가지 더 생각해 볼 문제는 <em>case vs event</em> 다. <em>case</em> 는 <em>birth date</em> 처럼 변하지 않는 것이고, <em>event</em> 는 프로세스를 거치면서 변하는 속성들이다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter04gettingthedata-110510153210-phpapp01/95/process-mining-chapter-4-getting-the-data-6-728.jpg?cb=1305062568'  alt="" /></p>
+
+<p>이벤트를 정의하는데 다양한 방법이 있어 혼란스러울 수 있겠지만, 다행히도 프로세스 마이닝에서 사용되는 표준 포맷이 있다. <em>eXtensible Event Stream, XES</em> 인데,</p>
+
+<p><img src='http://fluxicon.com/blog/wp-content/uploads/2010/09/XES-Schema.png'  alt="" /></p>
+
+<p align="center">(<a href='http://fluxicon.com/' >http://fluxicon.com</a>)</p>
+
+<p><br/> <br />
+<em>control flow</em> 를 표현하는데는 다양한 방법이 있다. <em>BPMN, UML, Patri net</em> 등등..</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Animated_Petri_net_commons.gif/330px-Animated_Petri_net_commons.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a>)</p>
+
+<p>이 표기법들을 선택하는데 2가지 기준을 세울 수 있다. </p>
+
+<p>(1) <strong>search space:</strong> finding a model that captures reality well <br />
+(2) <strong>visualization:</strong> what do end-users need to see?  </p>
+
+<p>선택된 표기법이 <em>reality</em> 를 잘 반영하지 못할 수 있기 때문에, 다양한 표기법들을 알고, 사용해 보는것이 정말 중요하다.</p>
+
+<h3 id="petrinets">Petri Nets</h3>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Animated_Petri_net_commons.gif/330px-Animated_Petri_net_commons.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a>)</p>
+
+<p><em>Petri Net</em> 은 <code>token</code>, <code>place</code>, <code>transition</code>, <code>arc</code> 로 구성되어있다. 토큰은 한 <code>place</code> 에서 다음 <code>place</code> 로 이동할 수 있다. <em>petri net</em> 의 상태를 <em>marking</em> 이라 부른다. </p>
+
+<p><em>transition</em> 의 경우 <em>input place</em> 가 토큰을 담고 있어야만 다음 <em>place</em> 로 토큰을 옮긴다. 다시 말해서 <em>transition</em> 이 <em>token</em> 을 <em>input places</em> 로 부터 <em>consume</em> 해서 <em>output place</em> 에 <em>token</em> 을 <em>produce</em> 한다.</p>
+
+<p>독립적인 <em>transition</em> 이 있을때 모든 <em>transition</em> 은 동시에 작동할 수도, 하나씩만 작동할 수도 있다. </p>
+
+<p>신호등을 모델링 해보면 <em>place</em> 는 <code>red, green,orange</code> 이고 <em>transition</em> 은 <code>rg, go, or</code> 이다. </p>
+
+<p><img src='http://www.bpm-book.com/foswiki/pub/BpmBook/Exercise4-23/ex4-23.png'  alt="" /></p>
+
+<p align="center">(<a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a>)</p>
+
+<p>하나의 신호등은 정말 그리기 쉬운데, 두개의 신호등을 모델링 하려면 좀 골치가 아프다. 우선 두개의 <em>petri net</em> 을 따로따로 사용할건가, 토큰만 두개로 늘릴건가를 생각해보자.</p>
+
+<p>토큰이 두개인 경우는 하나의 신호등이 <code>green</code> 이고 다른 신호등이 <code>red</code> 인 경우, 어떤 신호등이 <code>green</code> 인지를 알려주지 않는다. <em>marking</em> 이 6가지가 나온다.</p>
+
+<p>반면 두개의 <em>petri net</em> 을 사용하면 <em>marking</em> 이 9 가지가 되어 순서가 보존된다. 순열과 조합의 차이라 보면 되겠다.</p>
+
+<p>근데, 두개의 <em>petri net</em> 을 사용하면 두 토큰이 동시에 <code>green</code> 에 있을 수 있다. 이건 교차로라면 교통사고를 야기할 수 있다.</p>
+
+<p>그리고 한가지 더 생각해 볼 문제는 신호등의 순서다. <em>non-deterministic</em> 이면 한 신호등만 주구장창 파란불, 빨간불, 파란불, 이 될 수 있다. 따라서 한 신호등이 변하면 다음 신호등이 변하는 모델을 만들어야한다.</p>
+
+<h4 id="reachabilitygraph">Reachability Graph</h4>
+
+<p><em>transition</em> 에 따라 <em>marking</em> 이 변하는 그래프를 그릴 수 있는데, 이것을 <strong>reachability graph</strong> 라고 부른다. 이 그래프 내에서 각 상태가 <em>reachable marking</em> 이다.</p>
+
+<h3 id="transitionsystemsandpetrinetproperties">Transition Systems and Petri Net Properties</h3>
+
+<p><em>reachability graph</em> 는 한 상태에서 다른 상태로의 전환을 표현하므로 <em>transition system</em> 이라 볼 수 있다. 그리고, <em>reachability graph</em>는 <em>finite or infinite</em> 모두 가능하다.</p>
+
+<h4 id="boundednesssafeness">Boundedness, Safeness</h4>
+
+<p>어떤 <em>place</em> 에 <code>k</code> 이상의 토큰이 존재하는 <em>reachable marking</em> 이 없으면 <em><code>k</code>-bounded place</em> 라 부른다. 쉽게 생각하서 <em>upper bound</em> 라 보면 된다.</p>
+
+<p>만약에 <em>petri net</em> 의 모든 <em>place</em> 가 <em>k-bounded</em> 면, 그 <em>petri net</em> 도 <em>k-bounded</em> 다. </p>
+
+<p>이런 <code>k</code> 가 <em>petri net</em> 이나 <em>place</em> 가 있을수도 있고, 없을때도 있는데, 있을때만 <em>bounded petri net, bounded place</em> 라 부른다.</p>
+
+<p>만약에 어떤 <em>petri net</em> 이 <em><code>1</code>-bounded</em> 면 <em>safe</em> 하다고 말한다.</p>
+
+<h4 id="deadlock">Deadlock</h4>
+
+<p>그리고, <em>dead marking</em> 은 더이상 적용 가능한 <em>transition</em> 이 없을때다. 그리고 <em>petri net</em> 에 <em>reachable dead marking</em> 이 있으면 잠재적으로 <em>deadlock</em> 이 발생할 수 있다.</p>
+
+<p>따라서 모든 <em>reachable marking</em> 이 적어도 하나의 <em>transition</em> 이 있을때 <em>deadlock free</em> 하다고 말할 수 있다.</p>
+
+<h4 id="safeness">Safeness</h4>
+
+<p>어떤 <em>transition</em> <code>t</code> 대해, 어느 <em>reachable marking</em> 에서도 <code>t</code> 를 적용가능하면 <code>t</code> 는 <em>live</em> 하다. 그리고 모든 트랜지션이 <em>live</em> 면, <em>petri net</em> 은 <em>live</em> 다. </p>
+
+<p><em>live petri net</em> 에서는 모든 트랜지션이 적용 가능하므로 <em>deadlock-free</em> 하다고 말할 수 있다.</p>
+
+<h4 id="transitionsystem">Transition System</h4>
+
+<p>이전에 보았던 <em>reachability graph</em> 는 <em>transition system</em> 의 특별한 종류다. 트랜지션 시스템은 <em>state</em> 와 <em>transitions</em> 로 구성되는데, 하나 이상의 <em>initial state</em> 와 0 개 이상의 <em>final states</em> 가 있다.</p>
+
+<p>이 때 <em>initial state -> final state</em> 로의 <em>path</em> 를 <strong>complete trace</strong> 라 부른다.</p>
+
+<p>모델로 부터 <em>transition system</em> 을 만들고 이것으로 부터 <em>complete trace</em> 를 만들 수 있는데, 문제는 트랜지션 시스템이 엄청나게 거대해 질 수 있거나 심지어는 무한할수도 있다는 사실이다.</p>
+
+<p>단순히 <code>(token) -&gt; a1 -&gt; ()</code> 이란 간단한 모델에서 <code>a1, ..., ak</code> 만 해도 <code>2^k</code> 개의 트랜지션 시스템이 나온다. 어마어마하다</p>
+
+<h3 id="workflownetsandsoundness">Workflow Nets and Soundness</h3>
+
+<p><em>Petri net</em> 은 간편하긴 한데, 위에서 말했듯이 무한한 트랜지션 시스템이 나올 수 있고, 데드락이 발생할 수도 있다.</p>
+
+<p>따라서 프로세스 마이닝에서는 모델을 만들기 위해 <em>end state</em> 가 있고, 위에서 언급한 <em>anomalies</em> 가 없는 <em>Petri net</em> 의 일종인 <em>Workflow Nets, WF-Nets</em> 를 사용하기도 한다.</p>
+
+<p><img src='http://www.bpm-book.com/foswiki/pub/BpmBook/Exercise6-02/ex6-02.png'  alt="" /></p>
+
+<p align="center">(<a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a>)</p>
+
+<p>본래 <em>WF-nets</em> 은 <em>BPM</em> 에서 쓰이던 것이다. <em>BPM</em> 은 IT 와 비즈니스를 연결해 주는 학문인데, </p>
+
+<p><img src='http://bpmcenter.org/wp-content/uploads/BPM-lifecycle1.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://bpmcenter.org/' >http://bpmcenter.org/</a>)</p>
+
+<p><em>model-based analysis</em> 와 <em>data-based analysis</em> 를 반복하면서 모델을 개선한다.</p>
+
+<p><em>BPM</em> 에서 모델의 역할은</p>
+
+<p>(1) reason about processes (<strong>redesign</strong>) <br />
+(2) make decisions inside processes (<strong>planning and control</strong>)  </p>
+
+<p>안타깝게도 모델을 표현하는데 다양한 <em>notation</em> 이 있다. (언급 했듯이 <em>search space</em> 와 <em>visualization</em> 때문) 이 수업에서는 3 가지 표기를 사용한다.</p>
+
+<ul>
+<li>Business Process Model and Notation (<strong>BPMN</strong>)</li>
+<li>Event-Driven Process Chains (<strong>EPCs</strong>)</li>
+<li>Petri nets (Workflow nets)</li>
+</ul>
+
+<p>아래 이미지는 각각, <em>BPMN, EPCs</em> 다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-12-728.jpg?cb=1305062671'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-13-728.jpg?cb=1305062671'  alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="goodmodel">Good Model</h4>
+
+<p>좋은 모델이란 일반적으로 <em>sound WF-net</em> 을 말한다.</p>
+
+<p><strong>Workflow net</strong> 이란</p>
+
+<blockquote>
+  <p>A <strong>Workflow net</strong> has one source place(start) and one sink place(end) and all other nodes are on a path from source to sink.</p>
+</blockquote>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-10-728.jpg?cb=1305062671'  alt="" /></p>
+
+<p><em>Workflow net</em> 이 <em>sound</em> 라는건</p>
+
+<blockquote>
+  <p>A workflow net is <strong>sound</strong> if and only if the following properties hold:</p>
+  
+  <p>(1) <strong>safeness:</strong> places cannot hold multiple tokens at the same time <br />
+  (2) <strong>proper completion:</strong> if the sink place is marked, all other places are empty <br />
+  (3) <strong>option to complete:</strong> it is always possible to reach the marking that marks just the sink place <br />
+  (4) <strong>absence of dead parts:</strong> for any transition there is a firing sequence enabling it  </p>
+</blockquote>
+
+<p>작은 모델은 <em>soundness</em> 를 검사하기 쉬울지 모르지만, 모델이 커지만 좀 힘들 수도 있다. 여기에 사용할 수 있는 몇 가지 테크닉이 있다.</p>
+
+<p>(1) 우선 <em>option to complete</em> 와 <em>proper completion</em> 을 보면, <em>proper completion</em> 이 거짓이면 <em>option to complete</em> 도 거짓이므로 검사할 필요가 없다. 반대로 <em>option to complete</em> 가 참이면 I<em>proper completion</em> 도 참이다.</p>
+
+<blockquote>
+  <p>option to complete impiles proper completion</p>
+</blockquote>
+
+<p>(2) 만약 <em>WF-net</em> 의 <em>end</em> 에서 <em>start</em> 로 트랜지션을 만든 <em>short-circuited petri net</em> 이 <em>live, bounded</em> 면 <em>WF-net</em> 은 <em>sound</em> 다.</p>
+
+<blockquote>
+  <p>A WF-net is <strong>sound</strong> if and only if the corresponding "short circuted" Petri net is <strong>live</strong> and <strong>bounded</strong></p>
+</blockquote>
+
+<h4 id="modelbasedanalysis">Model-based Analysis</h4>
+
+<p>위에서 본 <em>soundness checking</em> 같은 검증이나 <em>performance analysis</em> 같은 시뮬레이션이 모델-베이스드 분석해서 주로 하는 일이다. 근데, 이런 검증이나 시뮬레이션은 모델이 높은 퀄리티를 가져야만 한다는 한계가 있다. 프로세스 마이닝은 이런 모델기반 분석과 실제 데이터를 연관시킨다. </p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-24-728.jpg?cb=1305062671'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="alphaalgorithm">Alpha Algorithm</h3>
+
+<p><em>alpha algorithm</em> 을 이용해서 모델을 발견할 수 있다. 즉 아래 그림에서, <em>discovery</em> 에 해당하는 과정이다. 이벤트로그로 부터 모델을 만드는 과정을 <em>play-in</em> 이라 부르기도 한다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-3-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<p>이벤트 로그를 간략화 하면 <em>activity</em> 의 <em>order</em> 가 된다. 즉, <em>timestamp</em> 가 <em>order</em> 로 표현되고, 한 묶음의 <em>ordered activity</em> 가 모여서 <em>trace</em> 가 된다. 예를 들어서 다음은 이벤트 로그라 볼 수 있다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-5-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/> <br />
+알파 알고리즘의 목적은 이렇게 간략화된 이벤트 로그를 이용해 모델을 뽑아내는 것이다.</p>
+
+<h4 id="operations">Operations</h4>
+
+<p>몇 가지 연산자를 알고 넘어가자</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-11-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/> <br />
+(1) <strong>direct succession:</strong> <code>x &gt; y</code>, iff for some case x is directly followed by y <br />
+(2) <strong>causality:</strong> <code>x -&gt; y</code>, iff <code>x &gt; y</code> and not <code>y &gt; x</code> <br />
+(3) <strong>parallel:</strong> <code>x || y</code>, iff <code>x &gt; y</code> and <code>y &gt; x</code> <br />
+(4) <strong>choice:</strong> <code>x # y</code>, iff not <code>x &gt; y</code> and <code>y &gt; x</code></p>
+
+<p><br/></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-18-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<p>그러면 이 연산자를 조합해 패턴을 발견할 수 있다.</p>
+
+<p>(1) <em>sequence:</em> <code>a -&gt; b</code> <br />
+(2) <em>XOR split:</em> <code>a -&gt; b</code>, <code>a -&gt; c</code>, <code>b # c</code> <br />
+(3) <em>XOR join:</em> <code>b -&gt; d</code>, <code>c -&gt; d</code>, <code>b # c</code> <br />
+(4) <em>AND split:</em> <code>a -&gt; b</code>, <code>a -&gt; c</code>, <code>b || c</code> <br />
+(5) <em>AND join:</em> <code>b -&gt; d</code>, <code>c -&gt; d</code>, <code>b || c</code></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-15-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="footprint">Footprint</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-16-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<p>각 트랜지션 사이에 테이블을 하나 만들면 이처럼 생겼는데, <em>footprint</em> 라 부른다. 우리가 로그를 이용해 만든 모델과, 로그의 풋 프린트는 동일하다. </p>
+
+<blockquote>
+  <p>Log and model agree on footprint</p>
+</blockquote>
+
+<p><br/></p>
+
+<h4 id="logics">Logics</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-19-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<p>알파 알고리즘은 이렇게 생겼는데, 너무 개략적으로 설명해 주셔서 나도 개략적으로 밖에 알지 못한다. 간략히 설명하면</p>
+
+<p>(1) <em>activity</em> 를 <em>transition</em> 으로 매핑한다 <br />
+(2) 첫 번째 트랜지션을 찾는다 <br />
+(3) 마지막 트랜지션을 찾는다</p>
+
+<p>두 인접한 트랜지션 사이에 있는 것은 <em>place</em> 이므로, 두 인접한 트랜지션을 찾아보자. 먼저</p>
+
+<p>(4) <code>(A, B)</code> 를 계산한다  </p>
+
+<p>이 때 <code>A</code> 내에 있는 모든 <code>a</code> 와 <code>B</code> 내에 있는 모든 <code>b</code> 에 대해 <code>a &gt; b</code> 이고, <code>a1 # a2</code>, <code>b1 # b2</code> 인 <code>(A, B)</code> 를 찾는다.</p>
+
+<blockquote>
+  <p>Find paris <code>(A, B)</code> of sets of activities such as that every element <code>a</code> in <code>A</code> and every element <code>b</code> in <code>B</code> are causally related, all element in <code>A</code> are independent and all elements in <code>B</code> are independent</p>
+</blockquote>
+
+<p>(5) <em>non-maximal pair</em> 를 제거한다. </p>
+
+<p><code>(4)</code> 에서 찾은 <code>(A, B)</code> 는 부분집합을 가질 수 있다. 이러면 <em>sub-pair</em> 로 인해 <code>place</code> 가 또 생길 수 있으므로 제거한다.</p>
+
+<p>예를 들어 <code>[({b}, {d}), ({b, e}, {d})]</code> 이 있다면 <em>sub-pair</em> <code>({b}, {d})</code> 를 제거한다.</p>
+
+<blockquote>
+  <p>Delete from set <code>X_L</code> all paris <code>(A, B)</code> that are not maximal</p>
+</blockquote>
+
+<p>(6) <em>place</em> <code>P_(A, B)</code> 의 위치를 결정한다. </p>
+
+<blockquote>
+  <p>Determine the place set. Each element <code>(A, B)</code> is a place. To ensure the workflow structure, add a source place and target place</p>
+</blockquote>
+
+<p>(7) <code>(2)</code> 와 <code>(3)</code> 에서 찾은 출발점과 끝점과 <code>(6)</code> 에서 찾은 <em>place</em> 의 <em>source transition</em> 과 <em>target transition</em> 과 잇는다.</p>
+
+<blockquote>
+  <p>Determine the flow relation. Connect each place P(A, B) with each element <code>a</code> of its set <code>A</code> of source transitions and with each element of its set <code>B</code> of target transitions. In addition, draw an arc from the source place to each start transition and an arc from each end transition to the sink place</p>
+</blockquote>
+
+<p>따라서 전체적인 알고리즘은</p>
+
+<ul>
+<li>먼저 <em>footprint</em> 를 만들고</li>
+<li>여기서 집합 내부적으로 <code>#</code> 이고 집합간 <code>&gt;</code> 를 가지는 <code>(A, B)</code> 를 구한뒤  </li>
+<li>중복을 제거하기 위해 <em>non-maximal pair</em> 를 제거한다  </li>
+<li><code>(A, B)</code> 에서 하나씩 <em>pair</em> 를 뽑아서 잇고, 이것들과 초기 트랜지션 <code>T_I</code>, 마지막 트랜지션 <code>T_O</code> 와 잇는다.</li>
+</ul>
+
+<h4 id="intuition">Intuition</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-21-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<p>알파 알고리즘은 간단하지만 <em>loop</em>, <em>choice</em>, <em>concurrenc</em> 등 꽤 많은 연산을 찾아낸다. 그러나 한계가 있다.</p>
+
+<h4 id="limitation">Limitation</h4>
+
+<h4 id="implicitplaces">implicit places</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-29-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p>여기서 초록색 <em>place</em> 는 아무일도 하지 않음에도 <em>alpha algorithm</em> 이 찾아냈다. </p>
+
+<h4 id="loopsoflength12">Loops of length 1, 2</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-30-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p>이벤트 로그를 보면 실제로는 <code>b</code> 가 <em>self-loop</em> 가 있음에도 알파 알고리즘은 찾아내지 못한다.</p>
+
+<p><br/></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-31-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p>길이가 2인 루프도 마찬가지로 찾아내지 못한다.</p>
+
+<h4 id="nonlocaldependency">Non-local dependency</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-32-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p>여기서 알파 알고리즘을 돌리면 <code>p1, p2</code> 를 못찾는다. 아래 그림은 알파 알고리즘이 찾기 힘든 모델이다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-33-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="representationbias">Representation Bias</h4>
+
+<p>알파 알고리즘이 가지는 표현적인 한계 때문에 다음과 같은 경우도 발생한다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-38-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-39-728.jpg?cb=1305062521'  alt="" /></p>
+
+<h4 id="noiseandincompleteness">Noise and Incompleteness</h4>
+
+<p>알파 알고리즘은 아주 기본적인 알고리즘이기 때문에 패턴을 잘못 인식하는 경우가 많다. </p>
+
+<p>게다가, 이벤트 로그 자체가 완벽한 <em>trace</em> 가 아닐수도 있다는 것도 고려해야한다.</p>
+
+<blockquote>
+  <p><strong>Noise:</strong> the event log contains rare and infrequent behavior not representative for the typical behavior of the process</p>
+  
+  <p><strong>Incompleteness:</strong> the event log contains too few events to be able to discover some of the underlying control-flow structures</p>
+</blockquote>
+
+<p>즉 이벤트 로그 자체가 어떤 패턴을 발견하기엔 너무 적거나, 좀 노이지할 수가 있다는 뜻이다.</p>
+
+<h4 id="fitnessvsprecisionsimplicityvsgeneralization">Fitness vs Precision, Simplicity vs Generalization</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-43-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<p>아래의 두 모델중 어떤게 더 이벤트 로그를 잘 반영한 것일까? 빈도가 적은 로그는 표현하지 않는것이 더 좋은가?</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-47-728.jpg?cb=1305062521'  alt="" /></p>
+
+<h4 id="summary">Summary</h4>
+
+<p>루프가 있거나, 모델에 <em>parallel</em> 이 있는 경우에 가능한 <em>trace</em> 의 수는 기하 급수적으로 많아진다. </p>
+
+<p>그러나 우리가 가진 이벤트 로그는 일부분이다. 따라서 이런 로그로 만드는 모델은 어느정도 틀릴 수 밖에 없다. </p>
+
+<p>알파 알고리즘의 단점을 좀 정리해 보면,</p>
+
+<p>(1) <strong>implicit places:</strong> harmless and be solved through preprocessing <br />
+(2) <strong>loops of length 1:</strong> can be solved in multiple ways <br />
+(3) <strong>loops of length 2:</strong> idem. <br />
+(4) <strong>non-local dependencies:</strong> challenging <br />
+(5) <strong>representational bias:</strong> cannot discover transtions with duplicate or invisible labels. other algorithms may have a different bias. <br />
+(6) <strong>discovered model does not need to be sound:</strong> some algorithm ensure this. <br />
+(7) <strong>noise, incompleteness:</strong> challenging  </p>
+
+<h3 id="references">References</h3>
+
+<p>(0) <a href='http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483' >Book: Process Mining</a> <br />
+(1) <a href='https://d396qusza40orc.cloudfront.net/procmin/lecture_slides/22-Petri%20Nets%20%281%29.pdf' >Slide</a> <br />
+(2) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst <br />
+(3) <a href='http://1ambda.github.io/www.processmining.org' >www.processmining.org</a> <br />
+(4) <a href='http://fluxicon.com/' >http://fluxicon.com</a> <br />
+(5) <a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a> <br />
+(6) <a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a> <br />
+(7) <a href='http://bpmcenter.org/' >http://bpmcenter.org/</a></p>]]></description><link>http://1ambda.github.io/process-mining-week2/</link><guid isPermaLink="false">51bbba08-c9ac-44ee-9593-85f5b62054fb</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[alpha algorithm]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 04:30:43 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 6]]></title><description><![CDATA[<p>이번시간엔 어떻게 <em>type</em> 과 <em>class</em> 를 정의하는지 배울겁니다. 이렇게 <em>commonality</em> 를  추출해서 <em>type</em> 과 <em>class</em> 로 만듦으로써 작업의 양을 줄일 수 있습니다. 이 과정을 추상화라 부르기도 합니다.</p>
+
+<p>마지막엔 이제까지 배운바를 적용해 봅시다. 항상 참인 명제를 검사하는 <strong>tautology checker</strong> 와 평가 시점을 조절하는 <strong>abstract machine</strong> 을 만들어 보겠습니다.</p>
+
+<h3 id="typedeclarations">Type Declarations</h3>
+
+<p>하스켈에선 존재하는 타입을 이용해서 새로운 타입을 만들 수 있습니다.</p>
+
+<pre><code class="haskell">type String = [Char]  
+</code></pre>
+
+<p>지난시간에 2차원 좌표계를 구현할 때 만들었던 <code>Pos</code> 타입 기억 나시죠?</p>
+
+<pre><code class="haskell">type Pos = (Int, Int)
+
+origin :: Pos  
+origin = (0, 0)
+
+left :: Pos -&gt; Pos  
+left (x, y) = (x-1, y)  
+</code></pre>
+
+<p><em>type</em> 은 함수와 마찬가지로 다양한 타입을 사용할 수 있습니다.</p>
+
+<pre><code class="haskell">type Pair a = (a, a)
+
+mult :: Pair Int -&gt; Int  
+mult (a, b) = a * b
+
+copy :: Int -&gt; Pair Int  
+copy a = (a, a)  
+</code></pre>
+
+<p>여러개의 타입도 사용할 수 있습니다.</p>
+
+<pre><code class="haskell">type Assoc k v = [(k, v)]
+
+find :: Eq k =&gt; k -&gt; Assoc k v -&gt; v  
+find k xs = head [v | (k', v) &lt;- xs, k == k']
+
+&gt; find 2 [(1, 'a'), (2, 'c'), (3, 'f')]
+-- 'c'
+</code></pre>
+
+<p>그리고 <em>nested (중첩)</em> 될 수 있습니다.</p>
+
+<pre><code class="haskell">type Trans = Pos -&gt; Pos
+
+left :: Trans  
+left (x, y) = (x-1, y)  
+</code></pre>
+
+<p>하지만 <em>recursive</em> 로 정의될 수는 없습니다. 왜냐하면 <em>type</em> 이 단지 <em>synonym</em> 이기 때문입니다.</p>
+
+<pre><code class="haskell">-- doesn't work
+type Tree = (Int, [Tree
+
+-- ghci
+
+Cycle in type synonym declarations:  
+  lecture9.hs:22:1-25: type Tree = (Int, [Tree])
+Failed, modules loaded: none.  
+</code></pre>
+
+<p>그러나 하스켈에선 재귀적으로 타입을 정의할 수 있는 방법이 있긴 있습니다! 다만 <em>nominal type</em> 을 이용해야 합니다.(<code>data</code> 키워드를 사용합니다.) 많은 언어들이 이와 비슷한 제약조건을 가지고 있습니다.</p>
+
+<p><em>object-oriented language</em> 에서는 전형적으로 <em>nominal type system</em> 을 사용합니다. 이는 <em>"두 타입이 같은지"</em>, <em>"한 타입이 다른 타입의 서브타입인지"</em> 검사하기 쉽기 때문입니다. 반면 <em>purely sructural type system</em> 에서는 이게 조금 어려워집니다. (참고로 <em>nominal vs structure</em> 은, <em>dynamic static</em> 과는 다른 문제입니다.)</p>
+
+<h3 id="datadeclarations">Data Declarations</h3>
+
+<p>기존타입과 관련없는 새로운 타입을 만들려면 <code>data</code> 키워드를 사용하면 됩니다.</p>
+
+<pre><code class="haskell">data Bool = False | True  
+</code></pre>
+
+<p>이제 <code>Bool</code> 은 새로운 <em>type</em> 이고, 여기에 <code>False, True</code> 의 <em>value</em> 를 사용할 수 있습니다.</p>
+
+<p>여기서 <code>False</code>, <code>True</code> 를 <em>type</em> <code>Bool</code> 을 위한 <em>constructor</em> 라 부릅니다. <em>type constructor</em> 의 이름은 반드시 대문자로 시작해야합니다.</p>
+
+<p>새로운 타입을 조금 더 만들어 봅시다.</p>
+
+<pre><code class="haskell">data Answer = Yes | No | Unknown
+
+answers :: [Answer]  
+answers = [Yes, No, Unknown]
+
+flip :: Answer -&gt; Answer  
+flip Yes = No  
+flip No = Yes  
+flip Unknown = Unknown  
+</code></pre>
+
+<p>좌표의 움직임을 추상화한 타입 <code>Move</code> 도 만들어 봅시다.</p>
+
+<pre><code class="haskell">data Move = Left | Right | Up | Down
+
+move :: Move -&gt; Pos -&gt; Pos  
+move Up (x, y) = (x, y-1)  
+move Left (x, y) = (x-1, y)  
+move Down (x, y) = (x, y+1)  
+move Right (x, y) = (x+1, y)
+
+moves :: [Move] -&gt; Pos -&gt; Pos  
+moves [] p = p  
+moves (m:ms) p = moves ms (move m p)
+
+&gt; move Left (1, 1)
+-- (0,1)
+
+&gt; moves [Left, Right, Up, Down, Left] (0, 0)
+--(-1,0)
+</code></pre>
+
+<p><em>data declaration</em> 내에 있는 <em>constructor</em> 는 파라미터를 가질 수 있습니다.</p>
+
+<pre><code class="haskell">data Shape = Circle Float  
+           | Rect Float Float
+
+square :: Float -&gt; Shape  
+square n = Rect n n
+
+area :: Shape -&gt; Float  
+area (Circle r) = pi * r^2  
+area (Rect x y) = x * y  
+</code></pre>
+
+<p>여기서 <em>constructor</em> 를 함수라 볼 수도 있습니다.</p>
+
+<pre><code class="haskell">Circle :: Float -&gt; Shape  
+Rect :: Float Float -&gt; Shape  
+</code></pre>
+
+<p><em>constructor</em> 뿐만 아니라 <em>data declaration</em> 그 자체도 파라미터를 가질 수 있습니다.</p>
+
+<pre><code class="haskell">data Maybe a = Nothing | Just a
+
+safediv :: Int -&gt; Int -&gt; Maybe Int  
+safediv _ 0 = Nothing  
+safediv x y = Just (x `div` y)
+
+safehead :: [a] -&gt; Maybe a  
+safehead [] = Nothing  
+safehead (x:xs) = Just x  
+</code></pre>
+
+<h3 id="recursivetypes">Recursive Types</h3>
+
+<p>재귀적인 타입의 예를 한번 볼까요?</p>
+
+<pre><code class="haskell">data Nat = Zero | Succ Nat  
+</code></pre>
+
+<p>여기서 <code>Zero :: Nat</code>, <code>Succ :: Nat -&gt; Nat</code> 라 보면 됩니다. 따라서 다음처럼 확장이 가능하지요.</p>
+
+<pre><code class="haskell">Zero -- 0  
+Succ Zero -- 1  
+Succ (Succ Zero) -- 2  
+</code></pre>
+
+<p>보시면 알겠지만, 우리는 단 한 줄로 자연수를 표현하는 데이터 타입 <code>Nat</code> 를 만들었습니다. 숫자와 <code>Nat</code> 타입을 변환하는 함수를 만들어 봅시다.</p>
+
+<pre><code class="haskell">data Nat = Zero | Succ Nat
+
+nat2int :: Nat -&gt; Int  
+nat2int Zero = 0  
+nat2int (Succ nat) = 1 + nat2int nat
+
+int2nat :: Int -&gt; Nat  
+int2nat 0 = Zero  
+int2nat n = Succ (int2nat (n-1))
+
+&gt; nat2int (int2nat 10)
+-- 10
+</code></pre>
+
+<p>재귀를 이용하면 <code>Nat</code> 간 덧셈을 위에서 만든 변환함수 없이도 만들수 있습니다.</p>
+
+<pre><code class="haskell">add :: Nat -&gt; Nat -&gt; Nat  
+add Zero n = n  
+add (Succ n) s = Succ (add n s)
+
+&gt; nat2int (add (int2nat 2) (int2nat 3))
+-- 5
+</code></pre>
+
+<h3 id="list">List</h3>
+
+<p>임의의 타입을 갖는 리스트를 나타내는 <code>List</code> 타입을 만들어 보죠.</p>
+
+<pre><code class="haskell">data List a = Nil | Cons a (List a)
+
+len :: List a -&gt; Int  
+len Nil = 0  
+len (Cons h t) = 1 + len t
+
+&gt;  len (Cons 4 (Cons 3 Nil))
+-- 2
+
+&gt; len Nil
+-- 0
+</code></pre>
+
+<h3 id="arithmeticexpressions">Arithmetic Expressions</h3>
+
+<p>기본적인 <code>+, *</code> 과 정수와 연산 <em>expression (식)</em> 을 타입으로 만들면 어떻게 될까요?</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Exp-tree-ex-11.svg/375px-Exp-tree-ex-11.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<pre><code class="haskell">data Expr = Val Int  
+          | Add Expr Expr
+          | Mul Expr Expr          
+</code></pre>
+
+<p>이제 <em>expression</em> 의 사이즈와, 계산 결과를 돌려주는 함수 <code>size</code>, <code>eval</code> 을 만듭시다.</p>
+
+<pre><code class="haskell">size :: Expr -&gt; Int  
+size (Val n) = 1  
+size (Add l r) = size l + size r  
+size (Mul l r) = size l + size r
+
+eval :: Expr -&gt; Int  
+eval (Val n) = n  
+eval (Add l r) = eval l + eval r  
+eval (Mul l r) = eval l * eval r
+
+&gt; eval (Add (Val 3) (Val 2))
+-- 5
+
+&gt; size (Add (Val 3) (Val 2))
+-- 2
+</code></pre>
+
+<p>이번엔 이진트리를 표현해 볼까요?</p>
+
+<pre><code class="haskell">data Tree = Leaf Int  
+          | Node Tree Int Tree
+</code></pre>
+
+<p>이제 트리에서 원하는 숫자가 존재하는지 검사하는 <code>occurs</code> 함수를 만들면</p>
+
+<pre><code class="haskell">occurs :: Int -&gt; Tree -&gt; Bool  
+occurs n (Leaf k) = n == k  
+occurs n (Node l k r) =  
+  (n == k) 
+  || occurs n l
+  || occurs n r
+
+&gt; occurs 3 (Node (Leaf 3) 4 (Leaf 5))
+-- True
+
+&gt; occurs 6 (Node (Leaf 3) 4 (Leaf 5))
+-- False  
+</code></pre>
+
+<p>트리의 모든 원소를 리스트로 돌려주는 <code>flatten</code> 함수도 만들어 봅시다.</p>
+
+<pre><code class="haskell">flatten :: Tree -&gt; [Int]  
+flatten (Leaf k) = [k]  
+flatten (Node l k r) = flatten l ++ [k] ++ flatten 
+
+&gt; flatten (Node (Leaf 3) 4 (Leaf 5))
+-- [3,4,5]
+
+&gt; flatten (Node (Leaf 6) 4 (Leaf 7))
+-- [6,4,7]
+</code></pre>
+
+<p>여기서 재미난 결과를 볼 수 있습니다. <code>flatten</code> 함수는 매 재귀마다 왼쪽부터 방문하고, 현재 노드를 방문하고, 마지막으로 오른쪽 노드를 방문합니다. </p>
+
+<p>그래서 <code>flatten</code> 함수의 결과가 <em>ordered</em> 이면 트리는 한 노드를 기준으로 한쪽은 현재 노드보다 작고, 다른쪽은 큰 <em>search-tree</em> 가 됩니다.</p>
+
+<p><em>search-tree</em> 에서는 만약 찾으려는 수가 현재 노드보다 크면 <em>right sub-tree</em> 만, 현재 노드보다 작으면 <em>left sub-tree</em> 만 검색하면 됩니다. 따라서 <code>occurs</code> 함수를 </p>
+
+<pre><code class="haskell">-- occurs for search-ree
+occurs' :: Int -&gt; Tree -&gt; Bool  
+occurs' n (Leaf k) = k == n  
+occurs' n (Node l k r) | n == k = True  
+                       | n &lt; k = occurs' n l
+                       | otherwise = occurs' n r
+
+
+&gt; occurs' 3 (Node (Leaf 3) 4 (Leaf 5))
+-- True
+
+&gt; occurs' 5 (Node (Leaf 3) 4 (Leaf 5))
+-- True
+</code></pre>
+
+<p>실제로 트리는 값을 어디에 저장하냐에 따라 다양한 형태가 될 수 있습니다.</p>
+
+<pre><code class="haskell">data Tree a = Leaf a | Node (Tree a) (Tree a)  
+data Tree a = Leaf | Node (Tree a) a (Tree a)  
+data Tree a b = Leaf a | Node (Tree a b) b (Tree a b)  
+data Tree a = Node a [Tree a]  
+</code></pre>
+
+<p>위에서 부터</p>
+
+<p>(1) <em>leaf</em> 에만 값을 저장 <br />
+(2) <em>node</em> 에만 값을 저장 <br />
+(3) <em>leaf</em>, <em>node</em> 에 모두 값을 저장 <br />
+(4) 한 <em>node</em> 에 값과 복수개의 트리를 저장  </p>
+
+<h3 id="tautologychecker">Tautology checker</h3>
+
+<p>항상 참인 명제를 <em>tautology</em> 라고 합니다. 논리학에 대해서는 다음 글을 참조해주세요.</p>
+
+<p>(1) <a href='http://imnt.tistory.com/91' >명제논리의 기초 1 : 소개</a> <br />
+(2) <a href='http://imnt.tistory.com/91' >명제논리의 기초 2 : 진리표</a> <br />
+(3) <a href='http://imnt.tistory.com/91' >명제논리의 기초 3 : tautology, contradiction</a>  </p>
+
+<p><em>tautology</em> 는 여러가지가 있습니다. 한 가지 예를 보면, 참 또는 거짓일 수 있는 명제 <code>p</code>, <code>q</code> 에 대해 <code>p -&gt; q ^ q -&gt; p</code> 는 항상 참입니다.</p>
+
+<p><img src='http://s1.hubimg.com/u/3891828_f520.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://julieburke.hubpages.com/' >http://julieburke.hubpages.com</a>)</p>
+
+<p>이번에 만들 프로그램에서는 논리학 연산자를 <code>Not</code>, <code>And</code>, <code>Imply</code>, <code>Or</code> 4가지로 제한하겠습니다. <em>proposition (명제)</em> 는 <code>A, ..., Z</code> 이고 각각 <code>True / False</code> 일 수 있습니다.</p>
+
+<pre><code class="haskell">data Prop =  Const Bool  
+          | Var Char
+          | Not Prop
+          | Or Prop
+          | And Prop Prop
+          | Imply Prop Porp
+</code></pre>
+
+<p>검사할 4개의 명제를 만들어 보죠.</p>
+
+<pre><code class="haskell">-- A and ~A
+p1 :: Prop  
+p1 = And (Var 'A') (Not (Var 'A'))
+
+-- A and B -&gt; A
+p2 :: Prop  
+p2 = Imply (And (Var 'A') (Var 'B')) (Var 'A')
+
+-- A -&gt; A and B
+p3 :: Prop  
+p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
+
+-- (A and (A -&gt; B)) -&gt; B
+p4 :: Prop  
+p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')  
+</code></pre>
+
+<p>각 명제가 참인지 거짓인지 알 수 있는 테이블을 나타내는 타입 <code>Subst</code> 를 만듭시다. 진리표라고 생각하면 됩니다. 그리고 여기서 값을 찾는 함수 <code>find</code> 도 만들면</p>
+
+<pre><code class="haskell">type Assoc k v = [(k, v)]  
+type Subst = Assoc Char Bool
+
+find :: Eq k =&gt; k -&gt; Assoc k v -&gt; v  
+find k t = head [v | (k', v) &lt;- t, k' == k]  
+</code></pre>
+
+<p>이제 <code>Prop</code> 를 평가하는 함수 <code>eval</code> 을 만들면</p>
+
+<pre><code class="haskell">eval :: Subst -&gt; Prop -&gt; Bool  
+eval _ (Const b) = b  
+eval s (Var x) = find x s  
+eval s (Not p) = not (eval s p)  
+eval s (Or p1 p2) = eval s p1 || eval s p2  
+eval s (And p1 p2) = eval s p1 &amp;&amp; eval s p2  
+eval s (Imply p1 p2) = eval s p2  
+</code></pre>
+
+<p>어떤 명제 <code>Prop</code> 가 <em>tautologt</em> 인지 검사하려면, 명제를 이루는 문장의 모든 참/거짓 경우에 대해 살펴봐야 합니다. 따라서 현재 가진 변수 <code>A, ..., Z</code> 에 대해서 참 / 거짓의 모든 경우를 포함한 테이블이 필요합니다. 이 함수를 만들기 위해 작은 함수부터 차근차근 조립해 갑시다.</p>
+
+<p>먼저 현재 <code>Prop</code> 에서 모든 변수를 찾는 함수 <code>vars</code> 와 중복을 제거하는 함수 <code>uniq</code> 를 만들겠습니다.</p>
+
+<pre><code class="haskel">vars :: Prop -&gt; [Char]  
+vars (Const _) = []  
+vars (Var x) = [x]  
+vars (Not p) = vars p  
+vars (And p1 p2) = vars p1 ++ vars p2  
+vars (Or p1 p2) = vars p1 ++ vars p2  
+vars (Imply p1 p2) = vars p1 ++ vars p2
+
+&gt; vars p1
+-- "AA"
+
+&gt; vars p2
+-- "AA"
+
+&gt; vars p3
+-- "ABA"
+
+&gt; vars p4
+--"AAB"
+
+uniq :: Eq a =&gt; [a] -&gt; [a]  
+uniq = foldr (\x xs-&gt; if elem x xs then xs else x:xs) []
+
+&gt; uniq (vars p4)
+-- "AB"
+</code></pre>
+
+<p>길이를 받으면 해당 길이 만큼 <code>True, False</code> 의 모든 조합을 리턴하는 <code>bools</code> 함수도 만들죠. 조합이므로 다음 재귀 단계에, 가능한 모든 경우를 더하면 됩니다.</p>
+
+<pre><code class="haskell">bools :: Int -&gt; [[Bool]]  
+bools 0 = [[]]  
+bools n = map (False:) prev ++ map (True:) prev  
+  where prev = bools (n - 1)
+</code></pre>
+
+<p>이제 마지막 퍼즐을 완성하겠습니다. <code>Prop</code> 를 받아, <code>[Subst]</code> 를 돌려주는 함수 <code>substs</code> 와, <code>Prop</code> 를 받아 <em>tautology</em> 인지 검사하는 함수 <code>isTaut</code> 는</p>
+
+<pre><code class="haskell">substs :: Prop -&gt; [Subst]  
+substs p = map (zip vs) (bools (length vs))  
+  where vs = uniq (vars p)
+
+isTaut :: Prop -&gt; Bool  
+isTaut p = and [eval s p | s &lt;- substs p]
+
+&gt; isTaut p1
+-- True
+
+&gt; isTaut p2
+--False
+
+&gt; isTaut p3
+--True
+
+&gt; isTaut p4
+--False
+
+&gt; isTaut p5
+-- True
+</code></pre>
+
+<h3 id="abstractmachine">Abstract Machine</h3>
+
+<p>간단한 수식 계산을 위한 <em>expression</em> 타입을 생각해 봅시다.</p>
+
+<pre><code class="haskell">data Expr = Val Int  
+          | Add Expr Expr
+
+value :: Expr -&gt; Int  
+value (Val n) = n  
+value (Add l r) = value l + value r  
+</code></pre>
+
+<p>이제 덧셈을 실제로 해 보면, 계산이 왼쪽부터 이루어지는걸 확인할수 있습니다.</p>
+
+<pre><code class="haskell">-- 2 + 3 + 4
+value (Add (Add (Val 2) (Val 3)) (Val 4))  
+...
+...
+(2 + value (Val 3)) + value (Val 4)
+</code></pre>
+
+<p>위에서 알 수 있듯이 왼쪽 인자가 오른쪽 인자보다 먼저 평가됩니다. 이건 우리가 지정한게 아니고, 하스켈이 왼쪽 인자부터 평가하기 때문입니다.</p>
+
+<p><em>expression</em> 에서 평가 시점을 결정하는 <em>abstract machine</em> 을 만들어서 해결할 수 있습니다.</p>
+
+<blockquote>
+  <p>If desired, however, such control information can be made explicit by defining an abstract machine for expressions,
+  which specifies the step-by-step process of their evaluation.</p>
+</blockquote>
+
+<p>컨트롤 스택을 위한 타입을 만들고, 값을 평가하는 <code>eval</code> 과 실제로 덧셈을 수행하는 <code>exec</code> 함수를 만들겠습니다.</p>
+
+<pre><code class="haskel">-- expression
+data Expr = Val Int  
+          | Add Expr Expr
+
+-- control stack
+type Cont = [Op]  
+data Op = EVAL Expr  
+        | ADD Int
+
+eval :: Expr -&gt; Cont -&gt; Int  
+eval (Val n) c = exec c n -- eval n  
+eval (Add x y) c = eval x (EVAL y : c) -- eval x before y
+
+exec :: Cont -&gt; Int -&gt; Int  
+exec [] n = n  
+exec (EVAL y : c) n = eval y (ADD n : c)  
+exec (ADD n : c)  m = exec c (n + m)
+
+value :: Expr -&gt; Int  
+value e = eval e []  
+</code></pre>
+
+<p><code>eval (Add x y)</code> 에 대해서 <code>EVAL y</code> 가 먼저 스택에 들어가고, <code>x</code> 가 먼저 평가됩니다. 그 이후에 <code>exec</code> 로 넘어오면서 <code>ADD</code> 명령이 스택에 들어가고, 그 이후에야 <code>y</code> 가 평가됩니다. 마지막으로 컨트롤 스택에 들어간 <code>ADD</code> 명령이 끝납니다.</p>
+
+<p>간단한 예제를 통해 평가되는 과정을 보면</p>
+
+<pre><code class="haskell">eval (Add (Val 3) (Val 5)) []  
+eval (Val 3) [EVAL (Val 5)]  
+exec [EVAL (Val 5)] 3  
+eval (Val 5) [ADD 3]  
+exec [ADD 3] 5  
+exec [] (3 + 5)  
+</code></pre>
+
+<h3 id="classandinstancedeclaration">Class and Instance declaration</h3>
+
+<p>마지막으로 <code>class</code> 대해 알아보겠습니다. 아참 시작하기 전에 먼저 아셔야 할 사실은, 하스켈에선 기술적인 이유로 <code>data</code> 를 이용해 만든 타입만 클래스의 인스턴스가 될 수 있습니다. </p>
+
+<blockquote>
+  <p>For technical reasons, only types declared using the data mechanism can be made into instances of classes.</p>
+</blockquote>
+
+<p>하스켈에선 <code>Eq</code> 클래스가 있는데요, 이렇게 정의되어 있습니다.</p>
+
+<pre><code class="haskell">class Eq where  
+ (==), (/=) :: a -&gt; a -&gt; Bool
+ x /= y = not (x == y) 
+</code></pre>
+
+<p>이 말은 <code>Eq</code> 의 인스턴스가 되는 <code>a</code> 는 <code>(==)</code> 연산을 지원해야 한다는 뜻입니다. (<code>/=</code> 연산은 디폴트로 정의되어 있습니다.)</p>
+
+<p>그래서 <code>Eq</code> 의 인스턴스인 <code>Bool</code> 의 경우</p>
+
+<pre><code class="haskell">instance Eq Bool where  
+  False == False = True
+  True == True = True
+  _ == _ = False
+</code></pre>
+
+<p>물론 기본 연산은 <em>overrided</em> 될 수 있습니다. 어떤 인스턴스의 경우 비교를 위해 <code>==</code> 를 재정의해서 사용할 수 있을겁니다.</p>
+
+<p>클래스는 확장될 수 있습니다. 다른언어의 상속처럼요.</p>
+
+<pre><code class="haskell">class Eq a =&gt; Ord a where  
+  (&lt;), (&lt;=), (&gt;), (&gt;=) :: a -&gt; a -&gt; Bool
+  min, max :: a -&gt; a -&gt; a
+
+  min x y | x &lt;= y = x
+          | otherwise = y
+
+  max x y | x &lt;= y = y
+          | otherwise = x
+</code></pre>
+
+<p>상대적인 크고 작음을 의미하는 <code>Ord</code> 클래스의 경우 <code>Eq</code> 의 연산에 추가적으로 크기 비교를 위한 연산을 가지고 있습니다. <code>&lt;, &lt;=, &gt;, &gt;=</code> 4개의 연산을 <code>Ord</code> 의 인스턴스는 정의해야 하는데요, 이것만 정의하면 디폴트로 정의된 <code>min, max</code> 도 사용할 수 있습니다.</p>
+
+<p>아까 <code>Imply</code> 구현할 때 <code>p &lt;= q</code> 연산 보셨죠? <code>Bool</code> 은 <code>Ord</code> 의 인스턴스이기도 한데요</p>
+
+<pre><code class="haskell">instance Ord Bool where  
+  False &lt; True = True
+  _ &lt; _ = False
+
+  b &gt; c = c &lt; b
+  b &lt;= c = (b &lt; c) || (b == c)
+  b &gt;= c = c &lt;= b
+</code></pre>
+
+<h3 id="derivedinstances">Derived instances</h3>
+
+<p>타입을 만들때 <em>built-in</em> 클래스의 인스턴스로 만들기 위해 <code>deriving</code> 키워드를 사용할 수 있습니다. 그래서 <code>Bool</code> 같은 경우 콘솔에 출력도 되고, 문자열에서 변경도 가능하고, 비교도 가능하죠.</p>
+
+<pre><code class="haskell">data Bool = False | True  
+          deriving (Eq, Ord, Show, Read)
+
+&gt; False == False
+--True
+
+&gt; False &lt; True
+-- True
+
+&gt; show False
+-- "False"
+
+&gt; read "False"::Bool
+--False
+</code></pre>
+
+<p>한가지 재밌는 사실은 <code>Bool</code> 의 <em>constructor</em> 중에서 <code>False</code> 가 <code>True</code> 보다 먼저 나오기 때문에 <code>False &lt; True</code> 라는 사실입니다.</p>
+
+<pre><code class="haskell">data Shape = Circle Float | Rect Float Float  
+data Maybe a = Nothing | Just a  
+</code></pre>
+
+<p>그리고 <code>Float</code> 가 <code>Eq</code> 의 인스턴스이기 때문에 결과적으로 이것을 파라미터로 가지는 <em>constructor</em> <code>Circle</code>, <code>Rect</code> 도 <code>Eq</code> 의 인스턴스입니다.</p>
+
+<pre><code class="haskell">&gt; Rect 1.0 4.0 &lt; Rect 2.0 3.0
+True
+
+&gt; Rect 1.0 4.0 &lt; Rect 1.0 3.0
+False  
+</code></pre>
+
+<p>마찬가지로 <code>Maybe a</code> 가 <code>Eq</code> 의 인스턴스가 되려면 <code>a</code> 가 <code>Eq</code> 의 인스턴스여야 합니다.</p>
+
+<h3 id="examples">Examples</h3>
+
+<p>몇개의 예제들입니다. 참고해보세요</p>
+
+<pre><code class="haskell">import Data.List  
+import Data.Char  
+import Unsafe.Coerce
+
+data Nat = Zero  
+         | Succ Nat
+         deriving Show
+
+nat2int :: Nat -&gt; Integer  
+nat2int = \n -&gt; genericLength [c | c &lt;- show n, c == 'S']
+
+int2nat 0 = Zero  
+int2nat n = Succ (int2nat (n-1))
+
+add :: Nat -&gt; Nat -&gt; Nat  
+add n Zero = n  
+add n (Succ m) = Succ (add m n)
+
+mult m Zero = Zero  
+mult m (Succ n) = add m (mult m n)
+
+-- tree
+data Tree1 = Leaf Integer  
+          | Node Tree Tree
+
+leaves (Leaf _) = 1  
+leaves (Node l r) = leaves l + leaves r  
+balanced :: Tree -&gt; Bool  
+balanced (Leaf _) = True  
+balanced (Node l r) = abs (leaves l - leaves r) &lt;= 1 &amp;&amp; balanced l &amp;&amp; balanced r
+
+balance :: [Integer] -&gt; Tree  
+halve xs = splitAt (length xs `div` 2) xs  
+balance [x] = Leaf x  
+balance xs = Node (balance ys) (balance zs)  
+  where (ys, zs) = halve xs
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <strong>DelftX FP 101x</strong> <br />
+(2) <em>Programming in Haskell</em> <br />
+(3) <a href='http://en.wikipedia.org/wiki/Binary_expression_tree' >Wiki - Binary Expression</a> <br />
+(4) <a href='http://imnt.tistory.com/' >http://imnt.tistory.com</a>  </p>]]></description><link>http://1ambda.github.io/haskell-intro6/</link><guid isPermaLink="false">51837e71-0662-427c-b231-b63c47edf5b7</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[type]]></category><category><![CDATA[constructor]]></category><category><![CDATA[class]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 25 Nov 2014 07:56:35 GMT</pubDate></item><item><title><![CDATA[Dijkstra, Heap, Red-Black Tree]]></title><description><![CDATA[<h3 id="dijkstrasshortestpathalgorithm">Dijkstra's Shortest-Path Algorithm</h3>
 
 <p><em>BFS</em> 는 <em>undirected graph</em> 에서 최단 경로를 찾지만, 이건 모든 <em>edge</em> 의 길이가 1일때만 그렇다. </p>
 
@@ -2489,7 +3729,7 @@ sequence (mx:mxs) = do x &lt;- mx
 
 <p><em>support</em> 와 마찬가지로 <code>0 ~ 1</code> 값을 가지며 높은 값일수록 더 연관성 있음을 의미한다.</p>
 
-<p><a href='http://latex.codecogs.com/gif.latex?confidence%28X%5CRightarrow%20Y%29%20%3D%20%7BN' >http://latex.codecogs.com/gif.latex?confidence%28X%5CRightarrow%20Y%29%20%3D%20%7BN</a><em>%7BX%20%5Ccup%20Y%7D%20%5Cover%20N</em>X%20%7D</p>
+<p><img src='http://latex.codecogs.com/gif.latex?confidence%28X%5CRightarrow%20Y%29%20%3D%20%7BN_%7BX%20%5Ccup%20Y%7D%20%5Cover%20N_X%20%7D'  alt="" /></p>
 
 <p>전체 <code>X</code> 인스턴스 중 <code>X</code>, <code>Y</code> 가 같이 있는 <em>instance</em> 의 비율을 의미한다.</p>
 
@@ -4473,978 +5713,4 @@ iterate' f = unfold (const False) id f -- const False is pred. always return Fal
 <h3 id="references">References</h3>
 
 <p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
-(2) <a href='http://functionspace.org/articles/19' >http://functionspace.org/articles/19</a></p>]]></description><link>http://1ambda.github.io/randomized-selection/</link><guid isPermaLink="false">fa03e2ba-fcfe-46a0-987a-4a8137bba43f</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[quick sort]]></category><category><![CDATA[selection]]></category><category><![CDATA[randomization]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 07 Nov 2014 08:17:47 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 5]]></title><description><![CDATA[<p>지난시간엔 왜 <em>neural network</em> 를 사용하는지 알아보았다. 데이터의 차수가 매우 클 때 <em>logistic regression</em> 으로는 성능이 떨어지거나 <em>overfitting</em> 의 문제가 발생할 수 있다는 사실을 알게 되었고, 마지막엔 <em>multi class</em> 문제를 어떻게 해결할지도 잠깐 논의 해봤다.</p>
-
-<p>이번에는 <em>back propagation</em>, <em>gradient checking</em> 에 대해서 배워보자.</p>
-
-<h3 id="costfunction">Cost Function</h3>
-
-<p>시작하기 전에 몇 가지 표기법을 정의하자.</p>
-
-<p><code>L</code> 을 레이어의 수, <code>s_l</code> 을 해당 레이어의 유닛 수라 하자. 그러면 <em>bianry classification</em> 에서 <code>S_L = 1</code> 이다. 아웃풋 레이어의 유닛 수를 더 간단히 <code>K</code> 라 하자. </p>
-
-<p>이제 <em>neural network</em> 에 대한 <em>cost function</em> 을 볼건데 먼저 <em>binary classification</em> 의 <em>regularized cost function</em> 식을 다시 보자.</p>
-
-<p><img src='http://3.bp.blogspot.com/-qNym-oCdMIg/Trd03YeslWI/AAAAAAAAApQ/GUfXiJ3vpUE/s400/Screen+shot+2011-11-07+at+3.03.55+AM.png'  alt="http://aimotion.blogspot.kr/" /></p>
-
-<p>지난 시간에 언급했듯이 신경망에서 각 단계는 <em>logistic regression</em> 과 같이 때문에 <code>L</code> 의 신경망은 <code>L-1</code> 의 <em>logistic regression</em> 의 식으로 변환할 수 있다.</p>
-
-<p><img src='http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20' [3].png" align="center" /></p>
-
-<p><del>이 식의 가장 큰 문제점은 이 식을 보면 당황스럽다는 것이다.</del></p>
-
-<p>뒷 부분 <em>regularization term</em> 은 이해하기 어렵지 않다. 신경망에선 <code>weight</code> (<em>theta</em>) 의 행렬이 이전 레이어와 다음 레이어의 유닛 수로 구성되므로 <code>(theta_ji^l)^2</code> 으로 모든 <code>theta^2</code> 를 구할 수 있다.</p>
-
-<p>여기서 <code>i = 1</code> 부터 시작하는 이유는 <em>logistic regression</em> 의 <em>regularization term</em> 에서 <code>theta_0</code> 을 포함하지 않는것과 같다.</p>
-
-<p>문제는 시그마 <code>K</code> 부분인데, <code>K</code> 가 이 신경망에서 클래스의 개수 라는 점을 고려하면 <code>y_k</code> 는 <code>[0; 0; 1; 0; ...]</code> 에서 <code>k</code> 번째 값, <code>(h0)_k</code> 또한 <code>k</code> 번째 <em>output unit</em> 의 값 이라 보면 된다.</p>
-
-<p>원래 <em>cost function</em> 정의 자체가 우리가 가진 <em>hypothesis</em> 로 구한 값과 본래의 값 <code>y</code> 와의 차이를 알려주는 것이므로 <code>K</code> 개의 클래스가 있을때는 각 클래스 위치의 값과 본래의 <em>k-dimensional vector</em> <code>y</code> 값의 해당 포지션의 차이를 모두 합한 값을 구하는 것이라 <em>neural network</em> 의 <em>cost function</em>  정의할 수 있다.</p>
-
-<h3 id="backpropagationalgorithm">Backpropagation: Algorithm</h3>
-
-<p><em>gradient computation</em> 을 위해서는 <em>cost function</em> 과 각 <code>l</code> 의 <code>i</code>, <code>j</code> 위치의 <code>theta</code> 에 대해서 <em>cost function</em> 의 <em>partial derivative</em> 를 구해야 한다. <del>네?</del></p>
-
-<p><img src='http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20' [7].png" align="center" />  </p>
-
-<p align="center">(<a href='http://www.holehouse.org/' >http://www.holehouse.org/</a>)</p>
-
-<p><img src='http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20' [8].png" alt="http://www.holehouse.org/mlclass/09<em>Neural</em>Networks<em>Learning</em>files/Image%20[8].png" title="" /></p>
-
-<p>다음과 같은 신경망이 있다고 하자, 그리고 <em>training set</em> 이 <code>(x, y)</code> 만 있다고 한다면 <em>cost function</em> 을 얻기 위해 다음의 <em>forward propagation</em> 을 진행하면 된다.</p>
-
-<p><img src='http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20' [9].png" alt="http://www.holehouse.org/mlclass/09<em>Neural</em>Networks<em>Learning</em>files/Image%20[9].png" title="" /></p>
-
-<p align="center">(<a href='http://www.holehouse.org/' >http://www.holehouse.org/</a>)</p>
-
-<p>그럼 <code>i, j, l</code> 에 대한 <em>cost function</em> 의 <em>partial derivative</em> 는 어떻게 구할까?</p>
-
-<p><strong>back propagation</strong> 을 이용하면 된다. 개요는 이렇다. 마지막 단계에서 신경망을 이용해 얻은 값 <code>a4</code> 와 실제 값인 <code>y</code> 의 차이를 <code>d4</code>(<em>delta</em>) 라 하자. 보면 알겠지만 이건 <em>error</em> 다. 이 에러값을 이용해 <code>d3</code> 즉 레이어 3 에서의 에러값을 구하고, 반복하면서 <code>d2</code> 까지 구한다. (<code>d1</code> 은 없다. <code>a1</code> 이 <em>input</em> 이기때문) </p>
-
-<p><em>forward propagation</em> 과 다르게 뒤에서 앞쪽으로 <em>error</em> 가 전파되기 때문에 <em>back propagation, BP</em> 라 부른다. BP 로 찾은 <code>d</code> 값을 이용하면 <em>partial derivative</em> 를 쉽게 구할 수 있다. <code>d3, d2</code> 를 구하는 방법은 아래와 같다. </p>
-
-<p><img src='http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20' [10].png" alt="http://www.holehouse.org/mlclass/09<em>Neural</em>Networks<em>Learning</em>files/Image%20[10].png" title="" /></p>
-
-<p align="center">(<a href='http://www.holehouse.org/' >http://www.holehouse.org/</a>)</p>
-
-<p>식에 대한 <em>intuition</em> 은 이전 레이어의 유닛의 <code>d</code> 를 얻기 위해서 다음 레이어의 모든 <code>d</code> 와 <code>theta</code> 의 곱을 이용한다는 사실이다. 이건 <em>FP</em> 에서 다음 단계의 유닛 <code>a</code> 를 얻기 위해 이전 단계의 모든 유닛과 <code>theta</code> 를 이용한다는 사실을 거꾸로 생각해보면 이해할 수 있다.</p>
-
-<p>이때 <em>sigmoid function</em> <code>g</code> 의 미분은 <code>g' = g(1-g)</code> 이고, <code>g'(z3)</code> 는 <code>a3 * (1 - a3)</code> 으로 고쳐쓸 수 있다.</p>
-
-<p>만약에 <em>regularization term</em> 을 무시한다면 다시 말해 <code>lambda = 0</code> 이면, <em>partial derivative</em> 는 <code>d</code> 를 이용해 쉽게 작성할 수 있다.  </p>
-
-<p>알고리즘을 좀 자세히 살펴보면 </p>
-
-<p><img src='http://my.csdn.net/uploads/201207/18/1342599882_9006.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>지금까지의 설명과 같이 먼저 <em>FP</em> 를 진행해서 각 레이어의 유닛 <code>a</code> 을 구하고, <em>BP</em> 를 진행한다.</p>
-
-<p>이 때 마지막 단계에서 삼각형(<em>large delta</em>, <code>Delta</code>) 에 이전 단계의 <code>DELTA</code> 와 <code>aj^(l)di(l+1)</code> 를 더하는데, 사실 <code>aj^(l)di(l+1)</code> 가 바로 <em>reulgarization term</em> 을 무시했을 때의 <em>partial derivative</em> 다.</p>
-
-<p>이렇게 모든 <code>DELTA</code> 를 구하고 나서 이제 <code>D</code> 에 <em>regularization term</em> 을 추가한다.</p>
-
-<p><img src='http://my.csdn.net/uploads/201207/19/1342669084_1797.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>이제 <em>regularization term</em> 까지 더한 <code>D</code> 가 바로 <em>partial derivative</em> 다. <del>너무 난해하다</del></p>
-
-<h3 id="backpropagationintuition">Back propagation: Intuition</h3>
-
-<p>조금 더 <em>Back propagation, BP</em> 를 살펴보자. <code>dj^(l-1)</code> 를 얻기 위해 <code>d^(l)</code> 과 <code>theta</code> 를 이용한다는 사실은 알겠다. 근데 <code>g'</code> 이라던지 이런건 도대체 어디서 나온걸까?</p>
-
-<p>처음으로 다시 돌아가면 <em>cost function</em> 에서 <em>training set</em> 이 1개라면 다시 말해 <code>m=1</code> 이고, <code>lambda=0</code> 이라면 <em>cost function</em> 은 <code>h(x), y</code> 에 의해 좌우된다. 결국 <em>squared error</em> 와 다를바 없다는 소리다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360304035_3064.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>결국 <code>dj^(l)</code> 은 <code>aj^(l)</code> 의 <em>error of cost</em> 다. 더 엄밀히 수학적으로 말하자면 <code>dj^(l)</code> 은 <code>cost(i)</code> 에 대한 <code>zj^(l)</code> 의 <em>partial derivative</em> 다. <code>zj^(l)</code> 이 변할때 <code>i</code> 에 대한 <em>cost</em> 가 얼마나 변하는지가 바로 <code>d</code> 란 이야기다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360304589_4715.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><code>d</code> 에 대한 더 엄밀한 수학적 증명은 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?' \delta_k%20=%20\frac{\partial%20J(\Theta)}{\partial%20z_k}%20=%20\frac{\partial%20J(\Theta)}{\partial%20a_k}\frac{\partial%20a_k}{\partial%20z_k}%20=%20\Theta_{k}\delta_{k+1}\cdot%20g%27(z_k)%20\\%20\Delta%20w_{ij}%20=%20\Delta%20w_{ij}%20+%20\frac{\partial%20J(\Theta)}{\partial%20w_{ij}}%20=%20\Delta%20w_{ij}%20+%20a_j^l%20\cdot%20\delta_k^(l+1)\\%20\frac{\partial%20J(\Theta)}{\partial%20w_{ij}}%20=%20\frac{\partial%20J(\Theta)}{\partial%20z_k}%20\cdot%20\frac{\partial%20z_k}{\partial%20w_{ij}}" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<h3 id="unrollingparameters">Unrolling Parameters</h3>
-
-<p><em>octave</em> 에서 <code>reshape</code> 함수를 이용해서 벡터를 매트릭스로 변환하는 방법을 알려준다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360306972_1270.png'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/08/1360307271_1026.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<h3 id="gradientchecking">Gradient Checking</h3>
-
-<p><em>BP</em> 를 이용해서 <em>neural network</em> 의 <em>cost function</em> 을 위한 <em>partial derivative</em> 를 구하는 방법을 배웠는데, 안타깝게도 이게 쉽게 구현할 수 있는것이 아니라서 버그가 생길 수 있다.</p>
-
-<p><em>gradient checking</em> 이란 방법을 이용하면 <em>FP, BP</em> 의 구현이 완벽함을 보일 수 있다. 배워보자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360308451_8919.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<p>말 그대로 기울기에 대한 근사치를 구해서 비교하여 검증하는 방법이다. <code>e</code>(엡실론) 이 매우 작다 하고, <code>0-e</code> 와 <code>0+e</code> 두 점 사이의 기울기를 구해 <em>gradient</em> 와 근사한 값을 구한다.</p>
-
-<p>우리는 <code>0</code> 가 하나가 아니기 때문에, 각각의 <code>0</code>(<code>theta</code>) 에 대해 모두 <em>gradient</em> 의 근사치를 구해야 한다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360308632_9597.png'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/08/1360308843_4503.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<p>마지막에서 <em>gradient checking</em> 을 이용해 구한 <code>gradApprox</code> 와 실제 <em>BP 를 이용해 구한 *graident</em> 인 <code>Dvec</code> 과 비슷한지 검사한다.</p>
-
-<p>그러나, 한가지 알아야할 사실이 있다. <em>gradient checking</em> 은 굉장히 비싸기 때문에 <code>Dvec</code> 과 비슷한 값을 구했는지 검사한 후에는 <em>gradient checking</em> 를 꺼야한다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360310625_8308.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<h3 id="randominitialization">Random Initialization</h3>
-
-<p><em>gradient desecnt</em> 를 위한 함수를 사용할때 <code>initialTheta</code> 를 줘야한다. 그냥 <code>zeros</code> 로 만들까? <em>neural network</em> 에서 모든 <code>theta</code> 가 <code>0</code> 으로 시작하면 모든 유닛의 값이 같아진다. 오류(<code>d</code>) 도 같고, <em>partial derivative</em> 의 값도 같으므로  다음 이터레이션에서도 같은 유닛은 같은 값을 가지고 이게 반복된다. </p>
-
-<p>결국 내가 가진 모든 히든 유닛이 같은 계산을 해 내고 있으므로, 하나의 <em>feature</em> 에 대한 극도로 중복된 연산을 볼 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/08/1360312970_4725.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<p><code>theta</code> 가 대칭이기 때문에 발생하는 문제인데 <em>symmetry breaking</em> 을 위해 <code>[-e, e]</code> 사이의 <code>theta</code> 를 랜덤으로 골라보자. 물론 이 <code>e</code> 는 <em>gradient checking</em> 에서의 <code>e</code> 와 관련이 없다.</p>
-
-<p><img src='http://my.csdn.net/uploads/201207/20/1342765672_2379.jpg'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p></p>
-
-<h3 id="puttingittoghther">Putting It Toghther</h3>
-
-<p>(1) <em>neural network</em> 를 훈련시킬 때 먼저 해야 할 일은 아키텍쳐를 고르는 일이다. </p>
-
-<p><em>output unit</em> 과 <em>input unit</em> 은 <em>class</em> 와 <em>feature</em> 수로 결정된다. 문제는 <em>hidden unit</em> 과 <em>hidden layer</em> 의 수다.</p>
-
-<p>기본적으로는 1개의 히든 레이어를 사용하거나, 1개 이상을 사용한다면 같은 수의 히든 유닛을 모든 히든 레이어에서 사용하는것이 대부분 계산 비용 면에서 낫다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/09/1360373142_6515.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<p>(2) <em>weights</em> 를 랜덤하게 초기화 한다. <br />
-(3) <em>forward propagation</em> <br />
-(4) <em>cost function</em> 을 구한다. <br />
-(5)  <em>partial derivatives</em> 구하기 위해 <em>back propagation</em>  </p>
-
-<p><em>BP</em> 를 할때는 <em>traning set</em> 의 수 <code>m</code> 번 만큼 루프를 돌면서 각 <code>(xi, yi)</code> 를 이용해 <em>FP</em>, <em>BP</em> 를 한다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/09/1360373729_4414.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<p>(6) <em>gradient checking</em> 을 이용해 얻은 근사치와 <em>partial derivatives</em> 를 비교한다. 값이 적당히 비슷하면 <em>gradient checking</em> 코드를 제거한다. <br />
-(7) <em>cost function</em> 을 최소화 하기 위해 <em>gradient descent</em> 나 <em>advanced optimization method</em> 를 사용한다.</p>
-
-<p>한 가지 알아야 할 사실은 <em>neural network</em> 의 <em>cost function</em> 은 <em>non-convex</em> 이기 때문에 <em>local optimum</em> 에서 멈출 수 있다. </p>
-
-<p>그런덷 문제가 굉장히 크다면 <em>gradient descent</em> 로 찾은 <em>local optimum</em> 도 충분히 좋은 값이라고 한다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/09/1360374039_7863.png'  alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p></p>
-
-<p>처음에 1장에서 봤던 언덕 그림이다.</p>
-
-<p><img src='http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5'  alt="" title="" /><p align="center">(<a href='http://mapository.tistory.com/59' >http://mapository.tistory.com/59</a>)</p></p>
-
-<p>여기서 <em>gradient descent</em> 가 하는 일은 언덕을 내려가는거고, <em>back propagation</em> 이 하는 일은 방향을 잡아주는 일이다.(<code>z</code> 가 변했을 때 <em>cost function</em> 값이 변하는 양인 오차 <code>d</code> 의 값이 적어지도록 방향을 잡아줌)</p>
-
-<p>그래서 신경망에서 <em>gradient descent</em> 를 사용한다 하더라도 적당히 좋은 로컬 옵티멈을 찾아준다는 훈훈한 이야기</p>
-
-<h3 id="autonomousdriving">Autonomous Driving</h3>
-
-<p>무인 운전을 신경망으로 어떻게 해결하는지를 보여준다. 미리 사람이 한번 운전한 경로(<code>y</code>) 를 바탕으로 학습하는데, 생각도 못해본 분야들에 이미  이런 기술들이 적용되어 있구나 싶다. <del>무려 1992년에 했던 실험이다</del></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://aimotion.blogspot.kr/' >http://aimotion.blogspot.kr/</a> <br />
-(2) <a href='http://www.holehouse.org/mlclass/09_Neural_Networks_Learning.html' >http://www.holehouse.org/mlclass/</a> <br />
-(3) <a href='http://blog.csdn.net/abcjennifer/article/details/7758797' >http://blog.csdn.net/abcjennifer/</a> <br />
-(4) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-5/</link><guid isPermaLink="false">b96b67f2-7881-4413-ac1c-b11177f200d2</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[neural network]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 06 Nov 2014 10:10:59 GMT</pubDate></item><item><title><![CDATA[Functional Programming in Scala, Chapter 7]]></title><description><![CDATA[<p>7주차에 걸친 대장정의 마지막이다. 이번시간에는 <em>stream</em>, <em>lazy evaluation</em> 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다.</p>
-
-<h3 id="structuralinductionontrees">Structural Induction on Trees</h3>
-
-<p>지난번엔 함수가 올바르게 동작함을 증명하기 위해 <em>induction</em> 을 사용했었는데 이번시간엔 <em>tree</em> 에 대해 <em>induction</em> 을 사용한다.</p>
-
-<p>모든 트리 <code>t</code> 에 대해서 속성 <code>P(t)</code> 가 참임을 증명하려면 </p>
-
-<p>(1) 먼저 트리의 모든 <em>leave</em> 에 대해 <code>P(1)</code> 임을 보인다. <br />
-(2) 서브트리 <code>s1, ..., s</code> 을 가진 <em>internal node</em> 에 대해 <code>P(s1) ^ ... ^ P(sn)</code> 임을 보인다.</p>
-
-<p>이제 몇 주 전에 만들었던 <code>IntSet</code> 을 증명해 보자.</p>
-
-<pre><code class="scala">  abstract class IntSet {
-    def incl(x: Int): IntSet
-    def contains(x: Int): Boolean
-  }
-
-  object Empty extends IntSet {
-    def contains(x: Int): Boolean = false
-    def incl(x: Int): IntSet = NonEmpty(x, Empty, Empty)
-  }
-
-  case class NonEmpty(elem: Int, left: IntSet, right: IntSet) extends IntSet {
-    def contains(x: Int): Boolean =
-      if (x &lt; elem) left contains x
-      else if (x &gt; elem) right contains x
-      else true
-
-    def incl(x: Int): IntSet =
-      if (x &lt; elem) NonEmpty(elem, left incl x, right)
-      else if (x &gt; elem) NonEmpty(elem, left, right incl x)
-      else this
-  }
-</code></pre>
-
-<p>구현에 대한 증명을 한다는건 구현이 포함하는 <em>law</em> 를 증명한다는 것을 의미한다. 예를들면</p>
-
-<pre><code class="scala">Empty contains x == false  
-(s incl x) contains x == true
-(s incl x) contains y == s contains y (if x != y)
-</code></pre>
-
-<p><code>(s incl x) contains x == true</code> 부터 증명하자. <del>쉬우니까</del></p>
-
-<p>(1) <em>base case (<code>P(1)</code>)</em> 은 <code>Empty</code> 를 <code>s</code> 에 집어넣으면 된다.   </p>
-
-<p><code>NonEmpty(x, Empty, Empty) contains x</code> 이므로 <code>true</code> 다.</p>
-
-<p>(2) <em>induction step: <code>s</code> 가 <code>NonEmpty(z, l, r)</code></em> 에 대해서 증명하자.</p>
-
-<p><code>NonEmpty(z, l, r) incl x contains x</code> 인데, <code>z == x</code>, <code>z &lt; x</code>, <code>z &gt; x</code> 인 3 가지 경우로 나눠서 참임을 보이면 된다. 뒤의 두개는 같은 증명이며 각각의 마지막 단계에서 <em>induction hypothesis</em> 를 사용하면 된다.</p>
-
-<pre><code class="scala">(NonEmpty(z, l, r) incl x) contians x // z &lt; x
-(NonEmpty(z, l, r incl x) contains x
-(r incl x) contians x // by def of NonEmpty.contains
-true // by induction hypothesis  
-</code></pre>
-
-<p><code>(xs incl y) contains x == xs contians x</code>, <code>(if x != y)</code> 를 증명해 보자.</p>
-
-<p>마찬가지로 <em>base case</em> 는 <code>Empty</code> 를 이용하면 된다. <code>y &lt; x</code>, <code>y &gt; x</code> 인 두 가지 경우로 나누어 참임을 보이자.</p>
-
-<p>다음으로 <em>inductive step</em> 인데, <code>xs</code> 가 <code>NonEmpty(z, l, r)</code> 일때다. 아래의 5가지 경우를 고려해야 한다. </p>
-
-<pre><code class="scala">z = x  
-z = y  
-z &lt; y &lt; x  
-y &lt; z &lt; x  
-y &lt; x &lt; z  
-</code></pre>
-
-<p>마찬가지로 <code>z = x, z = y</code> 도 <code>y &lt; x, y &gt; x</code> 로 나누어 풀자. 나머지 증명은</p>
-
-<pre><code class="scala">// z &lt; y &lt; x, to show NonEmpty(z, l, r) contains x
-NonEmpty(z, l, r incl y) contains x  
-(r incl y) contains x
-r contains x  // by induction hypothesis  
-NonEmpty(z, l, r) contains x // by def of NonEmpty.contains
-
-// y &lt; z &lt; x
-NonEmpty(z, l incl y, r) contains x  
-r contains x  
-NonEmpty(z, l, r) contains x // by def of NonEmpty.contains
-
-// y &lt; x &lt; z
-(NonEmpty(z, l, r) incl y) contains x
-NonEmpty(z, l incl y, r) contains x  
-(l incl y) contains x
-l contains x // by induction hypothesis  
-NonEmpty(z, l, r) contains x  
-</code></pre>
-
-<p>조금 더 어려운 증명으로 <code>union</code> 이 참임을 보일 수 있다.</p>
-
-<pre><code class="scala">(xs union ys) contains x = xs contains x || ys contains x
-</code></pre>
-
-<p>마찬가지로 <code>xs</code> 에 대해 <em>structural induction</em> 을 이용하면 된다.</p>
-
-<h3 id="streams">Streams</h3>
-
-<p>1000 부터 10000 사이에 있는 소수 중 두번 째 것을 찾는다 하자.</p>
-
-<pre><code class="scala">((1000 to 10000) filter isPrime)(1)
-</code></pre>
-
-<p>짧고 엘레강스 하지만 문제가 하나 있다. 1000 부터 10000 까지의 소수를 모두 찾은 뒤 2번째 원소에 접근하므로 성능 문제가 생긴다. 필요없는 나머지 소수도 같이 찾아버리는 것이다.</p>
-
-<p>그래서 스칼라에서는 <em>stream</em> 을 지원한다.</p>
-
-<blockquote>
-  <p>Avoid computing the tail of a sequence until it is needed for the evaluation result which might be never</p>
-</blockquote>
-
-<p>다시 말해서 <em>sequence</em> 에서 각 부분이 <em>evaluation (평가)</em> 되기 전까지 계산을 미루는 클래스를 스칼라에서는 <em>stream</em> 이란 이름으로 만들어 놨다.</p>
-
-<p>스트림은 리스트와 유사하지만 <em>tail</em> 부분이 <em>on-demand</em> 로 <em>evaluation</em> 된다.</p>
-
-<pre><code class="scala">&gt; Stream(1, 2, 3)
-scala.collection.immutable.Stream[Int] = Stream(1, ?)
-
-&gt; Stream.empty
-res1: scala.collection.immutable.Stream[Nothing] = Stream()
-
-&gt; (1 to 1000).toStream
-scala.collection.immutable.Stream[Int] = Stream(1, ?)
-
-&gt; val xs = Stream(1, Stream.cons(2,  Stream.empty))
-xs: scala.collection.immutable.Stream[Any] = Stream(1, ?)  
-</code></pre>
-
-<p>보면 알겠지만 진짜로 <em>tail</em> 부분이 <code>?</code> 로 되어있다.</p>
-
-<pre><code class="scala">  def streamRange(l: Int, h: Int): Stream[Int] = {
-    if (l &gt;= h) Stream.empty 
-    else Stream.cons(l, streamRange(l + 1, h))
-  }
-
-  def listRange(l:Int, h: Int): List[Int] = {
-    if (l &gt;= h) Nil
-    else l :: listRange(l + 1, h)
-  }
-</code></pre>
-
-<p>스트림을 만드는 <code>streamRange</code> 와 리스트를 만드는 <code>listRange</code> 를 보면 하는 생긴건 비슷하지만 실제로는 완전히 다른 일을 한다.</p>
-
-<p><code>listRange</code> 는 마지막 원소가 <code>Nil</code> 인 리스트를 만들지만 <code>streamRange</code> 는 두번 째 원소가 <code>?</code> 인 스트림을 만든다. </p>
-
-<p>다시 처음의 예제로 돌아와서 </p>
-
-<pre><code class="scala">((1000 to 10000).toStream filter isPrime)(1)
-</code></pre>
-
-<p><em>stream</em> 은 리스트와 관련된 메소드를 모두 사용할 수 있다. 하나만 빼고, 바로 <code>cons ::</code> 다.<code>Stream.cons</code> 는 <code>#::</code> 다.</p>
-
-<p>마찬가지로 <code>#::</code> 도 패턴으로 사용할 수 있다.</p>
-
-<p>스트림의 구현은 대부분 리스트와 비슷한데, <code>empty</code> 가 좀 다르다.  <code>Stream.empty</code> 처럼 스트림 내부에 정의되어있다.</p>
-
-<p>그리고 가장 중요한 차이점은 <code>Stream.cons</code> 의 파라미터다.</p>
-
-<pre><code class="scala">object Stream {  
-  def cons[T](hd: T, tl: =&gt; Stream[T]) = new Stream[T] {
-    def isEmpty = false
-    def head = hd
-    def tail = tl
-  }
-}
-</code></pre>
-
-<p><code>tl: =&gt; Stream[T]</code> 를 보면 알 수 있듯이 <code>tl</code> 은 <em>call-by-name</em> 이다. 따라서 바로 평가되지 않으며 사용하는 시점에 평가된다.</p>
-
-<p>이제 <code>filter</code> 의 구현을 좀 보자.</p>
-
-<pre><code class="scala">def filter(p: T =&gt; Boolean): Stream[T] =  
-  if (isEmpty) this
-  else if (p(head)) cons(head, tail.filter(p))
-  else tail.filter(p)
-}
-</code></pre>
-
-<p>여기서 중요한 부분이 <code>cons(head, tail.filter(p))</code> 다. 스트림의 <code>cons</code> 의 두번째 인자로 <code>tail.filter(p)</code> 를 넘겨주기 때문에 이 식의 평가는 나중에 호출될 때 이루어진다. 다시 말해 지금 당장은 <code>head</code> 만 <em>predicate <code>p</code></em> 가 적용된다는 뜻이다.</p>
-
-<p>따라서 <code>streamRange</code> 를 이렇게 수정하면 어떤 값이 출력될까?</p>
-
-<pre><code class="scala">  def streamRange(l: Int, h: Int): Stream[Int] = {
-    println("l: " + l)
-    if (l &gt;= h) Stream.empty 
-    else Stream.cons(l, streamRange(l + 1, h))
-  }
-
-streamRange(1, 10).take(3).toList  
-</code></pre>
-
-<p>답은 <code>1 2 3</code> 이다. <code>take(3)</code> 가 아니라 <code>toList</code> 때문에 그렇다. <code>take(3)</code> 는 여전히 <em>stream</em> 이다. 따라서 첫 번째 원소인 <code>1</code> 만 평가된 상태이며 리스트로 바꾸는 순간 <code>1, 2, 3</code> 이 모두 평가되어야 하므로 그때 출력된다.</p>
-
-<h3 id="lazyevaluation">Lazy Evaluation</h3>
-
-<p>이제 까지 본 <em>stream</em> 구현은 필요 없는 <code>tail</code> 부분을 계산하지 않게 해 주었지만 심각한 결함이 있다. <code>tail</code> 이 여러번 호출된다면 어떻게 될까? 매번 다시 계산되야 한다.</p>
-
-<p>그래서 첫 번째 <code>tail</code> 을 계산할 때 결과를 저장해 놓고, 그 다음부터는 재활용 하는 방법으로 이 문제를 해결해 보자. </p>
-
-<p>사실 이건 함수형 프로그래밍에서 함수는 매번 같은 결과를 반환한다는 원칙에도 부합한다.</p>
-
-<p>이걸 <em>lazy evaluation</em> 이라 부른다. 우리가 이제 까지 보아왔던 것은 <em>by-name evaluation</em> 이다. 필요할 때 평가하긴 하지만 매번 다시 계산해야하기 때문에 성능이 떨어진다. 그리고 <em>strict evaluation</em> 은 바로 평가되는 일반 <code>val</code> 변수라 보면 된다.</p>
-
-<p>하스켈은 <em>lazy evaluation</em> 이 디폴트지만 스칼라는 <em>strict evaluation</em> 이 기본이다.</p>
-
-<pre><code class="scala">lazy val x = expr  
-def x expr  
-</code></pre>
-
-<p>다음 두 식의 차이는 무엇일까? 둘 다 <em>on-demand</em> 로 평가되지만 <code>def</code> 는 매번 다시 계산되고 <code>lazy val</code> 은 처음의 계산을 재활용한다.</p>
-
-<p>그런 이유로 다음의 코드를 실행시키면</p>
-
-<pre><code class="scala">  def expr = {
-    val x = { println("x"); 1 }
-    lazy val y = { println("y"); 2 }
-    def z = { println("z"); 3 }
-    z + y + x + z + y + x
-  }
-
-  expr
-  // x
-  // z
-  // y
-  // z
-</code></pre>
-
-<p><code>xzyz</code> 가 출력된다.</p>
-
-<p>이제 <em>lazy evaluation</em> 을 <em>stream</em> 구현에 적용하자</p>
-
-<pre><code class="scala">object Stream {  
-  def cons[T](hd: T, tl: =&gt; Stream[T]) = new Stream[T] {
-    def isEmpty = false
-    def head = hd
-    lazy val tail = tl
-  }
-}
-</code></pre>
-
-<p>근데 이렇게 작성한 코드가 실제로 <em>on-demand</em> 로 평가되는지 어떻게 알까? <em>substitution model</em> 에 적용해보자.</p>
-
-<pre><code class="scala">(streamRange(1000, 10000) filter isPrime) apply 1
-
-// will be expanded 
-
-cons(1000, streamRange(1000 + 1, 10000)).filter(isPrime).apply(1)  
-</code></pre>
-
-<p>이제 <code>cons(1000, streamRange(1000 + 1, 10000))</code> 를 <code>C1</code> 이라 하자. </p>
-
-<pre><code class="scala">C1.filter(isPrime).apply(1)
-
-// same as
-(if (isPrirme(C1.head)) 
-  cons(C1.head, C1.tail.filter(isPrime))
-else C1.tail.filter(isPrime))  
-apply(1)  
-</code></pre>
-
-<p>이 때 <code>C1.head == 1000</code> 이므로 소수가 아니다. 따라서 이 식은</p>
-
-<pre><code class="scala">C1.tail.filter(isPrime).apply(1)
-
-// same as
-streamRange(1001, 10000).filter(isPrime).apply(1)  
-</code></pre>
-
-<p>이렇게 첫 번째 소수를 찾을 때 까지 반복된다. <code>cons(1009, streamRange(1009 + 1, 10000)</code> 을 <code>C2</code> 라 부르면 </p>
-
-<pre><code class="scala">C2.filter(isPrime).apply(1)
-
-// same as
-cons(1009, C2.tail.filter(isPrime)).apply(1)  
-</code></pre>
-
-<p>이 된다 스트림의 <code>apply</code> 가 다음과 같이 구현되어 있다고 하자.</p>
-
-<pre><code class="scala">def apply(n: Int): T =  
-  if (n == 0) head
-  else tail.apply(n - 1)
-</code></pre>
-
-<p>그럼 위 식은 이렇게 확장된다.</p>
-
-<pre><code class="scala">cons(1009, C2.tail.filter(isPrime)).tail.apply(0)
-
-
-// same as
-C2.tail.filter(isPrime).apply(0)
-
-// same as
-streamRange(1010, 10000)).filter(isPrime).apply(0)  
-</code></pre>
-
-<p>마찬가지로 다음 번 소수 <code>1013</code> 을 찾을 때 까지 <code>streamRange.tail</code> 와 <code>filter</code> 가 반복되며 식이 확장된다.</p>
-
-<pre><code class="scala">cons(1013, streamRange(1013 + 1, 10000)).filter(isPrime).apply(0)  
-</code></pre>
-
-<p>여기서 <code>cons(1013, streamRange(1013 + 1, 10000))</code> 를 <code>C3</code> 라 하자.</p>
-
-<pre><code class="scala">C3.filter(isPrime).apply(0)
-
-// same as
-cons(1013, C3.tail.filter(isPrime)).apply(0)  
-</code></pre>
-
-<p>따라서 <code>1013</code> 이 나온다. 결국 모든 과정에서 <em>stream</em> 의 <code>cons</code> 내부의 <code>tail</code> 은 <code>apply</code> 나 <code>filter</code> 이후에 호출됨을 알 수 있다.</p>
-
-<h3 id="computingwithinfinitesequences">Computing with Infinite Sequences</h3>
-
-<p>스트림에서 <em>tail</em> 이 필요할 때만 평가되기 때문에 <em>infinite stream</em> 을 만드는 것도 가능하다!</p>
-
-<pre><code class="scala">def from(n: Int): Stream[Int] = n #:: from(n + 1)
-
-
-val nats = from(0) // natural number  
-val m4s = nats map (_ * 4)
-
-(m4s take 3).toList // List(0, 4, 8)
-</code></pre>
-
-<p>이제 무한한 길이의 스트림을 만드는 방법을 배웠으니 이걸 이용해 우주에 존재하는 모든 소수를 포함하는 스트림을 만들어보자.</p>
-
-<p>고대의 소수 계산 방법인 <em>The Sieve of Eratosthenes</em> 를 이용한다. 2 부터 시작해서 하나씩 숫자를 증가 시키며 해당 숫자의 배수를 모두 제거하는 방식으로 소수를 찾는다. <del>무려 몇천년 뒤의 컴퓨터 기술을 고려하고  알고리즘을 구현한 갓 고대인들</del></p>
-
-<pre><code class="scala">def sieve(s: Stream[Int]): Stream[Int] =  
-  s.head #:: sieve(s.tail filter (_ % s.head != 0))
-
-val primes = sieve(from(2))  
-primes.take(4).toList  
-// List(2, 3, 5, 7)
-</code></pre>
-
-<p>다른 곳에도 좀 활용 해보자. 오래전에 <a href='http://1ambda.github.io/functional-programming-in-scala-chapter-1/' >1강</a> 에서 <em>뉴튼-랩슨</em> 법으로 제곱근을 구하는 함수를 작성한 적이 있었다. 그 때 제곱근의 값이 한 재귀 호출마다 특정 값 미만으로 변하는지 검사하는 <code>isGoodEnough</code> 함수를 작성했었고 이를 이용해서 제곱근 구하는 함수가 무한 재귀에 빠지지 않도록 했었다.</p>
-
-<p><em>lazy evaluation</em> 을 이용하면 계산을 미룰 수 있기 때문에 무한 재귀에 빠지는걸 막을 수 있다.</p>
-
-<pre><code class="scala">  def sqrtStream(x: Double): Stream[Double] = {
-    def improve(guess: Double) = (guess + x / guess) / 2
-    lazy val guesses: Stream[Double] = 1 #:: (guesses map improve)
-    guesses
-  }
-
-  sqrt(4).take(10).toList  
-</code></pre>
-
-<p>참고로 원리가 알고싶다면 <a href='https://www.google.co.kr/search?q=y+%3D+1%2Fx&amp;oq=y+%3D+1%2Fx&amp;aqs=chrome..69i57j69i65l2j69i64l2.3051j0j1&amp;sourceid=chrome&amp;es_sm=122&amp;ie=UTF-8' #newwindow=1&amp;q=y+%3D+(4%2Fx+%2B+x)+%2F+2">여기</a> 그래프를 한번 보라.</p>
-
-<p>물론 <code>sqrtStream</code> 은 <em>stream</em> 을 리턴하므로 좀 더 세밀한 값을 얻기 위해 <code>isGoodEnough</code> 를 활용할 수도 있다.</p>
-
-<pre><code class="scala">def isGoodEnough(x: Double, guess: Double) =  
-  math.abs((guess * guess - x ) / x) &lt; 0.0001
-
-sqrtStream(4).filter(isGoodEnough(_, 4)).take(10).toList  
-</code></pre>
-
-<p>그럼 이제 무한한 길이를 가진 컬렉션을 <code>map</code> 과 <code>filter</code> 두 가지 방법으로 구현할 수 있다는 사실을 알게 되었을 텐데, 어느게 더 빠를까?</p>
-
-<pre><code class="scala">val xs = from(1) map (_ * N)  
-val ys = from(1) filter (_ % N == 0)  
-</code></pre>
-
-<p>당연히 <code>map</code> 이 더 빠르다. 필터는 원소를 돌면서 필터링 하는거고, 맵은 바로 곱해서 값을 구한다. </p>
-
-<h3 id="thewaterpouringproblem">The Water Pouring Problem</h3>
-
-<p>기본적인 아이디어는 물컵에 대한 액션(<code>Move</code>)을 <code>Empty, Fill, Pour</code> 로, 액션을 수행할 상태를 <code>type State = Vector[Int]</code> 모델링한다.</p>
-
-<p>최초 상태 <code>initialState</code> 에 대해 가능한 모든 종류의 <code>Move</code> 를 미리 <code>moves</code> 에 만들어 놓고 (쉽게 만들 수 있다) 한번 씩 수행해 가면서 답이 있는지 검사한다. </p>
-
-<p>이 과정에서 만들어지는 <code>List[Move]</code> 를 <code>Path</code> 라 볼 수 있다. 쉽게 연산하기 위해(리스트의 컨싱을 이용) <code>Path</code> 의 <code>head</code> 가 제일 마지막 <code>Move</code> 라 하자. </p>
-
-<p>이러면 하나의 <code>Path</code> 는 우리가 가진 <code>initialState</code> 에 대해 <code>List[Move]</code> 를 적용해 마지막 상태를 알 수 있다. 이 것을 <code>endState</code> 함수로 구현한다. 이 때 마지막 <code>Move</code> 가 먼저 적용되야 하므로 <code>foldRight</code> 를 이용하면 <em>one-liner</em> 로 구현할 수 있다.</p>
-
-<p><code>Path</code> 가 가진 <code>List[Move]</code> 에 새로운 <code>Move</code> 를 컨싱으로 연결하는 <code>extend</code> 메소드를 만들고, 우리가 풀어야 할 문제의 답은 하나의 <code>Path</code> 이므로 출력을 위해 <code>toString</code> 도 오버라이드 하자.  </p>
-
-<p>하나의 <code>Path</code> 에서 <code>moves</code> 를 적용하면 다수의 <code>Path</code> 가 나온다. 이걸 <code>Paths: Set[Path]</code> 라 부르면 한 단계 한 단계 액션을 적용할 때마다 <code>Set[Path]</code> 가 생기는것이다. </p>
-
-<p>그런데, 재귀를 이용해 구현한다 해도 무한정 계산할 수 없으므로 스트림을 이용해 다음단계의 계산은 필요할때로 미룰 수 있다. <code>Set[Path]</code> 를 받아 <code>Stream[Set[Path]]</code> 를 돌려주는 <code>from</code> 함수를 만들자.</p>
-
-<pre><code class="scala">class Pouring(capacity: Vector[Int]) {
-
-  // State
-  type State = Vector[Int]
-  val initialState = capacity map { _ =&gt; 0 }
-
-  // Move
-  trait Move {
-    def change(s: State): State
-  }
-  case class Empty(glass: Int) extends Move {
-    def change(s: State) = s updated(glass, 0)
-  }
-  case class Fill(glass: Int) extends Move {
-    def change(s: State) = s updated(glass, capacity(glass))
-  }
-  case class Pour(from: Int, to: Int) extends Move {
-    def change(s: State) = {
-      val amount = s(from) min (capacity(to) - s(to))
-      s updated (from, s(from) - amount) updated (to, s(to) + amount)
-    }
-  }
-
-  val glasses = 0 until capacity.length
-
-  val moves =
-    (for (glass &lt;- glasses) yield Empty(glass)) ++
-    (for (glass &lt;- glasses) yield Fill(glass)) ++
-    (for (from &lt;- glasses; to &lt;- glasses if from != to) yield Pour(from, to))
-
-  // Path
-
-  class Path(history: List[Move]) {
-    def endState: State = (history foldRight initialState)(_ change _)
-    def extend(move: Move): Path = new Path(move :: history)
-    override def toString = "\n" + (history.reverse mkString " ") + "--&gt;" + endState
-  }
-
-  val initialPath = new Path(Nil)
-
-  def from(paths: Set[Path]): Stream[Set[Path]] = {
-    if (paths.isEmpty) Stream.empty
-    else {
-      val more = for {
-        path &lt;- paths
-        next &lt;- moves map path.extend
-      } yield next
-
-      paths #:: from(more)
-    }
-  }
-
-  val pathSets = from(Set(initialPath))
-
-  def solutions(target: Int): Stream[Path] = {
-    for {
-      pathSet &lt;- pathSets
-      path &lt;- pathSet
-      if path.endState contains target
-    } yield path
-  }
-}
-</code></pre>
-
-<p>그런데, 실제로 코드를 돌려보면 상당히 느리다.</p>
-
-<pre><code class="scala">val problem = new Pouring(Vector(4, 7, 8))  
-println(problem.solutions(6))  
-</code></pre>
-
-<p>이는 <code>from</code> 함수에서 <code>path</code> 를 <code>extend</code> 할 때 기존에 있던 <code>path</code>  도 포함하기 때문이다. 따라서 각 <code>path</code> 에서 <code>endState</code> 를 담은 <code>explored</code> 를 인자에 넘겨주고, 다시 넘겨 받으면</p>
-
-<pre><code class="scala">  def from(paths: Set[Path], explored: Set[State]): Stream[Set[Path]] = {
-    if (paths.isEmpty) Stream.empty
-    else {
-      val more = for {
-        path &lt;- paths
-        next &lt;- moves map path.extend
-      } yield next
-
-      paths #:: from(more, explored ++ (more map (_.endState)))
-    }
-  }
-
-  val pathSets = from(Set(initialPath), Set(initialState))
-</code></pre>
-
-<p>그리고 <code>endState</code> 도 재귀함수로서 자주 호출되는데 매번 다시 계산되야 하므로 변수로 저장하면</p>
-
-<pre><code class="scala">  class Path(history: List[Move], val endState: State) {
-    def extend(move: Move): Path = new Path(move :: history, move change endState)
-    override def toString = "\n" + (history.reverse mkString " ") + "--&gt;" + endState
-  }
-
-  val initialPath = new Path(Nil, initialState)
-</code></pre>
-
-<p><del>내 경우는 옵티마이징 한 결과가 더 느렸다;;</del></p>
-
-<p>여기서 중요한 아이디어 두개를 짚어보면</p>
-
-<p>(1) <code>List[Move]</code> 에서 앞쪽 <code>Move</code> 가 더 나중에 적용되는 것을 통해 매 <code>extend</code> 마다 전체 리스트를 순회할 필요가 없도록 하고 계산은 <code>foldRight</code> 를 이용해 쉽게 구현 <br />
-(2) 무한한 재귀를 <em>stream</em> 을 이용해 계산을 미룬 <code>solution</code> 이나 <code>from</code> 함수. </p>
-
-<p>특히 <code>solution</code> 은 <code>Stream[Path]</code> 를 리턴하도록 하여 첫번째 답까지 찾는 계산만 수행하는데, 이는 스트림에 <code>for-loop</code> 을 돌려도 스트림을 돌려준다는 사실을 알려준다. (<em>filter</em> 와 같다고 생각하면 편하다.*)</p>
-
-<pre><code class="scala">def ex =  
-  for(i &lt;- (1 to 10).toStream if i % 2 == 0)
-
-ex.take(3).toList // List(2, 4, 6)  
-</code></pre>
-
-<h3 id="coursesummary">Course Summary</h3>
-
-<p>이제 까지 우리가 다뤄 온 것들은</p>
-
-<ul>
-<li>higher-order functions</li>
-<li>case classes and pattern matching</li>
-<li>immutable collections</li>
-<li>absence of mutable state</li>
-<li>flexible evaluation strategies: <em>strict / lazy / by-name</em></li>
-</ul>
-
-<p>앞으로 다룰 것들은 (아마 <em>reactive programming</em> 에서)</p>
-
-<ul>
-<li><p><strong>functional programming and state</strong> <br />
-<em>what does it mean to have mutable state?</em> <br />
-<em>what changes if we add it?</em>  </p></li>
-<li><p><strong>parallelism</strong> <br />
-<em>how to exploit immutablility for parallel execution</em>  </p></li>
-<li><p><strong>DSL</strong> <br />
-<em>high-level libraries as embedded DSLs</em> <br />
-<em>interpretation techniques for external DSLs</em></p></li>
-</ul>
-
-<h3 id="references">References</h3>
-
-<p>2014-11-04, <strong>Functional Programming in Scala</strong>, Coursera</p>]]></description><link>http://1ambda.github.io/functional-programming-in-scala-chapter-7/</link><guid isPermaLink="false">2074b056-743c-46be-b701-5cda683aa29e</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[lazy evaluation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 05 Nov 2014 11:52:10 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 2]]></title><description><![CDATA[<p>이번시간엔 <em>list comprehension</em> 을 배웁니다. 수학에서는 집합의 원소를 이용해 새로운 집합을 만들 때 사용하는데요,</p>
-
-<blockquote>
-  <p>In mathematics, the <em>comprehension</em> notion can be used to construct new sets from old sets.</p>
-</blockquote>
-
-<p>비슷하게 하스켈에선 컬렉션에다 사용 할 수 있죠.</p>
-
-<blockquote>
-  <p>In Haskell, a similar comprehension notion can be used to construct new lists from old lists</p>
-</blockquote>
-
-<pre><code class="haskell">[x^2 | x &lt;- [1..3]] -- [1, 4, 9]
-</code></pre>
-
-<p>여기서 <code>x &lt;- [1..5]</code> 같은 <em>expression</em> 을 <strong>generator</strong> 라 부릅니다. <em>comprehension</em> 은 한 개 이상의 <em>generator</em> 를 가질 수 있습니다.</p>
-
-<pre><code class="haskell">[(x, y) | x &lt;- [1..3], y &lt;- [4..5]]
--- [(1,4),(1,5),(2,4),(2,5),(3,4),(3,5)]
-</code></pre>
-
-<p><em>generator</em> 의 순서를 바꿈으로써 생성되는 원소들의 순서도 바꿀 수 있습니다.</p>
-
-<pre><code class="haskell">[(x, y) | y &lt;- [4..5], x &lt;- [1..3]]
--- [(1,4),(2,4),(3,4),(1,5),(2,5),(3,5)]
-</code></pre>
-
-<p>보면 알겠지만 <em>multiple generators</em> 는 <em>nested loop</em> 와 비슷합니다. 뒤에 오는 <em>generator</em> 가 <em>inner-loop</em> 처럼 동작하죠.</p>
-
-<p>그럼 <code>j = i + 1</code> 과 같은 변수도 <em>generator</em> 로 표현 가능할까요? 그럼요!</p>
-
-<pre><code class="haskell">[(x, y) | x &lt;- [1..3], y &lt;- [x + 1]]
--- [(1,2),(2,3),(3,4)]
-</code></pre>
-
-<p>앞에 오는 <em>generator</em> 의 변수를 뒤에 오는 <em>generator</em> 에서 사용 할 수 있습니다. <em>dependant generator</em> 라 부릅니다.</p>
-
-<p>이제 <em>dependant generator</em> 를 이용해서 <code>concat</code> 함수를 만들어 봅시다.</p>
-
-<pre><code class="haskell">concat :: [[a]] -&gt; [a]  
-concat xss = [x | xs &lt;- xss, x &lt;- xs]
-
-concat [[1, 2, 3], [4, 5], [6]]  
--- [1,2,3,4,5,6]
-</code></pre>
-
-<h3 id="guards">Guards</h3>
-
-<p><em>generator</em> 에서 변수를 걸러내기 위해 <em>guards</em> 를 사용할 수 있습니다.</p>
-
-<pre><code class="haskell">[x | x &lt;- [1..10], even x]
--- [2, 4, 6, 8, 10]
-</code></pre>
-
-<p>약수를 골라내는 <code>factors</code> 함수도 만들어 볼 수 있겠죠? 그리고 소수를 판별하는 <code>prime</code> 도 같이 작성합시다.</p>
-
-<pre><code class="haskell">factors :: Int -&gt; [Int]  
-factors n = [x | x &lt;- [1..n], n `mod` x == 0]
-
-factors 17 -- [1,17]  
-factors 15 -- [1,3,5,15]
-
-prime :: Int -&gt; Bool  
-prime n = factors n == [1, n]  
-</code></pre>
-
-<p>소수를 찾아주는 <code>primes</code> 도 만들어볼까요?</p>
-
-<pre><code class="haskell">primes :: Int -&gt; [Int]  
-primes n = [x | x &lt;- [2..n], prime x]
-
-primes 40  
--- [2,3,5,7,11,13,17,19,23,29,31,37]
-</code></pre>
-
-<h3 id="zip">zip</h3>
-
-<p><code>zip</code> 함수는 두 개의 리스트를 받아 하나의 리스트를 만듭니다. </p>
-
-<pre><code class="haskell">-- zip :: [a] -&gt; [b] -&gt; [(a, b)]
-
-zip [1, 2, 3]  ['a', 'b', 'c', 'd']  
-[(1,'a'),(2,'b'),(3,'c')]
-</code></pre>
-
-<p><code>pairs</code> 와 같은 함수도 만들어 볼 수 있겠죠?</p>
-
-<pre><code class="haskell">pairs :: [a] -&gt; [(a, a)]  
-pairs xs = zip xs (tail xs)
-
-pairs [1, 2, 3, 4]  
--- [(1,2),(2,3),(3,4)]
-</code></pre>
-
-<p><code>pairs</code> 함수를 이용하면 하나의 리스트에 있는 한 원소와 그 다음 원소의 <em>pair</em> 를 구할 수 있으므로 리스트가 정렬되었는지를 검사하는 <code>sorted</code> 함수에 사용할 수 있습니다.</p>
-
-<pre><code class="haskell">sorted :: Ord a =&gt; [a] -&gt; Bool  
-sorted =  
-  and [x &lt;= y | (x, y) &lt;- paris xs]
-
-sorted [1, 2, 3, 4] --True  
-sorted [1, 2, 5, 3, 4] --False  
-</code></pre>
-
-<p>하스켈 리스트은 배열과는 달라서 인덱스가 없습니다. 리스트에서 주어진 값과 같은 값을 가지는 원소들의 리스트를 구하는 <code>positions</code> 함수를 <code>zip</code> 을 이용해 만들어봅시다.</p>
-
-<pre><code class="haskell">positions :: Eq a =&gt; a -&gt; [a] =&gt; [Int]  
-positions x xs =  
-  [i | (x', i) &lt;- zip xs [0..n], x == x']
-  where n = (length xs) - 1
-
-positions 0 [0, 1, 0, 1, 1, 1, 1, 0]  
--- [0,2,7]  
-</code></pre>
-
-<h3 id="stringcomprehensions">String comprehensions</h3>
-
-<p>하스켈에선 <em>스트링 (문자열)</em> 이 <em>캐릭터</em> 의 리스트라는 걸 지난시간에 이야기 했습니다. 따라서 리스트를 인자로 받는 <em>polymorphic</em> 함수에 스트링을 적용할 수 있습니다.</p>
-
-<pre><code class="haskell">zip "abc" [1, 2, 3] -- [('a',1),('b',2),('c',3)]  
-*Main&gt; take 3 "asdasd" -- "asd"
-length "adasd" -- 5  
-</code></pre>
-
-<p>그런 이유에서 <em>list comprehension</em> 을 이용해 스트링을 조작할 수 있습니다.</p>
-
-<pre><code class="haskell">import Data.Char
-
-lowers :: String -&gt; Int  
-lowers xs = length [x | x &lt;- xs, isLower x]  
-</code></pre>
-
-<h3 id="thecaesarcipher">The Caesar cipher</h3>
-
-<p><em>Caesar cipher (시저 암호)</em> 는 간단한 치환 암호입니다. 알파벳을 특정 자리수 만큼 밀어 인코딩된 새로운 문자열을 만들어 내지요.</p>
-
-<p>간단하게 구현하기 위해 모든 문자가 소문자라 가정하겠습니다. 알파벳은 26개이니 <code>a</code> 를 <code>0</code> 에 매핑하지요.</p>
-
-<pre><code class="haskell">import Data.Char
-
-let2int :: Char -&gt; Int  
-let2int c = ord c - ord 'a'
-
-int2let :: Int -&gt; Char  
-int2let n = chr(n + ord 'a')  
-</code></pre>
-
-<p><code>ord</code> 함수는 캐릭터를 받아 아스키 숫자로 변환하고 <code>chr</code> 함수는 그 반대의 역할을 합니다. 위 코드에서 <code>let2int</code> 는 캐릭터를 받아 <code>0</code> 부터 <code>25</code> 사이의 숫자로 변환합니다. 물론 <code>c</code> 가 소문자임을 가정합니다. <code>int2let</code> 은 반대의 역할을 하고요.</p>
-
-<p>이제 주어진 소문자 알파벳을 <code>n</code> 번 만큼 이동시키는 <code>shift</code> 함수를 만들어 봅시다.</p>
-
-<pre><code class="haskell">shift :: Int -&gt; Char -&gt; Char  
-shift n c | isLower c = int2let((let2int c + n) `mod` 26)  
-          | otherwise = c
-
-shift (-1) 'a' -- 'z'  
-shift (3) 'a' -- 'd'  
-</code></pre>
-
-<p>이제 <em>list comprehension</em> 을 이용해 <code>encode</code> 함수를 만들어 봅시다.</p>
-
-<pre><code class="haskell">encode :: Int -&gt; String -&gt; String  
-encode n cs = [shift n c | c &lt;- cs]
-
-encode 1 "abc"  
--- "bcd"
-encode 3 "haskell is fun"  
--- "kdvnhoo lv ixq"
-encode (-3) "kdvnhoo lv ixq"  
--- "haskell is fun"
-</code></pre>
-
-<h3 id="crackingtheciper">Cracking the Ciper</h3>
-
-<p>시저 암호를 깨는 방법은 다음과 같습니다.</p>
-
-<p>(1) 대량의 텍스트를 분석해 각 알파벳이 문장속에서 나올 확률을 가지고 있는 <em>frequency table</em> 을 준비합니다. <br />
-(2) 인코딩된 암호를 0 부터 25 까지 시프팅 해 가면서 우리가 준비한 <em>frequency table</em> 과 같은 비율을 가지고 있는지 검사합니다.</p>
-
-<p>물론 이 방법은 텍스트가 너무 짧거나, 아니면 우리가 가지고 있는 <em>frequency table</em> 과 다른 분포를 가지고 있는 텍스트를 복호화 하지 못합니다. </p>
-
-<p>일단 한번 해 봅시다.</p>
-
-<pre><code class="haskell">table :: [Float]  
-table = [8.2, 1.5, 2.8, 4.3, 12.7, 2.2, 2.0, 6.1, 7.0, 0.2, 0.8, 4.0, 2.4,  
-        6.7, 7.5, 1.9, 0.1, 6.0, 6.3, 9.1, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1]
-
-count :: Eq a =&gt; a -&gt; [a] -&gt; Int  
-count x xs = length [x' | x' &lt;- xs, x == x']
-
-lowers :: String -&gt; Int  
-lowers cs = length [c | c &lt;- cs, isLower c]
-
-percent :: Int -&gt; Int -&gt; Float  
-percent n m = (fromIntegral n / fromIntegral m) * 100
-
-freqs :: String -&gt; [Float]  
-freqs xs = [percent (count x xs) n | x &lt;- ['a'..'z']]  
-           where n = lowers xs
-</code></pre>
-
-<p><code>freqs</code> 함수는 주어진 문자열에 대해 <em>frequency table</em> 을 돌려줍니다. <code>count</code> 와 <code>percent</code>, <code>lowers</code> 함수를 이용해서 만들었습니다. </p>
-
-<p>이제 우리가 가지고 있는 <code>table</code> (<code>es</code>, <em>expected</em>) 과 인코딩된 텍스트를 시프팅 해서 얻은 <code>os</code> (<em>observed</em>) 테이블과의 차를 구하는 <code>chisqr</code> 함수를 만들겠습니다. 이 차이가 가장 작으면 <code>os</code> 가 우리가 가진 테이블에 가장 근접한 <em>frequency table</em> 을 가지는 테이블이라는 뜻이죠. </p>
-
-<p>카이 제곱 분포를 이용할 건데, 공식은 다음과 같습니다.</p>
-
-<p><img src='http://www.maritzresearch.com/maritzstats/HelpFiles/images/ChiSquareFormula-ChiSquareValue.bmp'  alt="http://www.maritzresearch.com/maritzstats/HelpFiles/Formula_ChiSquareTest.htm" /></p>
-
-<pre><code class="haskell">chisqr :: [Float] -&gt; [Float] -&gt; Float  
-chisqr os es = sum [(o- e)^2 / e | (o, e) &lt;- zip os es]  
-</code></pre>
-
-<p>하스켈 참 쉽죠? 이제 본래 인코딩 된 텍스트를 왼쪽으로 시프팅 하는 함수를 만들겁니다. <code>rotate</code> 라고 부릅시다. <code>take</code>, <code>drop</code> 을 이용하면</p>
-
-<pre><code class="haskell">rotate :: Int -&gt; [a] -&gt; [a]  
-rotate n xs = drop n xs ++ take n xs  
-</code></pre>
-
-<p>이제 인코딩된 텍스트에 대해 <code>[0..25]</code> 번 <code>rotate</code> 해 가며 <code>chisqr</code> 을 호출한 결과 중 가장 작은 값을 가지는 <code>factor</code> 를 찾아 <code>encode</code> 에  <code>-factor</code> 로 입력하면 암호가 깨집니다. 이런 일을 하는 함수를 <code>crack</code> 이라 부르고 작성해 봅시다.</p>
-
-<pre><code class="haskell">positions :: Eq a =&gt; a -&gt; [a] -&gt; [Int]  
-positions x xs = [i | (x', i) &lt;- zip xs [0..n], x' == x]  
-  where n = (length xs) - 1
-
-crack :: String -&gt; String  
-crack xs = encode (-factor) xs  
-  where
-    factor = head (positions (minimum chiTab) chiTab)
-    chiTab = [chisqr (rotate n table') table | n &lt;- [0..25]]
-    table' = freqs xs
-</code></pre>
-
-<p>이제 이 함수를 사용해 봅시다.</p>
-
-<pre><code class="haskell">crack "kdvnhoo lv ixq"  
--- "haskell is fun"
-crack "vscd mywzboroxcsyxs kbo esopev"  
--- "list comprehensioni are uieful"
-crack "vscd mywzboroxcsyxs kbo ecopev"  
--- "list comprehensioni are useful"
-
-crack (encode 3 "haskell")  
--- "piasmtt"
-crack (encode 3 "boxing wizards jump quickly")  
--- "wjsdib rduvmyn ephk lpdxfgt"
-</code></pre>
-
-<p>아래 두개의 예제는 복호화의 실패한 경우를 보여줍니다. 인코딩된 텍스트의 테이블이 우리가 가진 테이블과 많이 다르기 때문이지요.</p>
-
-<h3 id="exercise">Exercise</h3>
-
-<p>두개의 <em>generator</em> 를 가진 하나의 <em>comprehension</em> 은 하나의 <em>generator</em> 를 가진 두개 이상의 <em>comprehension</em> 으로 작성할 수 있습니다. 다음의 두 라인은 동일합니다.</p>
-
-<pre><code class="haskell">[(x, y) | x &lt;- [1, 2, 3], y &lt;- [4, 5, 6]]
-
-concat [[(x, y) | y &lt;- [4, 5, 6]] | x &lt;- [1, 2, 3]]  
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br />
-(2) Chapter 5, Programming in haskell <br />
-(3) <a href='http://ko.wikipedia.org/wiki/%EC%B9%B4%EC%9D%B4%EC%82%AC%EB%A5%B4_%EC%95%94%ED%98%B8' ><em>Caesar cipher</em></a> <br />
-(4) <a href='http://www.maritzresearch.com/maritzstats/HelpFiles/Formula_ChiSquareTest.htm' >http://www.maritzresearch.com</a></p>]]></description><link>http://1ambda.github.io/haskell-intro2/</link><guid isPermaLink="false">6893f28c-dffc-4c58-8195-730189d88711</guid><category><![CDATA[programming language]]></category><category><![CDATA[functional programming]]></category><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 04 Nov 2014 16:26:11 GMT</pubDate></item></channel></rss>
+(2) <a href='http://functionspace.org/articles/19' >http://functionspace.org/articles/19</a></p>]]></description><link>http://1ambda.github.io/randomized-selection/</link><guid isPermaLink="false">fa03e2ba-fcfe-46a0-987a-4a8137bba43f</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[quick sort]]></category><category><![CDATA[selection]]></category><category><![CDATA[randomization]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 07 Nov 2014 08:17:47 GMT</pubDate></item></channel></rss>
