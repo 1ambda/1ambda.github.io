@@ -1,5 +1,445 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 30 Nov 2014 15:03:18 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 8]]></title><description><![CDATA[<p>이번시간에는 <em>PCA</em> 와 <em>clustering</em> 을 배운다. <em>PCA</em> 가 어떻게 돌아가는지 알기위해 <em>covariance matrix</em>, <em>eigen decomposition</em>, <em>singular value decomposition</em> 등의 배경지식도 익혀보자. <del>K-means 는 거들뿐</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 01 Dec 2014 14:47:33 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Hash Table, Universal Hashing, Bloom filters]]></title><description><![CDATA[<h3 id="hashtable">Hash Table</h3>
+
+<p>해시 테이블의 연산은 <em>key</em> 를 이용해 이런 작업들을 한다.</p>
+
+<p>(1) <strong>insert:</strong> add new record <br />
+(2) <strong>delete:</strong> delete existing record <br />
+(2) <strong>lookup:</strong> check for a particular record</p>
+
+<p>가끔 사람들이 <em>dictionary</em> 라 부르기도 하는데, 해시테이블은 알파벳 순서같은 특정 <em>order</em> 로 데이터를 저장하진 않는다.</p>
+
+<p>이 3가지 연산이 거의 <code>O(1)</code> 라 보면 된다. 물론 이건 해시테이블을 잘 설계 했을때다. 슬프게도, 해시테이블은 <em>잘못</em> 구현하기 쉽다. 해시테이블이 <code>O(1)</code> 성능이 나오려면</p>
+
+<ul>
+<li>properly implemented</li>
+<li>non-pathological data</li>
+</ul>
+
+<p>여기서 <em>non-pathological</em> 이란 <em>collision</em> 을 만들지 않는 데이터를 말한다.</p>
+
+<h4 id="application">Application</h4>
+
+<p>(1) 주어진 <em>object stream</em> 을 <em>de-duplication</em> 하기 위해 해시테이블을 쓸 수 있다. 해시테이블에 들어오는 객체를 <em>lookup</em> 해 보고 없으면 채워 넣고, 있으면 무시한다.</p>
+
+<p>(2) <em>2-Sum Problem</em> 에도 해시테이블을 쓸 수 있다. <em>2-Sum</em> 을 푸는 <code>O(n logn)</code> 방법은, (<code>x + y = t</code>)</p>
+
+<p>먼저 정렬 후 <code>A</code> 의 원소 <code>x</code> 에 대해 <code>t - x</code> 를 이진탐색하는 방법이다. 이렇게 하면 <code>O(n logn)</code> 으로 해결할 수 있다.</p>
+
+<p>해시테이블을 이용하면 정렬 할 필요도 없고, 이진탐색 대신 <em>lookup</em> 으로 <code>O(1)</code> 시간에 원소를 검색할 수 있으므로 더 빨라진다.     </p>
+
+<p>해시 테이블을 만드는데 <code>O(n)</code>, 탐색에 <code>O(1 * n)</code> 에서, <code>O(n)</code> 만에 <em>2-Sum</em> 을 해결할 수 있다.</p>
+
+<p>(3) 이외에도</p>
+
+<ul>
+<li>symbol tables in compilers</li>
+<li>blocking network traffic</li>
+<li>search algorithm (e.g <strong>game tree exploration</strong>)</li>
+</ul>
+
+<h3 id="hashtableimplementation">Hash Table Implementation</h3>
+
+<p>모든 집합을 의미하는 <em>universe <code>u</code></em> 에 대해 a reasonable size* 의 <em>evolving set</em> <code>s &lt;= u</code>* 을 유지하면 된다.</p>
+
+<ul>
+<li>배열로 구현할 경우 <em>lookup</em> 은 <code>O(1)</code> 이지만 메모리가 <code>O(|u|)</code> 다.</li>
+<li>리스트로 구현할 경우 <code>O(|s|)</code> 의 메모리를 차지하지만, <em>lookup</em> 이 <code>O(|s|)</code> 다.</li>
+</ul>
+
+<p>더 나은 방법은 없을까?</p>
+
+<p>(1) <em>bucket size</em> 인 <code>n ~ |s|</code> 인 <code>n</code> 을 고른다. 이 때 <code>|s|</code> 는 그렇게 많이 안 변한다고 가정하자. <br />
+(2) 그 후 <em>hash function</em> <code>h: u -&gt; {0, 1, ..., n-1}</code> 인 <code>h</code> 를 고르면 된다. <br />
+(3) 길이 <code>n</code> 의 배열 <code>A</code> 에, <code>A[h(x)]</code> 위치에 <code>x</code> 를 저장하면 된다.</p>
+
+<p>이제 충돌 문제를 고민해 보자. 한 방에 <code>23</code> 명만 있어도, 생일이 같은 2명이 존재할 확률이 <code>50%</code> 가 넘으므로, </p>
+
+<p><code>n</code> 에 비해 그리 크지 않은 <em>input size</em> 에 대해서도 충돌이 발생할 확률이 꽤 높다.</p>
+
+<blockquote>
+  <p><strong>Collision:</strong> dinstinct <code>x, y in u</code> such that <code>h(x) = h(y)</code></p>
+</blockquote>
+
+<h3 id="resolvingcollisions">Resolving Collisions</h3>
+
+<p>충돌을 해결하기 위한 첫 번째 방법은</p>
+
+<p>(1) <strong>Chaining:</strong></p>
+
+<p><code>A[h(x)]</code> 을 리스토로 만들어 충돌이 발생하는 원소를 리스트에 저장한다.</p>
+
+<p>(2) <strong>Open Addressing:</strong></p>
+
+<p>충돌이 발생하면 새로운 <em>bucket</em> 을 찾도록 해 하나의 <em>bucket</em> 당 하나의 원소만 들어갈 수 있도록 한다.</p>
+
+<blockquote>
+  <p>hash function now specifies probe sequence <code>h_1(x), h_2(x), ...</code> keep trying til find open slot.</p>
+</blockquote>
+
+<p><br/></p>
+
+<p><em>open addressing</em> 에서는 <em>probing, 탐사</em> 방식을 통해 비어있는 <em>bucket</em> 을 찾는다. 몇 가지 방법이 있는데</p>
+
+<ul>
+<li><strong>linear probing:</strong> 순차적으로 탐색한다. 캐쉬 히트는 높으나, 클러스터링에 취약하다.</li>
+<li><strong>double hashing probing:</strong> 해쉬 함수 충돌이 발생하면 2차 해쉬 함수를 이용한다. 계산 비용이 비싸고, 캐쉬효율도 낮지만, 클러스터링에 영향을 받지 않는다.</li>
+<li><strong>quadratic probing:</strong> 2차 함수를 이용해서 탐색을 위치를 찾는데, 캐싱과 클러스터링에서 두 방식의 중간정도의 성능을 보여준다.</li>
+</ul>
+
+<h4 id="clustering">Clustering</h4>
+
+<p><em>key <code>k</code></em> 에 대한 최초의 해쉬 함수 값 <code>h(k)</code> <em>home position</em> 이라 부르는데, 같은 <em>home position</em> 를 갖는 <em>key</em> 들을 모아 <em>cluster</em> 라 부른다. <em>cluster</em> 가 커지면 커질수록, 클러스터의 중간을 <em>home position</em> 으로 하는 키가 들어올 확률도 높아지고, 인접한 클러스터와 합쳐지는 속도도 빨라진다.</p>
+
+<p>결국 <em>linear probing</em> 의 경우 <em>load factor</em> 가 높아질수록 해쉬 테이블의 성능이 <code>O(n)</code> 으로 떨어진다.</p>
+
+<h4 id="chainingvsopenaddessing">Chaining vs Open-addessing</h4>
+
+<p><a href='http://sweeper.egloos.com/viewer/925740' >여기</a>를 인용하면</p>
+
+<p><em>chaining</em> 은 <em>open addressing</em> 에 비해 다음의 장점을 가진다.</p>
+
+<blockquote>
+  <p>삭제 작업이 간단하다. 삭제 작업이 빈번하다면 <em>open addressing</em> 보다는 <em>chaining</em> 이 낫다.</p>
+  
+  <p><strong>chaining</strong> 은 클러스터링에 거의 영향을 받지 않아 충돌의 최소화만 고려하면 된다. 반면 <strong>open addressing</strong> 은 클러스터링까지 피해야 하므로 해쉬함수를 구현하기가 쉽지 않다.</p>
+  
+  <p><em>load factor</em> 가 높아져도 성능 저하가 선형적이다. 아래 그림에서 볼 수 있듯이, <em>open-addressing</em> 방법처럼 급격히 <em>lookup time</em> 이 늘지 않는다. 따라서 테이블 확장을 상당히 늦출 수 있다.</p>
+</blockquote>
+
+<p><img src='http://pds5.egloos.com/pds/200702/14/32/d0014632_11023351.jpg'  alt="" /></p>
+
+<blockquote>
+  <p>데이터의 크기가 <em>5 words and more</em> 이면, <em>open addressing</em> 보다 메모리 사용량이 적다. </p>
+</blockquote>
+
+<p>반면 <em>open addressing</em> 은</p>
+
+<blockquote>
+  <p>어떠한 포인터도 저장할 필요가 없고, 테이블 외부에 추가적인 공간이 필요 없으므로 메모리 효율이 높다.</p>
+  
+  <p>특히 <em>linear probing</em> 에서 뛰어난 <em>locality</em> 때문에 데이터가 캐쉬라인을 채울 정도로 크지 않다면 좋은 성능을 낼 수 있다.</p>
+</blockquote>
+
+<p>정리하자면,</p>
+
+<blockquote>
+  <p>open-addressing 방식은 테이블에 모두 저장될 수 있고 캐쉬 라인에 적합할 수 있을 정도로 데이터의 크기가 작을수록 성능이 더 좋아진다. 메모리 비용을 아끼려면, 이 방법이 적합하다.</p>
+  
+  <p>반면 테이블의 높은 load factor가 예상되거나, 데이터가 크거나, 데이터의 길이가 가변일 때 chained 해쉬 테이블은 open-addressing 방식보다 적어도 동등하거나 훨씬 더 뛰어난 성능을 보인다. 삭제가 중요하고, 빈번한 연산이라면 <em>chianing</em> 이 더 낫다.</p>
+</blockquote>
+
+<h3 id="whatmakesagoodhashfunction">What Makes a Good Hash Function?</h3>
+
+<p><em>chaining</em> 을 생각해 보자. </p>
+
+<ul>
+<li><strong>insert:</strong> <code>O(1)</code></li>
+<li><strong>lookup, delete:</strong> <code>O(list length in the bucket)</code></li>
+</ul>
+
+<p>이때 하나의 버켓에 들어있는 <em>list length</em> 는 <code>m/n</code> 부터 <code>m</code> 까지 일 수 있기 때문에 (<code>m</code> 개의 오브젝트에 대해), 해쉬 함수에 따라 성능이 정말 달라진다.</p>
+
+<p>이로부터 좋은 해쉬함수의 기준을 알 수 있다.</p>
+
+<blockquote>
+  <ol>
+  <li>Should lead to good performance => <em>"spread data out"</em> <br />
+  (gold standard: completely random hashing)</li>
+  <li>Should be easy to store / very fast to evaluate  </li>
+  </ol>
+</blockquote>
+
+<h3 id="quickanddirtyhashfunction">Quick and Dirty Hash Function</h3>
+
+<p>좋은 해쉬함수를 설계할 수 있다면 좋겠지만, 시간이 없을때 객체 <code>u</code> 를 받아 정수 <code>n</code> 으로 만들어 <em>bucket</em> 을 찾는 해쉬함수를 이렇게 디자인할 수 있다.</p>
+
+<ul>
+<li><code>u -&gt; n</code>: <em>hash code</em></li>
+<li><code>n -&gt; bucket</code>: <em>compression function</em> using <code>mod</code></li>
+</ul>
+
+<p>여기서 <code>n</code> 은 어떻게 고를까? </p>
+
+<p>(1) 우리가 <em>compression function</em> 으로 <code>mod</code> 를 사용하기 때문에 소수여야 한다. 소수가 아니라면, <code>n</code> 으로 나누어지는 모든 수는 <code>mod n == 0</code> 이 되어, 같은 <em>bucket</em> 에 할당될 것이다. 물론 이 수는 너무 커서는 안되고, 객체를 담을 수 있을만한 적당한 숫자여야 한다.</p>
+
+<p>(2) <em>input data</em> 의 패턴을 고려해 <code>n</code> 을 정해야 한다. 예를 들어 <em>memory location</em> 이 4의 배수일 때, 테이블 사이즈 <code>n</code> 을 <code>2^j</code> 로 정해버리면, <code>mod n == 0</code> 이 되는 경우가 많아 <em>empty bucket</em> 이 많이 생길 것이다.</p>
+
+<p>그리고 <code>n</code> 을 <code>2^k, 10^k</code> 로 정해버리는 경우 <code>mod</code> 연산이 시프팅으로 쉽게 구현되는데 이는 나머지 데이터를 고려하지 않고 일부의 데이터만으로 버킷을 찾아가므로 별로 좋은 선택이 아니다.</p>
+
+<h3 id="loadfactor">Load Factor</h3>
+
+<p><em>evenly spread out</em> 에 대해 고민해 보았으니, 이제 <em>non-pathological</em> 을 생각해 보자.</p>
+
+<p>용어부터 정의하고 가면 <em>load factor</em> 는 해시테이블에 들어있는 오브젝트 수를, 버킷 수로 나눈 것이다.</p>
+
+<p><em>open addressing</em> 의 경우에는 <em>load factor</em> 가 1보다 클 수 없지만 <em>chaining</em> 은 가능하다.</p>
+
+<p>(1) <em>load factor</em> <code>a = O(1)</code> 이어야 연산이 <em>constant time</em> 이다. <br />
+(2) <em>open addressing</em> 이라면 <code>x &lt;&lt; 1</code> 이어야 한다.</p>
+
+<p>따라서 해시 테이블의 성능을 위해서는 <em>load factor</em> 를 조절해야 한다.</p>
+
+<h3 id="pathologicaldatasets">Pathological Data Sets</h3>
+
+<p>모든 데이터에 대해 <em>evenly spread out</em> 할 수 있는 해시함수가 있다면 좋겠지만, <strong>그런 해시 함수는 없다.</strong></p>
+
+<p>모든 해시 함수는 자신만의 <em>pathological data set</em> 이 있다. 이는 쉽게 보일 수 있는데, <em>universe <code>u</code></em> 와 대해 버켓 수 <code>n</code> 에 대해 해시함수 <code>h: u -&gt; {0, 1, ..., n-1}</code> 이 있다고 하자.</p>
+
+<p>비둘기 집 원리에 의해 모든 <em>bucket</em> 은 적어도 <code>|u|/n</code> 개의 데이터를 담고 있다. 따라서 <code>u</code> 중에서 어느 한 <em>bucket</em> 에만 담을 수 있는 데이터 셋을 고르면, 그것이 바로 <em>pathological data set</em> 이다.</p>
+
+<p>이런 <em>pathological data set</em> 은 <em>service attack</em> 에 쓰이기도 한다. 따라서 오픈소스라면 리버스엔지니어링 하기 쉽지 않게끔 해시함수를 설계하는 것도 필요하다.</p>
+
+<p>그럼 모든 해시 함수가 이런 데이터 셋을 가지고 있고, 심지어 공격에도 이용할 수 있다면 어떻게 해시함수를 설계해야 이런 문제를 조금이나마 피할 수 있을까?</p>
+
+<p>(1) <strong>use a cryptographic hash function</strong> (e.g., <strong>SHA-2</strong>)  </p>
+
+<p>infeasible to reverse engineer a pathological data set</p>
+
+<p>(2) <strong>use randomization</strong>  </p>
+
+<p>design a family <code>H</code> of hash funcitons such that data sets <code>S</code>, "almost all" functions <code>h in H</code> spread <code>S</code> out "pretty evenly" (compare to quicksort guarantee)</p>
+
+<p>이제 <em>universal hashing</em> 이 무엇인지 알아보자</p>
+
+<h3 id="universalhashingfunctions">Universal Hashing Functions</h3>
+
+<blockquote>
+  <p>Let <code>H</code> be a set of hash functions from <code>u</code> to <code>{0, 1, ..., n-1}</code></p>
+  
+  <p><code>H</code> is <strong>universal</strong> if and only if,</p>
+  
+  <p>for all <code>x, y in u (x != y)</code> <code>P[h(x) = h(y)] &lt;= 1/n</code> when <code>h</code> is chosen unifomly at random from <code>H</code> where <code>n</code> is the number of buckets. </p>
+</blockquote>
+
+<h4 id="hashingipaddresses">Hashing IP Addresses</h4>
+
+<p><em>IP Address</em> 를 예로 들어 설명해보면 <em>IP</em> 를 <code>(x1, x2, x3, x4)</code> (<code>xi = 0 to 255</code>), <em>bucket</em> 수 <code>n</code> 을 소수라 하자.</p>
+
+<p><em>tuple <code>a = (a1, a2, a3, a4), where ai in {0, ..., n-1}</code></em> 에 대해서</p>
+
+<p><code>h_a</code> 를 이렇게 정의하자. 이러면 <code>h_a</code> 는 <code>n^4</code> 개 존재한다.</p>
+
+<p><code>h_a(x1, x2, x3, x4) = (a1x2 + a2x2 + a3x3 + a4x4) mod n</code></p>
+
+<p>이제 <code>h_a</code> 의 집합 <code>H</code> 는 <em>universal</em> 이다.</p>
+
+<p><code>H = { h_a | a1, a2, a3, a4 in {0, 1, ..., n-1} }</code></p>
+
+<h4 id="proof">Proof</h4>
+
+<p>서로 다른 <em>IP</em> <code>(x1, x2, x3, x4), (y1, y2, y3, y4)</code> 를 생각해보자.</p>
+
+<p>만약 <code>x4 != y4</code> 라면, 충돌이 일어날 확률은 얼마일까? 충돌에 대한 식을 좀 정리하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?collision%5C%20means%20%5C%5C%20%5C%5C%20%28a_1x_1%20&plus;%20a_2x_2%20&plus;%20a_3x_3%20&plus;%20a_4x_4%29%20%5Cmod%20n%20%3D%20%28a_1y_1%20&plus;%20a_2y_2%20&plus;%20a_3y_3%20&plus;%20a_4y_4%29%20%5Cmod%20n%20%5C%5C%20%5C%5C%20so%2C%20%5C%5C%20%5C%5C%20a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n'  alt="" /></p>
+
+<p>이 때 <code>a1, a2, a3</code> 를 고정하면 얼마나 많은 <code>a4</code> 에 대해 아래 식이 성립할까? </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n'  alt="" /></p>
+
+<p><code>xi, yi, a1, a2, a3</code> 가 <em>fixed</em> 기 때문에 우변은 <code>{0, ..., n-1}</code> 사이의 숫자고 <code>a4</code> 만 랜덤이다.</p>
+
+<p>이 때</p>
+
+<ul>
+<li><code>x4 != y4</code> 이므로 <code>x4 - y4 != 0</code> 이다</li>
+<li><code>n</code> 이 <code>ai</code> 의 최대값보다 큰수이면서 동시에 소수인데다가</li>
+<li><code>a4</code> 가 <em>uniform at random</em> 이기 때문에</li>
+</ul>
+
+<blockquote>
+  <p>left-hand side equally likely to be any of <code>{0, 1, ..., n-1}</code>.</p>
+</blockquote>
+
+<p>따라서 좌변이 특정 숫자인 우변과 같을 확률은 <code>1/n</code> 이다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P%5Bh_a%28x%29%20%3D%20h_a%28y%29%5D%20%3D%20%7B1%20%5Cover%20n%7D'  alt="" /></p>
+
+<h3 id="analysisofchaining">Analysis of Chaining</h3>
+
+<p><em>universal hash functions</em> 의 정의를 한번 더 보고 넘어가면,</p>
+
+<p><code>H</code> 가 해시함수 <code>u -&gt; {0, ..., n-1}</code> 의 집합일때 <code>H</code> 가 다음을 만족하면 <em>universal</em> 하다.</p>
+
+<ul>
+<li><code>x != y</code> 인 <code>u</code> 내의 <code>x, y</code> 에 대해 충돌이 일어날 확률 <code>P &lt;= 1/n</code> 이고</li>
+<li><code>H</code> 내에서 <code>h</code> 가 <em>uniformly at random</em> 하게 선택될때</li>
+</ul>
+
+<p>만약 해시 테이블이 <em>chaining</em> 을 이용해 구현되었을때, <em>universal family</em> <code>H</code> 로부터 해시함수 <code>h</code> 가 <em>uniformly a random</em> 하게 선택되면 모든 연산이 <code>O(1)</code> 이다.</p>
+
+<p>그리고, <code>|S| = O(n)</code> 다시 말해 <em>load factor</em> <code>alpha = |S| / n = O(1)</code> 임을, 해시 함수를 평가하는데 <code>O(1)</code> 임을 가정한다.</p>
+
+<h4 id="proof">Proof</h4>
+
+<p><em>unsuccessful lookup</em> 을 분석할건데, 다른 연산이 이보다는 항상 더 빠르므로 다른 연산의 <em>upper bound</em> 라 보면 된다.</p>
+
+<p><code>S</code> 를 <code>|S| = O(n)</code> 인 데이터셋이라 하자. <code>x not in S</code> 인 <code>x</code> 를 <em>lookup</em> 한다 하면 <em>running time</em> 은</p>
+
+<p><code>O(1) + O(list length in A[h(x)])</code> 다. 즉 <code>h(x)</code> 를 평가하는데 걸리는 시간과 해당 버킷 내의 리스트를 순회하는 시간의 합이다.</p>
+
+<p>그런데 여기서 <code>A[h(x)]</code> 버킷의 리스트 길이를 <code>L</code> 이라 하면 이 <code>L</code> 은 <code>h</code> 선택에 따라 달라지는 <em>random variable, 확률변수</em> 다.</p>
+
+<p>그럼 <em>average list length</em> 를 구해, <code>O(L)</code> 을 구해보자. 기대값의 선형성을 이용할건데, <code>E(L)</code> 을 위한 <code>1 or 0</code> 의 확률변수를 도입하자.</p>
+
+<p><code>x != y</code> 인 <code>y in S</code> 에 대해 <code>z_y</code> 를 충돌이 날경우 <code>1</code> 로, 아닐 경우를 <code>0</code> 으로 하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?z_y%3D%20%5Cbegin%7Bcases%7D%201%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%3D%20h%28y%29%20%5C%5C%200%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%5Cneq%20h%28y%29%20%5Cend%7Bcases%7D'  alt="" /></p>
+
+<p>이 때 해시함수가 무엇이든, 충돌이 날 경우에만 같은 버킷으로 들어가므로 버킷의 길이는 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?L%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y'  alt="" /></p>
+
+<p>따라서</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?E%28L%29%20%5C%5C%20%5C%5C%20%3D%20E%5B%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y%5D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20E%28z_y%29%20%5C%20%5C%20%5Cmbox%7B%28apply%20linearity%20of%20expectation%29%7D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%20%5C%20S%7D%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%5Cleq%20%7CS%7C%20' *%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%20O%281%29" alt="" /></p>
+
+<p>중간에 <code>H</code> 가 <em>universal</em> 이므로 <code>P[h(y) = h(x)] &lt;= 1/n</code> 이다.</p>
+
+<h3 id="openaddressingperformance">Open Addressing Performance</h3>
+
+<p><em>open addressing</em> 퍼포먼스를 계산할건데, <em>quick and dirty idealized analysis</em> 를 위해 <em>heuristic assumtion</em> 을 도입하면,</p>
+
+<blockquote>
+  <p>All <code>n!</code> probe sequences equally likely    </p>
+</blockquote>
+
+<p>이상적인 경우를 가정하면 얻어지는 것은</p>
+
+<blockquote>
+  <p>expected insertion time ~= <code>1 / (1 - a)</code> where <code>a = load factor</code></p>
+</blockquote>
+
+<p>다시 말해서, <code>a = 0.5</code> 라면 새로운 데이터를 집어넣기 위해 <code>2</code> 만큼 <em>probe</em> 해야한다는 소리다. 반면 <code>a ~= 1</code> 이면 (<code>1</code>에 가까워지면) <em>insertion</em> 타임은 어마어마하게 커진다.</p>
+
+<blockquote>
+  <p>A random probe finds an empty slot with probability <code>1 - a</code></p>
+</blockquote>
+
+<p>이 문제를 "<em>head</em> 를 얻기 위해 동전을 몇번 뒤집어야 하는가" 로 치환할 수 있다. 여기서 <code>Pr[heads] = 1 - a</code> 라 보면</p>
+
+<p><em>head</em> 를 얻기 위해 동전을 뒤집는 수 <code>N</code> 에 대해 기대값 <code>E[N]</code> 은</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%201%20&plus;%20%5Calpha%20%5C%20E%5BN%5D'  alt="" /></p>
+
+<p>식을 풀면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%20%7B1%20%5Cover%201-%20%5Calpha%7D'  alt="" /></p>
+
+<h4 id="linearprobing">Linear Probing</h4>
+
+<p><em>open addressing</em> 방법으로 <em>linear probing</em> 을 사용할 경우, 아까의 <em>heuristic assumption</em> 자체가 성립하지 않는다.</p>
+
+<p>따라서 다른 가정으로</p>
+
+<blockquote>
+  <p>initial probe uniformly random, independent for different keys.</p>
+</blockquote>
+
+<p>그러면 가정아래,  <em>expected insertion time</em> 은 <code>1 / (1 - a)^2</code> 에 가까워진다. (<em>D.E Knuth</em> 가 발견했다고 한다.)</p>
+
+<h3 id="bloomfilter">Bloom Filter</h3>
+
+<p>하던대로 <em>supported operation</em> 부터 이야기 하자.</p>
+
+<p>블룸 필터는 해시테이블과 비슷하게 빠른 삽입, 탐색을 지원한다. 해시테이블과 비교했을때 메모리가 덜 든다. 반면 단점은</p>
+
+<p>(1) Can't store an associated object <br />
+(2) No deletions <br />
+(3) small <strong>false positive</strong> pobability (but no false negative)</p>
+
+<p>블룸 필터는 다양한 곳에 사용한다. </p>
+
+<ul>
+<li>early spell checkers (original)</li>
+<li>list of forbidden passwords (canonical)</li>
+<li>network routers (mordern)</li>
+</ul>
+
+<p>만약 메모리가 아주 비싸고, <em>false positive</em> 를 참을만 하다면 블룸필터는 좋은 선택이다. 연산도 아주 빠르다.</p>
+
+<p>블룸 필터의 구성요소를 보자.</p>
+
+<p>(1) 자료구조는 <code>n</code> 비트의 배열이다. <br />
+(2) <code>k</code> 개의 해시 함수가 필요하다. (<code>k</code> 는 <em>small constant</em>)</p>
+
+<p><em>insertion</em> 은 <code>i = 1, ..., k</code> 에 대해 <code>A[h_i(x)] = 1</code> 로 세팅하면 된다. 이미 <code>1</code> 이어도 덮어쓴다. 참고로 덮어쓰기때문에 <em>false positive</em> 는 있어도 <em>false negative</em> 는 없다. 자그마한 종양만 보여도 무조건 암이라 주장하는 소심한 의사라 보면 이해가 쉽다.</p>
+
+<p><em>lookup</em> 은 <code>i = 1, ..., k</code> 에 대해 모든 <code>A[h_i(x)] = 1</code> 이면 찾으려는 <code>x</code> 가 존재한다.</p>
+
+<p><em>false positive</em> 는 <code>A[h_i(x)]</code> 가 다른 <em>insertion</em> 에 의해 <code>1</code> 로 세팅 되었을때 발생한다.</p>
+
+<p>블룸필터를 이미지로 보면</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Bloom_filter.svg/720px-Bloom_filter.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<p>블룸필터를 쓰는 것이 합리적인 선택이 되려면</p>
+
+<p>(1) <code>n / |S|</code> 즉, 오브젝트당 비트 수가 충분히 작아야 한다. <br />
+(2) <em>false positive</em>, 즉 에러 확률이 작아야한다.</p>
+
+<p>동시에 두 조건을 작은 값으로, 모두 만족시키지 못한다면 그냥 해시 테이블을 쓰는 것이 더 낫다. </p>
+
+<p>근데, 자세히 살펴보면 <em>space</em> 와 <em>error prob</em>, 이 두 조건은 <em>trade-off</em> 다.  </p>
+
+<h3 id="bloomfilterheuristicanalysis">Bloom Filter: Heuristic Analysis</h3>
+
+<p><em>heuristic assumption</em> 은</p>
+
+<blockquote>
+  <p>all <code>h_i(x)</code>' is uniformly random and independent (across different <code>i</code>'s and <code>x</code>'s</p>
+</blockquote>
+
+<p><code>k</code> 개의 해시함수를 가지는 <code>n</code> 비트 블룸 필터에 데이터셋 <code>S</code> 를 먼저 넣어놓자. 이제 블룸필터 <code>A</code> 의 각 비트가 1일 확률은,</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D'  alt="" /></p>
+
+<p>인데 이것은 한 비트가 <code>0</code> 일 확률을 <code>1</code> 에서 뺀 것이다. <code>0</code> 일 확률은 <code>k</code> 개의 해쉬 함수를 <code>|S|</code> 개의 모든 원소를 다 집어 넣은 후에도 <code>0</code> 인 확률이므로 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D'  alt="" /></p>
+
+<p>이 때 <code>e^x</code> 가 <code>1 + x</code> 의 <em>upper bound</em> 임을 이용하면, 각 비트가 1일 확률은</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%20%5Cmbox%7B%5C%20%5C%20%281/n%20%5Csim%200%29%7D'  alt="" /></p>
+
+<p>이 때 <code>n / |S| = b</code>, <code>b</code> 는 오브젝트당 비트 수 이므로</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%201%20-%20e%5E%7B-k%20/%20b%7D'  alt="" /></p>
+
+<p>이제 블룸필터에 한번도 입력되지 않은 데이터에 대해 <em>false positive</em> 확률 <code>P[FP]</code> 를 계산하면,</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5C%5C%20%5C%5C%20%5Cleq%20%281%20-%20e%5E%7B-k%20/%20b%7D%29%5Ek%20%5C%5C%20%5C%5C'  alt="" /></p>
+
+<p>이 때 고정된 수 <code>b</code> 에 대해 에러일 확률 <code>P[FP]</code> 를 최소화 하는 <code>k</code> 를 찾으면</p>
+
+<p><code>k ~ (ln2) * b</code> 다. 로그를 계산하면, <code>k ~ 0.693 * b</code> </p>
+
+<p>따라서 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5Csim%20%28%7B1%20%5Cover%202%7D%29%5E%7B%28ln2%29b%7D'  alt="" /></p>
+
+<p>이므로 오브젝트당 비트수 <code>b</code> 에 따라서 <em>false positive</em>, 즉 에러 확률이 <em>exponentially</em> 작아진다.</p>
+
+<p>식을 거꾸로 풀면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?b%20%5Csim%201.44%20' *%20log_2%7B1%20%5Cover%20P%5BFP%5D%7D" alt="" /></p>
+
+<p>이 두 식은 오브젝트당 비트수 <code>b</code> 와 <em>false positive</em> 의 <em>trade off</em> 를 보여준다.</p>
+
+<p>만약 <code>b = 8</code> 이고 <code>k = 5, 6</code> 이면 에러 확률은 <code>2%</code> 정도다. </p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
+(2) <a href='http://sweeper.egloos.com/viewer/925740' >Hash Table</a> <br />
+(3) <a href='http://www.slideshare.net/tanmaytan21/application-of-hashing-in-better-alg-design-tanmay' >http://www.slideshare.net/tanmaytan21</a> <br />
+(4) <a href='http://en.wikipedia.org/wiki/Hash_table' >Wikipedia: Hash Table</a> <br />
+(5) <a href='http://www.slideshare.net/sajidmarwatt/advance-algorithm-hashing-lec-ii' >http://www.slideshare.net/sajidmarwatt</a> <br />
+(6) <a href='http://en.wikipedia.org/wiki/Primary_clustering' >Wikipedia: Primary Clustering</a> <br />
+(7) <a href='http://en.wikipedia.org/wiki/Bloom_filter' >Wikipedia: Bloom Filter</a>    </p>]]></description><link>http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/</link><guid isPermaLink="false">883e3230-b261-4993-9b7c-566513bcf026</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[universal hashing]]></category><category><![CDATA[bloom filter]]></category><category><![CDATA[open addressing]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 01 Dec 2014 07:44:37 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 8]]></title><description><![CDATA[<p>이번시간에는 <em>PCA</em> 와 <em>clustering</em> 을 배운다. <em>PCA</em> 가 어떻게 돌아가는지 알기위해 <em>covariance matrix</em>, <em>eigen decomposition</em>, <em>singular value decomposition</em> 등의 배경지식도 익혀보자. <del>K-means 는 거들뿐</p>
 
 <h3 id="unsupervisedlearningintro">Unsupervised Learning Intro</h3>
 
@@ -6402,77 +6842,4 @@ iterate' f = unfold (const False) id f -- const False is pred. always return Fal
 <p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br />
 (2) <a href='https://sadakurapati.wordpress.com/' >https://sadakurapati.wordpress.com</a> <br />
 (3) <em>Programming in Haskell, Chapter 6, 7</em> <br />
-(4) <a href='http://www.pling.org.uk/cs/fun.html' >http://www.pling.org.uk/cs/fun.html</a>  </p>]]></description><link>http://1ambda.github.io/haskell-intro3/</link><guid isPermaLink="false">6ae03a58-8478-4f0d-a716-75f09c81a985</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[recursion]]></category><category><![CDATA[church numerals]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 12 Nov 2014 02:10:13 GMT</pubDate></item><item><title><![CDATA[Foundations of Data Analysis, Week1]]></title><description><![CDATA[<p><em>edx</em> 수업. R 을 이용해 실제 데이터에 학습한 통계 이론들을 적용하는 수업이다. <em>edx</em> 에서 제공하는 <em>discussion board</em> 대신에 <em>piazza board?</em> 이런것도 쓰고, <em>lab</em> 전에 비슷한 질문을 하는 <em>pre-lab</em> 도 있고.. 구성이 친절하다. 여러모로 신경을 많이 쓴듯 </p>
-
-<h3 id="classifyingvariables">Classifying Variables</h3>
-
-<p><em>population (모집단)</em> 의 각각을 <em>unit</em>, <em>subject</em> 라 부른다. <em>Galapagos Tortoises</em> 
-예제에서 <em>unit</em> 은 각각의 거북이들이다.</p>
-
-<p>연구자들이 갈라파고스 거북이들로부터 몇 가지 특징들을 뽑아내 도표로 만들었는데, 이런 특징들을 <em>varaible</em> 이라 부른다.</p>
-
-<p><em>variable</em> 은 종류에 따라서 <em>categorical</em>, <em>numerical</em> 로 구분한다. 다른말로는 <em>qualitative (= categorical)</em>, <em>quantitative (= numerical)</em> 이라 부르기도 한다.</p>
-
-<p>날씨나 등 껍질 종류 같은 경우는 <em>qualitative variable</em> 이고 <em>number of individuals repatriated</em> 는 <em>quantitative variable</em> 이다. 저 속성이 뭔 소린가 했는데, 갈라파고스 거북이들은 섬의 중앙에서 보호를 받고 자라다가 나중에 야생으로 돌아간다고.. 그 숫자를 의미하는것이 <em>number of indiviaudls repatriated</em> 다.</p>
-
-<p><em>complete counting</em> 혹은 <em>census (인구조사)</em> 같은 경우는 대부분의 경우 힘들기 때문에 <em>population</em> 에서 일부를 떼어낸 <em>sample</em> 을 이용하게 된다.</p>
-
-<blockquote>
-  <p>It is common to use a smaller, representative group from the population, called a <em>sample</em></p>
-</blockquote>
-
-<h3 id="errors">Errors</h3>
-
-<p><em>sample</em> 이 <em>population</em> 을 대표하지 못할 수도 있기 때문에, 완벽히 <em>parameter (모수)</em> 를 추정하는 것은 어렵다. 그래서 통계학자들은 <em>point estimate</em> 나 <em>interval estimiate</em> 를 사용한다. 예를 들면</p>
-
-<blockquote>
-  <p><em>"I am 95% confident that the true number of tortoises is actually between 561 and 1075."</em></p>
-</blockquote>
-
-<p><em>true paramter</em> 와 샘플로부터 얻어진 <em>statistic</em> 간 차이는 <em>sampling error</em> 라 부른다.</p>
-
-<p>갈라파고스 거북이를 조사 할 때 밀집 지역에서만 거북이를 골라낸다고 하자. 그리고 그 샘플을 전체 지역에 대한 통계값을 얻을 때 사용하면 너무 높은 값이 나올 수 있다. 이런 종류의 오류를 <em>bias</em> 라 부른다. 다행히도 통계학자들이 <em>bias</em> 를 피할 수 있는 다양한 도구들을 준비 해 놓았으니 배우기만 하면 된다.</p>
-
-<h3 id="levelsofmeasurement">Levels of Measurement</h3>
-
-<p>아까는 <em>variable</em> 을 간단히 두 종류로 나누어 봤지만 더 자세하게 나눌 수 있다. </p>
-
-<blockquote>
-  <p>A <strong>nominal measurement</strong> is one in which the values of the variable are names. The names of the different species of Galapagos tortoises are an example of a nominal measurement</p>
-  
-  <p>An <strong>ordinal measurement</strong> involves collecting information of which the order is somehow significant. The name of this level is derived from the use of ordinal numbers for ranking. If we measured the different species of tortoise from the largest population to the smallest, this would be an example of ordinal measurement.</p>
-  
-  <p>With <strong>interval measurement</strong>, the distance between any two values has a specific meaning. An example commonly cited for interval measurement is temperature. A change of 1 degree is the same if the temperature goes from <code>0C</code> to <code>1C</code> as it is when the temperature goes from <code>40C</code> to <code>41C</code>. In addition, there is meaning to the values between the ordinal numbers. That is, a half of a degree has meaning.</p>
-  
-  <p>A <strong>Ratio measurement</strong> is the estimation of the ratio between a magnitude of a continuous quantity and a unit magnitude of the same kind. A variable measured at this level not only includes the concepts of order and interval, but also adds the idea of <code>nothingness</code>, or absolute zero. With the temperature scale of the previous example, <code>0C</code> is really an arbitrarily chosen number and does not represent the absence of tempertature. As a result, the ratio between temperature is relative, and <code>40C</code>, for example, is not twice as hot as <code>20C</code>.</p>
-</blockquote>
-
-<p>간단히 정리하자면 <em>nominal measurement</em> 는 이름으로 분류를 할 수 있는 경우다. </p>
-
-<p><em>ordinal measurement</em> 는 각 <em>unit</em> 간 순위, 순서를 매긴 것이다. 이 경우 값 자체가 1, 2, 3 같은 순서기 때문에 <em>unit</em> 간 차이는 아무런 의미도 없다.</p>
-
-<p><em>interval measurement</em> 는 두 값간 <em>distance (차이)</em> 가 의미를 가지는 경우다. 온도를 잘 보면 40도와 39도의 차이 1은, 1도와 0도의 차이 와 같다. 그리고 <em>interval measurement</em> 에서는 각 <em>unit</em> 사이의 값들도 의미가 있다. (ex. 0.5도)</p>
-
-<p>마지막으로 <em>ratio measurement</em> 는 <em>nothingness</em> 혹은 <em>absolute zero</em> 가 존재하는 값이다. 켈빈 온도의 경우 20K 는 40K 의 1/2 이다. 반면 섭씨 온도의 경우 20C 가 40C 보다 1/2 덥다고 말할 수가 없다. </p>
-
-<p>이렇게 <em>nominal, ordinal, interval, ratio</em> 로 구분하는 방법을 <em>Stevens' Theory</em> 라 부른다. 단순히 <em>numerical, categorical</em> 로 구분하는 것 보다 좀 더 자세히 분류할 수 있다.</p>
-
-<p>몇 가지 예제를 좀 더 살펴보자면</p>
-
-<p>(1) 학생들의 <em>gender, race, political opinions</em> 등은 모두 <em>nominal measurement</em> 다. <br />
-(2) 학생들의 학년(7, 8, 9) 를 수집한다면 <em>ordinal measurement</em> 다. <br />
-(3) SAT 수학 점수를 모은다면, 그건 <em>interval measurement</em> 다. (아마 상대평가인가 봄) <br />
-(4) 나이, 키, 몸무게, 점수(0-100) 등을 수집한다면 <em>ratio measurement</em> 다.</p>
-
-<p><em>nominal</em> 에서 <em>ratio</em> 로 갈수록 값들이 점점 복잡해진다. </p>
-
-<p><img src='https://dr282zn36sxxg.cloudfront.net/datastreams/f-d%3A92ba1471fd7e4ab92e330423cc7653fc15f9e1808cbbd03f8cdad61a%2BIMAGE%2BIMAGE.1'  alt="" /></p>
-
-<p align="center">(<a href='http://www.ck12.org/statistics' >http://www.ck12.org/statistics</a></p>
-
-<p>이렇게 데이터를 구분하는 이유는, 각각 에 쓸 수 있는 <em>Tool</em> 이 다르기 때문이다. 어떤 툴은 <em>categorical variable</em> 에 유용할 수도 있고, 그렇지 않은 툴도 있기 마련이다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>UT.7.01x Foundations of Data Analysis</em> <br />
-(2) <a href='http://www.ck12.org/statistics/Levels-of-Measurement/lesson/Levels-of-Measurement/' >http://www.ck12.org/statistics</a></p>]]></description><link>http://1ambda.github.io/foundations-of-data-analysis-week1/</link><guid isPermaLink="false">7a56ea31-f2e1-4117-a5db-5140868a8668</guid><category><![CDATA[edx]]></category><category><![CDATA[statistics]]></category><category><![CDATA[R]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 12 Nov 2014 01:51:36 GMT</pubDate></item></channel></rss>
+(4) <a href='http://www.pling.org.uk/cs/fun.html' >http://www.pling.org.uk/cs/fun.html</a>  </p>]]></description><link>http://1ambda.github.io/haskell-intro3/</link><guid isPermaLink="false">6ae03a58-8478-4f0d-a716-75f09c81a985</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[recursion]]></category><category><![CDATA[church numerals]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 12 Nov 2014 02:10:13 GMT</pubDate></item></channel></rss>
