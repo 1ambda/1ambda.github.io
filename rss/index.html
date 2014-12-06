@@ -1,5 +1,1169 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 01 Dec 2014 14:47:33 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Hash Table, Universal Hashing, Bloom filters]]></title><description><![CDATA[<h3 id="hashtable">Hash Table</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 06 Dec 2014 18:11:28 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[A Poor Man's Concurrency Monad]]></title><description><![CDATA[<p><em>FP 101x</em> 의 최종 보스입니다. <del>Rose Tree 는 거들뿐</del> <em>Koen Claessen</em> 가 1999년에 발표한 <a href='http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.39.8039' ><em>Poor Man's Concurrenc Monad</em></a> 를 배경으로 하는 과제인데, 언어에 <em>primitive</em> 추가 없이 <em>concurrency</em> 를 모델링 하는 방법을 보여줍니다. </p>
+
+<h3 id="continuation">Continuation</h3>
+
+<p>먼저 용어부터 정의하고 가면, <em>continuation</em> 은 실행 가능한 <em>computation</em> 입니다. 필요할 때 사용할려고 미뤄둔 계산인데, 이게 프로세스를 모델링 하기에 적당합니다. 왜냐하면 프로세스도 멈추었다가, 나중에 다시 실행을 해야 하니까요!</p>
+
+<p>나중에 쓰려고 미뤄둔 계산, 즉 <em>continuation</em> 을 지속적으로 넘겨가면서 사용하는 방식을 <em>continuation passing style</em> 이라 부릅니다. <em>CPS</em> 로 작성된 함수는 리턴하는 법이 없습니다. 다만 자신의 계산을 <em>continuation</em> 으로 만들어 넘겨줄 뿐이지요.</p>
+
+<p>코드를 먼저 보시지요. 피타고라스 계산을 하스켈에서 <em>CPS</em> 로 작성하는 방법입니다. </p>
+
+<pre><code class="haskell">square :: Int -&gt; Int  
+square x = x * x
+
+add :: Int -&gt; Int -&gt; Int  
+add x y = x + y
+
+square_cps :: Int -&gt; (Int -&gt; r) -&gt; r  
+square_cps x = \cont -&gt; cont (square x)
+
+add_cps :: Int -&gt; Int -&gt; (Int -&gt; r) -&gt; r  
+add_cps x y = \cont -&gt; cont (add x y)
+
+pythagoras_cps :: Int -&gt; Int -&gt; (Int -&gt; r) -&gt; r  
+pythagoras_cps x y = \cont -&gt;  
+  square_cps x $ \squared_x -&gt;
+  square_cps y $ \squared_y -&gt;
+  add_cps squared_x squared_y cont
+
+&gt; square_cps 3 print
+-- "9"
+
+&gt; add_cps 3 4 print
+-- "7"
+
+&gt; pythagoras_cps 3 4 print
+-- "25"
+</code></pre>
+
+<p>위 예제에서는 <code>print</code> 가 나중에 쓸려고 모셔둔 계산, 즉 <em>continuation</em> 입니다. 이 타입 <code>(Int -&gt; r) -&gt; r</code> 을 잘 기억해 두세요.</p>
+
+<h3 id="processmodeling">Process Modeling</h3>
+
+<p>프로세스를 모델링 하려면 상태와 작업 두 가지를 나타내야 합니다. 먼저 프로세스가 하는 작업에 대해서 모델링을 해 보겠습니다. 프로세스는 의 작업은 <code>Action</code> 이라 부르겠습니다. <code>Action</code> 은 <code>Atom</code> 이라 부르는 <code>IO</code> 연산일 수도 있고, 자식을 만드는 <code>Fork</code> 나, 프로세스를 멈추는 <code>Stop</code> 이 될 수 있습니다.</p>
+
+<p><code>Atom</code> 은 <em>side-effect</em> 를 만드는 <em>atomic</em> 연산이라 보면 됩니다.</p>
+
+<pre><code class="haskell">data Action =  
+   = Atom (IO Action)
+   | Fork Action Action
+   | Stop
+</code></pre>
+
+<p>프로세스는 상태를 모델링 하기 위해 프로세스의 동작에 대해서 조금 논의해 봅시다. 프로세스는 자신의 작업이 있습니다. 우리는 <code>Action</code> 으로 표현했지요. 프로세스가 어떤 이유에서든지 중단된다면, 나중을 위해서 이 <code>Action</code> 을 기억해 둬야 합니다. 다시 작업을 해야하니까요!</p>
+
+<p>아까 위에서 보았던 <code>(Int -&gt; r) -&gt; r</code> 기억 나시나요? <em>continuation</em> <code>Int - r</code> 을 이용해 결과 <code>r</code> 을 만들어 냈던 타입이지요. 이 타입을 잘 보면, <em>continuation</em> 이 공급될 때 <em>result <code>r</code></em>  을 얻을 수 있습니다. 여기서 결과인 <code>r</code> 은 다른 프로세스에게 밀려 중단된 작업 <code>Action</code> 이라 보시면 되고, 공급되는 <em>continuation</em> 은 <em>CPU</em> 와 같은 리소스라 보시면 됩니다. (그렇게 생각하는 편이 <del>정신건강에</del> 좋습니다.)</p>
+
+<p>그러면, 비슷하게, 이런 타입을 생각해 볼 수 있습니다.</p>
+
+<pre><code class="haskell">data Concurrent a = ((a -&gt; Action) -&gt; Action)  
+</code></pre>
+
+<p>이 타입은 <code>a -&gt; Action</code> <em>continuation</em> 을 받아, 결과 <code>Action</code> 을 돌려줍니다. </p>
+
+<p>그러면 프로세스의 <strong>미뤄진 작업의 상태</strong>를 표현하는 <code>Concurrent</code> 에 <em>continuation</em> 을 공급해 <strong>미뤄진 작업</strong> <code>Action</code> 을 얻어내는 <code>action</code> 이란 함수를 만들 수 있습니다.</p>
+
+<pre><code class="haskell">action :: Concurrent a -&gt; Action  
+action (Concurrent concur) = concur (\a -&gt; Stop)  
+</code></pre>
+
+<p>또한 어떤 <em>continuation</em> 을 받던 무조건 멈추는 <code>Action</code> 을 돌려주는 <code>stop</code> 함수도 생각해 볼 수 있겠죠. 이건 <strong>멈춰진 작업의 상태</strong> 를 표현하는 <code>Concurrent</code> 라 보셔도 좋습니다.</p>
+
+<pre><code>stop :: Concurrent  
+stop = Concurrent (\cont -&gt; Stop)  
+</code></pre>
+
+<p>이제 <code>IO</code> 를 <code>Concurrent</code> 로 표현하기 위해 <code>IO a -&gt; Concurrent a</code> 로 변환해주는 <code>atom</code> 을 만들겁니다. 다시 말해서 이 함수는 <strong>멈춰진 <code>IO</code> 연산</strong> 을 돌려줘 하므로 <code>Concurrent</code> 내에 <code>Atom (IO Action)</code> 을 담아야 합니다. </p>
+
+<p><code>cont a</code> 가 <code>Action</code> 이므로, <code>do</code> 내에서 <code>return (cont a)</code> 이면 <code>IO Action</code> 타입을 얻을 수 있겠죠? 쉽게 생각해서 <em>continuation</em> 인 <code>cont</code> 가 공급될 때 <code>IO</code> 를 수행한다 보면 되겠습니다.</p>
+
+<pre><code class="haskell">atom :: IO a -&gt; Concurrent a  
+atom \io -&gt; Concurrent $ \cont -&gt; Atom $ do a &lt;- io  
+                                            return (cont a)
+</code></pre>
+
+<p>이제 프로세스를 분할하는 <code>Fork</code> 작업을 생각해 봅시다. 타입만 보면 <code>Fork Action Aciton</code>  입니다. 즉 두개의 <code>Action</code> 을 <code>Concurrent</code> 내에 담아야 합니다.</p>
+
+<pre><code class="haskell">fork :: Concurrent a -&gt; Concurrent ()  
+fork concur = Concurrent $ \cont -&gt; Fork (action concur) (cont ())  
+</code></pre>
+
+<p>보면, <code>action concur</code> 로 현재 미뤄진 작업에 대한 <code>Action</code> 을 추출하고, <em>continuation</em> 를 받아 <code>cont ()</code> 로 <em>continuation</em> 에 있는 다음 <code>Action</code> 을 뽑아냅니다. <em>continuation</em> 의 타입이 <code>a -&gt; Action</code> 인거 기억 나시죠?</p>
+
+<p>비슷하게, 두개의 미루어진 작업을 받아 <code>Fork</code> 로 만드는 <code>par</code> 함수도 만들어 봅시다.</p>
+
+<pre><code class="haskell">par :: Concurrent a -&gt; Concurrent a -&gt; Concurrent a  
+par (Concurrent a) (Concurrent b) = Concurrent $ \cont -&gt; Fork (a cont) (b con))  
+</code></pre>
+
+<p>이제 <code>Concurrent</code> 간 <em>composition</em> 을 위해 <code>&gt;&gt;=</code>, <code>return</code> 을 구현하면</p>
+
+<pre><code class="haskell">instance Monad Concurrent where  
+    -- g :: \a -&gt; Concurrent b
+    (Concurrent A) &gt;&gt;= g = 
+      \contB -&gt; A (\contA -&gt; case g a of (Concurrent B) -&gt; B contB  
+</code></pre>
+
+<p>직관적인 이해는, <code>&gt;&gt;=</code> 자체는 두 <code>Concurrent</code> 간 연결입니다. 서로 다른 타입 <code>a, b</code> 에 대해서 <code>Concurrent</code> 가 어떻게 연결되야 하는지 생각해 보면 됩니다. </p>
+
+<p><code>Concurrent a</code> 의 <code>Action</code> 을 얻기 위한  <em>continuation</em> 은, 다음 작업을 의미하는데 이 <em>continuation</em> <code>a' -&gt; Action</code> 에서의 <code>Action</code> 이 <code>Concurrent b</code> 의 <code>Action</code> 이라 보면 됩니다.</p>
+
+<p>다시 말해서, <code>Concurrent a</code> 의 <code>Action</code> 의 다음 작업이 <code>Concurrent b</code> 의 <code>Action</code> 이란 뜻이지요. </p>
+
+<p>마지막으로 <code>Action</code> 을 라운드 로빈 방식으로 스케쥴링하는 <code>roundRobin</code> 함수와, 실제로 <code>Concurrent a</code> 을 이용해 <code>roundRobin</code> 함수를 이용하는 <code>run</code> 함수를 보면,</p>
+
+<pre><code class="haskell">roundRobin :: [Action] -&gt; IO ()  
+roundRobin [] = return ()  
+roundRobin (Atom x:xs) = x &gt;&gt;= \ac -&gt; roundRobin (xs ++ [ac])  
+roundRobin (Fork x y : xs) = roundRobin (xs ++ [x, y])  
+roundRobin (Stop : xs) = roundRobin xs
+
+run :: Concurrent a -&gt; IO ()  
+run x = roundRobin [action x]  
+</code></pre>
+
+<p>몇개의 헬퍼 함수와 테스트 코드도 좀 보겠습니다.</p>
+
+<pre><code class="haskell">genRandom :: Int -&gt; [Int]  
+genRandom 1337 = [1, 96, 36, 11, 42, 47, 9, 1, 62, 73]  
+genRandom 7331 = [17, 73, 92, 36, 22, 72, 19, 35, 6, 74]  
+genRandom 2600 = [83, 98, 35, 84, 44, 61, 54, 35, 83, 9]  
+genRandom 42   = [71, 71, 17, 14, 16, 91, 18, 71, 58, 75]
+
+loop :: [Int] -&gt; Concurrent ()  
+loop xs = mapM_ (atom . putStr . show) xs
+
+ex0 :: Concurrent ()  
+ex0 = par (loop (genRandom 1337)) (loop (genRandom 2600) &gt;&gt; atom (putStrLn ""))
+
+ex1 :: Concurrent ()  
+ex1 = do atom (putStr "Haskell")  
+         fork (loop $ genRandom 7331) 
+         loop $ genRandom 42
+         atom (putStrLn "")
+
+myex0 = run $ (ho &gt;&gt; ho &gt;&gt; ho) &gt;&gt;  
+              (hi &gt;&gt; hi &gt;&gt; hi) &gt;&gt; atom (putStr "\n")
+  where ho = atom (putStr "ho")
+        hi = atom (putStr "hi")
+
+myex1 = run $ fork (ho &gt;&gt; ho &gt;&gt; ho) &gt;&gt;  
+              (hi &gt;&gt; hi &gt;&gt; hi) &gt;&gt; atom (putStr "\n")
+  where ho = atom (putStr "ho")
+        hi = atom (putStr "hi")
+
+myex2 = run $ fork (put3 "ba") &gt;&gt; fork (put3 "di") &gt;&gt;  
+        put3 "bu" &gt;&gt; atom (putStr "\n")
+  where put3 = sequence . take 3 . repeat . atom . putStr
+
+myex3 = run $ par (put3 "ba") (put3 "di" &gt;&gt; stop) &gt;&gt;  
+        atom (putStr "\n")
+  where put3 = sequence . take 3 . repeat . atom . putStr
+
+myex4 = run $ (par (put3 "ba") (put3 "di")) &gt;&gt;  
+        atom (putStr "\n")
+  where put3 = sequence . take 3 . repeat . atom . putStr
+
+myex5 :: Concurrent ()  
+myex5 = do fork (atom $ putStrLn "test")  
+           atom $ putStrLn "hello"
+
+myex6 :: Concurrent ()  
+myex6 = do val &lt;- par (atom $ return "hi") (atom $ return "hello")  
+           atom $ putStrLn val
+</code></pre>
+
+<h2 id="references">References</h2>
+
+<p>(1) <strong>DelftX FP 101x</strong> <br />
+(2) <em>Programming in Haskell</em> <br />
+(3) <a href='http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.39.8039' >A Poor Man's Concurrency Monad</a></p>]]></description><link>http://1ambda.github.io/a-poor-mans-concurrency-monad/</link><guid isPermaLink="false">15feb78a-f5db-44ac-9bb6-acd63bdca8fd</guid><category><![CDATA[haskell]]></category><category><![CDATA[continuation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 06 Dec 2014 15:35:51 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 8]]></title><description><![CDATA[<p>고차함수가 있는 다른언어와 비교했을 때 하스켈은 무슨 특징이 있을까요? 하스켈은 <em>expression</em> 을 평가하기 위해 디폴트로 <em>lazy evaluation</em> 을 사용한다는 점에서 다른 언어들과 다릅니다.</p>
+
+<p>이번시간엔 <em>evaluation</em> 의 개념부터 시작해서, 다양한 종류의 <em>evaluation</em> 전략들을 살펴보겠습니다.</p>
+
+<h3 id="evaluation">Evaluation</h3>
+
+<ul>
+<li>Avoid doing <strong>unnecessay evaluation</strong></li>
+<li>Allows programs to be <strong>more modular</strong></li>
+<li>Allows us to program with <strong>infinite lists</strong></li>
+</ul>
+
+<p>하스켈은 <em>lazy evaluation</em> 을 이용해 위에 나열한 것들을 제공합니다. <em>lazy evaluation</em> 을 이야기 하기 전에 먼저 <em>evaluation</em> 이 무엇인지 살펴봅시다.</p>
+
+<blockquote>
+  <p>Basically, expressions are evaluated or reduced by successively applying definitions until no further simplification is possible</p>
+</blockquote>
+
+<p>예를 들어서 <code>square n = n * n</code> 이란 <em>definition</em> 이 있을때, <em>expression</em> <code>square(3 + 4)</code> 는 이렇게 두 가지 방식으로 평가될 수 있습니다.</p>
+
+<pre><code class="haskell">square (3 + 4)  
+square 7  
+7 * 7  
+49
+
+-- bad
+square (3 + 4)  
+(3 + 4) * (3 + 4)
+7 * (3 + 4)  
+7 * 7  
+49  
+</code></pre>
+
+<p>만약에 아래 버전처럼 <code>(3 + 4) * (3 + 4)</code> 로 평가된다면, 똑같은 계산을 두번이나 하게 될 겁니다. 더 심각한 문제는 <em>side effect</em> 가 발생한다면 값이 달라질 수도 있다는 것이지요!</p>
+
+<p>아래 예제를 한번 봅시다. <em>evaluation</em> 전략에 따라 값이 달라지는 것을 보여줍니다.</p>
+
+<pre><code class="haskell">-- initially, n := 0
+
+-- left first
+n + (n := 1)  
+0 + (n := 1)  
+0 + 1  
+1
+
+-- right first
+n + (n := 1)  
+n + 1  
+1 + 1  
+2  
+</code></pre>
+
+<blockquote>
+  <p><strong>FACT:</strong> In Haskell, two diffrent (but terminating) ways of evaluating the same expression will always give the same final result.</p>
+</blockquote>
+
+<p>다행히도 하스켈은 어떤 전략을 사용하든 <em>terminating expression</em> 에 대해서는 항상 같은 결과를 돌려줍니다. </p>
+
+<h3 id="reductionstrategies">Reduction Strategies</h3>
+
+<p>일반적으로 평가방법은 크게 두 가지로 나눌 수 있습니다. 어떤 <em>reducible subexpression (redex)</em> 를 선택하냐에 따라 </p>
+
+<p>(1) <strong>Innermost reduction:</strong> An inner most redex is always reduced <br />
+(2) <strong>Outermost reduction:</strong> An outermost redex is always reduced</p>
+
+<pre><code class="haskell">loop = tail loop
+
+// innermost reduction
+fst (1, loop)  
+fst (1, tail loop)  
+fst (1, tail (tail loop))  
+...
+
+// outermost reduction
+fst (1, lop)  
+1  
+</code></pre>
+
+<p>위 결과를 보면 <em>innermost</em> 가 종료되지 않는 경우에도, <em>outermost</em> 는 결과를 돌려줄 수 있다는 사실을 알 수 있습니다. </p>
+
+<p>또한 어느 하나의 <em>reduction sequence</em> 라도 종료된다면 <em>outermost reduction</em> 도 종료됩니다. 같은 결과를 돌려주면서요. 원문을 첨부하면,</p>
+
+<blockquote>
+  <p>For a given expression if there exists any reduction sequence that terminates, then outermost reduction <strong>also</strong> terminates, with the same result</p>
+</blockquote>
+
+<p><em>innermost</em> 에 비해 더 많은 경우에 종료되므로 <em>outermost</em> 가 좋다고 볼 수도 있겠습니다. 그러나, <em>outermost reduction</em> 은 좀 비효율적입니다.</p>
+
+<pre><code class="haskell">// innermost
+square (3 + 4)  
+square 7  
+7 * 7  
+49
+
+// outermost
+square (3 + 4)  
+(3 + 4) * (3 + 4)
+7 * (3 + 4)  
+7 * 7  
+49  
+</code></pre>
+
+<p>따라서 하스켈에서는 <em>outermost</em> 에 <em>sharing</em> 을 더해 <em>lazy evalution</em> 이라 부르고 이 방법을 <em>evalution</em> 에 이용합니다.</p>
+
+<pre><code class="haskell">square (3 + 4) -- sharing, n = (3 + 4)  
+= n * n -- reduced shared expression `n` into 7
+= 7 * 7
+= 49
+</code></pre>
+
+<p><em>innermost, outermost</em> 예제를 좀 더 살펴봅시다.</p>
+
+<pre><code class="haskell">mult :: (Int, Int) -&gt; Int  
+mult (x, y) = x * y  
+</code></pre>
+
+<p>이제 <code>mult(1 + 2, 3 + 4)</code> 를 <em>innermost</em> 로 평가한다고 한다면,</p>
+
+<pre><code class="haskell">mult(1 + 2, 3 + 4)  
+mult(3, 3 + 4) -- conventionally, we select left innermost  
+mult(3, 7)  
+3 * 7 -- apply outermost  
+24  
+</code></pre>
+
+<p><em>innermost</em> 는 <em>argument (인자)</em> 가 먼저 평가 되어야 하기 때문에, 인자가 <em>value</em> 인 경우 사용할 수 있습니다. 반대로 <em>outermost</em> 전략을 사용한다고 결정하려면 인자가 <em>name</em> 이어야 합니다. </p>
+
+<p>어떤 함수들의 경우는 <em>outermost</em> 를 사용함에도 먼저 인자가 평가되어야 합니다. 예를 들어 <code>*, +</code> 같은 <em>built-in operator</em> 는 무조건 인자가 먼저 평가되야 합니다. 이런 함수들을 <em>strict</em> 하다고 말 합니다.</p>
+
+<p>좀 더 엄밀한 정의는</p>
+
+<blockquote>
+  <p>A function f is said to be strict if, when applied to a nonterminating expression, it also fails to terminate.</p>
+</blockquote>
+
+<p><code>mult</code> 를 <em>curried function</em> 으로 재 작성해 봅시다.</p>
+
+<pre><code class="haskell">mult :: Int -&gt; Int -&gt; Int  
+mult x = \y -&gt; x * y
+
+-- evaluation
+mult (1 + 2) (3 + 4)  
+mult 3 (3 + 4)  
+(\y -&gt; 3 * y)(3 + 4)
+(\y -&gt; 3 * y)(7)
+3 * 7  
+</code></pre>
+
+<p>이제 인자가 한턴에 하나씩 계산됩니다. 이는 <code>mult 3 (3 + 4)</code> 에서 <em>left, innermost redex</em> 가 <code>mult 3</code> 이기 때문입니다. <code>mult (3, 3 + 4)</code> 에선 <code>3 + 4</code> 가 <em>left, innermost redex</em> 였지만요.</p>
+
+<p>참고로 하스켈에서 <em>lambda expression</em> 내부의 <em>redex</em> 를 선택하는건 불가능합니다. 이는 람다도 함수이고, 함수 내부는 볼 수 없는 <em>black box</em> 이기 때문입니다.</p>
+
+<blockquote>
+  <p>Note that in Haskell, the selection of redexes within lambda expressions
+  is prohibited. The rational for not “reducing under lambdas” is that functions are viewed as black boxes that we are not permitted to look inside.</p>
+</blockquote>
+
+<p>일반적으로 <em>innermost</em> 전략을 <em>call by value</em>, <em>outermost</em> 전략을 <em>call by name</em> 이라 부릅니다.</p>
+
+<h3 id="infinitelist">Infinite List</h3>
+
+<p>여기 <code>1</code> 의 무한한 나열을 표현하는 <code>ones</code> 에 대해 <em>expression</em> <code>head ones</code> 가 어떻게 평가되는지 <em>innermost</em> 와 <em>lazy evaluation</em> 의 두 가지 방법을 비교해 봅시다. </p>
+
+<pre><code class="haskell">ones :: [Int]  
+ones = 1 : ones
+
+-- innermost
+head one  
+head (1 : one)  
+head (1 : 1 : one)  
+...
+
+-- lazy evaluation
+head one  
+head (1: ones)  
+1  
+</code></pre>
+
+<p><em>innermost</em> 의 경우에는 <em>evaluation</em> 이 끝나지 않습니다. 반면 <em>lazy evaluation</em> 은 식이 끝나면서 결과를 얻을 수 있죠.</p>
+
+<blockquote>
+  <p>Using <strong>lazy evaluation</strong>, expressions are only evaluated as much as required to produce the final result</p>
+</blockquote>
+
+<p>즉 필요한 만큼만 평가됩니다. 따라서 <em>lazy evaluation</em> 을 이용한 평가방법이 있으므로 <code>ones = 1 : ones</code> 처럼 무한할 <strong>가능성이 있는</strong> 데이터를 표현할 수 있습니다.</p>
+
+<h3 id="modularprogramming">Modular Programming</h3>
+
+<pre><code class="haskell">take 5 ones  
+-- [1, 1, 1, 1, 1]
+</code></pre>
+
+<p>위의 예제에서 볼 수 있듯이 <em>lazy evaluation</em> 을 이용하면 <em>expression</em> 을 두 부분으로 나눕니다. </p>
+
+<ul>
+<li><strong>Control Part:</strong> <code>take 5</code></li>
+<li><strong>Data:</strong> <code>ones</code></li>
+</ul>
+
+<p>인자를 받아 주어진 숫자만큼 복사하는 <code>replicate</code> 함수도 만들어 볼까요?</p>
+
+<pre><code class="haskell">replicate' :: Int -&gt; a -&gt; [a]  
+replicate' 0 _ = []  
+replicate' n x = x : replicate' (n - 1) x  
+</code></pre>
+
+<h3 id="generateprimes">Generate Primes</h3>
+
+<p>무한한 길이의 원소를 표현할 수 있다는 법을 배웠습니다. 이 방법을 이용해 존재하는 모든 소수의 집합을 표현하는 리스트를 만들어 볼까요? </p>
+
+<p><em>Sieve of Eratosthenes (에라토스테네스의 체)</em> 란 방법을 사용하겠습니다. 알고리즘은 <a href='http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes' >여기</a> 를 참조하세요.</p>
+
+<pre><code class="haskell">primes :: [Int]  
+primes = seive [2..]
+
+seive :: [Int] -&gt; [Int]  
+seive (p : xs) = p : [x | x &lt;- xs, x `mod` p /= 0]
+
+take 10 primes  
+-- [2,3,5,7,9,11,13,15,17,19]
+
+takeWhile (&lt;15) primes  
+-- [2, 3, 5, 7, 11, 13]
+</code></pre>
+
+<h3 id="strictapplication">Strict Application</h3>
+
+<p>하스켈에선 <em>lazy evaluation</em> 이 기본이지만, <em>strict</em> 버전으로 함수를 적용할 수 있는 방법도 제공합니다. <code>$!</code> 키워드를 이용하면 되는데요, <code>f $! x</code> 같은 경우 <code>f</code> 를 적용하기 전에 <code>x</code> 가 모두 평가되야 합니다.</p>
+
+<p>더 엄밀히 말하면 <em>top-level of evaluation</em> 이 이루어지는데요, 인자 <code>x</code> 의 타입이 <code>Int</code> 나 <code>Bool</code> 같은 <em>basic type</em> 일 경우는 <em>complete evaluation</em> 이 이루어집니다.</p>
+
+<p>반대로, <code>(Int, Bool)</code> 같은 복합타입이라면 <em>pair of expression</em> 이 얻어질 때 까지만 평가가 이루어집니다. 유사하게 타입이 리스트라면 <code>[]</code> 나 <code>a : b</code> 같은 컨싱이 얻어질때까지만 평가가 이루어집니다.</p>
+
+<blockquote>
+  <p>More formally, an expression of the form <code>f $! x</code> is only a redex once evaluation of the argument x, using lay evaluaion as normal, has reached the point where it is known that the result is not an undefined value, at which point the expression can be reduced to the normal application <code>f x</code></p>
+</blockquote>
+
+<p>예를 들어 <code>square $! (1 + 2)</code> 의 경우</p>
+
+<pre><code class="haskell">square $! (1 + 2)  
+square $! 3  
+square 3  
+3 * 3  
+9  
+</code></pre>
+
+<p>다수개의 인자를 갖는 <em>curried function</em> 과 <code>$!</code> 가 쓰일 경우에는 다양한 형태가 될 수 있습니다.</p>
+
+<pre><code class="haskell">(f $! x) y    -- forces top-level evaluation of x
+(f x) $! y    -- forces top-level evaluation of y
+(f $! x) $! y -- forces top-level evaluation of x and y
+</code></pre>
+
+<p>하스켈에서 <em>strict application</em> 은 주로 프로그램의 <em>space performance</em> 을 개선하기 위해 사용됩니다. 예를 들어 다음과 같은 <code>sumWith</code> 함수가 있다고 합시다. </p>
+
+<pre><code class="haskell">sumWith :: Int -&gt; [Int] -&gt; Int  
+sumWith v [] = v  
+sumWith v (x:xs) sumWith (v + x) xs  
+</code></pre>
+
+<p><em>lazy evaluation</em> 에서는</p>
+
+<pre><code class="haskell">sumWith 0 [1, 2, 3]  
+sumWith (0 + 1) [2, 3]  
+sumWith ((0 + 1) + 2) [3]  
+sumWith (((0 + 1) + 2) + 3) []  
+(((0 + 1) + 2) + 3)
+...
+...
+6  
+</code></pre>
+
+<p>계산 전에 <code>(((0 + 1) + 2) + 3)</code> 가 만들어 지는걸 볼 수 있습니다. <code>sumWith 0 [1.. 10000]</code> 같은 큰 수의 계산일 경우 공간이 좀 아까울 수 있지요.</p>
+
+<p>따라서 <code>sumWith</code> 에 <code>$!</code> 를 이용하면</p>
+
+<pre><code class="haskell">sumWith v [] = v  
+sumWith v (x:xs) = (sumWith $! (v + x)) xs
+
+sumWith 0 [1, 2, 3]  
+sumWtih $! (0 + 1) [2, 3]  
+sumWith $! 1 [2, 3]  
+sumWith 1 [2, 3]  
+...
+</code></pre>
+
+<p><code>sumWith</code> 뿐만 아니라 고차함수인 <code>foldl</code> 등에도 적용해 볼 수 있습니다.</p>
+
+<pre><code class="haskell">foldl' :: (a -&gt; b -&gt; a) -&gt; a -&gt; [b] -&gt; a  
+foldl' f v [] = v  
+foldl' f v (x:xs) ((foldl' f) $! (f v x)) xs  
+</code></pre>
+
+<p>이러면, <code>sumWith</code> 를 <code>foldl' (+)</code> 로 정의할 수 있습니다.</p>
+
+<h2 id="references">References</h2>
+
+<p>(1) <strong>DelftX FP 101x</strong> <br />
+(2) <em>Programming in Haskell</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro8/</link><guid isPermaLink="false">d903754f-78ce-4128-8c4f-51567d031c97</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[lazy evaluation]]></category><category><![CDATA[call by value]]></category><category><![CDATA[call by name]]></category><category><![CDATA[strict]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 04 Dec 2014 08:46:14 GMT</pubDate></item><item><title><![CDATA[Graph Challenges, Minimum Spanning Trees, Shortest Paths]]></title><description><![CDATA[<h3 id="graphprocesschallenge1">Graph Process Challenge 1</h3>
+
+<h4 id="isagraphbipartite">Is a graph bipartite?</h4>
+
+<p>그래프가 <em>bipartite</em> 인가 하는 문제는, 그래프의 노드를 이렇게 두 그룹으로 나눌 수 있느냐 하는 문제다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Simple-bipartite-graph.svg/330px-Simple-bipartite-graph.svg.png'  alt="" /></p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Biclique_K_3_5.svg/330px-Biclique_K_3_5.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<p>알고리즘이 얼마나 어려운가는 이렇게 나눠볼 수 있겠는데</p>
+
+<ol>
+<li>Any programmer could do it  </li>
+<li>Typical diligen algorithms student could do it  </li>
+<li>Hire an expert  </li>
+<li>Intractable  </li>
+<li>No one knows  </li>
+<li>Impossile</li>
+</ol>
+
+<p><em>biparting</em> 문제는 <em>DFS-based solution</em> 을 이용할 수 있으므로, 난이도 2정도에 해당한다 볼 수 있겠다. </p>
+
+<p>생각해 볼 수 있는 응용은, 질병의 전파 경로를 그래프로 그리고 <em>biparting</em> 이 가능한지 보는 것이다.</p>
+
+<h4 id="findacycle">Find a cycle</h4>
+
+<p>이것도 난이도 (2) 정도. 마찬가지로 <em>simple DFS-based solution</em> 을 이용하자.</p>
+
+<p>잘 알려진 응용으로, <em>euler tour</em> 가 있다. 각 <em>edge</em> 를 단 한번씩만 방문하는 <em>cycle</em> 이 있는지를 검사하는 문제다. 여기서 시작점과 끝 점이 같으면 <em>euler circuit</em> 이고, 다르면 <em>euler path</em> 라 부른다.</p>
+
+<p><a href='http://ko.wikipedia.org/wiki/%EC%98%A4%EC%9D%BC%EB%9F%AC_%EA%B2%BD%EB%A1%9C' >여기</a>에 의하면 그래프에 오일러 회로가 존재하려면 </p>
+
+<p>(1) 연결된 그래프여야 하고 <br />
+(2) 모든 꼭지점의 차수가 짝수여야 한다.</p>
+
+<p>반면 오일러 경로라면, 연결그래프에서 정확히 두 개의 꼭지점만 홀수 차수여야 한다.</p>
+
+<p>각 <em>node</em> 를 정확히 한번씩만 지나는 <em>cycle</em> 을 <em>traveling salesman problem, TSP</em> 혹은 <em>hamiltonian path problem</em> 이라 부른다.</p>
+
+<p>오일러 순회와 경로처럼 시작점과 끝점이 같은지, 아닌지에 따라 구분할 수 있다. <em>hamiltonian cycle</em> 은 전형적인 <em>NP-complete problem</em> 으로 알려져있다. 난이도로 구분하자면 <em>(4) intractable</em> 정도 되시겠다.</p>
+
+<h4 id="graphisomorphismproblem">Graph Isomorphism Problem</h4>
+
+<blockquote>
+  <p>Are two graphs identical except for vertex names?</p>
+</blockquote>
+
+<p>그래프의 형태가 같은지 묻는 문제다. 예를 들어 다음의 두 그래프는 같은 형태다.</p>
+
+<p><img src='http://www.biodatamining.org/content/figures/1756-0381-4-10-3-l.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.biodatamining.org/' >http://www.biodatamining.org/</a>)</p>
+
+<p>두 그래프의 노드를 <code>n!</code> 으로 배열해 가면서 같은지 비교하는 단순한 방법은 그래프가 커지면 기하 급수적으로 성능이 느려진다. 더 나은 알고리즘이 있는지 연구자들이 노력하고 있지만, 아직 모른다. 난이도는 <em>(5) No one knows</em></p>
+
+<h4 id="graphsplanarity">Graphs Planarity</h4>
+
+<p>그래프를 <em>crossing edge</em> 가 없는 그래프로 그릴 수 있느냐 하는 문제다.</p>
+
+<blockquote>
+  <p>평면 그래프(planar graph)는 평면 상에 그래프를 그렸을 때, 두 변이 꼭지점 이외에 만나지 않도록 그릴 수 있는 그래프를 의미한다.</p>
+</blockquote>
+
+<p>이건 난이도 <em>(3) Hier an expert</em> 문제다. <em>DFS</em> 기반의 <em>linear time</em> 알고리즘이 1970년대에 발표되었다.</p>
+
+<h3 id="minimumspanningtrees">Minimum Spanning Trees</h3>
+
+<p><em>undirected, positive edge weights</em> 그래프에서 </p>
+
+<p>(1) <em>connected, acyclic</em> <strong>(tree)</strong> <br />
+(2) <em>includes all of the vertices</em> <strong>(spanning)</strong>   </p>
+
+<p>인 서브 그래프를 <strong><em>spanning tree</em></strong> 라 부른다.</p>
+
+<p><strong><em>minimum spanning tree</em></strong> 는 여기서 <em>min weight</em> 를 갖는 <em>spanning tree</em> 를 찾는 문제다.</p>
+
+<h4 id="applications">Applications</h4>
+
+<ul>
+<li>dithering</li>
+<li>cluster analysis</li>
+<li>max bottleneck paths</li>
+<li>network design</li>
+</ul>
+
+<p>등에 활용할 수 있다.</p>
+
+<h3 id="mstgreedyalgorithm">MST: Greedy Algorithm</h3>
+
+<p>간단한 설명을 위해서 그래프가 연결되어있고 <em>weight</em> 가 모두 다르다 하자. 그럼 <em>MST</em> 는 하나만 존재할 것이다.</p>
+
+<p>먼저 <em>cut, crossing edge</em> 용어 정리를 하면</p>
+
+<blockquote>
+  <p><strong>Cut:</strong> A cut is a graph is a partition of its vertices into two (nonempty) sets</p>
+  
+  <p><strong>Crossing edge:</strong> A crossing edge connects a vertex in one set with a vertex in the other</p>
+</blockquote>
+
+<p>그러면, 이런 <em>cut property</em> 가 존재한다.</p>
+
+<blockquote>
+  <p>Given any <strong>cut</strong>, the crossing edge of min weight is in the MST</p>
+</blockquote>
+
+<p>증명은 <em>min-weight crossing edge</em> <code>e</code> 가 <em>MST</em> 내에 없다고 하자. <em>MST</em> 는 연결되야 하므로 다른 <em>crossing edge</em> <code>f</code> 가 대신 사용될 것이다. </p>
+
+<p>(1) 다른 <em>crossing edge</em> <code>f</code> 가 없으면 <em>connected</em> 가 아니므로 <em>MST</em> 가 아니다. <br />
+(2) 만약 <code>f</code> 가 있어서 <code>f</code> 를 대신 사용하는 <em>MST</em> 에 <code>e</code> 를 추가하면 사이클이 생긴다. 이 때 <code>f</code> 를 제거하면 <em>weight</em> 가 더 짧다. 따라서 <code>f</code> 가 포함되면 <em>MST</em> 가 아니다.</p>
+
+<p>따라서 <em>min-weight crossing edge</em> 가 <em>MST</em> 내에 존재한다. 이 사실을 이용하면 <em>MST</em> 를 찾는 <em>greedy algorithm</em> 을 만들 수 있다.</p>
+
+<pre><code>- Start with all edges colored gray
+- Find cut with no black corssing edges; 
+   color its min-weight edge black
+- Repeat until V - 1 edges are colored black
+</code></pre>
+
+<p>즉 어떤 <em>cut</em> 에 대해서 <em>min-weight crossing edge</em> 가 <em>MST</em> 에 포함되므로, 이미 찾은 <em>MST edge</em> 를 포함하지 않는 <em>cut</em> 을 찾아, <em>min-weight crossing edge</em> 을 추가해 나가면 된다.</p>
+
+<h4 id="correcteness">Correcteness</h4>
+
+<p>(1) Any edge colored black is in the MST (vis cut property) <br />
+(2) Fewer than <code>V - 1</code> black edges => cut with no black crossing edges</p>
+
+<p>모든 <em>MST</em> 는 <code>V - 1</code> 개의 <em>edge</em> 로 구성된다. 따라서 <code>V - 1</code> 개의 <em>black edge</em>, 즉 <em>MST</em> 의 원소를 찾아내면 된다. </p>
+
+<h3 id="edgeweightedgraphapi">Edge-Weighted Graph API</h3>
+
+<pre><code class="java">public class Edge implements Comparable&lt;Edge&gt; {  
+  Edge(int v, int w, double weight)
+  int either()
+  int other(int v)
+  int compareTo(Edge that)
+  ...
+}
+
+// allow self-loops and parallel edges
+public class EdgeWeightedGraph {  
+  EdgeWeightedGraph(int V) // V vertices
+  void addEdge(Edge e)
+  Iterable&lt;Edge&gt; adj(int v) // edges incident to v
+  Iterable&lt;Edge&gt; edges() // all edges
+  Int V() // # of vertices
+  int E() // # of edges
+}
+
+public class MST {  
+  MST(EdgeWeigtedGraph G)
+  Iterable&lt;Edge&gt; edges()
+  double totalWeight()
+}
+</code></pre>
+
+<h4 id="removingassumptions">Removing assumptions</h4>
+
+<ul>
+<li>What if edge weights are not all distinct?</li>
+</ul>
+
+<blockquote>
+  <p>Greedy MST algorithm still correct if equal weights are present. (our correctness proof fails, but that can be fixed)</p>
+</blockquote>
+
+<ul>
+<li>What if graph is not connected?</li>
+</ul>
+
+<blockquote>
+  <p>Compute MS forest = MST of each components</p>
+</blockquote>
+
+<h3 id="kruskalsalgorithm">Kruskal's Algorithm</h3>
+
+<pre><code>- Sort edges in ascending order of weight. 
+- Add next edge to tree T 
+  unless doing so would create a cycle 
+  (until V - 1 edges added) 
+</code></pre>
+
+<p><em>kruskal's algorithm</em> 은 <em>greedy MST</em> 의 일종이라 볼 수 있다.</p>
+
+<p>선택된 <em>edge</em> <code>e = v &lt;-&gt; w</code> 라 하고 이것을 <em>crossing edge</em> (<em>cut</em> 이라 볼 수 있다), 하면 </p>
+
+<p><em>black edge</em> 간 <em>no cycle</em> 인 <code>e</code> 를 선택한 것이므로 <code>v &lt;-&gt; w</code> 사이엔 <em>black crossing edge</em> 가 없다. </p>
+
+<p>게다가 선택하는 <em>crossing edge</em> 는 가장 작은 <em>weight</em> 를 가진다. 이 전에 이미 더 작은 <em>weight</em> 의 <em>edge</em> 를 모두 선택했기 때문이다.</p>
+
+<p>따라서 크루스칼 알고리즘은 <em>greedy MST</em> 의 일종이다.</p>
+
+<h4 id="cyclecheck">Cycle Check</h4>
+
+<p>어떻게 <em>Cycle check</em> 를 할까? 한 가지 방법은 <em>edge <code>e = v - w</code></em> 에 대해 <code>v - w</code> 가 연결되어있는지 <em>DFS</em> 를 돌리면 된다. 그러면 <code>O(V)</code> 로 사이클을 검사할 수 있다.</p>
+
+<p>단순히 연결되어있는지만 검사하는 것이므로 <em>union find</em> 를 쓰면 <code>O(log* V)</code> 로도 가능하다. <a href='http://1ambda.github.io/union-find-algorithms-week-1/' >Union-find</a> 를 참고하자.</p>
+
+<h4 id="kruskalmstimplementation">Kruskal MST Implementation</h4>
+
+<pre><code class="java">EdgeWeightedGraph G;  
+int V = G.V()  
+UF uf = new UF(V);
+
+Queue&lt;Edge&gt; mst = new Queue&lt;Edge&gt;();  
+MinPQ&lt;Edge&gt; pq = new MinQP&lt;Edge&gt;();
+
+for (Edge e : G.edges())  
+  pq.enqueue(e);
+
+while (!pq.isEmpty() &amp;&amp; mst.size() &lt; V - 1) {  
+  Edge e = pq.dequeue();
+  int v = e.either();
+  int w = e.other(v);
+
+  if (!uf.connected(v, w)) {
+    uf.union(v, w);
+    mst.enqueue(e);
+  }
+}
+</code></pre>
+
+<p><em>running time</em> 은 <code>E log E</code> 다. </p>
+
+<ul>
+<li>build <code>pq</code>: <code>1 * E</code></li>
+<li>dequeue: <code>E * log E</code></li>
+<li>union: <code>V * log* V</code></li>
+<li>connected: <code>E * log* V</code> </li>
+</ul>
+
+<h3 id="primsalgorithm">Prim's Algorithm</h3>
+
+<pre><code>- start with vertex 0 and greedily grow tree T
+- add to T the min weight edge with exactly one endpoint in T
+- repate until V - 1 edge
+</code></pre>
+
+<h4 id="correctness">Correctness</h4>
+
+<p>마찬가지로 <em>prim's algorithm</em> 도 <em>greedy MST</em> 의 일종이다.</p>
+
+<p>방문한 노드와 방문하지 않은 노드를 <em>cut</em> 해 거기서 <em>min-weight edge</em> 를 선택한다. 따라서 <em>cut</em> 자체가 방문하지 않은 노드와 방문한 노드 두 집합을 만드므로 <em>crossing edge</em> 중에는 <em>black edge</em> 가 없다. </p>
+
+<h4 id="primmstimplementation">Prim MST Implementation</h4>
+
+<p><em>lazy implementation</em> 으로 현재 선택할 수 있는 <em>edge</em> 를 <em>weight</em> 기준으로 <em>priority queue</em> 에 유지하는 방법이 있다.</p>
+
+<p><em>queue</em> 에 있는 <em>edge</em> <code>e = (v, w)</code> 를 꺼낸 뒤</p>
+
+<p>(1) <code>v, w</code> 둘 다 이미 방문했으면 패스하고, <br />
+(2) <code>v</code> 혹은 <code>w</code> 둘 중 하나만 방문했을 경우에만 <code>w or v</code> 의 <em>edge</em> 를 추가하고, <code>w or w</code> 를 방문 처리 한다. </p>
+
+<pre><code class="java">// lazy Prim MST
+
+boolean[] marked // MST vertices  
+Queue&lt;Edge&gt; mst = new Queue&lt;Edge&gt;();  
+MinPQ&lt;Edge&gt; pq = new MinPQ&lt;Edge&gt;();  
+WeightedGraph G;
+
+visit(G, 0);
+
+while (!pq.isEmpty()) {  
+  Edge e = pq.dequeue();
+  int v = e.either();
+  int w = e.other(v);
+
+  if (marked[v] &amp;&amp; marked[w]) continue;
+
+  mst.enqueue(e);
+
+  // add v or w
+  if (!marked[v]) visit(G, v);
+  if (!marked[w]) visit(G, w);
+}
+
+void visit(int v) {  
+  marked[v] = true;
+  for (Edge g : G.adj(v)) {
+    if (!marked[e.other(v)]) pq.insert(e);
+  }
+}
+</code></pre>
+
+<p><em>running time</em> 은 <code>O(E log E)</code> 다.</p>
+
+<p>좀 더 나은 알고리즘은 <em>MST</em> 에 <em>edge</em> <code>e = (v, w)</code> 를 추가할때, 이미 방문한 <code>w</code> 와 방문하지 않은 <code>v</code> 에 대해</p>
+
+<p><code>v</code> 에서 갈 수 있는 모든 <em>edge</em> <code>e = (v, x)</code> 을 생각해 보면, </p>
+
+<p>(1) <code>x</code> 가 이미 방문한 <em>vertex</em> 면 패스 <br />
+(2) <em>queue</em> 에 <code>(k, x)</code> 가 없으면 추가 (<code>k</code> 는 이미 방문한 <em>vertex</em>) <br />
+(3) <code>x</code> 까지의 거리가, <code>e = (v, x)</code> 가 더 짧으면 업데이트 (<em>decreaseKey operation</em>)</p>
+
+<p>여기서 <code>decreaseKey</code> 연산을 빠르게 구현하기 위해 <em>indexed priority queue</em> 를 이용할 수 있다.</p>
+
+<pre><code>void decreaseKey(int i, Key key)  
+</code></pre>
+
+<p>전체 러닝타임은 </p>
+
+<ul>
+<li><code>V</code> <em>insert</em></li>
+<li><code>V</code> <em>delete min</em></li>
+<li><code>E</code> <em>decrease key</em></li>
+</ul>
+
+<p>인데, <em>Priority Queue</em> 구현하는데 어떤 자료구조를 사용하느냐에 따라 각 연산의 시간이 달라진다.</p>
+
+<p>(1) Array implementation optimal for dnse graph  </p>
+
+<p>O(<code>V^2</code>)</p>
+
+<p>(2) Binary heap much faser for sparse graphs  </p>
+
+<p>O(<code>E log V</code>)</p>
+
+<p>(3) 4-way heap worth the trouble in performance-critical situations  </p>
+
+<p>O(<code>E log_(1/V) V</code>)</p>
+
+<p>(4) Fibonacchi heap best in theor, but not worth implementing  </p>
+
+<p>O(<code>E + V log V</code>)</p>
+
+<h3 id="mstcontext">MST Context</h3>
+
+<p><em>linear time MST</em> 알고리즘이 있을까? 1995년에 <em>linear time randomized MST</em> 가 발견 되었지만 <em>deterministic</em> 알고리즘은 여전히 연구중이다.</p>
+
+<h3 id="shortestpathsapi">Shortest Paths API</h3>
+
+<pre><code class="java">public class Directed Edge {
+
+  DirectedEdge(int v, int w, deouble weight)
+  int from()
+  int to()
+  double weight()
+}
+
+// allow self-loop, parallel
+public class EdgeWeightedDigraph {
+
+  EdgeWeightedDigraph(int V)
+  void addEdge(DirectedEdge e)
+  Iterable&lt;DirectedEdge&gt; adj(int v)
+  int V() // # of vertices
+}
+
+// shortest path
+public class SP {
+
+  SP(EdgeWeightedDigraph G, int s)
+  double distTo(int v)
+  Iterable &lt;DirectedEdge&gt; pathTo(int v)
+}
+</code></pre>
+
+<h3 id="shortestpathproperties">Shortest Path Properties</h3>
+
+<p><em>directed, weighted graph</em> 에서 <em>shortest path tree, SPT</em> 가 존재하는데, 이는 <em>cycle</em> 이면 <em>shortest</em> 가 될 수 없기 때문이다.</p>
+
+<p>위에서 본 <code>pathTo</code> 함수는 이렇게 구현할 수 있다.</p>
+
+<pre><code class="java">// edgeTo[v] is last edge on shortest path from s to v
+public Iterable&lt;DirectedEdge&gt; pathTo(int v) {  
+  Stack&lt;DirectedEdge&gt; path = new Stack&lt;DirectedEdge&gt;();
+  for (DirectedEdge e = edgeTo(v); e != null; e = edgeTo(e.from())
+    path.push(e);
+
+  return path;
+}
+</code></pre>
+
+<h4 id="edgerelaxation">Edge relaxation</h4>
+
+<p><em>relax edge <code>e = v -&gt; w</code></em>,</p>
+
+<ul>
+<li><code>distTo[v]</code> is length of shortest known path from <code>s</code> to <code>v</code></li>
+<li><code>distTo[w]</code> is length of shortest known path from <code>s</code> to <code>w</code></li>
+<li><code>edgeTo[w]</code> is last edge on shortest known path from <code>s</code> to <code>w</code></li>
+</ul>
+
+<p>여기서 만약 <code>e = v -&gt; w</code> 가 <code>w</code> 로의 더 짧은 거리라면, <code>distTo[w]</code> 와 <code>edgeTo[w]</code> 를 업데이트하면 된다.</p>
+
+<p><img src='http://www.csupomona.edu/' ~ftang/courses/CS241/notes/images/graph/relax1.jpg" alt="" title="" />  </p>
+
+<p><img src='http://faculty.ycp.edu/' ~dbabcock/PastCourses/cs360/lectures/images/lecture21/relaxation.png" alt="" /></p>
+
+<p align="center">(<a href='http://www.csupomona.edu/' ~ftang'>http://www.csupomona.edu/~ftang</a>)</p>
+
+<pre><code class="java">void relax(DirectedEdge e) {  
+  int v = e.from();
+  int w = e.to();
+
+  if (distTo(w) &gt; distTo(v) + e.weight()) {
+    distTo[w] = distTo[v] + e.weight();
+    edgeTo[w] = e;
+  }
+}
+</code></pre>
+
+<h4 id="shortestpathsoptimalityconditions">Shortest-paths optimality conditions</h4>
+
+<blockquote>
+  <p>Let <code>G</code> be an edge-weighted digraph, then <code>distTo[]</code> are the shortest path distance from s iff:</p>
+</blockquote>
+
+<ul>
+<li><code>distTo[s]</code> = 0</li>
+<li>For each vertex <code>v</code>, <code>distTo[v]</code> is the length of some path from <code>s</code> to <code>v</code></li>
+<li>For each edge <code>e = v -&gt; w</code>, <code>distTo[w] &lt;= distTo[v] + e.weight()</code></li>
+</ul>
+
+<p><strong>necessary condition</strong> </p>
+
+<p>만약 어떤 <code>e = v -&gt; w</code>에 대해 <code>distTo[w] &gt; distTo[v] + e.weight()</code> 이면, <code>e</code> 를 이용한 <code>w</code> 까지의 거리가 <code>distTo[w]</code> 보다 더 짧다. 그러면 <code>distTo[w]</code> 는 <em>shortest path</em> 가 아니다.</p>
+
+<p><strong>sufficient condition</strong></p>
+
+<ul>
+<li>Suppose <code>s = v0 -&gt; v1, ... -&gt; vk = w</code> is a shortest path from <code>s</code> to <code>v</code></li>
+</ul>
+
+<p>그러면</p>
+
+<pre><code>distTo[v1] &lt;= distTo[v0] + e1.weight();  
+...
+distTo[vk] &lt;= distTo[v_k-1] + ek.weight(); 
+
+// e_i is, i th edge on shortest path from s to w
+</code></pre>
+
+<p>이제 <code>distTo[v] = 0</code> 이라 하면</p>
+
+<p><code>distTo[w] &lt;= e1.weight + ..., + ek.weight()</code></p>
+
+<p>이 때 우변이 <em>shortest path</em> 위에 있는 <em>edge</em> 의 <em>weight</em> 값이므로, <code>distTo[w]</code> 는 <code>w</code> 까지의 <em>shortest path</em> 다.</p>
+
+<p>(여기서는 필요충분조건 <code>p &lt;=&gt; q</code> 를 증명하기 위해 <code>p -&gt; q</code>, <code>q -&gt; p</code> 를 증명했다.)</p>
+
+<h4 id="genericshortestpathsalgorithm">Generic Shortest-paths Algorithm</h4>
+
+<pre><code>initialize distTo[s] = 0 and distTo[v] = infinity for all other vertices
+
+Repeat until optimality conditions are satisfied,  
+  Relax any edge
+</code></pre>
+
+<p>어떤 <em>edge</em> 를 고를까 하는 문제로 발전할 수 있다.</p>
+
+<p>(1) <em>Dijkstra's algorithm</em>: <strong>non-negative weights</strong> <br />
+(2) <em>Topological sort</em>: <strong>no directed cycles</strong> <br />
+(3) <em>Bllman-Ford algorithm</em>: <strong>no negative cycles</strong></p>
+
+<h3 id="dijkstrasalgorithm">Dijkstra's Algorithm</h3>
+
+<pre><code>- Consider vertices in increasing order of dinstance from s
+  (non-tree vertex with the lowest distTo[] value)
+
+- Add vertex to tree and relax all edges pointing from that vertex
+</code></pre>
+
+<h4 id="correctness">Correctness</h4>
+
+<blockquote>
+  <p>Dijkstra's algorithm computes a SPT in any edge-weighted digraph with non-negative weights</p>
+</blockquote>
+
+<p>모든 <code>e = v -&gt; w</code> 는 단 한번씩만 <em>relaxed</em> 되기 때문에 알고리즘은 언젠간 종료된다. (<code>v</code> 가 <code>T</code> 에 추가되었을 때) </p>
+
+<p>그리고 이 과정에서 <code>distTo[w] &lt;= distTo[v] + e.weight()</code> 가 유지된다. 왜냐하면 <code>distTo[w]</code> 는 줄어들기만 하고, <em>weight</em> 가 음수인 <em>edge</em> 가 없기 때문에 <code>distTo[v]</code> 는 변함이 없기 때문이다. </p>
+
+<pre><code class="java">DirectedEdge[] edgeTo;  
+double[] distTo;  
+IndexMinPQ&lt;Double&gt; pq;
+
+void DijkstraSP(EdgeWeightedDigraph G, int s) {  
+  int V = G.V();
+  edgeTo = new DirectedEdge[V];
+  distTo = new double[V];
+  pq = new IndexMinPQ&lt;Double&gt;(V);
+
+  for(int v = 0; v &lt; V; v++) {
+    distTo[v] = Double.POSITIVE_INFINITY;
+  }
+
+  distTo[s] = 0.0;
+  pq.insert(s, 0.0);
+
+  while (!ps.isEmpty()) {
+    int v = pq.dequeue();
+    for(DirectedEdge e: G.adj(v))
+      relax(e);
+  }
+}
+
+void relax(DirectedEdge e) {  
+  int v = e.from();
+  int w = e.to();
+
+  if (distTo[w] &gt; distTo[v] + e.weight()) {
+    distTo[w] = distTo[v] + e.weight();
+    edgeTo[w] = e;
+
+    if (pq.contains(w)) pq.decreaseKey(w, distTo[w]);
+    else pq.insert(w, distTo[w]);
+  }
+}
+</code></pre>
+
+<p>프림 알고리즘과 마찬가지로 </p>
+
+<p><code>T(n) = V insert + V delete-min + E decrease key</code> 인데, 이 연산들은 <em>Priority Queue</em> 구현에 따라 다를 수 있다. </p>
+
+<p><em>undordered array</em> 라면 <code>V^2</code>, <em>binary heap</em> 이라면 <code>E log V</code> </p>
+
+<p>따라서 <em>dense graph</em> 에서는 <em>array</em> 를, <em>sparse graph</em> 라면 <em>binary heap</em> 이 낫다.</p>
+
+<h4 id="dijkstraandprim">Dijkstra and Prim</h4>
+
+<p>둘 다 <em>spanning tree</em> 를 만들어 낸다. </p>
+
+<ul>
+<li>다익스트라는 <em>directed path</em> 에서 <em>source</em> 에서 가장 가까운 <em>vertex</em> 를 선택한다면, </li>
+<li>프림 알고리즘은 <em>undirected edge</em> 내 에서 <em>tree</em> 에서 가장 가까운 <em>vertex</em> 를 선택한다.</li>
+</ul>
+
+<h3 id="edgeweighteddags">Edge-Weighted DAGs</h3>
+
+<p><em>cycle</em> 이 없는 그래프는 <em>shortest path</em> 를 찾기 더 쉽다.</p>
+
+<p><em>toplogical order</em> 순서로 <em>relaxing</em> 해 가면 된다. 어차피 방문 자체는 <em>topological order</em> 로 해야만 모든 <em>vertex</em> 를 방문할 수 있기 때문이다. </p>
+
+<p>이 알고리즘에서 재미난 점은 음수 <em>weight</em> 가 있던 말던 상관이 없다는 것이다.</p>
+
+<blockquote>
+  <p>Topological sort algorithm computes SPT in <strong>any</strong> edge-weighted DAG in time proprotional to <code>E + V</code></p>
+</blockquote>
+
+<p>다익스트라와 마찬가지로 모든 <em>edge <code>e = v -&gt; w</code></em> 는 단 한번만 <em>relaxed</em> 되고, 이 과정에서 <code>distTo[w] &lt;= distTo[v] + e.weight()</code> 다.</p>
+
+<p>(1) <code>distTo[w]</code> 는 줄어들기만 하고, <br />
+(2) <em>topological order</em> 이기 때문에 한번 방문된 <code>v</code> 에 대해 이후의 <em>vertex</em> 에서 <code>v</code> 로 갈 수 없다. 있다면 <em>cycle</em> 이고 그럼 <em>toplogical order</em> 가 안된다. 따라서 <code>distTo[v]</code> 는 변하지 않는다. 따라서 <em>weight</em> 가 음수든 양수든 상관이 없다.</p>
+
+<pre><code class="java">DirectedEdge[] edgeTo;  
+double[] distTo;
+
+public AcyclicSP(EdgeWeightedDigraph G, int s) {  
+  int V = G.V();
+  edgeTo = new DirectedEdge[V];
+  distTo = new double[V];
+
+  for(int v = 0; v &lt; V; v++) {
+    distTo[v] = Double.POSITIVE_INFINITY;
+  }
+
+  distTo[s] = 0.0;
+
+  Topological t = new Topological(G);
+
+  for (int v : t.order()) {
+    for (DirectedEdge e : G.adj(v)) {
+      relax(e);
+    }
+  }
+}
+</code></pre>
+
+<p>응용으로 <em>seam carving</em> 이 있다. 수직이나 수평으로 <em>shortest path</em> 를 찾아서 제거하면 된다.</p>
+
+<p><img src='http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation_files/image002.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://rahuldotgarg.appspot.com/' >http://rahuldotgarg.appspot.com</a>)</p>
+
+<p><em>longest path</em> 를 찾는법은 모든 <em>weight</em> 를 <em>negate</em> 하고, 찾고, 다시 결과의 <em>weight</em> 에 마이너스를 붙이면 된다. 이게 가능한 이유는 <em>no cycle</em> 이기 때문에 <em>weight</em> 가 음수든, 양수든 상관이 없기 때문이다.</p>
+
+<p>응용해서 <em>Critical path method, CPM</em> 에 활용할 수 있다.</p>
+
+<p>작업간 의존관계가 있으므로 이를 이용해서 <em>DAG</em> 를 그리면 된다. 각 <em>job</em> 당 <em>start vertex, finish vertex</em> 가 되며, 그 <em>weight</em> 는 <em>duration</em> 으로 하고 한 작업과 다음 작업의 <em>weight</em> 는 <code>0</code> 으로 했을때의 <em>longest path</em> 를 찾으면 된다. </p>
+
+<p><img src='http://algs4.cs.princeton.edu/44sp/images/scheduling-critical-path.png'  alt="" /></p>
+
+<p align="center">(<a href='http://algs4.cs.princeton.edu/44sp/' >http://algs4.cs.princeton.edu/44sp/</a>)</p>
+
+<h3 id="negativeweights">Negative Weights</h3>
+
+<p>다익스트라 알고리즘은 <em>negative weight</em> 에 대해서 작동하지 않는다. 모든 <em>weight</em> 에 일정 수 <code>n</code> 을 더해 모두 양수로 만들어도 똑같다. 심지어 이 경우는  <em>shortest path</em> 자체가 바뀐다. 따라서 다른 알고리즘이 필요하다.</p>
+
+<p>진도를 빼기 전에 용어를 좀 정의하고 가면</p>
+
+<p><em>negative cycle</em> 은, <em>directed cycle</em> 내의 모든 <em>weight</em> 를 더했을 때 음수인 경우를 말한다. 이 경우 <em>SPT</em> 는 없다. 이는 쉽게 보일 수 있는데</p>
+
+<p><em>negative cycle</em> 이 존재하면 한번 이 사이클을 돌면, 전체 값이 음수이므로 어느 경로를 택해도 이전보다 더 짧아진다.</p>
+
+<p>따라서 이 사이클을 돌면 내부 <em>vertex</em> 를 무한정 <em>relaxing</em> 할 수 있다.  </p>
+
+<h4 id="bellmanfordalgorihm">Bellman-Ford Algorihm</h4>
+
+<p><em>Bellman-Ford Algorihm</em> 은 <em>negative cycle</em> 이 있는지 검사할 수 있다.</p>
+
+<ul>
+<li>Initialize <code>distTo[s] = 0</code> and <code>distTo[v] = inf</code> 
+for all other vertice</li>
+<li>Repeat V times, relax each Edge</li>
+</ul>
+
+<pre><code>for (int i = 0; i &lt; G.V(); i++)  
+  for(int v = 0; v &lt; G.V(); v++)
+    for(DirectedEdge e: G.adj(v)) // pass i
+      relax(e);     
+</code></pre>
+
+<p>벨만 포드 알고리즘은 <em>negative cycle</em> 이 없을때 <code>O(E * V)</code> 로 <em>shortest path</em> 를 찾아낸다. </p>
+
+<p>증명은 <a href='http://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm' #Proof_of_correctness">여기</a>를 참조하도록 하자.</p>
+
+<p>알고리즘을 잘 보면, 한 <em>pass</em> 에서 <code>distTo[v]</code> 가 변하지 않으면 그 이후에도 안 변한다. </p>
+
+<blockquote>
+  <p>If <code>distTo[v]</code> does not change during pass <code>i</code>, no need to relax any edge pointing from <code>v</code> in pass <code>i + 1</code></p>
+</blockquote>
+
+<p>따라서 <code>distTo[]</code> 가 변화한 <code>v</code> 의 리스트를 유지해서, 이것 대상으로 <em>relax</em> 하면 성능을 더 개선할 수 있다.</p>
+
+<h4 id="findinganegativecycle">Finding a negative cycle</h4>
+
+<p>벨만 포드 알고리즘은 <em>negative cycle</em> 을 찾아내는데 사용할 수도 있다. <em>negative cycle</em> 이 있을 경우 무한히 <em>relax</em> 를 해 내기 때문이다.</p>
+
+<p>따라서 <code>V - 1</code> 까지 진행 한 후 <code>V</code> 번째에서 어느 <em>vertex</em> <code>v</code> 라도 업데이트 된다면, <em>negative</em> 사이클이 있다.</p>
+
+<p><em>negative cycle</em> 은 <em>arbitrage detection</em> 에 사용할 수 있다.</p>
+
+<h3 id="shortestpathcostsummary">Shortest Path Cost Summary</h3>
+
+<p>(1) <strong>Topological Sort:</strong> No directed cycles</p>
+
+<p>다익스트보다 더 빠르고, <em>negative weight</em> 도 문제 없다.</p>
+
+<ul>
+<li>typical: <code>E + V</code></li>
+<li>worst: <code>E + V</code></li>
+<li>extra space: <code>V</code></li>
+</ul>
+
+<p>(2) <strong>Dijkstra(binary heap):</strong> No negative weights</p>
+
+<p>거의 <em>linear time</em> 이다.</p>
+
+<ul>
+<li>typical: <code>E logV</code></li>
+<li>worst: <code>E logV</code></li>
+<li>extra space: <code>V</code></li>
+</ul>
+
+<p>(3) <strong>Bellman Ford:</strong> No negative cycles</p>
+
+<ul>
+<li>typical: <code>E * V</code></li>
+<li>worst: <code>E * V</code></li>
+<li>extra space: <code>V</code></li>
+</ul>
+
+<p>(4) <strong>Bellman Ford(queue):</strong> No directed Cycles</p>
+
+<ul>
+<li>typical: <code>E + V</code></li>
+<li>worst: <code>E * V</code></li>
+<li>extra space: <code>V</code></li>
+</ul>
+
+<p><em>SPT</em> 를 정리하면</p>
+
+<p><em>directed cycle</em> 은 문제를 더 어렵게 만들고,
+<em>negative weight</em> 도 문제를 더 어렵게 만들고,
+<em>negative cycles</em> 는 문제를 풀 수 없게 만든다. (내가 배운 한도 내에서는)</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
+(2) <a href='http://en.wikipedia.org/wiki/Bipartite_graph' >Wikipedia: Bipartite Graph</a> <br />
+(3) <a href='http://www.biodatamining.org/content/4/1/10/figure/F3?highres=y' >http://www.biodatamining.org/</a> <br />
+(4) <a href='http://ko.wikipedia.org/wiki/%ED%8F%89%EB%A9%B4_%EA%B7%B8%EB%9E%98%ED%94%84' >Wikipedia: 평면그래프</a> <br />
+(5) <a href='http://www.csupomona.edu/' ~ftang">CS241 Lecture Notes: Graph Algorithms</a> <br />
+(6) <a href='http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation.htm' >Seam Carving for Content-Aware Image Resizing</a> <br />
+(7) <a href='http://algs4.cs.princeton.edu/44sp/' >Algorithms: Shortest Path</a> <br />
+(8) <a href='http://stackoverflow.com/questions/19760077/what-does-bellman-ford-algorithm-detects-negative-weight-or-negative-cycle' >What does bellman ford algorithm</a></p>]]></description><link>http://1ambda.github.io/graph-challenges-minimum-spanning-trees/</link><guid isPermaLink="false">22c06085-7f5c-45eb-8efc-31870d3ed425</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[graph]]></category><category><![CDATA[minimum spanning tree]]></category><category><![CDATA[shortest-path]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 03 Dec 2014 06:01:51 GMT</pubDate></item><item><title><![CDATA[Hash Table, Universal Hashing, Bloom filters]]></title><description><![CDATA[<h3 id="hashtable">Hash Table</h3>
 
 <p>해시 테이블의 연산은 <em>key</em> 를 이용해 이런 작업들을 한다.</p>
 
@@ -5477,1369 +6641,4 @@ UNTIL Centroids don’t change // or less than thresahold”
 (9) <a href='http://datavisualization.blog.com/visible-data/cluster-analysis/' >http://datavisualization.blog.com</a> <br />
 (10) <a href='http://www.cs.umd.edu/hcil/hce/hce3-manual/hce3_manual.html' >http://www.cs.umd.edu</a> <br />
 (11) <a href='http://crsouza.blogspot.kr/2009/12/performing-discriminant-power-analysis.html' >http://crsouza.blogspot.kr</a> <br />
-(12) <a href='http://www.slideshare.net/salahecom/08-classbasic' >http://www.slideshare.net/salahecom/08-classbasic</a></p>]]></description><link>http://1ambda.github.io/process-mining-week1/</link><guid isPermaLink="false">6b0990d6-e516-4154-9e40-4b7b7244bdbf</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[decision tree]]></category><category><![CDATA[association rule]]></category><category><![CDATA[k-means clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 18 Nov 2014 03:51:30 GMT</pubDate></item><item><title><![CDATA[Graph Search and Connectivity￼]]></title><description><![CDATA[<p>기본적인 그래프 탐색 방법 <em>DFS</em>, <em>BFS</em> 에 대해 배우고 약간씩 응용하여 <em>shortest path</em>, <em>conncected components</em>, <em>topological order</em>, <em>strongly connected components</em> 등을 찾는 방법을 배운다. </p>
-
-<p>마지막 부분에선 웹이 어떻게 생겼을까 잠깐 고민해 본다.</p>
-
-<h3 id="graphsearch">Graph Search</h3>
-
-<p>그래프 탐색은 다양하게 활용할 수 있다.</p>
-
-<p>(1) check if a network is connected <br />
-(2) driving directoin (shortest path) <br />
-(3) formulate a plan (e.g how to fill in a sudoku puzzle) <br />
-(4) compute the <em>"pieces"</em> of a graph (e.g clustering)</p>
-
-<p>그래프를 탐색하는데는 <em>"재 방문하지 않는다"</em> 등 여러 조건이 붙으면서 다양한 방법이 있을 수 있겠지만 여기서는 단순히 모든 <em>vertex</em> 를 방문하는 일반적인 그래프 탐색 알고리즘 (<em>generic algorithm</em>) 에 대해 먼저 이야기 해 보자.</p>
-
-<p>이렇게 먼저 일반적인 알고리즘을 정의해 보는 이유는, <em>BFS</em> 와 <em>DFS</em> 를 증명할때 먼저 정의한 일반적인 알고리즘의 특수한 경우임을 파악하여 이미 증명된 결과를 활용할 수 있기 때문이다.</p>
-
-<blockquote>
-  <p>Goals: <strong>find everything findable from a given start vertex</strong>, <code>O(m + n)</code></p>
-</blockquote>
-
-<p>여기서 <em>findable</em> 이란 말은 두 점 <code>(s, e)</code> 사이에 <em>path (경로)</em> 가 있냐는 질문과 동일하다. 경로가 없으면 <em>findable</em> 이 아니다.</p>
-
-<p>목표로 하는 복잡도가 <code>O(m + n)</code> 인데, 이것은 정점의 수 <code>n</code> 이나 엣지수 <code>m</code> 중 더 큰 수를 따라간다고 이해하면 된다. 알고리즘은 이렇다.</p>
-
-<pre><code>initially `s` explored, all other vertices are unexplored  
-while possible:  
-  choose an edge `(u, v)` with `u` explored and `v` unexplored  
-  mark `v` explored  
-</code></pre>
-
-<p><em>generic graph search algorithm</em> 이 끝났을때 <code>v</code> 가 <em>explored</em> 라면 그래프 <code>G</code> 가 <code>s -&gt; v</code> 인 <em>path</em> 가 존재한다. 이를 귀납법으로 증명해 보자.</p>
-
-<p>귀납법이므로 먼저 증명하려는 바를 부정하여 알고리즘이 종료 되었을 때 <code>G</code> 에서 <code>(s -&gt; v)</code> 로 가는 경로가 없다고 하자. </p>
-
-<p>알고리즘 초기 단계에서 <code>s</code> 만 <em>explored</em> 고 나머지는 <em>unexplored</em> 다. 매 탐색마다 <code>(u, w)</code> 를 찾아내며 <em>unexplored</em> <code>w</code> 를 <em>explored</em> 로 마킹한다. </p>
-
-<p><code>(s, v)</code> 사이 경로가 없다면, 어떤 <code>w</code> 가 <em>unexplored</em> 인 <code>(u, w)</code> 가 알고리즘이 끝났을때 존재해야 한다. <code>w</code> 가 <code>v</code> 일수도, <code>u</code> 가 <code>s</code> 일수도 있다.</p>
-
-<p>그러나 이 경우 <em>unexplored</em> <code>w</code> 가 존재하면 알고리즘이 절대 종료될 수 없다. 결국 모순이므로 <code>s -&gt; v</code> <em>path</em> 가 없다는 것이 잘못되었다.</p>
-
-<h3 id="bfsvsdfs">BFS vs DFS</h3>
-
-<p>사실 그래프 탐색 문제는 <em>crossing edge</em> 문제와 같다. 한쪽을 <em>explored</em>, 다른쪽을 <em>unexplored</em> 라 놓고 각 <em>vertex</em> 들을 잇는 <em>crossing edge</em> 를 고르는 문제다.</p>
-
-<p><em>BFS</em> 는 기본적으로 <em>queue</em> 를 사용하면 <code>O(m + n)</code> 이다. 그리고</p>
-
-<p>(1) explore nodes in <em>"layers"</em> <br />
-(2) can compute <em>"shortest path"</em> <br />
-(3) can compute connected components of an undirected graph  </p>
-
-<p><em>DFS</em> 는 <em>stack</em> 을 이용하면 <code>O(m + n)</code> 이다. 그리고</p>
-
-<p>(1) explore aggressively like a maze, backtrack only when necessary <br />
-(2) compute topological ordering of directed acyclic graph <br />
-(3) compute connected components in directed graphs</p>
-
-<h3 id="breadthfirstsearch">Breadth-First Search</h3>
-
-<p><em>BFS</em> 는 <em>shortest path</em> 를 계산할 수 있고 <em>undirected graph</em> 의 <em>connected components</em> 를 구할 수 있다. 그리고 복잡도는 <code>O(m + n)</code> 이다.</p>
-
-<p>함수를 <code>BFS(graph G, start-vertex s)</code> 라 하면 시작단계에서는 모든 그래프 노드가 <em>unexplored</em> 다.</p>
-
-<p>(1) mark <code>s</code> as explored <br />
-(2) Let <code>Q</code> - queue data structure <strong>(FIFO)</strong>, initialied with <code>s</code> <br />
-(3) while <code>Q</code> is not empty: <br />
-- remove the first node of <code>Q</code>, call it <code>v</code> <br />
-- for each edge <code>(v, w)</code>, if <code>w</code> unexplored mark <code>w</code> as explored and add <code>w</code> to Q</p>
-
-<p>시작 점 <code>s</code> 를 <em>layer 0</em> 이라 부르면 <em>layer 1</em> 은 <em>layer 0</em> 에서 갈 수 있는 지점이다. 모두 저장하고, 큐에서 하나 꺼내 <em>layer 2</em> 를 계산해서 다시 집어넣고, 이 과정을 반복한다. 알고리즘 중에 이미 방문했는지를 검사하기 때문에 같은 노드를 두번 이상 방문하지 않는다.</p>
-
-<p>알고리즘이 종료되었을때 <code>v</code> 가 <em>explored</em> 라면 <code>s -&gt; v</code> 인 <em>path</em> 가 존재한다. 증명은 간단한데 <em>BFS</em> 가 <em>generic search algorithm</em> 의 <em>spcial case</em> 이기 때문이다. </p>
-
-<p><em>BFS</em> 알고리즘을 잘 보면 <em>generic algorithm</em> 처럼 <code>(u, w)</code>, <code>w</code> 는 <em>unexplored</em> 인 <em>edge</em> 를 찾는데, 이 때 <em>BFS</em> 는 한 레이어에서 다음 레이어로 갈 수 있는 <em>edge</em> 만 찾는다는 점이 다르다.</p>
-
-<p><em>running time</em> 은 <code>O(n_s + m_s)</code> 다. 여기서 <code>n_s</code> 는 <code>s</code> 에서 갈 수 있는 <em>node</em> 의 숫자고 <code>m_s</code> 는 <code>s</code> 에서 갈 수 있는 <em>edge</em> 수다.</p>
-
-<p><code>while</code> 루프 알고리즘을 다시 보면</p>
-
-<pre><code>while `Q` is not empty:  
-  remove the first node of `Q`, call it `v`  
-  for each edge `(v, w)`:
-    if `w` is unexplored:
-      mark `w` as explored
-      add `w` to Q
-</code></pre>
-
-<p>한 <em>vertex</em> 는 아무리 많아봐야 큐에 한번 들어가고,  이 때마다 이 <em>vertex</em> 에서 갈 수 있는 <em>edge</em> 를 검사하지만, 결국 아무리 많아봐야 한 <em>edge</em> 당 두번씩만 검사되고, 검사하는 <code>for</code> 구문은 <code>O(1)</code> 이기 때문에 <code>O(m + n)</code> 이다.</p>
-
-<h3 id="shortestpath">Shortest Path</h3>
-
-<p>생각해보면 굉장히 쉽다. <code>s</code> 부터 시작해서 <code>v</code> 까지의 거리를 찾는 경우 <code>s = v</code> 면 각 노드의 <code>dist</code> 값을 <code>0</code> 으로, 아니면 무한히 큰 값으로 한다. </p>
-
-<p><em>BFS</em> 에서 레이어마다 하나씩 넘어갈때 마다 <code>dist</code> 값을 1씩 증가시키는데, 이때 이미 <code>dist</code> 값이 있는 경우 그 값보다 적으면 새로운 <code>dist</code> 값을 기록하고, 아니면 기록하지 않는다.</p>
-
-<p>따라서 알고리즘이 종료되었을때 <code>dist(v) = i</code> 라면 <code>v</code> 는 <code>i</code> 번째 레이어에 있다. 바꿔말하면 <em>shortest path <code>(s, v)</code></em> 는 <code>i</code> 개의 <em>edge</em> 를 가지고 있다는 뜻이다.</p>
-
-<h3 id="undirectedconnectivity">Undirected Connectivity</h3>
-
-<p><em>undirected connectivity</em> 는 그래프에서 서로 연결된 부분 집합을 찾는 문제다. 용어부터 정의하고 가자면</p>
-
-<blockquote>
-  <p>equivalence classes of the relation <code>u ~ v</code> &lt;=> <code>E(u, v)</code> path in <code>G</code></p>
-</blockquote>
-
-<p><em>equivalence class</em> 는 처음봤는데 위키에 보니 다음의 3 가지 속성을 만족한다고 한다.</p>
-
-<blockquote>
-  <p>For every element <code>a</code> in X, <code>a ~ a</code> <strong>(reflexivity)</strong> <br />
-  For every two elements <code>a</code> and <code>b</code> in X, if <code>a ~ b</code>, then <code>b ~ a</code> <strong>(symmetry)</strong> <br />
-  For every three elements <code>a</code>, <code>b</code>, and <code>c</code> in X, if <code>a ~ b</code> and <code>b ~ c</code>, then <code>a ~ c</code> <strong>(transitivity)</strong></p>
-</blockquote>
-
-<p><em>connected component</em> 를 어디다 쓸 수 있을까? </p>
-
-<p>네트워크에 대해 적용해 보면, 네트워크가 끊어졌는지를 <em>connected component</em> 를 구해서 두개 이상이 나오는지로 판단할 수 있다.</p>
-
-<p><em>clustering</em> 에도 쓸 수 있다. 만약 두 유전자나, 웹페이지가 비슷한지를 비교해서 <em>connected component</em> 로 만들면 구별되는 특징을 가진 집단을 만들 수 있다.</p>
-
-<p><em>clustering</em> 하는 다른 알고리즘이 많음에도 <em>BFS</em> 는 <em>linear time</em> 이기 때문에 <em>clustering</em> 에 충분히 쓸만하다.</p>
-
-<p><em>undirected</em> 그래프에서 <em>BFS</em> 를 이용하면 <em>conncected component</em> 를 구하는 알고리즘은 이렇다.</p>
-
-<pre><code>all node unexplored // assume labelled 1 to n
-
-for i = 1 to n  
-  if i not yet explored
-    BFS(G, i)
-</code></pre>
-
-<p>따라서 <code>BFS</code> 를 수행할 때 마다 <em>connected component</em> 가 하나씩 나온다고 말할 수 있다. </p>
-
-<p>성능은 마찬가지로 <code>O(m + n)</code> 이다. 왜냐하면 부의 <code>if</code> 나 <code>for</code> 그리고 모든 노드를 <em>unexplored</em> 로 초기화 하는 부분도 <code>O(n)</code> 이고, 각 노드 하나씩에 대해서 방문하지 않았을 때만 <em>BFS</em> 를 수행하는데 <em>BFS</em> 는 <em>edge</em> 에 대해서는 <code>O(1)</code> 이고, 모든 <em>edge</em> 를 검사하므로 <em>BFS</em> 의 전체 성능은 <code>O(m)</code> 이다. 따라서 <code>O(m + n)</code></p>
-
-<h3 id="depthfirstsearch">Depth-First Search</h3>
-
-<blockquote>
-  <p>explore aggressively, and backtrack when necessary</p>
-</blockquote>
-
-<p><em>BFS</em> 로도 <code>O(m +n)</code> 시간 내에 탐색하고 <em>shortest path</em>, <em>connected component</em> 를 찾는데 왜 <em>DFS</em> 가 필요할까?</p>
-
-<p>(1) can computes a topological ordering of a directed acyclic graph <br />
-(2) strongly conncected components of directed graphs</p>
-
-<p><em>BFS</em> 는 못하는 이 두 가지 문제를 <code>O(m + n)</code> 으로 해결할 수 있다.</p>
-
-<p>코드는 비슷한데 <em>queue</em> 대신 <em>stack</em> 을 쓰도록 하고, 재귀버전으로 작성해 보자.</p>
-
-<pre><code>DFS(graph G, start-vertex s)
-
-mark s as explored
-
-for every edge (s, v):  
-  if v is unexplored
-    DFS(G, v)
-</code></pre>
-
-<p><em>DFS</em> 가 종료 됐을때 <code>v</code> 가 <em>explored</em> 라면 <code>s -&gt; v</code> 인 <em>path</em> 가 있다. 이는 <em>DFS</em> 가 위에서 본 <em>generic search algorithm</em> 의 특별한 케이스임을 생각하면 쉽게 알 수 있다.     </p>
-
-<p>성능은 <em>BFS</em> 와 같이 <code>O(n_s  m_s)</code> 인데, 각 <em>vertex</em> 는 아무리 많아봐야 한번, <em>edge</em> 는 아무리 많아봐야 두번씩 체크하고 <em>edge</em> 내부에서의 연산은 <code>O(1)</code> 이기 때문이다.</p>
-
-<h3 id="topologicalsort">Topological Sort</h3>
-
-<p>정의부터 보면</p>
-
-<blockquote>
-  <p>A <strong>toplogical ordering</strong> of a <em>directed graph</em> <code>G</code> is a labelling <code>f</code> of <code>G</code>'s nodes such that <br />
-  1. the <code>f(v)</code>'s are the set <code>{1, 2, 3, ..., n}</code> <br />
-  2. <code>(u, v)</code> in <code>G</code> => <code>f(u)</code> &lt; <code>f(v)</code></p>
-</blockquote>
-
-<p>이미지로 보면 더 이해하기 쉽다.</p>
-
-<p><img src='http://www.stoimen.com/blog/wp-content/uploads/2012/12/3.-Topological-Sort-Order.png'  alt="" /></p>
-
-<p align="center">(<a href='http://www.stoimen.com/' >http://www.stoimen.com</a>)</p>
-
-<p>왜 <em>topological sort</em> 가 필요할까? <em>precedence constraints</em> 가 있는 <em>sequence</em> 에서 나올 수 있는 모든 경우의 수를 파악하기에 좋다. 예를 들어 선수과목이 있을때 이수 가능한 스케쥴이라던가, 일정이라던가.</p>
-
-<blockquote>
-  <p>Sequence taks while respecting all precedence constraints</p>
-</blockquote>
-
-<p>단, <em>topological sort</em> 를 하기 위한 조건이 하나 있는데 <em>directed cycle</em> 이 없어야 한다. 다시 말해 <em>acyclic</em> 이어야 한다.</p>
-
-<blockquote>
-  <p>If <code>G</code> has directed cycle, then no topological ordering</p>
-</blockquote>
-
-<p><em>directed graph</em> 에서 <em>outgoing edge</em> 가 없는 것을 <em>sink vertex</em> 라 하자. 그러면 <em>directed acyclic graph, DAG</em> 는 최소한 하나의 <em>sink vertex</em> 를 가지고 있다.</p>
-
-<p>증명은 <em>contradiction</em> 을 이용하자. <em>sink vertex</em> 가 없다고 하면, 쭈욱 방문하다 보면 하나의 <em>vertex</em> 를 두번 이상 방문하게 되고, 그건 <em>cyclic</em> 이므로 <em>acyclic</em> 이란 조건에 위배되므로 모순이다. 따라서 <em>DAG</em> 에서는 최소한 하나의 <em>sink vertex</em> 가 있다.</p>
-
-<p><em>topological sort</em> 의 알고리즘은 </p>
-
-<pre><code>let v be a sink vertex of G  
-set f(v) = n  
-recurse on G - {v}  
-</code></pre>
-
-<p><code>G - {v}</code> 도 <em>DAG</em> 이다. 왜냐하면 <em>DAG</em> 에서 <em>sink vertex</em> 를 제거해도 <em>DAG</em> 이기 때문에 매 재귀마다 <code>G</code> 는 <em>DAG</em> 가 된다. 이 때 제거하는 <em>sink vertex</em> 에 전체 노드 수 <code>n</code> 을 매기기 때문에 최종적으로는 <code>1, .., n</code> 을 가진 <em>toplogical order</em> 을 계산할 수 있다.</p>
-
-<p>이제 <em>DFS</em> 를 이용해 <em>toplogical sort (위상 정렬)</em> 을 해보자.</p>
-
-<pre><code>DFS(graph G, start-vertex s)  
-- mark s explored  
-- for every edge (s, v):
-    if v not yet explored:
-      DFS(G, v)
-- set f(s) = current_label // sink vertex
-- current_label--
-
-DFS-Loop(graph G)  
-- mark all nodes unexplored
-- current_label = n // to keep track of ordering
-- for each vertex v in G:
-    if v not yet explored:
-      DFS(G, v)
-</code></pre>
-
-<p><em>running time</em> 은 <code>O(m + n)</code> 이다. <em>node</em> 마다 <code>O(1)</code>, <em>edge</em> 마다 <code>O(1)</code> 이고 <em>node</em> 나 <em>edge</em> 는 두번 방문하지 않기 때문에 (<em>directed graph</em>) <code>O(m + n)</code></p>
-
-<p>위상정렬을 하는지는 <code>(u, v)</code> 가 <em>edge</em> 라면 <code>f(u) &lt; f(v)</code> 임을 보이면 된다.</p>
-
-<p><code>u</code> 먼저 방문되었을 경우에는 <code>v</code> 가 먼저 끝나 <code>n</code> 이 할당되기 때문에 <code>f(u) &lt; f(v)</code> 다.</p>
-
-<p>만약에 <code>v</code> 가 <code>u</code> 보다 먼저 방문되면 <code>u</code> 가 방문되기도 전에 <code>v</code> 에 대한 방문이 끝나므로 <code>f(u) &lt; f(v)</code> 다.</p>
-
-<h3 id="stronglyconnectedcomponents">Strongly Connected Components</h3>
-
-<p>먼저 정의부터 보면 </p>
-
-<blockquote>
-  <p><strong>Strongly conncected components (SCCs)</strong> of a directed graph <code>G</code> are the equivalence classes of the relation. <code>u ~ v</code> means path <code>u -&gt; v</code> and <code>v -&gt; u</code> in G</p>
-</blockquote>
-
-<p><em>directed graph</em> 는 방향성이 있기 때문에 단순히 <em>component</em> 를 구한다고 해서 <em>equivalence classes</em> 가 되지 않는다. 서로 순환이 될 수 있는, cyclic  인 <em>component</em> 를 찾아야 한다.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/5/5c/Scc.png'  alt="" /></p>
-
-<p align="center">(<a href='http://commons.wikimedia.org/' >http://commons.wikimedia.org</a>)</p>
-
-<p><em>SCC</em> 는 <em>cycle</em> 이기 때문에 <em>DFS</em> 만 돌려도 나올 <strong>수</strong> 있다. 그런데, 만약 전체로 갈 수 있는 노드에서 <em>DFS</em> 를 돌려버리면 모든 <em>SCC</em> 가 합쳐진 형태가 나온다. 다시 말해서 단순 DFS 를 모든 노드에 대해 돌리는 것으로는 <em>SCC</em> 를 얻을 수도, 못 얻을 수도 있다는 소리다. <em>Kosaraju's Two-Pass Algorithm</em> 으로 해결할 수 있다.</p>
-
-<h3 id="kosarajus2passalgorithm">Kosaraju's 2-pass algorithm</h3>
-
-<p><code>O(m + n)</code> 으로 <em>SCC</em> 를 구하는 것을 보장한다. 어떻게 그럴까? <em>SCC</em> 를 찾을 때 <em>DFS</em> 를 돌릴려면 <strong>특정 노드의 순서</strong>로 <em>DFS</em> 를 돌려야 한다. 그렇지 않으면 <em>SCC</em> 가 나오지 않는다. <em>Kosaraju algorithm</em> 은 이 순서를 찾아준다. </p>
-
-<pre><code>Let G_rev = G with all arcs reversed  
-run DFS-Loop on G_rev // compute "magical ordering"  
-run DFS-Loop on G // discover SCCs  
-</code></pre>
-
-<p>좀 더 자세히 보면 <code>f(v)</code> 를 각 <em>vertex</em> 에 대해 <em>finishing time</em> 이라 보면, 두번째 <code>DFS-Loop</code> 에서 <code>f(v)</code> 의 <em>decreasing order</em> 로 <code>DFS</code> 를 여러번 돌리면 <em>SCC</em> 를 찾아준다. 각 함수의 구현을 보면</p>
-
-<pre><code>DFS-Loop(graph G)
-
-global variable t = 0 // # of nodes processed so far  
-global variable s = NULL // current source vertex
-
-// assume nodes labelled 1 to n
-for i = n to 1 by -1:  
-  if i not yet explored:
-    s := i
-    DFS(G, i)
-</code></pre>
-
-<pre><code>DFS(graph G, node i)
-
-mark i as explored  
-set leader(i) := node s
-
-for each arc (i, j) in G:  
-  if j not yet explored:
-    DFS(G, j)
-
-t++  
-set f(i) := t  
-</code></pre>
-
-<p>첫번째 <code>DFS-Loop</code> 에서는 <em>edge</em> 가 뒤집어져 있다. 함수가 끝나면 각 노드마다 <code>f(t)</code> 를 계산 해 주는데, 이게 사실 <em>SCC</em> 기준으로 보면 같은 <em>SCC</em> 내에서는 외부와의 연결고리가 없는 내부 노드가 가장 낮은 <code>f(t)</code> 를 가지게 된다. </p>
-
-<p>이제 두번째 <code>DFS-Loop</code> 를 돌리기 위해 <em>edge</em> 를 다시 뒤집어서 보면 가장 높은 <code>f(t)</code> 값을 가지는 노드가 가장 먼저 <em>DFS</em> 를 돌려야 할 노드가 된다. 그리고 <em>leader</em> 는 각 <em>SCC</em> 를 얻기 위해 <em>DFS</em> 를 시작해야 할 지점이 된다.</p>
-
-<p><em>running time</em> 은 <code>2 x DFS</code> 기 때문에 <code>O(m + n)</code> 이다. 첫 번째 노드에서 얻은 <em>finisihing time</em> <code>f(t)</code> 를 정렬하면 <code>O(n logn)</code> 이기 때문에 정렬 없이 <em>decreasing</em> 순서로 <em>DFS</em> 를 돌게 해줘야 한다.</p>
-
-<h3 id="analysis">Analysis</h3>
-
-<p>분석에 앞서서 간단한 성질을 먼저 이끌어 내자. 그래프를 변형해 <em>node</em> 각각을 <em>SCC</em> 로 만든 <em>meta-graph</em> 를 생각 해 보자. 이 <em>meta graph</em> 는 <em>DAG</em> 다. 왜냐하면 모든 <em>cycle</em> 있는 그래프는 <em>SCC</em> 로 포함되었기 때문이다.</p>
-
-<p>따라서 <code>G</code> 나, 여기서 <em>edge, arc</em> 를 뒤집은 <code>G_rev</code> 나 같은 <em>SCC</em> 를 가지고 있다.</p>
-
-<p>이 때 <code>G</code> 에서 서로 인접한 <em>SCC</em> <code>C1 -&gt; C2</code> 에 대해서 <em>edge</em> <code>(i, j)</code> 가 있다고 해 보자. (<code>i -&gt; j</code>)</p>
-
-<p>그러면 <code>G_rev</code> 로 계산한 <code>max f(C1) &lt; max f(C2)</code> 임을 알 수 있다. 다시 말해 <code>C2</code> 가 먼저 <em>DFS</em> 를 돌려야 하는 <em>SCC</em> 인데, 먼저 돌려야 할 수록 더 높은 <em>finishing time</em> <code>f(t)</code> 를 가진다. </p>
-
-<p>이건 쉽게 보일 수 있는데, <code>G_rev</code> 에서는 <em>arc</em> 가 반대 방향이 되므로 더 큰 <em>SCC</em> <code>C1</code> 이, 다시 말해 더 나중에 계산해야 할 <em>SCC</em> 가 더 작은 <em>SCC</em> 가 되므로 먼저 계산이 끝나 더 작은 <code>max f(t)</code> 를 가지게 된다. </p>
-
-<p>증명은 <code>C1 union C2</code> 의 첫번째 노드가 <code>C1</code> 에 있을 때 <code>C2</code> 에 있을때로 각각 나눠서 참임을 보이면 쉽다.</p>
-
-<p>알고리즘을 다시 보면</p>
-
-<pre><code>DFS-Loop(graph G)
-
-global variable t = 0 // # of nodes processed so far  
-global variable s = NULL // current source vertex
-
-// assume nodes labelled 1 to n
-for i = n to 1 by -1:  
-  if i not yet explored:
-    s := i
-    DFS(G, i)
-</code></pre>
-
-<pre><code>DFS(graph G, node i)
-
-mark i as explored  
-set leader(i) := node s
-
-for each arc (i, j) in G:  
-  if j not yet explored:
-    DFS(G, j)
-
-t++  
-set f(i) := t  
-</code></pre>
-
-<p><code>DFS</code> 를 한번 돌릴 때 마다 <em>SCC</em> 가 하나씩 발견된다. 우선 <em>sink SCC</em> 가 가장 높은 <code>f(t)</code> 값을 가지게 되므로 가장 먼저 <em>DFS</em> 를 돌게 된다. 그리고 <em>SCC</em> 는 <em>cyclic</em> 이므로 하나의 <em>SCC</em> 만 찾고 끝남을 보장한다. 다음으로 높은 <code>f(t)</code> 값을 가지는 <em>SCC</em> 를 찾고, 더이상 <em>SCC</em> 를 찾지 못할 때 까지 반복하고 알고리즘이 끝나는걸 확인할 수 있다.</p>
-
-<p>처음엔 잘 몰랐는데 <em>leader</em> 가 해당 <em>SCC</em> 에서 가장 높은 <code>f(t)</code> 값을 가지는 <em>node</em> 다.</p>
-
-<h3 id="structureoftheweb">Structure of the Web</h3>
-
-<p><em>vertices</em> 를 웹페이지라 보고 <em>edges</em> 를 하이퍼링크라 보면 웹을 <em>directed graph</em> 이해할 수 있다.</p>
-
-<p>그럼 웹은 어떻게 생겼을까? 사람들이 첫번째로 웹이 어떻게 생겼는지 확인하기 위해 시도한 방법은 <em>crawling</em>, 즉 링크를 따라가며 모든 웹페이지를 긁는 방식이었다.</p>
-
-<p>그래서 실제로 해보니 2000 년도에는 <em>200 milions</em> 의 <em>node</em>, <em>1 bilion</em> 의 <em>edge</em> 가 있었다고 한다.</p>
-
-<p>그럼 이게 어떻게 생겼을까? <em>one big scc</em> 일거라 보는 관점이 있다. 한쪽에선 오래된 웹페이지들이 있고, 더 뻗어나가지 않는다. 이쪽을 <em>out</em> 이라 보면 반대편에서는 새로운 웹페이지들이 생겨 기존의 웹페이지에 <em>edge</em> 를 붙여 나가는 <em>in</em> 부분이 있다고 할 수 있다. 몇몇 부분에는 전혀 연결이 되지 않은 부분이 있을 수 있다.</p>
-
-<p><img src='http://bparsia.files.wordpress.com/2009/11/bowtieweb.png?w=600&amp;h=364'  alt="" /></p>
-
-<p align="center">(<a href='http://bparsia.wordpress.com/' >http://bparsia.wordpress.com</a>)</p>
-
-<p>웹의 <em>core</em> 부분은 <em>well connected</em> 되어 있는데 <em>small world property</em> 를 가지고 있다. 무슨말이냐면 모든 노드가 각각 서로 연결되어 있진 않지만 연결을 많이 가지고 있는 특정 몇몇 노드에 의해 모든 노드가 연결된다는 뜻이다. 결국 서로 연결되는데 몇 <em>hop</em> 안걸린다 볼 수 있다.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Small-world-network-example.png/330px-Small-world-network-example.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Small-world_network' >http://en.wikipedia.org/wiki/Small-world_network</a>)</p>  
-
-<p><img src='http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2_files/image002.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://web.mit.edu/' >http://web.mit.edu</a>  
-)</p>
-
-<p>요즘의 연구들은 웹 그래프가 어떤식으로 진화하는지, 정보들이 어떤식으로 전파되는지 등을 중점으로 하고 있다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
-(2) <a href='http://en.wikipedia.org/wiki/Equivalence_class' >Equivalence class</a> <br />
-(3) <a href='http://www.stoimen.com/blog/2012/12/10/computer-algorithms-topological-sort-revisited/' >http://www.stoimen.com</a> <br />
-(4) <a href='http://commons.wikimedia.org/wiki/File:Scc.png' >http://commons.wikimedia.org/wiki/File:Scc.png</a> <br />
-(5) <a href='http://bparsia.wordpress.com/2009/11/24/does-rest-explain-the-bowtie-gross-structure-of-the-web/' >http://bparsia.wordpress.com</a> <br />
-(6) <a href='http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2.htm' >http://web.mit.edu</a> <br />
-(7) <a href='http://en.wikipedia.org/wiki/Small-world_network' >http://en.wikipedia.org/wiki/Small-world_network</a></p>]]></description><link>http://1ambda.github.io/graph-search-and-connectivity/</link><guid isPermaLink="false">dcb3c85a-c903-4dab-bb88-b408099fb092</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[graph]]></category><category><![CDATA[BFS]]></category><category><![CDATA[DFS]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 15 Nov 2014 04:29:52 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 6]]></title><description><![CDATA[<p>지난시간엔 <em>back propagation</em> 구현해 보고 여기에 적용할 수 있는 소소한 것들 <em>random initialization</em> 과 <em>gradient checking</em> 등도 알아 보았다.</p>
-
-<p>머신러닝을 단순히 아는것과, 실전에서 사용할 수 있다는 건 큰 차이가 있다. 이번 시간에는 실전에서 필요한 여러가지 팁들에 대해 설명한다. 후반부에서는 스팸 분류기를 통해 간단한 머신러닝 시스템을 설계해 본다.</p>
-
-<h3 id="diagnostics">Diagnostics</h3>
-
-<p><img src='http://chart.apis.google.com/chart?cht=tx&amp;chl=J' (%5Ctheta)%20%3D%20%7B1%20%5Cover%202m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20(h_%5Ctheta(x%5E%7B(i)%7D%20-%20y%5E%7B(i)%7D)%5E2%20%2B%20%5Clambda%5Csum_%7Bj%3D1%7D%5Em%20%5C%20%5Ctheta_j%5E2%5D" alt="" /></p>
-
-<p>집 가격에 대한 <em>linear regression</em> 가설을 세웠는데 <em>error</em> 가 좀 큰 것을 발견했다. 어떻게 해야할까?</p>
-
-<p>(1) Get more training examples <br />
-(2) Try smaller sets of features <br />
-(3) Try getting additional features <br />
-(4) Try adding polynomial features <br />
-(5) Try decreasing <em>lambda</em> <br />
-(5) Try increasing <em>lambda</em>  </p>
-
-<p>이중에서 더 많은 트레이닝 셋을 추가하는 것은 별로 도움이 안 될 수도 있다. (이유는 뒷 부분에서 논의한다.)</p>
-
-<p>알고리즘의 정상 동작여부를 파악할 수 있는 몇 가지 판별법을 알아보자. <em>gradient checking</em> 이 그랬던 것처럼, 구현하는데는 좀 시간이 걸려도 디버깅에 드는 시간을 많이 줄여준다.</p>
-
-<blockquote>
-  <p>A diagnostic can sometimes rule out certain courses of action (changes to your learning algorithm) as being unlikely to improve its performance significantly</p>
-</blockquote>
-
-<h3 id="evaluatingahypothesis">Evaluating a hypothesis</h3>
-
-<p><em>low training error</em> 를 갖는 <em>hypothesis (가설)</em> 이 항상 좋은 건 아니다. <em>overfitting</em> 이 발생할 수 있기 때문이다.</p>
-
-<p>그리고 <em>feature</em> 가 많을 수록 <em>plotting</em> 하기 힘들기 가설을 평가할 다른 방법을 찾아야 한다. 단순히 그리는 것 만으로 모든 가설을 평가하긴 어렵다.</p>
-
-<p>한가지 평가 방법으로 전체 <em>training set</em> 을 <code>70% / 30%</code> 로 분리해 <code>70%</code> 은 <em>training set</em> 으로 나머지 <code>30%</code> 는 <em>test set</em> 으로 활용할 수 있다. (<em>참고로 테스트셋과 트레이닝셋은 랜덤하게 분리하는 편이 좋다.</em>)</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/09/1360378105_8286.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>linear regressoin</em> 에 트레이닝 셋과 테스트셋을 분리하는 과정을 알아 보면</p>
-
-<p>(1) <code>0(theta)</code> 를 트레이닝 셋에 대해 학습시켜 트레이닝 에러를 최소화 하는 <code>J(0)</code> 를 찾는다. <br />
-(2) 학습된 <code>0(theta)</code> 에 대해 테스트 셋을 돌려 <em>test error</em> 를 찾는다.</p>
-
-<p>그럼 <em>linear regression</em> 말고 <em>classification</em> 에는 어떻게 적용할까?</p>
-
-<p>마찬가지로 <code>0(theta)</code> 에 대해 <code>J(0)</code> 를 찾고, 여기에 <code>J_test(0)</code> 를 돌려 테스트 에러를 찾는다.</p>
-
-<p>아니면 아래 그림에서 볼 수 있듯이 <em>misclassification error</em> 를 이용해도 된다. 보면 알겠지만 같은 정의다. <code>y = 0</code> 일때 <code>h(x) &lt; 0.5</code> 이어야 하고, <code>y = 1</code> 일때 <code>h(x) =&gt; 0.5</code> 이어야 하기 때문에 엇갈리게 나온 경우 <code>err</code> 함수에서 <code>1</code> 을 리턴해, 이 값을 모두 합한 뒤 전체 테스트 셋의 숫자로 나누면 테스트 에러값을 구할 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/09/1360378588_2059.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<h3 id="modelselection">Model Selection</h3>
-
-<p>당연한 이야기지만 <em>training set</em> 에 가설이 <em>well fit</em> 되어있기 때문에 트레이닝셋에 포함되지 않은 새로운 경향의 데이터를 만나면 에러가 많이 생길 수 있다.</p>
-
-<blockquote>
-  <p>Once parameters were fir to some set of data (training set), the error of the parameters as measured on that data (the training error <code>J(0)</code>) is likely to be lower than the actual generalization error.</p>
-</blockquote>
-
-<p><code>d</code> 를 <em>degree of polynomial (가설의 다항식 차수)</em> 이라 하자. 그럼 <code>d = 1, 2, .. , 10</code> 중에 어떤 걸 택하는 게 좋을까?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/09/1360380082_1392.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>각각에서 나오는 파라미터 벡터를 <code>0^(1), 0^(2), ...</code> 이라 하자. 그리고 여기서 나오는 테스트 셋의 에러를 <code>J_test(0^(1))</code>, <code>J_test(0^(2))</code> 등이라 하면 이 값을 모두 조사해 최소로 나오는 <code>d</code> 를 가진 모델을 택한다. </p>
-
-<p>그러나 문제는 이렇게 선택한 모델이 <em>optimistic estimate of generalization error</em> 라는 점이다. 테스트 셋에 대해서 가장 적은 에러를 모델이 보여준다 해도 실제 데이터에 대해 똑같이 적은 에러를 보여주리라고 확신할 수 없다.</p>
-
-<h3 id="trainvalidationtestsets">Train / Validation / Test Sets</h3>
-
-<p>이 문제를 해결하기 위해 <em>training set</em> 을 <em>60%/20%/20%</em> 로 나누어 각각을 <em>training set</em>, <em>cross validation set (CV)</em>, <em>test set</em> 이라 하자. 그리하여 각각의 에러를 구할 수 있다. </p>
-
-<p>여기서 <em>CV</em> 에 대한 <em>error</em> 가 최저인 모델을 택하면 이 모델은 <em>test set</em> 에 대해서는 <em>fit</em> 되어 있지 않기 때문에 <em>test error</em> 가 <em>estimate generalization error</em> 라 볼 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/10/1360459807_7333.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>다시 정리해 보면 먼저 <code>0</code> 를 <em>training set</em> 에 대해 학습 시켜 <code>0</code> 값을 얻은 뒤, <em>cross validation (CV)</em> 에 대해 <em>error</em> 를 구해 가장 작은 값을 갖는 모델을 고른다.</p>
-
-<p>이제 이 모델에 대해서 <em>test error</em> 를 구하면 이 모델은 테스트 셋에 대해서 <em>fit</em> 되지도, 가장 적은 에러를 가지는지 검사되지도 않은 데이터이므로 일반적인 에러값에 대한 추정치라 볼 수 있다.</p>
-
-<p>일반적으로 <em>CV error</em> 는 <em>test error</em> 보다 더 작은 값을 가지는데, 이는 선택한 모델의 <code>0</code> 가 <em>CV set</em> 에 대해 최저치를 갖도록 <em>fit</em> 되어있기 때문이다.</p>
-
-<h3 id="diagnosingbiasvsvariance">Diagnosing Bias vs Variance</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/10/1360461366_4352.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>그림에서 볼 수 있듯이 <code>d=1</code> 인 경우엔 <em>underfit</em>, <code>d=4</code> 인 경우엔 <em>overfit</em> 이 발생한다. 다른말로 각각 <em>high bias</em>, <em>high variance</em> 라 부른다.</p>
-
-<p>아래와 같이 가로 축을 <code>d</code>, 세로 축을 <code>error</code> 라 하면 <code>d</code> 가 증가할 수록 <em>training error</em> 는 0 에 가까워진다. 반면 <em>CV set</em> 에 대해서는 하나의 <code>d</code> 만 최저치를 가지고 나머지는 그 보다 높기 때문에 아래와 같은 그래프를 그릴 수 있다.</p>
-
-<p><img src='http://my.csdn.net/uploads/201207/28/1343484056_3257.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>이 그래프가 시사하는 바는, </p>
-
-<p>(1) <em>underfit</em> 할 경우 <code>d</code> 가 작으므로 <code>J_train(0)</code> 는 매우 크고, <code>J_cv(0)</code> 는 그의 거의 비슷한 값을 가지게 된다. (<em>bias problem</em>) <br />
-(2) <em>overfit</em> 할 경우 <code>d</code> 가 크므로 <code>J_train(0)</code> 는 매우 작고, <code>J_cv(0)</code> 는 그보다는 훨씬 크다. (<em>variance problem</em>)  </p>
-
-<p>따라서 <code>J_train(0)</code> 값이 <code>J_cv(0)</code> 과 얼마나 비슷한지 비교함으로써 <em>overfit</em> 혹은 <em>underfit</em> 되는지 판단할 수 있다.</p>
-
-<p><img src='http://my.csdn.net/uploads/201207/28/1343484595_6134.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><a href='http://www.4four.us/article/2010/11/bias-variance-tradeoff' >여기</a> 서 <em>bias vs varance</em> 의 이해를 위해 인용을 좀 하자면,</p>
-
-<blockquote>
-  <p>Bias, 즉 선입관이 크면, (좋게 말해서) 줏대가 있고 (나쁘게 말해서) 고집이 세기 때문에 새로운 경험을 해도 거기에 크게 휘둘리지 않는다. 평소 믿음과 다른 결과가 관찰되더라도 한두 번 갖고는 콧방귀도 안 뀌며 생각의 일관성을 중시한다. (High Bias, Low Variance) 반대로 선입관이 작으면, (좋게 말하면) 사고가 유연하고 (나쁘게 말하면) 귀가 얇기 때문에 개별 경험이나 관찰 결과에 크게 의존한다. 새로운 사실이 발견되면 최대한 그걸 받아들이려고 하는 것이다. 그래서 어떤 경험을 했느냐에 따라서 최종 형태가 왔다갔다한다. (High Variance, Low Bias)</p>
-</blockquote>
-
-<h3 id="regularizationandbiasvariance">Regularization and Bias / Variance</h3>
-
-<p><em>regularization</em> 이 끼어들면 <code>lambda</code> 를 <em>bias vs variance</em> 문제에서 고려해야 한다. 아래 그림을 보자.</p>
-
-<p><img src='http://my.csdn.net/uploads/201207/28/1343485336_9809.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><em>lambda</em> 가 크면 당연히 <em>high bias</em>, 매우 작으면 <em>high variance</em> 다. 그러면 중간 값을 찾아야 한다는건 알겠는데, 어느정도가 적당한 값일까?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/10/1360461577_6101.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>이 전과 비교했을때 <code>J(0)</code> 에 <em>regularization term</em> 이 추가되었지만 <code>J_train(0)</code> 이나 <code>J_cv(0)</code>, <code>J_test(0)</code> 에는 <em>regularization term</em> 이 없다는 점에 유의하자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/10/1360461899_5163.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>모델을 선택했다면 <em>lambda</em> 를 천천히 증가시켜가면서 각각에 대해 <code>0(theta)</code> 를 구한다. 그리고 이 값을 이용해 구한 <code>J_cv(0)</code> 가 가장 적은 에러 값을 가지는 <em>lambda</em> 를 구하면 된다. <em>model selection</em> 과 비슷하다.</p>
-
-<p><em>lambda</em> 과 <em>CV error</em>, <em>training error</em> 간 관계를 알아보자면 아래와 같다. 위에서 언급 했듯이 <em>lambda</em> 가 크면 <em>bias</em>, 0 에 가까우면 <em>variance</em> 임을 확인할 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/10/1360462458_2256.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>bias</em> 와 <em>variance</em>, 그리고 <em>lambda</em> 의 관계는 아래 그래프에서도 확인할 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201210/12/1350026192_9384.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<h3 id="learningcurves">Learning Curves</h3>
-
-<p>전체 트레이닝 셋의 사이즈 <code>m</code> 이 커질때 에러는 어떻게 되는가 그래프로 한번 보자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552101_5795.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>간단히 생각해 보면 <code>m</code> 의 사이즈가 클수록 <em>training set</em> 의 에러는 점점 늘어나고, <code>m</code> 이 커지면 커질수록 <em>generalize</em> 가 가능하므로 <em>CV error</em> 는 점점 줄어든다.</p>
-
-<p><em>high bias</em> 인 경우 처음엔 <em>training error</em> 이 매우 크다가, <code>m</code> 이 클수록 <em>training error</em> 의 증가율이 작아지므로</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552417_8655.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>이 그림이 시사하는 바는 </p>
-
-<blockquote>
-  <p><em>high bias</em> 알고리즘이라면 <code>m</code> 이 을 많이 수집한다 해도 <code>J_cv(0)</code> 의 감소율이 적기 때문에 별 도움이 되지 못한다. 다시 말해 <code>m</code> 을 많이 투입해도 얻어지는 <em>training error</em> 와 <em>CV error</em> 의 차이는 미미하다.</p>
-</blockquote>
-
-<p>반면 <em>high variance</em> 의 경우에는 <code>m</code> 이 크면 클수록 <em>training error</em> 의 증가율이 점점 줄어들고, <em>overfit</em> 이기 때문에 <em>CV error</em> 는 <em>training set</em> 과 차이가 많이 난다. 그래프는</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552431_2697.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>결국</p>
-
-<blockquote>
-  <p><em>high variance</em> 일 경우 <code>m</code> 을 많이 투입하면 할수록 낮은 <em>CV error</em> 를 얻는데 도움이 된다.</p>
-</blockquote>
-
-<p>다시 말해 이 두가지 경우는 <em>training error</em> 와 <em>CV error</em> 의 차이가 꽤 클때는 <code>m</code> 을 높이면 낮은 <em>CV error</em> 를 적은 비용으로 얻을 수 있다는 뜻이다.</p>
-
-<h3 id="applyingtoneuralnetwork">Applying to Neural Network</h3>
-
-<p>이제 처음에 나왔던 6가지 경우를 고려해 보자.</p>
-
-<p>(1) Get more training examples -> <em>fixing high variance</em> <br />
-(2) Try smaller sets of features -> <em>fixing high variance</em> <br />
-(3) Try getting additional features -> <em>fixing high bias</em> <br />
-(4) Try adding polynomial features -> <em>fixing high bias</em> <br />
-(5) Try decreasing <em>lambda</em> -> <em>fixing high bias</em> <br />
-(5) Try increasing <em>lambda</em> -> <em>fixing high variance</em>  </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552523_3279.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>bias vs variance</em> 문제를 <em>neural network</em> 에 적용시켜보자. </p>
-
-<p>(1) 작은 사이즈의 신경망이라면 계산 비용은 저렴한 대신 <em>underfit</em> 할 수 있다. <br />
-(2) 큰 사이즈의 신경망이라면 계산 비용은 비싸고 <em>overfit</em> 할 수 있다. 따라서 <em>regurarization</em> 을 이용해 <em>overfit</em> 되는 정도를 줄일 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/11/1360552606_9371.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<h3 id="machinelearningsystemdesign">Machine Learning System Design</h3>
-
-<p>간단한 스팸 분류기를 작성한다고 하자. <em>supervised learning</em> 을 위해서</p>
-
-<p>(1) <code>x</code> = features of email (<em>choose 100 words indicative of spam or not</em>) <br />
-(2) <code>y</code> = spam <code>1</code> or not spam <code>0</code>  </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360804751_1943.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>각 단어가 이메일 본문에 등장했는지 아닌지를 각 <em>feature</em> 의 값으로 사용한다. (<code>1</code> or <code>0</code>)</p>
-
-<p>일반적으로는 100개를 수동으로 고르는게 아니라, 스팸에서 많이 사용된 단어를 <code>n</code> 개 골라 사용한다.</p>
-
-<p>그럼 <em>low error</em> 를 얻기 위해서는 무엇을 해야할까?</p>
-
-<p>(1) Collect lots of data : 항상 도움이 되진 않는다. <br />
-(2) Develop sophisticated features based on email routing information <br />
-(3) Develop sophisticated features for message body. e.g should "discount" and "discounts" be treated as the same word? <br />
-(4) Develop sophisticated algorithm to detect misspelings e.g m0rtgage  </p>
-
-<p>등등 의 다양한 방법을 고안할 수 있다. 이 중 무엇을 선택해야 할까? 좀 더 체계적인 방법은 없을까? 여기 몇 가지 가이드라인이 있다.</p>
-
-<blockquote>
-  <ol>
-  <li>Start with a simple algorithm that can implement quickly. Implement it and test it on your corss-validation data.</li>
-  <li>Plot learning curves to decide if more data, more features, etc. are likely to help.</li>
-  <li>Error analysis: manually examine the examples (in corss validation set) that your algorithm made errors on. See if you spot any systematic trend in what type of examples it is making errors on.</li>
-  </ol>
-</blockquote>
-
-<h3 id="erroranalysis">Error Analysis</h3>
-
-<p><em>error analysis</em> 하는 방법은 <em>CV error</em> 를 발견했을 때, 각각의 에러를 수동으로 검사하면서 분류하는 것이다.</p>
-
-<p>이메일의 타입이 무엇인지, 혹은 어떤 <em>feature</em> 가 알고리즘에서 이 이메일을 분류하는데 도움이 될만한지 생각해 본다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360804909_5716.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>error analysis</em> 가 에러가 나타난 이유에 대한 어떤 경향을 제공할 수 있기 때문에 간단히 먼저 구현해 보고 분석 해 보는것도 나쁘지 않다.</p>
-
-<p><em>error analysis</em> 는 실제로 분석 결과를 새로운 알고리즘에 적용했을때 <em>performace</em> 가 더 좋을지 알려주지 않는다. 따라서 해보고 <em>numerical evaluation</em> 을 비교해 본다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360804976_1060.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<h3 id="skewedclasses">Skewed Classes</h3>
-
-<p>암을 진단한다고 하자. <em>logistic regression</em> 을 구현했고, 놀랍게도 <em>test error</em> 가 <code>1%</code> 라고 하자.</p>
-
-<p>근데, 만약에 환자중에 <code>0.5%</code> 만 암환자라면, 차라리 모두 암이 아니라고 진단하는 다음의 함수가 더 에러가 낮다.</p>
-
-<pre><code class="matlab">function y = predictCancer(x)  
-  y = 0; 
-return  
-</code></pre>
-
-<p>이렇게 확률이 희박한 <em>class</em> 를 <strong>skewed class</strong> 라 부른다. 또 한가지 사실을 알 수 있는데, <em>error</em> 가 낮다고 해서 항상 좋은 알고리즘이 아니라는 사실이다. <code>y = 0</code> 은 <code>99.5</code> 의 정확도를 보여주지만 알고리즘이 아니다. 에러값 말고 다른 평가방법이 필요하다!</p>
-
-<h3 id="precisionrecall">Precision / Recall</h3>
-
-<p>그림을 먼저 보자. 예측 여부와 실제 값에 따라서 <code>2 x 2</code> 매트릭스를 붙일 수 있다. </p>
-
-<p><img src='http://my.csdn.net/uploads/201208/06/1344228190_4576.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>여기서 <em>precision</em> 과 <em>recall</em> 이란 개념을 끌어낼 수 있는데</p>
-
-<blockquote>
-  <p><em>*Precision: *</em> Of All patients where we predicted y = 1, what fraction actually has cancer?</p>
-  
-  <p><em>*Recall: *</em> Of all patients that actually have cancer, what fraction did we correctly detect as having cancer?</p>
-</blockquote>
-
-<p>다시 말해 <em>precision</em> 은 우리가 암이 있다고 진단한 환자중 실제 암이 있는 환자의 비율이고, <em>recall</em> 은 실제 암이 있는 환자 중 우리가 암이 있다고 진단한 환자의 비율이다.</p>
-
-<p>위의 함수처럼 <code>y = 0</code> 으로 진단하는 경우 <em>true positive</em> = <code>0</code> 이므로 <em>recall</em> = <code>0</code> 이다.</p>
-
-<p>단순히 <em>error</em> 만으로 판단하는 것은 위의 예처럼 잘못된 판단일 수 있다. 따라서 <em>skewed class</em> 가 있더라도 <em>precision</em> 과 <em>recall</em> 을 보면 알고리즘에 속임수가 있는지, 없는지를 파악할 수 있다.</p>
-
-<h3 id="tradingoffprecisionandrecall">Trading off Precision and Recall</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360805261_5122.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>일반적으로 <code>h(x) &gt;= 0.5</code> 일경우에 <code>1</code> 을, <code>h(x) &lt; 0.5</code> 일 경우에 <code>0</code> 을 예측하는데, 이 수치를 좀 더 올려 <code>0.7</code> 이상 또는 미만으로 예측한다 해 보자.</p>
-
-<p>이 경우 좀 더 확실한 환자만 암이라 진단하므로 <em>precision</em> 은 올라가는 반면 <em>recall</em> 은 내려간다. </p>
-
-<p>거꾸로 수치를 <code>0.3</code> 으로 낮추면 덜 확실해도 그냥 암이라 우기므로 <em>recall</em> 은 높아지겠지만 예측한 것중 실제 환자를 의미하는 <em>precision</em> 값은 떨어진다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360805315_5777.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>위 그림을 보면 <em>threshold</em> 에 따라서 <em>recall</em> 과 <em>precision</em> 값이 얼추 반비례하는 걸 볼 수 있다. 디테일에 따라서 구체적인 그래프의 모양은 다를 수 있다.</p>
-
-<p>그럼 이제 문제는, <em>threshold</em> 를 고를 수 있느냐, 다시 말해 어느 <em>(precision, recall)</em> 쌍이 더 좋은가 하는 문제다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360805419_2578.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>단순히 평균을 쓰면 <code>y = 1</code> 로 예측하는 것과 같은 알고리즘들이 높은 값을 얻을 수 있다. 예를 들어 위 그림에서 <em>algorithm 3</em> 가 그렇듯이.</p>
-
-<p>따라서 단순히 평균을 하기 보다는 <em>F1 score</em> 를 많이 쓴다.</p>
-
-<p><img src='http://my.csdn.net/uploads/201208/06/1344234475_3823.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>따라서 <em>CV set</em> 에 대해 높은 <em>F1 score</em> 를 가지는 <em>threshold</em> 를 택함으로써 좋은 알고리즘을 고를 수 있다.</p>
-
-<h3 id="dataformachinelearning">Data for Machine Learning</h3>
-
-<p>지금까지는 <em>evaluation</em> 에 대한 논의었고, <em>data</em> 에 대한 이야기를 좀 더 해 보자. 앞에서는 단순히 데이터가 많다고 해서 좋다는 뉘앙스로 이야기를 했지만 실제 특정 상황에서, 특정 알고리즘은 다량의 데이터를 이용하면 좋은 성능을 내기도 한다. 실제 그런가 보자. 4개의 서로 다른 알고리즘을 트레이닝 셋 사이즈를 늘려가며 정확도를 비교한 결과다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360806606_8278.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<blockquote>
-  <p><em>"It's not who has the best algorithm that wins, It's who has the most data."</em></p>
-</blockquote>
-
-<p>항상 그렇지는 않다. 집 값을 예측 할 때 <em>feature</em> 로 사이즈 하나만 준다면 정확하게 예측하기란 불가능하다. 양이 문제가 아니고 집 값을 예측하기에 충분한 정보가 필요하다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360807112_1041.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>많은 수의 <em>parameter</em> 가 있다. 하자. <em>low bias</em> 기 때문에 <code>J_train(0)</code> 는 작을 것이다. (<em>not underfit</em>)</p>
-
-<p>그리고 여기에 <em>parameter</em> 보다 훨씬 많은 <em>training set</em> 을 사용한다면, <em>overfit</em> 하지 않는다 볼 수 있다. 따라서 <em>underfit</em> 도 아니고 <em>overfit</em> 도 아니므로</p>
-
-<p><code>J_test(0)</code> 는 <code>J_train(0)</code> 에 근사한 값을 가진다 볼 수 있다. 결국 작은 <code>J_test(0)</code> 을 얻을 수 있다.</p>
-
-<p>정리하자면, 충분한 양의 정보를 가지고 있고 (<em>large parameters</em>), 큰 사이즈의 데이터를 대상으로 알고리즘을 훈련 시킨다면 상당히 좋은 성능을 뽑아낼 수 있다는 훈훈한 이야기. (거꾸로 말하면, 반복하지만, 데이터만 많다고, 혹은 파라미터만 많다고 좋은 결과를 얻을 수 없다는 이야기)</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
-(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
-(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a> <br />
-(4) <a href='http://www.4four.us/article/2010/11/bias-variance-tradeoff' >http://www.4four.us</a></p>]]></description><link>http://1ambda.github.io/machine-learning-week-6/</link><guid isPermaLink="false">58386046-1a88-4f88-b8dc-b5c6c76aa5cb</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[precision]]></category><category><![CDATA[bias]]></category><category><![CDATA[learning curves]]></category><category><![CDATA[recall]]></category><category><![CDATA[variance]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 14 Nov 2014 05:00:50 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 3]]></title><description><![CDATA[<p>하스켈에서 <em>repetition (반복)</em> 은 <em>recursion</em> 을 통해 표현됩니다. 간단한 재귀부터 시작해서 <em>mutual recursion</em> 까지 알아보고, <em>Higher order function</em> (특히 <code>fold</code>) 에 대해 배운 뒤 적용을 위해 <em>church numerals</em> 를 구현해보고, 마지막으로 간단한 문자열 전송기를 모델링 해 보겠습니다.</p>
-
-<h3 id="tailcall">Tail call?</h3>
-
-<p><em>recursion</em> 을 주로 사용한다면 <em>stack</em> 이 많이 쌓일 수 있습니다. 이런 문제를 해결해 주는 것이 <em>tail call elimination</em> 입니다.</p>
-
-<p>간단한 재귀 함수를 만들어서 스택이 어떻게 변하나 한번 보죠.</p>
-
-<pre><code class="haskell">factorial 0 = 1  
-factorial n = n * factorial(n - 1)  
-</code></pre>
-
-<p>이 때 <code>factorial 3</code> 을 평가한다면</p>
-
-<pre><code class="haskell">factorial 3  
-3 * factorial 2  
-3 * (2 * factorial 1)  
-3 * (2 * (1 * factorial 0))  
-3 * (2 * (1 * 1))  
-3 * (2 * 1)  
-3 * 2  
-6  
-</code></pre>
-
-<p>이렇게 각 단계가 확장되면서 <code>n</code> 이 매우 클 경우 마지막 단계에서 연산의 길이가 엄청나게 길어집니다. 함수 한번 호출당 스택이 하나씩 생긴다고 보면 어마어마한 스택이 생기는 것이죠. </p>
-
-<p>다행히도 하스켈은 <em>tail recursion optimization (꼬리 재귀 최적화)</em> 를 가지고 있습니다. 꼬리 재귀에 대한 이야기는 나중에 더 이야기 하도록 하지요.</p>
-
-<h3 id="recursiononlists">Recursion on Lists</h3>
-
-<p>리스트는 같은 타입을 여러개 저장할 수 있기 때문에 <em>recursion</em> 을 사용하기 적합하죠.</p>
-
-<p>리스트 내의 모든 원소의 곱을 구하는 <code>product</code> 함수를 만들어 볼까요? 하스켈에 원래 있지만, 재미삼아 만들어 봅시다. 이름은 충돌이 안나게 <code>productC</code> 라 부릅시다.</p>
-
-<pre><code class="haskell">productC :: [Int] -&gt; Int  
-productC [] = 1  
-productC (n : ns) = n * productC ns  
-</code></pre>
-
-<p><code>length</code> 와 <code>reverse</code> 도 만들어 봅시다.</p>
-
-<pre><code class="haskell">lengthC :: [a] -&gt; Int  
-lengthC [] = 0  
-lengthC (x : xs) = 1 + length xs
-
-reverseC :: [a] -&gt; [a]  
-reverseC [] = []  
-reverseC (x : xs) = reverse(xs) ++ [x]  
-</code></pre>
-
-<p>조금 더 복잡한 <code>zip</code>, <code>drop</code> 함수나 <code>++</code> 연산자도 어렵지 않습니다. </p>
-
-<pre><code class="haskell">zipC :: [a] -&gt; [b] -&gt; [(a, b)]  
-zipC [] _ = []  
-zipC _ [] = []  
-zipC (x:xs) (y:ys) = (x, y) : zip xs ys
-
-dropC :: Int -&gt; [a] -&gt; [a]  
-dropC 0 xs = xs  
-dropC _ [] = []  
-dropC n (x:xs) = drop (n-1) xs
-
-(++) :: [a] -&gt; [a] -&gt; [a]
-[] ++ ys = ys
-(x:xs) ++ ys = x : (xs ++ ys)
-</code></pre>
-
-<h3 id="quicksort">Quick sort</h3>
-
-<p>퀵소트 알고리즘은 간단합니다. 매 함수 호출에서, <em>pivot</em> 이라 불리는 리스트 내 원소를 고른 후 <em>pivot</em> 좌측에는 그 보다 작은 수를, 우측에는 <em>pivot</em> 보다 큰 수를 배치합니다. 그리고 <em>pivot</em> 을 제외한 좌측 과 우측에 대해 재귀 호출을 하지요.</p>
-
-<p><img src='https://sadakurapati.files.wordpress.com/2013/10/qsort_2.png?w=902&amp;h=617'  alt="" /></p>
-
-<p align="center">(<a href='https://sadakurapati.wordpress.com/' >https://sadakurapati.wordpress.com</a>)</p>
-
-<p>지난 강의에서 배운 <em>list comprehension</em> 을 이용하면 매우 간단하게 <em>quick sort</em> 를 만들 수 있습니다.</p>
-
-<pre><code class="haskell">qsort :: [Int] -&gt; [Int]  
-qsort [] = []  
-qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger  
-               where
-                 smaller = [a | a &lt;- xs, a &lt;= x]
-                 larger = [b | b &lt;- xs, b &gt; x]
-</code></pre>
-
-<p>위 코드에서는 매 재귀마다 인자로 받는 리스트의 첫번째 원소 <code>x</code> 를  <em>pivot</em> 으로 사용했습니다.</p>
-
-<p><img src='http://media-cache-ec0.pinimg.com/736x/11/09/78/11097867a0e6c772c36285d97d94623b.jpg'  alt="" /></p>
-
-<h3 id="recursion">Recursion</h3>
-
-<p>위의 예에서 보았듯이 자기 자신을 호출하는 함수 패턴을 <em>recursion (재귀)</em> 라 부릅니다. 언제 유용할까요? 재귀를 이용하면 <em>induction (귀납법)</em> 을 이용해 함수의 성질을 증명할 수 있습니다. 제대로 동작하는지, 의도 했던대로 동작하는지 등을요.</p>
-
-<blockquote>
-  <p>Properties of functions defined using recursion can be proved using the simple but powerful mathematical technique of <strong>induction</strong></p>
-</blockquote>
-
-<h3 id="mutialrecursion">Mutial recursion</h3>
-
-<p><em>mutual recursion</em> 은 서로 다른 두개의 함수가 상호간 재귀를 이용해 정의되는 방식입니다. </p>
-
-<p><code>odd</code> 와 <code>even</code> 함수를 <em>mutual recursion</em> 을 이용해 정의할 수 있습니다. 일반적으로는 효율성을 위해  2로 나눈 나머지를 이용해 정의하지만, 양수에 대해서는 아래와 같이 <em>mutual recursion</em> 으로 만들 수 있죠.</p>
-
-<pre><code class="haskell">even :: Int -&gt; Bool  
-even 0 = True  
-even n = oddC (n-1)
-
-odd :: Int -&gt; Bool  
-odd 0 = False  
-odd n = evenC (n-1)  
-</code></pre>
-
-<p>비슷하게 리스트에서 짝수번째, 혹은 홀수번째 원소들만 돌려주는 <code>evens</code> 와 <code>odds</code> 함수도 <em>mutual recursion</em> 을 이용해 정의할 수 있습니다. <code>evens</code> 는 0번째 부터 돌려줍니다. <code>odds</code> 는 턴을 넘기는데 쓰고 실제 작업은 <code>evens</code> 에서 한다고 생각하면 금방 이해할 수 있습니다.</p>
-
-<pre><code class="haskell">evens :: [a] -&gt; [a]  
-evens [] = []  
-evens (x:xs) = x : odds xs
-
-odds :: [a] -&gt; [a]  
-odds [] = []  
-odds (_:xs) = evens xs  
-</code></pre>
-
-<h3 id="adviceonrecursion">Advice on recursion</h3>
-
-<p>재귀는 자전거 타기와 비슷합니다. 처음엔 불가능해 보이는데 한번 시도해보면 정말 쉽게 탈 수 있죠. 여기 재귀를 만드는데 도움이 될만한 5가지 스텝이 있습니다. <code>init</code> 함수를 예로 들어 설명하겠습니다.</p>
-
-<p>(1) define the type  </p>
-
-<pre><code class="haskell">init :: [a] -&gt; [a]  
-</code></pre>
-
-<p>(2) enumerate the cases  </p>
-
-<pre><code class="haskell">init (x:xs) =  
-</code></pre>
-
-<p>(3) define the simple case  </p>
-
-<pre><code class="haskell">init (x:xs) | null xs = []  
-            | otherwise = 
-</code></pre>
-
-<p>(4) define the other cases  </p>
-
-<pre><code class="haskell">init (x:xs) | null xs = []  
-            | otherwise = x : init xs
-</code></pre>
-
-<p>(5) generalise and simplify</p>
-
-<pre><code class="haskell">init :: [a] -&gt; [a]  
-init [_] = []  
-init (x:xs) = x : init xs  
-</code></pre>
-
-<h3 id="examples">Examples</h3>
-
-<p>예제 몇 가지를 좀 더 살펴봅시다. 먼저 곱셈 연산입니다.</p>
-
-<pre><code class="haskell">(*) :: Int -&gt; Int -&gt; Int
-m * 0 = 0  
-m * n = m + (m * (n - 1))  
-</code></pre>
-
-<p>정렬된 리스트에 원소를 삽입하는 <code>insert</code> 함수입니다. 바로 다음에 만들 <code>isort</code> (<em>insertion sort</em>) 를 구현한 함수에서 사용합니다.</p>
-
-<pre><code class="haskell">insert :: Ord a =&gt; a -&gt; [a] -&gt; [a]  
-insert x [] = [x]  
-insert x (y:ys) | x &lt;= y = x : y : ys  
-                | otherwise = y : insert x ys
-
-isort :: Ord a =&gt; [a] -&gt; [a]  
-isort [] = []  
-isort (x:xs) = insert x (isort xs)  
-</code></pre>
-
-<p>이번엔 <em>merge sort</em> 입니다.</p>
-
-<pre><code class="haskell">merge :: Ord a =&gt; [a] -&gt; [a] -&gt; [a]  
-merge [] ys = ys  
-merge xs [] = xs  
-merge (x:xs) (y:ys) =  
-  if x &lt;= y then x : merge xs (y: ys) else y : merge (x:xs) ys
-
-halve :: [a] -&gt; ([a], [a])  
-halve xs = splitAt (length xs `div` 2) xs
-
-msort :: Ord a =&gt; [a] -&gt; [a]  
-msort [] = []  
-msort [x] = [x]  
-msort xs = merge (msort ys) (msort zs)  
-           where (ys, zs) = halve xs
-</code></pre>
-
-<h3 id="higherorderfunction">Higher-order function</h3>
-
-<p><em>higher-order function</em> 은 함수를 인자로 받아 다시 함수를 돌려주는 함수를 말합니다. <del>응?</del></p>
-
-<blockquote>
-  <p>A function is called <em>higher-order</em> if it takes a function as an argument or returns a function as a result</p>
-</blockquote>
-
-<pre><code class="haskell">twice :: (a -&gt; a) -&gt; a -&gt; a  
-twice f x = f (f x)  
-</code></pre>
-
-<p><code>twice</code> 는 인자 <code>x</code> 에 <code>f</code> 를 두번 적용한 뒤 값을 돌려줍니다. 더 정확히는 <em>curried function</em> 이므로 <code>twice f</code> 는 앞으로 뭘 인자로 받을지 모르지만 <code>f</code> 를 두번 적용하는 함수를 돌려줍니다.</p>
-
-<p>이런 <em>higher-order function (고차함수)</em> 가 언제 유용할까요?</p>
-
-<blockquote>
-  <ol>
-  <li><p><strong>Common programming idioms</strong> can be encoded as functions within the language itself.</p></li>
-  <li><p><strong>Domain specific languages</strong> can be defined as collections of higher-order functions.</p></li>
-  <li><p><strong>Algebraic properties</strong> of higher-order functions can be used to reason about programs.</p></li>
-  </ol>
-</blockquote>
-
-<h3 id="map">map</h3>
-
-<p>먼저 <code>map</code> 함수를 살펴봅시다.</p>
-
-<pre><code class="haskell">map :: (a -&gt; b) -&gt; [a] -&gt; [b]
-
-map (+1) [1, 3, 5, 7]  
--- [2, 4, 6, 8]
-</code></pre>
-
-<p>이 <code>map</code> 함수는 우리가 이전에 배웠던 <em>list comprehension</em> 으로 똑같이 작성할 수 있습니다.</p>
-
-<pre><code class="haskell">map f xs = [f x | x &lt;- xs]  
-</code></pre>
-
-<p>아니면 <em>recursive function</em> 으로 작성할 수도 있습니다.</p>
-
-<pre><code class="haskell">map f [] = []  
-map f (x:xs) = f x : map f xs  
-</code></pre>
-
-<h3 id="filter">filter</h3>
-
-<p><code>filter</code> 도 고차함수입니다. <code>filter</code> 는 <em>predicate</em> 즉, <code>(a -&gt; Bool)</code> 을 받아 <code>True</code> 인 원소만 모아 돌려줍니다.</p>
-
-<pre><code class="haskell">filter :: (a -&gt; Bool) -&gt; [a] -&gt; [a]
-
-filter even [1..10]  
--- [2, 4, 6, 8, 10]
-</code></pre>
-
-<p><code>filter</code> 도 마찬가지로 <em>list comprehension</em> 과 <em>recursive function</em> 두 가지 버전으로 작성될 수 있습니다.</p>
-
-<pre><code class="haskell">filter p xs = [x | x &lt;- xs, p x]
-
-filter p [] = []  
-filter p (x:xs)  
-  | p x = x : filter p xs
-  | otherwise = filter p xs
-</code></pre>
-
-<p>단순히 <em>list comprehension</em> 으로 작성하는 것 보다, <em>recursive function</em> 으로 작성하면 위에서 볼 수 있듯이 공통점을 파악할 수 있습니다. 그러면 한단계 더 추상화 할 수 있지요. <code>filter</code> 와 <code>map</code> 의 공통점이 보이시나요?</p>
-
-<h3 id="foldr">foldr</h3>
-
-<p>위의 두 가지 예에서 <code>filter</code>, <code>map</code> 모두 빈 리스트와 그렇지 않은 리스트를 구분했습니다. 그리고 각각의 원소에 대해서 연산을 수행했지요. </p>
-
-<pre><code class="haskell">f [] = v  
-f (x:xs) = x pred f xs  
-</code></pre>
-
-<p>빈 원소라면 특정 값 <code>v</code> 를 돌려주고 아니라면 원소 <code>x</code> 에 <code>pred</code>를 적용하고, 나머지 <em>tail</em> <code>xs</code> 에 <code>f</code> 를 적용합니다. 비슷한 예제를 살펴볼까요?</p>
-
-<pre><code class="haskell">-- v = 0, pred = +
-sum [] = 0  
-sum (x:xs) = x + sum xs
-
--- v = 1, pred = *
-product [] = 1  
-product (x:xs) = x * product xs
-
--- v = True, pred = &amp;&amp;
-and [] = True  
-and (x:xs) = x &amp;&amp; and xs  
-</code></pre>
-
-<p>따라서 다음과 같이 <code>foldr</code> (<em>fold right</em>) 을 이용해 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">sum = foldr (+) 0
-
-product = foldr (*) 1
-
-or = foldr (||) False
-
-and = foldr (&amp;&amp;) True  
-</code></pre>
-
-<p>위에서 대략적인 정의를 봤지만, 더 엄밀하게 <code>foldr</code> 은 이렇게 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">foldr :: (a -&gt; b-&gt; b) -&gt; b -&gt; [a] -&gt; b  
-foldr f v [] = []  
-foldr f v (x:xs) = f x (foldr f v xs)  
-</code></pre>
-
-<p>보면 알겠지만, 리스트의 <em>the right-most (가장 우측)</em> 부터 연산합니다. 그래서 <em>fold right</em> 라는 이름이 붙었지요. 그림으로 보자면</p>
-
-<p><img src='http://www.pling.org.uk/cs/funimg/foldr.png'  alt="" /></p>
-
-<p align="center">(<a href='http://www.pling.org.uk/cs/fun.html' >http://www.pling.org.uk/cs/fun.html</a>)</p>
-
-<pre><code class="haskell">sum [1, 2, 3]  
-foldr (+) 0 [1, 2, 3]  
-foldr (+) 0 (1:(2:(3:[])))  
-1 + (2 + (3 + 0))  
-</code></pre>
-
-<p>콘싱 <code>:</code> 하고 비슷합니다. 이 부분에 연산자를 집어넣고, <code>[]</code> 에 초기값 <code>v</code> 를 넣는다고 생각하면 이해하기 쉽습니다.</p>
-
-<p><code>length</code> 도 비슷한 패턴을 가지고 있기 때문에 <code>foldr</code> 로 바꿀 수 있습니다.</p>
-
-<pre><code class="haskell">length :: [a] -&gt; Int  
-length [] = 0  
-length (x:xs) = 1 + length xs
-
-length = foldr (\_ n -&gt; 1 + n) 0  
-</code></pre>
-
-<p>이렇게 바꿀 수 있는 이유는</p>
-
-<pre><code class="haskell">length [1, 2, 3]  
-length (1: (2: (3:[])))  
-1 + (1 + (1 + 0)))  
-</code></pre>
-
-<p>여기서 각 <code>:</code> 을 <code>\_ n -&gt; 1 + n</code> 으로 바꾸면 되기 때문입니다.</p>
-
-<pre><code class="haskell">reverse [] = []  
-reverse (x:xs) reverse xs ++ [x]  
-</code></pre>
-
-<p>이제 위 <code>reverse</code> 함수도 <code>foldr</code> 을 이용할 수 있습니다.</p>
-
-<pre><code class="haskell">reverse = foldr (\x xs -&gt; xs ++ [x]) []  
-</code></pre>
-
-<p>처음의 <code>filter</code>, <code>map</code> 도 이렇게 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">foldr :: (a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b  
-foldr f v [] = v  
-foldr f v (x:xs) = f x (foldr f v xs)
-
-filter :: (a -&gt; Bool) -&gt; [a] -&gt; [a]  
-filter p xs = foldr (\x acc -&gt; if p x then x : acc else acc) [] xs
-
-map :: (a -&gt; b) -&gt; [a] -&gt; [b]  
-map p xs = foldr (\x acc -&gt; p x : acc) [] xs  
-</code></pre>
-
-<p><code>foldr</code> 을 이용하면 몇 가지 장점이 있습니다.</p>
-
-<blockquote>
-  <ol>
-  <li><p>Some recursive functions on lists, such as sum, are <strong>simpler</strong> to define using foldr.</p></li>
-  <li><p>Properties of functions defined using foldr can ben proved using algebraic properties of foldr, such as <strong>fusion</strong> and the <strong>banana split</strong> rule.</p></li>
-  <li><p>Advanced program <strong>optimizations</strong> can be simpler if foldr is used in place of explicit recursion.</p></li>
-  </ol>
-</blockquote>
-
-<p>여기서 <em>fusion</em> 은, 하나의 <code>foldr</code> 은 리스트를 순회하면서 새로운 리스트를 리턴하고, 다른 <code>foldr</code> 을 그 결과에 사용할 때 <em>intermediate list</em> 를 생성하는 것 없이 계산을 해 낸다는 뜻입니다.</p>
-
-<blockquote>
-  <p>In particular <strong>fusion</strong> means that I have two functions. One that uses <code>foldr</code> to traverse one list and return another list. And if I do another <code>foldr</code> on the result of that I can fuse these two together, such that the <strong>intermediate list is never constructed</strong>. So program can be optimized.</p>
-</blockquote>
-
-<p>다른 고차함수들을 좀 살펴봅시다.</p>
-
-<h3 id="composition">composition</h3>
-
-<p><code>(.)</code> 은 함수를 <em>composition (합성)</em> 해 줍니다. </p>
-
-<pre><code class="haskell">(.) :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)
-f . g = \x -&gt; f(g x)  
-</code></pre>
-
-<p>예를 들어</p>
-
-<pre><code class="haskell">odd :: Int -&gt; Bool  
-odd = not . even  
-</code></pre>
-
-<p><em>compoisition</em> 을 사용할때는 괄호와 나머지 인자를 제거하여 함수의 정의를 간단히 할 수 있습니다.</p>
-
-<pre><code class="haskell">twice f x = f (f x)
-
--- same as
-twice f = f f  
-</code></pre>
-
-<h3 id="allany">all, any</h3>
-
-<p>모든 원소에 대해 <code>p</code> 를 적용한 결과가 참인지를 돌려주는 <code>all</code> 은 다음처럼 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">all :: (a -&gt; Bool) -&gt; [a] -&gt; Bool  
-all p xs = and [p x | x &lt;- xs]  
-</code></pre>
-
-<p>이번엔 <em>list comprehension</em> 을 사용했습니다. <code>foldr</code> 과의 차이는, <code>foldr</code> 은 모든 순회 가능한 데이터 타입에 적용 가능한 반면 <em>list comprehension</em> 은 리스트에만 사용할 수 있습니다. 위 예제를 <code>foldr</code> 로 바꾸면</p>
-
-<pre><code class="haskell">all :: (a -&gt; Bool) -&gt; [a] -&gt; Bool  
-all p xs = foldr (\x acc -&gt; p x &amp;&amp; acc) True xs  
-</code></pre>
-
-<p><code>any</code> 도 만들 수 있습니다.</p>
-
-<pre><code class="haskell">import Data.Char
-
-any :: (a -&gt; Bool) -&gt; [a] -&gt; Bool  
-any p xs = or [p x | x &lt;- xs]
-
--- same as
-any p xs = or (map p xs)  
-</code></pre>
-
-<h3 id="takewhiledropwhile">takeWhile, dropWhile</h3>
-
-<p><code>takeWhile</code> 은 <em>predicate</em> 가 참인 원소까지만 돌려줍니다. 예를 들어</p>
-
-<pre><code class="haskell">takeWhile :: (a -&gt; Bool) -&gt; [a] -&gt; [a]  
-takeWhile p [] = []  
-takeWhile p (x:xs) | p x = x : takeWhile p xs  
-                    | otherwise = [] 
-
-takeWhile isAlpha "abc def"  
--- "abc"
-</code></pre>
-
-<p>반면 <code>dropWhile</code> 은 <em>predicate</em> 를 적용한 결과가 참인 원소를 모두 버리고 나머지만 돌려줍니다. 예를 들어</p>
-
-<pre><code class="haskell">dropWhile :: (a -&gt; Bool) -&gt; [a] -&gt; [a]  
-dropWhile p [] = []  
-dropWhile p (x:xs) | p x = dropWhile p xs  
-                    | otherwise = x:xs
-
-dropWhile isAlpha "fp 101"  
--- " 101" 
-</code></pre>
-
-<h3 id="churchnumerals">Church Numerals</h3>
-
-<blockquote>
-  <p><strong>Church Numerals</strong> give us a way to <em>abstract</em> over the concrete representation of a number by means of <strong>functions</strong> and <strong>unction application</strong>.</p>
-</blockquote>
-
-<p>숫자 <code>n</code> 은 <em>zero</em> 에 <code>n</code> 번의 <code>s</code> <em>function application</em> 을 통해 정의합니다. </p>
-
-<pre><code class="haskell">zero = \s z -&gt; z  
-one = \s z -&gt; s z  
-two = \s z -&gt; s (s z)
-
--- same as
-two = \s z -&gt; (s . s) z
-
--- we can remove z
-two = \s -&gt; s . s  
-</code></pre>
-
-<p>여기서 데이터 <code>z</code> 자체는 아무것도 정해진 것이 없습니다. 다시 말해 어떤 타입이든 가져다 쓸 수 있다는 뜻이지요.</p>
-
-<p>우리가 숫자 3을 표현하기 위해 <code>1</code>을 세번 더해 <code>3</code> 을 표시하든, 아니면 <code>*</code> 를 세번 컨싱하든 상관 없다는 뜻 입니다.</p>
-
-<pre><code class="haskell">zero = \s z -&gt; z  
-one = \s z -&gt; s z  
-two = \s -&gt; s . s
-
--- church to int
-c2i x = x (+1) 0
-
-c2i zero  
--- 0
-
-c2i one  
--- 1
-
-c2i two  
--- 2
-</code></pre>
-
-<p><em>* (에스터리스크)</em> 의 개수로 숫자를 정의해 봅시다.</p>
-
-<pre><code class="haskell">-- church to int
-c2s x = x ('*' :) ""
-
-c2s zero  
--- ""
-
-c2s one  
--- "*"
-
-c2s two  
--- "**"
-</code></pre>
-
-<p>이제 연산자를 만들어 봅시다. 덧셈부터 시작해 보죠! <code>c2i</code> 에 <code>x</code> 를 넣어 만들어낸 <em>수 (Number)</em> 를 <code>x'</code> 라 하고 <code>y</code> 를 넣어 만든 수를 <code>y'</code> 라 합시다. </p>
-
-<pre><code class="haskell">x' = c2i x  
-y' = c2i y  
-</code></pre>
-
-<p>그러면 덧셈은 이렇게 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">x' + y' = c2i (add x y)  
-</code></pre>
-
-<p>증명해 봅시다.</p>
-
-<pre><code class="haskell">x' + y'  
-= c2i x + c2i y
-= x (+1) 0 + c2i y -- 0 is substituted
-= x (+1) (c2i y)
-= x (+1) (y (+1) 0)
-= (\s z -&gt; x s (y s z)) (+1) 0 -- by beta expension
-</code></pre>
-
-<p>보면 알겠지만 <code>c2i y</code> 나 <code>0 + c2i y</code> 나 같습니다. 따라서 <code>0</code>을 지우고 <code>x c2i</code> 의 베이스 값으로 <code>(c2i y)</code> 를 사용할 수 있죠.</p>
-
-<p>그리고 마지막 치환은 <code>s</code> 와 <code>z</code> 를 <code>(+1)</code> 과 <code>0</code> 으로 취하는 <em>lambda</em> 를 구할 수 있습니다. <code>\s z -&gt; x s (y s z)</code> 를 <code>add</code> 라 부르면</p>
-
-<pre><code class="haskell">x' + y' = (add x y) (+1) 0  
-= c2i (add x y)
-</code></pre>
-
-<p>결국 <em>addtion</em> 은</p>
-
-<pre><code class="haskell">add x y = \s z -&gt; x s (y s z)
-
-c2i (add one two)  
--- 3
-</code></pre>
-
-<p><em>multiplication (곱셈)</em>은 어떻게 만들까요? 간단한 예제부터 시작해 <em>intuition</em> 을 얻어보도록 합시다.</p>
-
-<pre><code class="haskell">two = \s -&gt; s . s  
-three = \s -&gt; s . s . s  
-</code></pre>
-
-<p>결국 <code>n</code> 번째 수란건 <code>s</code> <em>successor function</em> 을 <code>n</code> 번 만큼 수행한거지요. 그럼 <code>a * b</code> 의 곱셈은 <code>b</code> 번 적용한 <em>successor</em> 를 <code>a</code> 번 적용하면 되므로</p>
-
-<pre><code class="haskell">mul = \s z -&gt; x (y s) z
-
-c2i (mul two five)  
--- 10
-</code></pre>
-
-<h3 id="examples">Examples</h3>
-
-<pre><code class="haskell">id :: a -&gt; a  
-id = \x -&gt; x
-
-compose :: [a -&gt; a] -&gt; (a -&gt; a)  
-compose = foldr (.) id  
-</code></pre>
-
-<p><code>id</code> 함수는 받은걸 그대로 돌려주기 때문에 <code>id . f</code>, <code>f . id</code> 는 <code>f</code> 입니다. 따라서 함수 리스트를 위한 <code>foldr</code> 의 초기값으로 <code>id</code> 를 사용할 수 있습니다.</p>
-
-<h3 id="stringtransmitter">String Transmitter</h3>
-
-<p>간단한 문자열 전송을 모델링한 코드를 작성해 봅시다.</p>
-
-<pre><code class="haskell">import Data.Char
-
-type Bit = Int
-
-bin2int :: [Bit] -&gt; Int  
-bin2int bits = sum [w * b | (w, b) &lt;- zip weights bits]  
-  where weights = iterate (*2) 1
-
--- or
--- bin2int bitis = foldr (\x acc -&gt; x + acc * 2) 0
-
-int2bin :: Int -&gt; [Bit]  
-int2bin 0 = []  
-int2bin n = n `mod` 2 : int2bin(n `div` 2)
-
-make8 :: [Bit] -&gt; [Bit]  
-make8 bits = take 8 (bits ++ repeat 0)
-
-encode :: String -&gt; [Bit]  
-encode = concat . map (make8 . int2bin . ord)
-
-chop8 :: [Bit] -&gt; [[Bit]]  
-chop8 [] = []  
-chop8 bits = take 8 bits : chop8 (drop 8 bits)
-
-decode :: [Bit] -&gt; String  
-decode = map (chr . bin2int) . chop8
-
-channel :: [Bit] -&gt; [Bit]  
-channel = id
-
-transmit :: String -&gt; String  
-transmit = decode . channel . encode  
-</code></pre>
-
-<p>재밌는 부분은 마지막 <code>channel</code> 부분인데요, <code>id</code> 함수를 써서 인코딩된 문자열이 바로 디코딩을 위해 전송된다는 것을 표현했습니다.</p>
-
-<p>위 코드 중에서 <code>int2bin</code> 과 <code>chop8</code> 은 헤드에 특정 연산을 수행하고, <code>tail</code> 에 나머지 연산을 수행 한 결과를 다시 재귀적으로 호출하는 패턴을 가지고 있는데요, <code>unfold</code> 함수로 추상화 할 수 있습니다. </p>
-
-<p>쉽게 말해서 <code>fold</code> 가 리스트를 <em>접어 (folding)</em> 원소 하나로 만든다면, <code>unfold</code> 는 리스트를 더 한단계 펼친다고 볼 수 있습니다.</p>
-
-<pre><code class="haskell">unfold p h t x  
-  | p x = []
-  | otherwise = h x : unfold p h t (t x)
-</code></pre>
-
-<p>그리하면 구현을</p>
-
-<pre><code class="haskell">type Bit = Int  
-int2bin :: Int -&gt; [Bit]  
-int2bin = unfold (== 0) (`mod` 2) (`div` 2)
-
-chop8 :: [Bit] -&gt; [[Bit]]  
-chop8 = unfold null (take 8) (drop 8)  
-</code></pre>
-
-<p><code>map</code> 과 <code>iterate</code> 도 구현할 수 있습니다.</p>
-
-<pre><code class="haskell">map2 f = unfold null (f . head) tail
-
-iterate' f = unfold (const False) id f -- const False is pred. always return False  
-</code></pre>
-
-<p>여기서 <code>const False</code> 는 항상 <code>False</code> 만 돌려주는 <em>predicate</em> 라 보시면 됩니다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br />
-(2) <a href='https://sadakurapati.wordpress.com/' >https://sadakurapati.wordpress.com</a> <br />
-(3) <em>Programming in Haskell, Chapter 6, 7</em> <br />
-(4) <a href='http://www.pling.org.uk/cs/fun.html' >http://www.pling.org.uk/cs/fun.html</a>  </p>]]></description><link>http://1ambda.github.io/haskell-intro3/</link><guid isPermaLink="false">6ae03a58-8478-4f0d-a716-75f09c81a985</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[recursion]]></category><category><![CDATA[church numerals]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 12 Nov 2014 02:10:13 GMT</pubDate></item></channel></rss>
+(12) <a href='http://www.slideshare.net/salahecom/08-classbasic' >http://www.slideshare.net/salahecom/08-classbasic</a></p>]]></description><link>http://1ambda.github.io/process-mining-week1/</link><guid isPermaLink="false">6b0990d6-e516-4154-9e40-4b7b7244bdbf</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[decision tree]]></category><category><![CDATA[association rule]]></category><category><![CDATA[k-means clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 18 Nov 2014 03:51:30 GMT</pubDate></item></channel></rss>
