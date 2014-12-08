@@ -1,5 +1,411 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 06 Dec 2014 18:11:28 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[A Poor Man's Concurrency Monad]]></title><description><![CDATA[<p><em>FP 101x</em> 의 최종 보스입니다. <del>Rose Tree 는 거들뿐</del> <em>Koen Claessen</em> 가 1999년에 발표한 <a href='http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.39.8039' ><em>Poor Man's Concurrenc Monad</em></a> 를 배경으로 하는 과제인데, 언어에 <em>primitive</em> 추가 없이 <em>concurrency</em> 를 모델링 하는 방법을 보여줍니다. </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Dec 2014 13:35:32 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 9]]></title><description><![CDATA[<p>이번시간엔 <em>anomaly detection</em> 과 <em>recommender system</em> 을 배운다.</p>
+
+<h3 id="anomalydectectoin">Anomaly Dectectoin</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236753_7590.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236757_2205.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>anomaly</em> 는 정상집단에서 떨어진 데이터라 보면 된다. 공장에서 품질이 떨어지는 제품을 골라낼때 사용할 수 있는데, 위 그림은 비행기 엔진 공장을 예로 들어 설명한다.</p>
+
+<p>데이터로부터 <code>p(x)</code> 를 만들어, 검사할 데이터가 <em>threshold</em> 를 넘는지 안넘는지 검사해 <em>anomaly</em> 로 판정할 수 있다.</p>
+
+<p>참고로, <em>anomaly</em> 가 너무 많으면, <em>false positive</em> 가 높은 것인데 이 때는  <em>threshold</em> 를 줄이면 된다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236761_2830.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>anomaly detection</em> 은 <em>fraud detection</em> 에 많이 사용된다. 데이터로부터 모델 <code>p(x)</code> 를 만들고 <em>unusual user</em> 를 검사하기 위해 <code>p(x) &lt; e</code> 인지 검사하면 된다.</p>
+
+<p>이외에도 항공기 엔진 예제처럼 제품의 품질 관리나, 데이터 센터에서의 노드 과부하 탐지등에 사용할 수 있다.</p>
+
+<h3 id="gaussiandistribution">Gaussian Distribution</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>gaussian density</em> 공식은</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?P%28x%3B%20%5Cmu%2C%20%5Csigma%5E2%29%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20%5Cexp%28-%20%7B%28x%20-%20%5Cmu%29%5E2%20%5Cover%202%5Csigma%5E2%7D%29'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236839_1788.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>평균과 분산은</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5C%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csigma%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="anomalydetectionalgorithm">Anomaly Detection Algorithm</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236899_7015.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>각 <em>feature</em> 가 가우시안 분포를 따른다고 하면, </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20p%28x_1%3B%20%5Cmu_1%2C%20%5Csigma_1%5E2%29%5C%20p%28x_2%3B%20%5Cmu_2%2C%20%5Csigma_1%5E2%29%20%5Ccdots%5C%20p%28x_n%3B%20%5Cmu_n%2C%20%5Csigma_1%5En%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%20%3D%201%7D%5En%20p%28x_j%3B%20%5Cmu_j%2C%20%5Csigma_j%5E2%29'  alt="" /></p>
+
+<p>이렇게 가정하려면, 각 <em>feature</em> 가 독립적이어야 하지만 실제로는 독립적이지 않더라도 어느정도 동작한다. 이 때 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cmu_j%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x_j%5E%7B%28i%29%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csigma_j%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%7B%28x_j%5E%7B%28i%29%7D%20-%20%5Cmu_j%29%5E2%7D'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236904_6921.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>따라서 <code>p(x)</code> 는 아래 식이 된다. <code>p(x)</code> 는 <em>feature</em> 가 나올 확률로 이해하면 된다. 이 때 <code>p(x)</code> 가 상당히 작으면, 평균에 가깝지 않은 <em>feature</em> 가 많이 나왔다는 뜻이므로 <em>anomaly</em> 라 볼 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%3D1%7D%5En%20%5C%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma_j%5E2%7D%7D%20%5C%20%5Cexp%28-%7B%28x_j%20-%20%5Cmu_j%29%5E2%20%5Cover%202%5Csigma_j%5E2%7D%29'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236907_7102.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>두 <em>feature</em> <code>x1, x2</code> 의 가우시안 분포를 3차원으로 조합하면 <code>p(x)</code> 가 좌측 하단 3차원 원뿔의 높이가 된다.</p>
+
+<h3 id="evaluatinganomalydetection">Evaluating Anomaly Detection</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236992_3664.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236996_4034.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>anomaly</em> 를 잘 나타낼거 같은 <em>feature</em> 를 골라내고, 이를 이용해 모델을 만든다. </p>
+
+<p>우리가 가진 데이터가 <em>anomaly</em> 를 알려주는 <code>y</code> 가 있다면, 위 그림처럼 <em>training set</em> 으로 <em>non-anomalous</em> 을 이용하고, <em>CV, Test Set</em> 으로 나머지를 반반씩 분할하면 된다.</p>
+
+<p>즉 <em>good example</em> 로 모델을 만들고, <em>anomaly</em> 가 섞여있는 <em>cv, test set</em> 으로 평가한다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361237001_5250.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>이 때 <em>skewed classess</em> 이기 때문에 (<code>y = 0</code> 이 대다수, <code>y = 1</code> 은 희박) 단순히 정확도로 평가하긴 좀 무리가 있다. <em>precision, recall, f1 score</em> 등을 이용해 평가해야 한다.</p>
+
+<p><em>threshold</em> 인 <code>e</code> (엡실론) 를 고르기 위해 <em>cross validation</em> 을 이용할 수 있다. <em>f1 score</em> 를 최대화 하는 <code>e</code> 를 고른다거나.</p>
+
+<h3 id="anomalydectectionvssupervisedlearning">Anomaly Dectection vs Supervised Learning</h3>
+
+<p><code>y</code> 값이 있는 데이터라면, 왜 <em>supervised learning</em> 을 이용하지 않을까? </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361242897_8389.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<h4 id="anomalydetection">Anomaly Detection</h4>
+
+<p><em>anomaly detection</em> <em>skewed class</em> 가 있을 때 사용한다.</p>
+
+<blockquote>
+  <p>Many different <strong>types</strong> of anomalies. Hard for any algorithm to learn from positive examples what the anomalies look like</p>
+  
+  <p>Future anomalies may look nothing like any of the anomalous examples we've seen so far</p>
+</blockquote>
+
+<p>보면 알겠지만 <em>anomaly</em> 가 굉장히 다양할 수 있기 때문에 <em>anomaly</em> 를 특정 형태로 구분짓는 알고리즘을 쓰긴 좀 힘들다.</p>
+
+<p>게다가, 가지고 있는 데이터 셋에서 보지 못했던 새로운 종류의 <em>anomaly</em> 가 나올 수도 있다.</p>
+
+<h4 id="supervisedlearning">Supervised Learning</h4>
+
+<p><em>positive, negative example</em> 이 많을 때 사용한다.</p>
+
+<blockquote>
+  <p>Enough positive examples for algorithms to get a sense of what positive examples are like, futre positive example likly to be similar to ones in training set</p>
+</blockquote>
+
+<p><em>supervised learning</em> 에서 <em>positive example</em> 은 어떤 특정 형태기 때문에, 미래에 발견할 <em>positive example</em> 도 비슷한 형태라 생각될 때 사용한다.</p>
+
+<p><em>SPAM filtering</em> 에서는 다양한 타입의 <em>positive example</em> 이 있어도, 우리가 충분한 양의 <em>positive example</em> 이 있기 때문에 커버할 수 있어 <em>supervised learning</em> 을 사용한다.</p>
+
+<p><br/></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361243087_2169.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><br/></p>
+
+<h3 id="choosingwhatfeaturestouse">Choosing What Features to Use</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361244210_3429.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>feature</em> 의 분포가 가우시안이면 고맙지만, 아닐경우 변환이 필요하다. 왼쪽 아래 분포에 로그를 씌우면, 가우시안 분포 비슷하게 보인다.</p>
+
+<p>다른 방법으로는 <code>log(x_2 + c)</code>, <code>sqrt(x_3)</code> 등등이 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361245473_5316.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>흔한 에러는 <code>p(x)</code> 가 <em>normal, anomalous</em> 에 대해서 모두 높은 경우인데, 슬라이드의 아래쪽에서 볼 수 있듯이 <code>x2</code> 라는 <em>feature</em> 를 만들어서 <em>anomaly</em> 를 발견하는 알고리즘을 만들 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361246077_9679.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>anomaly</em> 를 위한 <em>feature</em> 를 고를 때 특이하게 높거나, 낮을 수 있는 것을 고르면 된다. 데이터 센터 예제에서는 <em>CPU load / network traffic</em> 등이 있을 수 있다. 네트워크 트래픽이 낮은데 <em>CPU load</em> 가 높다면 확실히 <em>anomaly</em> 기 때문이다.</p>
+
+<h3 id="multivariategaussiandistribution">Multivariate Gaussian Distribution</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361257865_7961.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>feature</em> 를 <em>CPU laod, memory use</em> 로 했을 때 낮은 CPU 부하에도 메모리 사용량이 높으면 <em>anomaly</em> 라 볼 수 있다.</p>
+
+<p>그런데, 슬라이드의 왼쪽 그림에서 녹색으로 표시한 <em>anomaly</em> 는 지금까지 설명했던 알고리즘으로 찾기가 힘들다. 적당한 수준의 <em>memory use</em> 와 그리 낮지 않은 <em>cpu load</em> 를 가지기 때문이다.</p>
+
+<p>실제 <em>normal example</em> 이 타원형이기 때문에, 원으로 <em>anomaly</em> 를 찾기는 어렵다. </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361258533_5107.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>따라서 <code>p(x_1)p(x_2)...</code> 을 이용한 모델 말고 다른 방법으로 모델을 만들어야 한다. </p>
+
+<p><code>u</code> 를 <code>n</code> 벡터라 하고, <code>Sigma</code> 를 <code>u</code> 의 <em>convariance matrix</em> 라 하자. 그러면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?p%28x%3B%20%5Cmu%2C%20%5CSigma%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%282%5Cpi%29%5E%7Bn/2%7D%20%5C%20%7C%5CSigma%7C%5E%7B1/2%7D%7D%20%5C%20%5Cexp%28-%7B1%5Cover%202%7D%28x%20-%20%5Cmu%29%5ET%20%5C%20%5CSigma%5E%7B-1%7D%28x%20-%20%5Cmu%29%29'  alt="" /></p>
+
+<p>여기서 <code>|Sigma|</code> 는 <code>Sigma</code> 의 행렬식인데, 여기를 참고하자.</p>
+
+<ul>
+<li><a href='http://ghebook.blogspot.com/2011/06/matrix.html' >행렬</a></li>
+<li><a href='http://ghebook.blogspot.com/2011/06/determinant.html' >행렬식</a></li>
+<li><a href='http://ghebook.blogspot.kr/2011/06/geometric-meaning-of-determinant.html' >행렬식의 기하학적 의미</a></li>
+<li><a href='http://darkpgmr.tistory.com/104' >행렬식과 기하학적 활용</a></li>
+</ul>
+
+<p>이제 위 식을 이용해서 나온 <code>p(x)</code> 를 3차원, 2차원으로 보면</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259228_7695.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259243_2967.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259236_1052.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><br/></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259583_5151.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5CSigma%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%20%5C%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%5ET'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259728_6035.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><code>u, Sigma</code> 를 찾아 <code>p(x)</code> 를 만들고, 테스트 데이터에 대해 <code>p(x) &lt; e</code> 인지 비교한다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361260300_1768.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>original model</em> 은 <em>multivariate model</em> 에서 각 <em>feature</em> 간 상관 관계가 없는 (독립), 즉 <em>covariance matrix</em> 가 <em>diagonal matrix</em> 인 경우다. (</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/19/1361260755_3407.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<ul>
+<li><strong>Original model</strong></li>
+</ul>
+
+<p>수동으로 <em>feature</em> 를 만들때 사용할 수 있다. 또는 적은 연산을 원할때, 다시 말해서 <code>n</code> 이 커서 연산이 무지막지하게 클 때 좋다.</p>
+
+<p><code>m</code> 이 작아도 쓸 수 있다.</p>
+
+<ul>
+<li><strong>Multivariate Gaussian</strong></li>
+</ul>
+
+<p>계산 비용이 비싸지만, 자동으로 <em>feature</em> 간 상관관계를 모델에 포함시킨다.</p>
+
+<p><code>Sigma</code> 가 <em>invertible</em> 이기 위해서는 <code>m &gt; n</code> 이어야 한다. 실제로는 <code>m</code> 이 <code>n</code> 보다 훨씬 클 때 사용하는 경우가 많다. (e.g. <code>m &gt;= 10n</code>)</p>
+
+<p>만약에 <code>m &gt; n</code> 인데, <code>Sigma</code> 가 <em>non-invertible</em> 이면 <em>redundant feature</em> 가 있는 경우니 확인해 보자. (흔한 오류라고 함)</p>
+
+<h3 id="recommendersystem">Recommender System</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361324993_7588.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<h3 id="contentbasedrecommendations">Content Based Recommendations</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361325560_4034.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>위 슬라이드는 유저 <code>j</code> 로 부터 <code>theta^(j)</code> 를 얻어, <em>feature</em> <code>x</code> 와 곱함으로써 <em>linear regression</em> 문제로 변경했다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361326084_2070.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><code>theta^(j)</code> 는 어떻게 훈련시킬까?</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202m%5E%7B%28j%29%7D%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202m%5E%7B%28j%29%7D%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
+
+<p>여기서 <code>m^(j)</code> 는 유저 <code>j</code> 에 의해 점수를 받은 영화의 수인데, 어차피 상수이므로 제거하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361326247_4648.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>이 때 각 유저마다의 <code>theta(j)</code> 를 합 해 최소화 시키는 방식으로 전체 <code>theta</code> 를 훈련시킬 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361326573_9477.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>gradient descent</em> 는</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20%5C%20%28for%5C%20k%20%3D%200%29'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20&plus;%20%5Clambda%5Ctheta_k%5E%7B%28j%29%7D%5C%20%28for%5C%20k%20%5Cneq%200%29'  alt="" /></p>
+
+<h3 id="collaborativefiltering">Collaborative Filtering</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361327928_4438.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>content-based recommendation</em> 에서 <em>feature</em> 를 구하긴 사실 어려운 일이다. 누가 이 영화가 얼마만큼 로맨스고, 아닌지를 판별해줄까? </p>
+
+<p>문제를 좀 변경해서, 만약에 유저로부터 <code>theta(j)</code> 를 얻어낼 수 있다면 그 정보로 부터 <em>feature</em> <code>x(i)</code> 를 추출할 수 있다. 왜냐하면 <code>(\theta^(j))^T * x^(i) ~ y^(i, j)</code> 이기 때문이다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361328443_4320.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><code>x^(i)</code> 를 얻기 위해, </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?min_%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%20%5Csum_%7Bi%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/20/1361330430_7394.png'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<ul>
+<li><code>theta</code> 가 주어지면 <code>x</code> 를 훈련할 수 있고</li>
+<li><code>x</code> 가 주어지면 <code>theta</code> 를 훈련할 수 있다.</li>
+</ul>
+
+<p>따라서 최초의 랜덤 <code>theta</code> 에 대해 <code>x</code> 를 훈련하고, 다시 <code>theta</code> 를 훈련하고, 반복하면 된다. </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361495687_3476.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><code>theta</code> 와 <code>x</code> 를 반복해서 훈련시키는 것보다, 동시에 훈련시키는 것이 좀 더 효율적이다. 따라서</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?J%28%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%2C%20%5Ctheta%5E%7B%28i%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7B%28i%2C%20j%29%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
+
+<p>를 최소화 시키면 된다. 참고로 <code>x_0</code> 은 <em>collaborative filtering</em> 에서 필요가 없다. 알고리즘 자체가 <em>feature</em> 를 직접 찾아내니 <em>hard coded</em> 된 <em>feature</em> 는 사용하지 않는다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361495692_7530.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>(1) <code>x</code>, <code>theta</code> 를 작은 값으로 초기화 한다.</p>
+
+<p>이는 <em>symmetry breaking</em> 을 하기 위함이다. 작은 랜덤값들로 초기화 하여 <code>x^(i)</code> 가 서로 다른 값들을 가지도록 도와준다.</p>
+
+<p>(2) <em>cost function</em> <code>J</code> 를 <em>gradient descent</em> 등으로 최소화 시킨다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?x_k%5E%7B%28i%29%7D%20%3A%3D%20x_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bj%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Ctheta_k%5E%7B%28j%29%7D%20&plus;%20%5Clambda%20x_k%5E%7B%28i%29%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28i%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Cx_k%5E%7B%28i%29%7D%20&plus;%20%5Clambda%20%5Ctheta_k%5E%7B%28j%29%7D'  alt="" /></p>
+
+<p>(3) 유저의 <em>parameter</em> <code>theta</code> 와 영화의 <em>feature</em> <code>x</code> 에 대해 <code>theta^T * x</code> 를 이용해 예측하면 된다.</p>
+
+<h3 id="vectorizationlowrankmatrixfactorization">Vectorization: Low Rank Matrix Factorization</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361496844_8727.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361496849_5252.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>collaborative filtering</em> 은 <em>low rank matrix factoriazation</em> 이라 부르기도 한다. 위 슬라이드처럼 <code>X, THETA</code> 를 구성하고 <code>X * THETA^T</code> 를 구하면 된다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361496854_2443.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>low rank matrix factorization</em> 을 이용해서 <em>feature</em> 를 찾으면, 두 영화 <code>i, j</code> 가 얼마나 유사한지 <code>||x^(i) - x^(j)||</code> 으로 판단할 수 있다.</p>
+
+<h3 id="implementationdetailmeannormalization">Implementation Detail: Mean Normalization</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361497832_3797.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p>만약 위 슬라이드의 <code>Eve</code> 처럼 아무 영화도 평가 안한 사람에게는, <code>theta</code> 가 <code>0</code> 으로 나온다. (첫번째 <em>term</em> 이 <code>0</code> 이고, <em>regularization term</em> 은 <code>theta</code> 를 최소화한다.)</p>
+
+<p>그렇게 되면, 어떤 영화도 높은 <em>rating</em> 을 받을 수 없으므로 (<code>theta^T * x</code>). 추천할 거리가 없다. 이건 별로 좋은 상황이 아닌데, <em>mean normalization</em> 을 이용하면 이 문제를 해결할 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361497813_3878.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
+
+<p><em>mean normalized</em> 데이터를 이용하면, 추천 안한 사람이 <code>theta = 0</code> 을 갖더라도, 남들이 추천한 선호도 <code>u</code> 에 따라서 영화를 추천받을 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20&plus;%20%5Cmu_i'  alt="" /></p>
+
+<p>잘보면 <em>feature scaling</em> 과는 다르게 특정 <em>range</em> 로 나누질 않는데, 이건 이미 <em>rating</em> 자체가 일정 범위 <code>1-5</code> 를 갖기 때문이다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
+(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
+(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a> <br />
+(4) <a href='http://ghebook.blogspot.com/2011/06/matrix.html' >http://ghebook.blogspot.com</a> <br />
+(5) <a href='http://darkpgmr.tistory.com/104' >http://darkpgmr.tistory.com</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-9/</link><guid isPermaLink="false">0247c02a-4927-4ae8-957c-adf6590fac09</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine learning]]></category><category><![CDATA[anomaly detection]]></category><category><![CDATA[recommender system]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 07 Dec 2014 15:39:40 GMT</pubDate></item><item><title><![CDATA[A Poor Man's Concurrency Monad]]></title><description><![CDATA[<p><em>FP 101x</em> 의 최종 보스입니다. <del>Rose Tree 는 거들뿐</del> <em>Koen Claessen</em> 가 1999년에 발표한 <a href='http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.39.8039' ><em>Poor Man's Concurrenc Monad</em></a> 를 배경으로 하는 과제인데, 언어에 <em>primitive</em> 추가 없이 <em>concurrency</em> 를 모델링 하는 방법을 보여줍니다. </p>
 
 <h3 id="continuation">Continuation</h3>
 
@@ -6266,379 +6672,4 @@ sequence (mx:mxs) = do x &lt;- mx
 (3) <a href='http://wiki.reeseo.net/Haskell/%EA%B3%B5%EC%8B%9D%20%EC%9E%85%EB%AC%B8%EC%84%9C%20%EB%B2%88%EC%97%AD%EB%AC%B8/9.%20%EB%AA%A8%EB%82%98%EB%93%9C%20' (Monads)">http://wiki.reeseo.net/Haskell</a> <br />
 (4) <a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' >Understanding Monads</a> <br />
 (5) <a href='http://www.csee.umbc.edu/courses/331/fall11/hw/hw2/' >http://www.csee.umbc.edu</a> <br />
-(6) <a href='http://www.cs.nott.ac.uk/' ~gmh/monads">Programming With Effects</a> by <em>Graham Hutton</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro4/</link><guid isPermaLink="false">1b0aad8b-73c3-4f02-9556-e14d8933cae4</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[functional parser]]></category><category><![CDATA[monad]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 19 Nov 2014 04:39:46 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week1]]></title><description><![CDATA[<p>매 10분마다 새롭게 생성되는 데이터의 양은 2003년까지의 모든 데이터를 합한 것보다 더 많다고 한다. 이 데이터 속에는 무궁무진한 가치가 있다고 하여 어떤 사람들은 데이터를 기름이라 비유하기도 한다.</p>
-
-<p><img src='https://farm9.staticflickr.com/8037/8008798697_d36feb328d_h_d.jpg'  alt="" /></p>
-
-<h3 id="datascienceandbigdata">Data Science and Big Data</h3>
-
-<p>우리가 들고 다니는 핸드폰에는 14개 이상의 센서가 달려있는데, 이렇게 다양한 이벤트로부터 데이터가 무수히 많이 발생하는걸 볼 수 있다. <em>Internet of Events</em> 시대다.</p>
-
-<p><em>Internet of Events</em> 에는 크게 4개의 <em>source</em> 가 있는데</p>
-
-<p>(1) <em>Internet of Content</em> (e.g Google, Wiki) <br />
-(2) <em>Internet of People</em> (e.g Twitter, Facebook) <br />
-(3) <em>Internet of Things</em> (e.g home appliances) <br />
-(4) <em>Internet of Places</em> (e.g Smart phones)</p>
-
-<p>왜 이렇게 데이터가 많이 증가할까? 데이터를 만드는 도구들이 널리 퍼졌기도 하지만 기본적으로 디바이스들이 어마어마하게 좋아졌기 때문이다. (가격도 물론). </p>
-
-<p>매 2년마다 같은 범위에 집약할 수 있는 트랜지스터가 2배씩 늘어난다는 무어의 법칙을 일상생활에 적용하면 어떻게 될까? 40년전에는 비행기로 7시간 걸리던 거리가, 매 2년마다 1/2씩 줄어든다면 24 milliseconds 가 된다. 이건 정말 어마어마하게 줄어든 것이다. </p>
-
-<p>이렇게 디바이스들의 처리, 저장 능력이 급속도로 늘었기 때문에 사람들은 이제 <em>Big Data</em> 를 이야기 하게 되었다. 그리고 문제는 여전히</p>
-
-<blockquote>
-  <p>How to extract real value from big data?</p>
-</blockquote>
-
-<p>기존의 데이터에 비해서 <em>Big data</em> 가 다른점은 무엇일까? 사람들은 빅데이터에 대해 이야기 할때 <em>4V</em> 를 말하곤 하는데</p>
-
-<p>(1) <strong>Variety:</strong> Different froms of data sources <br />
-(2) <strong>Veracity:</strong> Uncertainty of data <br />
-(3) <strong>Volumn:</strong> Data size <br />
-(4) <strong>Velocity:</strong> Speed of change</p>
-
-<p><em>Veracity</em> 가 묻고자 하는것은 이런 것들이다. <em>"다량의 면도기 사용 데이터를 수집했는데, 이 면도기를 사용한 사람이, 실제로 그 면도기를 구매한 사람인가?"</em></p>
-
-<p>이런 성격을 가진 빅데이터를 포함해서 일반적인 데이터를 분석할때 데이터 사이언티스트가 하는 4가지 질문이 있다.</p>
-
-<ol>
-<li>What happened?  </li>
-<li>Why did it happen?  </li>
-<li>What will happen?  </li>
-<li>What is the best that can happen?</li>
-</ol>
-
-<p>예를 들어 병원에서는 <em>"왜 이 환자가 이렇게 오래 기다렸나?</em>", <em>"의사가 가이드라인을 따랐나?"</em>, <em>"그럼 대기 시간을 예측할 수 있을까?"</em>, <em>"내일은 얼마나 많은 스태프가 더 필요할까?"</em>, <em>"비용을 얼마나 줄일 수 있을까?"</em> 와 같은 질문을 할 수 있다.</p>
-
-<p>이런 질문에 답하기 위해 다양한 스킬을 이용할 수 있다.</p>
-
-<p><img src='http://blog.zhaw.ch/datascience/files/2014/06/SkillSet-1024x751.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.zhaw.ch/datascience' >http://blog.zhaw.ch/datascience</a>)</p>
-
-<p>지금까지 빅데이터에 대해 했지만 이 강의에서는 특별히 <em>process</em> 에 집중한다. 이유는</p>
-
-<blockquote>
-  <p>In the end, It is the process that matters (and no the data or the software)    </p>
-  
-  <p>Not just patterns and decisions, but end-to-end processes</p>
-</blockquote>
-
-<p>간단히 말하면 프로세스 마이닝은 <em>process-centric view on data science</em> 라 할 수 있다.</p>
-
-<p>즉 프로세스 마이닝은 <em>event data</em> 와 <em>processes</em>, <em>process models</em> 간의 관계를 파악하는 것이다. 어떤 사람들은 <em>Business process intelligence</em> 라 부르기도 한다.</p>
-
-<p>프로세스 마이닝의 <em>use cases</em> 는</p>
-
-<blockquote>
-  <ol>
-  <li>What is the process that people really follow?</li>
-  <li>Where are the bottlenecks in my process?  </li>
-  <li>Where do people (or machines) deiate from the expected or idealized processes?</li>
-  </ol>
-</blockquote>
-
-<p>결국 프로세스 마이닝은 <em>Data science in Action</em> 이다.</p>
-
-<blockquote>
-  <p>Not just data processes matter</p>
-</blockquote>
-
-<h3 id="differencetypesofprocessmining">Difference Types of Process Mining</h3>
-
-<p>프로세스 마이닝의 포지션은 <em>process model analysis</em> 와 <em>data-oriented analysis</em> 의 중간이다. </p>
-
-<p><img src='http://fluxicon.com/blog/wp-content/uploads/2014/02/Overview-ProcessMining.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://fluxicon.com/blog' >http://fluxicon.com/blog</a>)</p>
-
-<p>기존의 데이터마이닝은 데이터만을 보고 프로세스에 집중하지 않았다면, 프로세스 마이닝은 <em>end-to-end</em> 를 포함한 프로세스 자체에 집중한다. </p>
-
-<p>왜 이런 프로세스에 집중할까? 그 이유는 <em>performance-oriented questions</em>, <em>comliance-oriented questions</em> 에 답하기 위해서다.</p>
-
-<p>프로세스 마이닝의 시작은 <em>event data</em> 를 분석하는 것 부터다. <em>event log</em> 는 3가지 컬럼을 기본적으로 가지고 있는데 <em>case id</em>, <em>activity name</em>, <em>time stamp</em> 다.</p>
-
-<p><img src='http://fluxicon.com/blog/wp-content/uploads/2012/02/PM-Example_small.png'  alt="" /></p>
-
-<p align="center">(<a href='http://fluxicon.com/blog' >http://fluxicon.com/blog</a>)</p>
-
-<p><em>model</em> 과 <em>event data</em> 사이에는 3가지 관계가 있다.</p>
-
-<p>(1) <strong>Play-Out:</strong> 단순히 <em>model</em> 을 <em>simulation</em> 하면 다양한 시나리오 (<em>event logs</em>) 를 만들 수 있다. <br />
-(2) <strong>Play-In:</strong> 다양한 <em>event logs</em> 로 부터 <em>model</em> 을 추론하는 것이다. (<em>No modeling is needed</em>) <br />
-(3) <strong>Replay:</strong> <em>event data</em> 를 <em>model</em> 에서 재현함으로써 어떤 요소가 부족한지, 혹은 병목 지점등을 파악할 수 있다. (<em>conformance checking</em>)  </p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter01introduction-110510153155-phpapp01/95/process-mining-chapter-1-introduction-20-728.jpg?cb=1305062721'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter01introduction-110510153155-phpapp01/95/process-mining-chapter-1-introduction-21-728.jpg?cb=1305062721'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter01introduction-110510153155-phpapp01/95/process-mining-chapter-1-introduction-22-728.jpg?cb=1305062721'  alt="" /></p>
-
-<p><br/> <br />
-<em>play-in</em> 은 좀 신선하다. 단순히 <em>event logs</em> 만으로 실제로 사람들이 따르는 프로세스를 추론할 수 있다는 이야기다.</p>
-
-<p>그리고 이런 모델에 대해 <em>real data</em> 를 <em>repaly</em> 함으로써 병목 지점을 발견하여 개선함으로써 <em>performance</em> 를 늘릴 수 있다는 것이다.</p>
-
-<p><br/> <br />
-<img src='http://image.slidesharecdn.com/processminingchapter01introduction-110510153155-phpapp01/95/process-mining-chapter-1-introduction-17-728.jpg?cb=1305062721'  alt="" /></p>
-
-<p>요약하자면 <em>event logs</em> 로 부터 <em>play-in</em> 을 통해 <em>model</em> 을 이끌어 내고 여기에 대해 <em>replay</em> 를 통해 <em>conformance checking</em> 을 할 수 있다. 그리고 <em>enchanced model</em> 을 실제 적용하는 과정이 <em>play-out</em> 이라 볼 수 있다.</p>
-
-<h3 id="howprocessminingrelatestodatamining">How process Mining Relates to Data Mining</h3>
-
-<p><br/> <br />
-<img src='http://fluxicon.com/blog/wp-content/uploads/2011/08/Version2.png'  alt="" /></p>
-
-<p align="center">(<a href='http://fluxicon.com/blog' >http://fluxicon.com/blog</a>)</p>
-
-<p>기존의 <em>BI</em> 는 실제 <em>reality</em> 를 단순히 <em>KPI</em> 를 요약하는데 그쳤었다. 그러나 <em>anscombe's quartet</em> 를 보면 알 수 있듯이 똑같은 통계치를 가졌더라도 시각화 하면 전혀 다른 양상일 수 있다.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/638px-Anscombe%27s_quartet_3.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet'>http://en.wikipedia.org/wiki/Anscombe's_quartet</a>)</p>
-
-<p>따라서 <em>event data</em> 를 단순히 값으로 요약하는건 <em>reality</em> 를 반영하지 못할 수도 있다. 값도 중요하지만 <em>process</em> 를 봐야한다.</p>
-
-<p>더 깊이 들어가기전에 데이터마이닝에 대해서 좀 알고 가자.</p>
-
-<h4 id="variables">Variables</h4>
-
-<p>두 타입의 <em>variable</em> 이 있는데 </p>
-
-<p>(1) <strong>categorical variables:</strong> <em>ordinal</em>, <em>nominal</em> <br />
-(2) <strong>numerical varaibles:</strong> ordered, cannot be enumerated easily  </p>
-
-<p><em>yes / no</em> 같은건 <em>nominal</em> 이다.</p>
-
-<h4 id="supervisedlearning">Supervised Learning</h4>
-
-<p><em>supervised learning</em> 의 목표는 <em>labeled data</em> 를 이용하여</p>
-
-<blockquote>
-  <p>Explain <strong>response variable (dependent variable)</strong> in terms of <strong>predictor variable (independent variables)</strong></p>
-</blockquote>
-
-<p>여기에는 크게 나누면 두 가지 테크닉이 쓰인다. 하나는 <em>categorial response variable</em> 에 대해 사용하는 <em>classification</em> 이고 다른 하나는 <em>numerical response variable</em> 에 대해 쓸 수 있는 <em>regression</em> 이다.</p>
-
-<h4 id="unsupervisedlearning">Unsupervised Learning</h4>
-
-<p><em>unsupervised learning</em> 은 <em>unlabeled data</em> 를 가지고 <em>clustering</em> 이나 <em>pattern discovert</em> 등을 하는 것이다.</p>
-
-<p><em>k-means</em>, <em>agglomerative hierarchical</em>, <em>association rules</em> 등 다양한 알고리즘을 이용한다.</p>
-
-<h4 id="processminingvsdatamining">Process Mining vs Data Mining</h4>
-
-<ul>
-<li>둘 다 데이터로부터 시작한다.  </li>
-<li>데이터마이닝은 <em>process-centric</em> 이 아니다.  </li>
-<li><em>process discovery</em>, <em>conformance checking</em>, <em>bottleneck analysis</em> 는 전통적인 데이터마이닝으로 풀기 어렵다.  </li>
-<li>프로세스 마이닝은 <em>end-to-end process models</em>, <em>concurrency</em> 중심이다.  </li>
-<li>프로세스 마이닝의 <em>event log</em> 는 <em>timestamp</em> 와 <em>case</em> 컬럼이 있다.  </li>
-<li>프로세스 마이닝과 데이터마이닝은 복잡한 문제를 풀기 위해 같이 사용될 수 있다.  </li>
-</ul>
-
-<h3 id="learningdecisiontree">Learning Decision Tree</h3>
-
-<p><em>decision tree</em> 는 <em>supervised learning</em> 에서 사용되는 기법이다. <em>decision tree</em> 에 놓여있는 아이디어는 처음의 <em>*high entropy (uncertain)</em> 상태에서 <em>attribute</em> 에 따라 <em>subset</em> 으로 쪼개면서 복잡도를 낮춤으로써 <em>low entropy</em> 를 만들 수 있다.</p>
-
-<p><em>entropy</em> 는 <em>degree of uncertainty</em>, <em>inverse of compressibility</em> 다. 만약 데이터에서 <em>entropy</em> 가 매우 적다면 데이터를 압축할 수 있다. 그러나 대부분의 경우 <em>high entropy</em> 이기 때문에</p>
-
-<blockquote>
-  <p><strong>Goal:</strong> reduce entropy in leaves of tree to improve predictability  </p>
-</blockquote>
-
-<p>엔트로피를 계산하기 위해 로그를 이용하면 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?E%20%3D%20-%20%5Csum_%7Bi%20%3D%201%7D%5Ek%20P_i%20%5C%20log_2%28P_i%29'  alt="" /></p>
-
-<p><em>intuition</em> 은 초록공과 빨간공이 1:1 로 섞여있을땐 <code>E = 1</code> 이고, 빨간공이나 초록공만 있을때는 <code>E = 0</code> 이다. 따라서 <em>decision tree</em> 가 깊어지면 깊어질수록 전체 <code>E</code> 가 낮아진다. </p>
-
-<p><img src='http://cfile26.uf.tistory.com/image/2023334B5153F4EE27D112'  alt="http://frontjang.tistory.com/" /></p>
-
-<p align="center">(<a href='http://frontjang.tistory.com/' >http://frontjang.tistory.com</a>)</p>
-
-<p>그리고 이렇게 얻어진 <em>overall entropy</em> 의 차이를 <em>information gain</em> 이라 부른다. <em>classification</em> 에는 변화가 없어도 <em>information gain</em> 이 있을 수 있다. 반대로 한단계 더 분리 되었어도 <em>information gain</em> 이 <code>0</code> 일 수 있다.</p>
-
-<p>따라서 선택 가능한 모든 <em>attribute</em> 에 대해 <em>information gain</em> 을 비교하여 가장 큰 <em>attribute</em> 를 선택하고 더 이상의 커다란 변화가 없을때 까지 반복하면 <em>decision tree</em> 를 만들 수 있다.</p>
-
-<p><em>minimal gain</em>, <em>maximum depth</em> 등을 세팅할 수도 있고, <em>overfitting</em> (모든 경우를 다 분리하는것) 을 막기 위해 최소 노드 사이즈를 정할 수 있다. <em>post pruning</em> 등 다양한 기술이 있다.</p>
-
-<p>프로세스 마이닝에 적용해 보면 모델에서 분기 될 때 <em>"What is driving these decisions?"</em>, 등을 파악할 수 있고 <em>"most likely path"</em> 같은 문제도 해결할 수 있다.</p>
-
-<h3 id="associationrule">Association Rule</h3>
-
-<p><em>unsupervised learning</em> 도구인 <em>association rule</em> 을 이용해 패턴을 찾아보자.</p>
-
-<p><em>association rule</em> 은 <code>X =&gt; Y</code> 형태다. 시작 전에 몇가지 개념을 보고 넘어가자.</p>
-
-<h4 id="support">Support</h4>
-
-<p><em>support</em> 는 <code>0 ~ 1</code> 사이의 값을 가지는데, <code>1</code> 이면 <em>good</em>, <code>0</code> 로 갈수록 <em>bad</em> 를 의미한다. </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?support%28X%5CRightarrow%20Y%29%20%3D%20%7BN_%7BX%20%5Ccup%20Y%7D%20%5Cover%20N%20%7D'  alt="" /></p>
-
-<p>즉 전체 데이터 중 <code>X</code>, <code>Y</code> 가 같이 있는 <em>instance</em> 의 비율을 의미한다.</p>
-
-<h4 id="confidence">Confidence</h4>
-
-<p><em>support</em> 와 마찬가지로 <code>0 ~ 1</code> 값을 가지며 높은 값일수록 더 연관성 있음을 의미한다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?confidence%28X%5CRightarrow%20Y%29%20%3D%20%7BN_%7BX%20%5Ccup%20Y%7D%20%5Cover%20N_X%20%7D'  alt="" /></p>
-
-<p>전체 <code>X</code> 인스턴스 중 <code>X</code>, <code>Y</code> 가 같이 있는 <em>instance</em> 의 비율을 의미한다.</p>
-
-<h4 id="lift">Lift</h4>
-
-<p><img src='http://latex.codecogs.com/gif.latex?lift%28X%5CRightarrow%20Y%29%20%5C%5C%20%5C%5C%3D%20%7BN_%7BX%20%5Ccup%20Y%7D%5C%20/%5C%20N%20%5Cover%20%7B%28N_X%20/%20N%29%20%28N_Y%20/%20N%29%7D%20%7D%20%5C%5C%20%5C%5C%20%5C%5C%20%3D%20%7BN_%7BX%20%5Ccup%20Y%7D%5C%20N%20%5Cover%20%7BN_X%20%5C%20N_Y%7D%20%7D'  alt="" /></p>
-
-<p><em>lift</em> 는 <em>실제 같이 나타나는 비율 / 기대했던 비율</em> 이다. 식을 보면 알겠지만 각 아이템이 나타나는 비율을 독립이라 가정한 것을 분모로 실제 나타나는 비율을 나눈 것이다. 따라서 <code>lift &gt; 1</code> 이면 <code>X</code> 는 <code>Y</code> 가 나타나는데 긍정적인 영향을 미치거나 혹은 <code>Y</code> 가 <code>X</code> 에 대해 긍정적인 영향을 미친것이다. 반면 <code>lift &lt; 1</code> 이면 반대고, <code>lift = 1</code> 이면 서로 관계가 없다 볼 수 있다.</p>
-
-<p><a href='http://analyticstrainings.com/?p=151' >여기</a>를 인용하면</p>
-
-<blockquote>
-  <p><strong>A lift value greater than 1</strong> indicates that X and Y appear more often together than expected; this means that the occurrence of X has a positive effect on the occurrence of Y or that X is positively correlated with Y.</p>
-  
-  <p><strong>A lift smaller than 1</strong> indicates that X and Y appear less often together than expected, this means that the occurrence of X has a negative effect on the occurrence of Y or that X is negatively correlated with Y</p>
-  
-  <p><strong>A lift value near 1</strong> indicates that X and Y appear almost as often together as expected; this means that the occurrence of X has almost no effect on the occurrence of Y or that X and Y have Zero Correlation.</p>
-</blockquote>
-
-<p><em>class</em> 가 많으면 <em>rule</em> 또한 엄청나게 많아지기 때문에 <em>support</em>, <em>confidence</em>, <em>lift</em> 를 이용해서 룰을 필터링하거나 정렬할 수 있다.</p>
-
-<p>일반적으로 이 3가지에 대해</p>
-
-<p>(1) <em>support</em> 는 높을수록 좋다. <br />
-(2) <em>confidence</em> 는 1에 가까워야 한다. <br />
-(3) <em>lift</em> 는 1보다 커야한다.  </p>
-
-<p>다음의 조건이 있을때 각 룰에 대해 <em>support</em>, <em>confidence</em>, <em>lift</em> 를 계산해 보자.</p>
-
-<blockquote>
-  <p>100 customers buy diapers and / or beer: <br />
-  - 9 customers buy just Hoegaarden <br />
-  - 40 customers buy just Pampers <br />
-  - 50 customers buy just Pampers and Dommelsch <br />
-  - 1 customer buys just Pampers, Hoegaarden and Dommelsch  </p>
-</blockquote>
-
-<p>먼저 <code>{Pampers} =&gt; {Dommelsch}</code> 는</p>
-
-<p><code>s = 51 / 100 = 0.51</code>, <code>c = 51 / 91 = 0.56</code>, <code>l = 51 * 100 / (91 * 51) = 1.1</code> </p>
-
-<p>다음으로 <code>{Dommelsch} =&gt; {Pampers}</code> 는</p>
-
-<p><code>s = 0.51, c = 1, l = 1.1</code> 이다.</p>
-
-<p>값을 보면 이 두 가지 룰은 상당히 신빙성이 있다고 볼 수 있다. 그리고 나머지 룰들을 살펴봐도 <code>supoort, confidence, lift</code> 값 이 상당히 낮다.</p>
-
-<p>계산 방법은 간단한데, <em>class</em> 가 많으면 계산해야 할 <em>rule</em> 자체가 어마어마하게 많아진다. 이 문제를 해결하기 위해 몇 가지 방법이 있다.</p>
-
-<h4 id="apriorialgorithm">Apriori Algorithm</h4>
-
-<p><img src='http://latex.codecogs.com/gif.latex?Y%20%5Csubset%20X%5C%20%3D%3E%5C%20%28N_Y%20/%20N%29%20%5Cgeq%20%28N_X%20/%20N%29'  alt="" /></p>
-
-<p><code>X</code> 의 부분집합인 <code>Y</code> 에 대해서, <code>X</code> 의 <em>support</em> 가 높으면 <code>X</code> 의 부분집합도 충분히 빈번해야 한다. 그래서 <code>X</code> 의 부분집합인 <code>Y</code> 의 <em>support</em> 가 낮으면 <code>Y</code> 의 부분집합을 살펴볼 필요가 없어 연산 수를 줄일 수 있다.</p>
-
-<h4 id="patternmining">Pattern Mining</h4>
-
-<p>여기서 본 연관 분석은 <em>process</em> 를 고려하지 않지만, 이 기법을 잘 활용하면 <em>sequence mining</em> 이나 <em>episode mining</em> 등등에 활용 될 수 있다.</p>
-
-<h3 id="clusteranalysis">Cluster Analysis</h3>
-
-<p><em>unsupervised learning</em> 기법인 <em>clustering</em> 도 간단히 살펴보자.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/SLINK-Gaussian-data.svg/186px-SLINK-Gaussian-data.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Cluster_analysis' >http://en.wikipedia.org/wiki/Cluster_analysis</a>)</p>
-
-<h4 id="kmeansclustering">k-means clustering</h4>
-
-<p>여기서 <code>k</code> 는 몇개의 집단으로 나눌건지를 의미하는 숫자다. 알고리즘 자체는 굉장히 직관적이다.</p>
-
-<p>(1) 먼저 <em>centroid</em> 라 부르는 점들을 <em>attribute</em> 에 랜덤하게 혹은 레귤러 하게 <code>k</code> 개 배치한다. <br />
-(2) 각 점에서 <em>centroid</em> 까지 거리가 가장 짧은 <em>centroid</em> 를 선택하고, 이 집단 내부에서 가운데 점을 계산해 <em>centroid</em> 로 다시 정한다. <br />
-(3) <em>centroid</em> 에 변화가 없을 때 까지 계속 반복한다.  </p>
-
-<p><img src='http://datavisualization.blog.com/files/2011/08/kmeansclustering.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://datavisualization.blog.com/' >http://datavisualization.blog.com</a>)</p>
-
-<pre><code>// ref: http://datavisualization.blog.com/visible-data/cluster-analysis/
-
-Select K points as the initial Centroids  
-REPEAT  
-   Form K clusters by assigning all points to the closest Centroid
-   recompute the Centroid for each cluster
-UNTIL Centroids don’t change // or less than thresahold”  
-</code></pre>
-
-<p>초기에 <em>centroid</em> 가 랜덤하게 선택되기 때문에 <em>non-deterministic</em> 이어서 여러번 계산 후에 가장 좋은 <em>clustering</em> 을 골라야 한다. </p>
-
-<p>그리고 <code>k</code> 값에 따라 클러스터가 달라질 수 있으므로 변화시켜가면서 좋은 <code>k</code> 값을 찾아야 한다.</p>
-
-<p><img src='http://datavisualization.blog.com/files/2011/08/howmanyclusters.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://datavisualization.blog.com/' >http://datavisualization.blog.com</a>)</p>
-
-<h4 id="agglomerativehierarchicalclustring">Agglomerative hierarchical clustring</h4>
-
-<p><em>k-means</em> 이외에도 다양한 클러스터링 알고리즘이 있다.</p>
-
-<p><img src='http://www.cs.umd.edu/hcil/hce/hce3-manual/dendrogram.png'  alt="" /></p>
-
-<p align="center">(<a href='http://www.cs.umd.edu/' >http://www.cs.umd.edu</a>)</p>
-
-<h4 id="applyingprocessmining">Applying Process Mining</h4>
-
-<p>클러스터링은 <em>event-log</em> 를 분할하는데 쓸 수 있다. 그러면 특징이 다른 <em>event-log</em> 를 뽑아낼 수 있고 각각의 클러스터에 대해 모델을 만드는데 유용하다.</p>
-
-<h3 id="evaluatingminingresult">Evaluating Mining Result</h3>
-
-<p>마이닝으로 모델을 만들거나, 결과를 얻었다고 하자. 어떻게 평가할까?</p>
-
-<h4 id="confusionmatrix">Confusion Matrix</h4>
-
-<p><em>confusion matrix</em> 는 <em>predict class</em> 와 <em>actual class</em> 를 기반으로 테이블을 만든 것이다.</p>
-
-<p><img src='http://lh3.ggpht.com/_qIDcOEX659I/SzjW6wGbmyI/AAAAAAAAAtY/Nls9tSN6DgU/contingency_thumb%5B3%5D.png?imgmax=800'  alt="" /></p>
-
-<p align="center">(<a href='http://crsouza.blogspot.kr/' >http://crsouza.blogspot.kr</a>)</p>
-
-<p><br/> <br />
-여기에 대해 <em>error</em>, <em>accuracy</em>, <em>precision</em>, <em>recall</em>, <em>F1-score</em> 등을 계산할 수 있다.</p>
-
-<p><img src='http://image.slidesharecdn.com/08classbasic-140913212207-phpapp02/95/data-miningconcepts-and-techniques-chapter-8-classification-basic-concepts-51-638.jpg?cb=1410662460'  alt="" /></p>
-
-<p align="center">(<a href='http://www.slideshare.net/salahecom/08-classbasic' >http://www.slideshare.net/salahecom/08-classbasic</a>)</p>
-
-<h4 id="crossvalidation">Cross Validation</h4>
-
-<p>가지고 있는 데이터로 모델을 만들면, 모델에는 잘 맞지만 실제 데이터에는 안맞을 수 있다.</p>
-
-<blockquote>
-  <p><strong>Overfitting :</strong> the model is too specific for the data set used to learn the model and performs poorly on new instances</p>
-  
-  <p><strong>Underfitting :</strong> the model is too general and does not exploit the data</p>
-</blockquote>
-
-<p>그래서 데이터셋을 <em>training set</em> 과 <em>test set</em> 으로 분리해서 각각 훈련, 퍼포먼스 테스트를 위해 사용한다.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p>이번 주차엔 데이터마이닝에 대해서 논했는데, 다음 시간부터는 <em>process discovery</em>, <em>conformance checking</em> 등에 대해 이야기 한다. <del>어째 오토마타의 향연이 될 것 같기도</del></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst <br />
-(2) <a href='http://1ambda.github.io/www.processmining.org' >www.processmining.org</a> <br />
-(3) <a href='http://blog.zhaw.ch/datascience/the-data-science-skill-set/' >http://blog.zhaw.ch/datascience/the-data-science-skill-set/</a> <br />
-(4) <a href='http://fluxicon.com/blog/2014/02/how-is-process-mining-different-from/' >http://fluxicon.com/blog</a> <br />
-(5) <a href='http://www.slideshare.net/wvdaalst/process-mining-chapter01introduction?related=1' >Process Mining Chapter 1</a> <br />
-(6) <a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet">Anscombe's quartet</a> <br />
-(7) <a href='http://frontjang.tistory.com/category/Computer/MachineLearning' >http://frontjang.tistory.com</a> <br />
-(8) <a href='http://analyticstrainings.com/?p=151' >http://analyticstrainings.com/?p=151</a> <br />
-(9) <a href='http://datavisualization.blog.com/visible-data/cluster-analysis/' >http://datavisualization.blog.com</a> <br />
-(10) <a href='http://www.cs.umd.edu/hcil/hce/hce3-manual/hce3_manual.html' >http://www.cs.umd.edu</a> <br />
-(11) <a href='http://crsouza.blogspot.kr/2009/12/performing-discriminant-power-analysis.html' >http://crsouza.blogspot.kr</a> <br />
-(12) <a href='http://www.slideshare.net/salahecom/08-classbasic' >http://www.slideshare.net/salahecom/08-classbasic</a></p>]]></description><link>http://1ambda.github.io/process-mining-week1/</link><guid isPermaLink="false">6b0990d6-e516-4154-9e40-4b7b7244bdbf</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[decision tree]]></category><category><![CDATA[association rule]]></category><category><![CDATA[k-means clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 18 Nov 2014 03:51:30 GMT</pubDate></item></channel></rss>
+(6) <a href='http://www.cs.nott.ac.uk/' ~gmh/monads">Programming With Effects</a> by <em>Graham Hutton</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro4/</link><guid isPermaLink="false">1b0aad8b-73c3-4f02-9556-e14d8933cae4</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[functional parser]]></category><category><![CDATA[monad]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 19 Nov 2014 04:39:46 GMT</pubDate></item></channel></rss>
