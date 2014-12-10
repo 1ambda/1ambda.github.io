@@ -1,11 +1,865 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Dec 2014 13:35:32 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 9]]></title><description><![CDATA[<p>이번시간엔 <em>anomaly detection</em> 과 <em>recommender system</em> 을 배운다.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 10 Dec 2014 06:53:36 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Process Mining, Week3]]></title><description><![CDATA[<h3 id="fourqualitycriteriaforprocessdiscovery">Four Quality Criteria For Process Discovery</h3>
 
-<h3 id="anomalydectectoin">Anomaly Dectectoin</h3>
+<p><em>real process</em> 로 부터 <em>event log</em> 를 얻고 이것으로 <em>process model</em> 을 만든다. </p>
+
+<p><em>process model</em> 을 평가하기 위해 해야하는 질문은</p>
+
+<blockquote>
+  <p>Is the process model a correct reflection of the real process?</p>
+</blockquote>
+
+<p>그러나 <em>real process</em> 를 모르기 때문에 판단하기가 쉽지 않다. 일반적으로 데이터마이닝에서 사용하는 평가 지표인 <em>confusion matrix</em> 를 도입하면</p>
+
+<p><img src='http://lh3.ggpht.com/_qIDcOEX659I/SzjW6wGbmyI/AAAAAAAAAtY/Nls9tSN6DgU/contingency_thumb%5B3%5D.png?imgmax=800'  alt="" /></p>
+
+<p align="center">(<a href='http://crsouza.blogspot.kr/' >http://crsouza.blogspot.kr</a>)</p>
+
+<ul>
+<li><strong>True Positive:</strong> traces possible in model and also possible in real process</li>
+<li><strong>True Negative:</strong> traces not possible in model and also not possible in real process</li>
+<li><strong>False Positive:</strong> traces possible in model and but not possible in real process</li>
+<li><strong>False Negative:</strong> traces not possible in model and but possible in real process</li>
+</ul>
+
+<p>보통은 평가 지표로 <em>recall</em>, <em>precision</em>, <em>F1 score</em> 등을 이용하는데 프로세스마이닝에서의 문제는 <em>real process</em> 에서 일어나는 <strong>FN, TP</strong> 를 알 수가 없다는 것이다.</p>
+
+<p>따라서 <em>event log</em> 의 <strong>FN', TP'</strong> 를 이용해서 <em>replay fitness</em> 를 이용한다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?replay%5C%20fitness%20%5C%5C%5C%5C%20%3D%20%7BTP%27%20%5Cover%20TP%27%20&plus;%20FN%27%7D'  alt="" /></p>
+
+<p>이 외에도 다양한 문제를 마주칠 수 있는데,</p>
+
+<ul>
+<li>보통 이벤트로그로 부터는 <strong>FN'</strong> 이 무엇인지 알 수 없다.</li>
+<li>로그가 <em>possible traces</em> 의 일부분만 담고 있다.</li>
+<li>Almost vs poorly fitting traces</li>
+<li>루프가 있으면 무한히 많은 <em>possible traces</em> 가 있다.</li>
+<li>Murphy's law for process mining: <strong>Anything is possible, so pobabilities matter</strong></li>
+</ul>
+
+<p>이런 문제점들은 다음의 기준들 사이에서 균형을 맞춰야 함을 알려준다.</p>
+
+<ul>
+<li><strong>fitness:</strong> observed behavior fits</li>
+<li><strong>simplicity:</strong>  Occam's razor</li>
+<li><strong>precision:</strong> avoiding underfitting</li>
+<li><strong>generalization:</strong> avoiding overfitting</li>
+</ul>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-51-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p>여기서 <em>precision</em> 이 문제가 되는 경우라는 것은, <em>flower model</em> 처럼 필요 이상으로 가능한 모든 경우의 수를 도입한 모델이라 보면 된다. 다시 말해서 기존의 <em>log</em> 와는 완전히 다른 로그가 모델에 맞을 경우를 말한다. (<em>underfitting</em>) </p>
+
+<p><br/> <br />
+<img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-52-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p>반대로 <em>generalization</em> 이 낮은 모델은, 너무 <em>log</em> 에 맞추느라 복잡해진 경우를 말한다. (<em>overfitting</em>)</p>
+
+<p>따라서 <em>traces</em> 의 수가 적은 경우에 너무 <em>overfitting</em> 하려고 하면 퍼포먼스가 낮아진다. 반대로 <em>traces</em> 수가 상당히 많다면, 다음에 들어올 <em>traces</em> 가 다른 형태일 확률이 낮아지므로 모델을 조금 더 <em>fitting</em> 하는 편이 낫다. (오히려 이 경우는 <em>overfitting</em> 이라 보기 어렵다.)</p>
+
+<p><br/></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-43-728.jpg?cb=1305062521'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="representationalbias">Representational Bias</h3>
+
+<blockquote>
+  <p>Modeling language provides a bias</p>
+</blockquote>
+
+<p>예를 들어 <em>petri net</em> 같은 경우는 <em>concurrency</em> 를 모델링하는데 문제가 없는 반면 <em>transition system</em> 은 어렵다.</p>
+
+<p><em>concurrency</em> 에 대해서도 생각해 볼 것이, <code>k = 10</code> 의 <em>parallel activities</em> 가 있다면 가능한 <em>traces</em> 는 <code>10! ~= 3600000</code> 이다.</p>
+
+<p>반면 알파 알고리즘이 이 모델을 발견하려면 단지 <code>k(k-1</code> 의 <em>direct succession</em> 만 필요하다.</p>
+
+<p>그러나 알파 알고리즘은 <em>optional(skip)</em> 이 있는 모델을 발견하지 못한다. 그리고, <em>silent transition(OR-joins)</em> 이 있는 모델에서의 가능한 <em>traces</em> 수는</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bi%20%3D%200%7D%5Ek%20%5Cbinom%7Bk%7D%7Bi%7D%20i%21'  alt="" /></p>
+
+<p><em>WF-net</em> 같은 경우는 <em>unique label</em> 과 관련해서 문제가 있다.</p>
+
+<p><code>L = [&lt;a, c, d&gt;^45, &lt;b, c, e&gt;^42, &lt;a, c, e&gt;^20]</code> </p>
+
+<p>이 있을때, <em>WF-net</em> 은 <code>e</code> 두개인 모델을 발견할 것이다.</p>
+
+<p>그리고 만약 <em>no indirected dependencies</em> 라면,</p>
+
+<p><code>L = [&lt;a, c, d&gt;^45, &lt;b, c, e&gt;^42]</code> 에서 올바른 모델을 찾아내지 못할것이다.  (<code>a, b</code> 가 <code>d, e</code> 의 선택에 영향을 준다.)</p>
+
+<blockquote>
+  <p>Visualization of discovered model != representatoinal bias</p>
+</blockquote>
+
+<h4 id="whatisprocessdiscoverysodifficult">What is process discovery so difficult?</h4>
+
+<ul>
+<li>There are <strong>no negative examples</strong></li>
+<li>Due to concurrency, loops, and choices the search space has a complex structure and the log typically contains only a fraction of all possible behaviors</li>
+<li>There is no clear relation between the size of a model and its behavior</li>
+</ul>
+
+<p>특히 마지막 문제는, 일반적인 경우에선 작은 모델이 작은 로그를 만들어 내지만 프로세스 마이닝에선 작은 모델이라도 많은 로그를 만들 수 있다.</p>
+
+<p>따라서 <em>representational bias</em> 를 잘 고려해서 모델을 선택해야 한다.</p>
+
+<h3 id="businessprocessmodelandnotationbpmn">Business Process Model and Notation (BPMN)</h3>
+
+<blockquote>
+  <p>Representational bias impacts search space</p>
+</blockquote>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/en/7/71/BPMN_gateway_types.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org/</a>)</p>
+
+<p><em>exclusive OR</em> 은 둘 중 하나만 선택이고, <em>parallel</em> 은 모두로 분기한다. <em>inclusive OR</em> 은 하나 이상을 선택할 수 있다. 더 자세한 내용은 <a href='http://tynerblain.com/blog/2006/07/27/bpmn-gateways/' >BPMN Gateway</a> 를 참고하자.</p>
+
+<p>보통 <em>inclusive OR join</em> 이 있으면 <em>synchronization</em> 이 된다. 그리고 앞쪽에 <em>inclusive OR split</em> 이 있고 뒤쪽에 <em>and join</em> 이 있으면 <em>deadlock</em> 이 있을 가능성이 높다.</p>
+
+<p>일반적으로는 <em>OR join, split</em> 을 <em>AND join split</em> 을 결합해야 데드락이 없다.</p>
+
+<p>참고로 <em>BPMN</em> 은 <em>UML</em> 이나 <em>Event-Driven Process Chains, EPCs</em> 와 비스무리하다. 아래는 <em>BPMN</em> 예제</p>
+
+<p><img src='http://sehlhorst.smugmug.com/photos/84432593-M.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://tynerblain.com/blog' >http://tynerblain.com/blog</a>)</p>
+
+<p>보통은 <em>Petri net</em> 이나 <em>process tree</em> 로 작업하고 <em>BPMN</em> 으로 변환한다. <em>BPMN</em> 으로 바로 작업하는 경우는 흔하지 않다고 함.</p>
+
+<h4 id="viciouscycleparadox">Vicious Cycle Paradox</h4>
+
+<p>이부분은 당최 뭔 소린지 이해가.. 나중을 위해서 그림만 넣어놈.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-121219213500-phpapp02/95/process-mining-chapter02processmodelingandanalysis-14-638.jpg?cb=1355974557'  alt="" /></p>
+
+<h3 id="dependencygraphs">Dependency Graphs</h3>
+
+<p><img src='http://www.ijmijournal.com/cms/attachment/305569/1959182/gr6.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://www.ijmijournal.com/' >http://www.ijmijournal.com</a>)</p>
+
+<p><em>footprint</em> 의 <em>casuality</em> 를 이용해서 <em>dependency graph</em> 를 만들 수 있다. <em>place</em> 가 없는 일종의 <em>Petri Net</em> 이라 볼 수 있다.</p>
+
+<p>참고로 <em>casuality</em> 는</p>
+
+<blockquote>
+  <p>causality: <code>x -&gt; y</code>, iff <code>x &gt; y</code> and not <code>y &gt; x</code></p>
+</blockquote>
+
+<p><em>dependency graph</em> 는 의존성은 잘 보여주지만 <em>executable semantic</em> 이 없다. 각 노드는 <em>OR join, split</em> 의 <strong>fuzzy</strong> 로 볼 수 있다.</p>
+
+<ul>
+<li>Fuzzy models can be viewed as dependency graphs</li>
+<li>No precise semantics  </li>
+<li>Many ways to create dependency graphs often based on heuristics</li>
+</ul>
+
+<h3 id="casualnets">Casual Nets</h3>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-121219213500-phpapp02/95/process-mining-chapter02processmodelingandanalysis-15-638.jpg?cb=1355974557'  alt="" /></p>
+
+<p><em>Casual nets, C-nets</em> 은 <em>dependency graph</em> 에 <em>inpt, output</em> 을 붙여 <em>possible behavior</em> 를 보여준다.</p>
+
+<p><br/></p>
+
+<p>왜 <em>C-nets</em> 을 이야기 할까?</p>
+
+<ul>
+<li>Output of several mining techniques, e.g., the well-known huritics miner</li>
+<li>Fits well with mainsteam languages (BPMN, EPCs, YAWL, etc.)</li>
+<li>Able to model <strong>XOR, AND, OR</strong> but <strong>no sidlent steps or duplicate activities needed</strong></li>
+<li>Loose interpretation. <strong>focus on replay semantics rather then executing semantics</strong></li>
+</ul>
+
+<p><em>C-nets</em> 에서는 <em>obligation</em> 이 <em>token</em> 의 역할을 한다. </p>
+
+<blockquote>
+  <p>Semantics are declarative <br />
+  Only valid binding sequences are considered</p>
+</blockquote>
+
+<p><em>C-nets</em> 은 <em>WF-nets</em> 으로 쉽게 변환될 수 있다. <em>WF-nets</em> 에선 <em>deadlock</em> 이 있을 수 있는 반면 <em>C-nets</em> 에선 <em>valid seq</em> 만을 논하기 때문에 <em>deadlock</em> 은 이야기 하지 않는다.</p>
+
+<blockquote>
+  <p>Valid binding seqence of <em>C-net</em> is, Valid firing sequence of <em>WF-net</em></p>
+</blockquote>
+
+<p>그리고 <em>C-net</em> 이 <em>WF-nets</em> 보다 좀 더 표현적이다. 강의에서 나온 <em>C-nets</em> 같은 경우, 무한한 수의 <code>b, c, d</code> 를 표현하면서도 <em>order</em> 가 유지되고, <code>b, c, d</code> 가 같은 수로 반복된다.</p>
+
+<h3 id="heuristicmining">Heuristic Mining</h3>
+
+<p>(1) Learn a dependency graph by counting freq => <strong>dependency graph</strong> <br />
+(2) Learn splits and joins => <strong>C-nets</strong> <br />
+(3) visualize (and convert if needed) => <strong>BPMN, etc.</strong>  </p>
+
+<h3 id="learningdependencygraphs">Learning Dependency Graphs</h3>
+
+<p>알파 알고리즘을 이용하면 별별 문제가 다 생기는데, 휴리스틱하게 모델을 만들면 이런 문제는 좀 피할 수 있다.</p>
+
+<p>그리고 한 가지 더 생각해 볼 문제는</p>
+
+<blockquote>
+  <p>Freqencies matter</p>
+</blockquote>
+
+<p>무슨 말인고 하니, 빈번한 로그만 <em>valid</em> 취급하면 <em>overfitting</em> 을 피할 수 있다. 알파 알고리즘에 적용하면, 좀 빈도수가 많은 것들만 <em>valid casuality</em> 로 취급할 수 있다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-12-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="dependencymeasure">Dependency Measure</h4>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-15-728.jpg?cb=1305062477'  alt="" title="" />    </p>
+
+<p><em>dependency measure</em> 값은 <code>-1 ~ 1</code> 인데, 1 에 가까울 수록 <em>casuality</em> 가 있다. 아래 그림은 <em>threshold</em> 를 넘는 <em>direct succession, casuality</em> 만 표시한 <em>dependency graph</em> 다. </p>
+
+<p><em>threshold</em> 가 높아질 수록 그래프가 심플해진다.</p>
+
+<p><br/></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-17-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-18-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><em>dependency measure</em> <code>a =&gt; b</code> <em>direct succession</em> <code>a &gt; b</code> 값을 이용해서 <em>sequence, AND split, join, XOR join, split</em> 등의 패턴을 파악할 수 있다.</p>
+
+<p>게다가 <code>a =&gt; a</code> 도 값을 세기 때문에 <em>loop pattern</em> 도 발견할 수 있다</p>
+
+<h3 id="learningcnets">Learning C-nets</h3>
+
+<p>휴리스틱 마이닝의 두번째 단계는 <em>split, join</em> 등을 파악해서 <em>C-nets</em> 을 만드는 것이다.</p>
+
+<p>어떻게 <em>split, join</em> 을 파악할까? 자주 사용하는 두 가지 접근 법이 있다.</p>
+
+<p>(1) <strong>Heuristics approaches:</strong> using a <strong>time window</strong> before and after each activity. By counting sets of input and output acivities the bindings can be determinded (local decision)  </p>
+
+<p>(2) <strong>Optimization approaches:</strong> based on replay, Given a set of possible input and ouput bindings one can see whether reality can be <strong>replayed property</strong>. The set of possible input and output bindings are finite, so a "best set bindings" can be determined using some goal function.</p>
+
+<h4 id="approach1basedonheuristics">Approach 1: Based on heuristics</h4>
+
+<p><em>dependency graph</em> 에서 볼 수 있듯이 각 <em>activity</em> 는 가능한 <em>input, output</em> 이 있다. 얼마나 자주 나오는지 세면 된다. 이 때 어느 범위까지 셀지를 <em>window size</em> 라 부른다.</p>
+
+<p>예를 들어 <em>window size</em> <code>= 4</code> 면</p>
+
+<pre><code>1 ... klbg[a]dhek ...  
+2 ... lkgc[a]hedl ...  
+3 ... kblg[a]ehdk ...  
+4 ... klgb[a]dehk ...  
+5 ... klkc[a]dkeh ...  
+</code></pre>
+
+<p>이 때 <code>b, c</code> 에 대해서 <code>{b} = 3, {c} = 2</code> 다. 요게 <em>input binding</em></p>
+
+<p><code>{d, e} = 5</code> 다. 요게 <em>output binding</em>. 이 값들을 <em>depdency graph</em> 를 표시하면 된다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-19-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><br/></p>
+
+<p>이걸로 끝나는것은 아니고 <em>refinement</em> 가 필요하다.</p>
+
+<ul>
+<li>What if there are no corresponding acivities in the input or output window?</li>
+<li>Noise filtering (remove infreq bindings)</li>
+<li>Handling repeating activities (cut off window size)</li>
+<li>Details are out of scope, but be aware of such complications when interpreting result</li>
+</ul>
+
+<h4 id="approache2optimizationproblem">Approache 2: Optimization problem</h4>
+
+<ul>
+<li>Evaluate all possible acivity bindings and take best one.</li>
+<li>Based on the idea that ideally a trace can be <strong>replayed from the initial input state to the final state</strong></li>
+<li>This <strong>can be checked</strong> precisely using various replay approaches</li>
+<li>Hence, one can use approaches that simply <strong>try bindings exhaustively</strong></li>
+</ul>
+
+<p>간단히 말해서 가능한 모든 조합을 구하고, 말이 될 만한 <em>input, output</em> 을 <strong>replay</strong> 를 통해 골라내면 된다.</p>
+
+<p>여기서 평가 기준은 <em>fitness simplicity, precision, generalization</em> 등이다. 시간이 너무 걸린다면 <em>randomize</em>, <em>genetic algorithm</em> 등을 이용할 수 있다. (generic 이 아니고 <em>genetic</em> 이다.)</p>
+
+<h3 id="learningtransitionsystem">Learning Transition System</h3>
+
+<p>지금까지 모델을 만들기 위해 다음의 방법을 배웠다.</p>
+
+<ul>
+<li>Alpha algorithm</li>
+<li>Heuristic mining <em>dep graph, C-net</em></li>
+</ul>
+
+<p>이번시간엔 <em>state-based regions</em> 를 배워보자.</p>
+
+<p>(1) Learning a transition system using a state abstraction => <em>transition system</em>  </p>
+
+<p>(2) Transform the transition system into an equivalent Petri net => <em>Petri net</em>  </p>
+
+<p>(3) visualize (and convert if needed) => <em>BPMN, etc.</em></p>
+
+<p>트랜지션 시스템을 학습하는 방법은, 현재 <em>state</em> 를 기준으로 <em>past, future</em> 를 보고 이 두가지를 합치면 된다. <del>말은 언제나 쉽다.</del> </p>
+
+<p>예를 들어 <code>a b c d c d c d e ^ f a g h h h i</code> 를 기준으로, 현재 상태가 <code>^</code> 라 하면 </p>
+
+<ul>
+<li><strong>past:</strong> <code>a b c d c d c d e</code></li>
+<li><strong>future:</strong> <code>f a g h h i</code></li>
+</ul>
+
+<p>여기서 <em>order</em> 는 무시하고 <em>frequency</em> 만 고려하면 <em>past</em> 는 </p>
+
+<p><code>[a, b, c^3, d^3, e]</code> 가 된다. 만약에, 여기서 <em>time window</em> (<strong>k-tail</strong>) 를 이용하면 <code>[c, d^2, e]</code> 가 된다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-121219213521-phpapp01/95/process-mining-chapter06advancedprocessdiscoverytechniques-29-638.jpg?cb=1355974629'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-121219213521-phpapp01/95/process-mining-chapter06advancedprocessdiscoverytechniques-30-638.jpg?cb=1355974629'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-121219213521-phpapp01/95/process-mining-chapter06advancedprocessdiscoverytechniques-31-638.jpg?cb=1355974629'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-121219213521-phpapp01/95/process-mining-chapter06advancedprocessdiscoverytechniques-32-638.jpg?cb=1355974629'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-33-728.jpg?cb=1305062477'  alt="" /></p>
+
+<h4 id="postprocessing">Postprocessing</h4>
+
+<ul>
+<li>remove <em>self-loop</em></li>
+<li>imporve <em>diamond structure</em> (for missing interleavings)</li>
+<li>merge <em>similar states</em> based on inputs</li>
+</ul>
+
+<h3 id="usingregionstodiscoverconcurrency">Using Regions to Discover Concurrency</h3>
+
+<p>이제 <em>transition system</em> 을 <em>Petri net</em> 으로 변경하면 된다. </p>
+
+<p>기본적인 아이디어는 <em>transition system</em> 의 <em>subset</em> 이 <em>Petri net</em> 의 <em>place</em> 의 해당한다는 것이다. 이는 당연한데 트랜지션 시스템에서 어떤 상태는, 이 전까지의 상태의 반영이고, 이건 <em>place</em> 다.</p>
+
+<blockquote>
+  <p>State-based regions correspond to places</p>
+</blockquote>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-34-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p>이 때 <em>state-based region</em> 의 <em>enter, exit</em> 를 확인 하면 쉽게 <em>place</em> 를 만들 수 있다.</p>
+
+<blockquote>
+  <p>All states need to be reachable</p>
+  
+  <p>A region is a set of states, such that, if a transition <strong>exits</strong> the region, then all equally labeled trasition <strong>exit</strong> the region</p>
+  
+  <p>and If a transition <strong>enters</strong> the region, then all equally labeled transitions <strong>enter</strong> the region</p>
+  
+  <p>All events not entering or exiting the region <strong>do not cross</strong> the region</p>
+</blockquote>
+
+<p><code>n</code> 개의 <em>concurrent activity</em> 가 있으면 <code>2^n</code> 개의 <em>state</em> 가 생긴다. 이 때 몇 개의 <em>region</em> 이 생길까? </p>
+
+<p>아무리 많아봐야 1 개의 트랜지션 라벨만 <em>crossing</em> 할 수 있으므로, <code>n</code> <em>split</em> 을 만들 수 있고 여기에 <em>empty</em> 까지 더하면 <code>2(n + 1)</code> 이다.</p>
+
+<p>직선인 <em>petri net</em> 의 경우는 더 심각하다. 모든 <em>transition</em> 의 <em>subset</em> 이 <em>region</em> 이므로 <code>2^(n+1)</code> 이 된다. 따라서 <em>non-trivial minimal region</em> 만 포함해야 한다.</p>
+
+<p><em>Petri net</em> 을 만드는 알고리즘은</p>
+
+<p>(1) For each transition label in the transition system, a <strong>transition</strong> is added to the Petri net <br />
+(2) The <strong>minimal non-trivial regions</strong> are computed <br />
+(3) For each minimal non-trivial region in the transition system, a <strong>place</strong> is added to the Petri net. <br />
+(4) The coressponding arcs are generated <br />
+(5) A <strong>token</strong> is aded to each place that corresponds to a region containing the initial state</p>
+
+<p><code>L = [&lt;a, c, d&gt;^45, &lt;b, c, e&gt;^42]</code></p>
+
+<p>의 경우 알파 알고리즘은 <em>non directed dependency</em> 를 발견하지 못하는데, 트랜지션 시스템을 만들고, <em>state-based region</em> 을 이용하면 올바른 <em>petri net</em> 을 만들 수 있다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483' >Book: Process Mining</a> <br />
+(2) <a href='https://d396qusza40orc.cloudfront.net/procmin/lecture_slides/22-Petri%20Nets%20%281%29.pdf' >Slide</a> <br />
+(3) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst <br />
+(4) <a href='http://1ambda.github.io/www.processmining.org' >www.processmining.org</a> <br />
+(5) <a href='http://fluxicon.com/' >http://fluxicon.com</a> <br />
+(6) <a href='http://crsouza.blogspot.kr/2009/12/performing-discriminant-power-analysis.html' >Confusion matrix</a> <br />
+(7) <a href='http://en.wikipedia.org/wiki/Business_Process_Model_and_Notation' #mediaviewer/File:BPMN_gateway_types.png">Wikipedia - BPMN</a> <br />
+(8) <a href='http://tynerblain.com/blog/2006/07/27/bpmn-gateways/' >BPMN Gateway</a> <br />
+(9) <a href='http://www.ijmijournal.com/' >http://www.ijmijournal.com</a></p>]]></description><link>http://1ambda.github.io/process-mining-week3/</link><guid isPermaLink="false">43e49375-88bc-4ec0-aff0-93f098b34d10</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[BPMN]]></category><category><![CDATA[dependency graph]]></category><category><![CDATA[C-nets]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 10:44:29 GMT</pubDate></item><item><title><![CDATA[Intro to Computational Thinking and Data Science 4]]></title><description><![CDATA[<p>그래프는 네트워크를 표현하는 것 뿐만 아니라, <em>state</em> 를 표현할 수 있다.</p>
+
+<ul>
+<li>Nodes represent states of system</li>
+<li>Edges represent actions that cause a change of state</li>
+</ul>
+
+<p>그러면 그래프 문제는 </p>
+
+<ul>
+<li>Finding sequence of actions to convert system to desired state</li>
+</ul>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/8puzzle_example.svg/2000px-8puzzle_example.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<p><em>8 puzzle</em> 도 이렇게 그래프 문제로 변환할 수 있다. 그런데, <code>9! = 362880</code> 의 <em>node</em> 와 노드당 <code>2~4</code> 개의 <em>edge</em> 를 가지고 있으므로 문제의 사이즈가 어마어마하게 커진다. 거의 백만개의 <em>edge</em> 를 가진다.</p>
+
+<h3 id="animplicitgraph">An Implicit Graph</h3>
+
+<p>그래서, 처음부터 모든 <em>state</em> 를 만들기 보다는 초기 상태로부터 <em>action</em> 을 취해가면서 <em>desired state</em> 를 찾는 방식으로 해결하자.</p>
+
+<p>퍼즐의 상태를 문자열로 표현하면</p>
+
+<pre><code class="python">class puzzle(object):  
+    def __init__(self, order):
+        self.label = order
+
+        for i in range(9):
+            if order[i] == '0':
+                self.spot = i
+                return None
+
+    def transition(self, to):
+        currentLabel = self.label
+        blank = self.spot
+        # current slot value which will be filled with blank
+        current = str(currentLabel[to]) 
+        nextLabel = ''
+
+        for i in range(9):
+            if i == to:
+                nextLabel += '0'
+            elif i == blank:
+                nextLabel += current
+            else:
+                nextLabel += str(currentLabel[i])
+
+        return puzzle(nextLabel)
+
+    def __str__(self):
+        return "{0} {1} {2}\n{3} {4} {5}\n{6} {7} {8}\n".format(self.label[0],
+                                                                self.label[1],
+                                                                self.label[2],
+                                                                self.label[3],
+                                                                self.label[4],
+                                                                self.label[5],
+                                                                self.label[6],
+                                                                self.label[7],
+                                                                self.label[8])
+</code></pre>
+
+<p>그리고 각 슬롯의 이동 가능한 방향을 딕셔너리로 만들면</p>
+
+<pre><code class="python">shiftDict = {}  
+shiftDict[0] = [1, 3]  
+shiftDict[1] = [0, 2, 4]  
+shiftDict[2] = [1, 5]  
+shiftDict[3] = [0, 4, 6]  
+shiftDict[4] = [1, 3, 5, 7]  
+shiftDict[5] = [2, 4, 8]  
+shiftDict[6] = [3, 7]  
+shiftDict[7] = [4, 6, 8]  
+shiftDict[8] = [5, 7]  
+</code></pre>
+
+<p>이제 <em>state</em> 를 변경해 나아가면서 그래프를 만들 수 있다 <em>state</em>, 즉 <em>node</em> 를 변경해 나아가면서 그래프를 탐색하는 방법은 2개가 있는데, <em>BFS, DFS</em> 다. 코드는 거의 유사하다. 스택을 쓰냐 큐를 쓰냐의 차이다.</p>
+
+<pre><code class="python">def notInPath(state, path):  
+    for s in path:
+        if s.label == state.label:
+            return False
+
+    return True
+
+
+def BFS(start, end, q=[]):  
+    initPath = [start]
+    q.append(initPath)
+
+    while len(q) != 0:
+        currentPath = q.pop(0)
+        lastState = currentPath[len(currentPath) - 1]
+
+        if lastState.label == end.label:
+            return currentPath
+
+        for s in shifts[lastState.spot]:
+            nextState = lastState.transition(s)
+
+            if notInPath(nextState, currentPath):
+                nextPath = currentPath + [nextState]
+                q.append(nextPath)
+
+    return None
+
+
+def DFS(start, end, stack=[]):  
+    initPath = [start]
+    stack.insert(0, initPath)
+
+    while len(stack) != 0:
+        currentPath = stack.pop(0)
+        lastState = currentPath[len(currentPath) - 1]
+
+        if lastState.label == end.label:
+            return currentPath
+
+        for s in shifts[lastState.spot]:
+            nextState = lastState.transition(s)
+
+            if notInPath(nextState, currentPath):
+                nextPath = currentPath + [nextState]
+                stack.insert(0, nextPath)
+
+    return None
+</code></pre>
+
+<p>테스트는</p>
+
+<pre><code class="python">def test():  
+    goal = puzzle('012345678')
+    test1 = puzzle('125638047')
+    answer = BFS(test1, goal)
+
+    for state in answer:
+        print state
+</code></pre>
+
+<p>비교해 보면 <em>BFS</em> 가 훨씬 빠르다.</p>
+
+<h3 id="maximumcliques">Maximum Cliques</h3>
+
+<blockquote>
+  <p>For some problems, finding sugraphs of a graph that are complete can be important</p>
+</blockquote>
+
+<p>여기서 <em>complete</em> 란 노드가 다른 노드 모두와 연결되어 있다는 뜻이다.</p>
+
+<ul>
+<li>Finding sets of people in a social network that all know each other</li>
+<li>Finin subjects in an infected population that all have had contact with one another</li>
+</ul>
+
+<p>두 번째 예제는 <em>complete subgraph</em> 를 찾는 것의 중요성을 잘 보여준다.</p>
+
+<p><em>clique</em> 는 communication networks, gene expression data 등에도 이용할 수 있다.</p>
+
+<h4 id="bruteforce">Brute Force</h4>
+
+<p><em>maximum clique</em> 문제를 <em>brute force</em> 로 풀려면, 가능한 모든 서브 그래프를 찾고, <em>clique</em> 인지 판별하면서 큰 사이즈의 <em>clique</em> 를 유지하면 된다.</p>
+
+<p>모든 서브 그래프를 찾을려면, <a href='http://1ambda.github.io/edx-600-2x-3/' >지난시간</a> 에 <em>knapsack problem</em> 을 풀 때 이용했던 <em>power set</em> 을 도입하면 된다.</p>
+
+<p><em>knapsack</em> 문제도 <em>brute force</em> 로 풀기 위해서 가능한 모든 집합을 구했었다. 후에는 <em>search space</em> 를 줄이기 위해 <em>decision tree</em> 를 도입하고, 반복 계산을 피하기 위해 <em>memoization</em> 이용했었다.</p>
+
+<p><em>clique</em> 문제도 마찬가지로 각 노드를 숫자로 표현할 수 있으므로 <code>n</code> 자리의 이진수를 만들어 <em>power set</em> 을 생성할 수 있다. 지난 시간에 이용했었던 대강의 로직은 </p>
+
+<pre><code class="python">count = 2 ** len(nodes)
+
+binStrs = []
+
+for i in range(count):  
+  binStrs.append(int2bin(i, len(nodes))
+
+powerSet = []
+
+for bs in binStrs:  
+  subGraph = []
+
+  for i range(len(bs)):
+    if bs[i] == '1':
+      subGraph.append(nodes[i])
+
+  powerSet.append(subGraph)
+
+return powerSet  
+</code></pre>
+
+<p>이번시간엔 재귀를 이용해서 <em>power set</em> 을 구해보자. 하스켈로 로직을 표현하면,</p>
+
+<pre><code class="haskell">powerset [] = [[]]  
+powerset (x:xs) = xs' ++ map (x:) xs'  
+  where xs' = powerset xs
+</code></pre>
+
+<p>따라서 파이선 코드는</p>
+
+<pre><code class="python">def powerSet(xs):  
+    if len(xs) == 0:
+        return [[]]
+
+    else:
+        # xs = head:tail
+        head = xs[0]
+        tail = xs[1:]
+
+        prev = powerSet(tail)
+        incl = map(lambda sub: sub + [head], prev)
+        return prev + incl
+</code></pre>
+
+<p>이걸 이용해 모든 <em>sub graph</em> 를 만들고, <em>clique</em> 인지 검사하는 함수를 만들면</p>
+
+<pre><code class="python">def powerGraph(graph):  
+    nodes = []
+
+    for n in graph.nodes:
+        nodes.append(n)
+
+    pSet = powerSet(nodes)
+    return pSet
+
+
+def isClique(graph, subGraph):  
+    for n in subGraph:
+        for m in subGraph:
+            if not m == n:
+                if n not in graph.childrenOf(m):
+                    return False
+
+    return True
+
+
+def maxClique(graph):  
+    maximum = None
+    maxLen = 0
+    subGraphs = powerGraph(graph)
+
+    for sub in subGraphs:
+        if isClique(graph, sub):
+            if len(sub) &gt; maxLen:
+                maximum = sub
+                maxLen = len(sub)
+
+    return maximum
+</code></pre>
+
+<p><a href='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/clique.py' >지난시간에 작성했던 Graph 코드</a> 는 여기로, </p>
+
+<p>테스트 코드는 </p>
+
+<pre><code class="python">def testGraph():  
+    nodes = []
+    for name in range(5):
+        nodes.append(Node(str(name)))
+    g = Graph()
+    for n in nodes:
+        g.addNode(n)
+    g.addEdge(Edge(nodes[0],nodes[1]))
+    g.addEdge(Edge(nodes[1],nodes[2]))
+    g.addEdge(Edge(nodes[2],nodes[0]))
+    g.addEdge(Edge(nodes[2],nodes[4]))
+    g.addEdge(Edge(nodes[4],nodes[3]))
+    return g
+
+
+trialGraph = testGraph()  
+myClique = maxClique(trialGraph)  
+</code></pre>
+
+<p><code>myClique</code> 를 출력하면, <em>node</em> 가 3개 나와야 한다.</p>
+
+<h3 id="machinelearning">Machine Learning</h3>
+
+<blockquote>
+  <p><strong>Automating automation</strong></p>
+  
+  <p>Computer programs can automatically follow rules. <br />
+  How do we determine these rules automatically?</p>
+  
+  <p><strong>ML fources on getting computers to program themselves</strong></p>
+  
+  <p>Let the data do the work. <br />
+  Automatically generate programs that create useful outputs from data</p>
+</blockquote>
+
+<p>전통적인 프로그래밍에선 <em>data</em> 와 <em>program</em> 을 넣고 <em>output</em> 을 기대했다면, </p>
+
+<p><em>machine learning</em> 에서는 <em>data, output</em>  을 넣고 <em>program</em> 을 만든다. 이 프로그램은 다음번에 <em>data</em> 가 들어왔을 때 <em>output</em> 을 만들어 낸다. 다시 말해서 머신러닝은 일종의 <em>generalization</em> 이다.</p>
+
+<blockquote>
+  <p><strong>Supervised</strong></p>
+  
+  <p>Given a set of feature/label pairs, find a rule that predicts the label associated with a previously unseen input</p>
+  
+  <p><strong>Unsupervied</strong></p>
+  
+  <p>Given a set of feature vectors (without labels), group them into "natural clusters"</p>
+</blockquote>
+
+<p>예를 들어 다음은 <em>supervised learning</em> 이다.</p>
+
+<blockquote>
+  <p>A group of 1000 students are asked for a sample of their handwriting. Researchers make pairs of (handwritten text, typed text). Given a new handwriting sample from a new student, we want to determine what the typed version of the handwriting sample would be.</p>
+</blockquote>
+
+<h3 id="clustering">Clustering</h3>
+
+<ul>
+<li>Low intra-cluster dissimilarity</li>
+<li>High inter-cluster dissimilarity</li>
+</ul>
+
+<p>간단하긴 한데, 연산 비용이 비싸다. <em>k-means</em> 와 <em>hierarchical clustering</em> 을 살펴보자.</p>
+
+<h4 id="hierarchicalclustering">Hierarchical Clustering</h4>
+
+<p>(1) Start by assigning each item to a cluster, so that if you have <code>N</code> items, you now have <code>N</code> clusters, each containing just one item.</p>
+
+<p>(2) Find the closest (most similar) pair of clusters and merge them into a single cluster, so that now you have one cluster fewer.</p>
+
+<p>(3) Continue the process until all items are clustered into a single cluster of size <code>N</code></p>
+
+<p><img src='http://www.alanfielding.co.uk/multivar/images/dend5.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://www.alanfielding.co.uk/' >http://www.alanfielding.co.uk</a>)</p>
+
+<blockquote>
+  <p><strong>Linkage Criteria</strong></p>
+  
+  <p>in <strong>single-linkage</strong> clustering (also called the <em>connectedness</em> or <em>minimum</em> method), we consider the distance between one cluster and another cluster to be equal to the shortest distance from any member of one cluster to any member of th other cluster</p>
+  
+  <p>in <strong>complete-linkage</strong> clustering (also called the <em>diameter</em> or <em>maximum</em> method), we consider the distance between one cluster and another cluster to be equal to th greatest distance from any member of one cluster to any member of the other cluster</p>
+  
+  <p>in <strong>average-linkage</strong>, we consider the distance between one cluster and another cluster to be equal to th average distance from any member of one cluster to any member of the other cluster. A slight variant of this uses the median instead of the mean</p>
+</blockquote>
+
+<p><em>single-linkage</em> 클러스터 간 거리를 두 클러스터 사이의 최소 거리로, <em>complete-linkage</em> 는 최대 거리로, <em>average-linkage</em> 는 평균 거리로 본다.</p>
+
+<pre><code class="python">    def singleLinkageDist(self, other):
+        """ Returns the float distance between the points that 
+        are closest to each other, where one point is from 
+        self and the other point is from other. Uses the 
+        Euclidean dist between 2 points, defined in Point."""
+        minDist = float("inf")
+        for p1 in self.points:
+            for p2 in other.points:
+                dist = p1.distance(p2)
+                if dist &lt; minDist:
+                    minDist = dist
+
+        return minDist
+
+    def maxLinkageDist(self, other):
+        """ Returns the float distance between the points that 
+        are farthest from each other, where one point is from 
+        self and the other point is from other. Uses the 
+        Euclidean dist between 2 points, defined in Point."""
+        maxDist = float(0)
+        for p1 in self.points:
+            for p2 in other.points:
+                dist = p1.distance(p2)
+                if dist &gt; maxDist:
+                    maxDist = dist
+
+        return maxDist
+
+    def averageLinkageDist(self, other):
+        """ Returns the float average (mean) distance between all 
+        pairs of points, where one point is from self and the 
+        other point is from other. Uses the Euclidean dist 
+        between 2 points, defined in Point."""
+        dists = []
+        for p1 in self.points:
+            for p2 in other.points:
+                dists.append(p2.distance(p1))
+
+        return sum(dists) / float(len(dists))
+</code></pre>
+
+<h3 id="kmeansclustering">K-Means Clustering</h3>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bc%3D1%7D%5EK%20%5Csum_%7Bx%5C%20%5Cin%5C%20c%7D%20%5Cleft%20%5C%7C%20x%20-%20%5Cmu_c%20%5Cright%20%5C%7C%5E2'  alt="" /></p>
+
+<ul>
+<li>Final result can depend upon initial centroids</li>
+<li>Greedy algorihm can find different local optima</li>
+<li>Choosing the <em>wrong</em> <code>K</code> can lead to nonsense</li>
+</ul>
+
+<p>따라서</p>
+
+<ul>
+<li>Use priori knowledge about application domain</li>
+<li>Try multiple times</li>
+</ul>
+
+<p><em>hierarchical</em> 과 비교하면</p>
+
+<blockquote>
+  <p>Hierarchical looks at different numbers of clusters From 1 to n</p>
+  
+  <p>K-means looks at many ways of createing k clusters.</p>
+</blockquote>
+
+<p><em>hierarchical</em> 은 좀 느린편이고 <em>deterministic</em> 이다. 반면 <em>K-means</em> 는 비교적 빠르고, <em>stochastic</em> 이다.</p>
+
+<p>아래는 <em>K-means</em> 로 분류하기 어려운 몇 가지 예제들</p>
+
+<p><img src='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/k1.png'  alt="" /></p>
+
+<p><img src='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/k3.png'  alt="" /></p>
+
+<p align="center">(<a href='https://courses.edx.org/c4x/MITx/6.00.2_2x' >https://courses.edx.org/c4x/MITx/6.00.2_2x</a>)</p>
+
+<h3 id="scaling">Scaling</h3>
+
+<p><em>odd ratio</em> 는 <em>acutal / expected</em> 값인데, 1에 가까우면 클러스터링이 랜덤에 비해 별로 나을게 없다는 소리다. (좋은 클러스터링이 아니란 뜻)</p>
+
+<p>강의에서 나온 환자 예제는 이 값이 1에 근접하는데, 이는 <em>HR, age</em> 값이 단위가 커서 이 <em>feature</em> 에 영향을 많이 받기 때문이다.</p>
+
+<p>따라서 평균 0, 표준편차 1을 가지도록 모든 <em>feature</em> 를 스케일링 하고 다시 돌리면  <em>odd ratio</em> <code>0.18, 1.45</code> 의 두 클러스터를 얻을 수 있다. 하나는 <em>heart attack</em> 이 잘 안올 환자, 다른 하나는 위험한 환자.</p>
+
+<p>아래 예제는 스케일링 하면 안되는 경우</p>
+
+<blockquote>
+  <p>The percent concentration of a virus in a random sampling of healthy and unhealthy people.</p>
+  
+  <p>The angle of refraction of light (degree that light bends) observed when entering water vs. glass vs a diamond.</p>
+</blockquote>
+
+<h3 id="statisticalfallacies">Statistical Fallacies</h3>
+
+<p>세상에는 3 종류의 거짓말이 있다고 한다.</p>
+
+<ul>
+<li>LIES</li>
+<li>DAMNED LIES</li>
+<li><strong>STATISTICS</strong></li>
+</ul>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/638px-Anscombe%27s_quartet_3.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet'>http://en.wikipedia.org/wiki/Anscombe's_quartet</a>)</p>
+
+<p>보면 데이터가 정말 다르게 분포해 있지만, <em>mean, variance, correlation, linear regression</em> 이 동일하다.</p>
+
+<p>흔한 오류 중 하나로, <em>correlation => causation</em> 도 있다. </p>
+
+<p>학교가 문을 여는 시즌에, 독감이 많이 유행한다고 해서 상관 관계가 있다고 단정짓긴 어렵다. 어쩌면 다른 요인이 있을지도 모른다.</p>
+
+<p><em>non response bias</em> 도 생각해봐야 한다. 예를 들어 전화조사에서, 응답자와 비응답자의 정치 성향이 다를 수도 있다는 것이다.</p>
+
+<h3 id="dataenhancement">Data Enhancement</h3>
+
+<p><em>texas sharpshotter fallacy (텍사스 명사수의 오류)</em> 란 것도 있다. <a href='http://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy' >위키</a> 에서 인용하면</p>
+
+<blockquote>
+  <p>The Texas sharpshooter fallacy is an informal fallacy which is committed when differences in data are ignored, but similarities are stressed.</p>
+</blockquote>
+
+<p>텍사스의 총잡이가 헛간에 총을 마구마구 쏜 후, 밀집한 지역 중심으로 원을 그리면! 그 총잡이는 명사수처럼 보이게 된다는 것에서 유래한 오류다.</p>
+
+<p>바꿔 말하면, 우연도 필연으로 해석한다는 것이다. (존재하지도 않는 패턴을 찾으려고 하는것에 비유하기도 함)</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br />
+(2) <a href='http://en.wikipedia.org/wiki/Heuristic_function' >Wikipedia: Huristic Function</a> <br />
+(3) <a href='http://www.alanfielding.co.uk/multivar/dend.htm' >http://www.alanfielding.co.uk</a> <br />
+(4) <a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet">Wikipedia - Anscombe's quartet</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-4/</link><guid isPermaLink="false">a07909c0-49d7-4a0a-9dd8-5e52550b331f</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[graph]]></category><category><![CDATA[hierarchical clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 03:23:13 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 9]]></title><description><![CDATA[<p>이번시간엔 <em>anomaly detection</em> 과 <em>recommender system</em> 을 배운다.</p>
+
+<h3 id="anomalydectection">Anomaly Dectection</h3>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361236753_7590.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361236757_2205.png'  alt="" /></p>
 
@@ -28,8 +882,6 @@
 <h3 id="gaussiandistribution">Gaussian Distribution</h3>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png'  alt="" /></p>
 
@@ -86,8 +938,6 @@
 <h3 id="evaluatinganomalydetection">Evaluating Anomaly Detection</h3>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361236992_3664.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361236996_4034.png'  alt="" /></p>
 
@@ -161,8 +1011,6 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361245473_5316.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p>흔한 에러는 <code>p(x)</code> 가 <em>normal, anomalous</em> 에 대해서 모두 높은 경우인데, 슬라이드의 아래쪽에서 볼 수 있듯이 <code>x2</code> 라는 <em>feature</em> 를 만들어서 <em>anomaly</em> 를 발견하는 알고리즘을 만들 수 있다.</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361246077_9679.png'  alt="" /></p>
@@ -185,8 +1033,6 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361258533_5107.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p>따라서 <code>p(x_1)p(x_2)...</code> 을 이용한 모델 말고 다른 방법으로 모델을 만들어야 한다. </p>
 
 <p><code>u</code> 를 <code>n</code> 벡터라 하고, <code>Sigma</code> 를 <code>u</code> 의 <em>convariance matrix</em> 라 하자. 그러면</p>
@@ -206,15 +1052,9 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361259228_7695.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361259243_2967.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361259236_1052.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><br/></p>
 
@@ -230,13 +1070,9 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361259728_6035.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><code>u, Sigma</code> 를 찾아 <code>p(x)</code> 를 만들고, 테스트 데이터에 대해 <code>p(x) &lt; e</code> 인지 비교한다.</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/19/1361260300_1768.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>original model</em> 은 <em>multivariate model</em> 에서 각 <em>feature</em> 간 상관 관계가 없는 (독립), 즉 <em>covariance matrix</em> 가 <em>diagonal matrix</em> 인 경우다. (</p>
 
@@ -266,8 +1102,6 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/20/1361324993_7588.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <h3 id="contentbasedrecommendations">Content Based Recommendations</h3>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/20/1361325560_4034.png'  alt="" /></p>
@@ -277,8 +1111,6 @@
 <p>위 슬라이드는 유저 <code>j</code> 로 부터 <code>theta^(j)</code> 를 얻어, <em>feature</em> <code>x</code> 와 곱함으로써 <em>linear regression</em> 문제로 변경했다.</p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/20/1361326084_2070.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><code>theta^(j)</code> 는 어떻게 훈련시킬까?</p>
 
@@ -318,8 +1150,6 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/20/1361328443_4320.png'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><code>x^(i)</code> 를 얻기 위해, </p>
 
 <p><img src='http://latex.codecogs.com/gif.latex?min_%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%20%5Csum_%7Bi%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
@@ -336,8 +1166,6 @@
 <p>따라서 최초의 랜덤 <code>theta</code> 에 대해 <code>x</code> 를 훈련하고, 다시 <code>theta</code> 를 훈련하고, 반복하면 된다. </p>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/22/1361495687_3476.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><code>theta</code> 와 <code>x</code> 를 반복해서 훈련시키는 것보다, 동시에 훈련시키는 것이 좀 더 효율적이다. 따라서</p>
 
@@ -365,11 +1193,7 @@
 
 <p><img src='http://img.my.csdn.net/uploads/201302/22/1361496844_8727.jpg'  alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><img src='http://img.my.csdn.net/uploads/201302/22/1361496849_5252.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>collaborative filtering</em> 은 <em>low rank matrix factoriazation</em> 이라 부르기도 한다. 위 슬라이드처럼 <code>X, THETA</code> 를 구성하고 <code>X * THETA^T</code> 를 구하면 된다.</p>
 
@@ -382,8 +1206,6 @@
 <h3 id="implementationdetailmeannormalization">Implementation Detail: Mean Normalization</h3>
 
 <p><img src='http://img.my.csdn.net/uploads/201302/22/1361497832_3797.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>만약 위 슬라이드의 <code>Eve</code> 처럼 아무 영화도 평가 안한 사람에게는, <code>theta</code> 가 <code>0</code> 으로 나온다. (첫번째 <em>term</em> 이 <code>0</code> 이고, <em>regularization term</em> 은 <code>theta</code> 를 최소화한다.)</p>
 
@@ -5426,1250 +6248,4 @@ def tryFits(fName):
 (2) <a href='http://ko.wikipedia.org/wiki/%EC%A4%91%EC%8B%AC%EA%B7%B9%ED%95%9C%EC%A0%95%EB%A6%AC' >http://ko.wikipedia.org</a> <br />
 (3) <a href='http://www.financedoctor.co.kr/finance/view.php?f_idx=14587&amp;b_code=8&amp;m_code=0&amp;s_code=0' >http://www.financedoctor.co.kr</a> <br />
 (4) <a href='http://www.researchgate.net/post/What_is_the_difference_among_Deterministic_model_Stochastic_model_and_Hybrid_model' >www.researchgate.net/</a> <br />
-(5) <a href='http://www4.stat.ncsu.edu/' ~gross/BIO560%20webpage/slides/Jan102013.pdf">www4.stat.ncsu.edu</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-2/</link><guid isPermaLink="false">32cb7752-47f2-4ad2-a5cf-176453e06a7c</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[simulation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 21 Nov 2014 15:43:27 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 5]]></title><description><![CDATA[<p>키보드를 읽거나 화면에 무엇인가 쓰는 <em>intertactive program</em> 은 <em>side-effect</em> 를 만듭니다. 그런데, 하스켈은 <em>side-effect</em> 가 없지요. 그럼 입출력이 불가능한 것일까요? </p>
-
-<p>당연히 그렇지 않습니다. <strong>IO 모나드</strong> 를 사용할겁니다.</p>
-
-<p><em>pure expression</em> 부분과 <em>side-effect</em> 를 만들어내는 <em>impure action</em> 을 구분하여 하스켈에서 입출력을 할 수 있습니다.</p>
-
-<blockquote>
-  <p>Interactive program can be written in Haskell using types to distinguish pure expressions from impure actions that may involve side effects</p>
-</blockquote>
-
-<p>예를 들어 <code>IO a</code> 는 <code>a</code> 타입을 리턴하는 <em>action</em> 입니다.</p>
-
-<p>몇 가지 예를 보면, <code>IO Char</code> 은 캐릭터를 리턴하는 액션입니다. <code>IO ()</code> 는 <em>unit</em> 을 돌려주는데 이건 절차형 언어에서의 <em>void</em> 와 같다고 보면 됩니다. 다시 말해서 <code>IO ()</code> 는 다른 것엔 아무것도 관심 없고 입출력에만 관심이 있다는 뜻이지요.</p>
-
-<p>지난 시간에 언급 했듯이 <em>IO 모나드</em> 는 사실 <em>State 모나드</em> 입니다.</p>
-
-<pre><code class="haskell">State -&gt; (a, State)  
-</code></pre>
-
-<p>스크린이나, 키보드 버퍼등 다양한 State 를 변화시켜 가면서 <code>a</code> 타입의 값을 리턴할 수 있죠. 위에서 본 <code>IO ()</code> 는 <em>purely side-effecting action</em> 입니다.</p>
-
-<h3 id="basicactions">Basic Actions</h3>
-
-<p><code>getChar</code> 는 키보드로부터 글자를 하나 읽어 캐릭터를 리턴합니다. 다른 언어에서는 <code>() -&gt; Char</code> 처럼 정의되었겠죠?</p>
-
-<pre><code class="haskell">getChar :: IO Char  
-</code></pre>
-
-<p>다른 <em>action</em> 도 좀 살펴볼까요?</p>
-
-<pre><code class="haskell">puChar :: Char -&gt; IO ()  
-return :: a -&gt; IO a  
-</code></pre>
-
-<h3 id="sequencing">Sequencing</h3>
-
-<p><em>action</em> 들을 <code>do</code> 로 조합할 수 있습니다.</p>
-
-<pre><code class="haskell">a :: IO (Char, Char)  
-a = do x &lt;- getChar  
-    getChar
-    y &lt;- getChar
-    return (x, y)
-
-getLine :: IO String  
-getLine = do x &lt;- getChar  
-             if x == '\n' then
-               return []
-             else
-               do xs &lt;- getLine
-                  return (x:xs)
-</code></pre>
-
-<p>몇 가지 더 볼까요?</p>
-
-<pre><code class="haskell">putStr :: String -&gt; IO ()  
-putStr [] = return ()  
-putStr (x:xs) = do putChar x  
-                   putStr xs
-
-putStrLn :: String -&gt; IO ()  
-putStrLn xs = do putStr xs  
-                 putChar '\n'
-</code></pre>
-
-<p>모나드의 산을 넘고 넘어야 IO 의 간결함이 이해가 되니, 아이러니 하죠? 본래 입출력은 정말 기초적인 부분인데 말이지요.</p>
-
-<p>참고로 <em>list comprehension</em> 을 이용하면 <code>putStr</code> 은 이렇게 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">seqn :: [IO a] -&gt; IO ()  
-seqn [] = return ()  
-seqn (x:xs) = do x  
-                 seqn xs
-
-putStr xs = seqn [putChar x | x &lt;- xs]  
-</code></pre>
-
-<p>조금 더 블럭을 쌓아봅시다. 문자열을 키보드로 부터 입력받아 화면에 그 길이를 띄워주는 함수를 작성해 봅시다.</p>
-
-<pre><code class="haskell">strlen :: IO ()  
-strlen = do putStr "Enter a string: "  
-            xs &lt;- getLine
-            putStr "The string has "
-            putStr (show (length xs))
-            putStrLn " characters"
-
-&gt; strlen
--- Enter a string: Hello World!
--- the string has 12 characters
-</code></pre>
-
-<p><code>strlen</code> 은 <code>IO ()</code> 타입이니까, 아무것도 돌려주지 않습니다. 입출력에만 관심이 있지요.</p>
-
-<h3 id="hangman">Hangman</h3>
-
-<p>이제까지 배운것을 응용해서 자그마한 행맨 게임을 만들어 봅시다. <em>top down</em> 방식으로 접근할 겁니다.</p>
-
-<pre><code class="haskell">hangman :: IO ()  
-hangman = do putStrLn "Think of a word :"  
-             word &lt;- sgetLine
-             putStrLn "Try to guess it:"
-             guess word
-</code></pre>
-
-<p>여기서 <code>sgetLine</code> 은 키보드로부터 문자를 입력받아 <code>-</code> 를 화면에 출력합니다.</p>
-
-<pre><code class="haskell">sgetLine :: IO String  
-sgetLine = do x &lt;- getCh  
-              if x == '\n'
-                then do putChar x
-                        return []
-                else do putChar '-'
-                        xs &lt;- sgetLine
-                        return (x:xs)
-</code></pre>
-
-<p><code>getCh</code> 는 문자열을 키보드로 부터 읽지만 화면에 출력하진 않지요.</p>
-
-<pre><code class="haskell">import System.IO
-
-getCh :: IO Char  
-getCh = do hSetEcho stdin False  
-           c &lt;- getChar
-           hSetCho stdin True
-           return c
-</code></pre>
-
-<p>여기서 잘 보면 <code>c &lt;- getChar</code> 이 할당(<code>=</code>)처럼 보일텐데, 사실은 그렇지 않습니다. 우린 어떠한 <em>mutable</em> 도 변수도 사용하고 있지 않습니다. 비록 우리가 작성한 코드가 절차형 언어처럼 보일지라도요!</p>
-
-<p>이제 마지막 퍼즐인 <code>guess</code> 함수를 작성해 볼까요?</p>
-
-<pre><code class="haskell">guess :: String -&gt; IO ()  
-guess word = do putStr "&gt; "  
-                xs &lt;- getLine
-                if xs == word
-                  then putStrLn "You got it!"
-                  else do putStrLn (diff word xs)
-                          guess word
-
-diff :: String -&gt; String -&gt; String  
-diff xs ys = [if elem x ys then x else '-' | x &lt;- xs]  
-</code></pre>
-
-<p><code>diff</code> 를 잠깐 실행해 보면</p>
-
-<pre><code class="haskell">&gt; diff "haskell" "pascal"
--- "-as--ll"
-</code></pre>
-
-<h3 id="calculator">Calculator</h3>
-
-<p>시작 전에 몇 가지 보조 함수를 정의하면,</p>
-
-<pre><code class="haskell">getCh :: IO Char  
-getCh =  do hSetEcho stdin False  
-            c &lt;- getChar
-            hSetEcho stdin True
-            return c
-
-beep :: IO ()  
-beep = putStr "\BEL"
-
-cls :: IO ()  
-cls = putStr "\ESC[2J"
-
-type Pos = (Int, Int)
-
-goto :: Pos -&gt; IO ()  
-goto (x, y) = putStr ("\ESC["  ++ show y ++ ";" ++ show x ++ "H")
-
-writeAt :: Pos -&gt; String -&gt; IO ()  
-writeAt p xs = do goto p  
-                  putStr xs
-</code></pre>
-
-<p>콘솔 창에서 문자의 위치는 좌표 <code>(Int, Int)</code> 에 의해 결정됩니다. <code>goto</code> 는 그 위치로 커서를 옮기고 <code>writeAt</code> 는 해당 좌표에 입력받은 문자열을 출력합니다.</p>
-
-<p>여기에 <a href='http://1ambda.github.io/haskell-intro4/' >지난번</a>에 만들었던 파서가 <code>-</code>, <code>/</code> 도 처리할 수 있게 조금 업그레이드 하면</p>
-
-<pre><code class="haskell">int :: Parser Int  
-int =  do char '-'  
-          n &lt;- nat
-          return (-n)
-        +++ nat
-
-natural :: Parser Int  
-natural =  token nat
-
-integer :: Parser Int  
-integer =  token int
-
-expr :: Parser Int  
-expr = do t &lt;- term  
-          do symbol "+"
-             e &lt;- expr
-             return (t + e)
-           +++ do symbol "-"
-                  e &lt;- expr
-                  return (t - e)
-           +++ return t
-
-term :: Parser Int  
-term = do f &lt;- factor  
-          do symbol "*"
-             t &lt;- term
-             return (f * t)
-           +++ do symbol "/"
-                  t &lt;- term
-                  return (f `div` t)
-           +++ return f
-
-factor :: Parser Int  
-factor = do symbol "("  
-            e &lt;- expr
-            symbol ")"
-            return e
-          +++ natural
-</code></pre>
-
-<p>이제 간단한 계산기를 문자열로 나타내 보면</p>
-
-<pre><code class="haskell">box :: [String]  
-box =  ["+---------------+",  
-       "|               |",
-       "+---+---+---+---+",
-       "| q | c | d | = |",
-       "+---+---+---+---+",
-       "| 1 | 2 | 3 | + |",
-       "+---+---+---+---+",
-       "| 4 | 5 | 6 | - |",
-       "+---+---+---+---+",
-       "| 7 | 8 | 9 | * |",
-       "+---+---+---+---+",
-       "| 0 | ( | ) | / |",
-       "+---+---+---+---+"]
-</code></pre>
-
-<p><code>q, c, d, =</code> 는 <em>quit</em>, <em>clear</em>, <em>delete</em> <em>evaluation</em> 를 의미합니다. 나머지 버튼은 식을 입력하는데 사용하지요. 이제 박스를화면에 그려주는 <code>showbox</code> 함수를 작성합시다.</p>
-
-<pre><code class="haskell">seqn :: [IO a] -&gt; IO ()  
-seqn [] = return ()  
-seqn (a:as) = do a  
-                 seqn as
-
-buttons :: [Char]  
-buttons = standard ++ extra  
-          where
-            standard = "qcd=123+456-789*0()/"
-            extra = "QCD \ESC\BS\DEL\n"
-
-showbox :: IO ()  
-showbox =  
-  seqn [writeAt (1, y) line | (y, line) &lt;- zip [1..13] box]
-</code></pre>
-
-<p><code>buttons</code> 에서 <code>extra</code> 는 좀 더 유연한 버튼 인터페이스를 위해 사용합니다. 무슨 말인고 하니 <code>q</code> 뿐만 아니라 <code>Q</code> 를 눌러도 계산기가 종료되게끔요. </p>
-
-<p>이제 수식을 표현하는 부분을 출력해줄 <code>display</code> 함수를 만듭시다. 입력받은 문자열을, 뒤에서부터 13개만 짤라서 <code>(3, 2)</code> 위치에 출력해줍니다.</p>
-
-<pre><code class="haskell">display :: String -&gt; IO ()  
-display xs = do writeAt (3, 2) "             "  
-                writeAt (3, 2) (reverse (take 13 (reverse xs)))
-</code></pre>
-
-<p>이제 사용자로부터 문자를 입력받아 화면에 출력해주는 로직을 구현한 <code>calc</code> 함수를 보면</p>
-
-<pre><code class="haskell">calc :: String -&gt; IO ()  
-calc xs = do display xs  
-             c &lt;- getCh
-             if elem c buttons
-               then process c xs
-               else do beep
-                       calc xs
-
-process :: Char -&gt; String -&gt; IO ()  
-process c xs  
-  | elem c "qQ\ESC" = quit
-  | elem c "dD\BS\DEL" = delete xs
-  | elem c "=\n" = eval xs
-  | elem c "cC" = clear
-  | otherwise = press c xs
-</code></pre>
-
-<p><code>calc</code> 에서는 현재 수식창에 입력된 데이터 <code>xs</code> 와, 사용자로부터 받은 <code>c</code> 를 이용해 작업을 합니다. <code>c</code> 가 만약 <code>buttons</code> 내부에 없다면 다시 <code>calc xs</code> 를 호출해서 새로운 입력을 받습니다.</p>
-
-<p>만약 <code>c</code> 가 <code>buttons</code> 내에 있는 문자들 중 하나라면 <code>process c xs</code> 를 호출하는데, 여기서는 버튼의 종류에 따라 다른 <code>IO ()</code> 를 돌려줍니다.</p>
-
-<pre><code class="haskell">quit :: IO ()  
-quit = goto (1, 14)
-
-delete :: String -&gt; IO ()  
-delete "" = calc ""  
-delete xs = calc (init xs)
-
-eval :: String -&gt; IO ()  
-eval xs = case parse expr xs of  
-           [(n, "")] -&gt; calc (show n)
-           _ -&gt; do beep
-                   calc xs
-
-clear :: IO ()  
-clear = calc ""
-
-press :: Char -&gt; String -&gt; IO ()  
-press c xs = calc (xs ++ [c])  
-</code></pre>
-
-<p>(1) <code>quit</code> 는 다시 <code>calc</code> 호출 없이 현재 커서를 14번째 라인으로 이동해 계산기를 종료합니다. <br />
-(2) <code>delete</code> 는 현재 <code>xs</code> 에서 마지막 문자를 제거한 <code>init xs</code> 를 <code>calc</code> 에 넘겨줌으로써 수식 입력창에서 마지막 문자를 지웁니다. <br />
-(3) <code>eval</code> 는 <code>parse expr xs</code> 의 결과로 올바른 계산 값을 얻으면 <code>calc</code> 에 그 숫자를 문자열로 변환한 결과를 넘겨주어 계산값을 표시합니다. (<code>show n</code>) 아니라면, 계산이 안되므로 비프음을 뿜고 다시 <code>calc xs</code> 를 호출해 새로운 입력을 기다립니다. <br />
-(4) <code>clear</code> 는 수식 입력창에 있는 값을 <code>""</code> 를 돌려줌으로써 비웁니다. <br />
-(5) <code>press</code> 는 현재 수식 입력창에 있는 데이터 <code>xs</code> 에 <code>c</code> 를 이어 붙입니다.  </p>
-
-<p>잘 보시면 현재 가지고 있는 데이터는 <code>xs</code> 로 표시되고, 이외의 <code>IO ()</code> 를 조합해 가며 화면의 상태(<em>State</em>) 를 변화시킵니다. 이 과정에서 <strong>화면을 변화시키는 부분과, 데이터 <code>xs</code> 가 변하는 부분이 서로 분리</strong> 되어 있습니다.</p>
-
-<p>마지막으로 계산기를 실행시키는 함수 <code>run</code> 을 만들겠습니다.</p>
-
-<pre><code class="haskell">run :: IO ()  
-run = do cls  
-         showbox
-         clear
-</code></pre>
-
-<h3 id="gameoflife">Game of Life</h3>
-
-<p><del>인생게임은 아닙니다</del> 세포의 생존게임이라 생각하면 이해하기 쉽습니다. <code>n * m</code> 보드에서 각 칸마다 세포가 위치할 수 있습니다.</p>
-
-<blockquote>
-  <ol>
-  <li><p>a living cell survives if it has precisely two or three neighbouring squares that contain living cells, and dies (becomes empty) otherwise.</p></li>
-  <li><p>an empty square gives birth to a living cell if it has precisely neighbours that contain living cells, and remains empty otherwise.</p></li>
-  </ol>
-</blockquote>
-
-<p>각 칸마다 균등한 기회를 주기 위해 모서리에 있는 칸 또한 8개의 이웃한 칸을 가졌다고 합시다. <em>torus (3차원의 도넛모양 )</em> 을 생각하심 됩니다.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Simple_Torus.svg/310px-Simple_Torus.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://commons.wikimedia.org/wiki/File:Simple_Torus.svg' >http://commons.wikimedia.org/wiki/File:Simple_Torus.svg</a>)</p>
-
-<p>초기값에 따라 턴을 반복하면서 다양한 종류의 결과물이 나옵니다. 그 중에서 초기값이 몇번의 턴을 지나면서 지속적으로 대각선으로 움직이는 패턴을 <em>glider</em> 라 부릅니다.</p>
-
-<p><img src='https://camo.githubusercontent.com/f865db6a304d36aa7fef6c060729a2d635cd5c14/687474703a2f2f7777772d726f68616e2e736473752e6564752f7e72636172726574652f7465616368696e672f4d2d3539365f706174742f696d616765732f676c696465722e676966'  alt="" /></p>
-
-<p align="center">(<a href='https://gist.github.com/boggle/10390842' >https://gist.github.com/boggle/10390842</a>)</p>
-
-<p>이제 <em>row</em> 를 <code>x</code>, <em>column</em> 을 <code>y</code> 로 해서 1 부터 시작하는 <code>5 x 5</code> 의 <em>glider</em> 보드를 만들면</p>
-
-<pre><code class="haskell">width :: Int  
-width = 5
-
-height :: Int  
-height = 5
-
-type Board = [Pos]
-
-glider :: Board  
-glider = [(4,2),(2,3),(4,3),(3,4),(4,4)]
-
-showCells :: Board -&gt; IO ()  
-showCells b = seqn [writeAt p "O" | p &lt;- b]
-
-isAlive :: Board -&gt; Pos -&gt; Bool  
-isAlive b p = elem p b
-
-isEmpty :: Board -&gt; Pos -&gt; Bool  
-isEmpty = not (isAlive b p)  
-</code></pre>
-
-<p>여기에 해당 칸의 세포가 살았는지 죽었는지 검사하는 <code>isAlive</code>, <code>isEmpty</code> 와 보드를 출력하는 <code>showCells</code> 함수도 만들었습니다.</p>
-
-<p>이제 어떤 <code>(x, y)</code> 를 입력 받아 그 주변 8개의 이웃 세포 좌표를 돌려주는 함수를 만들면</p>
-
-<pre><code class="haskell">neighbs :: Pos -&gt; [Pos]  
-neighbs (x,y) =  map wrap [(x-1,y-1), (x,y-1),  
-                           (x+1,y-1), (x-1,y),
-                           (x+1,y)  , (x-1,y+1),
-                           (x,y+1)  , (x+1,y+1)] 
-
-wrap :: Pos -&gt; Pos  
-wrap (x,y) =  (((x-1) `mod` width) + 1, ((y-1) `mod` height + 1))  
-</code></pre>
-
-<p><code>wrap</code> 은 <code>mod</code> 연산을 이용해서, 판의 범위를 벗어난 이웃 세포의 좌표를 판 내에 있는 이웃으로 만들어 돌려줍니다. 예를 들어 </p>
-
-<pre><code class="haskell">&gt; wrap (0, 1)
--- (5,1)
-</code></pre>
-
-<p>이제 살아있는 이웃 세포의 개수를 돌려주는 <code>liveNeighbs</code> 와, 살아있는 세포들(인접한 살아있는 세포가 2, 3개인) 좌표를 돌려주는 <code>survivors</code> 함수를 만듭시다.</p>
-
-<pre><code class="haskell">liveNeighbs :: Board -&gt; Pos -&gt; Int  
-liveNeighbs b = length . filter (isAlive b) . neighbs
-
-survivors :: Board -&gt; [Pos]  
-survivors b = [p | p &lt;- b, elem (liveNeighbs b p) [2, 3]]  
-</code></pre>
-
-<p>그리고 죽은 세포에 대해 인접한 살아있는 세포가 3개일 때만 살아있는 세포로 변경하는 <code>births</code> 함수를 만들면</p>
-
-<pre><code class="haskell">births :: Board  
-births :: Board -&gt; [Pos]  
-births b = [p | p &lt;- rmdups (concat (map neighbs b)),  
-            isEmpty b p,
-            liveNeighbs b p == 3]
-
-rmdups :: Eq a =&gt; [a] -&gt; [a]  
-rmdups [] = []  
-rmdups (x:xs) = x : filter (/= x) xs  
-</code></pre>
-
-<p>중복을 제거하기 위해 <code>rmdups</code> 함수를 만들어서 사용했습니다.</p>
-
-<p>이렇게 되면, 다음 턴에서의 <em>board</em> 는 <code>survivors</code> 와 <code>births</code> 의 원소들 이므로</p>
-
-<pre><code class="haskell">nextGen :: Board -&gt; Board  
-nextGen b = survivors b ++ births b  
-</code></pre>
-
-<p>이제 화면 출력을 위한 몇 가지 함수를 더 만들면</p>
-
-<pre><code class="haskell">life :: Board -&gt; IO ()  
-life b = do cls  
-            showCells b
-            wait 5000
-            life (nextGen b)
-
-wait :: Int -&gt; IO ()  
-wait n = seqn [return () | _ &lt;- [1..n]]  
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>DelftX FP 101x</strong> <br />
-(2) <em>Programming in Haskell</em> <br />
-(3) <a href='https://gist.github.com/boggle/10390842' >gist.github.com/boggle</a></p>]]></description><link>http://1ambda.github.io/haskell-intro5/</link><guid isPermaLink="false">2ec0d609-25c4-4cac-bfd7-196899ad001f</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[monad]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 21 Nov 2014 02:20:50 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 4]]></title><description><![CDATA[<p>이번시간엔 모나드를 배웁니다. <del>네. 올것이 왔습니다.</del> 간단한 파서를 구현하는 것 부터 시작해 보겠습니다.</p>
-
-<h3 id="whatisaparser">What is a Parser</h3>
-
-<p><strong>Parser (파서)</strong> 란 텍스트 조각을 분석하여 <em>syntaxtic structure</em> 를 만들어 내는 프로그램(코드)를 말합니다.</p>
-
-<p>많은 프로그램들이 자신만의 파서를 가지고 있습니다. <em>GHC</em> 는 <em>haskell</em> , <em>UNIX</em> 는 <em>shell script</em>, <em>explorer</em> 는 <em>HTML</em> 분석합니다.</p>
-
-<h3 id="theparsertype">The Parser Type</h3>
-
-<pre><code class="haskell">type Parser = String -&gt; Tree  
-</code></pre>
-
-<p>하스켈 같은 함수형 언어에서 파서는 함수라 볼 수 있습니다. 문자열을 받아서 <em>Tree (트리)</em> 를 만들어 주는 함수처럼요.</p>
-
-<p>때때로 입력된 문자열이 이상하다면 파서가 제대로 동작하지 않을수도 있습니다. 그럴때 분석되지 않은 문자열을 돌려주려면 이런 형태여야 합니다.</p>
-
-<pre><code class="haskell">type Parser = String -&gt; (Tree, String)  
-</code></pre>
-
-<p>어떤 문자열들은 여러가지로 해석될 수도 있겠지요. 그럼 리스트를 돌려줘야겠네요.</p>
-
-<pre><code class="haskell">type Parser = String -&gt; [(Tree, String)]  
-</code></pre>
-
-<p>꼭 파서가 트리를 만들 필요는 없지 않을까요? 문자열이 <code>1 + 2</code> 라면 이 값을 더한 <code>3</code> 을 돌려줄 수도 있을겁니다.</p>
-
-<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]  
-</code></pre>
-
-<p>이번 강의에서는 복잡한 파서를 구현하기 보다 파서가 무슨일을 하는지에 집중할 것이므로 파서의 타입을 심플하게 가져가겠습니다. 파서가 문자열을 분석하는데 실패하면 <code>[]</code>  성공하면 <em>singleton list</em> 를 돌려주겠습니다.</p>
-
-<h3 id="basicparsers">Basic Parsers</h3>
-
-<p>먼저 문자열에서 첫 번째 원소를 소비하고, 나머지를 돌려주는 간단한 <code>item</code> 파서를 만들어 봅시다. 이 파서는 빈 문자열에 대해서는 <code>[]</code> 를 돌려줍니다.</p>
-
-<pre><code class="haskell">module Lecture7 where
-
-type Parser a = String -&gt; [(a, String)]
-
-item :: Parser Char  
-item = \xs -&gt; case xs of  
-               [] -&gt; []
-               (x:xs) -&gt; [(x, xs)]
-</code></pre>
-
-<p>실행하면 이런 결과를 얻습니다.</p>
-
-<pre><code class="haskell">&gt; item "hello world"
--- [('h',"ello world")]
-
-&gt; item ""
--- []
-</code></pre>
-
-<p>항상 <code>[]</code> 만 돌려주는 <code>failure</code> 파서와 <code>a -&gt; Parser a</code> 타입의 <code>return</code> 도 만들어 봅시다. 하나는 항상 실패하고, 다른 하나는 항상 성공하는 파서입니다.</p>
-
-<pre><code class="haskell">failure :: Parser a  
-failure = \xs -&gt; []
-
-return :: a -&gt; Parser a  
-return v = \xs -&gt; [(v, xs)]
-
-&gt; failure "hello world!"
--- []
-
-&gt; (return "hello") " world"
--- [("hello"," world")]
-
-&gt; (return "hello") ""
--- [("hello","")]
-</code></pre>
-
-<p>이제 두 개의 파서를 붙이는 함수 <code>(+++)</code> 를 만들어 봅시다. <code>p +++ q</code> 에 대해 파서 <code>p</code> 가 성공하면 <code>p</code> 의 리턴값을, <code>p</code> 가 실패하면 <code>q</code> 가 처리하게 합시다. 위에서 항상 성공하는 파서 <code>return v</code> 와 항상 실패하는 파서 <code>failure</code> 를 여기다 붙이며 어떻게 될지도 한번 생각해 보는것도 좋습니다.</p>
-
-<pre><code class="haskell">(+++) :: Parser a -&gt; Parser a -&gt; Parser a
-p +++ q = \xs -&gt; case p xs of  
-                  [] -&gt; parse q xs
-                  [(y, ys)] -&gt; [(y, ys)]
-
-parse :: Parser a -&gt; String -&gt; [(a, String)]  
-parse p xs = p xs  
-</code></pre>
-
-<p>여기서 <code>parse</code> 는 그냥 <em>readable</em> 한 코드를 만들기 위해 사용했다고 보면 됩니다. 파서와 텍스트를 받아서 그 적용한 결과를 돌려줍니다.</p>
-
-<pre><code class="haskell">&gt; parse (return '1') "234"
--- [('1',"234")]
-
-&gt; parse failure "abcd"
--- []
-
-&gt; parse (failure +++ (return '1')) "abcd"
--- [('1',"abcd")]
-
-&gt; parse (item +++ return 'd') "abc"
--- [('a', "bc")]
-</code></pre>
-
-<h3 id="monad">Monad</h3>
-
-<p>여기서 잠깐 생각해 볼 거리가 있습니다. "<em>parser</em> 가 대체 무슨일을 하고 있는가?"</p>
-
-<p>파서의 타입을 잘 보면 원본 타입 <code>String</code> 을 받아, 여기서 부가적인 작업을 해서 <code>a</code> 타입을 만들고, 다시 본래 타입인 <code>String</code> 더해 튜플로 만들어 돌려줍니다. 다시 말해 파서는 <em>한 타입을 받아 부가적인 정보를 만들어 본래 타입에 붙여주는 함수</em> 라 볼 수 있습니다.</p>
-
-<p>파서의 연결을 도와주는 함수는 <code>(+++)</code> 무엇일까요? <em>부가적인 정보를 붙여주는 파서 를 <strong>합성</em></strong> 해 주는 역할을 합니다.</p>
-
-<p>지금 <code>(+++)</code> 의 규칙은 <code>p</code> 가 실패하면 <code>q</code> 를 적용하지만, 파서 <code>t, u, v</code> 를 받아 모두 적용한 뒤 결과를 돌려주는 연산자도 만들 수 있습니다.</p>
-
-<p><code>(+++)</code> 자체는 하나의 규칙을 의미하지만 자세히 보면 이외에도 다양한 규칙을 가진 합성 함수를 만들 수 있다는 것을 알 수 있습니다. </p>
-
-<p>부가적인 정보를 만들어 내는 함수와(파서), 이 파서간의 합성이 아주 중요한 키 포인트입니다. 그리고 이 파서가 바로 <em>monad</em> 입니다. <del>두둥</del></p>
-
-<blockquote>
-  <p>The parser type is a <strong>monad</strong>, a mathematical structure that has proved useful for modeling many different kinds of computations</p>
-</blockquote>
-
-<h3 id="sequencing">Sequencing</h3>
-
-<p>위에서는 두개의 파서를 엮어 하나로 만들긴 했지만 둘 중에 하나만 사용했죠. 둘 다 사용하진 않았습니다. 그럼 둘 이상의 파서를 엮어 하나의 파서를 만들려면 어떻게 해야할까요? 일단 생각해 볼 수 있는건 타입이 좀 다릅니다. </p>
-
-<p>서로 다른 두개의 파서 <code>Parser a</code> 와 <code>Parser b</code> 를 고려해 봅시다. </p>
-
-<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]
-
-Parser a  
--- String -&gt; [(a, String)]
-
-Parser b  
--- String -&gt; [(b, String)]
-</code></pre>
-
-<p><code>Parser a</code> 의 출력은 <code>[(a, String)]</code>, 이기 때문에 다른 파서 <code>Parser b</code> 의 입력 <code>String</code> 이 될 수 없습니다. </p>
-
-<p>그리고 여기서 한 가지 더 중요한 사실은, <code>Parser a</code> 가 <code>String</code> 을 이용해 만든 타입 <code>a</code> 의 부가정보를 <code>Parser b</code> 에 손실 없이 넘겨줘야 한다는 사실입니다. 그래야만 파서를 조합한 의미가 있지요.</p>
-
-<p>정리하자면 <code>Parser a</code> 를 받아 <code>Parser b</code> 를 돌려주는 <em>파서 조합함수</em> 를 만들 것인데,  부가정보 <code>a</code> 의 보존을 위해 이 함수 내부에서 <code>a -&gt; Parser b</code> 타입의 중간 함수가 필요합니다. <strong>이 중간 함수가 어디에서 어떤 일을 할지가 구현해야 할 부분이자, 가장 중요한 부분</strong>입니다. 파서 종류에 따라 원본 데이터 (여기서는 <code>String</code>) 을 조작하는 방법이 다르기 때문입니다. 거꾸로 말하면 <em>다양한 종류의 파서가 있다는 말</em> 입니다.</p>
-
-<p>함수의 이름은 <code>&gt;&gt;=</code> 라 짓겠습니다. <em>bind</em> 라 읽습니다. 타입은</p>
-
-<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]
-
-parse :: Parser a -&gt; String -&gt; [(a, String)]  
-parse p xs = p xs
-
-(&gt;&gt;=) :: Parser a -&gt; (a -&gt; Parser b) -&gt; Parser b
-</code></pre>
-
-<p>구현은 </p>
-
-<pre><code class="haskell">p &gt;&gt;= q = \xs -&gt; case p xs of  
-                  [] -&gt; []
-                  (y, ys) -&gt; parse (q y) ys
-</code></pre>
-
-<p>즉 <code>&gt;&gt;=</code> 는 <code>Parser a</code> 의 처리 결과가 <code>[]</code> 이면 <code>[]</code> 을 돌려줍니다. 올바르게 처리되었을 경우에는 <code>Parser a</code> 의 결과로 얻어진 부가정보 <code>a</code> 타입에 대해 <code>a -&gt; Parser b</code> 타입의 함수인 <code>y</code> 에게 넘겨 <code>Parser b</code> 를 받고 결과적으로는 <code>\xs -&gt; parse k ys</code> 를 돌려줍니다. (<code>k :: parser b</code>) 그런데, 여기서 <code>parse k ys</code> 의 결과가 <code>[(b, String)]</code> 이기 때문에 <code>\xs -&gt; parse k ys</code> 는 <code>Parser b</code> 라 볼 수 있습니다. </p>
-
-<p>최종적으로는 <code>Parser a</code> 를 이용해 <code>Parser b</code> 를 만들어 냈습니다.</p>
-
-<p>예제를 한번 보시죠. <code>Parser Char</code> 을 이용해 <code>Parser (Char, Char)</code> 을 만들어 볼 수 있습니다.</p>
-
-<pre><code class="haskell">return :: a -&gt; Parser a  
-return v = \xs -&gt; [(v, xs)]
-
-(&gt;&gt;=) :: Parser a -&gt; (a -&gt; Parser b) -&gt; Parser b
-p &gt;&gt;= q = \xs -&gt; case p xs of  
-                   [] -&gt; []
-                   (y, ys) -&gt; parse (q, y) ys
-
--- consume only one Char
-parseTwice :: Parser (Char, Char)  
-parseTwice = item &gt;&gt;= \x -&gt; return (x, x)  
-</code></pre>
-
-<pre><code class="haskell">parseTwice "5BEAF"  
--- [((5, 5), "BEAF")] 
-</code></pre>
-
-<p><code>item</code> 과 <code>return (x, x)</code> 두개의 파서를 조합해서 <code>parseTwice</code> 라는 새로운 파서를 만들었습니다. 조금 더 붙여볼까요?</p>
-
-<pre><code class="haskell">ignore2 :: Parser (Char, Char)  
-ignore2 = item &gt;&gt;= \x -&gt; item &gt;&gt;= \y -&gt; item &gt;&gt;= \z -&gt; return (x, z)
-
-&gt; ignore2 "2A371"
--- [(('2','3'),"71")]
-</code></pre>
-
-<h3 id="do">Do</h3>
-
-<p>위에서 보았듯이 같은 원본 타입 <code>String</code> 을 가지는 같은 종류의 파서(모나드)는 계속 연결할 수 있습니다. <code>p1, ..., pn</code> 을 파서라 하고 <code>v1, ..., vn</code> 을 파서가 만드는 부가정보라 할 때 다음과 같이 일반화 할 수 있습니다.</p>
-
-<pre><code class="haskell">p1 &gt;&gt;= \v1 -&gt;  
-p2 &gt;&gt;= \v2 -&gt;  
-p3 &gt;&gt;= \v3 -&gt;  
-...
-pn &gt;&gt;= \vn -&gt;  
-return (f v1 v2 ... vn)  
-</code></pre>
-
-<p>하스켈에선 조금 더 편한 문법을 지원하는데요 바로 <code>do</code> 구문입니다.</p>
-
-<pre><code class="haskell">do v1 &lt;- p1  
-   v2 &lt;- p2
-   ...
-   vn &lt;- pn
-   return (f v1 v2 ... vn)
-</code></pre>
-
-<h3 id="monadicaxioms">Monadic Axioms</h3>
-
-<p>이 때 <code>do</code> 구문을 활용하는 파서(모나드) <code>pn</code> 에 대해서는 미리 <code>&gt;&gt;=</code> 과 <code>return</code> 이 구현되어 있어야 합니다. 우리도 위에서 두 가지 함수를 사용했습니다. </p>
-
-<p>하스켈에서는 모나드 클래스가 따로 있습니다. 그리고 모든 모나드 클래스의 인스턴스는 최소한 <code>&gt;&gt;=</code> 와 <code>return</code> 을 구현해야 합니다. 우리가 위에서 구현했던 파서를 잠깐 보면</p>
-
-<pre><code class="haskell">type Parser a = String -&gt; [(a, String)]
-
-return :: a -&gt; Parser a  
-return v = \xs -&gt; [(v, xs)]
-
-(&gt;&gt;=) :: Parser a -&gt; (a -&gt; Parser b) -&gt; Parser b
-p &gt;&gt;= q = \xs -&gt; case parse p xs of  
-                  [] -&gt; []
-                  [(y, ys)] -&gt; parse (q y) ys
-</code></pre>
-
-<p><code>return</code> 은 <code>a</code> 를 받아 파서를 돌려줍니다. <code>&gt;&gt;=</code> 는 파서(모나드)를 결합하지요.</p>
-
-<p>아까 다양한 파서(모나드)가 있을 수 있다고 말했던 것 기억 나시죠? 많은 종류의 모나드에 대해  최소한 <code>return</code> 과 <code>&gt;&gt;=</code> 를 구현해야 하는데, 이때 지켜져야 할 <em>axioms (공리)</em> 가 있습니다.</p>
-
-<p>(1) <code>m &gt;&gt;= return</code> == <code>m</code> (<em>right unit</em>) <br />
-(2) <code>return x &gt;&gt;= f</code> == <code>f x</code> (<em>left unit</em>) <br />
-(3) <code>(m &gt;&gt;= f) &gt;&gt;= g</code> == <code>m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)</code> (<em>associativity</em>)  </p>
-
-<h3 id="sowhymonad">So, Why Monad?</h3>
-
-<p>근데, 이런 복잡한 모나드가 왜 중요한걸까요? 바로 <em>부가정보</em> 를 만들면서 본래의 타입을 유지하기 때문입니다. </p>
-
-<p>본래 순수 함수형 프로그래밍에선 콘솔 출력 같은 <em>side-effect</em> 를 만들 수 없습니다. 그러나 모나드를 이용하면 <strong>부가정보 (= <em>side-effect</em>)</strong> 와 <strong>연산 부분 (<em>purely functional</em>)</strong> 를 분리할 수 있습니다.</p>
-
-<p>실제 하스켈에서도 <em>IO Monad</em> 를 통해 입출력을 할 수 있죠.</p>
-
-<h3 id="monadagain">Monad, Again</h3>
-
-<p>그러면 실제로 하스켈에서 제공하는 모나드를 클래스를 사용해 봅시다. 코드를 조금 변경해야합니다.</p>
-
-<pre><code class="haskell">module Lecture7 where
-
-import Control.Monad
-
--- ref: http://www.cs.nott.ac.uk/~gmh/Parsing.lhs
-newtype Parser a = P (String -&gt; [(a, String)])
-
-instance Monad Parser where  
-  return v = P $ \inp -&gt; [(v, inp)]
-  p &gt;&gt;= f = P $ \inp -&gt; case parse p inp of
-                         [] -&gt; []
-                         [(v, out)] -&gt; parse (f v) out
-
-item :: Parser Char  
-item = P $ \inp -&gt; case inp of  
-                    [] -&gt; []
-                    (x:xs) -&gt; [(x, xs)]
-
-parse                         :: Parser a -&gt; String -&gt; [(a,String)]  
-parse (P p) inp               =  p inp
-
-ignore2 :: Parser (Char, Char)  
-ignore2 = do x &lt;- item  
-             item
-             z &lt;- item
-             return (x, z)
-</code></pre>
-
-<p>실제 돌려보면,</p>
-
-<pre><code class="haskell">&gt; parse ignore2 "7A3BCEF"
--- [(('7','3'),"BCEF")]
-</code></pre>
-
-<h3 id="monadplus">MonadPlus</h3>
-
-<p>아까 작성했었던 파서 <code>failure</code>, <code>(+++)</code> 기억 나시나요? <code>failure</code> 는 항상 실패하는 파서를, <code>(+++)</code> 는 첫번째 파서와 두번째 파서를 붙여 둘 중 성공하는 하나의 파서만 선택하는 합성 파서입니다.</p>
-
-<p>하스켈에선 이런 두 가지 특징을 구현한 모나드를 <code>MonadPlus</code> 라 부릅니다. 다시 말해 <code>MonadPlus</code> 에는 기본적인 <code>return</code> 이나 <code>&gt;&gt;=</code> 이외에도 위 두 가지가 더 구현되어 있다는 말이죠. </p>
-
-<p><code>MonadPlus</code> 에서는 <code>failure</code> 대신 <code>mzero</code> 를 <code>(+++)</code> 대신 <code>mplus</code> 란 이름을 사용합니다.</p>
-
-<pre><code class="haskell">instance MonadPlus Parser where  
-  mzero = P $ \_ -&gt; []
-  p `mplus` q = P $ \inp -&gt; case parse p inp of
-                             [] -&gt; parse q inp
-                             [(v, out)] -&gt; [(v, out)]
-
-failure :: Parser Char  
-failure = mzero
-
-(+++) :: Parser a -&gt; Parser a -&gt; Parser a
-p +++ q = p `mplus` q  
-</code></pre>
-
-<pre><code class="haskell">&gt; parse (item +++ return 'd') "abc"
--- [('a',"bc")]
-
-&gt; parse (item +++ return 'd') ""
--- [('d',"")]
-</code></pre>
-
-<h3 id="derivedprimitives">Derived Primitives</h3>
-
-<p>이제 파서를 엮어서 다양한 파서를 만들어 봅시다.</p>
-
-<pre><code class="haskell">import Data.Char
-
-sat :: (Char -&gt; Bool) -&gt; Parser Char  
-sat p = do x &lt;- item  
-           if p x then return x else failure
-
-digit :: Parser Char  
-digit = sat isDigit
-
-lower :: Parser Char  
-lower = sat isLower
-
-upper :: Parser Char  
-upper = sat isUpper 
-
-letter :: Parser Char  
-letter = sat isAlpha
-
-alphanum :: Parser Char  
-alphanum = sat isAlphaNum
-
-char :: Char -&gt; Parser Char  
-char x = sat (== x)  
-</code></pre>
-
-<p>여기서 <code>char</code> 을 이용하면 지정된 문자열이 있는지 검사하는 파서 <code>string</code> 을 만들 수 있습니다.</p>
-
-<pre><code class="haskell">string :: String -&gt; Parser String  
-string [] = return []  
-string (x:xs) = do char x  
-                   string xs
-                   return (x:xs)
-</code></pre>
-
-<p><code>string</code> 은 재귀를 이용해 작성했는데, 입력된 문자열이 모두 존재할 경우에만 <code>return</code> 하고 아니면 <code>[]</code> 를 돌려줍니다. (<code>do</code> 매크로는 중간에 <code>[]</code> 가 나오면 <code>[]</code> 를 바로 리턴합니다.)</p>
-
-<pre><code class="haskell">&gt; parse (string "google") "naver google yahoo"
--- []
-
-&gt; parse (string "google") "google yahoo"
--- [("google"," yahoo")]
-
-&gt; parse (string "google") "goo yahoo"
--- []
-</code></pre>
-
-<p>그러면, <code>digit</code> 나 <code>letter</code> 같은 파서에 대해 동일한 파서를 여러번 사용하려면 어떻게 해야 할까요? <code>string</code> 처럼 재귀를 이용해 매번 파서를 만들어야 할까요?</p>
-
-<p>그렇지 않습니다. <em>mutual recursion</em> 을 이용해서 파서를 받아 여러번 적용해 주는 <code>many</code> 란 파서를 만들어 봅시다.</p>
-
-<pre><code class="haskell">many :: Parser a -&gt; Parser [a]  
-many p = many1 +++ return []
-
-many1 :: parser a -&gt; Parser [a]  
-many1 p = do x &lt;- p  
-             xs &lt;- many p
-             return (x:xs)
-</code></pre>
-
-<p><code>many</code> 는 <code>p</code> 을 0번 이상, <code>many1</code> 은 적어도 1번 이상 <code>p</code> 를 적용합니다. </p>
-
-<p><code>many</code> 를 활용하면 변수의 이름도 파싱할 수 있습니다. 변수의 이름은 첫 글자가 소문자로, 나머지는 알파벳 혹은 숫자로 구성되어 있다고 하면 이를 위한 파서 <code>ident</code> 는</p>
-
-<pre><code class="haskell">ident :: Parser String  
-ident = do x &lt;- lower  
-           xs &lt;- many alphanum
-           return (x:xs)
-
-&gt; parse ident "left = 3"
--- [("left"," = 3")]
-</code></pre>
-
-<p>이제 뭔가 파서가 좀 쓸만해 보이죠? 자연수를 파싱하는 <code>nat</code> 와 스페이스를 파싱하는 <code>space</code> 를 만들어 보겠습니다.</p>
-
-<pre><code class="haskell">nat :: Parser Int  
-nat = do xs &lt;- many1 digit  
-         return (read xs)
-
-space :: Parser ()  
-space = do many (sat isSpace)  
-           return ()
-
-&gt; parse nat "123 abc"
--- [(123," abc")]
-
-&gt; parse space "   abc"
--- [((),"abc")]        
-</code></pre>
-
-<p>코드를 분석하는 파서를 만들때 스페이스를 주의해야 합니다. 예를 들어 <code>1+2</code> 와 <code>1 + 2</code> 는 같은 코드입니다. </p>
-
-<p>파서를 받아 앞 뒤로 붙은 스페이스를 제거하는 기능을 덧붙인 파서를 돌려주는 <code>token</code> 이란 함수를 만들어 봅시다. 그리고 나면 <code>token</code> 을 활용해 <code>identifier</code>, <code>natural</code>, <code>symbol</code> 을 만들겁니다.</p>
-
-<pre><code class="haskell">token :: Parser a -&gt; Parser a  
-token p = do space  
-             v &lt;- p
-             space
-             return v
-
-identifier :: Parser String  
-identifier = token ident
-
-natural :: Parser Int  
-natural = token nat
-
-symbol :: String -&gt; Parser String  
-symbol xs = token (string xs)  
-</code></pre>
-
-<p>이제 이걸 엮어서 숫자 리스트를 분석하는 파서를 만들어 봅시다.</p>
-
-<pre><code class="haskell">nlist :: Parser [Int]  
-nlist = do symbol "["  
-           n &lt;- natural
-           ns &lt;- many (do symbol ","
-                          natural)
-           symbol "]"
-           return (n:ns)
-
-
-&gt; parse nlist "[1, 2, 3]"
--- [([1,2,3],"")]
-
-&gt; parse nlist "[1, 2]"
--- [([1,2],"")]
-
-&gt; parse nlist "[1, 2"
--- []
-
-&gt; parse nlist "[1 2"
--- []
-
-&gt; parse nlist "[1,"
--- []
-</code></pre>
-
-<p><del>모나드의 세계란 참으로 놀랍죠?</del></p>
-
-<h3 id="arithmeticexpressions">Arithmetic Expressions</h3>
-
-<p>이제 단순한 텍스트가 아니라, 코드를 분석해 보죠. 우선 작은 수식을 분석하는 파서를 작성해 봅시다. 우리가 작성할 파서는 정수에 대한 <code>*</code> 과 <code>+</code> 만 처리할 수 있습니다. 간단히 문법을 만들어 보면</p>
-
-<pre><code class="haskell">expr   ::= expr + expr | term  
-term   ::= term * term | factor  
-factor ::= (expr) | nat  
-nat    ::= 0 | 1 | 2 | ...  
-</code></pre>
-
-<p>처음보면 난해할 수 있습니다. 이 그림과 비교해가며 보세요. 완벽히 일치하진 않지만 대략적인 설명을 해줍니다.</p>
-
-<p><img src='http://www.csee.umbc.edu/courses/331/fall11/hw/hw2/parsetree.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://www.csee.umbc.edu/' >http://www.csee.umbc.edu</a>)</p>
-
-<p>그런데, 실제로 <code>2 + 3 + 4</code> 에 적용해보면, <code>(2 + 3) + 4</code> 과 <code>2 + (3 + 4)</code> 두 가지 방법으로 해석될 수 있습니다. 따라서 모호함을 제거하기 위해</p>
-
-<pre><code class="haskell">expr   ::= term + expr | term  
-term   ::= factor * term | factor  
-factor ::= (expr) | nat  
-nat    ::= 0 | 1 | 2 | ...  
-</code></pre>
-
-<p>이제 <code>2 + 3 + 4</code> 는 확실히 <code>2 + (3 + 4)</code> 입니다. 괴상한 문법을 하스켈로 옮기기 위해 조금  더 다듬어 보도록 하지요.</p>
-
-<p><code>term + expr | term</code> 은 사실 <code>term + (expr | e)</code> 과 동일합니다. (<code>e</code> 는 <strong>비었음</strong> 을 의미) <code>factor * term | factor</code> 도 <code>factor + (term | e)</code> 구요. 따라서</p>
-
-<pre><code class="haskell">expr   ::= term + (expr | e)  
-term   ::= factor + (term | e)  
-factor ::= (expr) | nat  
-nat    ::= 0 | 1 | 2 | ...  
-</code></pre>
-
-<p>이제 하스켈 코드로 옮길겁니다. 우리는 트리를 만드는 대신 바로바로 계산할 겁니다. </p>
-
-<pre><code class="haskell">expr :: Parser Int  
-expr = do t &lt;- term  
-          do symbol "+"
-             e &lt;- expr
-             return (t + e)
-           +++ return t
-
-term :: Parser Int  
-term = do f &lt;- factor  
-          do symbol "*"
-             t &lt;- term
-             return (t * f)
-           +++ return f
-
-factor :: Parser Int  
-factor = do symbol "("  
-            e &lt;- expr
-            symbol ")"
-            return e
-          +++ natural          
-</code></pre>
-
-<p><code>return t</code> 도 하나의 파서고, <code>+++</code> 로 둘 중 올바르게 작동하는 파서만 택함으로써 문법에서의 <code>|</code> 를 구현했습니다.</p>
-
-<p>이제 파싱된 결과를 해석하는 <code>eval</code> 함수를 만들어 봅시다.</p>
-
-<pre><code class="haskell">eval :: String -&gt; Int  
-eval xs = case parse expr xs of  
-           [(n, [])] -&gt; n
-           [(_, out)] -&gt; error ("ununsed input: " ++ out)
-           [] -&gt; error ("invalid input: " ++ xs)
-
-
-&gt; eval "2 * 3 + 4"
--- 10
-
-&gt; eval "2 * (3 + 4)"
--- 14
-
-&gt; eval "2 * 3 +"
--- *** Exception: ununsed input: +
-
-&gt; eval "2 * 3 - 4"
--- *** Exception: ununsed input: - 4
-
-&gt; eval "-4"
--- *** Exception: invalid input: -4
-</code></pre>
-
-<h3 id="programmingwitheffects">Programming With Effects</h3>
-
-<p><a href='http://www.cs.nott.ac.uk/' ~gmh/monads">Programming With Effects</a> 는 <em>Programming in Haskell</em> 의 저자인 <strong>Graham Hutton</strong> 이 작성한 글입니다. 모나드에 대해 이보다 쉽고, 간결하게 설명한 글은 찾기 힘들죠. </p>
-
-<p><em>Programming with Effects</em> 를 참고하여 몇 가지 예제를 더 작성해 보면서 모나드에 더 익숙해져 봅시다.</p>
-
-<pre><code class="haskell">data Expr = Val Int | Div Expr Expr  
-</code></pre>
-
-<p>위와 같은 <code>Expr</code> 이 있다고 합시다. 평가하기 위해서 <code>eval</code> 함수를 만들고 실행해 봅시다.</p>
-
-<pre><code class="haskell">eval :: Expr -&gt; Int  
-eval (Val n) = n  
-eval (Div x y) = eval x `div` eval y
-
-&gt; eval (Val 3)
--- 3
-
-&gt; eval (Div (Val 3) (Val 4))
--- 0
-
-&gt; eval (Div (Val 8) (Val 4))
--- 2
-
-&gt; eval (Div (Val 8) (Val 0))
--- *** Exception: divide by zero
-</code></pre>
-
-<p><code>0</code> 으로 나누니 에러가 발생합니다. <code>expr</code> 이 <code>Val 0</code> 인지 아닌지를 판별할 필요가 있습니다. </p>
-
-<p>조금 더 고쳐보면</p>
-
-<pre><code class="haskell">import Prelude hiding (Maybe, Just, Nothing)
-
-data Expr = Val Int | Div Expr Expr  
-data Maybe a = Nothing | Just a
-
-safediv :: Int -&gt; Int -&gt; Maybe Int  
-safediv n m = if m == 0 then Nothing else Just (n `div` m)
-
-eval :: Expr -&gt; Maybe Int  
-eval (Val n) = Just n  
-eval (Div x y) = case eval x of  
-                  Nothing -&gt; Nothing
-                  Just n -&gt; case eval y of
-                             Nothing -&gt; Nothing
-                             Just m -&gt; safediv n m
-</code></pre>
-
-<p>너무 복잡합니다. <code>eval</code> 에서 <code>safediv</code> 에 인자를 넘기는 부분을 추상화하면</p>
-
-<pre><code class="haskell">seqn :: Maybe a -&gt; Maybe b -&gt; Maybe (a, b)  
-seqn _ Nothing = Nothing  
-seqn Nothing _ = Nothing  
-seqn (Just x) (Just y) = Just (x, y)
-
-apply :: (a -&gt; Maybe b) -&gt; Maybe a -&gt; Maybe b  
-apply f Nothing = Nothing  
-apply f (Just x) = f x
-
-eval :: Expr -&gt; Maybe Int  
-eval (Val n) = Just n  
-eval (Div x y) = apply f (eval x `seqn` eval y)  
-                 where f (n, m) = safediv n m
-</code></pre>
-
-<p>조금 더 간편해졌습니다. 그런데 만약 인자가 3개인 연산자에 대해 평가 방법을 정의한다면</p>
-
-<pre><code class="haskell">eval (Op x y z) =  
-  apply f (eval x `seqn` (eval y `seqn` eval z))
-  where f (a, (b, c)) =                 
-</code></pre>
-
-<p>괄호가 점점 중첩됩니다. 모든 것을 나중에 <code>seqn</code> 로 모든 결과를 모아 <code>f</code> 에서 처리하기 보다는 <code>Maybe a</code> 를 받아 <code>a -&gt; Maybe b</code> 를 바로 적용해 <code>Maybe b</code> 를 돌려주고, 이런식으로 순차적으로 처리하는 방식으로 바꿔봅시다.</p>
-
-<pre><code class="haskell">(&gt;&gt;=) :: Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b
-m &gt;&gt;= f = case m of  
-           Nothing -&gt; Nothing
-           Just x -&gt; f x
-
-eval :: Expr -&gt; Maybe Int  
-eval (Val x) = Just x  
-eval (Div x y) = eval x &gt;&gt;= \n -&gt;  
-                 eval y &gt;&gt;= \m -&gt; 
-                 safediv n m 
-</code></pre>
-
-<p>어디서 많이 보다싶은 식이죠? 바로 하스켈의 <code>do</code> 와 비슷합니다.</p>
-
-<p>하스켈에서 <code>Eq</code> 의 클래스의 정의는 이렇게 되어있습니다.</p>
-
-<pre><code class="haskell">class Eq a where  
-  (==) :: a -&gt; a -&gt; Bool
-  (/=) :: a -&gt; a -&gt; Bool
-
-  x /= y = not (x == y)
-</code></pre>
-
-<p>이 말은 <code>Eq</code> 클래스의 인스턴스가 되는 <code>a</code> 타입은 무조건 <code>==</code> 를 구현해야 한다는 뜻입니다. (<code>/=</code> 는 이미 구현되어 있는거 보이시죠?)</p>
-
-<p>마찬가지로 타입 <code>m</code> 으로 <em>parameterized</em> 된 <code>Monad</code> 클래스의 인스턴스 또한 다음의 두 함수를 구현해야 합니다.</p>
-
-<pre><code class="haskell">class Monad m where  
-  return :: a -&gt; m a
-  (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b
-</code></pre>
-
-<p>예를 들어 <code>Maybe</code> 같은 경우</p>
-
-<pre><code class="haskell">instance Monad Maybe where  
-  return x = Just x
-
-  Nothing &gt;&gt;= _ = Nothing
-  (Just x) &gt;&gt;= f = f x
-</code></pre>
-
-<h3 id="listmonad">List Monad</h3>
-
-<p><code>Maybe</code> 모나드를 잘 보면 <code>Nothing</code> 은 실패를, <code>Just x</code> 는 성공을 나타내는 연산으로 볼 수 있습니다. </p>
-
-<p>리스트 모나드는 이런 개념을 좀 더 일반화한 것입니다. 복수번의 성공이 있을 수 있죠.</p>
-
-<pre><code class="haskell">instance Monad [] where  
-  return x = [x]
-  xs &gt;&gt;= f = concat (map f xs)
-</code></pre>
-
-<p>이를 이용하면 <code>pairs</code> 와 같은 함수를 만들수 있습니다.</p>
-
-<pre><code class="haskell">pairs :: [a] -&gt; [b] -&gt; [(a, b])  
-pairs xs ys = do x &lt;- xs  
-                 y &lt;- ys
-                 return (x, y)
-
-&gt; pairs [1, 2, 3] [4, 5, 6]
--- [(1,4),(1,5),(1,6),(2,4),(2,5),(2,6),(3,4),(3,5),(3,6)]                 
-</code></pre>
-
-<p><em>list comprehension</em> 구문과 비슷합니다. 실제로 <code>do</code> 와 <em>list comprehension</em> 모두 리스트의 <code>&gt;&gt;=</code> 를 이용합니다.</p>
-
-<h3 id="statemonad">State Monad</h3>
-
-<p>한 상태(State) 에서 다른 상태로 변환시켜주는 <em>state transformer</em> 의 타입은 이렇게 정의할 수 있을 겁니다.</p>
-
-<pre><code class="haskell">type ST = State -&gt; State  
-</code></pre>
-
-<p>그리고 상태가 변하면서 어떤 정보를 남겼을때의 타입을 이렇게 만들어 볼 수 있겠죠.</p>
-
-<pre><code class="haskell">type ST a = State -&gt; (a, State)  
-</code></pre>
-
-<p>어디서 많이 본것 같죠? 맞습니다. 위에서 본 <code>Parser</code> 입니다. <code>String -&gt; (a, String)</code> 이였으니까, <code>State</code> 가 <code>String</code> 이었던 거죠.</p>
-
-<pre><code class="haskell">instance Monad ST where  
-  return x = \s -&gt; (x, s)
-
-  st &gt;&gt;= f = \s -&gt; let (x, s') = st s
-                   in f x s'
-</code></pre>
-
-<p>누차 언급했듯이 <code>&gt;&gt;=</code> 는 모나드(연산)간 연결입니다. <code>st</code> 에 <code>s</code> 를 넣은 결과를 <code>(x, s')</code> 라 하면 다시 <code>f x</code> 에 <code>s</code> 를 넣어 연결할 수 있다는 뜻이지요.</p>
-
-<p>위에서는 <code>type</code> 을 사용했지만 실제로 이 키워드를 사용하면 클래스의 인스턴스가 될 수 없습니다. <code>ST</code> 를 <em>monadic type</em> 클래스의 인스턴스로 만들려면 <code>data</code> 나 <code>newtype</code> 을 이용할 수 있습니다. <code>data</code> 의 경우엔 <em>dummy constructor</em> 가 필요합니다. 여기선 <code>S</code> 가 되겠습니다. <em>dummy constructor</em> 의 런타임 오버헤드를 피하려면 <em>newtype</em> 을 이용하면 됩니다.</p>
-
-<p>그리고 이 예제에서는 <em>dummy constructor</em> 를 제거하기 위해 <code>apply</code> 함수를 만들어서 이용하겠습니다. </p>
-
-<p><code>State</code> 는 정수로 표시할겁니다. </p>
-
-<pre><code class="haskell">type State = Int  
-data ST a = S (State -&gt; (a, State))
-
-apply :: ST a -&gt; State -&gt; (a, State)  
-apply (S f) x = f x
-
-instance Monad ST where  
-  return x = S (\s -&gt; (x, s))
-  st &gt;&gt;= f = S (\s -&gt; let (x, s') = apply st s in apply (f x) s')
-</code></pre>
-
-<p>이제 예제에서 활용할 간단한 이진트리를 정의해 봅시다. 이진트리의 <em>leaf</em> 는 <code>a</code> 타입의 값을 가지고 있습니다.</p>
-
-<pre><code class="haskell">data Tree = Leaf a | Node (Tree a) (Tree b)
-
--- example
-tree :: Tree Char  
-tree = Node (Node (Leaf 'a') (Leaf 'b')) (Leaf 'c')  
-</code></pre>
-
-<p>이제 <em>State</em> 를 받아 <code>+1</code> 을 더한 다음 <em>State</em> 를 돌려주는 <code>fresh</code> 를 만들어 봅시다.</p>
-
-<pre><code class="haskell">-- data ST a = S (State -&gt; (a, State))
-
-fresh :: ST Int  
-fresh = S (\n -&gt; (n, n + 1))  
-</code></pre>
-
-<p>즉 <code>fresh</code> 는 <em>State</em> 를 <code>1</code> 만큼 증가시키고 부가정보로 <em>current state</em> <code>n</code> 을 남깁니다. <code>fresh</code> 를 이용하면 위에서 만든 이진트리를 순회하면서 번호를 붙일 수 있습니다. 부가정보로 남는 <code>n</code> 을 <code>Leaf</code> 에다가 붙이는 것이죠. </p>
-
-<p>다음 <code>fresh</code> 의 입력은 이전 <code>fresh</code> 의 아웃풋인 <code>n + 1</code> 이기 때문에 서로 다른 두 노드가 같은 숫자를 가질 일은 없습니다.</p>
-
-<pre><code class="haskell">mlabel :: Tree a -&gt; ST (Tree (a, Int))  
-mlabel (Leaf x) = do n &lt;- fresh  
-                     return (Leaf (x, n))
-mlabel (Node l r) = do l' &lt;- mlabel l  
-                       r' &lt;- mlabel r
-                       return (Node l' r')
-
-label  :: Tree a -&gt; Tree (a,Int)  
-label t = fst (apply (mlabel t) 0)
-
-&gt; label tree
--- Node (Node (Leaf ('a',0)) (Leaf ('b',1))) (Leaf ('c',2))
-</code></pre>
-
-<h3 id="iomonad">IO Monad</h3>
-
-<p>하스켈에서 입출력은 IO 모나드를 이용합니다. 무슨말인고 하니, 다음과 같은 <em>axioms</em> 를 구현한 <strong>IO 모나드</strong> 에 대해</p>
-
-<pre><code class="haskell">return  :: a -&gt; IO a  
-(&gt;&gt;=)   :: IO a -&gt; (a -&gt; IO b) -&gt; IO b
-getChar :: IO Char  
-putChar :: Char -&gt; IO ()  
-</code></pre>
-
-<p>다음처럼 <code>do</code> 구문을 이용해서 프로그램을 작성할 수 있다는 뜻입니다.</p>
-
-<pre><code class="haskell">getLine :: IO String  
-getLine = do x &lt;- getChar  
-             if x == '\n' then
-               return []
-             else
-               do xs &lt;- getLine
-                  return (x:xs)
-</code></pre>
-
-<p>IO 모나드는 <em>State 모나드</em> 라 볼 수 있습니다. <code>IO a</code> 는 타입 <code>a</code> 의 부가정보를 만들면서 <em>State</em> 를 변화시키는 것으로요</p>
-
-<pre><code class="haskell">type World = ...  
-type IO a = World -&gt; (a, World)  
-</code></pre>
-
-<p>여기서 입/출력이 수행되는 것은 <em>action</em> 에 의해 <code>World</code> 가 변경되는 것이라 볼 수 있습니다.</p>
-
-<h3 id="derivedprimitives">Derived Primitives</h3>
-
-<p>다양한 종류의 모나드에 대해 적용할 수 있는 함수를 만들 수 있습니다. </p>
-
-<p><code>liftM</code> 는 모나드에 대한 <code>map</code> 을 <code>join</code> 은 <code>concat</code> 을, <code>&gt;&gt;</code> 는 첫 번째 결과값을 다 버리고 두번째만 취하는 함수입니다. 마지막으로 <code>sequence</code> 는 모나드 익스프레션 리스트를  하나의 모나드 익스프레션으로 바꾸고, 그 결과를 리스트로 돌려줍니다. 타입을 보시면 이해가 빠를겁니다.</p>
-
-<pre><code class="haskell">liftM :: Monad m =&gt; (a -&gt; b) -&gt; m a -&gt; m b  
-liftM f mx = do x &lt;- mx  
-             return (f x)
-
-join :: Monad m =&gt; m (m a) -&gt; m a  
-join mmx = do mx &lt;- mmx  
-              x &lt;- mx
-              return x
-
-(&gt;&gt;) :: Monad m =&gt; m a -&gt; m b -&gt; m b
-mx &gt;&gt; my = do _ &lt;- mx  
-              y &lt;- my
-              return y
-
-sequence :: Monad m =&gt; [m a] -&gt; m [a]  
-sequence (mx:mxs) = do x &lt;- mx  
-                       xs &lt;- sequence mxs
-                       return (x:xs)
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>DelftX FP 101x</strong> <br />
-(2) <a href='http://stackoverflow.com/questions/2607498/programming-in-haskell-error-in-sat-function' >error in sat function in "Programming in Haskell"</a> <br />
-(3) <a href='http://wiki.reeseo.net/Haskell/%EA%B3%B5%EC%8B%9D%20%EC%9E%85%EB%AC%B8%EC%84%9C%20%EB%B2%88%EC%97%AD%EB%AC%B8/9.%20%EB%AA%A8%EB%82%98%EB%93%9C%20' (Monads)">http://wiki.reeseo.net/Haskell</a> <br />
-(4) <a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' >Understanding Monads</a> <br />
-(5) <a href='http://www.csee.umbc.edu/courses/331/fall11/hw/hw2/' >http://www.csee.umbc.edu</a> <br />
-(6) <a href='http://www.cs.nott.ac.uk/' ~gmh/monads">Programming With Effects</a> by <em>Graham Hutton</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro4/</link><guid isPermaLink="false">1b0aad8b-73c3-4f02-9556-e14d8933cae4</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[functional parser]]></category><category><![CDATA[monad]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 19 Nov 2014 04:39:46 GMT</pubDate></item></channel></rss>
+(5) <a href='http://www4.stat.ncsu.edu/' ~gross/BIO560%20webpage/slides/Jan102013.pdf">www4.stat.ncsu.edu</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-2/</link><guid isPermaLink="false">32cb7752-47f2-4ad2-a5cf-176453e06a7c</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[simulation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 21 Nov 2014 15:43:27 GMT</pubDate></item></channel></rss>

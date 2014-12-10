@@ -15,7 +15,7 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Machine Learning, Week 9">
-  <meta name="twitter:description" content="이번시간엔 anomaly detection 과 recommender system 을 배운다. Anomaly Dectectoin (http://blog.csdn.net/linuxcumt1) (http://blog.csdn.net/linuxcumt1) anomaly 는 정상집단에서 떨어진 데이터라 보면 된다. 공장에서 품질이 떨어지는 제품을 골라낼때 사용할 수 있는데, 위 그림은 비행기 엔진 공장을 예로 들어 설명한다. 데이터로부터 p(x) 를 만들어, 검사할 데이터가">
+  <meta name="twitter:description" content="이번시간엔 anomaly detection 과 recommender system 을 배운다. Anomaly Dectection (http://blog.csdn.net/linuxcumt1) anomaly 는 정상집단에서 떨어진 데이터라 보면 된다. 공장에서 품질이 떨어지는 제품을 골라낼때 사용할 수 있는데, 위 그림은 비행기 엔진 공장을 예로 들어 설명한다. 데이터로부터 p(x) 를 만들어, 검사할 데이터가 threshold 를 넘는지 안넘는지 검사해">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/machine-learning-week-9/">
@@ -77,7 +77,7 @@
 <body>
 
   
-  <script src="../public/jquery.js?v=fa67f20722"></script>
+  <script src="../public/jquery.js?v=6f47017915"></script>
 
   
 
@@ -111,11 +111,9 @@
     <section>
       <p>이번시간엔 <em>anomaly detection</em> 과 <em>recommender system</em> 을 배운다.</p>
 
-<h3 id="anomalydectectoin">Anomaly Dectectoin</h3>
+<h3 id="anomalydectection">Anomaly Dectection</h3>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361236753_7590.png" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361236757_2205.png" alt="" /></p>
 
@@ -138,8 +136,6 @@
 <h3 id="gaussiandistribution">Gaussian Distribution</h3>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png" alt="" /></p>
 
@@ -196,8 +192,6 @@
 <h3 id="evaluatinganomalydetection">Evaluating Anomaly Detection</h3>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361236992_3664.png" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361236996_4034.png" alt="" /></p>
 
@@ -271,8 +265,6 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361245473_5316.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p>흔한 에러는 <code>p(x)</code> 가 <em>normal, anomalous</em> 에 대해서 모두 높은 경우인데, 슬라이드의 아래쪽에서 볼 수 있듯이 <code>x2</code> 라는 <em>feature</em> 를 만들어서 <em>anomaly</em> 를 발견하는 알고리즘을 만들 수 있다.</p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361246077_9679.png" alt="" /></p>
@@ -295,8 +287,6 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361258533_5107.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p>따라서 <code>p(x_1)p(x_2)...</code> 을 이용한 모델 말고 다른 방법으로 모델을 만들어야 한다. </p>
 
 <p><code>u</code> 를 <code>n</code> 벡터라 하고, <code>Sigma</code> 를 <code>u</code> 의 <em>convariance matrix</em> 라 하자. 그러면</p>
@@ -316,15 +306,9 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361259228_7695.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361259243_2967.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361259236_1052.png" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><br/></p>
 
@@ -340,13 +324,9 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361259728_6035.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><code>u, Sigma</code> 를 찾아 <code>p(x)</code> 를 만들고, 테스트 데이터에 대해 <code>p(x) &lt; e</code> 인지 비교한다.</p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/19/1361260300_1768.png" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>original model</em> 은 <em>multivariate model</em> 에서 각 <em>feature</em> 간 상관 관계가 없는 (독립), 즉 <em>covariance matrix</em> 가 <em>diagonal matrix</em> 인 경우다. (</p>
 
@@ -376,8 +356,6 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/20/1361324993_7588.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <h3 id="contentbasedrecommendations">Content Based Recommendations</h3>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/20/1361325560_4034.png" alt="" /></p>
@@ -387,8 +365,6 @@
 <p>위 슬라이드는 유저 <code>j</code> 로 부터 <code>theta^(j)</code> 를 얻어, <em>feature</em> <code>x</code> 와 곱함으로써 <em>linear regression</em> 문제로 변경했다.</p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/20/1361326084_2070.png" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><code>theta^(j)</code> 는 어떻게 훈련시킬까?</p>
 
@@ -428,8 +404,6 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/20/1361328443_4320.png" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><code>x^(i)</code> 를 얻기 위해, </p>
 
 <p><img src="http://latex.codecogs.com/gif.latex?min_%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%20%5Csum_%7Bi%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2" alt="" /></p>
@@ -446,8 +420,6 @@
 <p>따라서 최초의 랜덤 <code>theta</code> 에 대해 <code>x</code> 를 훈련하고, 다시 <code>theta</code> 를 훈련하고, 반복하면 된다. </p>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/22/1361495687_3476.jpg" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><code>theta</code> 와 <code>x</code> 를 반복해서 훈련시키는 것보다, 동시에 훈련시키는 것이 좀 더 효율적이다. 따라서</p>
 
@@ -475,11 +447,7 @@
 
 <p><img src="http://img.my.csdn.net/uploads/201302/22/1361496844_8727.jpg" alt="" /></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
-
 <p><img src="http://img.my.csdn.net/uploads/201302/22/1361496849_5252.jpg" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>collaborative filtering</em> 은 <em>low rank matrix factoriazation</em> 이라 부르기도 한다. 위 슬라이드처럼 <code>X, THETA</code> 를 구성하고 <code>X * THETA^T</code> 를 구하면 된다.</p>
 
@@ -492,8 +460,6 @@
 <h3 id="implementationdetailmeannormalization">Implementation Detail: Mean Normalization</h3>
 
 <p><img src="http://img.my.csdn.net/uploads/201302/22/1361497832_3797.jpg" alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>만약 위 슬라이드의 <code>Eve</code> 처럼 아무 영화도 평가 안한 사람에게는, <code>theta</code> 가 <code>0</code> 으로 나온다. (첫번째 <em>term</em> 이 <code>0</code> 이고, <em>regularization term</em> 은 <code>theta</code> 를 최소화한다.)</p>
 
