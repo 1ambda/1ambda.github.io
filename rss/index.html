@@ -1,5 +1,963 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 10 Dec 2014 06:53:36 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Process Mining, Week3]]></title><description><![CDATA[<h3 id="fourqualitycriteriaforprocessdiscovery">Four Quality Criteria For Process Discovery</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 16 Dec 2014 08:47:12 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Machine Learning, Week 10]]></title><description><![CDATA[<p>이번 주에는 <em>mini-batch, stochastic graident descent</em>, <em>online learning</em>, <em>map-reduce</em> 등의 개념에 대해 배운다.</p>
+
+<h3 id="learningwithlargedatasets">Learning With Large Datasets</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361499744_2717.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>왜 그렇게 큰 데이터 셋이 필요할까? 좋은 퍼포먼스를 얻기 위한 한 가지 방법이, <em>low bias</em> 알고리즘에 <em>massive data</em> 를 활용해 훈련하는 것이기 때문이다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361499747_9327.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>그러나 커다란 데이터 셋을 연산하기 위해서는 연산비용이 정말 비싸다. 예를 들어 
+<code>m = 100,000,000</code> 이라 하면 <em>gradient</em> 를 계산하기 위해 매번 <code>k * m</code> 의 연산이 필요하다.</p>
+
+<p>따라서 모든 데이터를 이용해 알고리즘을 훈련하기 보다는, 랜덤하게 고른 작은 서브셋에 대해서 알고리즘을 개발하고, 이후에 전체 데이터에 대해서 훈련하는 방법을 쓰기도 한다.</p>
+
+<p>그러면 <code>m</code> 이 작아도 알고리즘이 충분히 잘 훈련된다는 것을 어떻게 보장할까? 이는 <em>learning curve</em> 를 그려보면 된다.</p>
+
+<p>위 슬라이드에서 우측 하단은 <em>high bias</em> 알고리즘인데 <code>m</code> 을 많이 투입해도 별다른 이득이 없으므로 적당한 수준에서 <code>m</code> 을 정하면 된다.</p>
+
+<p>물론 만든 알고리즘이 우측처럼 <em>high bias</em> 로 나오면, 좀 더 자연스러운 생각은 <em>hidden layer</em> 를 추가한다거나, 새로운 <em>feature</em> 를 도입해서 <em>bias</em> 를 낮추는 것이다.</p>
+
+<p><br/></p>
+
+<h3 id="stochsticgradientdescent">Stochstic Gradient Descent</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361500908_4667.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>gradient descent</em> 를 이용하는 <em>linear regression</em> 에서</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?h_%5Ctheta%28x%29%20%3D%20%5Csum_%7Bj%3D0%7D%5En%20%5C%20%5Ctheta_jx_j'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?J_%7Btrain%7D%28%5Ctheta%29%20%3D%20%7B1%20%5Cover%202m%7D%20%5Csum_%7Bi%3D1%7D%5Em%5C%20%28h_%5Ctheta%28x%29%5E%7B%28i%29%7D%20-%20y%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
+
+<p>이미 언급했듯이 <em>batch gradient descent</em> 의 문제는, <code>m</code> 이 크면 <code>J</code> 의 연산이 어마어마하게 많아진다는 것이다. 매 스텝마다 <code>m</code> 을 읽고, 계산값을 저장하기 때문이다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361501694_2445.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>이 문제를 해결하기 위해 <em>stochastic gradient descent</em> 에서는 한 턴에 한 쌍의 <code>x, y</code> 에 대해서만 <em>gradient</em> 를 계산한다.</p>
+
+<p><em>batch gradient decsent</em> 에서는 한 턴마다 모든 모든 쌍의 <code>x, y</code> 에 대해     <em>gradient</em> (= <code>theta_j</code>) 를 계산 했었다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?cost%28%5Ctheta%2C%20%28x%5E%7B%28i%29%7D%2C%20y%5E%7B%28i%29%7D%29%29%20%3D%20%7B1%20%5Cover%202%7D%5C%20%28h_%5Ctheta%28x%5E%7B%28i%29%7D%20-%20y%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?J_%7Btrain%7D%28%5Ctheta%29%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%20cost%28%5Ctheta%2C%20%28x%5E%7B%28i%29%7D%2C%20y%5E%7B%28i%29%7D%29%29'  alt="" /></p>
+
+<p>라고 하면</p>
+
+<pre><code>- Randomly shuffle dataset  
+- Repeat for i = 1 to m
+  - 0_j := 0_j - a * derivative of cost(0, (xi, yi)
+</code></pre>
+
+<p>즉 <code>J_train</code> 의 미분 대신에 <code>cost</code> 의 미분값을 이용해서 연산을 줄이는 방법이다. 이 때 데이터가 이미 랜덤하게 섞였다는 점을 기억하자. 기하학적으로 보면</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361502040_9252.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>batch</em> 에서는 올바른 방향을 향해 가지만, 보폭이 좀 좁다. <em>stochastic</em> 은 이리 갔다, 저리 갔다 하지만 결국에는 최저점을 향해 간다. 다만 <em>global optima</em> 에 도달하지 못하고 그 근처에 도착할 수 있다.</p>
+
+<p><code>m</code> 이 굉장히 크면, <em>repeat</em> 부분의 루프를 1번만 돌려도 될 테지만, 작으면 여러번 돌려서 최대한 좋은 퍼포먼스를 내도록 훈련시킬 수 있다.</p>
+
+<p><br/></p>
+
+<h3 id="minbatchgradientdescent">Min-Batch Gradient Descent</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361503946_9357.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<ul>
+<li><strong>Batch gradient descent:</strong> Use all <code>m</code> examples in each iteration</li>
+<li><strong>Stochastic gradient descent:</strong> Use <code>1</code> example in each iteration</li>
+<li><strong>Batch gradient descent:</strong> Use <code>b</code> examples in each iteration</li>
+</ul>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_j%20%3A%3D%20%5Ctheta-j%20-%20%7B%5Calpha%20%5Cover%20b%7D%20%5Csum_%7Bk%20%3D%20i%7D%5E%7Bi%20&plus;%20b%20-%201%7D%20%28h_%5Ctheta%28x%5E%7B%28k%29%7D%29%20-%20y%5E%7B%28k%29%7D%29%20x_j%5E%7B%28k%29%7D'  alt="" /></p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361504164_4561.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><code>b</code> 는 보통 <code>2 - 100</code> 사이의 값이기 때문에 <em>batch</em> 보다 훨씬 빠르다. 또한 <em>vectorization</em> 을 이용하면 <em>gradient computation</em> 을 <em>partially parallelize</em> 할 수 있기 때문에 <em>stochastic</em> 보다 더 빠를 수 있다. <del>병렬화의 미덕</del></p>
+
+<p>단점으로는 추가적인 파라미터 <code>b</code> 가 필요하다는 점이다. 그러나 <em>vectorization</em> 을 잘 이용하면 더 빨라지므로 문제 없다.</p>
+
+<p><br/></p>
+
+<h3 id="stochasticgradientdescentconvergence">Stochastic Gradient Descent Convergence</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361519060_5993.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>convergence</em> 를 검증하는 방법으로, 훈련시키는 동안 얻은 <code>cost(0, (xi yi)</code> 평균값을 이용해 플롯을 그릴 수 있다.     </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361519096_5186.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>stochastic</em> 은 <em>global optimum</em> 을 찾아내지 못할 수도 있기 때문에, 그 주변에서 알짱거릴 수도 있다.</p>
+
+<p>더 많은 <code>m</code> 을 투입하면, 까끌거리는 선보다 좀 매끄러운 곡선을 얻을 수도 있다.</p>
+
+<p>때때로 알고리즘이 전혀 학습하지 못하는 것 처럼 보일수도 있는데, 그럴 경우 <code>m</code> 을 더 투입하면 좀 경사가 낮은 커브로 조금씩 <em>decreasing</em> 할 수 있다. 이를 보면 결국 훈련되긴 하는데, 평균값을 플랏으로 그리니 들쭉날쭉 해 보이는 것이다. (물론 학습하지 못하는 경우도 있다. <code>m</code> 을 더 늘려서 확인해 보자.)</p>
+
+<p><code>cost</code> 값이 증가한다면 더 작은 <em>learning late</em> 값을 이용하자.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361519184_7199.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>learning rate</em> 와 관련해서 위 슬라이드처럼 식을 만들면, 이터레이션 넘버가 천천히 증가하면서 <code>alpha</code> 가 감소해 <em>converge</em> 하는 결과를 얻을 수 있다.</p>
+
+<blockquote>
+  <p>If we reduce learning rate <code>alpha</code> (and run stochastic gradient descent long enough), it's possible that we may find a set of better parameters than with large <code>alpha</code></p>
+</blockquote>
+
+<p><br/></p>
+
+<h3 id="onlinelearning">Online Learning</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361520551_7175.jpg'  alt="" /></p>
+
+<p><em>online learning</em> 에서는 데이터를 얻어 <code>theta</code> 를 업데이트하는데 사용하고, 버린다. 큰 사이트라면 데이터가 지속적으로 들어오기 때문에, <em>trianing data</em> 를 볼 필요가 없다. 다시 말해 같은 데이터를 두번 이상 쓰지 않는다는 말이다.</p>
+
+<p>또 다른 장점으로는 사용자의 취향 변화를 빠르게 반영할 수 있다는 점이다.</p>
+
+<blockquote>
+  <p>Can adopt to changing user preference</p>
+</blockquote>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361520594_9988.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>product search</em> 에 <em>predicted CTR</em> 를 이용해, 검색어와 잘 매칭되는 상품을 결과로 돌려수 있다. 이때 매 검색마다 돌려주는 검색결과는 일종의 <em>training set</em> 이 된다.</p>
+
+<ul>
+<li>special offers</li>
+<li>customized selection</li>
+</ul>
+
+<p>등에도 사용할 수 있다.</p>
+
+<p><br/></p>
+
+<h3 id="mapreduceanddataparallelism">Map Reduce and Data Parallelism</h3>
+
+<p>데이터가 어마어마하게 많으면, 하나의 컴퓨터에서 머신러닝 알고리즘을 돌리기가 좀 힘들다. 어떻게 해결할까?</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361522176_1942.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/22/1361522180_7521.jpg'  alt="" /></p>
+
+<p>쉽게 말하면, 분산해서 처리할 수 있는 결과는 <code>map</code> 으로 해결하고, 이 결과들을 이용해 전체적인 결과는 <code>reduce</code> 가 계산한다. (실제로는 <code>reduce</code> 도 여러개 일 수 있다)</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361522184_5033.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<blockquote>
+  <p>Many lenaring algorithms can be expressed as computing sums of functions over the training set</p>
+</blockquote>
+
+<p>이렇기 때문에 <em>map-reduce</em> 가 큰 데이터셋에 대한 계산 처리 방법으로 좋은 해결책이 될 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/22/1361522188_9650.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>요즘엔 대부분의 프로세서가 멀티코어이기 때문에, 하나의 컴퓨터에서도 병렬화를 이용해 계산을 빠르게 해 낼 수 있다. 이 경우는 <em>network latency</em> 등에 대해 생각을 안해도 된다. 참고로 좋은 라이브러리들은 자동으로 연산을 병렬화한다. </p>
+
+<p><br/></p>
+
+<h3 id="photoocrandpipeline">Photo OCR and Pipeline</h3>
+
+<p>머신러닝 예제로 <em>Photo OCR</em> 을 알아보자.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361935712_3407.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><em>Photo OCR pipeline</em> 은 </p>
+
+<ul>
+<li>Image</li>
+<li>Text detection</li>
+<li>Character segmentation</li>
+<li>Character recognition</li>
+</ul>
+
+<p>의 단계를 거친다. 각 단계마다 머신러닝을 적용할 수 있다.</p>
+
+<p><br/></p>
+
+<h3 id="slidingwindows">Sliding Windows</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361936303_5994.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361936307_1350.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361937647_2708.jpg'  alt="" /></p>
+
+<p>텍스트나, 보행자등 특정 패턴을 검색하기 위해 이동하는 <em>rectangle</em> 의 단위를 <em>step-size, slide</em> 라 부른다. <em>slide</em> 의 사이즈를 변경해 가면서 패턴을 파악하는 방법을 <em>sliding window</em> 라 부른다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361937654_3410.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361937664_2466.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>텍스트를 인식해서, 근처의 텍스트와 묶는 <em>expansion</em> 작업을 하고 <em>character segmentation</em> 단계로 넘어간다. </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361937671_6657.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361937676_4874.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><br/></p>
+
+<h3 id="artificialdata">Artificial Data</h3>
+
+<p><em>low bias</em> 에 <em>massive data set</em> 을 조합하면 좋은 퍼포먼스가 나오긴 하는데, 어디서 커다란 데이터셋을 구할까? 작은 데이터 셋으로 커다란 데이터셋을 인위적으로 만들 수 있을까?</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361948453_3756.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361948457_9107.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361948462_1113.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>스케일링, 로테이션, 디스토션, 백그라운드 수정 등 다양한 조합을 통해 진짜처럼 보이는 <em>synthetic data</em> 를 얻을 수 있다. 마찬가지로, <em>speech recognition</em> 에도 <em>synthetic data</em> 를 만들어 퍼포먼스를 높일 수 있다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361948466_5032.jpg'  alt="" /></p>
+
+<ul>
+<li><em>synthetic data</em> 를 만들기 전에 <em>low bias classifier</em> 인지 확인하자.</li>
+<li>데이터를 조합하는데 들어가는 노력이 얼마나 들까 생각해보자</li>
+<li><em>crowd source</em> 를 고려하자. (e.g. Amazon Mechanical Turk)</li>
+</ul>
+
+<p>10 초당 1개의 <em>example</em> 을 수동으로 얻는다면, 10000 개를 얻는데 대략 3.5일의 시간이 걸린다.</p>
+
+<h3 id="ceilinganalysis">Ceiling Analysis</h3>
+
+<p>이전의 <em>Photo OCR</em> 문제에서 퍼포먼스를 높이려면 파이프라인의 각 단계 중 어느 부분에 가장 많은 노력을 들여야할까? </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361952527_2269.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p>각 단계에서 수동으로 정확도 100% 를 만들었을때와, 전체적인 정확도를 비교해서 어느 부분을 향상 시켰을때 가장 효율적일지를 파악할수 있다.  </p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361952535_9451.jpg'  alt="" />
+<img src='http://img.my.csdn.net/uploads/201302/27/1361952540_1528.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361952938_3624.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
+
+<p><strong>supervised learning</strong> 의 종류로</p>
+
+<ul>
+<li>linear regresison</li>
+<li>logistic regression</li>
+<li>neural networks</li>
+<li>SVM</li>
+</ul>
+
+<p><strong>unsupervised learning</strong> 으로</p>
+
+<ul>
+<li>k-means</li>
+<li>PCA</li>
+<li>anomaly detection</li>
+</ul>
+
+<p>또한 머신 러닝의 응용으로</p>
+
+<ul>
+<li>recommender system</li>
+<li>large scale ML</li>
+</ul>
+
+<p>마지막으로 머신러닝에 도움이 되는 주제로</p>
+
+<ul>
+<li>bias vs variance</li>
+<li>regularization</li>
+<li>evaluation technique</li>
+<li>learning curve</li>
+<li>error analysis</li>
+<li>ceiling analysis</li>
+</ul>
+
+<p>등을 배웠다.</p>
+
+<p><img src='http://img.my.csdn.net/uploads/201302/27/1361953290_6926.jpg'  alt="" /></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
+(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
+(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-10/</link><guid isPermaLink="false">5ffe5848-c50e-42ff-84ab-153d47f0c7d3</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine learning]]></category><category><![CDATA[stochastic gradient descent]]></category><category><![CDATA[mini-batch gradient descent]]></category><category><![CDATA[online learning]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 15 Dec 2014 03:14:52 GMT</pubDate></item><item><title><![CDATA[Radix Sort, Suffix Sort]]></title><description><![CDATA[<h3 id="stringsinjava">Strings in Java</h3>
+
+<p>문자열은 <em>Character (문자)</em> 의 나열이다. C 에서 하나의 캐릭터는 <em>8-bit</em> 인데, 자바의 경우에는 <em>16-bit unsigned integer</em> 로 표시한다. </p>
+
+<p>스트링의 길이를 얻기 위해 <code>length</code>, 인덱싱 하기 위해 <code>charAt</code>, 서브스트링을 얻기 위해 <code>substring</code> 의 메소드를 지원한다.</p>
+
+<pre><code class="java">public final class String implements Comparable&lt;String&gt; {
+
+  private char values;
+  private int offset; // index of first char in array
+  private int length;
+  private int hash; // cache of hashCode()
+
+  ...
+
+  public char charAt(int i) {
+    return value[i + offset];
+  }
+
+  ...
+}
+</code></pre>
+
+<p>자바에서 문자열은 <em>immutable</em> 이다. 더 정확히는 <em>immutable</em> <code>char []</code> <em>array</em> 라 보면 된다. 길이 정보를 가지고 있고 배열이기 때문에 <code>length</code>, <code>charAt</code>, <code>substring</code> 등의 연산은 <code>O(1)</code> 임을 보장한다.</p>
+
+<p><code>concat</code> 의 경우에는 새로운 문자열을 만들기 때문에 <code>O(N)</code> 이다. 메모리는 길이 <code>N</code> 의 문자열에 대해 <code>40 + 2N</code> 을 필요로 한다. 메모리를 아껴야 한다면 <em>byte, char</em> 을 이용할 수 있겠지만 여러 편리한 스트링의 메소드를 사용하지 못한다.</p>
+
+<h3 id="stringbuilderstringbuffer">StringBuilder, StringBuffer</h3>
+
+<p><code>StringBuilder</code> 는 <em>mutable</em> 이다. <code>char []</code> 배열을 <em>resizing</em> 하기 때문에 </p>
+
+<ul>
+<li><code>substirng</code> 의 경우 <code>O(N)</code> 이며 (새 스트링을 만든다)</li>
+<li><code>concat</code> 은 <code>O(1*)</code> 이다. (<code>*</code> 는 amortized)</li>
+</ul>
+
+<p><code>length, charAt</code> 은 마찬가지로 <code>O(1)</code> 이다. 참고로 <code>StringBuffer</code> 는 <code>StringBuilder</code> 와 비슷하지만 <em>thread safe</em> 하고, 느리다.</p>
+
+<p>그러면 <em>reverse</em> 를 구현 할 때 <code>String</code> 과 <code>StringBuilder</code> 중 어떤 것이 더 나을까?</p>
+
+<pre><code class="java">// 1. use String
+public static String reverse(String s) {  
+  String rev = "";
+  for (int i = s.length() - 1; i &gt;= 0; i--)
+    rev += s.charAt(i);
+
+  return rev;
+}  
+
+// 2. use StringBuilder
+public static String reverse(String s) {  
+  StringBuilder rev = new StringBuilder();
+  for (int i = s.length() - 1; i &gt;= 0; i--)
+    rev.append(s.charAt(i));
+
+  return rev.toString();
+}  
+</code></pre>
+
+<p><code>String</code> 을 이용한 버전은 <code>O(n^2)</code> 이고, <code>StringBuilder</code> 를 이용한 버전은 <code>O(n)</code> 이다. 이는 <code>+=</code> 와 <code>append</code> 의 차이 때문이다.</p>
+
+<p><em>suffixes</em> 문제도 생각해 보자.</p>
+
+<pre><code class="java">// input string
+a a c a a g t t a c a a g c
+
+// output
+c     // suffixes 14  
+g c   // suffixes 13  
+a g c // suffixes 12  
+...
+...
+a a c a a g t t a c a a g c // suffixes 0  
+</code></pre>
+
+<p><code>String</code> 과 <code>StringBuilder</code> 의 구현을 생각해 보면,</p>
+
+<pre><code class="java">// 1. use String 
+public static String[] suffixes(String s) {  
+  int N = s.length();
+  String[] suffixes = new String[N];
+
+  for (int i = 0; i &lt; N; i ++)
+    suffixes[i] = s.substring(i, N);
+
+  return suffixes;
+}
+
+// 2. use StringBuilder 
+public static String[] suffixes(String s) {  
+  int N = s.length;
+  stringBuilder sb = new StringBuilder(s);
+  String suffixes = new String
+
+  for (int i = 0; i &lt; N; i++)
+    suffixes[i] = s.substring(i, N);
+
+  return suffixes;
+}
+</code></pre>
+
+<p>당연히 <code>substring</code> 은 <code>String</code> 이 메모리 사용량이 훨씬 더 적을꺼라 생각했는데 Java7 Update6 부터 좀 달라졌다고 한다.</p>
+
+<p><em>Java 7 Update 6</em> 부터는 이전처럼 <code>String</code> 의 <code>char []</code> 가 공유되지 않는단다. 따라서 <code>String.substring</code> 은 더이상 <em>constance space, time</em> 이 아니라 <em>linear space, time</em> 의 비용이 든다. 자세한 내용은 <a href='http://java-performance.info/changes-to-string-java-1-7-0_06/' >Changes to String Java 1.7.0-06</a>로 </p>
+
+<p>따라서 알고리즘 <code>1</code> 은 <em>linear time, space</em> <code>2</code> 는 <em>quadratic time, space</em> 의 알고리즘이다.</p>
+
+<h4 id="longestcommonprefix">Longest common prefix</h4>
+
+<pre><code class="java">public static int lcp(String s, String t) {  
+  int n = Math.min(s.length(), t.length());
+
+  for (int i = 0; i &lt; n; i++)
+    if (s.charAt(i) != t.charAt(i))
+      return i;
+
+  return n;
+}
+</code></pre>
+
+<p>러닝타임은 <code>s, t</code> 중 더 긴 문자열의 길이에 비례한다. 일반적으로는 <em>sublinear time</em> 이다. 따라서 <code>compareTo</code> 메소드를 <em>sublinear time</em> 으로 구현할 수 있다.</p>
+
+<h4 id="radix">Radix</h4>
+
+<p>알파벳을 다양한 형태로 표현할 수 있는데, <em>binary</em> 의 경우엔 <code>01</code> 이 될 것이다. 이때의 <em>radix</em> 는 2 다. <em>DNS</em> 는 <code>ACTG</code> 로 표현할 수 있으므로 <code>R = 4</code> 다.</p>
+
+<h3 id="keyindexedcounting">Key-Indexed Counting</h3>
+
+<p>정렬 알고리즘의 성능을 정리해 보면,</p>
+
+<p>(1) <strong>Insertion Sort</strong></p>
+
+<ul>
+<li><strong>guarantee:</strong> <code>O(N^2 / 2)</code></li>
+<li><strong>random:</strong> <code>O(N^2 / 4)</code></li>
+<li><strong>extra space:</strong> <code>1</code></li>
+<li><strong>stable:</strong> <code>yes</code></li>
+</ul>
+
+<p>(2) <strong>Merge Sort</strong></p>
+
+<ul>
+<li><strong>guarantee:</strong> <code>O(N log N)</code></li>
+<li><strong>random:</strong> <code>O(N log N)</code></li>
+<li><strong>extra space:</strong> <code>N</code></li>
+<li><strong>stable:</strong> <code>yes</code></li>
+</ul>
+
+<p>(3) <strong>Quick Sort</strong></p>
+
+<ul>
+<li><strong>guarantee:</strong> <code>O(1.39 N log N)</code></li>
+<li><strong>random:</strong> <code>O(1.39 N log N)</code></li>
+<li><strong>extra space:</strong> <code>c log N</code></li>
+<li><strong>stable:</strong> <code>no</code></li>
+</ul>
+
+<p>(4) <strong>Heap Sort</strong></p>
+
+<ul>
+<li><strong>guarantee:</strong> <code>O(2 N log N)</code></li>
+<li><strong>random:</strong> <code>O(2 N log N)</code></li>
+<li><strong>extra space:</strong> <code>1 log N</code></li>
+<li><strong>stable:</strong> <code>no</code></li>
+</ul>
+
+<p>이런 <em>comparison based</em> 알고리즘은 <em>lower bound</em> 가 <code>N log N</code> 이다. 따라서 <em>key compare</em> 를 하지 않는다면 더 나은 성능을 낼 수 있다.</p>
+
+<p><em>key-indexed counting</em> 에서는 <em>key</em> 가 <code>0</code> 부터 <code>R - 1</code> 사이의 정수라 가정한다. 따라서 키를 배열의 인덱스로 사용할 수 있다.</p>
+
+<p>따라서 다음처럼 활용할 수 있다.</p>
+
+<ul>
+<li>Sort String by first letter</li>
+<li>Sort class roster by section</li>
+<li>Sort phone number by area code</li>
+<li>Subroutine in a sorting algorithm</li>
+</ul>
+
+<p>알고리즘을 보자. </p>
+
+<blockquote>
+  <p><strong>Goal:</strong> Sort an array <code>a[]</code> of <code>N</code> integers between <code>0</code> and <code>R - 1</code></p>
+</blockquote>
+
+<p>(1) Count frequencies of each letter using key as index <br />
+(2) Compute frequecy cumulates which specify destinations <br />
+(3) Access cumulates using key as index to move items <br />
+(4) Copy back into original array</p>
+
+<pre><code class="java">int N = a.length();  
+int[] count = new int[R + 1];
+
+// step (1)
+for (int i = 0; i &lt; N; i++)  
+  count[a[i] + 1]++;
+
+// step (2)
+for (int r = 0; r &lt; R; r++)  
+  count[r + 1] += count[r];
+
+// step (3)
+for (int i = 0; i &lt; N; i++)  
+  aux[count[a[i]]++] = a[i];
+
+// step (4)
+for (int i = 0; i &lt; N; i++)  
+  a[i] = aux[i];
+</code></pre>
+
+<ul>
+<li><code>~11N + 4R</code> <em>array access</em></li>
+<li><code>N + R</code> <em>extra space</em></li>
+</ul>
+
+<p><em>key-indexed counting</em> 은 <em>linear time, stable sorting</em> 이다.</p>
+
+<h4 id="stable">Stable</h4>
+
+<p>알고리즘이 <em>stable</em> 하다는 건 무슨 뜻일까? </p>
+
+<blockquote>
+  <p>A stable sort is one which preserves the original order of the input set while The unstable algorithm exhibits undefined behaviour when two elements are equal, it is perfectly possible that the order is sometimes preserved.</p>
+</blockquote>
+
+<p><img src='http://i.stack.imgur.com/hn6Rg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://programmers.stackexchange.com/' >http://programmers.stackexchange.com/</a>)</p>
+
+<h3 id="lsdradixsort">LSD Radix Sort</h3>
+
+<p><em>least-significant-digit-first string(radix) sort</em></p>
+
+<p>아이디어는 간단하다. 우측부터 좌측으로 한 문자씩 <em>key-indexed couting</em> 을 하면 된다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTjVFR1ozVWpNaVJHTzVZV0x4QXpZNDBpWjNJMk10WW1ZeEVUTHlZak5pVkdOMWN6TDJnRE14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<blockquote>
+  <p>Which of the following is the most efficient algorithm to sort 1 million 32-bit integers?</p>
+</blockquote>
+
+<p>답은 <em>radix sort</em></p>
+
+<h4 id="correctness">Correctness</h4>
+
+<blockquote>
+  <p>LSD sorts fixe-length strins in ascending order</p>
+</blockquote>
+
+<p>가설에 의해 <code>i</code> 번째 pass 후에는 뒤 부터 <code>i</code> 개의 문자들이 정렬되어 있다.  이 때 비교하려는 <code>i+1</code> 번째의 두 문자가 다르다면, <em>key-indexed sort</em> 가 두 개의 문자열을 정렬한다. 이 때 <em>key-indexed sort</em> 는 <em>stable</em> 하므로 이전 까지의 정렬했던 순서를 보존한다.</p>
+
+<h4 id="implementation">Implementation</h4>
+
+<pre><code class="java">    // W: fixed-length of strings
+    public static void LSDsort(String[] a, int W) {
+        int N = a.length;
+        int R = 256;
+        String[] aux = new String[N];
+
+        // key indexed counting for each digit from right to left
+        for (int d = W - 1; d &gt;= 0; d--) {
+            int[] count = new int[R + 1];
+
+            // count frequencies
+            for (int i = 0; i &lt; N; i++) 
+                count[a[i].charAt(d) + 1]++;
+
+            for (int r = 0; r &lt; R; r++)     
+                count[r + 1] += count[r];
+
+            for (int i = 0; i &lt; N; i++)
+                aux[count[a[i].charAt(d)]++] = a[i];
+
+            for (int i = 0; i &lt; N; i++)
+                a[i] = aux[i];
+        }
+    }
+</code></pre>
+
+<p><em>LSD sort</em> 퍼포먼스는 <code>2WN</code>, 랜덤하게 <code>2WN</code>, 공간은 <code>N + R</code>, <em>stable</em> 하다. 참고로, <code>4byte Int</code> 에 대해 <code>1Byte</code> 씩 <em>LSD sort</em> 를 적용하면 <code>Array.sort</code> 보다 2~3배 더 빠르다고 한다. <a href='http://algs4.cs.princeton.edu/51radix/LSD.java.html' >코드는 여기로</a></p>
+
+<h3 id="msdradixsort">MSD Radix Sort</h3>
+
+<p><em>most significant-digit-first string sort</em></p>
+
+<ul>
+<li>Partition array into <code>R</code> pieces according to first character</li>
+<li>Recursively sort all strings that start with each character</li>
+</ul>
+
+<p>좌측 문자열 부터 시작하고, 현재 문자가 같은 문자열들 끼리 모아, 나머지 부분을 <em>sub-array</em> 취급해서 재귀적으로 정렬한다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWjNNV001VW1ZaWhETTRjVExoTldONDBpTTJVMk10RVdaeEFUTHpVRFptZHpNaEYyTDVFVE14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<p><em>LSD</em> 는 다루지 못하는 <em>variable-length string</em> 을 정렬할 수 있다.</p>
+
+<h4 id="implementation">Implementation</h4>
+
+<p>참고로 자바에서는 <code>\0</code> 이 없다. 그래서 문자열의 길이를 넘어서는 인덱스에 대해 <code>-1</code> 을 돌려주는 <code>charAt</code> 을 만들자. 추가적인 문자가 없다면, 정렬된 것으로 보고 끝내면 된다. </p>
+
+<pre><code class="java">private static int charAt(String s, int d) {  
+  if (d &lt; s.length()) return s.charAt(d);
+  else return -1;
+}
+
+    private static void msdSort(String[] a, String[] aux, int l, int h, int d) {
+
+        if (h &lt;= l) return;
+
+        int R = 256;
+        int[] count = new int[R + 2];
+
+        // count frequencies
+        for (int i = l; i &lt;= h; i++) {
+            int c = charAt(a[i], d);
+            count[c + 2]++;
+        }
+
+        // accumulate
+        for (int r = 0; r &lt; R + 1; r++)
+            count[r + 1] += count[r];
+
+        // sort
+        for (int i = l; i &lt;= h; i++) {
+            int c = charAt(a[i], d);
+            aux[count[c + 1]++] = a[i];
+        }
+
+        // copy
+        for (int i = l; i &lt;= h; i++)
+            a[i] = aux[i - l];
+
+        // solve sub-arrays
+        for (int r = 0; r &lt; R; r++)
+            msdSort(a, aux, l + count[r], l + count[r + 1] - 1, d + 1);
+    }
+
+    public static void MSDsort(String[] a) {
+        String[] aux = new String[a.length];
+        msdSort(a, aux, 0, a.length - 1, 0);
+    }
+</code></pre>
+
+<p>그런데 이 구현은 몇 가지 문제가 있다.</p>
+
+<p>(1) 매 재귀마다 <code>count</code> 배열을 만들고, 그 크기는 <code>R</code> 에 비례하기 때문에 <code>~11R + N</code> 의 성능을 갖는 <em>key-indexed counting</em> 연산이 <em>small subarray</em> 가 많아지면서 급격히 느려진다. </p>
+
+<p>(2) 조그마한 <em>sub-array</em> 에 대해 많은 수의 재귀가 호출된다.</p>
+
+<p>이 문제를 해결하기 위해 적은 수의 <em>small array</em> 에 대해 <em>insertion sort</em> 를 사용하자. </p>
+
+<pre><code class="java">    // substring comparison is much faster than charAt comparison
+    private static boolean less(String v, String w, int d) {
+        return v.substring(d).compareTo(w.substring(d)) &lt; 0;
+    }
+
+    private static void isort(String[] a, String[] aux, int l, int h, int d) {
+        // insertion sort
+        for (int i = l; i &lt;= h; i++)
+            for (int j = i; j &gt; l &amp;&amp; less(a[j], a[j - 1], d); j--) {
+                // swap a[j - 1], a[j]
+                String temp = a[j - 1];
+                a[j - 1] = a[j];
+                a[j] = temp;
+            }
+
+    }
+
+    private static void msdSort(String[] a, String[] aux, int l, int h, int d) {
+
+        int CUTOFF = 15;
+        if (h &lt;= l + CUTOFF) {
+            isort(a, aux, l, h, d);
+            return;
+        }
+    ...
+    ...
+    ...
+</code></pre>
+
+<h4 id="performance">Performance</h4>
+
+<p><em>MSD string sort</em> 는 필요한만큼 <em>character</em> 를 확인하기 때문에, 데이터에 따라 성능이 다르다. 그러나 대부분의 경우 <em>sublinear</em> 하고, 운이 나쁜 경우 <em>linear</em> 의 성능이 나온다. <em>duplicated key</em> 가 있는 경우에는 <em>nearly linear</em> 다.</p>
+
+<p>재밌는 사실은 <code>compareTo</code> 를 이용하지만 <em>sublinear</em> 하게 성능이 나올 수도 있다는 점이다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTWhkVFk0VXpZa2RqTmtaV0x3Z2paNTBpTTNZek10VWpNMFVUTGxSMlkxY1Raamx6TDRJVE14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<p><em>MSD string sort</em> 는 매 재귀마다 새로운 <code>count</code> 배열을 만들기 때문에 <code>N + DR</code> 만큼의 메모리가 필요하다., (<code>D</code> 는 재귀 호출의 수)</p>
+
+<p><em>LSD</em> 에 비해서 가변길이 문자열을 정렬할 수 있고, <em>random</em> 데이터에 대해 <code>N log_R N</code> 의 성능을 보여준다. <em>LSD</em> 와 마찬가지로 <em>stable</em> 하다.</p>
+
+<h4 id="msdvsquick">MSD vs quick</h4>
+
+<p><em>MSD string sort</em> 는 <em>random access</em> 를 하기 때문에 <em>cache inefficient</em> 할 수 있고, <em>quicksort</em> 에 비해 <em>inner loop</em> 에 많은 명령어가 있다. 게다가 <code>count, aux</code> 등 추가적인 메모리가 필요하다.</p>
+
+<p>반면 <em>quicksort</em> 는 <em>linear</em> 하지 않다. 그리고, 많은 수의 문자들을 다시 비교해야한다. 이 두가지를 합친 방법은 없을까?</p>
+
+<h3 id="3wayradixquicksort">3-way Radix Quicksort</h3>
+
+<p><del>무려 교수님이 만드신 알고리즘 1997년에 이 수업에서 만들었다고 함</del></p>
+
+<p>기본적인 아이디어는</p>
+
+<blockquote>
+  <p>Do 3-way partitioning on the <code>d</code> th character</p>
+</blockquote>
+
+<ul>
+<li>Less overhead than <code>R</code>-way partitioning in <em>MSD string sort</em></li>
+<li>Does not re-examine characters equal to the partitioning char (but does re-examine characters not equal to the partitioning char)</li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTWhKVFpoTkRPMk1qWTRRV0xsTm1ZaTFDTjVFek10SVdNaVZUTHdZVFlsVldPbVoyTDBNVE14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<p>즉, 첫 문자열의 첫 번째 문자를 기준으로, 이것보다 큰 것, 작은 것, 같은 것 3개로 파티셔닝하면서 정렬하는 알고리즘이다. </p>
+
+<h4 id="implementation">Implementation</h4>
+
+<p>구현은 퀵소트랑 상당히 유사하다.</p>
+
+<pre><code class="java">    // 3-Way Quicksort
+    public static void Quicksort3way(String[] a) {
+        qsort3way(a, 0, a.length - 1, 0);
+    }
+
+    // helper method for 3 way quicksort
+    private static void swap(String[] a, int i, int j) {
+        String temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+    private static void qsort3way(String[] a, int l, int h, int d) {
+        if (h &lt;= l) return;
+
+        int lt = l, gt = h;
+        int v = charAt(a[l], d);
+        int i = l + 1;
+
+        // partition
+        while (i &lt;= gt) {
+            int t = charAt(a[i], d);
+
+            if      (t &lt; v) swap(a, lt++, i++);
+            else if (t &gt; v) swap(a, i, gt--);
+            else            i++;
+        }
+        // a[lo..lt-1] &lt; v = a[lt..gt] &lt; a[gt+1..hi]
+        qsort3way(a, l, lt - 1, d);
+        if (v &gt;= 0) qsort3way(a, lt, gt, d + 1);
+        qsort3way(a, gt + 1, h, d);
+    }
+</code></pre>
+
+<p><em>MSD string sort</em> 와 마찬가지로 <code>CUTOFF</code> 를 이용해서 작은 <em>sub-array</em> 를 <em>insetion sort</em> 로 정렬할 수 있다.</p>
+
+<h4 id="3wayquicksortvsstandardquicksor">3-way quicksort vs standard quicksor</h4>
+
+<p>일반적으로 <em>quicksort</em> 는 <code>compareTo</code> 를 기준으로 <code>~ 2N lnN</code> 의 성능을 보여주고, <em>long common prefixes</em> 가 있는 경우에 상당히 계산 비용이 비싸다. 이는 비교했던 문자열을 또 비교할 수 있기 때문이다.</p>
+
+<p>그러나 <em>3-way string quicksort</em> 는 <code>charAt</code> 을 기준으로 <code>~ 2N lnN</code> 의 성능을 보인다. 그리고 같은 파티션에 대해 <code>d + 1</code> 로 재귀호출하기 때문에 같은 파티션 내에서는 비교했던 문자를 다시 계산하지 않는다. <del>갓 교수님</del></p>
+
+<h4 id="3wayquicksortvsmsdsort">3-way quicksort vs MSD sort</h4>
+
+<p>(1) <strong>MSD string sort</strong> 는</p>
+
+<ul>
+<li>같은 <code>count</code> 값을 가진 문자열에 뜬금없이 접근하기 때문에 <em>cache-inefficient</em></li>
+<li>재귀마다 <code>count[]</code> 를 새로 만들어 너무 많은 메모리를 사용</li>
+<li><code>count[], aux[]</code> 를 초기화하는데 너무 많은 오버헤드</li>
+</ul>
+
+<p>(2) <strong>3-way string quicksort</strong> 는</p>
+
+<ul>
+<li>더 짧은 <em>inner loop</em></li>
+<li><code>while</code> 을 이용해 순차적으로 접근하므로 <em>cache-friendly</em></li>
+<li><em>in-place</em></li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTTTJFV09tZFRPakoyTTVjVEwxWW1ZNDBDTWtoek10UVRZMUlXTDVVRE8wWUdNd1UyTHhRVE14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<h3 id="suffixarrays">Suffix Arrays</h3>
+
+<p><em>keyword-in-context search</em> 란</p>
+
+<blockquote>
+  <p>Given a text of <code>N</code> chars, preprocess i to enable fast substring search (find all occurrences of query string ocntext)</p>
+</blockquote>
+
+<p>쉽게 말해서 구글 검색창에 <em>world</em> 라고 치면 <em>hello world</em> 등이 자동으로 검색목록에 나오는것.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmtkVFozRW1ZbFZtTmlGVEx6RVRPNDBTWTFZek10UVRNeFFXTGlKVFpqbERNekkyTHpRVE14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<p><em>suffixes</em> 를 만든다음에 문자열 정렬을 해서 중복된 <em>suffix</em> 가 있는지 보면 된다. <code>String</code> 의 경우 <code>substring</code> 을 얻는데 <code>O(1)</code> 이이므로 <em>suffixes</em> 를 만드는데 <code>O(n)</code> 이다. </p>
+
+<p>그 후에 <em>binary search</em> 를 하면, 일치하는 문자열을 검색할 수 있다.</p>
+
+<p>(1) <strong>Preprocess:</strong> <em>suffix sort</em> the text. <br />
+(2) <strong>Query:</strong> <em>binary search</em> for query; scan until mismatch.  </p>
+
+<h3 id="longestrepeatedsubstring">Longest repeated substring</h3>
+
+<blockquote>
+  <p>Gien a string of <code>N</code> characters, find the longest repeated substring.</p>
+</blockquote>
+
+<p>유전자 지도 <code>a g t t a a t c g ~</code> 에서 일치하는 가장 긴 유전자 문자열을 찾아내는데 활용할 수 있다.</p>
+
+<p><em>data compression</em> 에도 활용 가능하다. 자주 반복되는 긴 패턴을 발견해 짧게 줄이면 용량을 상당히 줄일 수 있다.</p>
+
+<p>악보를 이용해서 음악을 <em>visualization</em> 하는데도 활용할 수 있다.</p>
+
+<h4 id="bruteforce">Brute Force</h4>
+
+<p>문자열의 길이가 <code>N</code>, 가장 긴 패턴의 길이가 <code>D</code> 라면 <em>worst case</em> <code>DN^2</code> 이다. </p>
+
+<h4 id="sortingsolution">Sorting solution</h4>
+
+<p>(1) form suffixes (<code>O(n)</code>) <br />
+(2) sort suffixes (<code>O(n log n)</code>) <br />
+(3) compute longest prefix between adjacent suffixes (<code>O(kn)</code>)  </p>
+
+<pre><code class="java">    // longrest common prefix
+    public static String lcp(String v, String w) {
+
+        int n = Math.min(v.length(), w.length());
+
+        for (int i = 0; i &lt; n; i++) {
+            if (v.charAt(i) != w.charAt(i)) return v.substring(0, i);
+        }
+
+        return v.substring(0, n);
+    }
+
+    // longest repeated substring
+    public static String lrs(String s) {
+
+        int N = s.length();
+        String[] suffixes = new String[N];
+
+        // form suffixes
+        for(int i = 0; i &lt; N; i++)
+            suffixes[i] = s.substring(i, N);
+
+        // sort
+        Arrays.sort(suffixes);
+
+        // find longest repeated substring using lcp
+        String lrs = "";
+
+        for (int i = 0; i &lt; N - 1; i++) {
+            String x = lcp(suffixes[i], suffixes[i + 1]);
+
+            if (x.length() &gt; lrs.length()) lrs = x;
+        }
+
+        return lrs;
+    }
+</code></pre>
+
+<p><em>suffix soring</em> 에 <em>3-way string quicksort</em> 를 이용하면 어마어마하게 빠르다.</p>
+
+<p>한 가지 문제는 <em>lrs</em> 의 길이가 길어지면 <em>suffix sort</em> 의 성능이 급격히 떨어진다. <code>D</code> 를 <em>lrs</em> 의 길이라 했을때 적어도 <code>1 + 2 + ... + D</code> 의  문자열 비교가 필요하다. (자신과 자신의 서브스트링과의 비교)</p>
+
+<p>따라서 <code>D</code> 가 길면 길수록 성능이 나빠진다. </p>
+
+<blockquote>
+  <p>Quadratic (or worse) in <code>D</code> for <em>LRS</em></p>
+</blockquote>
+
+<p>성능이 떨어지는 입력 데이터로, 반복되는 인풋이 있다. <code>twinstwins</code> 를 예로 들면</p>
+
+<pre><code>ins  
+instwins  
+ns  
+nstwins  
+s  
+stwins  
+twins  
+twinstwins  
+wins  
+winstwins  
+</code></pre>
+
+<p>그러면 더 빠른 알고리즘이 없을까? <em>Manber-Myers algorithm</em> 이란게 있는데, 요건 <em>linearithmic</em></p>
+
+<p><em>suffix trees</em> 란 것도 있다. 이건 <em>linear</em></p>
+
+<h4 id="manbermyersmsdalgorithm">Manber-Myers MSD Algorithm</h4>
+
+<p>(1) sort on first character using key-indexed counting sort <br />
+(2) given array of suffixes sorted on first <code>2^(i-1)</code> characters (phase <code>i</code>)  </p>
+
+<p><em>worse-case</em> 퍼포먼스는 <code>N lgN</code></p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWmtCVE9rZFRaMVFEWjVBVEwwY2paaTFTTjBjek10Z0RabU5XTGlSRE9qUkRNalIyTDNNak14OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(www.programering.com)</p>
+
+<p><em>key-indexed counting</em> 을 이용해 먼저 하나의 문자를 정렬하고, 그 이후에는 <code>2, 4, 6, 8, ...,</code> 개씩 정렬해 나간다. 이 과정에서 <code>inverse[]</code> 를 이용한 <em>index sort</em> 란걸 하는데, 아이디어는 이렇다.</p>
+
+<p><em>suffixes</em> 에서 비교하려는 두 문자열의 뒷부분의 일부는 이미 이전 단계에 정렬 되었을 수 있다. (슬라이드의 빨간색 부분) 따라서 이미 정렬해 된 순서 <code>inverse[]</code> 를 이용해서 현재 비교하려는 두 문자열의 순서를 정할 수 있다. </p>
+
+<h4 id="summary">Summary</h4>
+
+<ul>
+<li><em>linear-time</em> 문자열 정렬을 할 수 있다.</li>
+</ul>
+
+<p>왜냐하면 <em>key comparison</em> 이 아니라 <em>character comparison</em> 으로 해낼 수 있기 때문</p>
+
+<ul>
+<li><em>sublinear-time</em> 정렬도 만들 수 있다.</li>
+</ul>
+
+<p>모든 문자열을 비교할 필요가 없기 때문 (Input size is amount of data in keys, not number of keys.)</p>
+
+<ul>
+<li><em>3-way string quicksort is asymptotically optimal</em></li>
+</ul>
+
+<p><code>1.39 N lgN</code> 의 문자열 비교, <em>random data</em> 에 대해. 그러나 <em>suffix sort</em> 에 대해 <code>N lgN</code> 을 보장하려면(<em>worst case</em>) <em>Manber-Myer</em> 를 사용해야 한다.</p>
+
+<ul>
+<li>Long strings are rarely random in practice</li>
+</ul>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
+(2) <a href='http://programmers.stackexchange.com/questions/247440/what-does-it-mean-for-a-sorting-algorithm-to-be-stable' >What is a stable sorting algorithm?</a> <br />
+(3) <a href='http://www.programering.com/a/MTOyYjNwATM.html' >www.programering.com</a></p>]]></description><link>http://1ambda.github.io/radix-sort-suffix-sort/</link><guid isPermaLink="false">e649e1bf-a946-4414-a54a-e3f1be9c1d66</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[radix sort]]></category><category><![CDATA[String]]></category><category><![CDATA[3 way radix]]></category><category><![CDATA[MSD]]></category><category><![CDATA[LSD]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 11 Dec 2014 06:59:33 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week3]]></title><description><![CDATA[<h3 id="fourqualitycriteriaforprocessdiscovery">Four Quality Criteria For Process Discovery</h3>
 
 <p><em>real process</em> 로 부터 <em>event log</em> 를 얻고 이것으로 <em>process model</em> 을 만든다. </p>
 
@@ -5628,624 +6586,4 @@ if a &lt; i, recurse z, (i - a - 1)'th statistic
 (5) <a href='http://commons.wikimedia.org/wiki/File:Binary_search_tree_delete_3.svg' >http://commons.wikimedia.org/</a> <br />
 (6) <a href='http://www.tcs.auckland.ac.nz/' ~georgy/teaching/1998/98-231FC/231-hand/test231.html">http://www.tcs.auckland.ac.nz/~georgy/</a> <br />
 (7) <a href='http://en.wikipedia.org/wiki/Red%E2%80%93black_tree' >Wiki - Red-black tree</a> <br />
-(8) <a href='http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png' >Wiki - Tree rotation</a></p>]]></description><link>http://1ambda.github.io/dijkstra-heap-balanced-tree/</link><guid isPermaLink="false">8d4c00c5-78fc-4a4d-97a1-cf0829c53396</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[heap]]></category><category><![CDATA[dijkstra]]></category><category><![CDATA[red-black tree]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 23 Nov 2014 14:23:37 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 7]]></title><description><![CDATA[<p>이번시간에 <em>Support Vector Machine, SVM</em> 을 배운다.</p>
-
-<h3 id="optimizationobjective">Optimization Objective</h3>
-
-<p>먼저 직관을 얻기 위해 <em>logistic regression</em> 의 <em>sigmoid function</em> 을 좀 보자.</p>
-
-<p><img src='http://my.csdn.net/uploads/201208/09/1344525027_7041.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><code>y = 1</code> 이면 <code>0^Tx &gt;&gt; 0</code> 이어야 <code>h(x)</code> 가 <code>1</code> 에 가까워 진다. </p>
-
-<p>이제 <em>cost function</em> 에 <code>h(x)</code> 를 넣자. 그리고 <code>m = 1</code> 인 트레이닝 셋에 대해서 보면</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360809698_1212.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>파란 그래프에서 볼 수 있듯이 <code>y = 1</code> 일때 <code>0^Tx &gt;&gt; 0</code> 이면 <em>cost</em> 가 상당히 낮아지는걸 볼 수 있다. 이 그래프를 좀 단순화 해서 <em>자주색</em> 그래프를 만들어 보자. 두개의 직선으로 만들었는데, 이 <em>cost function</em> 을 계산하면 상당히 근접한 값을 얻을 수 있고, 동시에 그래프가 단순해져 <em>computational advantage</em> 를 얻을 수 있다.</p>
-
-<p>각각 좌측, 우측에 있는 <em>cost function</em> 을 이렇게 쓴다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5C%20%5C%5Ccost_1%28z%29%5C%20%28y%20%3D%201%29%20%5C%5Ccost_0%28z%29%5C%20%28y%20%3D%200%29'  alt="" /></p>
-
-<p><em>logistic regression</em> 식 에서 <code>-log h(x)</code> 를 <code>cost_1(z)</code> 로, <code>-log(1 - h(x)))</code> 를 <code>cost_0(z)</code> 로 바꾸면 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%20m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7D%28-log%5C%20h_%5Ctheta%28x%5E%7B%28i%29%7D%29%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28-log%281%5C%20-%5C%20h_%7B%5Ctheta%7D%28x%5E%7B%28i%29%7D%29%29%29%5D%5C%20&plus;%20%5C%20%7B%5Clambda%20%5Cover%202m%7D%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2%20%5C%5Ccost_1%28z%29%5C%20%28y%20%3D%201%29%20%5C%5Ccost_0%28z%29%5C%20%28y%20%3D%200%29'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5C%5Ccost_1%28z%29%5C%20%28y%20%3D%201%29%20%5C%5Ccost_0%28z%29%5C%20%28y%20%3D%200%29%20%5C%5C%20min_%5Ctheta%20%5C%20%7B1%20%5Cover%20m%7D%20%5B%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7Dcost_1%28%5Ctheta%5ETx%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28cost_0%28%5Ctheta%5ETx%29%29%5D%5C%20&plus;%20%5C%20%7B%5Clambda%20%5Cover%202m%7D%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
-
-<p>이 때, <code>1/m</code> 은 상수이므로 제거해도 어차피 똑같은 <code>0(theta)</code> 를 얻을 수 있다.</p>
-
-<p>그리고 식을 좀 간략히 적어보면 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20A%20&plus;%20%5Clambda%20B'  alt="" /></p>
-
-<p>여기서 <code>lambda</code> 가 하는 일은 <em>low cost ('A')</em> 와 <em>small parameter ('B')</em> 를 조절하는 일이다. 식을 좀 변경하면 이렇게도 볼 수 있다. 여기서 <code>C</code> 는 <code>1 / lambda</code> 과 같은 역할이라 보면 된다. </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20C%20&plus;%20%5Clambda%20B'  alt="" /></p>
-
-<p>아주 작은 수의 <code>lambda</code> 를 사용하면 파라미터 <code>B</code> 가 커지는데, 이것은 <code>C</code> 가 커져 <code>A</code> 를 낮추고 <code>B</code> 를 높이는 것과 똑같다. 반대로 <code>C</code> 가 작으면 <code>A</code> 가 커지고, <code>B</code> 가 작아진다.</p>
-
-<p>결국 <code>C</code> 를 쓰느냐 <code>lambda</code> 를 쓰느냐는, 어떤 항을 옵티마이제이션의 중심으로 두느냐다. 최적화된 파라미터를 찾는건 똑같다.</p>
-
-<p>식을 마지막으로 정리하면,</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20C%20%5C%20%5B%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7Dcost_1%28%5Ctheta%5ETx%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28cost_0%28%5Ctheta%5ETx%29%29%5D%5C%20&plus;%20%5C%20%7B1%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
-
-<p>결국 위 식 (<em>cost</em>) 를 최소화 하면, <code>y = 1</code> 일때 <code>0^Tx &gt;&gt; 0</code> 이 되므로 <code>h(x) == 1</code> 이란 뜻이다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360809865_3224.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<h3 id="largeminginintuition">Large Mingin Intuition</h3>
-
-<p><em>SVM</em> 은 <em>large margin classifier</em> 라 부르도 한다. 왜 그런게 한번 살펴보자.</p>
-
-<p>두 집단을 구분하는 초록색, 자주색, 검은색 직선을 생각해 보자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360811170_6003.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>검은색 선이 가장 낫고, 자주색과 초록색은 두 집단을 분리하긴 하는데 썩 만족할만하게는 아니다. 검은 선과 평행하고 각 점까지의 거리가 최소인 파란선을 그리자. 이걸 <em>margin</em> 이라 부른다. 다시 말해서 <em>margin</em> 이 클수록 좋은 <em>classification</em> 이다.</p>
-
-<p><em>large margin</em> 하고 <em>SVM</em> 하고 무슨 상관일까? 그 전에 먼저 <code>C</code> 를 좀 살펴보자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360811018_1834.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><code>z == 0^T x</code>, 의 범위를 생각해 보면 <code>y = 1</code> 일때 <code>z &gt;= 1</code> 이길 바란다. 반대로 <code>y = 0</code> 이면 <code>z &lt;= -1</code> 이면 <code>h(x)</code> 로 충분히 만족할 만한 값을 얻을 수 있다.</p>
-
-<p>이 때 <code>C</code> 가 매우 크면 <code>A</code> 즉, 아래의 식은 굉장히 작아진다. 거의 0 에 가깝게</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bi%3D1%7D%5Em%20y%5E%7B%28i%29%7Dcost_1%28%5Ctheta%5ETx%29%5C%20&plus;%20%5C%20%281%20-%20y%5E%7B%28i%29%7D%29%5C%20%28cost_0%28%5Ctheta%5ETx%29%29'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/14/1360811206_9816.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>두 집단에 대해서 <code>C</code> 가 매우 크면, 다시 말해 <code>A</code> 가 <code>0</code> 에 가까우면 <em>overfitting</em> 된다 볼 수 있으므로 자주색과 비슷한 라인을 찾아낸다. 자주색 선은 모든 샘플에 대해 <em>large margin</em> 을 가지고 있지만 그렇게 썩 좋은 <em>classification</em> 이라 볼 수는 없다.</p>
-
-<p>그러나 <code>C</code> 가 그렇게 크지 않으면 비 정상적인 샘플들은 조금 무시하고 검은색 선을 찾아낸다. 이게 <em>SVM</em> 이 작동하는 방식이다.</p>
-
-<h3 id="mathematicsbehindlargemarginclassification">Mathematics Behind Large Margin Classification</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360893984_1771.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360893988_7434.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>결국 <code>C</code> 가 아주 클 때 <code>A = 0</code> 이므로 <em>SVM</em> <em>cost fucntion</em> 을 최소화 하는 것은 아래 식과 동일하다. 그런데 이 식을 풀어 보면 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%20%5Cleft%20%5C%7C%20%5Ctheta%20%5Cright%20%5C%7C%5E2'  alt="" /></p>
-
-<p>그리고 <code>0(theta)</code> 와 <code>x</code> 를 벡터이므로 <code>0^T x^(i) = p^(i) * ||0||</code> 라 볼 수 있다. (여기서 <code>p^(i)</code> 는 <code>x</code> 의 <code>0</code> 로의 <em>projection</em> 된 선의 길이)</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta%5ETx%20%5C%5C%20%5C%5C%20%3D%20p%5E%7B%28i%29%7D%20%5Cleft%20%5C%7C%20%5Ctheta%20%5Cright%20%5C%7C'  alt="" /></p>
-
-<p>이제 이 식을 좀 활용해 보자. <code>C</code> 가 매우 클때는 <code>B</code> 만 최소화 하면 되는데</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
-
-<p>이 식 자체가 <em>large margin</em> 을 찾아낸다. 왜 그런가 보면</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360893992_3213.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>왼쪽 그래프의 계산 과정을 보면 <code>x1</code> 을 <code>0</code> 에 <em>projection</em> 해서 얻은 <code>p1</code> 이 매우 작다. 따라서 <code>p1 * ||0|| &gt;= 1</code> 에서 <code>||0||</code> 가 커야 전체 식이 1보다 커지는데, 이러면 식 <code>B</code> 를 최소화 할 수 없다. 마찬가지로 <code>p2</code> 는 매우 작은 음수고, <code>p2 * ||0|| &lt;= -1</code> 에서, <code>||0||</code> 가 매우 큰 음수여야 한다. 이 또한 <code>0</code> 를 크게 만드므로 식 <code>B</code> 가 작아지는 <code>0</code> 를 찾지 못한다. </p>
-
-<p>결국 <code>p</code> 가 커야만 <code>0</code> 가 작아지기 때문에 <code>p</code> 를 크게 하는 <code>0</code> 만 찾고, 이것은 <em>large margin</em> 이다. 따라서 초록색 같은 <em>low margin</em> 의 <code>0</code> 는 선택되지 않는다. </p>
-
-<p>정리하자면 <code>C</code> 가 매우 클때 <em>SVM</em> 은 <em>large magin</em> 을 찾고, 여기서 <code>C</code> 를 낮춤으로써 적당한 수준의 <em>classification</em> 을 얻을 수 있다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5En%20%5Ctheta_j%5E2'  alt="" /></p>
-
-<h3 id="kernels">Kernels</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895849_6087.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><em>SVM</em> 으로 <em>non-linear decision boundary</em> 를 어떻게 찾아낼까? 단순히 <em>high polynomial features</em> 를 사용하는 것보다 더 나은 방법은 없을까? 고차 다항식은 이미지 처리 예제에서도 봤지만, 계산 비용이 너무 비싸다.</p>
-
-<p><em>kernel</em> 이란 개념이 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895854_4557.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>수동으로 몇몇 <em>landmark</em> <code>l1, l2, ...</code> 을 고른후 이 <em>landmark</em> 사이와의 거리로 새로운 <em>feature</em> <code>f</code> 를 만든다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?f_1%20%3D%20similarity%28x%2C%20l%5E%7B%281%29%7D%29%20%3D%20exp%20%28-%20%7B%7C%7Cx-l%5E%7B%281%29%7D%7C%7C%5E2%20%5Cover%202%5Csigma%5E2%7D%29'  alt="" /></p>
-
-<p>dl <em>similarity function</em> 을 <em>kernel function</em> 특히 여기서 사용한 수식은 <em>gaussian kernel</em> 이라 부른다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895859_5163.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><code>x</code> 와 <code>l</code> 이 상당히 가까우면 <code>f</code> 는 <code>1</code> 에 근접하고, 상당히 멀면 <code>0</code> 에 가까워진다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895862_8544.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>위 그림은 시그마에 따른 <code>f</code> 값의 변화를 보여주는데, 시그마가 작으면 작을수록 조금만 멀어도 <code>f</code> 값은 <code>0</code> 에 가까워진다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360895867_6739.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>데이터가 <em>landmark</em> 중 하나에 라도 가까우면 적어도 하나의 <code>f</code> 가 1이 되어, <code>h(x)</code> 가 1 이되고 반면 모든 <em>landmark</em> 에 멀면 모든 <code>f</code> 가 0 이 되어 <code>h(x)</code> 가 0 이된다.</p>
-
-<p>그럼 이제, 문제는 어떻게 <em>landmark</em> 를 정할 것인가?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899128_1431.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899133_9301.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><code>l1, ..., lm</code> 을 <code>x1, ..., xm</code> 라 하자. 즉 각 <em>training example</em> 이 <em>landmark</em> 가 된다. 이를 이용해 구한 <em>feature vector</em> <code>f^(i)</code> 중 하나는 <code>sim(x^i, l^i)</code> 이므로 1이 된다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899136_2691.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>따라서 주어진 <code>x</code> 에 대해 <code>m + 1</code> 의 벡터 <code>f</code> 를 구해 <code>0^Tf &gt;= 0</code> 이면 <code>y = 1</code> 이다. 그리고 이 때 <em>feature</em> 수가 <code>m</code> 이 되므로 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%5Ctheta%20%5C%20C%20%5C%20%5Csum_%7By%3D1%7D%5Emcost_1%28%5Ctheta%5ETf%5E%7B%28i%29%7D%29%20&plus;%20%281-y%5E%7B%28i%29%7D%29cost_0%28%5Ctheta%5ETf%5E%7B%28i%29%7D%29%29%20&plus;%20%7B1%20%5Cover%202%7D%20%5Csum_%7Bj%3D1%7D%5Em%5Ctheta_j%5E2'  alt="" /></p>
-
-<p>마지막 항을 좀 자세히 보면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bj%3D1%7D%5Ctheta_j%5E2%20%5C%5C%20%5C%5C%20%3D%20%5Ctheta%5ET%20%5Ctheta'  alt="" /></p>
-
-<p>인데 <em>SVM</em> 실제 구현에서는 가운데 <code>M</code> 매트릭스를 삽입해 좀더 효율적으로 돌아가도록 한다. 이 <code>M</code> 은 어떤 <em>kernel</em> 을 사용하는지에 따라 다르다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta%5ET%20M%20%5C%20%5Ctheta'  alt="" /></p>
-
-<p><em>logistic regression</em> 에 <em>kernel</em> 을 사용할 수도 있겠지만, 상당히 느리다. 반면 <em>SVM</em> 에서는 마지막 항을 위 처럼 수정할 수 있기에 빠르게 동작한다.</p>
-
-<h3 id="biasvsvarianceinsvm">Bias vs Variance in SVM</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360899140_2255.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>(1) <code>C</code> 가 크면 <em>low bias</em>, <em>high variance</em>  (== <em>small <code>lambda</code></em>) <br />
-(2) <code>C</code> 가 작으면 <em>high bias</em>, <em>low variance</em>  (== <em>large <code>lambda</code></em>)  </p>
-
-<p><code>sigma</code> 가 크면 <code>f</code> 가 적게 변하기 때문에 인풋 <code>x</code> 에 대해서도 <em>high bias</em>, <em>low variance</em> 다.</p>
-
-<h3 id="usingansvm">Using an SVM</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901245_9359.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>라이브러리를 사용하더라도 <code>C</code> 와 어떤 <em>kernel</em> 을 사용할지는 골라야 한다.</p>
-
-<p><em>feature</em> 가 크고, 트레이닝셋이 작을때는 <em>overfitting</em> 될 수 있으므로 <em>linear kernel</em> 을 사용하는 편이 낫다.</p>
-
-<p>반면 <code>n</code> 이 작고, <code>m</code> 이 클 경우에는 <em>non-linear</em> 가설일 수 있으므로 <em>gaussian kernel</em> 을 사용할 수 있다. 그러면 <code>sigma</code> 를 골라야 한다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901242_6422.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><em>SVM</em> 라이브러리를 이용할때는 <code>kernel function</code> 을 직접 구현해야 한다. 이걸 이용해서 라이브러리는 <code>x</code> 에 대해 <code>f1, ..., fl</code> 을 계산한다.</p>
-
-<p>만약에 <em>feature</em> 의 스케일이 다르면, <code>x1 = 10000, x2 = 5, ...</code> <code>||x-l||^2</code> 값이 숫자가 큰 항에 의해 좌우될 수 있으므로 <em>feature scailing</em> 을 하는편이 좋다.</p>
-
-<h4 id="otherchoicesofkernel">Other choices of kernel</h4>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901245_9359.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p><em>SVM</em> 구현들이 계산을 최적화 하기위해 다양한 트릭을 이용한다. 이로 인해 모든 <em>similarity function</em> 유효한 커널이 되는건 아니고, <em>"Mercer's Theorem"</em> 을 만족해야만 한다. <del>인용하려 했는데 무슨말인지 모르겠음</del></p>
-
-<p>그렇다고 커널이 <em>linear</em> 와 <em>gaussian</em> 만 있는건 아니고 다양한 커널이 있다. 그림을 참조하자.</p>
-
-<h4 id="multiclassclassification">Multi-class classification</h4>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/15/1360901253_5022.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>대부분의 <em>SVM</em> 라이브러리들은 <em>multi-class</em> 에 대한 함수를 제공한다. 그러나 이것들을 사용하는 대신 <em>one-vs-all</em> 방법을 사용할 수도 있다. <code>k</code> 개의 클래스가 있다면 <code>k</code> 개의 <em>SVM</em> 훈련시키면 된다.</p>
-
-<h4 id="logisticregressionvssvm">Logistic regression vs SVM</h4>
-
-<p><img src='http://my.csdn.net/uploads/201208/12/1344759226_6088.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<p>(1) <code>n &gt;= m</code> 이면 <em>logistic regression</em> 이나 <em>linear kernel</em> 이 낫다. <br />
-(2) <code>n</code> 이 작고, <code>m</code> 이 중간 사이즈면 <em>gaussian kernel</em> 을 <br />
-(3) <code>n</code> 이 작고 <code>m</code> 이 크면 <em>gaussian</em> 은 상당히 느려진다. <em>feature</em> 를 좀 수정하고, <em>logistic</em> 이나 <em>linear kernel</em> 을 이용한다.</p>
-
-<p><em>SVM</em> 의 장점은 다양한 <em>kernel</em> 을 <em>non-linear function</em> 을 훈련시키기 위해 사용할 수 있다는 점이다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
-(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
-(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-7/</link><guid isPermaLink="false">61eb3656-6495-48e4-a92f-2ba44cf1416d</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[SVM]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 22 Nov 2014 06:23:25 GMT</pubDate></item><item><title><![CDATA[Intro to Computational Thinking and Data Science 2]]></title><description><![CDATA[<blockquote>
-  <p>Computational systems are so very convenient for modeling behaviors of noisier, uncertain systems, <strong>especially in estimating the values of parameters of those systems</strong>.</p>
-</blockquote>
-
-<h3 id="montecarlosimulation">Monte Carlo Simulation</h3>
-
-<blockquote>
-  <p>Monte Carlo simulation is a method of <strong>estimating the value of an unknown quantity using the principles of inferential statistics</strong></p>
-</blockquote>
-
-<p>이전에 잠깐 <em>deterministic model</em> 과 <em>stochastic model</em> 언급 했었는데, 다시 한번 알아보자면</p>
-
-<blockquote>
-  <p>In <strong>deterministic models</strong>, the output of the model is  fully determined by the parameter values and the
-  initial conditions.</p>
-  
-  <p><strong>Stochastic models</strong> possess some inherent randomness. The same set of parameter values and initial conditions will lead to an ensemble of different outputs</p>
-</blockquote>
-
-<p>때때로 사람들이 <em>deterministic model</em> 은 <em>uncertainty</em> 를 다루지 않는다고 말하곤 하는데 이건 엄밀히 말하면 틀렸다. <em>deterministic model</em> 내부적으로는 <em>randomness</em> 가 없지만, 모델 외부에 <em>uncertainty</em> 가 있을 수 있다.  </p>
-
-<p>몬테 카를로 시뮬레이션이 바로 <em>deterministic model</em> 에 대해 <em>random input</em> 을 이용해 분포를 얻어내는 방법이다. </p>
-
-<blockquote>
-  <p>I have heard people say that "a stocahstic model handles uncertainty, a deterministic model doesn't". This is not strictly correct. The correct statement should be: 
-  a stochastic model has the capacity to handle then uncertainty in the inputs built into it, for a deterministic model, the uncertainties are extenal to the model. The uncertainties in the inputs to a deterministic model can be handled through use of a Monte Carlo simulation (note that this does not make it a stochastic model). This is computationally inefficient however.</p>
-</blockquote>
-
-<h3 id="findingpi">Finding PI</h3>
-
-<pre><code class="python">def stdDev(X):  
-    mean = sum(X) / float(len(X))
-    total = 0.0
-    for x in X:
-        total += (x - mean) ** 2
-    return (total / len(X)) ** 0.5
-
-
-def dropNeedles(num):  
-    inCircle = 0
-    for needles in xrange(1, num + 1, 1):
-        x = random.random()
-        y = random.random()
-
-        if (x*x + y*y) ** 0.5 &lt;= 1.0:
-            inCircle += 1
-
-    return 4 * (inCircle / float(num))
-
-
-def estimate(numOfNeedles, trials):  
-    estimates = []
-    for i in range(trials):
-        pi = dropNeedles(numOfNeedles)
-        estimates.append(pi)
-
-    sd = stdDev(estimates)
-    est = sum(estimates) / len(estimates)
-
-    return (est, sd)
-
-
-def simulate(precision, trials):  
-    numOfNeedles = 1000
-    sd = precision
-
-    # 95% of the values lie within precision of the mean
-    while sd &gt;= (precision / 2.0):
-        est, sd = estimate(numOfNeedles, trials)
-        print 'PI est =', est, "sd =", round(sd, 6), "needles =", numOfNeedles
-        numOfNeedles *= 2
-
-    return est
-
-
-random.seed(0)  
-simulate(0.005, 100)  
-</code></pre>
-
-<p>반지름이 1인 원 안에 바늘을 떨어트려, 해당 원 안에 있을 경우와 직사각형에 있을 경우의 비율에 직사각형의 넓이를 곱하면, 원의 넓이 즉 <code>PI</code> 값이 나온다.</p>
-
-<p>실제 돌려보면</p>
-
-<pre><code>PI est = 3.14844 sd = 0.047886 needles = 1000  
-PI est = 3.13918 sd = 0.035495 needles = 2000  
-PI est = 3.14108 sd = 0.02713 needles = 4000  
-PI est = 3.141435 sd = 0.016805 needles = 8000  
-PI est = 3.141355 sd = 0.0137 needles = 16000  
-PI est = 3.14131375 sd = 0.008476 needles = 32000  
-PI est = 3.141171875 sd = 0.007028 needles = 64000  
-PI est = 3.1415896875 sd = 0.004035 needles = 128000  
-PI est = 3.14174140625 sd = 0.003536 needles = 256000  
-PI est = 3.14155671875 sd = 0.002101 needles = 512000  
-</code></pre>
-
-<p><code>32000</code> 개와 <code>64000</code> 개의 바늘을 떨어트린 샘플을 보면 실제 샘플도 후자가 많고, 표준편차도 후자가 작음에도 실제 추정값은 더 나쁘게 나왔다.</p>
-
-<p>표준편차가 작으면 실제 값에 근접한 추정값이 나왔다는 뜻이 아닌가? </p>
-
-<blockquote>
-  <p>Having the small standard deviation doesn't mean we have a good estimate.</p>
-</blockquote>
-
-<p>그렇지 않다. 표준편차가 작다는 것이, 우리가 얻은 추정값이 실제 값과 같다는 뜻은 아니다.</p>
-
-<blockquote>
-  <p>All this means is that if we were to draw more samples from the same distribution, we can be reasonably confident that we would get a similar value.</p>
-</blockquote>
-
-<p>단지 같은 분포에서 더 많은 샘플을 이용하면 <em>현재 값과 비슷한 값 (!= 실제값)</em> 을 얻을 수 있다는 말이다.</p>
-
-<p>우리가 구한 값이 실제 <code>PI</code> 와 근사하다고 믿기 전에 3가지를 먼저 확인해야한다.</p>
-
-<p>(1) <strong>conceptual model</strong> (이 경우 <code>PI</code> 를 위한 계산) <br />
-(2) <strong>implementation</strong> <br />
-(3) <strong>enough samples</strong>  </p>
-
-<p>만약에 <code>4 * (inCircle / float(num)</code> 대신에 <code>2 * (inCircle / float(num)</code> 를 사용해 잘못된 <em>conceptual model</em> 을 가진다면 (버그라 볼 수도 있겠다.)</p>
-
-<pre><code>PI est = 1.57422 sd = 0.023943 needles = 1000  
-PI est = 1.56959 sd = 0.017748 needles = 2000  
-PI est = 1.57054 sd = 0.013565 needles = 4000  
-PI est = 1.5707175 sd = 0.008402 needles = 8000  
-PI est = 1.5706775 sd = 0.00685 needles = 16000  
-PI est = 1.570656875 sd = 0.004238 needles = 32000  
-PI est = 1.5705859375 sd = 0.003514 needles = 64000  
-PI est = 1.57079484375 sd = 0.002017 needles = 128000  
-</code></pre>
-
-<p>보면 알겠지만, 표준편차는 충분히 작음에도 우리가 구한 추정값이 <code>PI</code> 와는 상당히 다르다.</p>
-
-<blockquote>
-  <p>Whenever possible, one should attempt to validate results against realilty</p>
-</blockquote>
-
-<h3 id="normaldistribution">Normal Distribution</h3>
-
-<blockquote>
-  <p>Instead of estimating an unknown parameter by a single value, a <strong>confidence interval</strong> provides a range that is likely to contain the unknown value and a confidence level that the unknown value lays within that range</p>
-</blockquote>
-
-<h3 id="commonpatterninscienceandengineering">Common Pattern in Science and Engineering</h3>
-
-<p>보통 두 가지 작업이 있는데,</p>
-
-<p>(1) develop a hypothesis <br />
-(2) design an experiment, take measurements <br />
-(3) use computation to <br />
-- evaluate hypothesis, <br />
-- determin values of unknowns, <br />
-- predict consequences</p>
-
-<p>두가지는 <code>1 -&gt; 2</code> 순서일 수 있고, 때때로 뒤 바뀔 수도 있다. 예를 한번 살펴보면</p>
-
-<p>먼저 16세기에 <em>Hooke</em> 는 <em>"용수철에 가해진 힘은 그 길이에 비례한다는 가설"</em> 을 세웠다. 이를 증명하기 위해 실험을 고안했는데, 천장에 서로 다른 길이의 스프링을 연결하고 거기에 저울 추를 달았다.</p>
-
-<p>늘어난 길이 <code>x</code> 에 대해 용수철 상수 <code>k</code> 를 <code>kx = mg</code> 를 이용해 계산하면, 얼추 맞는다. 그런데 몇몇 샘플에 대해서는 용수철 상수 <code>k</code> 가 상당히 다르게 나온다. <code>[11.41, 14.49 ...]</code> 왜 그럴까? 용수철 상수가 매번 변한다는걸까? </p>
-
-<p>다음 데이터에 대해 그래프를 그려보면</p>
-
-<pre><code>Distance (m) Mass (kg)  
-0.0865 0.1  
-0.1015 0.15  
-0.1106 0.2  
-0.1279 0.25  
-0.1892 0.3  
-0.2695 0.35  
-0.2888 0.4  
-0.2425 0.45  
-0.3465 0.5  
-0.3225 0.55  
-0.3764 0.6  
-0.4263 0.65  
-0.4562 0.7  
-0.4502 0.75  
-0.4499 0.8  
-0.4534 0.85  
-0.4416 0.9  
-0.4304 0.95  
-0.437 1.0  
-</code></pre>
-
-<p><em>distance</em> 에 대한 예측 <code>ma / k</code> 와 실제 값이 일치하지 않는다. 이른바 <em>error (오류)</em> 가 있는 것인데, 이들 오류는 <em>small randomness</em> 에 대한 축적의 결과로 이루어 진 것이다.</p>
-
-<p>오류에 대한 <em>probabilty density function</em> 로 <code>y = x - 1 (-1 &lt;= x &lt; 0)</code>, <code>y = -x + 1 (0 &lt; x &lt;= 1)</code> 을 가정했을때 시뮬레이션을 좀 해보자. <code>random.triangular</code> 를 이용하면 <em>triangle distribution</em> 을 얻을 수 있다.</p>
-
-<pre><code class="python">def testErrors(ntrials=10000,npts=100):  
-    results = [0] * ntrials
-    for i in xrange(ntrials):
-        s = 0   # sum of random points
-        for j in xrange(npts):
-            s += random.triangular(-1,1)
-        results[i] =s
-    # plot results in a histogram
-    pylab.hist(results,bins=50)
-    pylab.title('Sum of 100 random points -- Triangular PDF (10,000 trials)')
-    pylab.xlabel('Sum')
-    pylab.ylabel('Number of trials')
-
-testErrors()  
-pylab.show()  
-</code></pre>
-
-<p>실행해 보면 에러의 합의 분포가 정규 분포와 비슷하다. 우리가 어떤 에러 분포를 고르든지 간에 <em>finite mean, variance</em> 를 가지고 있다면 에러의 분포는 정규분포다. </p>
-
-<p>실제 그런가 <code>random.triangular</code> 말고 <code>random.uniform</code> 을 이용해 보면 똑같이 정규분포를 얻는다. 이는 <em>central limit theorem (중심극한정리)</em> 를 의미하는데 위키에서 인용하면</p>
-
-<blockquote>
-  <p>동일한 확률분포를 가진 독립 확률 변수 n개의 평균값은 n이 적당히 크다면 정규분포에 가까워진다는 정리</p>
-</blockquote>
-
-<p>결국 우리가 이전에 스프링을 이용해 봤던 실험에서 발생한 에러는 <em>small random error</em> 의 <em>accumulation</em> 이므로, 우리는 이 에러의 분포를 정규분포라 말할 수 있다는 것이다.</p>
-
-<p><strong>결국 오차 역시 평균 주변에 몰려있는 값이므로, 참값을 상당히 높은 확률로 추측해 낼 수 있다.</strong></p>
-
-<blockquote>
-  <p>정규분포는 19세기의 가장 위대한 수학자인 가우스(C. F. Gauss, 1777-1855)에 의해 새롭게 해석된다. 가우스는 관측에 따른 오차의 정도가 대체로 평균값 주변에서 발생한다는 점에 착안하여 정규분포에 따른 확률 밀도 함수와 똑 같은 식을 얻을 수 있었다. 이것은 <strong>관측 오차 역시 정규분포를 따른다는 것으로, 이후 실험으로 구한 관측값에서 참값을 추정해내는 근본적인 원리</strong>로 자리잡게 된다. 이런 점에서 위의 종모양 곡선을 오차곡선(error curve)라고도 부른다.</p>
-</blockquote>
-
-<p><em>normal distribution</em> 의 식은 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%20-%20%5Cmu%29%5E2%20%5Cover%20%5Csigma%5E2%7D'  alt="" /></p>
-
-<p><code>mu = 0, sigma = 1</code> 인 경우에 <em>standard normal</em> 혹은 <em>unit normal</em> 이라 부른다.</p>
-
-<blockquote>
-  <p>So when observation errors are due to the accumlation of many small random perturbations</p>
-</blockquote>
-
-<p><img src='http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%29%5E2%20%5Cover%20%5Csigma%5E2%7D'  alt="" /></p>
-
-<p>다시 말해 작은 랜덤의 누적으로 발생한 관측 오차의 경우에는 <code>mu = 0</code> 이다. 그리고 식이 말해주는 바는, 큰 에러의 경우에는 확률이 <em>expnentially less likely</em> 하다는 것이다.</p>
-
-<p>이제 각 에러가 일어날 확률 곱을 다음과 같이 구할 수 있다. </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29'  alt="" /></p>
-
-<p>이때 이 값을 최대화한다는 것은 각 에러가 나올 확률이 가장 높아야 한다. 다시 말해서 가장 평균적인 에러만 나와야 한다는 뜻이다. 이 값의 최대를 구하는 것은 뒤집은 식의 최소값을 찾는 것과 같으므로</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min%20%5C%20%7B1%20%5Cover%20%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D'  alt="" /></p>
-
-<p>여기에 자연 로그를 씌우면 확률 변수의 곱이 덧셈으로 변한다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?ln%20%28%7B1%20%5Cover%20%5Cprod%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D%29%20%5C%5C%20%5C%5C%20%5C%5C%20%3D%20-%20%5Csum%20ln%20%28L_%7Berr%7D%28obs_i%20-%20pred_i%29%29'  alt="" /></p>
-
-<p>이 값을 최소화 하면 된다. 여기서 <em>pdf</em> 식을 적용하면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min%20-%20%5Csum%20ln%20%28%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20e%5E%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%29'  alt="" /></p>
-
-<p>로그를 씌우면 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csum%20%5Bln%20%7B%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20&plus;%20ln%20%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%5D'  alt="" /></p>
-
-<p>이 때 다른 상수를 제외하고 실제 최소화 해야 할 부분만 고려하면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min%20%5Csum%20%28obs_i%20-%20pred_i%29%5E2'  alt="" /></p>
-
-<p>따라서 이 값을 최소화 하면 <em>most likely observations</em> 가 된다. 이런 이유에서 오차 제곱의 합의 최소가 되는 파라미터가 바로 가장 신뢰할만한 파라미터가 된다.</p>
-
-<p><br/> <br />
-처음부터 정리하자면, 중심 극한 정리에 따라 에러의 분포가 어떠하든 간에 에러가 확률변수라면 이것의 평균은 정규분포다. 따라서 <em>pdf</em> 식을 적용할 수 있고 이때 <code>mean = 0</code> 이다.</p>
-
-<p>에러가 나올 확률의 곱이 최대이면, 모든 에러에 대해 보편적인 에러를 얻었다는 뜻이므로 이에 대해 식을 정리하면,</p>
-
-<p><em>sum of squared of erros (SSE, least square)</em> 를 최소화 하는 파라미터를 선택하면 가장 신뢰할 만한 관측 결과를 얻어낼 수 있다는 결론을 얻게된다.</p>
-
-<p><br/> <br />
-파이선에서는 <code>pylab.plotfit</code> 을 이용해 값을 최소화 하는 파라미터를 뽑아낼 수 있다. 예를 들어서 <code>y = ax + b</code> 의 합을 최소화 하는 <code>a, b</code> 를 찾으려면 </p>
-
-<pre><code class="python">a, b = pylab.ployfir(xvals, yvals, 1)  
-</code></pre>
-
-<p><code>y = ax^2 + bx + c</code> 에 대해서는</p>
-
-<pre><code class="python">a, b, c = pylab.polyfit(xvals, yvals, 2)  
-</code></pre>
-
-<h3 id="firingarrow">Firing Arrow</h3>
-
-<p>이제 위에서 얻은 개념을 다른 예제에 적용해보면서 가설이 얼마나 <em>잘 맞는가</em> 를 어떻게 측정할건지를 좀 생각해 보자. (<em>Measuring "goodness" of fit</em>)</p>
-
-<p>화살이 날라가는 거리에 따른 높이를 측정한 데이터다.</p>
-
-<pre><code>Distance (yds) height (ins) height height height  
-30  0 0 0 0  
-29 2.25 3.25 4.5 6.5  
-28 5.25 6.5 6.5 8.75  
-27 7.5 7.75 8.25 9.25  
-26 8.75 9.25 9.5 10.5  
-25 12 12.25 12.5 14.75  
-24 13.75 16 16 16.5  
-23 14.75 15.25 15.5 17.5  
-22 15.5 16 16.6 16.75  
-21 17 17 17.5 19.25  
-20 17.5 18.5 18.5 19  
-15 19.5 20 20.25 20.5  
-10 18.5 18.5 19 19  
-5 13 13 13 13  
-0 0 0 0 0  
-</code></pre>
-
-<pre><code class="python">def getTrajectoryData(fileName):  
-    dataFile = open(fileName, 'r')
-    distances = []
-    heights1, heights2, heights3, heights4 = [],[],[],[]
-    discardHeader = dataFile.readline()
-    for line in dataFile:
-        d, h1, h2, h3, h4 = line.split()
-        distances.append(float(d))
-        heights1.append(float(h1))
-        heights2.append(float(h2))
-        heights3.append(float(h3))
-        heights4.append(float(h4))
-    dataFile.close()
-    return (distances, [heights1, heights2, heights3, heights4])
-
-def tryFits(fName):  
-    distances, heights = getTrajectoryData(fName)
-    distances = pylab.array(distances)*36 # convert yard to
-    totHeights = pylab.array([0]*len(distances))
-    for h in heights:
-        totHeights = totHeights + pylab.array(h)
-    pylab.title('Trajectory of Projectile (Mean of 4 Trials)')
-    pylab.xlabel('Inches from Launch Point')
-    pylab.ylabel('Inches Above Launch Point')
-    meanHeights = totHeights/float(len(heights))
-    pylab.plot(distances, meanHeights, 'bo')
-    a,b = pylab.polyfit(distances, meanHeights, 1)
-    altitudes = a*distances + b
-    pylab.plot(distances, altitudes, 'r',
-               label = 'Linear Fit')
-    a,b,c = pylab.polyfit(distances, meanHeights, 2)
-    altitudes = a*(distances**2) + b*distances + c
-    pylab.plot(distances, altitudes, 'g',
-               label = 'Quadratic Fit')
-    pylab.legend()
-</code></pre>
-
-<p>위 코드를 돌려보면 이차함수가 일차함수보다 더 <em>fit</em> 한 걸 볼 수 있다. 그럼 문제는 매번 그래프로 그릴수도 없고 어떻게 측정할거냐 하는건데, <em>variabilty</em> 를 이용하는 방법이 있다. 다시 말해 에러가 얼마나 많이 변하냐는 것이다.</p>
-
-<p><em>variability of errors</em> 는 SEE, 즉 관측 데이터와 예측값 간 차이의 제곱의 합으로 구할 수 있다. 그리고 <em>variability of data</em> 는 관측값과 관측값의 평균의 차이의 제곱의 합으로 구할 수 있다. 그리고 이 두 변수간 비율로 모델이 얼마나 잘 맞는지를 판단할 수 있다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%7B%5Csigma_%7Berr%7D%5E2%20%5Cover%20%5Csigma_%7Bdata%7D%5E2%7D'  alt="" /></p>
-
-<p>이 값을 <code>R^2</code> 또는 <em>coefficient of determination</em> 이라 부른다. 이 값이 <code>1</code> 에 근접하면 모델이 데이터와 잘 맞고, <code>0</code> 에 가까우면 거의 안맞는다는 뜻이다.</p>
-
-<p>그러나 주의해야 할 점이 하나 있다. <code>R^2</code> 값이 높은 모델이라고 해서 좋은 모델이라는 뜻은 아니다. 지금 현재 가진 데이터에 <em>fit</em> 된다는 거지, 실제 데이터에 적용하면 어떻게 될지 모른다. <em>overfitting</em> 할 수도 있다는 이야기다.</p>
-
-<p>파이썬에서 <code>R^2</code> 를 구하는 함수를 만들면</p>
-
-<pre><code class="python">def rSquare(measured, estimated):  
-    """measured: one dimensional array of measured values
-       estimate: one dimensional array of predicted values"""
-    SEE = ((estimated - measured)**2).sum()
-    mMean = measured.sum()/float(len(measured))
-    MV = ((mMean - measured)**2).sum()
-    return 1 - SEE/MV
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br />
-(2) <a href='http://ko.wikipedia.org/wiki/%EC%A4%91%EC%8B%AC%EA%B7%B9%ED%95%9C%EC%A0%95%EB%A6%AC' >http://ko.wikipedia.org</a> <br />
-(3) <a href='http://www.financedoctor.co.kr/finance/view.php?f_idx=14587&amp;b_code=8&amp;m_code=0&amp;s_code=0' >http://www.financedoctor.co.kr</a> <br />
-(4) <a href='http://www.researchgate.net/post/What_is_the_difference_among_Deterministic_model_Stochastic_model_and_Hybrid_model' >www.researchgate.net/</a> <br />
-(5) <a href='http://www4.stat.ncsu.edu/' ~gross/BIO560%20webpage/slides/Jan102013.pdf">www4.stat.ncsu.edu</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-2/</link><guid isPermaLink="false">32cb7752-47f2-4ad2-a5cf-176453e06a7c</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[simulation]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 21 Nov 2014 15:43:27 GMT</pubDate></item></channel></rss>
+(8) <a href='http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png' >Wiki - Tree rotation</a></p>]]></description><link>http://1ambda.github.io/dijkstra-heap-balanced-tree/</link><guid isPermaLink="false">8d4c00c5-78fc-4a4d-97a1-cf0829c53396</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[heap]]></category><category><![CDATA[dijkstra]]></category><category><![CDATA[red-black tree]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 23 Nov 2014 14:23:37 GMT</pubDate></item></channel></rss>
