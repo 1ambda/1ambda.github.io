@@ -1,5 +1,752 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 17 Dec 2014 05:40:48 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Process Mining, Week4]]></title><description><![CDATA[<h3 id="twophaseprocessdiscoverylimitations">Two-Phase Process Discovery, Limitations</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 17 Dec 2014 13:47:26 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Reactive Programming 1, Monads]]></title><description><![CDATA[<h3 id="whatisreactiveprogramming">What is Reactive Programming?</h3>
+
+<p><em>reactive</em> 란 뜻은</p>
+
+<ul>
+<li><em>React to events</em> <strong>(event-driven)</strong></li>
+<li><em>React to load</em> <strong>(scalable)</strong></li>
+<li><em>React to failures</em> <strong>(resilient)</strong></li>
+<li><em>React to users</em> <strong>(responsive)</strong></li>
+</ul>
+
+<h4 id="eventdriven">Event-driven</h4>
+
+<p><em>event-driven</em> 을 통해 <em>scalable, resilient</em> 해질 수 있고, 이 3가지를 통해 <em>responsive</em> 한 서비스를 만들 수 있다.</p>
+
+<p>옛날에는 시스템이 <em>multi-threaded</em> 로 구성되어 <em>shared, synchronized state</em> 를 통해 커뮤니케이션 했었다. 그래서</p>
+
+<blockquote>
+  <p>Strong coupling, hard to compose</p>
+</blockquote>
+
+<p>요즘 시스템은 <em>loosel coupled even handlers</em> 로 구성된다. 그리하여</p>
+
+<blockquote>
+  <p>Events can be handled asynchoronously, without blokcing</p>
+</blockquote>
+
+<h4 id="scalable">Scalable</h4>
+
+<blockquote>
+  <p>An application is <strong>scalable</strong> if it is able to be expanded according ot its usage</p>
+</blockquote>
+
+<ul>
+<li><strong>scale up:</strong> make use of parallelism in multi-core systems</li>
+<li><strong>scale out:</strong> make use of multiple server nodes</li>
+</ul>
+
+<blockquote>
+  <p><strong>Important for scalability:</strong> minimize shared mutable state</p>
+  
+  <p><strong>Important for scale out:</strong> location transparency, resilience</p>
+</blockquote>
+
+<h4 id="resilient">Resilient</h4>
+
+<blockquote>
+  <p>An application is <strong>resilient</strong> if it can recover quickly from failures</p>
+</blockquote>
+
+<p>일반적으로 <em>resilience</em> 는 나중에 (<em>afterthought</em>) 추가하기 어렵다. 시작부터 디자인의 일부로 고려해야한다. 이를 위해</p>
+
+<ul>
+<li>loose coupling</li>
+<li>strong ecapsulation of state</li>
+<li>pervasive supervisor hierarchies</li>
+</ul>
+
+<h4 id="responsive">Responsive</h4>
+
+<blockquote>
+  <p>An application is <strong>responsive</strong> if it provides rich, real-time interaction with its users even under load and in the presence of failures.</p>
+  
+  <p>Responsive applications can be built on an event-driven, scalable, and resilient architecture</p>
+  
+  <p>Still need careful attention to algorithms, system design, back-pressure, and many other details.</p>
+</blockquote>
+
+<h4 id="callback">Callback</h4>
+
+<p>보통 이벤트를 다루기 위해 <em>callback</em> 이 사용되는데 자바를 예로 들면</p>
+
+<pre><code class="scala">class Counter extends ActionListener {  
+  private var count = 0
+  button.addActinoListener(this)
+
+  def actionPerformed(e: ActionEvent): Unit = {
+    count += 1
+  }
+}
+</code></pre>
+
+<p>여기서 볼 수 있는 문제는 </p>
+
+<p>(1) <em>shared mutable state</em> 가 필요하다 <br />
+(2) <em>composing</em> 하기 힘들다 <br />
+(3) 시스템이 커지면 <em>callback hell</em> 이 될 수 있다</p>
+
+<h4 id="composableeventabstraction">Composable Event Abstraction</h4>
+
+<p>일반적으로 함수형 프로그래밍에서 이를 해결하기 위한 방법은 <em>composable event abstraction</em> 이다.</p>
+
+<ul>
+<li>Events are first class</li>
+<li>Events are often represented as messages</li>
+<li>Handlers of events are also first-class</li>
+<li>Complex handlers can be composed from primitive ones</li>
+</ul>
+
+<p>이 수업에서 다룰 내용은 <em>monad</em>, <em>future</em>, <em>observables</em>, <em>actor</em>, <em>supervisor</em>, <em>distributed actor</em> 등이다.</p>
+
+<h4 id="functionpatternmaching">Function, Pattern Maching</h4>
+
+<p>잠깐 복습하고 가면 <em>JSON</em> 을 모델링 하기 위해서</p>
+
+<pre><code class="scala">abstract class JSON  
+case class JSeq (elems: List[JSON])           extends JSON  
+case class JObj (bindings: Map[String, JSON]) extends JSON  
+case class JNum (num: Double)                 extends JSON  
+case class JStr (str: String)                 extends JSON  
+case class JBool (b: Boolean)                 extends JSON  
+case class JNull                              extends JSON  
+</code></pre>
+
+<p>그러면 요로코롬 데이터를 표현할 수 있다.</p>
+
+<pre><code class="scala">  val data = JObj(Map(
+    "firstName"   -&gt; JStr("Jason"),
+    "lastName"    -&gt; JStr("Bone"),
+    "phoneNumber" -&gt; JSeq(List(
+      JObj(Map(
+        "type" -&gt; JStr("home"), "number" -&gt; JStr("212 555 3347"),
+        "type" -&gt; JStr("fax"),  "number" -&gt; JStr("33312 555 3347")
+      ))
+    ))
+  ))
+</code></pre>
+
+<p>자바스크립트에서 이거랑 똑같다. 좀 스칼라 버전이 복잡해 보이는데, 오더스키 말로는 더 문법적으로 간편하도록 작성할 수 있다고 한다. 아마 어디 라이브러리에 구현되어있을듯</p>
+
+<pre><code class="javascript">data = {  
+  "firstName": "Json",
+  "lastName": "Bone",
+  "phoneNumber": [
+    { "type: "home", "number", "212 555 3347" },
+    { "type: "fax",  "number", "33312 555 3347" }
+  ]
+}
+</code></pre>
+
+<p>이제 <code>JSON</code> 을 출력하는 <code>show</code> 함수를 만들어 보면</p>
+
+<pre><code class="scala">  def show(json: JSON): String = json match {
+    case JSeq(elems) =&gt; "[" + (elems map show mkString ", ") + "]"
+    case JObj(bindings) =&gt;
+      val assocs = bindings map {
+        case (key, value) =&gt; "\"" + key + "\":" + show(value)
+      }
+      "{" + (assocs mkString ", ") + "}"
+
+    case JNum(num) =&gt; num.toString
+    case JStr(str) =&gt; "\"" + str + "\""
+    case JBool(b) =&gt; b.toString
+    case JNull() =&gt; "null"
+  }
+</code></pre>
+
+<p><em>case class</em> 가 나와서 잠깐 보면 다음 타입은 무엇일까?</p>
+
+<pre><code class="scala">{ case (key, value) =&gt; ...  }
+</code></pre>
+
+<p>이것 자체로는 아무 타입이 아닌데, 타입을 지정해 주면 <em>function</em> 이 될 수 있다. 무슨말인고 하니</p>
+
+<pre><code class="scala">type JBinding = (String, JSON)  
+val f = { case (key, value) =&gt; ...  } // error  
+val f: JBinding =&gt; String = { case (key, value) =&gt; ...  }  
+</code></pre>
+
+<p>두 번째 <code>val</code> 만 성공적으로 컴파일된다. 그리고 스칼라에서 모든 구체적인 타입은 <em>class</em> 나 <em>trait</em> 의 구현체인데 <em>function</em> 도 마찬가지다.</p>
+
+<p><code>JBinding =&gt; String</code> 은 <code>scala.Function1[JBinding, String]</code> 이다. 다시 말해서 모든 함수는 <code>Function</code> <em>trait</em> 의 구현이다.</p>
+
+<pre><code class="scala">trait Function[-A, +R] {  
+  def apply(x: A): R
+}
+</code></pre>
+
+<p>여기서 <code>-A</code>, <code>+R</code> 등은 <em>variance</em> 와 관련된 것인데, 이 <em>variance</em> 란 것이 어떤 두 타입사이에 관계가 있다면, 컨테이너에 넣었을때의 관계는 어떠한가를 기술하는 것이다. </p>
+
+<ul>
+<li><code>S &lt;: T</code> means <strong>S is a subtype of T</strong></li>
+<li><code>S :&gt; T</code> means <strong>S is a supertype of T</strong></li>
+</ul>
+
+<p>이걸 <em>bound</em> 라 부른다. 따라서 <em>mixed bound</em> 도 있다. <code>S &gt;: NonEmpty &lt;: IntSet]</code> 이라던지.</p>
+
+<p><code>A &lt;: B</code>, 즉 <em>lower bound</em> 가 있고, 컨테이너 <code>C</code> 가 있을때</p>
+
+<ul>
+<li><code>C[A] &lt;: C[B]</code> means <strong>C is covariant</strong>, <code>C[+A]</code></li>
+<li><code>C[A] &gt;: C[B]</code> means <strong>C is contravariant</strong>, <code>C[-A]</code></li>
+<li>상관 없으면 <strong>C is non-variant</strong>, <code>C[A]</code></li>
+</ul>
+
+<p>위에서 봤듯이 함수의 파라미터는 <em>contravariant</em>, 리턴타입은 <em>covariant</em> 인데 이는 파라미터를 나중에 함수 호출할 수 있기 때문이다.</p>
+
+<p>더 자세한 내용은 <a href='http://1ambda.github.io/functional-programming-in-scala-chapter-4/' >Functional Programming in Scala Chapter4</a> 를 참조하자.</p>
+
+<p>함수는 <em>trait</em> 의 구현이고, <code>Map</code> 은 <code>Function1</code> 의 서브클래스다. 따라서 맵을 사용할때 <code>exampleMap(key)</code> 처럼 사용할 수 있다.</p>
+
+<p><code>Seq</code> 도 마찬가지로 서브클래스다. 그래서 <code>Vector(3)</code> 처럼 사용할 수 있다.</p>
+
+<h4 id="collection">Collection</h4>
+
+<p>컬렉션도 잠깐 복습해 보자.</p>
+
+<p><img src='http://librairie.immateriel.fr/baw/9780596155957/httpatomoreillycomsourceoreillyimages322250.png'  alt="" /></p>
+
+<p align="center">(<a href='http://librairie.immateriel.fr/' >http://librairie.immateriel.fr</a>)</p>
+
+<p><img src='http://i.stack.imgur.com/2fjoA.png'  alt="" /></p>
+
+<p align="center">(<a href='http://stackoverflow.com/' >http://stackoverflow.com</a>)</p>
+
+<p><em>filter, map</em> 과 같은 메소드들은 다양한 컬렉션을 지원하지만, <em>list</em> 에서는 <em>tail recursive</em> 하게 정의되어 있다고 한다.</p>
+
+<h3 id="forexpression">For Expression</h3>
+
+<p>스칼라에서 <code>for</code> 구문은 <code>map, flatMap</code> 그리고 <em>lazy variant</em> <code>filter</code> 로 번역된다.</p>
+
+<p>(1) <code>for (x &lt;- e1) yield e2</code> 는</p>
+
+<p><code>e1.map(x =&gt; e2)</code> 다.</p>
+
+<p>(2) <code>for (x &lt;- e1 if f; s) yield e2</code> 는</p>
+
+<p>여기서 <code>f</code> 는 <em>filter</em> 고 <code>s</code> 는 <em>sequence of generators and filters</em> 다. 따라서</p>
+
+<p><code>for (x &lt;- e1.withFilter(x =&gt; f); s) yield e2</code> 로 번역된다. 외울 필요는 없고 <code>for</code> 루프를 쓸 때 <code>withFilter</code> 때문에 메모리 낭비가 적다는 사실 정도만 알고 있으면 된다.</p>
+
+<blockquote>
+  <p>You can think of <code>withFilter</code> as a variant of <code>filter</code> that doesn't produce an intermediate list, but instead filters the following <code>map</code> or <code>flatMap</code> function application</p>
+</blockquote>
+
+<p>(3) <code>for (x &lt;- e1; y &lt;- e2; s) yield e3</code> 는</p>
+
+<p><code>e1.flatMap(x =&gt; for (y &lt;- e2; s) yield e3)</code> 로 번역된다.</p>
+
+<p>(4) <code>for</code> 구문에서 <em>generator</em> 의 <em>left-hand side</em> 가 패턴일 수 있다. 무슨말인고 하니</p>
+
+<pre><code class="scala">val data: List[JSON] = ...
+
+for {  
+  JObj(bindings) &lt;- data
+  JSeq(phones) &lt;- bindings("phoneNumber")
+  JObj(phone) &lt;- phones
+  JStr(digits) = phone("number")
+  if digits startWith "212"
+} yield (bindings("firstName"), bindings("lastName"))
+</code></pre>
+
+<p><code>pattern &lt;- expr</code> 은 이렇게 번역된다.</p>
+
+<pre><code class="scala">x &lt;- expr withFilter {  
+        case pattern =&gt; true
+        case _ =&gt; false
+     } map {
+       case pattern =&gt; x
+     }
+</code></pre>
+
+<h3 id="functionalrandomgenerators">Functional Random Generators</h3>
+
+<p><code>for</code> 구문은 <em>collection</em> 에만 쓸 수 있지 않다. <code>map, flatMap, withFilter</code> 만 구현 된다면 다른 곳으로의 응용도 가능하다. (LINQ 도 그 예라고 본것 같음)</p>
+
+<p><em>random value generator</em> 가 하나의 예제인데, 뭔지 살펴보자.</p>
+
+<pre><code class="scala">  trait Generator[+T] {
+    def generate: T
+  }
+
+  val integers = new Generator[Int] {
+    val rand = new java.util.Random
+    def generate = rand.nextInt()
+  }
+
+  val booleans = new Generator[Boolean] {
+    def generate = integers.generate &gt; 0
+  }
+
+  val pairs = new Generator[(Int, Int)] {
+    def generate = (integers.generate, integers.generate)
+  }
+</code></pre>
+
+<p>말 그대로 랜덤한 값들을 타입별로 생성해주는거다. 근데, 매번 해야하는 <em>boilerplate</em> 땜에 귀찮타. 더 좋은 방법은 없을까? 예를 들어 이렇게 쓸 수 있다면,</p>
+
+<pre><code class="scala">val booleans = for (x &lt;- integers) yield x &gt; 0
+
+def pairs[T, U](t: Generator[T], u: Generator[U]) = for {  
+  x &lt;- t
+  y &lt;- u
+} yield (x, y)
+</code></pre>
+
+<p><del>존나</del> 쿨하다! 근데 이게 스칼라에서 이렇게 번역되기 때문에</p>
+
+<pre><code class="scala">val booleans = integers map (x =&gt; x &gt; 0)
+
+def pairs[T, U](t: Generator[T], u: Generator[U]) =  
+  t flatMap(x =&gt; u map (y =&gt; (x, y)))
+</code></pre>
+
+<p><em>generator</em> 을 위한 <code>map</code>, <code>flatMap</code> 을 만들어야 한다. 이 함수들이  새로운 타입을 위한 <code>Generator</code> 를 돌려주면 된다. <del>모나드 느낌이 솔솔 난다</del></p>
+
+<pre><code class="scala">trait Generator[+T] {  
+  self =&gt; // an alias for "this"
+  def generate: T
+
+  def map[S](f: T =&gt; S): Generator[S] = new Generator[S] {
+    def generate = f(self.generate)
+  }
+
+  def flatMap[S](f: T =&gt; Generator[S]): Generator[S] = 
+    new Generator[S] {
+      def generate = f(self.generate).generate
+    }
+}
+</code></pre>
+
+<p>여기서 <code>self</code> 가 필요한 이유는 <code>map</code> 함수 내부에서 <code>this</code> 컨텍스트를 사용할 수 없기 때문이다. <code>map</code> 의 <code>this</code> 로 해석되어 무한루프에 빠진다.</p>
+
+<p>이렇게 <code>Generator</code> 를 위한 <code>map, flatMap</code> 을 만들면 <code>booleans</code> 가 이렇게 번역된다.</p>
+
+<pre><code class="scala">val booleans = for (x &lt;- integers) yield x &gt; 0
+
+val booleans = integers map { x =&gt; x &gt; 0 }
+
+val booleans = new Generator[Booelan] {  
+  def generate = (x =&gt; x &gt; 0)(integers.generate)
+}
+
+val booleans = new Generator[Booelan] {  
+  def generate = integers.generate &gt; 0
+}
+</code></pre>
+
+<pre><code class="scala">def pairs[T, U](t: Generator[T], u: Generator[U]) = t flatMap {  
+  x =&gt; u map { y =&gt; (x, y) }
+}
+
+...
+...
+...
+
+def pairs[T, U](t: Generator[T], u: Generator[U]) =  
+  new Generator[(T, U)] {
+    def generate = (t.generate, u.generate)
+  }
+</code></pre>
+
+<p>여기 몇개 더 유용한 <em>generator</em> 를 좀 살펴보면</p>
+
+<pre><code class="scala">  def single[T](x: T): Generator[T] = new Generator[T] {
+    def generator = x
+  }
+
+  def choose(l: Int, h: Int): Generator[Int] =
+    for (x &lt;- integers) yield l + x % (h - l)
+
+  def oneOf[T](xs: T*): Generator[T] =
+    for (i &lt;- choose(0, xs.length)) yield xs(i)
+</code></pre>
+
+<p>재밌는 사실은 <em>Generator</em> 가 <em>building block</em> 이 된다는 사실이다. <em>Generator</em> 를 조합해 <em>Generator</em> 를 만들고.</p>
+
+<p>처음에 <em>reactive programming</em> 에 관해서 잠깐 이야기 하면서 <em>compose</em> 란 단어가 나왔는데, 이게 바로 <em>composing</em> 의 강력함이다.</p>
+
+<h4 id="listgenerator">List Generator</h4>
+
+<pre><code class="scala">  def lists: Generator[List[Int]] = for {
+    isEmpty &lt;- booleans
+    list &lt;- if (isEmpty) emptyLists else nonEmptyLists
+  } yield list
+
+  def emptyLists = single(Nil)
+
+  def nonEmptyLists = for {
+    head &lt;- integers
+    tail &lt;- lists
+  } yield head :: tail
+</code></pre>
+
+<h4 id="treegenerator">Tree Generator</h4>
+
+<pre><code class="scala">  // tree generator
+  trait Tree
+  case class Leaf(x: Int)                   extends Tree
+  case class Inner(left: Tree, right: Tree) extends Tree
+
+  def leafs: Generator[Leaf] = for {
+    x &lt;- integers
+  } yield Leaf(x)
+
+  def inners: Generator[Inner] = for {
+    l &lt;- trees
+    r &lt;- trees
+  } yield Inner(l, r)
+
+  def trees: Generator[Tree] = for {
+    isLeaf &lt;- booleans
+    tree &lt;- if (isLeaf) leafs else inners
+  } yield tree
+</code></pre>
+
+<p>코드를 보면, 좀 뭔가 감이 올테다. 바로 <code>map</code>, <code>flatMap</code> 을 <code>Geneartor</code> 에 대해서 정의했기 때문에 <code>for</code> 내부에서 <code>Generator</code> 에서 <code>T</code> 타입을 빼올 수 있다. 그리고 <code>yield</code> 를 이용해 만드는 것 또한 <code>Generator</code> 가 된다. </p>
+
+<p><del>오더스키 교수는 진짜 천재같다. 모나드를 이렇게 설명하다니. 예전 강의 들을때도 정말 쉽게 설명한다는 느낌을 많이 받았는데</del></p>
+
+<h4 id="applicationrandomtesting">Application: Random Testing</h4>
+
+<p>유닛테스팅을 할때 <em>input</em> 에 대해서 <em>expected output</em> 과 비교해 테스팅을 진행하는데, <em>input</em> 을 직접 만들지 않고 테스팅이 가능할까?</p>
+
+<blockquote>
+  <p>Yes, By generating random test inputs</p>
+</blockquote>
+
+<pre><code class="scala">def randomTest[T](g: Generator[T], times: Int = 100)(f: T =&gt; Boolean): Unit = {  
+  for (i &lt;- 0 until times) {
+    val value = g.generate
+    assert(f(value), "test failed for" + value)
+  }
+  println("passed " + times + "tests")
+}
+</code></pre>
+
+<p>이런 테스팅을 한다면, </p>
+
+<pre><code class="scala">randomTest(pairs(lists, lits)) {  
+  case (xs, ys) =&gt; (xs ++ ys).length &gt; xs.length
+}
+</code></pre>
+
+<p>실패할 것이다. 둘다 <code>Nil</code> 이면 실패한다.</p>
+
+<p>우리는 <em>test</em> 를 작성할 필요가 없고, 항상 참이어야 하는 <em>properties</em> 만 작성하면 된다. 그게 <a href='http://www.scalacheck.org/' ><em>ScalaCheck</em></a> 도구의 기본 아이디어다.</p>
+
+<p><em>ScalaCheck</em> 튜토리얼을 보면 </p>
+
+<pre><code class="scala">import org.scalacheck.Properties  
+import org.scalacheck.Prop.forAll
+
+object StringSpecification extends Properties("String") {
+
+  property("startsWith") = forAll { (a: String, b: String) =&gt;
+    (a+b).startsWith(a)
+  }
+
+  property("concatenate") = forAll { (a: String, b: String) =&gt;
+    (a+b).length &gt; a.length &amp;&amp; (a+b).length &gt; b.length
+  }
+
+  property("substring") = forAll { (a: String, b: String, c: String) =&gt;
+    (a+b+c).substring(a.length, a.length+b.length) == b
+  }
+}
+</code></pre>
+
+<p>하스켈의 <a href='https://www.haskell.org/haskellwiki/Introduction_to_QuickCheck1' ><em>QuickCheck</em></a> 가 먼저 구현되었다고 한다.</p>
+
+<pre><code class="haskell">*A&gt; quickCheck ((\s -&gt; (reverse.reverse) s == s) :: [Char] -&gt; Bool)
+</code></pre>
+
+<h3 id="monads">Monads</h3>
+
+<p><del>올것이 왔다</del></p>
+
+<blockquote>
+  <p>Data structures with <code>map</code> and <code>flatMap</code> seem to be quite common.</p>
+  
+  <p>In fact there's a name that describe this class of a data structure together with some algebraic laws that they hould have</p>
+  
+  <p>They are called <strong>monads</strong></p>
+</blockquote>
+
+<p>모나드는 <code>M[T]</code> 타입으로 표시하는데, 다음의 함수들을 구현해야 한다. 하스켈에서 <code>&gt;&gt;=, return</code> 과 동일하다.</p>
+
+<pre><code class="scala">trait M[T] {  
+  // `&gt;&gt;=` called bind
+  def flatMap[U](f: T =&gt; M[U]): M[U]
+}
+
+// return
+def unit[T](x: T): M[T]  
+</code></pre>
+
+<p>이미 우리가 모르는 사이에 썼던 모나드를 보면</p>
+
+<ul>
+<li><code>List</code> is a monad with <code>unit(x) = List(x)</code></li>
+<li><code>Set</code> is a monad with <code>unit(x) = Set(x)</code></li>
+<li><code>Option</code> is a monad with <code>unit(x) = Some(x)</code></li>
+<li><code>Generator</code> is a monad with <code>unit(x) = single(x)</code></li>
+</ul>
+
+<p><code>flatMap</code> 은 이들 타입에 두루 쓰일 수 있는 반면 스칼라에서 <code>unit</code> 은 각 모나드 마다 다르다. </p>
+
+<p>그리고 <code>map</code> 은 모나드에서 <code>flatMap</code> 과 <code>unit</code> 을 조합해 만들 수 있다.</p>
+
+<pre><code class="scala">m map f
+
+== m flatMap (x =&gt; unit(f(x)))
+== m flatMap (f andThen unit) // composing functions
+</code></pre>
+
+<p>즉 <code>f</code> 를 받아 적용하고, <code>unit</code> 으로 모나드로 감싼뒤 <code>flatMap</code> 을 이용해 <em>flattening</em> 하면 <code>map</code> 의 결과가 나온다.</p>
+
+<h4 id="monadlaws">Monad Laws</h4>
+
+<ul>
+<li><em>associativity</em></li>
+</ul>
+
+<pre><code class="scala">m flatMap f flatMap g == m flatMap (x =&gt; f(x) flatMap g)  
+</code></pre>
+
+<ul>
+<li><em>left unit</em></li>
+</ul>
+
+<pre><code class="scala">unit(x) flatMap f == f(x)  
+</code></pre>
+
+<ul>
+<li><em>right unit</em></li>
+</ul>
+
+<pre><code class="scala">m flatMap unit = m  
+</code></pre>
+
+<p><a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' #Monad_Laws">하스켈 문법</a>으로 보면</p>
+
+<pre><code class="haskell">(m &gt;&gt;= f) &gt;&gt;= g  =  m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)  -- associativity
+
+return x &gt;&gt;= f   =  f x                      -- left unit
+
+m &gt;&gt;= return     =  m                        -- right unit  
+</code></pre>
+
+<p><em>associativity</em> 와 관련해서, <em>monoid</em> 란 것도 있는데 이건 <em>bind</em> 가 없는 모나드라 생각하면 쉽다. 예를 들어 <em>integer</em> 는 모노이드다</p>
+
+<pre><code>(x + y) + z = x + (y + z)
+</code></pre>
+
+<p><em>monad laws</em> 를 확인하기 위해 <code>Option</code> 을 좀 보자.</p>
+
+<pre><code class="scala">abstract class Option[+T] {  
+  def flatMap[U](f: T =&gt; Option[U]): Option[U] = this match {
+    case Some(x) =&gt; f(x)
+    case None =&gt; None
+  }
+}
+</code></pre>
+
+<p><em>left unit</em> 을 보이려면 <code>return x &gt;&gt;&gt; f   =   f x</code>, 즉</p>
+
+<pre><code class="scala">Some(x) flatMap f == f(x)
+
+// ==
+Some(x) match {  
+  case Some(x) =&gt; f(x)
+  case None =&gt; None
+}
+
+// == 
+f(x)  
+</code></pre>
+
+<p><em>right unit</em> 을 보이려면 <code>m &gt;&gt; return     =    m</code> 임을 보이면 된다.</p>
+
+<pre><code class="scala">opt flatMap Some // == opt
+
+// == 
+opt match {  
+  case Some(x) =&gt; Some(x)
+  case None =&gt; None
+}
+</code></pre>
+
+<p><em>associative law</em> 를 보이려면 </p>
+
+<pre><code class="haskell">(m &gt;&gt;= f) &gt;&gt;= g     =     m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)
+</code></pre>
+
+<p>따라서 스칼라에선</p>
+
+<pre><code class="scala">opt flatMap f flatMap g  
+// == opt flatMap (x =&gt; f(x) flatMap g)
+
+opt flatMap f flatMap g
+
+// ==
+opt match { case Some(x) =&gt; f(x) case None =&gt; None }  
+    match { case Some(y) =&gt; g(y) case None =&gt; None }
+
+// ==
+opt match {  
+  case Some(x) =&gt;
+    f(x) match { case Some(y) =&gt; g(y) case None =&gt; None }
+  case None =&gt;
+    None match { case Some(y) =&gt; g(y) case None =&gt; None }
+}
+
+// ==
+opt match {  
+  case Some(x) =&gt; f(x) match {
+    case Some(y) =&gt; g(y) case None =&gt; None
+  }
+  case None =&gt; None
+}
+
+// ==
+opt match{  
+  case Some(x) =&gt; f(x) flatMap g
+  case None =&gt; None
+}
+
+// ==
+opt flatMap (x =&gt; f(x) flatMap g)  
+</code></pre>
+
+<p>결국 <code>Option</code> 은 모나드다. 근데 이런 <em>monad laws</em> 를 지키면 얻는게 뭘까? </p>
+
+<p><em>associativity</em> 가 지켜지면, 중첩된 <em>for-loop</em> 를 <em>inline</em> 할 수 있다.</p>
+
+<pre><code class="scala">for (y &lt;- for (x &lt;- m; y &lt;- f(x)) yield y  
+     z &lt;- g(y)) yield z
+
+// ==
+for (x &lt;- m;  
+     y &lt;- f(x)
+     z &lt;- g(y)) yield z
+</code></pre>
+
+<p><em>right unit</em> 은 </p>
+
+<pre><code class="scala">for (x &lt;- m) yield x
+
+== m
+</code></pre>
+
+<p>애석하게도 <em>left unit</em> 은 마땅한 <em>for-loop</em> 가 없다.</p>
+
+<blockquote>
+  <p>Left unit does not have an analogue for <em>for-expression</em></p>
+</blockquote>
+
+<h3 id="anothertypetry">Another type: Try</h3>
+
+<p>강의 후반부에서 <code>Try</code> 라는 타입을 다룰건데, 이 타입은 <code>Option</code> 과 비슷하다. 서브타입이 <code>Success, Failure</code> 로 <em>exception</em> 이 발생할 경우와 아닐 경우를 처리하는데 쓸 수 있다.</p>
+
+<pre><code class="scala">abstract class Try[+T]  
+case class Success[T](x: T)         extends Try[T]  
+case class Failure[T](e: Exception) extends Try[Nothing]  
+</code></pre>
+
+<p>이 <code>Try</code> 를 예외가 발생할 수 있는 <em>computation (연산)</em> 을 <em>thread, computer</em> 간 넘겨주는데 사용할 수 있다. 참고로 스칼라에서 <code>Nothing</code> 은 <em>bottom type</em> 이다.</p>
+
+<p>이 <code>Try</code> 를 이용해 <em>computation</em> 을 감쌀 수 있다. <code>Try(expr)</code> 처럼</p>
+
+<pre><code class="scala">object Try {  
+  def apply[T](expr: =&gt; T): Try[T] =
+    try Success(expr)
+    catch {
+      case NonFatal(e) =&gt; Failure(e)
+    }
+}
+</code></pre>
+
+<p>여기서 <code>=&gt; T</code> 로 <code>expr</code> 를 <em>by name</em> 으로 받는 이유는 연산을 나중에 하기 위해서다.</p>
+
+<p><code>Try</code> 를 <em>for-loop</em> 에 활용하면</p>
+
+<pre><code class="scala">for {  
+  x &lt;- computeX
+  y &lt;- computeY
+} yield f(x, y)
+</code></pre>
+
+<p>이 구문이 하는 일은, <code>computeX</code>, <code>computeY</code> 가 모두 성공할 경우에만 <code>Success(f(x, y))</code> 를 돌려준다. 둘 중 하나라도 실패하면 <code>Failure(e)</code> 를 반환할 것이다.</p>
+
+<p><code>Try</code> 를 위한 <code>map</code>, <code>flatMap</code> 은</p>
+
+<pre><code class="scala">abstract class Try[T] {  
+  def flatMap[U](f: T =&gt; Try[U]): Try[U] = this match {
+    case Success(x) = try f(x) 
+                      catch { case NonFatal(e) =&gt; Failure(ex)
+    case fail: Failure =&gt; fail
+  }
+
+  def flatMap[U](f: T =&gt; U): Try[U] = this match {
+    case Success(x) =&gt; Try(f(x))
+    case fail: Failure =&gt; fail
+  }
+}
+
+
+// t map f
+// == t flatMap (f andThen Try)
+</code></pre>
+
+<p><code>Try</code> 를 모나드라 생각해 보자. <em>monad law</em> 중 실패하는 것이 있을까? 다시 한번 보면</p>
+
+<pre><code class="haskell">return x &gt;&gt;= f     =    f x    -- left unit  
+m &gt;&gt;= return       =    m      -- right unit  
+-- associativity
+(m &gt;&gt;= f) &gt;&gt;= g    =    m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g) 
+</code></pre>
+
+<p>아까 <em>for-expression</em> 에 사용했으니 <em>right unit, associativity</em> 는 맞을 거고 <em>left unit</em> 을 살펴보자.</p>
+
+<pre><code class="scala">// return x &gt;&gt;= f     =    f x
+Try(x) flatmap f
+
+// ==
+this match {  
+  Success(x) =&gt; try f(x) 
+                catch { case NonFatal(e) =&gt; Failure(ex)
+  case fail: Failure =&gt; fail
+}
+</code></pre>
+
+<p>보면 알겠지만, 예외가 발생하지 않을 경우에만 <em>left unit</em> 이 성립한다.</p>
+
+<pre><code class="scala">Try(expr) flatMap f != f(expr)  
+</code></pre>
+
+<p>좌변은 예외를 그냥 던지지않고, 감싸서 준다. 반면 우측은 예외를 던질 수 있다. 즉 예외를 던지지 않는 <em>law</em> 를 얻기 위해 <em>left unit</em> 을 희생했다고 보면 된다.</p>
+
+<blockquote>
+  <p>An expression composed from <code>Try</code>, <code>map</code>, <code>flatMap</code> will never throw a non-fatal exception</p>
+</blockquote>
+
+<p>이거 <em>bullet-proof principle</em> 이라 부른다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>우리는 <em>collection</em> 뿌만 아니라 다양한 타입에 대해 <em>for-xpression</em> 을 쓸 수 있음을 배웠다. <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 등을 구현하면 된다.</p>
+
+<p><code>flatMap</code> 을 구현한 많은 타입이 <em>monad</em> 다. 만약에 <code>withFilter</code> 를 구현하면 <em>monad with zer</em> 라 부른다.</p>
+
+<p>모나드 법칙은 <em>API</em> 를 구현할때 가이드라인이 되지만, <code>Try</code> 의 예에서 봤듯이 모나드 법칙을 버려서 다른 이득을 얻을 수도 있다. <del>만만한 left unit</del></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://stackoverflow.com/questions/1722137/scala-2-8-collections-design-tutoria$l' >Scala 2.8 Collection</a> <br />
+(2) <a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' #Monad_Laws">Haskell Wiki: Monad</a>  </p>]]></description><link>http://1ambda.github.io/reactive-programming-1/</link><guid isPermaLink="false">c49814fa-24c5-4f5f-83c4-d1a196a8b687</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[variance]]></category><category><![CDATA[monad]]></category><category><![CDATA[reactive programming]]></category><category><![CDATA[generator]]></category><category><![CDATA[scala check]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 07:30:37 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week4]]></title><description><![CDATA[<h3 id="twophaseprocessdiscoverylimitations">Two-Phase Process Discovery, Limitations</h3>
 
 <p>지난시간에 두 단계를 거치는 프로세스 마이닝 알고리즘을 봤었다.</p>
 
@@ -6013,421 +6760,4 @@ valid Div x y = x `mod` y == 0 &amp;&amp; y /= 1
 <h3 id="references">References</h3>
 
 <p>(1) <strong>DelftX FP 101x</strong> <br />
-(2) <em>Programming in Haskell</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro7/</link><guid isPermaLink="false">334d7896-68cf-4d8b-943c-0a31e6ce3dfb</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 16:22:28 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week2]]></title><description><![CDATA[<p>지난 주 수업을 듣고 보니, 이벤트 로그를 만들어서 악성 사용자나, 비 정상적인 유저의 행동으로 부터 모델을 만들어서 어뷰징을 막거나, 부족한점을 개선해 서비스의 품질을 높일수도 있겠단 생각이 들었다.</p>
-
-<p>근데 프로세스 마이닝에서 사용하는 이벤트 로그를 만들려면 <em>activity</em> 가 어떤 데이터가 되야할지 부터 정해야 하는데, 쉽지가 않다. 2주차에는 이런 고민들을 좀 해 보고, 프로세스 마이닝에서 사용하는 모델 표기법과 알파 알고리즘에 대해 논의한다.</p>
-
-<p><img src='http://www.triua.com/wp-content/uploads/business-process-modeling-automation.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.triua.com/' >http://www.triua.com/</a>)</p>  
-
-<p><br/></p>
-
-<h3 id="eventlogsandprocessmodels">Event Logs and Process Models</h3>
-
-<p>지난 시간에 <strong>Play-in</strong>, <strong>Play-out</strong>, <strong>Replay</strong> 에 대해 잠깐 언급했는데, 이 중에서 <strong>Play-in</strong> 은 사람들이 정해진 규칙에 의해서가 아니라, 실제로 따르는 프로세스를 찾아낼 수 있다.</p>
-
-<blockquote>
-  <p><strong>Process discovery:</strong> learning de facto process models from observed behavior</p>
-</blockquote>
-
-<p>그리고 <strong>Replay</strong> 는 <em>conformance checking</em>, <em>prediction</em>, <em>bottleneck analysis</em> 에 사용할 수 있다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter01introduction-110510153155-phpapp01/95/process-mining-chapter-1-introduction-17-728.jpg?cb=1305062721'  alt="" /></p>
-
-<p align="center">(www.procesmining.org)</p>
-
-<p>결국 <em>observed behavior</em> 의 기록인 <em>event-log</em> 를 모으는 것이 중요하다. 그런데, 모든 이벤트를 바로 <em>case id, activity name, timestamp</em> 로 매핑하긴 쉬운 일이 아니다.</p>
-
-<p>예를 들어 이메일에서 <em>activity</em> 는 무엇일까? <del>어렵다.</del> 다양한 답이 나올 수 있지만, 딱 맘에 드는 답을 찾기 어렵다.</p>
-
-<p><em>transactional information</em> 에서는 <em>event</em> 가 다양한 <em>state (상태)</em> 로 나타날 수 있다.</p>
-
-<p><img src='http://www.cubrid.org/files/attach/images/220547/971/295/thread-state-diagram.png'  alt="" /></p>
-
-<p align="center">(<a href='http://architects.dzone.com/' >http://architects.dzone.com</a>)</p>
-
-<p>한 가지 더 생각해 볼 문제는 <em>case vs event</em> 다. <em>case</em> 는 <em>birth date</em> 처럼 변하지 않는 것이고, <em>event</em> 는 프로세스를 거치면서 변하는 속성들이다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter04gettingthedata-110510153210-phpapp01/95/process-mining-chapter-4-getting-the-data-6-728.jpg?cb=1305062568'  alt="" /></p>
-
-<p>이벤트를 정의하는데 다양한 방법이 있어 혼란스러울 수 있겠지만, 다행히도 프로세스 마이닝에서 사용되는 표준 포맷이 있다. <em>eXtensible Event Stream, XES</em> 인데,</p>
-
-<p><img src='http://fluxicon.com/blog/wp-content/uploads/2010/09/XES-Schema.png'  alt="" /></p>
-
-<p align="center">(<a href='http://fluxicon.com/' >http://fluxicon.com</a>)</p>
-
-<p><br/> <br />
-<em>control flow</em> 를 표현하는데는 다양한 방법이 있다. <em>BPMN, UML, Patri net</em> 등등..</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Animated_Petri_net_commons.gif/330px-Animated_Petri_net_commons.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a>)</p>
-
-<p>이 표기법들을 선택하는데 2가지 기준을 세울 수 있다. </p>
-
-<p>(1) <strong>search space:</strong> finding a model that captures reality well <br />
-(2) <strong>visualization:</strong> what do end-users need to see?  </p>
-
-<p>선택된 표기법이 <em>reality</em> 를 잘 반영하지 못할 수 있기 때문에, 다양한 표기법들을 알고, 사용해 보는것이 정말 중요하다.</p>
-
-<h3 id="petrinets">Petri Nets</h3>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Animated_Petri_net_commons.gif/330px-Animated_Petri_net_commons.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a>)</p>
-
-<p><em>Petri Net</em> 은 <code>token</code>, <code>place</code>, <code>transition</code>, <code>arc</code> 로 구성되어있다. 토큰은 한 <code>place</code> 에서 다음 <code>place</code> 로 이동할 수 있다. <em>petri net</em> 의 상태를 <em>marking</em> 이라 부른다. </p>
-
-<p><em>transition</em> 의 경우 <em>input place</em> 가 토큰을 담고 있어야만 다음 <em>place</em> 로 토큰을 옮긴다. 다시 말해서 <em>transition</em> 이 <em>token</em> 을 <em>input places</em> 로 부터 <em>consume</em> 해서 <em>output place</em> 에 <em>token</em> 을 <em>produce</em> 한다.</p>
-
-<p>독립적인 <em>transition</em> 이 있을때 모든 <em>transition</em> 은 동시에 작동할 수도, 하나씩만 작동할 수도 있다. </p>
-
-<p>신호등을 모델링 해보면 <em>place</em> 는 <code>red, green,orange</code> 이고 <em>transition</em> 은 <code>rg, go, or</code> 이다. </p>
-
-<p><img src='http://www.bpm-book.com/foswiki/pub/BpmBook/Exercise4-23/ex4-23.png'  alt="" /></p>
-
-<p align="center">(<a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a>)</p>
-
-<p>하나의 신호등은 정말 그리기 쉬운데, 두개의 신호등을 모델링 하려면 좀 골치가 아프다. 우선 두개의 <em>petri net</em> 을 따로따로 사용할건가, 토큰만 두개로 늘릴건가를 생각해보자.</p>
-
-<p>토큰이 두개인 경우는 하나의 신호등이 <code>green</code> 이고 다른 신호등이 <code>red</code> 인 경우, 어떤 신호등이 <code>green</code> 인지를 알려주지 않는다. <em>marking</em> 이 6가지가 나온다.</p>
-
-<p>반면 두개의 <em>petri net</em> 을 사용하면 <em>marking</em> 이 9 가지가 되어 순서가 보존된다. 순열과 조합의 차이라 보면 되겠다.</p>
-
-<p>근데, 두개의 <em>petri net</em> 을 사용하면 두 토큰이 동시에 <code>green</code> 에 있을 수 있다. 이건 교차로라면 교통사고를 야기할 수 있다.</p>
-
-<p>그리고 한가지 더 생각해 볼 문제는 신호등의 순서다. <em>non-deterministic</em> 이면 한 신호등만 주구장창 파란불, 빨간불, 파란불, 이 될 수 있다. 따라서 한 신호등이 변하면 다음 신호등이 변하는 모델을 만들어야한다.</p>
-
-<h4 id="reachabilitygraph">Reachability Graph</h4>
-
-<p><em>transition</em> 에 따라 <em>marking</em> 이 변하는 그래프를 그릴 수 있는데, 이것을 <strong>reachability graph</strong> 라고 부른다. 이 그래프 내에서 각 상태가 <em>reachable marking</em> 이다.</p>
-
-<h3 id="transitionsystemsandpetrinetproperties">Transition Systems and Petri Net Properties</h3>
-
-<p><em>reachability graph</em> 는 한 상태에서 다른 상태로의 전환을 표현하므로 <em>transition system</em> 이라 볼 수 있다. 그리고, <em>reachability graph</em>는 <em>finite or infinite</em> 모두 가능하다.</p>
-
-<h4 id="boundednesssafeness">Boundedness, Safeness</h4>
-
-<p>어떤 <em>place</em> 에 <code>k</code> 이상의 토큰이 존재하는 <em>reachable marking</em> 이 없으면 <em><code>k</code>-bounded place</em> 라 부른다. 쉽게 생각하서 <em>upper bound</em> 라 보면 된다.</p>
-
-<p>만약에 <em>petri net</em> 의 모든 <em>place</em> 가 <em>k-bounded</em> 면, 그 <em>petri net</em> 도 <em>k-bounded</em> 다. </p>
-
-<p>이런 <code>k</code> 가 <em>petri net</em> 이나 <em>place</em> 가 있을수도 있고, 없을때도 있는데, 있을때만 <em>bounded petri net, bounded place</em> 라 부른다.</p>
-
-<p>만약에 어떤 <em>petri net</em> 이 <em><code>1</code>-bounded</em> 면 <em>safe</em> 하다고 말한다.</p>
-
-<h4 id="deadlock">Deadlock</h4>
-
-<p>그리고, <em>dead marking</em> 은 더이상 적용 가능한 <em>transition</em> 이 없을때다. 그리고 <em>petri net</em> 에 <em>reachable dead marking</em> 이 있으면 잠재적으로 <em>deadlock</em> 이 발생할 수 있다.</p>
-
-<p>따라서 모든 <em>reachable marking</em> 이 적어도 하나의 <em>transition</em> 이 있을때 <em>deadlock free</em> 하다고 말할 수 있다.</p>
-
-<h4 id="safeness">Safeness</h4>
-
-<p>어떤 <em>transition</em> <code>t</code> 대해, 어느 <em>reachable marking</em> 에서도 <code>t</code> 를 적용가능하면 <code>t</code> 는 <em>live</em> 하다. 그리고 모든 트랜지션이 <em>live</em> 면, <em>petri net</em> 은 <em>live</em> 다. </p>
-
-<p><em>live petri net</em> 에서는 모든 트랜지션이 적용 가능하므로 <em>deadlock-free</em> 하다고 말할 수 있다.</p>
-
-<h4 id="transitionsystem">Transition System</h4>
-
-<p>이전에 보았던 <em>reachability graph</em> 는 <em>transition system</em> 의 특별한 종류다. 트랜지션 시스템은 <em>state</em> 와 <em>transitions</em> 로 구성되는데, 하나 이상의 <em>initial state</em> 와 0 개 이상의 <em>final states</em> 가 있다.</p>
-
-<p>이 때 <em>initial state -> final state</em> 로의 <em>path</em> 를 <strong>complete trace</strong> 라 부른다.</p>
-
-<p>모델로 부터 <em>transition system</em> 을 만들고 이것으로 부터 <em>complete trace</em> 를 만들 수 있는데, 문제는 트랜지션 시스템이 엄청나게 거대해 질 수 있거나 심지어는 무한할수도 있다는 사실이다.</p>
-
-<p>단순히 <code>(token) -&gt; a1 -&gt; ()</code> 이란 간단한 모델에서 <code>a1, ..., ak</code> 만 해도 <code>2^k</code> 개의 트랜지션 시스템이 나온다. 어마어마하다</p>
-
-<h3 id="workflownetsandsoundness">Workflow Nets and Soundness</h3>
-
-<p><em>Petri net</em> 은 간편하긴 한데, 위에서 말했듯이 무한한 트랜지션 시스템이 나올 수 있고, 데드락이 발생할 수도 있다.</p>
-
-<p>따라서 프로세스 마이닝에서는 모델을 만들기 위해 <em>end state</em> 가 있고, 위에서 언급한 <em>anomalies</em> 가 없는 <em>Petri net</em> 의 일종인 <em>Workflow Nets, WF-Nets</em> 를 사용하기도 한다.</p>
-
-<p><img src='http://www.bpm-book.com/foswiki/pub/BpmBook/Exercise6-02/ex6-02.png'  alt="" /></p>
-
-<p align="center">(<a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a>)</p>
-
-<p>본래 <em>WF-nets</em> 은 <em>BPM</em> 에서 쓰이던 것이다. <em>BPM</em> 은 IT 와 비즈니스를 연결해 주는 학문인데, </p>
-
-<p><img src='http://bpmcenter.org/wp-content/uploads/BPM-lifecycle1.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://bpmcenter.org/' >http://bpmcenter.org/</a>)</p>
-
-<p><em>model-based analysis</em> 와 <em>data-based analysis</em> 를 반복하면서 모델을 개선한다.</p>
-
-<p><em>BPM</em> 에서 모델의 역할은</p>
-
-<p>(1) reason about processes (<strong>redesign</strong>) <br />
-(2) make decisions inside processes (<strong>planning and control</strong>)  </p>
-
-<p>안타깝게도 모델을 표현하는데 다양한 <em>notation</em> 이 있다. (언급 했듯이 <em>search space</em> 와 <em>visualization</em> 때문) 이 수업에서는 3 가지 표기를 사용한다.</p>
-
-<ul>
-<li>Business Process Model and Notation (<strong>BPMN</strong>)</li>
-<li>Event-Driven Process Chains (<strong>EPCs</strong>)</li>
-<li>Petri nets (Workflow nets)</li>
-</ul>
-
-<p>아래 이미지는 각각, <em>BPMN, EPCs</em> 다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-12-728.jpg?cb=1305062671'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-13-728.jpg?cb=1305062671'  alt="" /></p>
-
-<p><br/></p>
-
-<h4 id="goodmodel">Good Model</h4>
-
-<p>좋은 모델이란 일반적으로 <em>sound WF-net</em> 을 말한다.</p>
-
-<p><strong>Workflow net</strong> 이란</p>
-
-<blockquote>
-  <p>A <strong>Workflow net</strong> has one source place(start) and one sink place(end) and all other nodes are on a path from source to sink.</p>
-</blockquote>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-10-728.jpg?cb=1305062671'  alt="" /></p>
-
-<p><em>Workflow net</em> 이 <em>sound</em> 라는건</p>
-
-<blockquote>
-  <p>A workflow net is <strong>sound</strong> if and only if the following properties hold:</p>
-  
-  <p>(1) <strong>safeness:</strong> places cannot hold multiple tokens at the same time <br />
-  (2) <strong>proper completion:</strong> if the sink place is marked, all other places are empty <br />
-  (3) <strong>option to complete:</strong> it is always possible to reach the marking that marks just the sink place <br />
-  (4) <strong>absence of dead parts:</strong> for any transition there is a firing sequence enabling it  </p>
-</blockquote>
-
-<p>작은 모델은 <em>soundness</em> 를 검사하기 쉬울지 모르지만, 모델이 커지만 좀 힘들 수도 있다. 여기에 사용할 수 있는 몇 가지 테크닉이 있다.</p>
-
-<p>(1) 우선 <em>option to complete</em> 와 <em>proper completion</em> 을 보면, <em>proper completion</em> 이 거짓이면 <em>option to complete</em> 도 거짓이므로 검사할 필요가 없다. 반대로 <em>option to complete</em> 가 참이면 I<em>proper completion</em> 도 참이다.</p>
-
-<blockquote>
-  <p>option to complete impiles proper completion</p>
-</blockquote>
-
-<p>(2) 만약 <em>WF-net</em> 의 <em>end</em> 에서 <em>start</em> 로 트랜지션을 만든 <em>short-circuited petri net</em> 이 <em>live, bounded</em> 면 <em>WF-net</em> 은 <em>sound</em> 다.</p>
-
-<blockquote>
-  <p>A WF-net is <strong>sound</strong> if and only if the corresponding "short circuted" Petri net is <strong>live</strong> and <strong>bounded</strong></p>
-</blockquote>
-
-<h4 id="modelbasedanalysis">Model-based Analysis</h4>
-
-<p>위에서 본 <em>soundness checking</em> 같은 검증이나 <em>performance analysis</em> 같은 시뮬레이션이 모델-베이스드 분석해서 주로 하는 일이다. 근데, 이런 검증이나 시뮬레이션은 모델이 높은 퀄리티를 가져야만 한다는 한계가 있다. 프로세스 마이닝은 이런 모델기반 분석과 실제 데이터를 연관시킨다. </p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter02processmodelingandanalysis-110510153158-phpapp01/95/process-mining-chapter-2-process-modeling-and-analysis-24-728.jpg?cb=1305062671'  alt="" /></p>
-
-<p><br/></p>
-
-<h3 id="alphaalgorithm">Alpha Algorithm</h3>
-
-<p><em>alpha algorithm</em> 을 이용해서 모델을 발견할 수 있다. 즉 아래 그림에서, <em>discovery</em> 에 해당하는 과정이다. 이벤트로그로 부터 모델을 만드는 과정을 <em>play-in</em> 이라 부르기도 한다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-3-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<p>이벤트 로그를 간략화 하면 <em>activity</em> 의 <em>order</em> 가 된다. 즉, <em>timestamp</em> 가 <em>order</em> 로 표현되고, 한 묶음의 <em>ordered activity</em> 가 모여서 <em>trace</em> 가 된다. 예를 들어서 다음은 이벤트 로그라 볼 수 있다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-5-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/> <br />
-알파 알고리즘의 목적은 이렇게 간략화된 이벤트 로그를 이용해 모델을 뽑아내는 것이다.</p>
-
-<h4 id="operations">Operations</h4>
-
-<p>몇 가지 연산자를 알고 넘어가자</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-11-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/> <br />
-(1) <strong>direct succession:</strong> <code>x &gt; y</code>, iff for some case x is directly followed by y <br />
-(2) <strong>causality:</strong> <code>x -&gt; y</code>, iff <code>x &gt; y</code> and not <code>y &gt; x</code> <br />
-(3) <strong>parallel:</strong> <code>x || y</code>, iff <code>x &gt; y</code> and <code>y &gt; x</code> <br />
-(4) <strong>choice:</strong> <code>x # y</code>, iff not <code>x &gt; y</code> and <code>y &gt; x</code></p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-18-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<p>그러면 이 연산자를 조합해 패턴을 발견할 수 있다.</p>
-
-<p>(1) <em>sequence:</em> <code>a -&gt; b</code> <br />
-(2) <em>XOR split:</em> <code>a -&gt; b</code>, <code>a -&gt; c</code>, <code>b # c</code> <br />
-(3) <em>XOR join:</em> <code>b -&gt; d</code>, <code>c -&gt; d</code>, <code>b # c</code> <br />
-(4) <em>AND split:</em> <code>a -&gt; b</code>, <code>a -&gt; c</code>, <code>b || c</code> <br />
-(5) <em>AND join:</em> <code>b -&gt; d</code>, <code>c -&gt; d</code>, <code>b || c</code></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-15-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<h4 id="footprint">Footprint</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-16-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<p>각 트랜지션 사이에 테이블을 하나 만들면 이처럼 생겼는데, <em>footprint</em> 라 부른다. 우리가 로그를 이용해 만든 모델과, 로그의 풋 프린트는 동일하다. </p>
-
-<blockquote>
-  <p>Log and model agree on footprint</p>
-</blockquote>
-
-<p><br/></p>
-
-<h4 id="logics">Logics</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-19-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<p>알파 알고리즘은 이렇게 생겼는데, 너무 개략적으로 설명해 주셔서 나도 개략적으로 밖에 알지 못한다. 간략히 설명하면</p>
-
-<p>(1) <em>activity</em> 를 <em>transition</em> 으로 매핑한다 <br />
-(2) 첫 번째 트랜지션을 찾는다 <br />
-(3) 마지막 트랜지션을 찾는다</p>
-
-<p>두 인접한 트랜지션 사이에 있는 것은 <em>place</em> 이므로, 두 인접한 트랜지션을 찾아보자. 먼저</p>
-
-<p>(4) <code>(A, B)</code> 를 계산한다  </p>
-
-<p>이 때 <code>A</code> 내에 있는 모든 <code>a</code> 와 <code>B</code> 내에 있는 모든 <code>b</code> 에 대해 <code>a &gt; b</code> 이고, <code>a1 # a2</code>, <code>b1 # b2</code> 인 <code>(A, B)</code> 를 찾는다.</p>
-
-<blockquote>
-  <p>Find paris <code>(A, B)</code> of sets of activities such as that every element <code>a</code> in <code>A</code> and every element <code>b</code> in <code>B</code> are causally related, all element in <code>A</code> are independent and all elements in <code>B</code> are independent</p>
-</blockquote>
-
-<p>(5) <em>non-maximal pair</em> 를 제거한다. </p>
-
-<p><code>(4)</code> 에서 찾은 <code>(A, B)</code> 는 부분집합을 가질 수 있다. 이러면 <em>sub-pair</em> 로 인해 <code>place</code> 가 또 생길 수 있으므로 제거한다.</p>
-
-<p>예를 들어 <code>[({b}, {d}), ({b, e}, {d})]</code> 이 있다면 <em>sub-pair</em> <code>({b}, {d})</code> 를 제거한다.</p>
-
-<blockquote>
-  <p>Delete from set <code>X_L</code> all paris <code>(A, B)</code> that are not maximal</p>
-</blockquote>
-
-<p>(6) <em>place</em> <code>P_(A, B)</code> 의 위치를 결정한다. </p>
-
-<blockquote>
-  <p>Determine the place set. Each element <code>(A, B)</code> is a place. To ensure the workflow structure, add a source place and target place</p>
-</blockquote>
-
-<p>(7) <code>(2)</code> 와 <code>(3)</code> 에서 찾은 출발점과 끝점과 <code>(6)</code> 에서 찾은 <em>place</em> 의 <em>source transition</em> 과 <em>target transition</em> 과 잇는다.</p>
-
-<blockquote>
-  <p>Determine the flow relation. Connect each place P(A, B) with each element <code>a</code> of its set <code>A</code> of source transitions and with each element of its set <code>B</code> of target transitions. In addition, draw an arc from the source place to each start transition and an arc from each end transition to the sink place</p>
-</blockquote>
-
-<p>따라서 전체적인 알고리즘은</p>
-
-<ul>
-<li>먼저 <em>footprint</em> 를 만들고</li>
-<li>여기서 집합 내부적으로 <code>#</code> 이고 집합간 <code>&gt;</code> 를 가지는 <code>(A, B)</code> 를 구한뒤  </li>
-<li>중복을 제거하기 위해 <em>non-maximal pair</em> 를 제거한다  </li>
-<li><code>(A, B)</code> 에서 하나씩 <em>pair</em> 를 뽑아서 잇고, 이것들과 초기 트랜지션 <code>T_I</code>, 마지막 트랜지션 <code>T_O</code> 와 잇는다.</li>
-</ul>
-
-<h4 id="intuition">Intuition</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-21-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<p>알파 알고리즘은 간단하지만 <em>loop</em>, <em>choice</em>, <em>concurrenc</em> 등 꽤 많은 연산을 찾아낸다. 그러나 한계가 있다.</p>
-
-<h4 id="limitation">Limitation</h4>
-
-<h4 id="implicitplaces">implicit places</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-29-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p>여기서 초록색 <em>place</em> 는 아무일도 하지 않음에도 <em>alpha algorithm</em> 이 찾아냈다. </p>
-
-<h4 id="loopsoflength12">Loops of length 1, 2</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-30-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p>이벤트 로그를 보면 실제로는 <code>b</code> 가 <em>self-loop</em> 가 있음에도 알파 알고리즘은 찾아내지 못한다.</p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-31-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p>길이가 2인 루프도 마찬가지로 찾아내지 못한다.</p>
-
-<h4 id="nonlocaldependency">Non-local dependency</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-32-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p>여기서 알파 알고리즘을 돌리면 <code>p1, p2</code> 를 못찾는다. 아래 그림은 알파 알고리즘이 찾기 힘든 모델이다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-33-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<h4 id="representationbias">Representation Bias</h4>
-
-<p>알파 알고리즘이 가지는 표현적인 한계 때문에 다음과 같은 경우도 발생한다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-38-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-39-728.jpg?cb=1305062521'  alt="" /></p>
-
-<h4 id="noiseandincompleteness">Noise and Incompleteness</h4>
-
-<p>알파 알고리즘은 아주 기본적인 알고리즘이기 때문에 패턴을 잘못 인식하는 경우가 많다. </p>
-
-<p>게다가, 이벤트 로그 자체가 완벽한 <em>trace</em> 가 아닐수도 있다는 것도 고려해야한다.</p>
-
-<blockquote>
-  <p><strong>Noise:</strong> the event log contains rare and infrequent behavior not representative for the typical behavior of the process</p>
-  
-  <p><strong>Incompleteness:</strong> the event log contains too few events to be able to discover some of the underlying control-flow structures</p>
-</blockquote>
-
-<p>즉 이벤트 로그 자체가 어떤 패턴을 발견하기엔 너무 적거나, 좀 노이지할 수가 있다는 뜻이다.</p>
-
-<h4 id="fitnessvsprecisionsimplicityvsgeneralization">Fitness vs Precision, Simplicity vs Generalization</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-43-728.jpg?cb=1305062521'  alt="" /></p>
-
-<p><br/></p>
-
-<p>아래의 두 모델중 어떤게 더 이벤트 로그를 잘 반영한 것일까? 빈도가 적은 로그는 표현하지 않는것이 더 좋은가?</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter05processdiscovery-110510153220-phpapp01/95/process-mining-chapter-5-process-discovery-47-728.jpg?cb=1305062521'  alt="" /></p>
-
-<h4 id="summary">Summary</h4>
-
-<p>루프가 있거나, 모델에 <em>parallel</em> 이 있는 경우에 가능한 <em>trace</em> 의 수는 기하 급수적으로 많아진다. </p>
-
-<p>그러나 우리가 가진 이벤트 로그는 일부분이다. 따라서 이런 로그로 만드는 모델은 어느정도 틀릴 수 밖에 없다. </p>
-
-<p>알파 알고리즘의 단점을 좀 정리해 보면,</p>
-
-<p>(1) <strong>implicit places:</strong> harmless and be solved through preprocessing <br />
-(2) <strong>loops of length 1:</strong> can be solved in multiple ways <br />
-(3) <strong>loops of length 2:</strong> idem. <br />
-(4) <strong>non-local dependencies:</strong> challenging <br />
-(5) <strong>representational bias:</strong> cannot discover transtions with duplicate or invisible labels. other algorithms may have a different bias. <br />
-(6) <strong>discovered model does not need to be sound:</strong> some algorithm ensure this. <br />
-(7) <strong>noise, incompleteness:</strong> challenging  </p>
-
-<h3 id="references">References</h3>
-
-<p>(0) <a href='http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483' >Book: Process Mining</a> <br />
-(1) <a href='https://d396qusza40orc.cloudfront.net/procmin/lecture_slides/22-Petri%20Nets%20%281%29.pdf' >Slide</a> <br />
-(2) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst <br />
-(3) <a href='http://1ambda.github.io/www.processmining.org' >www.processmining.org</a> <br />
-(4) <a href='http://fluxicon.com/' >http://fluxicon.com</a> <br />
-(5) <a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a> <br />
-(6) <a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a> <br />
-(7) <a href='http://bpmcenter.org/' >http://bpmcenter.org/</a></p>]]></description><link>http://1ambda.github.io/process-mining-week2/</link><guid isPermaLink="false">51bbba08-c9ac-44ee-9593-85f5b62054fb</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[alpha algorithm]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 04:30:43 GMT</pubDate></item></channel></rss>
+(2) <em>Programming in Haskell</em>  </p>]]></description><link>http://1ambda.github.io/haskell-intro7/</link><guid isPermaLink="false">334d7896-68cf-4d8b-943c-0a31e6ce3dfb</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 16:22:28 GMT</pubDate></item></channel></rss>
