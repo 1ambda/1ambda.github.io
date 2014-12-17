@@ -1,5 +1,422 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 16 Dec 2014 14:22:03 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[R-way, Ternary Search Tries]]></title><description><![CDATA[<h3 id="stringsymboltable">String Symbol Table</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 17 Dec 2014 05:40:48 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Process Mining, Week4]]></title><description><![CDATA[<h3 id="twophaseprocessdiscoverylimitations">Two-Phase Process Discovery, Limitations</h3>
+
+<p>지난시간에 두 단계를 거치는 프로세스 마이닝 알고리즘을 봤었다.</p>
+
+<p>하나는 <em>heuristic mining</em> 으로 <em>dependency graph</em> 를 만들고, 이것을 <em>C-nets</em> 으로 변환했었다.</p>
+
+<p>다른 하나는 <em>transition system</em> 을 학습하는 것으로 먼저 <em>state abstraction</em> 을 이용해 <em>transition system</em> 을 만들고 여기에 숨어있는 <em>state-based region</em> 을 이용해 <em>Petri-nets</em> 을 만들었다.</p>
+
+<p>그런데, <em>state-based region</em> 접근 방법에는 문제점이 있다.</p>
+
+<p>(1) Inability to discover particular <strong>process construct</strong>s <br />
+(2) Inability to balance the four forces (<em>fitness</em>, <em>precision</em>, <em>generalization</em>, simplicity)</p>
+
+<p>예를 하나 보자. <code>&lt;a, a&gt;^55</code> 란 로그가 있을때 만들어지는 트랜지션 시스템으로 <code>s1 -&gt; s2 -&gt; s3</code> 가 있다. 여기엔 몇개의 <em>non-trivial region</em> 이 있을까?</p>
+
+<p>없다. <em>empty set</em>, <code>{s1, s2, s3}</code> 가 있는데, <em>trivial region</em> 이므로</p>
+
+<p>따라서 이걸 이용해 <em>petri-net</em> 을 만들면 <em>place</em> 가 없는 <em>petri-net</em> 이 만들어 지고, <code>&lt;a, a, a&gt;</code> 등의 로그를 허용하므로 에러가 있다.</p>
+
+<p><code>&lt;a, c&gt;, &lt;a, b, c&gt;, &lt;a, b, b, c&gt; ...</code> 의 로그를 훈련시켜 만든 트랜지션 시스템은 대략 이런 모양이다</p>
+
+<p><code>s1 -&gt; s2 &gt; s3</code> (<code>s2</code> 는 자기 자신으로의 액션 <code>b</code> 가 있음) </p>
+
+<p>이 때 여기에는 <em>non-trivial region</em> 이 3개가 생기는데, 이걸 이용해 <em>petri-net</em> 을 만들면 <code>b</code> 만 붕 떠 있어, <code>b</code> 가 가운데 실행되지 않고 먼저나, 나중에 실행되는 <em>petri-net</em> 이 만들어 진다. <em>underfit</em> 이다.</p>
+
+<blockquote>
+  <p>Petri net can simulate the behavior of the transition system, but not the other way around (no bisimulation)</p>
+</blockquote>
+
+<p>첫 번째 문제같은 경우는 <em>forward closure</em> 속성을 검사해서, 문제가 발견되면 <em>label</em> 을 <em>spliting</em> 하는걸로 해결할 수 있다. (이미지를 첨부하고 싶은데 찾을 수가 없다.) 두 번째 문제도 같은 방법으로 해결할 수 있다. <em>ProM</em> 에는 <em>bisimulation</em> 을 위한 플러그인이 있다.</p>
+
+<p>이제 특정 프로세스 패턴을 발견하지 못하는 문제를 해결했다. 이제 문제 (2) 를 해결해 보자.</p>
+
+<blockquote>
+  <p>(2) Inability to balance the four forces (<em>fitness</em>, <em>precision</em>, <em>generalization</em>, simplicity)</p>
+</blockquote>
+
+<p>먼저 <em>step 1</em> 에서 트랜지션 시스템을 학습할때는 <em>fitness, generalization</em>, <em>precision</em>, <em>simplicity</em> 의 <em>trade-off</em> 를 봐가면서 해야한다.</p>
+
+<p><em>step 2</em> 에서는 <em>region</em> 을 이용해서 <em>concurrency</em> 를 발견하는데 사실 잘 생각해 보면 <em>Petri-nets</em> 은 트랜지션시스템에서의 변환이므로 이 단계에서는 <em>simplicity</em> 나 <em>generalization</em> 의 개선 여지가 없다. 트랜지션 시스템이 이미 복잡한데 어떻게 페트리넷을 간단하게 할까? 마찬가지로 트랜지션 시스템이 이미 <em>overfit</em> 되어있는데, 어떻게 이 문제를 풀까? 이 두 가지 문제를 해결하려면 (1) 로 돌아가야 한다.</p>
+
+<p>정리하자면 <em>Region-based techniques</em> 은 </p>
+
+<ul>
+<li><strong>Overfitting</strong> may be a problem</li>
+<li>Inability to leave out <strong>infrequent</strong> behavior (but can be done in the transtion system)</li>
+<li><strong>Noise</strong> and <strong>incompleteness</strong> connot be handled well</li>
+</ul>
+
+<h3 id="alternativeprocessdiscoverytechniques">Alternative Process Discovery Techniques</h3>
+
+<p>이전까지는 모델의 퍼포먼스를 기준으로 삼았지만 사실 </p>
+
+<ul>
+<li>speed</li>
+<li>memory usage</li>
+<li>representational bias</li>
+<li>flexibility(related problems),</li>
+<li>implementation vs apporach</li>
+</ul>
+
+<p>등을 고려해야 한다. </p>
+
+<p><em>petri net</em> 에서 무엇을 해야 <em>behavior</em> 를 추가할 수 있을까? <em>place</em> 는 일종의 <em>constraint</em> 라 보면 된다. 그리고 <em>place</em> 에 토큰이 많아지면 다 더 다양한 로그가 생길 수 있다.</p>
+
+<ul>
+<li>Add a transition</li>
+<li>Remove a place</li>
+<li>Add an arc from a transition to a place</li>
+<li>Remove an arc from a place to a transtion</li>
+</ul>
+
+<p>반대로 <em>behavior</em> 를 제거하려면</p>
+
+<ul>
+<li>Remove a transition</li>
+<li>Add a place</li>
+<li>Add an arc from a place to transition</li>
+<li>Remove an arc from a transition to a place</li>
+</ul>
+
+<p><em>process discovery</em> 가 <em>finding place</em> 라는 점을 고려하면 <em>alpha algorithm</em> 에서는 <em>constraint</em> 인 <em>place</em> 를 발견하는 과정이었다. <em>state-based region</em> 에서는 먼저 <em>transition</em> 을 만들고, 이걸 <em>place</em> 로 변환했었다.</p>
+
+<p>이번엔 <em>language-based region</em> 이란 기법을 배워보자.</p>
+
+<h3 id="languagebasedregion">Language-based Region</h3>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-36-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-37-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-38-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-40-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p><br/></p>
+
+<p><code>c * 1 + A' * x - A * y &gt;= 0</code> 등의 식으로 표현되는데, 이 말은 <em>place</em> 가 음수가 될 수 없다는 뜻이라 보면 된다. <del>이제 나도 뭔소린지 모르겠다 너무멀리 와버렸음 ㅠㅠ</del></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?c%20' *%201%20&plus;%20A%27%20x%20-%20Ay%20%5Cgeq%200" alt="" /></p>
+
+<p>여기서 <code>A', A</code> 는 <em>log</em>, <code>x, y</code> 는 <em>petri-nets</em>, <code>c</code> 는 초기에 <em>place</em> 내에 있는 토큰의 수다. 이 때 위 방정식을 만족하는 <code>x, y, c</code> 가 <em>region</em> 이다. </p>
+
+<ul>
+<li><code>c</code> is the initial number of tokens in the place</li>
+</ul>
+
+<p>예를 들어</p>
+
+<p><code>&lt;a&gt;, &lt;b&gt;, &lt;a, b&gt;, &lt;b, a&gt;</code> 인 로그가 있다고 하자. 그러면 진리표처럼 로그 내에 <code>a, b</code> 쌍을 <code>0, 1</code> 로 표현할 수 있다. 이걸 <code>A</code> 라 하면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?A%20%3D%20%5Cbegin%7Bpmatrix%7D%201%20%26%200%5C%5C%200%20%26%201%5C%5C%201%20%26%201%5C%5C%201%20%26%201%20%5Cend%7Bpmatrix%7D'  alt="" /></p>
+
+<p>그리고 <code>A'</code> 를 만들기 위해 마지막 <em>trace</em> 는 무시하도록 하자. 그러면 다음 식을 만들 수 있다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?c%20' *%20%5Cbegin%7Bpmatrix%7D%201%5C%5C%201%5C%5C%201%5C%5C%201%20%5Cend%7Bpmatrix%7D%20&plus;%20%5Cbegin%7Bpmatrix%7D%200%20%26%200%5C%5C%200%20%26%200%5C%5C%201%20%26%200%5C%5C%200%20%26%201%20%5Cend%7Bpmatrix%7D%20*%20%5Cbegin%7Bpmatrix%7D%20x_a%5C%5C%20x_b%20%5Cend%7Bpmatrix%7D%20-%20%5Cbegin%7Bpmatrix%7D%201%20%26%200%5C%5C%200%20%26%201%5C%5C%201%20%26%201%5C%5C%201%20%26%201%20%5Cend%7Bpmatrix%7D%20*%20%5Cbegin%7Bpmatrix%7D%20y_a%5C%5C%20b_b%20%5Cend%7Bpmatrix%7D%20%5Cgeq%20%5Cbegin%7Bpmatrix%7D%200%5C%5C%200%5C%5C%200%5C%5C%200%20%5Cend%7Bpmatrix%7D" alt="" /></p>
+
+<ul>
+<li><code>x_a</code> is the number of arcs from transition <code>a</code> to the place</li>
+<li><code>x_b</code> is the number of arcs from transition <code>b</code> to the place</li>
+<li><code>y_a</code> is the number of arcs from the place to transtion <code>a</code></li>
+<li><code>y_b</code> is the number of arcs from the place to transtion <code>b</code></li>
+</ul>
+
+<p>식을 풀면</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5C%20%5C%5C%20c%20-%20y_a%20%5Cgeq%200%20%5C%5C%20c%20-%20y_b%20%5Cgeq%200%20%5C%5C%20c%20&plus;%20x_a%20-%20y_a%20-%20y_b%20%5Cgeq%200%20%5C%5C%20c%20&plus;%20x_b%20-%20y_a%20-%20y_b%20%5Cgeq%200%20%5C%5C'  alt="" /></p>
+
+<p>하나의 답으로 </p>
+
+<ul>
+<li><code>c=1, x_a=0, x_b=0, y_a=1, y_b=0</code></li>
+<li><code>c=1, x_a=0, x_b=0, y_a=0, y_b=1</code></li>
+</ul>
+
+<p><em>language-based region</em> 에서는</p>
+
+<ul>
+<li>any solution is a feasible place</li>
+<li>additional constraints can be added easily</li>
+<li><strong>goal function</strong> can be used to select most interesting places</li>
+<li>optimiazation problem (e.g ILP)</li>
+</ul>
+
+<h3 id="geneticprocessmining">Genetic Process Mining</h3>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-22-728.jpg?cb=1305062477'  alt="" /></p>
+
+<p>이번엔 <em>genetic process mining</em> 기법을 살펴보자.</p>
+
+<p><em>event log</em> 로 부터 <em>initial population</em> 을 만들고, 이것에 대해 <em>conformance checking</em> 등을 이용해 얼마나 좋은 모델인가 본다. 이것을 다시 매 턴마다 랜덤하게 변이시키면서 계속 반복하는 것이다.</p>
+
+<p>많은 <em>generation</em>, <em>mutation</em> 이 있을 수 있기 때문에 굉장히 느리지만 <em>very flexible</em> 할 수 있다. 왜냐하면 <em>qualty measure</em> 을 이용해서 4 품질(fitness 등) 을 조절할 수 있기 때문이다.</p>
+
+<h3 id="inductiveprocessmining">Inductive Process Mining</h3>
+
+<p>로그를 <em>trace</em> 를 기준으로 쪼개는 방법인데</p>
+
+<pre><code>abdef  
+acdef  
+abdeg  
+adceg  
+</code></pre>
+
+<p>가 있을때, <code>abcd</code>, <code>efg</code> 기준으로 쪼개면</p>
+
+<pre><code>abd  
+acd  
+abd  
+adc
+
+ef  
+ef  
+eg  
+eg  
+</code></pre>
+
+<p>로 분리할 수 있다. 여기서 <code>abcd</code> 부분을 또 쪼개면 <code>a</code> <code>seq</code> <code>bcd</code> 로 쪼갤 수 있다. 마찬가지로 뒷부분도 <code>e</code> <code>seq</code> <code>fg</code> 로 쪼갤 수 있다. 뒷부분의 경우 <code>f xor g</code> 로 다시 쪼갤 수 있고. 이렇게 반복하면서 쪼개는 방법이다. 이 결과로 만들어지는 것이 <em>process tree</em> 다. 이를 <em>petri-net</em> 이나 <em>BPMN</em> 으로 변경할 수 있다. </p>
+
+<p><em>ProM</em> 에도 플러그인이 있다고 함.</p>
+
+<h3 id="introtoconformancechecking">Intro to Conformance Checking</h3>
+
+<p><img src='http://www.win.tue.nl/' ~mpechen/projects/edm/images/framework.jpg" alt="" /></p>
+
+<p align="center">(<a href='http://www.win.tue.nl/' >http://www.win.tue.nl</a>)</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-4-728.jpg?cb=1305062420'  alt="" />
+<br/></p>
+
+<p>다른 품질도 중요하긴 한데, <em>replay fitness</em> 가 주된 관심사라고 한다. <em>conformance checking</em> 의 주된 용도는</p>
+
+<ul>
+<li>Auditing and compliance</li>
+<li>Evaluating process discovery algorithm</li>
+<li>Conformance to specification (software, service)</li>
+</ul>
+
+<p><em>conformance checking</em> 은 <em>runtime</em> 에 할수도 있다.</p>
+
+<h3 id="footprintsbasedconformancechecking">Footprints-based Conformance Checking</h3>
+
+<p>알파 알고리즘을 사용할때 <em>footprints</em> 를 봤었다. 테이블에 각 <em>trace</em> 사이의 <em>direct succession, causality, parallel, choice</em> 를 표시한 것이다. </p>
+
+<p>로그로 부터 <em>footprint</em> 가 나왔기 때문에 로그의 <em>footprint-based conformance</em> 는 항상 <code>1</code> 이다. 다시 말해서</p>
+
+<blockquote>
+  <p>footprints of log and model coincide</p>
+</blockquote>
+
+<p>그런데, 모델을 만들고 보니 다음과 같이 로그와 모델의 <em>footprint</em> 를 작성했다고 하자.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-34-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><code>a - d, b - d</code> 부분이 다르다. 따라서 다른 부분을 파악해서 값으로 매기면</p>
+
+<p><br/></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-35-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-36-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><br/></p>
+
+<p><em>flower model</em> 에서는 수 많은 조합이 가능하기 때문에 <em>footprint-based conformance</em> 가 떨어진다.</p>
+
+<p><em>footprint-based conformance</em> 자체는 굉장히 유연하다. </p>
+
+<ul>
+<li><em>log to log</em></li>
+<li><em>log to model</em></li>
+<li><em>model to model</em></li>
+</ul>
+
+<p>모두 가능하다. 그러나</p>
+
+<ul>
+<li>frequencies are not used</li>
+<li>behavior is only considered indiretcly (directly follows relation)</li>
+<li>aims to capture fitness, precision and generalization in a single metric</li>
+</ul>
+
+<p>다양한 <em>metric</em> 으로 <em>fitness</em> 을 분류하고 싶을 수도 있는데, <em>footprint-based</em> 는 그러질 못한다. 이 때문에 <em>token-based conformance</em> 를 이용하기도 한다.</p>
+
+<h3 id="tokenbasedreplay">Token-based Replay</h3>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-12-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><em>traces</em> 를 모델에 실제 <em>replay</em> 해 보면서 <em>missing token</em>, <em>remaining token</em> 을 기록한다.</p>
+
+<ul>
+<li><code>p</code>, <em>produced tokens</em></li>
+<li><code>c</code>, <em>consumed tokens</em></li>
+<li><code>m</code>, <em>missing tokens</em></li>
+<li><code>r</code>, <em>remaining tokens</em></li>
+</ul>
+
+<p><img src='http://latex.codecogs.com/gif.latex?fitness%28%5Csigma%2C%20N%29%20%3D%20%5C%5C%20%5C%5C%20%7B1%20%5Cover%202%7D%20%281%20-%20%7Bm%20%5Cover%20c%7D%29%20&plus;%20%7B1%20%5Cover%202%7D%281%20-%20%7Br%20%5Cover%20p%7D%29'  alt="" /></p>
+
+<p>그리고, 어느 <em>place</em> 에서든 <em>invariants</em> 는</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5C%20%5C%5C%20p%20&plus;%20m%20%5Cgeq%20c%20%5Cgeq%20m%5C%20%5C%20%5Cmbox%7B%28at%5C%20any%5C%20time%29%7D%20%5C%5C%20r%20%3D%20p%20&plus;%20m%20-%20c%5C%20%5C%20%5Cmbox%7B%28at%5C%20the%5C%20end%29%7D'  alt="" /></p>
+
+<p><em>replay</em> 의 시작과 끝을 생각해 보면</p>
+
+<ul>
+<li>In the beginning, a token is <strong>produced</strong> for the <em>source place</em> <code>p = 1</code></li>
+<li>At the end, a token is <strong>consumed</strong> from the <em>sink place</em> (also if not there) <code>c' = c + 1</code></li>
+</ul>
+
+<p>뭔 소린가 했는데, <em>conformance checking</em> 을 위해 초기에 토큰을 하나 넣어주고, <em>replay</em> 가 끝났을 때 <em>sink place</em> 에서 <em>consume</em> 해서 <code>c</code> 값을 하나 증가시킨다는 이야기</p>
+
+<p>왼쪽 위의 값을 주목하면서 따라가 보자.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-17-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-18-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-19-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><br/></p>
+
+<p>이번엔 좀 문제가 있는 <em>event log</em></p>
+
+<p><br/></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-20-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-21-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-22-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-24-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><br/></p>
+
+<p>각 <em>log</em> 가 <em>transition</em> 에서 얼마나 실행되었는지 기록해서 모델에 어떤 문제가 있는지 파악할 수 있다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-30-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><em>frequency</em> 는 <code>p, c, m, r</code> 에 곱해서 전체 <em>fitness</em> 값을 얻으면 된다. </p>
+
+<p>만약 <em>consumed token</em> 이 모두 <em>missing token</em> 이고, <em>produced token</em> 이 모두 <em>remaining token</em> (미사용) 이면 <em>fitness</em> 는 <code>0</code> 이다.</p>
+
+<h4 id="limitations">Limitations</h4>
+
+<ul>
+<li>Basic replay approache assumes <strong>visible, unique labeled</strong> transitions</li>
+<li>ProM implementation uses <strong>heuristics</strong> to deal with slient transitions having same label</li>
+<li>Conformance value is too optimistic due tu <strong>token flooding</strong></li>
+<li>Local decision marking may misleading</li>
+</ul>
+
+<p>특히 마지막은 중요한데, 우리는 <em>value</em> 를 보고 싶은게 아니라 <em>closest path</em> 를 보고싶어 할수도 있다.</p>
+
+<p>예를 들어 <code>&lt;a, c1, c2, c3, e1, e2, e3&gt;</code> 값이 <code>0.8</code> 로 나왔다 하면, "그럼 올바른 <em>path</em> 는 무얼까?" 하고 질문할 수 있다.</p>
+
+<blockquote>
+  <p>Replay technique does not provide corresponding path through model</p>
+</blockquote>
+
+<p>다음장에서 배울 <em>alignment</em> 를 이용하면 모델에서 가능한 <em>real path</em> 를 얻을 수 있다.</p>
+
+<h3 id="alignmentbasedconformancechecking">Alignment-based Conformance Checking</h3>
+
+<p>먼저 생각해 볼 거리는</p>
+
+<blockquote>
+  <p>Conformance checking <strong>should not impose restriction</strong> on the process notation e.g slient transitions and two transitions with same label should be possible</p>
+  
+  <p>Should provide <strong>closest maching path</strong> (required for <em>performance analysis</em>)</p>
+</blockquote>
+
+<p>특히 <em>closest maching path</em> 가 제공되면 <em>fitness</em> 를 넘어 <em>generalization</em>, <em>precision</em>, <em>bottle-neck</em> 등에 이용할 수 있다. 대략 이런 느낌이라고 보면 된다.</p>
+
+<p><img src='http://image.slidesharecdn.com/alignmentbasedprecisionchecking-121013004859-phpapp01/95/alignment-based-precision-checking-5-728.jpg?cb=1350107718'  alt="" /></p>
+
+<p>즉 <em>replay</em> 불가능한 로그에서 <em>replay</em> 가능한 로그와 차이점을 반영한 것이라 보면 된다. 그러면, 다음중 어떤 것이 더 <em>possible</em> 한 로그일까?</p>
+
+<pre><code>a &gt;&gt; c1 c2 e1 e2 e3 // invalid path  
+&gt;&gt; b c1 c2 e1 e2 e3 // valid path
+
+a1 c1 c2 &gt;&gt; &gt;&gt; &gt;&gt; e1 e2 e3 // invalid  
+a1 c1 c2 d1 d2 d3 &gt;&gt; &gt;&gt; &gt;&gt; // valid  
+</code></pre>
+
+<p>이건 <em>cost function</em> 에 따라 다르다. <em>standard cost function</em> 의 경우 <code>&gt;&gt;</code> (<em>move</em>) 의 수를 센다.</p>
+
+<p>근데 몇 가지 생각해볼 거리가 있다. <code>-2</code> 와 <code>+2</code> 의 <em>cost</em> 가 있을 때 어떤 것을 택할건가 하는 문제들이다. 이 차이 때문에 루프가 있을수도 있다.    </p>
+
+<h3 id="alignmentbasedfitness">Alignment-based Fitness</h3>
+
+<p>1 에서 <em>optimal cost</em> / <em>worst cost</em> 를 빼면 된다. 강의에서 나오는 <em>log</em> 의 경우</p>
+
+<pre><code>// optimal
+a &gt;&gt; c1 c2 e1 e2 e3  
+&gt;&gt; b c1 c2 e1 e2 e3
+
+// worst
+a1 c1 c2 e1 e2 e3 &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt;  
+&gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; b1 c1 c2 d1 d2 d3
+</code></pre>
+
+<p>따라서 <code>1 - (2 / 12) = 0.83</code></p>
+
+<p><em>alignment-based conformance checking</em> 의 장점으로는 </p>
+
+<ul>
+<li>observed behavior is directly related to modeled behavior</li>
+<li>very <strong>flexible</strong> (any cost structure)</li>
+<li>detailed diagnostics</li>
+<li>after aligning log and model, other quality dimensions can be investigated</li>
+</ul>
+
+<p>다른 장점으로는 <em>drilling down</em> 도 있다. 즉 <em>replay</em> 되는 것과 아닌 것을 분리해서 분석할 수 있다는 뜻이다. 분리 된 것중 이상한 로그를 <em>새로운</em> 로그처럼 취급해서 다양한 기법들을 적용할 수 있다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-32-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><br/></p>
+
+<p>지금까지 <em>fitness</em> 만 좀 봤지만 다른 퀄리티에 대해서도 적용 가능하다. 그리고 지금까지는 <em>control flow</em> 관점으로 좀 봤는데, <em>cost, time</em> 등 다른 기준으로도 볼 수 있다. 이를 위한 기법으로 <em>data-aware alignments</em> 가 있다.</p>
+
+<h3 id="exploringeventdata">Exploring Event Data</h3>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-3http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-16-728.jpg?cb=13050623738-728.jpg?cb=1305062420'  alt="" /></p>
+
+<p><del>멘탈이 터짐</del></p>
+
+<p><em>model view</em>, <em>instance view</em>, <em>event view</em> 사이에 관계가 있다고 함.</p>
+
+<p><br/></p>
+
+<h4 id="dottedchart">Dotted Chart</h4>
+
+<p>모든 이벤트를 볼 수 있는 일종의 <em>view</em> 인데 <em>dot</em> 과 <em>event</em> 사이에는 1:1 관계가 있다. 모든 <em>event</em> 에는 <em>timestamp</em> 가 있는데, 이것을 이용해 <code>X</code> 를 계산하고 다른 <em>attribute</em> 를 이용해서 <code>Y</code> 축을 잡는다. 액티비티나 리소스에 따라 다른 색을 가질 수 있다.</p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-16-728.jpg?cb=1305062373'  alt="" /></p>
+
+<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-17-728.jpg?cb=1305062373'  alt="" /></p>
+
+<p><br/></p>
+
+<p>이게 중요한 이유가 <code>Y</code> 축과 컬러를 어떻게 하느냐에 따라 정말 다양한 <em>view</em> 를 얻을 수 있다. 그래서 강의에서 헬리콥터 뷰 라고 표현함. 심지어 <em>time</em> 을 <em>logical time</em> (step 1) 등으로 수정해서 볼 수도 있다. </p>
+
+<p>다양한 뷰를 조절해 가면서 왜 <em>delayed</em> 되었는지, <em>decision</em> 이 없다면 이전 스텝이 무엇인지 등을 파악할 수 있다. </p>
+
+<p><em>dotted chart</em> 를 이용하면 모델을 작업 하기 전에 <em>input</em> 만을 이용해 다양한 직관을 얻을 수 있다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483' >Book: Process Mining</a> <br />
+(2) <a href='https://d396qusza40orc.cloudfront.net/procmin/lecture_slides/22-Petri%20Nets%20%281%29.pdf' >Slide</a> <br />
+(3) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst <br />
+(4) <a href='http://1ambda.github.io/www.processmining.org' >www.processmining.org</a> <br />
+(5) <a href='http://fluxicon.com/' >http://fluxicon.com</a> <br />
+(6) <a href='http://www.win.tue.nl/' ~mpechen/projects/edm/">http://www.win.tue.nl</a> <br />
+(7) <a href='http://www.slideshare.net/caise2013vlc/ramezani-taghiabadi-temporal-compliance-checking-2' >Temporal Compliance Checking</a> <br />
+(9) <a href='http://www.slideshare.net/aryaadriansyah/alignment-based-precision-checking' >Alignment-based onformance Checking</a></p>]]></description><link>http://1ambda.github.io/process-mining-week4/</link><guid isPermaLink="false">c0ec136c-9e68-46bc-b21f-0cd5f8661eb9</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[conformance checking]]></category><category><![CDATA[token-based]]></category><category><![CDATA[footprint-based]]></category><category><![CDATA[alignment-based]]></category><category><![CDATA[dotted chart]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 00:59:53 GMT</pubDate></item><item><title><![CDATA[R-way, Ternary Search Tries]]></title><description><![CDATA[<h3 id="stringsymboltable">String Symbol Table</h3>
 
 <p>지난 시간에 <em>symbol-table</em> 의 구현으로 <em>red-black tree, hash table</em> 의 성능을 살펴봤었다.</p>
 
@@ -38,11 +455,6 @@
 
 <p><em>value</em> 는 항상 끝에만 있을 수 있는건 아니고 <code>shell</code>, <code>she</code> 둘 다 저장했을때 <code>e</code> 에도 <code>she</code> 를 위한 <em>value</em> 를     저장할 수 있다.</p>
 
-<h4 id="trierepresenation">Trie Represenation</h4>
-
-<pre><code class="java">
-</code></pre>
-
 <h4 id="trieperformance">Trie Performance</h4>
 
 <ul>
@@ -55,11 +467,7 @@
 <li>Search miss</li>
 </ul>
 
-<p>첫 번째 문자부터 탐색에 실패할 확률도 있다. 전형적인 경우는 몇 개의 문자를 탐색하다 실패하는 경우 <em>sublinear</em></p>
-
-<ul>
-<li>Spcae</li>
-</ul>
+<p>첫 번째 문자부터 탐색에 실패할 확률도 있다. 전형적인 경우는 몇 개의 문자를 탐색하다 실패하는 경우이므로 <em>sublinear</em> 한 퍼포먼스를 보여준다.</p>
 
 <p>각 <code>leaf</code> 마다 <code>R</code> 개의 널 링크가 필요한데, 그래도 <em>sublinear</em> 라고 말할 수 있는 것이 짧은 문자열들은 <em>common prefix</em> 를 공유한다.</p>
 
@@ -6022,639 +6430,4 @@ valid Div x y = x `mod` y == 0 &amp;&amp; y /= 1
 (4) <a href='http://fluxicon.com/' >http://fluxicon.com</a> <br />
 (5) <a href='http://en.wikipedia.org/wiki/Petri_net' >http://en.wikipedia.org/wiki/Petri_net</a> <br />
 (6) <a href='http://www.bpm-book.com/' >http://www.bpm-book.com</a> <br />
-(7) <a href='http://bpmcenter.org/' >http://bpmcenter.org/</a></p>]]></description><link>http://1ambda.github.io/process-mining-week2/</link><guid isPermaLink="false">51bbba08-c9ac-44ee-9593-85f5b62054fb</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[alpha algorithm]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 04:30:43 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 6]]></title><description><![CDATA[<p>이번시간엔 어떻게 <em>type</em> 과 <em>class</em> 를 정의하는지 배울겁니다. 이렇게 <em>commonality</em> 를  추출해서 <em>type</em> 과 <em>class</em> 로 만듦으로써 작업의 양을 줄일 수 있습니다. 이 과정을 추상화라 부르기도 합니다.</p>
-
-<p>마지막엔 이제까지 배운바를 적용해 봅시다. 항상 참인 명제를 검사하는 <strong>tautology checker</strong> 와 평가 시점을 조절하는 <strong>abstract machine</strong> 을 만들어 보겠습니다.</p>
-
-<h3 id="typedeclarations">Type Declarations</h3>
-
-<p>하스켈에선 존재하는 타입을 이용해서 새로운 타입을 만들 수 있습니다.</p>
-
-<pre><code class="haskell">type String = [Char]  
-</code></pre>
-
-<p>지난시간에 2차원 좌표계를 구현할 때 만들었던 <code>Pos</code> 타입 기억 나시죠?</p>
-
-<pre><code class="haskell">type Pos = (Int, Int)
-
-origin :: Pos  
-origin = (0, 0)
-
-left :: Pos -&gt; Pos  
-left (x, y) = (x-1, y)  
-</code></pre>
-
-<p><em>type</em> 은 함수와 마찬가지로 다양한 타입을 사용할 수 있습니다.</p>
-
-<pre><code class="haskell">type Pair a = (a, a)
-
-mult :: Pair Int -&gt; Int  
-mult (a, b) = a * b
-
-copy :: Int -&gt; Pair Int  
-copy a = (a, a)  
-</code></pre>
-
-<p>여러개의 타입도 사용할 수 있습니다.</p>
-
-<pre><code class="haskell">type Assoc k v = [(k, v)]
-
-find :: Eq k =&gt; k -&gt; Assoc k v -&gt; v  
-find k xs = head [v | (k', v) &lt;- xs, k == k']
-
-&gt; find 2 [(1, 'a'), (2, 'c'), (3, 'f')]
--- 'c'
-</code></pre>
-
-<p>그리고 <em>nested (중첩)</em> 될 수 있습니다.</p>
-
-<pre><code class="haskell">type Trans = Pos -&gt; Pos
-
-left :: Trans  
-left (x, y) = (x-1, y)  
-</code></pre>
-
-<p>하지만 <em>recursive</em> 로 정의될 수는 없습니다. 왜냐하면 <em>type</em> 이 단지 <em>synonym</em> 이기 때문입니다.</p>
-
-<pre><code class="haskell">-- doesn't work
-type Tree = (Int, [Tree
-
--- ghci
-
-Cycle in type synonym declarations:  
-  lecture9.hs:22:1-25: type Tree = (Int, [Tree])
-Failed, modules loaded: none.  
-</code></pre>
-
-<p>그러나 하스켈에선 재귀적으로 타입을 정의할 수 있는 방법이 있긴 있습니다! 다만 <em>nominal type</em> 을 이용해야 합니다.(<code>data</code> 키워드를 사용합니다.) 많은 언어들이 이와 비슷한 제약조건을 가지고 있습니다.</p>
-
-<p><em>object-oriented language</em> 에서는 전형적으로 <em>nominal type system</em> 을 사용합니다. 이는 <em>"두 타입이 같은지"</em>, <em>"한 타입이 다른 타입의 서브타입인지"</em> 검사하기 쉽기 때문입니다. 반면 <em>purely sructural type system</em> 에서는 이게 조금 어려워집니다. (참고로 <em>nominal vs structure</em> 은, <em>dynamic static</em> 과는 다른 문제입니다.)</p>
-
-<h3 id="datadeclarations">Data Declarations</h3>
-
-<p>기존타입과 관련없는 새로운 타입을 만들려면 <code>data</code> 키워드를 사용하면 됩니다.</p>
-
-<pre><code class="haskell">data Bool = False | True  
-</code></pre>
-
-<p>이제 <code>Bool</code> 은 새로운 <em>type</em> 이고, 여기에 <code>False, True</code> 의 <em>value</em> 를 사용할 수 있습니다.</p>
-
-<p>여기서 <code>False</code>, <code>True</code> 를 <em>type</em> <code>Bool</code> 을 위한 <em>constructor</em> 라 부릅니다. <em>type constructor</em> 의 이름은 반드시 대문자로 시작해야합니다.</p>
-
-<p>새로운 타입을 조금 더 만들어 봅시다.</p>
-
-<pre><code class="haskell">data Answer = Yes | No | Unknown
-
-answers :: [Answer]  
-answers = [Yes, No, Unknown]
-
-flip :: Answer -&gt; Answer  
-flip Yes = No  
-flip No = Yes  
-flip Unknown = Unknown  
-</code></pre>
-
-<p>좌표의 움직임을 추상화한 타입 <code>Move</code> 도 만들어 봅시다.</p>
-
-<pre><code class="haskell">data Move = Left | Right | Up | Down
-
-move :: Move -&gt; Pos -&gt; Pos  
-move Up (x, y) = (x, y-1)  
-move Left (x, y) = (x-1, y)  
-move Down (x, y) = (x, y+1)  
-move Right (x, y) = (x+1, y)
-
-moves :: [Move] -&gt; Pos -&gt; Pos  
-moves [] p = p  
-moves (m:ms) p = moves ms (move m p)
-
-&gt; move Left (1, 1)
--- (0,1)
-
-&gt; moves [Left, Right, Up, Down, Left] (0, 0)
---(-1,0)
-</code></pre>
-
-<p><em>data declaration</em> 내에 있는 <em>constructor</em> 는 파라미터를 가질 수 있습니다.</p>
-
-<pre><code class="haskell">data Shape = Circle Float  
-           | Rect Float Float
-
-square :: Float -&gt; Shape  
-square n = Rect n n
-
-area :: Shape -&gt; Float  
-area (Circle r) = pi * r^2  
-area (Rect x y) = x * y  
-</code></pre>
-
-<p>여기서 <em>constructor</em> 를 함수라 볼 수도 있습니다.</p>
-
-<pre><code class="haskell">Circle :: Float -&gt; Shape  
-Rect :: Float Float -&gt; Shape  
-</code></pre>
-
-<p><em>constructor</em> 뿐만 아니라 <em>data declaration</em> 그 자체도 파라미터를 가질 수 있습니다.</p>
-
-<pre><code class="haskell">data Maybe a = Nothing | Just a
-
-safediv :: Int -&gt; Int -&gt; Maybe Int  
-safediv _ 0 = Nothing  
-safediv x y = Just (x `div` y)
-
-safehead :: [a] -&gt; Maybe a  
-safehead [] = Nothing  
-safehead (x:xs) = Just x  
-</code></pre>
-
-<h3 id="recursivetypes">Recursive Types</h3>
-
-<p>재귀적인 타입의 예를 한번 볼까요?</p>
-
-<pre><code class="haskell">data Nat = Zero | Succ Nat  
-</code></pre>
-
-<p>여기서 <code>Zero :: Nat</code>, <code>Succ :: Nat -&gt; Nat</code> 라 보면 됩니다. 따라서 다음처럼 확장이 가능하지요.</p>
-
-<pre><code class="haskell">Zero -- 0  
-Succ Zero -- 1  
-Succ (Succ Zero) -- 2  
-</code></pre>
-
-<p>보시면 알겠지만, 우리는 단 한 줄로 자연수를 표현하는 데이터 타입 <code>Nat</code> 를 만들었습니다. 숫자와 <code>Nat</code> 타입을 변환하는 함수를 만들어 봅시다.</p>
-
-<pre><code class="haskell">data Nat = Zero | Succ Nat
-
-nat2int :: Nat -&gt; Int  
-nat2int Zero = 0  
-nat2int (Succ nat) = 1 + nat2int nat
-
-int2nat :: Int -&gt; Nat  
-int2nat 0 = Zero  
-int2nat n = Succ (int2nat (n-1))
-
-&gt; nat2int (int2nat 10)
--- 10
-</code></pre>
-
-<p>재귀를 이용하면 <code>Nat</code> 간 덧셈을 위에서 만든 변환함수 없이도 만들수 있습니다.</p>
-
-<pre><code class="haskell">add :: Nat -&gt; Nat -&gt; Nat  
-add Zero n = n  
-add (Succ n) s = Succ (add n s)
-
-&gt; nat2int (add (int2nat 2) (int2nat 3))
--- 5
-</code></pre>
-
-<h3 id="list">List</h3>
-
-<p>임의의 타입을 갖는 리스트를 나타내는 <code>List</code> 타입을 만들어 보죠.</p>
-
-<pre><code class="haskell">data List a = Nil | Cons a (List a)
-
-len :: List a -&gt; Int  
-len Nil = 0  
-len (Cons h t) = 1 + len t
-
-&gt;  len (Cons 4 (Cons 3 Nil))
--- 2
-
-&gt; len Nil
--- 0
-</code></pre>
-
-<h3 id="arithmeticexpressions">Arithmetic Expressions</h3>
-
-<p>기본적인 <code>+, *</code> 과 정수와 연산 <em>expression (식)</em> 을 타입으로 만들면 어떻게 될까요?</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Exp-tree-ex-11.svg/375px-Exp-tree-ex-11.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
-
-<pre><code class="haskell">data Expr = Val Int  
-          | Add Expr Expr
-          | Mul Expr Expr          
-</code></pre>
-
-<p>이제 <em>expression</em> 의 사이즈와, 계산 결과를 돌려주는 함수 <code>size</code>, <code>eval</code> 을 만듭시다.</p>
-
-<pre><code class="haskell">size :: Expr -&gt; Int  
-size (Val n) = 1  
-size (Add l r) = size l + size r  
-size (Mul l r) = size l + size r
-
-eval :: Expr -&gt; Int  
-eval (Val n) = n  
-eval (Add l r) = eval l + eval r  
-eval (Mul l r) = eval l * eval r
-
-&gt; eval (Add (Val 3) (Val 2))
--- 5
-
-&gt; size (Add (Val 3) (Val 2))
--- 2
-</code></pre>
-
-<p>이번엔 이진트리를 표현해 볼까요?</p>
-
-<pre><code class="haskell">data Tree = Leaf Int  
-          | Node Tree Int Tree
-</code></pre>
-
-<p>이제 트리에서 원하는 숫자가 존재하는지 검사하는 <code>occurs</code> 함수를 만들면</p>
-
-<pre><code class="haskell">occurs :: Int -&gt; Tree -&gt; Bool  
-occurs n (Leaf k) = n == k  
-occurs n (Node l k r) =  
-  (n == k) 
-  || occurs n l
-  || occurs n r
-
-&gt; occurs 3 (Node (Leaf 3) 4 (Leaf 5))
--- True
-
-&gt; occurs 6 (Node (Leaf 3) 4 (Leaf 5))
--- False  
-</code></pre>
-
-<p>트리의 모든 원소를 리스트로 돌려주는 <code>flatten</code> 함수도 만들어 봅시다.</p>
-
-<pre><code class="haskell">flatten :: Tree -&gt; [Int]  
-flatten (Leaf k) = [k]  
-flatten (Node l k r) = flatten l ++ [k] ++ flatten 
-
-&gt; flatten (Node (Leaf 3) 4 (Leaf 5))
--- [3,4,5]
-
-&gt; flatten (Node (Leaf 6) 4 (Leaf 7))
--- [6,4,7]
-</code></pre>
-
-<p>여기서 재미난 결과를 볼 수 있습니다. <code>flatten</code> 함수는 매 재귀마다 왼쪽부터 방문하고, 현재 노드를 방문하고, 마지막으로 오른쪽 노드를 방문합니다. </p>
-
-<p>그래서 <code>flatten</code> 함수의 결과가 <em>ordered</em> 이면 트리는 한 노드를 기준으로 한쪽은 현재 노드보다 작고, 다른쪽은 큰 <em>search-tree</em> 가 됩니다.</p>
-
-<p><em>search-tree</em> 에서는 만약 찾으려는 수가 현재 노드보다 크면 <em>right sub-tree</em> 만, 현재 노드보다 작으면 <em>left sub-tree</em> 만 검색하면 됩니다. 따라서 <code>occurs</code> 함수를 </p>
-
-<pre><code class="haskell">-- occurs for search-ree
-occurs' :: Int -&gt; Tree -&gt; Bool  
-occurs' n (Leaf k) = k == n  
-occurs' n (Node l k r) | n == k = True  
-                       | n &lt; k = occurs' n l
-                       | otherwise = occurs' n r
-
-
-&gt; occurs' 3 (Node (Leaf 3) 4 (Leaf 5))
--- True
-
-&gt; occurs' 5 (Node (Leaf 3) 4 (Leaf 5))
--- True
-</code></pre>
-
-<p>실제로 트리는 값을 어디에 저장하냐에 따라 다양한 형태가 될 수 있습니다.</p>
-
-<pre><code class="haskell">data Tree a = Leaf a | Node (Tree a) (Tree a)  
-data Tree a = Leaf | Node (Tree a) a (Tree a)  
-data Tree a b = Leaf a | Node (Tree a b) b (Tree a b)  
-data Tree a = Node a [Tree a]  
-</code></pre>
-
-<p>위에서 부터</p>
-
-<p>(1) <em>leaf</em> 에만 값을 저장 <br />
-(2) <em>node</em> 에만 값을 저장 <br />
-(3) <em>leaf</em>, <em>node</em> 에 모두 값을 저장 <br />
-(4) 한 <em>node</em> 에 값과 복수개의 트리를 저장  </p>
-
-<h3 id="tautologychecker">Tautology checker</h3>
-
-<p>항상 참인 명제를 <em>tautology</em> 라고 합니다. 논리학에 대해서는 다음 글을 참조해주세요.</p>
-
-<p>(1) <a href='http://imnt.tistory.com/91' >명제논리의 기초 1 : 소개</a> <br />
-(2) <a href='http://imnt.tistory.com/91' >명제논리의 기초 2 : 진리표</a> <br />
-(3) <a href='http://imnt.tistory.com/91' >명제논리의 기초 3 : tautology, contradiction</a>  </p>
-
-<p><em>tautology</em> 는 여러가지가 있습니다. 한 가지 예를 보면, 참 또는 거짓일 수 있는 명제 <code>p</code>, <code>q</code> 에 대해 <code>p -&gt; q ^ q -&gt; p</code> 는 항상 참입니다.</p>
-
-<p><img src='http://s1.hubimg.com/u/3891828_f520.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://julieburke.hubpages.com/' >http://julieburke.hubpages.com</a>)</p>
-
-<p>이번에 만들 프로그램에서는 논리학 연산자를 <code>Not</code>, <code>And</code>, <code>Imply</code>, <code>Or</code> 4가지로 제한하겠습니다. <em>proposition (명제)</em> 는 <code>A, ..., Z</code> 이고 각각 <code>True / False</code> 일 수 있습니다.</p>
-
-<pre><code class="haskell">data Prop =  Const Bool  
-          | Var Char
-          | Not Prop
-          | Or Prop
-          | And Prop Prop
-          | Imply Prop Porp
-</code></pre>
-
-<p>검사할 4개의 명제를 만들어 보죠.</p>
-
-<pre><code class="haskell">-- A and ~A
-p1 :: Prop  
-p1 = And (Var 'A') (Not (Var 'A'))
-
--- A and B -&gt; A
-p2 :: Prop  
-p2 = Imply (And (Var 'A') (Var 'B')) (Var 'A')
-
--- A -&gt; A and B
-p3 :: Prop  
-p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
-
--- (A and (A -&gt; B)) -&gt; B
-p4 :: Prop  
-p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')  
-</code></pre>
-
-<p>각 명제가 참인지 거짓인지 알 수 있는 테이블을 나타내는 타입 <code>Subst</code> 를 만듭시다. 진리표라고 생각하면 됩니다. 그리고 여기서 값을 찾는 함수 <code>find</code> 도 만들면</p>
-
-<pre><code class="haskell">type Assoc k v = [(k, v)]  
-type Subst = Assoc Char Bool
-
-find :: Eq k =&gt; k -&gt; Assoc k v -&gt; v  
-find k t = head [v | (k', v) &lt;- t, k' == k]  
-</code></pre>
-
-<p>이제 <code>Prop</code> 를 평가하는 함수 <code>eval</code> 을 만들면</p>
-
-<pre><code class="haskell">eval :: Subst -&gt; Prop -&gt; Bool  
-eval _ (Const b) = b  
-eval s (Var x) = find x s  
-eval s (Not p) = not (eval s p)  
-eval s (Or p1 p2) = eval s p1 || eval s p2  
-eval s (And p1 p2) = eval s p1 &amp;&amp; eval s p2  
-eval s (Imply p1 p2) = eval s p2  
-</code></pre>
-
-<p>어떤 명제 <code>Prop</code> 가 <em>tautologt</em> 인지 검사하려면, 명제를 이루는 문장의 모든 참/거짓 경우에 대해 살펴봐야 합니다. 따라서 현재 가진 변수 <code>A, ..., Z</code> 에 대해서 참 / 거짓의 모든 경우를 포함한 테이블이 필요합니다. 이 함수를 만들기 위해 작은 함수부터 차근차근 조립해 갑시다.</p>
-
-<p>먼저 현재 <code>Prop</code> 에서 모든 변수를 찾는 함수 <code>vars</code> 와 중복을 제거하는 함수 <code>uniq</code> 를 만들겠습니다.</p>
-
-<pre><code class="haskel">vars :: Prop -&gt; [Char]  
-vars (Const _) = []  
-vars (Var x) = [x]  
-vars (Not p) = vars p  
-vars (And p1 p2) = vars p1 ++ vars p2  
-vars (Or p1 p2) = vars p1 ++ vars p2  
-vars (Imply p1 p2) = vars p1 ++ vars p2
-
-&gt; vars p1
--- "AA"
-
-&gt; vars p2
--- "AA"
-
-&gt; vars p3
--- "ABA"
-
-&gt; vars p4
---"AAB"
-
-uniq :: Eq a =&gt; [a] -&gt; [a]  
-uniq = foldr (\x xs-&gt; if elem x xs then xs else x:xs) []
-
-&gt; uniq (vars p4)
--- "AB"
-</code></pre>
-
-<p>길이를 받으면 해당 길이 만큼 <code>True, False</code> 의 모든 조합을 리턴하는 <code>bools</code> 함수도 만들죠. 조합이므로 다음 재귀 단계에, 가능한 모든 경우를 더하면 됩니다.</p>
-
-<pre><code class="haskell">bools :: Int -&gt; [[Bool]]  
-bools 0 = [[]]  
-bools n = map (False:) prev ++ map (True:) prev  
-  where prev = bools (n - 1)
-</code></pre>
-
-<p>이제 마지막 퍼즐을 완성하겠습니다. <code>Prop</code> 를 받아, <code>[Subst]</code> 를 돌려주는 함수 <code>substs</code> 와, <code>Prop</code> 를 받아 <em>tautology</em> 인지 검사하는 함수 <code>isTaut</code> 는</p>
-
-<pre><code class="haskell">substs :: Prop -&gt; [Subst]  
-substs p = map (zip vs) (bools (length vs))  
-  where vs = uniq (vars p)
-
-isTaut :: Prop -&gt; Bool  
-isTaut p = and [eval s p | s &lt;- substs p]
-
-&gt; isTaut p1
--- True
-
-&gt; isTaut p2
---False
-
-&gt; isTaut p3
---True
-
-&gt; isTaut p4
---False
-
-&gt; isTaut p5
--- True
-</code></pre>
-
-<h3 id="abstractmachine">Abstract Machine</h3>
-
-<p>간단한 수식 계산을 위한 <em>expression</em> 타입을 생각해 봅시다.</p>
-
-<pre><code class="haskell">data Expr = Val Int  
-          | Add Expr Expr
-
-value :: Expr -&gt; Int  
-value (Val n) = n  
-value (Add l r) = value l + value r  
-</code></pre>
-
-<p>이제 덧셈을 실제로 해 보면, 계산이 왼쪽부터 이루어지는걸 확인할수 있습니다.</p>
-
-<pre><code class="haskell">-- 2 + 3 + 4
-value (Add (Add (Val 2) (Val 3)) (Val 4))  
-...
-...
-(2 + value (Val 3)) + value (Val 4)
-</code></pre>
-
-<p>위에서 알 수 있듯이 왼쪽 인자가 오른쪽 인자보다 먼저 평가됩니다. 이건 우리가 지정한게 아니고, 하스켈이 왼쪽 인자부터 평가하기 때문입니다.</p>
-
-<p><em>expression</em> 에서 평가 시점을 결정하는 <em>abstract machine</em> 을 만들어서 해결할 수 있습니다.</p>
-
-<blockquote>
-  <p>If desired, however, such control information can be made explicit by defining an abstract machine for expressions,
-  which specifies the step-by-step process of their evaluation.</p>
-</blockquote>
-
-<p>컨트롤 스택을 위한 타입을 만들고, 값을 평가하는 <code>eval</code> 과 실제로 덧셈을 수행하는 <code>exec</code> 함수를 만들겠습니다.</p>
-
-<pre><code class="haskel">-- expression
-data Expr = Val Int  
-          | Add Expr Expr
-
--- control stack
-type Cont = [Op]  
-data Op = EVAL Expr  
-        | ADD Int
-
-eval :: Expr -&gt; Cont -&gt; Int  
-eval (Val n) c = exec c n -- eval n  
-eval (Add x y) c = eval x (EVAL y : c) -- eval x before y
-
-exec :: Cont -&gt; Int -&gt; Int  
-exec [] n = n  
-exec (EVAL y : c) n = eval y (ADD n : c)  
-exec (ADD n : c)  m = exec c (n + m)
-
-value :: Expr -&gt; Int  
-value e = eval e []  
-</code></pre>
-
-<p><code>eval (Add x y)</code> 에 대해서 <code>EVAL y</code> 가 먼저 스택에 들어가고, <code>x</code> 가 먼저 평가됩니다. 그 이후에 <code>exec</code> 로 넘어오면서 <code>ADD</code> 명령이 스택에 들어가고, 그 이후에야 <code>y</code> 가 평가됩니다. 마지막으로 컨트롤 스택에 들어간 <code>ADD</code> 명령이 끝납니다.</p>
-
-<p>간단한 예제를 통해 평가되는 과정을 보면</p>
-
-<pre><code class="haskell">eval (Add (Val 3) (Val 5)) []  
-eval (Val 3) [EVAL (Val 5)]  
-exec [EVAL (Val 5)] 3  
-eval (Val 5) [ADD 3]  
-exec [ADD 3] 5  
-exec [] (3 + 5)  
-</code></pre>
-
-<h3 id="classandinstancedeclaration">Class and Instance declaration</h3>
-
-<p>마지막으로 <code>class</code> 대해 알아보겠습니다. 아참 시작하기 전에 먼저 아셔야 할 사실은, 하스켈에선 기술적인 이유로 <code>data</code> 를 이용해 만든 타입만 클래스의 인스턴스가 될 수 있습니다. </p>
-
-<blockquote>
-  <p>For technical reasons, only types declared using the data mechanism can be made into instances of classes.</p>
-</blockquote>
-
-<p>하스켈에선 <code>Eq</code> 클래스가 있는데요, 이렇게 정의되어 있습니다.</p>
-
-<pre><code class="haskell">class Eq where  
- (==), (/=) :: a -&gt; a -&gt; Bool
- x /= y = not (x == y) 
-</code></pre>
-
-<p>이 말은 <code>Eq</code> 의 인스턴스가 되는 <code>a</code> 는 <code>(==)</code> 연산을 지원해야 한다는 뜻입니다. (<code>/=</code> 연산은 디폴트로 정의되어 있습니다.)</p>
-
-<p>그래서 <code>Eq</code> 의 인스턴스인 <code>Bool</code> 의 경우</p>
-
-<pre><code class="haskell">instance Eq Bool where  
-  False == False = True
-  True == True = True
-  _ == _ = False
-</code></pre>
-
-<p>물론 기본 연산은 <em>overrided</em> 될 수 있습니다. 어떤 인스턴스의 경우 비교를 위해 <code>==</code> 를 재정의해서 사용할 수 있을겁니다.</p>
-
-<p>클래스는 확장될 수 있습니다. 다른언어의 상속처럼요.</p>
-
-<pre><code class="haskell">class Eq a =&gt; Ord a where  
-  (&lt;), (&lt;=), (&gt;), (&gt;=) :: a -&gt; a -&gt; Bool
-  min, max :: a -&gt; a -&gt; a
-
-  min x y | x &lt;= y = x
-          | otherwise = y
-
-  max x y | x &lt;= y = y
-          | otherwise = x
-</code></pre>
-
-<p>상대적인 크고 작음을 의미하는 <code>Ord</code> 클래스의 경우 <code>Eq</code> 의 연산에 추가적으로 크기 비교를 위한 연산을 가지고 있습니다. <code>&lt;, &lt;=, &gt;, &gt;=</code> 4개의 연산을 <code>Ord</code> 의 인스턴스는 정의해야 하는데요, 이것만 정의하면 디폴트로 정의된 <code>min, max</code> 도 사용할 수 있습니다.</p>
-
-<p>아까 <code>Imply</code> 구현할 때 <code>p &lt;= q</code> 연산 보셨죠? <code>Bool</code> 은 <code>Ord</code> 의 인스턴스이기도 한데요</p>
-
-<pre><code class="haskell">instance Ord Bool where  
-  False &lt; True = True
-  _ &lt; _ = False
-
-  b &gt; c = c &lt; b
-  b &lt;= c = (b &lt; c) || (b == c)
-  b &gt;= c = c &lt;= b
-</code></pre>
-
-<h3 id="derivedinstances">Derived instances</h3>
-
-<p>타입을 만들때 <em>built-in</em> 클래스의 인스턴스로 만들기 위해 <code>deriving</code> 키워드를 사용할 수 있습니다. 그래서 <code>Bool</code> 같은 경우 콘솔에 출력도 되고, 문자열에서 변경도 가능하고, 비교도 가능하죠.</p>
-
-<pre><code class="haskell">data Bool = False | True  
-          deriving (Eq, Ord, Show, Read)
-
-&gt; False == False
---True
-
-&gt; False &lt; True
--- True
-
-&gt; show False
--- "False"
-
-&gt; read "False"::Bool
---False
-</code></pre>
-
-<p>한가지 재밌는 사실은 <code>Bool</code> 의 <em>constructor</em> 중에서 <code>False</code> 가 <code>True</code> 보다 먼저 나오기 때문에 <code>False &lt; True</code> 라는 사실입니다.</p>
-
-<pre><code class="haskell">data Shape = Circle Float | Rect Float Float  
-data Maybe a = Nothing | Just a  
-</code></pre>
-
-<p>그리고 <code>Float</code> 가 <code>Eq</code> 의 인스턴스이기 때문에 결과적으로 이것을 파라미터로 가지는 <em>constructor</em> <code>Circle</code>, <code>Rect</code> 도 <code>Eq</code> 의 인스턴스입니다.</p>
-
-<pre><code class="haskell">&gt; Rect 1.0 4.0 &lt; Rect 2.0 3.0
-True
-
-&gt; Rect 1.0 4.0 &lt; Rect 1.0 3.0
-False  
-</code></pre>
-
-<p>마찬가지로 <code>Maybe a</code> 가 <code>Eq</code> 의 인스턴스가 되려면 <code>a</code> 가 <code>Eq</code> 의 인스턴스여야 합니다.</p>
-
-<h3 id="examples">Examples</h3>
-
-<p>몇개의 예제들입니다. 참고해보세요</p>
-
-<pre><code class="haskell">import Data.List  
-import Data.Char  
-import Unsafe.Coerce
-
-data Nat = Zero  
-         | Succ Nat
-         deriving Show
-
-nat2int :: Nat -&gt; Integer  
-nat2int = \n -&gt; genericLength [c | c &lt;- show n, c == 'S']
-
-int2nat 0 = Zero  
-int2nat n = Succ (int2nat (n-1))
-
-add :: Nat -&gt; Nat -&gt; Nat  
-add n Zero = n  
-add n (Succ m) = Succ (add m n)
-
-mult m Zero = Zero  
-mult m (Succ n) = add m (mult m n)
-
--- tree
-data Tree1 = Leaf Integer  
-          | Node Tree Tree
-
-leaves (Leaf _) = 1  
-leaves (Node l r) = leaves l + leaves r  
-balanced :: Tree -&gt; Bool  
-balanced (Leaf _) = True  
-balanced (Node l r) = abs (leaves l - leaves r) &lt;= 1 &amp;&amp; balanced l &amp;&amp; balanced r
-
-balance :: [Integer] -&gt; Tree  
-halve xs = splitAt (length xs `div` 2) xs  
-balance [x] = Leaf x  
-balance xs = Node (balance ys) (balance zs)  
-  where (ys, zs) = halve xs
-</code></pre>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>DelftX FP 101x</strong> <br />
-(2) <em>Programming in Haskell</em> <br />
-(3) <a href='http://en.wikipedia.org/wiki/Binary_expression_tree' >Wiki - Binary Expression</a> <br />
-(4) <a href='http://imnt.tistory.com/' >http://imnt.tistory.com</a>  </p>]]></description><link>http://1ambda.github.io/haskell-intro6/</link><guid isPermaLink="false">51837e71-0662-427c-b231-b63c47edf5b7</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[type]]></category><category><![CDATA[constructor]]></category><category><![CDATA[class]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 25 Nov 2014 07:56:35 GMT</pubDate></item></channel></rss>
+(7) <a href='http://bpmcenter.org/' >http://bpmcenter.org/</a></p>]]></description><link>http://1ambda.github.io/process-mining-week2/</link><guid isPermaLink="false">51bbba08-c9ac-44ee-9593-85f5b62054fb</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[alpha algorithm]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 26 Nov 2014 04:30:43 GMT</pubDate></item></channel></rss>

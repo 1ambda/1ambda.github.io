@@ -77,7 +77,7 @@
 <body>
 
   
-  <script src="../public/jquery.js?v=d99681c495"></script>
+  <script src="../public/jquery.js?v=3f8411df64"></script>
 
   
 
@@ -148,11 +148,6 @@
 
 <p><em>value</em> 는 항상 끝에만 있을 수 있는건 아니고 <code>shell</code>, <code>she</code> 둘 다 저장했을때 <code>e</code> 에도 <code>she</code> 를 위한 <em>value</em> 를     저장할 수 있다.</p>
 
-<h4 id="trierepresenation">Trie Represenation</h4>
-
-<pre><code class="java">
-</code></pre>
-
 <h4 id="trieperformance">Trie Performance</h4>
 
 <ul>
@@ -165,11 +160,7 @@
 <li>Search miss</li>
 </ul>
 
-<p>첫 번째 문자부터 탐색에 실패할 확률도 있다. 전형적인 경우는 몇 개의 문자를 탐색하다 실패하는 경우 <em>sublinear</em></p>
-
-<ul>
-<li>Spcae</li>
-</ul>
+<p>첫 번째 문자부터 탐색에 실패할 확률도 있다. 전형적인 경우는 몇 개의 문자를 탐색하다 실패하는 경우이므로 <em>sublinear</em> 한 퍼포먼스를 보여준다.</p>
 
 <p>각 <code>leaf</code> 마다 <code>R</code> 개의 널 링크가 필요한데, 그래도 <em>sublinear</em> 라고 말할 수 있는 것이 짧은 문자열들은 <em>common prefix</em> 를 공유한다.</p>
 
