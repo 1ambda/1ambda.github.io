@@ -77,7 +77,7 @@
 <body>
 
   
-  <script src="../public/jquery.js?v=ea68e2fa69"></script>
+  <script src="../public/jquery.js?v=508e95c004"></script>
 
   
 
@@ -130,7 +130,7 @@
   <p>Strong coupling, hard to compose</p>
 </blockquote>
 
-<p>요즘 시스템은 <em>loosel coupled even handlers</em> 로 구성된다. 그리하여</p>
+<p>근데 요즘 시스템은 <em>loosely coupled even handlers</em> 로 구성되기 때문에</p>
 
 <blockquote>
   <p>Events can be handled asynchoronously, without blokcing</p>
@@ -847,9 +847,9 @@ this match {
 
 <h3 id="summary">Summary</h3>
 
-<p>우리는 <em>collection</em> 뿌만 아니라 다양한 타입에 대해 <em>for-xpression</em> 을 쓸 수 있음을 배웠다. <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 등을 구현하면 된다.</p>
+<p>이제까지 <em>collection</em> 뿐만 아니라 다양한 타입에 대해 <em>for-expression</em> 을 쓸 수 있음을 배웠다. <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 등을 구현하면 된다.</p>
 
-<p><code>flatMap</code> 을 구현한 많은 타입이 <em>monad</em> 다. 만약에 <code>withFilter</code> 를 구현하면 <em>monad with zer</em> 라 부른다.</p>
+<p><code>flatMap</code> 을 구현한 많은 타입이 <em>monad</em> 다. 만약에 <code>withFilter</code> 를 구현하면 <em>monad with zero</em> 라 부른다.</p>
 
 <p>모나드 법칙은 <em>API</em> 를 구현할때 가이드라인이 되지만, <code>Try</code> 의 예에서 봤듯이 모나드 법칙을 버려서 다른 이득을 얻을 수도 있다. <del>만만한 left unit</del></p>
 
