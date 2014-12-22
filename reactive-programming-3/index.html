@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Reactive Programming 3, Futures, Promises</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Reactive Programming 3, Futures, Promises">
+  <meta name="twitter:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자. trait Adventure {     def collectCoins(): List">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/reactive-programming-3/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/reactive-programming-3/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=94da418e4f"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-coursera tag-reactive-programming tag-scala-2 tag-futures tag-promises tag-awaitable tag-try">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/reactive-programming">reactive programming</a>, <a href="../tag/scala-2"> scala</a>, <a href="../tag/futures">futures</a>, <a href="../tag/promises">promises</a>, <a href="../tag/awaitable">awaitable</a>, <a href="../tag/try">try</a></h5>
+      <h1 class="margin_bottom_medium">Reactive Programming 3, Futures, Promises</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-21">Sunday, December 21, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/reactive-programming-3/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p>이번시간엔 <em>Try</em>, <em>Future</em>, <em>Awaitable</em>, <em>Async</em>, <em>Promise</em> 에 대해 알아본다. <del>모나드가 삶을 윤택하게 하리라</del></p>
+
+<h3 id="monadsandeffects">Monads and Effects</h3>
+
+<p>프로그래밍에서 4가지 본질적 <em>effects</em> 는</p>
+
+<pre><code>                  One           Many
+
+Synchronous     T/Try[T]     Iterable[T]  
+Asynchronous    Future[T]    Observable[T]  
+</code></pre>
+
+<p><em>asynchoronous computation</em> 을 살펴보기전에 <em>synchronous</em> 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자.</p>
+
+<pre><code class="scala">trait Adventure {  
+  def collectCoins(): List[Coin]
+  def buyTreasure(coins: List[Coin]): Treasure
+}
+
+val adventu  
+re = Adventrue()  
+val coins = adventure.collectCoins()  
+val treasure = adventure.buyTreasure(coins)  
+</code></pre>
+
+<p>여기서 <code>collecCoins, buyTreasure</code> 는 구현에 따라 실패할 수도 있다. 예를 들어</p>
+
+<pre><code class="scala">def collectCoins(): List[Coin] = {  
+  if (eatenByMonster(this)) throw new GameOverException("Ooops")
+  List(Silver, Silver, Gold)
+}
+def buyTreasure(coins: List[Coin]): Treasure = {  
+  if (coins.sumBy(_.value) &lt; treasureCost)
+    throw new GameOverException("Nice try!")
+  Diamond
+}
+</code></pre>
+
+<p>그런데, 타입상으로는 <code>collectCoins, buyTreasure</code> 는 함수가 실패할 것이라는 어떠한 정보도 주지 않는다. <code>Try</code> 를 이용해 함수가 예외를 던질수도 있다는 것을 타입에 표시하자.</p>
+
+<h4 id="try">Try</h4>
+
+<p>아래는 <code>Try</code> 의 정의다.</p>
+
+<pre><code class="scala">abstract class Try[T]  
+case class Success[T](elem: T) extends Try[T]  
+case class Failure[T](t: Throwable) extends Try[Nothing]  
+</code></pre>
+
+<p>이걸 게임 함수의 리턴값에 적용하면</p>
+
+<pre><code class="scala">import scala.util.{Try, Success, Failure}
+
+def collectCoins(): Try[List[Coin]] = {  
+  if (eatenByMonster(this)) throw new GameOverException("Ooops")
+  List(Silver, Silver, Gold)
+}
+def buyTreasure(coins: List[Coin]): Try[Treasure] = {  
+  if (coins.sumBy(_.value) &lt; treasureCost)
+    throw new GameOverException("Nice try!")
+  Diamond
+}
+
+val adventure = Adventrue()  
+val coins: Try[List[Coin]] = adventure.collectCoins()  
+val treasure = coins match {  
+  case Success(cs) =&gt; adventure.buyTreasure(cs)
+  case failure @ Failure(t) =&gt; failure
+}
+</code></pre>
+
+<p>좀 귀찮다. 많이 귀찮다. <em>higher order function</em> 의 은혜를 받아 삶을 좀 윤택하게 해 보자.</p>
+
+<pre><code class="scala">def flatMap[S](f: T =&gt; Try[S]): Try[S]
+
+def flatten[U &lt;: Try[T]]: TRy[U]
+
+def map[S](f: T =&gt; S): Try[T]
+
+def filter(p: T =&gt; Boolean): Try[T]
+
+def recoverWith(f: PartialFunction[Throwable, Try[T]]): Try[T]  
+</code></pre>
+
+<p>여기서 <code>flatMap</code> 을 이용하면 코드가 상당히 이뻐질 것 같다.</p>
+
+<p>사실 비밀을 하나 공개하자면, <code>Try[T]</code> 는 모나드다. 그 중에서 <em>exception</em> 을 다루는 모나드.</p>
+
+<p><code>Try</code> 모나드를 이용하면 <em>exception</em> 부분(<code>Try[T]</code>)은 알아서 다루어 주고, 우리가 다뤄야 할 <code>T</code> 부분에 집중하게 해준다.</p>
+
+<p><code>flatMap</code> 이 코드를 어떻게 바꾸는가 한번 보자.</p>
+
+<pre><code class="scala">val treasure: Try[Treasure] =  
+  adventure.collectCoins().flatMap(coins =&gt; {
+    adventure.buyTreasure(coins)
+  }
+</code></pre>
+
+<p>리턴타입은 <code>Try[Treasure]</code> 인데 <code>Try</code> 패턴매칭이 사라졌다? 그게 바로 <code>flatMap</code> 이 해주는 일이다. 타입을 다시 보자.</p>
+
+<pre><code class="scala ">def flatMap[S](f: T =&gt; Try[S]): Try[S]  
+</code></pre>
+
+<p><code>T</code> 를 받아 <code>Try[S]</code> 를 돌려줄 함수만 넣어주면, 실제 <code>T</code> 를 이 함수에 넣기 위해 해야할 패턴매칭은 알아서 해준다.</p>
+
+<p>그리고 지난 <a href="http://1ambda.github.io/reactive-programming-1/">1강</a> 에서 모나드속에 있는 타입을 빼기 위해 <em>for expression</em> 을 이용했었다. 마찬가지로 <code>Try</code> 도 가능하다. <code>flatMap</code> 보다 더 이뻐진다.</p>
+
+<pre><code class="scala">val treasure: Try[Treasure] = for {  
+  coins &lt;- adventure.collectCoins()
+  treasure &lt;- adventure.buyTreasure(coins)
+} yield treasure
+</code></pre>
+
+<p>우측에서 <code>Try[T]</code> 를 리턴하고, <code>for</code> 가 알아서 <code>Try</code> 를 제거하고 좌측에 <code>T</code> 를 돌려준다.</p>
+
+<p><code>Try</code> 를 다루기 위한 <em>higher order function</em> 이 내부적으로 어떻게 돌아가는지 한번 살펴보자.</p>
+
+<pre><code class="scala">def map[S](f: T =&gt; S): Try[S] = this match {  
+  case Succes(value) =&gt; Try(f(Value))
+  case failure @ Failure(t) =&gt; failure
+}
+
+def flatMap[S](f: T =&gt; Try[S]): Try[S] = this match {  
+  case Success(value) =&gt; try { f(value) } catch { cast t =&gt; Failure(t) }
+  case failure @ Failure(t) =&gt; failure
+}
+
+object Try {  
+  def apply[T](r: =&gt; T): Try[T] = {
+    try { Success(r) }
+    catch { case t =&gt; Failure(t) }
+  }
+}
+</code></pre>
+
+<p><code>flatMap</code> 내부에서 패턴매칭 및 예외 처리를 해준다. </p>
+
+<h3 id="latencyasaneffect">Latency as an Effect</h3>
+
+<pre><code>                  One           Many
+
+Synchronous     T/Try[T]     Iterable[T]  
+Asynchronous    Future[T]    Observable[T]  
+</code></pre>
+
+<p>지금까지 <code>T/Try[T]</code> 에 대해서 봤다. 이번엔 <em>asynchronous</em> 로 옮겨가 <code>Future[T]</code> 를 한번 볼건데, 간단한 네트워크 프로그램을 모델링 하면서 배워보자.</p>
+
+<pre><code class="scala">trait Socket {  
+  def readFromMemory(): Array[Byte]
+  def sendToEurope(packet: Array[Byte]): Array[Byte]
+}
+
+val socket = Socket()  
+val packet = socket.readFromMemory()  
+val confirmation = socket.sendToEurope(package)  
+</code></pre>
+
+<p>이 코드도 이전의 어드벤쳐 게임처럼 실행중에 어떤일이 발생할지 모른다. 예외가 발생하지 않았을때만 정상적으로 실행된다. 게다가 <code>readFromMemory</code>, <code>sendToEurope</code> 동안 함수가 블럭되면 프로그램은 멈춰있다. (<em>heavy effect</em>)</p>
+
+<p>이걸 해결하는게 <em>Future</em> 모나드다. 이 모나드는 <em>exception</em> 과 <em>latency</em> 를 다룬다. <code>Future[T]</code> 의 정의는</p>
+
+<pre><code class="sala">import scala.concurrent._  
+import scala.concurrent._ExecutionContext.Implicits.global
+
+trait Future[T] {  
+  def onComplete(callback: Try[T] =&gt; Unit)
+     (implicit excutor: ExecutionContext): Unit
+}
+</code></pre>
+
+<p><code>Try[T]</code> 를 받는 콜백을 인자로 필요로 하는 <code>onComplete</code> 메소드가 있다. 아랫 부분에 <code>ExecutionContext</code> 는 백그라운드에서 다른 스레드로 돌리기 위해 사용하고, <code>implicit</code> 는 이런 디테일을 숨기기 위함이다.</p>
+
+<p><em>Future</em> 는 다른 버전으로 작성될 수도 있는데,</p>
+
+<pre><code class="scala">trait Future[T] {  
+  def onComplete(success: T =&gt; Unit, 
+                 failed Throwale =&gt; Unit): Unit
+
+  def onComplete(callback: Observer[T]): Unit
+}
+
+trait Observer[T] {  
+  def onNext(value: T): Unit
+  def onError(error: Throwable): Unit
+}
+</code></pre>
+
+<p>이건 위 버전에서의 <em>callback</em> 을 좀 세분화 한것이다. 어차피 콜백이 <code>Try[T]</code> 를 받기 때문에 내부에서 <em>case</em> 로 분리해야 하는데, 미리 로직을 분리해서 각각의 경우에 대해 넘겨주는 것이다.</p>
+
+<p>아니면 그 아래 <code>onComplete</code> 정의처럼 <code>Observer</code> 로 감싸서 줄 수 있다. 이것도 마찬가지로 성공했을때의, 실패했을때의 콜백이다.</p>
+
+<p>이제 처음의 소켓 프로그램으로 돌아와서 <em>Future</em> 를 적용하면</p>
+
+<pre><code class="scala">trait Future[T] {  
+  def onComplete(callback: Try[T] =&gt; Unit)
+     (implicit executor: ExecutionContext): Unit
+}
+
+trait Socket {  
+  def readFromMemory(): Future[Array[Byte]]
+  def sendToEurope(package: ArrayByte]): Future[Array[Byte]]
+}
+</code></pre>
+
+<p>이제 <code>readFromMemory(), sendToEurope()</code> 의 함수 호출이 긴 시간이 걸릴수 있겠구나 하고 <code>Future</code> 가 리턴타입에 있음을 보고 알 수 있다.</p>
+
+<p><em>future</em> 는 참 좋은건데, 이걸 사용하면 아까 실행 코드는</p>
+
+<pre><code class="scala">// before
+val socket = Socket()  
+val packet = socket.readFromMemory()  
+val confirmation = socket.sendToEurope(package)
+
+// after
+val socket = Socket()  
+val packet: Future[Array[Byte]] = socket.readFromMemory()
+
+// can't compile
+val confirmation: Future[Array[Byte]] =  
+  packet onComplete {
+    case Success(p) =&gt; socket.sendToEurope(p)
+    case Failure(t) =&gt; ...
+  }
+</code></pre>
+
+<p>잘 보면 <code>onComplete</code> 의 리턴타입은 <code>Unit</code> 이기 때문에 <code>confirmation</code> 은 <code>Future[Array[Byte]]</code> 가 될 수 없다.</p>
+
+<p>한 가지 방법은 <code>confirmation</code> 을 내부에 넣는건데,    그러면 나머지 밑 부분 코드도 모두 <code>Success</code> 내부에 작성해야 한다. <del>자바스크립트 콜백헬</del></p>
+
+<pre><code class="scala">// can't compile
+  packet onComplete {
+    case Success(p) =&gt; 
+      val confirmation = socket.sendToEurope(p)
+      ...
+      ...
+      // callback hell
+      ...
+    case Failure(t) =&gt; ...
+  }
+</code></pre>
+
+<p>이 문제를 해결하기 위해 <em>future</em> 를 만들 수 있다. <code>Future</code> 의 <em>companion object</em> 정의를 보면</p>
+
+<pre><code class="scala">object Future {  
+  def apply(body =&gt; T)
+     (implicit context: ExecutionContext): Future[T]
+}
+</code></pre>
+
+<p>예제를 보면</p>
+
+<pre><code class="scala">import scala.concurrent.ExecutionContext.Implicit.global  
+import akka.serializer._
+
+val memory = Queue[EmailMessage](  
+  EmailMessage(from = "Erik",   to = "Roland")
+  EmailMessage(from = "Martin", to = "Erik")
+  EmailMessage(from = "Roland", to = "Martin"))
+
+def readFromMemory(): Future[Array[Byte]] = Future {  
+  val email = queue.dequeue()
+  val serializer = serialization.findSerializationFor(email)
+  serializer.toBinary(email)
+}
+
+val packet: Future[Array[Byte]] = socket.readFromMemory()
+
+packet onSuccess {  
+  case bs =&gt; socket.sendToEurope(p)
+}
+
+packet onSuccess {  
+  case bs =&gt; socket.sendToEurope(p)
+}
+</code></pre>
+
+<p>이렇게 사용할 수 있다. 이 코드가 모두 실행되면, 이메일 큐에는 두개의 이메일이 남는다. <strong>하나가 아니다!!</strong> <code>Future</code> 는 <strong>미래에 돌려줄 결과</strong>를 가지고 있다고 보면 되는데, 하나의 결과에 대해 두개의 콜백을 호출해도 하나의 결과, 즉 이메일 하나만 뽑아먹었다는 사실은 변하지 않는다.</p>
+
+<h3 id="combinatorsonfutures">Combinators on Futures</h3>
+
+<p>이제 <em>future</em> 가 무슨일을 하는지 알았으면, 이걸 어떻게 모나드스럽게 사용할지 알아보자. 단골손님 <code>flatMap</code> 과 그 친구들이 등장한다.</p>
+
+<pre><code class="scala">trait Awaitable[T] extends AnyRef {  
+  abstract def ready(atMost: Duration): Unit
+  abstract def result(atMost: Duration): T
+}
+
+trait Future[T] extends Awaitable[T] {  
+  def filter(p: T =&gt; Boolean): Future[T]
+  def flatMap[S](f: T =&gt; Future[S]): Future[S]
+  def map[S](f: T =&gt; S): Future[S]
+  def recoverWith(f: PartialFunction[Throwable, Future[T]]): Future[T]
+}
+
+objec Future {  
+  def apply[T](body: =&gt; T): Future[T]
+}
+</code></pre>
+
+<p><code>flatMap</code> 님을 이용해서 코드를 작성하자.</p>
+
+<pre><code class="scala">val socket = Socket()  
+val packet: Future[Array[Byte]] = socket.readFromMemor()  
+val confirmation: Future[ArrayByte]] =  
+  packet.flatMap(p =&gt; {
+    socket.sendToEurope(p)
+  }
+</code></pre>
+
+<p><code>flatMap</code> 의 정의를 보면 알겠지만, 함수 <code>f: T =&gt; Future[S]</code> 만 제공하면 앞의 <code>Future</code> 를 껍질을 벗겨, <code>T</code> 로 넣어준다. 근데 여기서 재밌는 사실은, <code>flatMap</code> 의 리턴 타입이 <code>Future[S]</code> 기 때문에 <code>confirmation</code> 도 같은 타입이 된다.</p>
+
+<p>즉, <code>flatMap</code> 을 이용하면 모나드를 체이닝할 수 있다. 다른 예제도 좀 보자.</p>
+
+<pre><code class="scala">import scala.concurrent.ExecutionContext.Implicits.global  
+import scala.imaginary.Http._
+
+object Http {  
+  def apply(url: URL, req: Request): Future[Response] = 
+  { .. runs the http request asynchronously }
+}
+
+// buggy
+def sendToEurope(packet: Array[Byte]): Future[Array[Byte]] =  
+  Http(URL("mail.server.eu"), Request(packet))
+    .filter(response =&gt; response.isOK)
+    .map(response =&gt; response.toByteArray)
+</code></pre>
+
+<p>마지막 부분의 코드를 다양하게 활용해 보자.</p>
+
+<pre><code class="scala">def sendTo(url: URL, packet: Array[Byte]): Future[Array[Byte]] =  
+  Http(URL("mail.server.eu"), Request(packet))
+    .filter(response =&gt; response.isOK)
+    .map(response =&gt; response.toByteArray)
+
+def sendToAndBackup(packet: Array[Byte]):  
+  Future[(Array[Byte], Array[Byte])] = {
+    val europeConfirm = sendTo(mailServer.europe, packet)
+    val usaConfirm    = sendTo(mailServer.usa, packet)
+    europeConfirm.zip(usaConfirm)
+  }
+</code></pre>
+
+<p>는 정상적인 코드가 아니다. 유럽이나 미국 둘중 하나라도 실패하면, 전체가 실패한다. 다행히도 스칼라 디자이너가 이런 문제를 해결하기 위한 함수들 <code>recover, recoverWith</code> 를 준비 해 놓았다.</p>
+
+<pre><code class="scala">def recover(f: PartialFunction[Throwable, T]): Future[T]  
+def recoverWIth(f: PartialFunction[Throwable, Future[T]): Future[T]  
+</code></pre>
+
+<p>타입을 잘보면 예외를 검사해서 다시 <code>Future[T]</code> 를 던지는 함수들이다. 특히 <code>recoverWith</code> 는 또 다른 비동기 연산을 할 수 있도록 <code>Future[T]</code> 를 지원한다.</p>
+
+<p>위의 이메일 예제에 <code>recover, recoverWith</code> 를 적용해 보자.</p>
+
+<pre><code class="scala">def sendTo(url: URL, packet: Array[Byte]): Future[Array[Byte]] =  
+  Http(URL("mail.server.eu"), Request(packet))
+    .filter(response =&gt; response.isOK)
+    .map(response =&gt; response.toByteArray)
+
+def sendToAndBackup(packet: Array[Byte]): Future[Array[Byte]] =  
+  sendTo(mailServer.europe, packet) recoverWith {
+    case europeError =&gt; sendTo(mailServer.usa, packet) recover {
+      case usaError =&gt; usaError.getMessage.toByteArray      
+    }
+  }
+</code></pre>
+
+<p>근데 마지막 부분에서 <code>usaError.getMessage.toByteArray</code> 가 별로 맘에 안든다.  미국으로 보내는건 백업일 뿐이고, 실제로는 유럽에 보내고 싶었다. 그래서 실패한 메세지를 받더라도 유럽쪽 에러를 받고 싶다. 또 다른 문제는 코드가 좀 못생겼다. 이 두가지 문제를 해결해보자.</p>
+
+<pre><code class="scala">def fallbackTo(that: =&gt; Future[T]): Future[T] = {  
+  if this future fails take the successful result
+  of that future
+  if that future fails too, take the error of
+  this future
+}
+</code></pre>
+
+<p>이런 메소드가 있다면 다음처럼 작성할 수 있다.</p>
+
+<pre><code class="scala">def sendSafe(packet: Array[Byte]): Future[Array[Byte]] =  
+  sendTo(mailServer.europe, packet) fallbackTo {
+    sendTo(mailServer.usa, packet)
+  } recover {
+    case europeError =&gt; europeError.getMessage.toByteArray
+  }
+</code></pre>
+
+<p><code>fallbackTo</code> 의 구현은 </p>
+
+<pre><code class="scala">def fallbackTo(that: =&gt; Future[T]): Future[T] = {  
+  this recoverWith {
+    case _ =&gt; that recoverWith { case _ =&gt; this }
+  }
+}
+</code></pre>
+
+<p><code>Try</code> 에 실패했을때 복구하는 <code>Try</code> 를 만들 수 있다.</p>
+
+<pre><code class="scala">object Try {  
+  def apply(f: Future[T]): Future[Try[T]] = 
+    f.map(s =&gt; Success(s)) recover { case t =&gt; Failure(t) }
+}
+</code></pre>
+
+<h4 id="awaitable">Awaitable</h4>
+
+<pre><code class="scala">trait Awaitable[T] extends AnyRef {  
+  abstract def ready(atMost: Duration): Unit
+  abstract def result(atMost: Duration): T
+}
+
+trait Future[T] extends Awaitable[T] {  
+  def filter(p: T =&gt; Boolean): Future[T]
+  def flatMap[S](f: T =&gt; Future[S]): Future[S]
+  def map[S](f: T =&gt; S): Future[S]
+  def recoverWith(f: PartialFunction[Throwable, Future[T]]): Future[T]
+}
+</code></pre>
+
+<p>때때로 <em>asynchronous</em> 보다는 <em>blocking</em> 을 원할 수 있다. 그럴때는 <code>Awaitable</code> 을 사용하면 된다. 지정된 시간동안 블럭 후에 <code>result</code> 함수는 모나드를 벗겨 <code>T</code> 를 돌려준다.</p>
+
+<p>예를 들어</p>
+
+<pre><code class="scala">val socket = Socket()  
+val packet: Future[Array[Byte]] = socket.readFromMemory()  
+val confirmation: Future[Array[Byte]] =  
+  packet.flatMap(socket.sendToSafe(_))
+
+val c = Await.result(confirmation, 2 seconds)  
+println(c.toText)  
+</code></pre>
+
+<p>여기 잘 보면 <code>2 seconds</code> 라고 썼는데, 진짜 동작하는 코드다.</p>
+
+<pre><code class="scala">import scala.language.postFixOps
+
+object Duration {  
+  def apply(length: Long, unit: TimeUnit): Duration
+}
+
+val fiveYears = 1826 minutes  
+</code></pre>
+
+<h3 id="composingfutures">Composing Futures</h3>
+
+<pre><code class="scala">val socket = Socket()  
+val packet: Future[Array[Byte]] =  
+  socket.readFromMemory()
+
+val confirmation: Future[Array[Byte]] =  
+  packet.flatmap(socket.sendToSafe(_))
+</code></pre>
+
+<p>위에서 이런 코드를 작성했었다. 당연히 <em>for expression</em> 으로 변환할 수 있다.</p>
+
+<pre><code class="scala">val socket = Socket()
+
+val confirmation: Future[Array[Byte]] = for {  
+  packet  &lt;- socket.readFromMemory()
+  confirm &lt;- socket.sendToSafe(packet)
+} yield confirm
+</code></pre>
+
+<p>여기에 더 많은 <em>control flow</em> 를 도입하려면 어떻게 해야할까? <code>flatMap</code> 만으로는 좀 부족해보인다. 예를 들어 정해진 횟수만큼 <em>retry</em> 를 하고싶다고 하자. 이런 함수를 만들어야 하는데,</p>
+
+<pre><code class="scala">def retry(times: Int)(block: =&gt; Future[T]): Future[T]  
+</code></pre>
+
+<p>재귀로 구현하면</p>
+
+<pre><code class="scala">def retry(times: Int)(block: =&gt; Future[T]): Future[T] = {  
+  if (times == 0) Future.failed(new Exeception("Sorry")
+  else 
+    block fallbackTo { 
+      retry(times - 1) { block }
+    }
+}
+</code></pre>
+
+<p>음... 못생겼다. 재귀긴 한데.. 에릭 마이어에 의하면 <em>recursion</em> 은 함수형 프로그래밍의 <strong>GOTO</strong> 라고 한다. 재귀 말고 <em>fold</em> 를 사용하자.</p>
+
+<pre><code class="scala">def retry(times: Int)(block: =&gt; Futurep[T]): Future[T] = {  
+  val ns: Iterator[Int] = (1 to times).iterator
+  val attempts: Iterator[Future[T]] = ns.map(_ =&gt; () =&gt; block)
+  val failed = Future.failed(new Exception)
+
+  attempts.foldLeft(failed)
+    ((a, block) =&gt; a recoverWith { block() })
+}
+</code></pre>
+
+<p>즉, <em>future</em> 를 받아 <code>times</code> 만큼의 리스트를 만들어 놓고, <em>fold</em> 를 이용해 <code>recoverWith</code> 를 호출한다. </p>
+
+<p>따라서 <code>retry(3) { block }</code> 코드는 이렇게 확장된다.</p>
+
+<pre><code class="scala">((failed recoverWith block) recoverWith block) recoverWith block
+</code></pre>
+
+<p>만약 <em>foldRight</em> 를 이용하면</p>
+
+<pre><code class="scala">def fallbackTo(that: =&gt; Future[T]): Future[T] = {  
+  this recoverWith {
+    case _ =&gt; that recoverWith { case _ =&gt; this }
+  }
+}
+
+def retry(times: Int)(block: =&gt; Futurep[T]): Future[T] = {  
+  val ns: Iterator[Int] = (1 to times).iterator
+  val attempts: Iterator[Future[T]] = ns.map(_ =&gt; () =&gt; block)
+  val failed = Future.failed(new Exception)
+
+  attempts.foldRight(() =&gt; failed)
+    ((block, a) =&gt; () =&gt; { block() fallbackTo { a() } })
+}
+
+retry(3) { block } ()
+
+// ==
+block fallbackTo { block fallbackTo { block fallbackTo { failed }}}  
+</code></pre>
+
+<p>잘보면 <code>foldRight</code> 부분에서 초기값이 <code>() =&gt; failed</code> 로 변했다. 이는 우리가 <code>fallbackTo</code> 를 이용하기 때문인데, <code>fallbackTo</code> 의 로직상 <code>this</code> 가 실패하면 <code>that</code> 을 시도하게끔 되어있다. <code>that</code> 이 성공하면 <code>that</code> 을 돌려준다.</p>
+
+<p>우리는 이미 실패한 <code>block</code> 을 <code>a</code> 에 쌓아놨기 때문에, 이것을 그대로 돌려주려면 <code>() =&gt;</code> 로 감싸서 성공할 수 있도록 해야한다.</p>
+
+<h3 id="async">Async</h3>
+
+<p>타입에 <em>effect</em> 를 명시하는건 무슨일이 일어나는지 알려주니까 정말 좋긴 한데, 코드를 작성하기가 까다롭다. 좀 간단하게 할 수 있는 방법은 없을까?</p>
+
+<pre><code class="scala">import scala.async.Async._
+
+def async[T](body: =&gt; T)  
+  (implicit context: ExecutionContext): Future[T]
+
+def await[T](future: Future[T]): T  
+</code></pre>
+
+<p>여기서 <code>async</code> 는 <code>Future</code> 의 팩토리라 보면 된다. 위에서 본 코드와의 다른점은, 내부에 <code>await</code> 함수를 사용할 수 있다. 얼핏 보면 <code>await</code> 은 블럭킹을 위한 <code>Awaitable</code> 과 비슷하게 보이기도 한다. <code>Future</code> 를 받아 <code>T</code> 를 돌려주니까.</p>
+
+<pre><code class="scala">trait Awaitable[T] extends AnyRef {  
+  abstract def ready(atMost: Duration): Unit
+  abstract def result(atMost: Duration): T
+}
+
+// usage
+Await.result(confirmation, 2 seconds)  
+</code></pre>
+
+<p>그러나 놀랍게도 <code>await</code> 함수는 블럭되지 않는다. 코드를 보기전에 잠깐 설명서를 좀 보면</p>
+
+<blockquote>
+  <p><strong>Illegal Uses</strong></p>
+  
+  <ul>
+  <li><p>await requires a directly-enclosing async; this means await must not be used inside a closure nested within in an async block, or insdie a nested object, trait, or class</p></li>
+  <li><p>await must not be used inside an expression passed as an argument to a by name parameter</p></li>
+  <li><p>await must not be used inside a Boolean short-circuit argument</p></li>
+  <li><p>return expression are illegal inside an async block</p></li>
+  <li><p>await should not be used under a <strong>try / catch</strong></p></li>
+  </ul>
+</blockquote>
+
+<p><code>try / catch</code> 구문을 이용할 수 없으므로 <code>Try</code> 모나드를 써야한다. 이제 위에서 봤던 <code>retry</code> 함수를 <code>await</code> 을 이용해서 작성하면</p>
+
+<pre><code class="scala">def retry(times: Int)(block =&gt; Future[T]): Future[T] = async {  
+  val i = 0
+  var result: Try[T] = Failure(new Exception("sorry man!"))
+
+  while (i &lt; times &amp;&amp; result.isFailure) {
+    result = await { Try(block) }
+    i += 1
+  }
+
+  result.get
+}
+</code></pre>
+
+<p>코드가 좀 더 이해하기 쉬워졌다. 그리고 내부에서는 <em>mutable state</em> 를 사용할지라도 외부로는 여전히 <em>purely functional</em> 이다.</p>
+
+<p>내친김에 <code>filter</code> 도 구현해 보자.</p>
+
+<pre><code class="scala">def async[T](body: =&gt; T)  
+  (implicit context: ExecutionContext): Future[T]
+def await[T](future: Future[T]): T
+
+def filter(p: T =&gt; Boolean): Future[T] = async {  
+  val x = await { this }
+
+  if (!p(x)) throw new NoSuchElementException()
+  else x
+}
+</code></pre>
+
+<p>여기서 예외를 던지는 이유는 <em>empty future</em> 를 예외로 간주하기 때문이다. 앞서 코드에서도 그랬듯이.</p>
+
+<p><code>flatMap</code> 은 어떨까?</p>
+
+<pre><code class="scala">def async[T](body: =&gt; T)  
+  (implicit context: ExecutionContext): Future[T]
+def await[T](future: Future[T]): T
+
+def flatMap[S](f: T =&gt; Future[S]): Future[S] =  
+  async { await { f(await {this}) }}
+</code></pre>
+
+<h3 id="promise">Promise</h3>
+
+<p><code>await</code> 없이 <code>filter</code> 를 만들려면 <code>Promise</code> 를 사용할 수 있다.</p>
+
+<pre><code class="scala">def filter(pred: T =&gt; Boolean): Future[T] = {  
+  val p = Promise[T]()
+
+  this onComplete {
+    case Failure(e) =&gt; p.failure(e)
+    case Success(x) =&gt; 
+      if (!pred(x)) p.failure(new NoSuchElementException)
+      else p.success(x)
+  }
+
+  p.future
+}
+</code></pre>
+
+<p><code>Promise</code> 의 정의를 보면</p>
+
+<pre><code class="scala">trait Promise[T] {  
+  def future: Future[T]
+  def complete(result: Try[T]): Unit
+  def tryComplete(result: Try[T]): Boolean
+}
+
+trait Future[T] {  
+  def onCompleted(f: Try[T] =&gt; Unit): Unit
+}
+</code></pre>
+
+<p><code>Promise</code> 는 <code>Future</code> 를 담고 있는데, <code>Future.onCompleted</code> 에 등록된 콜백 <code>f: Try[T] =&gt; Unit</code> 은, <code>Promise.complete</code> 에 의해 호출된다. </p>
+
+<p><code>Promise.complete</code> 는 한번만 호출될 수 있다. 상식적으로 생각해봐도 그렇다. 따라서 <code>tryComplete</code> 를 만들어, 이미 완료되었으면 <code>false</code> 를 얻어 검사한다.</p>
+
+<p>재미난 예제를 하나 더 보자.</p>
+
+<pre><code class="scala">import scala.concurrent.ExecutionContext.Implicits.global
+
+def race[T](left: Future[T], right: Future[T]): Future[T] = {  
+  val p = Promise[T]()
+
+  left  onComplete { p.tryComplete(_) }
+  right onComplete { p.tryComplete(_) }
+
+  p.future
+}
+</code></pre>
+
+<p>두 <code>left, right</code> <em>computation</em> 중 먼저 끝나는 연산이 돌려주는 <code>Try[T]</code> 가 <code>p.future.onComplete</code> 의 콜백에 삽입된다. </p>
+
+<p>어떤 리소스를 얻길 원하는데 로컬 캐싱값과 리모트 값 둘 중 먼저 얻어오는 것을 사용하려고 할 때 이런 코드를 작성할 수 있다. <em>HTML5</em> 에도 <em>worker</em>(?) 라고 이렇게 활용할 수 있는 기능이 있는걸로 안다.</p>
+
+<p><code>Promise</code> 에는 몇 가지 함수들이 더 있다.</p>
+
+<pre><code class="scala">trait Promise[T] {  
+  def future: Future[T]
+  def complete(result: Try[T]): Unit
+  def tryComplete(result: Try[T]): Boolean
+
+  // helper method
+  def success(value: T): Unit = this.complete(Success(value))
+  def failure(t: Throwable): Unit = this.complete(Failure(t))
+}
+</code></pre>
+
+<p>이제 아까 <code>filter</code> 로 다시 돌아가자.</p>
+
+<pre><code class="scala">// async version
+def filter(p: T =&gt; Boolean): Future[T] = async {  
+  val x = await { this }
+
+  if (!p(x)) throw new NoSuchElementException()
+  else x
+}
+
+// promise version
+def filter(pred: T =&gt; Boolean): Future[T] = {  
+  val p = Promise[T]()
+
+  this onComplete {
+    case Failure(e) =&gt; p.failure(e)
+    case Success(x) =&gt; 
+      if (!pred(x)) p.failure(new NoSuchElementException)
+      else p.success(x)
+  }
+
+  p.future
+}
+</code></pre>
+
+<p><code>zip</code> 도 <code>Promise</code> 와 <code>await</code> 이용해 작성해 보자.</p>
+
+<pre><code class="scala">// promise version
+def zip[S, R](that: Future[S], f: (T, S) =&gt; R): Future[R] = {  
+  val p = Promise[R]()
+
+  this onComplete {
+    case Failure(e) =&gt; p.failure(e)
+    case Success(x) =&gt; that onComplete {
+      case Failure(e) =&gt; p.failure(e)
+      case Success(y) =&gt; p.success(f(x, y))
+    }
+  }
+
+  p.future
+}
+
+// async version
+def zip[S, R](p: Future[S], f: (T, S) =&gt; R): Future[R] = async {  
+  f(await { this }, await {that })
+}
+</code></pre>
+
+<p><del>갓 async</del> </p>
+
+<p>시퀀스도 <code>await</code> 을 이용해서 구현하면</p>
+
+<pre><code class="scala">def sequence[T](fs: List[Future[T]]): Future[List[T]] = async {  
+  var _fs = fs
+  var r = ListBuffer[T]()
+  while (_fs != Nil) {
+    r += await { _fs.head }
+    _fs = _fs.tail
+  }
+
+  r.result
+}
+</code></pre>
+
+<p>즉 <code>Future[T]</code> 를 하나씩 <em>async</em> 하게 얻어, 리스트로 돌려준다. 만약 이걸 <code>Promise</code> 로 구현하면</p>
+
+<pre><code class="scala">def sequence[T](fs: List[Future[T]]): Future[List[T]] = {  
+  val successful = Promise[List[T]]()
+  successful.success(Nil)
+
+  fs.foldRight(successful.future) {
+    (f, acc) =&gt; for {x &lt;- f; xs &lt;- acc} yield x :: xs
+  }
+}
+</code></pre>
+
+<p><code>Future[T]</code> 를 누적해서 리스트를 만들어야 하기 때문에 <code>Promise.complete(Nil)</code> 을 세팅해 이것의 <code>Promise.future</code> 를 <code>foldRight</code> 의 초기값으로 사용한다.</p>
+
+<p>그리고 <em>for expression</em> 에서 <code>f: Future[T], acc: Future[List[T]]</code> 다. 따라서 <code>for</code> 구문에서 모나드가 벗겨져 <code>x: T, xs: List[T]</code> 이며 성공적으로 <code>x</code> 를 가져오면 컨싱한다.</p>
+
+<p>지금까지 <code>Try</code> 와 <code>Future</code> 를 살펴봤다. 다음엔 하나의 값이 아니라 컬렉션을 <em>async</em> 하게 어떻게 처리하나 알아보자.</p>
+
+<pre><code>                  One           Many
+
+Synchronous     T/Try[T]     Iterable[T]  
+Asynchronous    Future[T]    Observable[T]  
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong>  </p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '86';
+  var disqus_url = 'http://1ambda.github.io/reactive-programming-3/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>

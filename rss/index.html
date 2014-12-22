@@ -1,7 +1,1507 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 18 Dec 2014 16:40:38 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[하스켈로 배우는 함수형 언어 9]]></title><description><![CDATA[<h3 id="intro">Intro</h3>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 22 Dec 2014 02:23:50 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Reactive Programming 3, Futures, Promises]]></title><description><![CDATA[<p>이번시간엔 <em>Try</em>, <em>Future</em>, <em>Awaitable</em>, <em>Async</em>, <em>Promise</em> 에 대해 알아본다. <del>모나드가 삶을 윤택하게 하리라</del></p>
 
-<p>이번시간엔 함수형 프로그래밍에서 <em>property</em> 를 증명하는 방법인 <em>induction</em> 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 <em>Rose Tree</em> 를 구현하면서 <em>Function, Monoid, Foldable</em> 등에 대해 좀 알아봅시다.</p>
+<h3 id="monadsandeffects">Monads and Effects</h3>
+
+<p>프로그래밍에서 4가지 본질적 <em>effects</em> 는</p>
+
+<pre><code>                  One           Many
+
+Synchronous     T/Try[T]     Iterable[T]  
+Asynchronous    Future[T]    Observable[T]  
+</code></pre>
+
+<p><em>asynchoronous computation</em> 을 살펴보기전에 <em>synchronous</em> 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자.</p>
+
+<pre><code class="scala">trait Adventure {  
+  def collectCoins(): List[Coin]
+  def buyTreasure(coins: List[Coin]): Treasure
+}
+
+val adventu  
+re = Adventrue()  
+val coins = adventure.collectCoins()  
+val treasure = adventure.buyTreasure(coins)  
+</code></pre>
+
+<p>여기서 <code>collecCoins, buyTreasure</code> 는 구현에 따라 실패할 수도 있다. 예를 들어</p>
+
+<pre><code class="scala">def collectCoins(): List[Coin] = {  
+  if (eatenByMonster(this)) throw new GameOverException("Ooops")
+  List(Silver, Silver, Gold)
+}
+def buyTreasure(coins: List[Coin]): Treasure = {  
+  if (coins.sumBy(_.value) &lt; treasureCost)
+    throw new GameOverException("Nice try!")
+  Diamond
+}
+</code></pre>
+
+<p>그런데, 타입상으로는 <code>collectCoins, buyTreasure</code> 는 함수가 실패할 것이라는 어떠한 정보도 주지 않는다. <code>Try</code> 를 이용해 함수가 예외를 던질수도 있다는 것을 타입에 표시하자.</p>
+
+<h4 id="try">Try</h4>
+
+<p>아래는 <code>Try</code> 의 정의다.</p>
+
+<pre><code class="scala">abstract class Try[T]  
+case class Success[T](elem: T) extends Try[T]  
+case class Failure[T](t: Throwable) extends Try[Nothing]  
+</code></pre>
+
+<p>이걸 게임 함수의 리턴값에 적용하면</p>
+
+<pre><code class="scala">import scala.util.{Try, Success, Failure}
+
+def collectCoins(): Try[List[Coin]] = {  
+  if (eatenByMonster(this)) throw new GameOverException("Ooops")
+  List(Silver, Silver, Gold)
+}
+def buyTreasure(coins: List[Coin]): Try[Treasure] = {  
+  if (coins.sumBy(_.value) &lt; treasureCost)
+    throw new GameOverException("Nice try!")
+  Diamond
+}
+
+val adventure = Adventrue()  
+val coins: Try[List[Coin]] = adventure.collectCoins()  
+val treasure = coins match {  
+  case Success(cs) =&gt; adventure.buyTreasure(cs)
+  case failure @ Failure(t) =&gt; failure
+}
+</code></pre>
+
+<p>좀 귀찮다. 많이 귀찮다. <em>higher order function</em> 의 은혜를 받아 삶을 좀 윤택하게 해 보자.</p>
+
+<pre><code class="scala">def flatMap[S](f: T =&gt; Try[S]): Try[S]
+
+def flatten[U &lt;: Try[T]]: TRy[U]
+
+def map[S](f: T =&gt; S): Try[T]
+
+def filter(p: T =&gt; Boolean): Try[T]
+
+def recoverWith(f: PartialFunction[Throwable, Try[T]]): Try[T]  
+</code></pre>
+
+<p>여기서 <code>flatMap</code> 을 이용하면 코드가 상당히 이뻐질 것 같다.</p>
+
+<p>사실 비밀을 하나 공개하자면, <code>Try[T]</code> 는 모나드다. 그 중에서 <em>exception</em> 을 다루는 모나드.</p>
+
+<p><code>Try</code> 모나드를 이용하면 <em>exception</em> 부분(<code>Try[T]</code>)은 알아서 다루어 주고, 우리가 다뤄야 할 <code>T</code> 부분에 집중하게 해준다.</p>
+
+<p><code>flatMap</code> 이 코드를 어떻게 바꾸는가 한번 보자.</p>
+
+<pre><code class="scala">val treasure: Try[Treasure] =  
+  adventure.collectCoins().flatMap(coins =&gt; {
+    adventure.buyTreasure(coins)
+  }
+</code></pre>
+
+<p>리턴타입은 <code>Try[Treasure]</code> 인데 <code>Try</code> 패턴매칭이 사라졌다? 그게 바로 <code>flatMap</code> 이 해주는 일이다. 타입을 다시 보자.</p>
+
+<pre><code class="scala ">def flatMap[S](f: T =&gt; Try[S]): Try[S]  
+</code></pre>
+
+<p><code>T</code> 를 받아 <code>Try[S]</code> 를 돌려줄 함수만 넣어주면, 실제 <code>T</code> 를 이 함수에 넣기 위해 해야할 패턴매칭은 알아서 해준다.</p>
+
+<p>그리고 지난 <a href='http://1ambda.github.io/reactive-programming-1/' >1강</a> 에서 모나드속에 있는 타입을 빼기 위해 <em>for expression</em> 을 이용했었다. 마찬가지로 <code>Try</code> 도 가능하다. <code>flatMap</code> 보다 더 이뻐진다.</p>
+
+<pre><code class="scala">val treasure: Try[Treasure] = for {  
+  coins &lt;- adventure.collectCoins()
+  treasure &lt;- adventure.buyTreasure(coins)
+} yield treasure
+</code></pre>
+
+<p>우측에서 <code>Try[T]</code> 를 리턴하고, <code>for</code> 가 알아서 <code>Try</code> 를 제거하고 좌측에 <code>T</code> 를 돌려준다.</p>
+
+<p><code>Try</code> 를 다루기 위한 <em>higher order function</em> 이 내부적으로 어떻게 돌아가는지 한번 살펴보자.</p>
+
+<pre><code class="scala">def map[S](f: T =&gt; S): Try[S] = this match {  
+  case Succes(value) =&gt; Try(f(Value))
+  case failure @ Failure(t) =&gt; failure
+}
+
+def flatMap[S](f: T =&gt; Try[S]): Try[S] = this match {  
+  case Success(value) =&gt; try { f(value) } catch { cast t =&gt; Failure(t) }
+  case failure @ Failure(t) =&gt; failure
+}
+
+object Try {  
+  def apply[T](r: =&gt; T): Try[T] = {
+    try { Success(r) }
+    catch { case t =&gt; Failure(t) }
+  }
+}
+</code></pre>
+
+<p><code>flatMap</code> 내부에서 패턴매칭 및 예외 처리를 해준다. </p>
+
+<h3 id="latencyasaneffect">Latency as an Effect</h3>
+
+<pre><code>                  One           Many
+
+Synchronous     T/Try[T]     Iterable[T]  
+Asynchronous    Future[T]    Observable[T]  
+</code></pre>
+
+<p>지금까지 <code>T/Try[T]</code> 에 대해서 봤다. 이번엔 <em>asynchronous</em> 로 옮겨가 <code>Future[T]</code> 를 한번 볼건데, 간단한 네트워크 프로그램을 모델링 하면서 배워보자.</p>
+
+<pre><code class="scala">trait Socket {  
+  def readFromMemory(): Array[Byte]
+  def sendToEurope(packet: Array[Byte]): Array[Byte]
+}
+
+val socket = Socket()  
+val packet = socket.readFromMemory()  
+val confirmation = socket.sendToEurope(package)  
+</code></pre>
+
+<p>이 코드도 이전의 어드벤쳐 게임처럼 실행중에 어떤일이 발생할지 모른다. 예외가 발생하지 않았을때만 정상적으로 실행된다. 게다가 <code>readFromMemory</code>, <code>sendToEurope</code> 동안 함수가 블럭되면 프로그램은 멈춰있다. (<em>heavy effect</em>)</p>
+
+<p>이걸 해결하는게 <em>Future</em> 모나드다. 이 모나드는 <em>exception</em> 과 <em>latency</em> 를 다룬다. <code>Future[T]</code> 의 정의는</p>
+
+<pre><code class="sala">import scala.concurrent._  
+import scala.concurrent._ExecutionContext.Implicits.global
+
+trait Future[T] {  
+  def onComplete(callback: Try[T] =&gt; Unit)
+     (implicit excutor: ExecutionContext): Unit
+}
+</code></pre>
+
+<p><code>Try[T]</code> 를 받는 콜백을 인자로 필요로 하는 <code>onComplete</code> 메소드가 있다. 아랫 부분에 <code>ExecutionContext</code> 는 백그라운드에서 다른 스레드로 돌리기 위해 사용하고, <code>implicit</code> 는 이런 디테일을 숨기기 위함이다.</p>
+
+<p><em>Future</em> 는 다른 버전으로 작성될 수도 있는데,</p>
+
+<pre><code class="scala">trait Future[T] {  
+  def onComplete(success: T =&gt; Unit, 
+                 failed Throwale =&gt; Unit): Unit
+
+  def onComplete(callback: Observer[T]): Unit
+}
+
+trait Observer[T] {  
+  def onNext(value: T): Unit
+  def onError(error: Throwable): Unit
+}
+</code></pre>
+
+<p>이건 위 버전에서의 <em>callback</em> 을 좀 세분화 한것이다. 어차피 콜백이 <code>Try[T]</code> 를 받기 때문에 내부에서 <em>case</em> 로 분리해야 하는데, 미리 로직을 분리해서 각각의 경우에 대해 넘겨주는 것이다.</p>
+
+<p>아니면 그 아래 <code>onComplete</code> 정의처럼 <code>Observer</code> 로 감싸서 줄 수 있다. 이것도 마찬가지로 성공했을때의, 실패했을때의 콜백이다.</p>
+
+<p>이제 처음의 소켓 프로그램으로 돌아와서 <em>Future</em> 를 적용하면</p>
+
+<pre><code class="scala">trait Future[T] {  
+  def onComplete(callback: Try[T] =&gt; Unit)
+     (implicit executor: ExecutionContext): Unit
+}
+
+trait Socket {  
+  def readFromMemory(): Future[Array[Byte]]
+  def sendToEurope(package: ArrayByte]): Future[Array[Byte]]
+}
+</code></pre>
+
+<p>이제 <code>readFromMemory(), sendToEurope()</code> 의 함수 호출이 긴 시간이 걸릴수 있겠구나 하고 <code>Future</code> 가 리턴타입에 있음을 보고 알 수 있다.</p>
+
+<p><em>future</em> 는 참 좋은건데, 이걸 사용하면 아까 실행 코드는</p>
+
+<pre><code class="scala">// before
+val socket = Socket()  
+val packet = socket.readFromMemory()  
+val confirmation = socket.sendToEurope(package)
+
+// after
+val socket = Socket()  
+val packet: Future[Array[Byte]] = socket.readFromMemory()
+
+// can't compile
+val confirmation: Future[Array[Byte]] =  
+  packet onComplete {
+    case Success(p) =&gt; socket.sendToEurope(p)
+    case Failure(t) =&gt; ...
+  }
+</code></pre>
+
+<p>잘 보면 <code>onComplete</code> 의 리턴타입은 <code>Unit</code> 이기 때문에 <code>confirmation</code> 은 <code>Future[Array[Byte]]</code> 가 될 수 없다.</p>
+
+<p>한 가지 방법은 <code>confirmation</code> 을 내부에 넣는건데,    그러면 나머지 밑 부분 코드도 모두 <code>Success</code> 내부에 작성해야 한다. <del>자바스크립트 콜백헬</del></p>
+
+<pre><code class="scala">// can't compile
+  packet onComplete {
+    case Success(p) =&gt; 
+      val confirmation = socket.sendToEurope(p)
+      ...
+      ...
+      // callback hell
+      ...
+    case Failure(t) =&gt; ...
+  }
+</code></pre>
+
+<p>이 문제를 해결하기 위해 <em>future</em> 를 만들 수 있다. <code>Future</code> 의 <em>companion object</em> 정의를 보면</p>
+
+<pre><code class="scala">object Future {  
+  def apply(body =&gt; T)
+     (implicit context: ExecutionContext): Future[T]
+}
+</code></pre>
+
+<p>예제를 보면</p>
+
+<pre><code class="scala">import scala.concurrent.ExecutionContext.Implicit.global  
+import akka.serializer._
+
+val memory = Queue[EmailMessage](  
+  EmailMessage(from = "Erik",   to = "Roland")
+  EmailMessage(from = "Martin", to = "Erik")
+  EmailMessage(from = "Roland", to = "Martin"))
+
+def readFromMemory(): Future[Array[Byte]] = Future {  
+  val email = queue.dequeue()
+  val serializer = serialization.findSerializationFor(email)
+  serializer.toBinary(email)
+}
+
+val packet: Future[Array[Byte]] = socket.readFromMemory()
+
+packet onSuccess {  
+  case bs =&gt; socket.sendToEurope(p)
+}
+
+packet onSuccess {  
+  case bs =&gt; socket.sendToEurope(p)
+}
+</code></pre>
+
+<p>이렇게 사용할 수 있다. 이 코드가 모두 실행되면, 이메일 큐에는 두개의 이메일이 남는다. <strong>하나가 아니다!!</strong> <code>Future</code> 는 <strong>미래에 돌려줄 결과</strong>를 가지고 있다고 보면 되는데, 하나의 결과에 대해 두개의 콜백을 호출해도 하나의 결과, 즉 이메일 하나만 뽑아먹었다는 사실은 변하지 않는다.</p>
+
+<h3 id="combinatorsonfutures">Combinators on Futures</h3>
+
+<p>이제 <em>future</em> 가 무슨일을 하는지 알았으면, 이걸 어떻게 모나드스럽게 사용할지 알아보자. 단골손님 <code>flatMap</code> 과 그 친구들이 등장한다.</p>
+
+<pre><code class="scala">trait Awaitable[T] extends AnyRef {  
+  abstract def ready(atMost: Duration): Unit
+  abstract def result(atMost: Duration): T
+}
+
+trait Future[T] extends Awaitable[T] {  
+  def filter(p: T =&gt; Boolean): Future[T]
+  def flatMap[S](f: T =&gt; Future[S]): Future[S]
+  def map[S](f: T =&gt; S): Future[S]
+  def recoverWith(f: PartialFunction[Throwable, Future[T]]): Future[T]
+}
+
+objec Future {  
+  def apply[T](body: =&gt; T): Future[T]
+}
+</code></pre>
+
+<p><code>flatMap</code> 님을 이용해서 코드를 작성하자.</p>
+
+<pre><code class="scala">val socket = Socket()  
+val packet: Future[Array[Byte]] = socket.readFromMemor()  
+val confirmation: Future[ArrayByte]] =  
+  packet.flatMap(p =&gt; {
+    socket.sendToEurope(p)
+  }
+</code></pre>
+
+<p><code>flatMap</code> 의 정의를 보면 알겠지만, 함수 <code>f: T =&gt; Future[S]</code> 만 제공하면 앞의 <code>Future</code> 를 껍질을 벗겨, <code>T</code> 로 넣어준다. 근데 여기서 재밌는 사실은, <code>flatMap</code> 의 리턴 타입이 <code>Future[S]</code> 기 때문에 <code>confirmation</code> 도 같은 타입이 된다.</p>
+
+<p>즉, <code>flatMap</code> 을 이용하면 모나드를 체이닝할 수 있다. 다른 예제도 좀 보자.</p>
+
+<pre><code class="scala">import scala.concurrent.ExecutionContext.Implicits.global  
+import scala.imaginary.Http._
+
+object Http {  
+  def apply(url: URL, req: Request): Future[Response] = 
+  { .. runs the http request asynchronously }
+}
+
+// buggy
+def sendToEurope(packet: Array[Byte]): Future[Array[Byte]] =  
+  Http(URL("mail.server.eu"), Request(packet))
+    .filter(response =&gt; response.isOK)
+    .map(response =&gt; response.toByteArray)
+</code></pre>
+
+<p>마지막 부분의 코드를 다양하게 활용해 보자.</p>
+
+<pre><code class="scala">def sendTo(url: URL, packet: Array[Byte]): Future[Array[Byte]] =  
+  Http(URL("mail.server.eu"), Request(packet))
+    .filter(response =&gt; response.isOK)
+    .map(response =&gt; response.toByteArray)
+
+def sendToAndBackup(packet: Array[Byte]):  
+  Future[(Array[Byte], Array[Byte])] = {
+    val europeConfirm = sendTo(mailServer.europe, packet)
+    val usaConfirm    = sendTo(mailServer.usa, packet)
+    europeConfirm.zip(usaConfirm)
+  }
+</code></pre>
+
+<p>는 정상적인 코드가 아니다. 유럽이나 미국 둘중 하나라도 실패하면, 전체가 실패한다. 다행히도 스칼라 디자이너가 이런 문제를 해결하기 위한 함수들 <code>recover, recoverWith</code> 를 준비 해 놓았다.</p>
+
+<pre><code class="scala">def recover(f: PartialFunction[Throwable, T]): Future[T]  
+def recoverWIth(f: PartialFunction[Throwable, Future[T]): Future[T]  
+</code></pre>
+
+<p>타입을 잘보면 예외를 검사해서 다시 <code>Future[T]</code> 를 던지는 함수들이다. 특히 <code>recoverWith</code> 는 또 다른 비동기 연산을 할 수 있도록 <code>Future[T]</code> 를 지원한다.</p>
+
+<p>위의 이메일 예제에 <code>recover, recoverWith</code> 를 적용해 보자.</p>
+
+<pre><code class="scala">def sendTo(url: URL, packet: Array[Byte]): Future[Array[Byte]] =  
+  Http(URL("mail.server.eu"), Request(packet))
+    .filter(response =&gt; response.isOK)
+    .map(response =&gt; response.toByteArray)
+
+def sendToAndBackup(packet: Array[Byte]): Future[Array[Byte]] =  
+  sendTo(mailServer.europe, packet) recoverWith {
+    case europeError =&gt; sendTo(mailServer.usa, packet) recover {
+      case usaError =&gt; usaError.getMessage.toByteArray      
+    }
+  }
+</code></pre>
+
+<p>근데 마지막 부분에서 <code>usaError.getMessage.toByteArray</code> 가 별로 맘에 안든다.  미국으로 보내는건 백업일 뿐이고, 실제로는 유럽에 보내고 싶었다. 그래서 실패한 메세지를 받더라도 유럽쪽 에러를 받고 싶다. 또 다른 문제는 코드가 좀 못생겼다. 이 두가지 문제를 해결해보자.</p>
+
+<pre><code class="scala">def fallbackTo(that: =&gt; Future[T]): Future[T] = {  
+  if this future fails take the successful result
+  of that future
+  if that future fails too, take the error of
+  this future
+}
+</code></pre>
+
+<p>이런 메소드가 있다면 다음처럼 작성할 수 있다.</p>
+
+<pre><code class="scala">def sendSafe(packet: Array[Byte]): Future[Array[Byte]] =  
+  sendTo(mailServer.europe, packet) fallbackTo {
+    sendTo(mailServer.usa, packet)
+  } recover {
+    case europeError =&gt; europeError.getMessage.toByteArray
+  }
+</code></pre>
+
+<p><code>fallbackTo</code> 의 구현은 </p>
+
+<pre><code class="scala">def fallbackTo(that: =&gt; Future[T]): Future[T] = {  
+  this recoverWith {
+    case _ =&gt; that recoverWith { case _ =&gt; this }
+  }
+}
+</code></pre>
+
+<p><code>Try</code> 에 실패했을때 복구하는 <code>Try</code> 를 만들 수 있다.</p>
+
+<pre><code class="scala">object Try {  
+  def apply(f: Future[T]): Future[Try[T]] = 
+    f.map(s =&gt; Success(s)) recover { case t =&gt; Failure(t) }
+}
+</code></pre>
+
+<h4 id="awaitable">Awaitable</h4>
+
+<pre><code class="scala">trait Awaitable[T] extends AnyRef {  
+  abstract def ready(atMost: Duration): Unit
+  abstract def result(atMost: Duration): T
+}
+
+trait Future[T] extends Awaitable[T] {  
+  def filter(p: T =&gt; Boolean): Future[T]
+  def flatMap[S](f: T =&gt; Future[S]): Future[S]
+  def map[S](f: T =&gt; S): Future[S]
+  def recoverWith(f: PartialFunction[Throwable, Future[T]]): Future[T]
+}
+</code></pre>
+
+<p>때때로 <em>asynchronous</em> 보다는 <em>blocking</em> 을 원할 수 있다. 그럴때는 <code>Awaitable</code> 을 사용하면 된다. 지정된 시간동안 블럭 후에 <code>result</code> 함수는 모나드를 벗겨 <code>T</code> 를 돌려준다.</p>
+
+<p>예를 들어</p>
+
+<pre><code class="scala">val socket = Socket()  
+val packet: Future[Array[Byte]] = socket.readFromMemory()  
+val confirmation: Future[Array[Byte]] =  
+  packet.flatMap(socket.sendToSafe(_))
+
+val c = Await.result(confirmation, 2 seconds)  
+println(c.toText)  
+</code></pre>
+
+<p>여기 잘 보면 <code>2 seconds</code> 라고 썼는데, 진짜 동작하는 코드다.</p>
+
+<pre><code class="scala">import scala.language.postFixOps
+
+object Duration {  
+  def apply(length: Long, unit: TimeUnit): Duration
+}
+
+val fiveYears = 1826 minutes  
+</code></pre>
+
+<h3 id="composingfutures">Composing Futures</h3>
+
+<pre><code class="scala">val socket = Socket()  
+val packet: Future[Array[Byte]] =  
+  socket.readFromMemory()
+
+val confirmation: Future[Array[Byte]] =  
+  packet.flatmap(socket.sendToSafe(_))
+</code></pre>
+
+<p>위에서 이런 코드를 작성했었다. 당연히 <em>for expression</em> 으로 변환할 수 있다.</p>
+
+<pre><code class="scala">val socket = Socket()
+
+val confirmation: Future[Array[Byte]] = for {  
+  packet  &lt;- socket.readFromMemory()
+  confirm &lt;- socket.sendToSafe(packet)
+} yield confirm
+</code></pre>
+
+<p>여기에 더 많은 <em>control flow</em> 를 도입하려면 어떻게 해야할까? <code>flatMap</code> 만으로는 좀 부족해보인다. 예를 들어 정해진 횟수만큼 <em>retry</em> 를 하고싶다고 하자. 이런 함수를 만들어야 하는데,</p>
+
+<pre><code class="scala">def retry(times: Int)(block: =&gt; Future[T]): Future[T]  
+</code></pre>
+
+<p>재귀로 구현하면</p>
+
+<pre><code class="scala">def retry(times: Int)(block: =&gt; Future[T]): Future[T] = {  
+  if (times == 0) Future.failed(new Exeception("Sorry")
+  else 
+    block fallbackTo { 
+      retry(times - 1) { block }
+    }
+}
+</code></pre>
+
+<p>음... 못생겼다. 재귀긴 한데.. 에릭 마이어에 의하면 <em>recursion</em> 은 함수형 프로그래밍의 <strong>GOTO</strong> 라고 한다. 재귀 말고 <em>fold</em> 를 사용하자.</p>
+
+<pre><code class="scala">def retry(times: Int)(block: =&gt; Futurep[T]): Future[T] = {  
+  val ns: Iterator[Int] = (1 to times).iterator
+  val attempts: Iterator[Future[T]] = ns.map(_ =&gt; () =&gt; block)
+  val failed = Future.failed(new Exception)
+
+  attempts.foldLeft(failed)
+    ((a, block) =&gt; a recoverWith { block() })
+}
+</code></pre>
+
+<p>즉, <em>future</em> 를 받아 <code>times</code> 만큼의 리스트를 만들어 놓고, <em>fold</em> 를 이용해 <code>recoverWith</code> 를 호출한다. </p>
+
+<p>따라서 <code>retry(3) { block }</code> 코드는 이렇게 확장된다.</p>
+
+<pre><code class="scala">((failed recoverWith block) recoverWith block) recoverWith block
+</code></pre>
+
+<p>만약 <em>foldRight</em> 를 이용하면</p>
+
+<pre><code class="scala">def fallbackTo(that: =&gt; Future[T]): Future[T] = {  
+  this recoverWith {
+    case _ =&gt; that recoverWith { case _ =&gt; this }
+  }
+}
+
+def retry(times: Int)(block: =&gt; Futurep[T]): Future[T] = {  
+  val ns: Iterator[Int] = (1 to times).iterator
+  val attempts: Iterator[Future[T]] = ns.map(_ =&gt; () =&gt; block)
+  val failed = Future.failed(new Exception)
+
+  attempts.foldRight(() =&gt; failed)
+    ((block, a) =&gt; () =&gt; { block() fallbackTo { a() } })
+}
+
+retry(3) { block } ()
+
+// ==
+block fallbackTo { block fallbackTo { block fallbackTo { failed }}}  
+</code></pre>
+
+<p>잘보면 <code>foldRight</code> 부분에서 초기값이 <code>() =&gt; failed</code> 로 변했다. 이는 우리가 <code>fallbackTo</code> 를 이용하기 때문인데, <code>fallbackTo</code> 의 로직상 <code>this</code> 가 실패하면 <code>that</code> 을 시도하게끔 되어있다. <code>that</code> 이 성공하면 <code>that</code> 을 돌려준다.</p>
+
+<p>우리는 이미 실패한 <code>block</code> 을 <code>a</code> 에 쌓아놨기 때문에, 이것을 그대로 돌려주려면 <code>() =&gt;</code> 로 감싸서 성공할 수 있도록 해야한다.</p>
+
+<h3 id="async">Async</h3>
+
+<p>타입에 <em>effect</em> 를 명시하는건 무슨일이 일어나는지 알려주니까 정말 좋긴 한데, 코드를 작성하기가 까다롭다. 좀 간단하게 할 수 있는 방법은 없을까?</p>
+
+<pre><code class="scala">import scala.async.Async._
+
+def async[T](body: =&gt; T)  
+  (implicit context: ExecutionContext): Future[T]
+
+def await[T](future: Future[T]): T  
+</code></pre>
+
+<p>여기서 <code>async</code> 는 <code>Future</code> 의 팩토리라 보면 된다. 위에서 본 코드와의 다른점은, 내부에 <code>await</code> 함수를 사용할 수 있다. 얼핏 보면 <code>await</code> 은 블럭킹을 위한 <code>Awaitable</code> 과 비슷하게 보이기도 한다. <code>Future</code> 를 받아 <code>T</code> 를 돌려주니까.</p>
+
+<pre><code class="scala">trait Awaitable[T] extends AnyRef {  
+  abstract def ready(atMost: Duration): Unit
+  abstract def result(atMost: Duration): T
+}
+
+// usage
+Await.result(confirmation, 2 seconds)  
+</code></pre>
+
+<p>그러나 놀랍게도 <code>await</code> 함수는 블럭되지 않는다. 코드를 보기전에 잠깐 설명서를 좀 보면</p>
+
+<blockquote>
+  <p><strong>Illegal Uses</strong></p>
+  
+  <ul>
+  <li><p>await requires a directly-enclosing async; this means await must not be used inside a closure nested within in an async block, or insdie a nested object, trait, or class</p></li>
+  <li><p>await must not be used inside an expression passed as an argument to a by name parameter</p></li>
+  <li><p>await must not be used inside a Boolean short-circuit argument</p></li>
+  <li><p>return expression are illegal inside an async block</p></li>
+  <li><p>await should not be used under a <strong>try / catch</strong></p></li>
+  </ul>
+</blockquote>
+
+<p><code>try / catch</code> 구문을 이용할 수 없으므로 <code>Try</code> 모나드를 써야한다. 이제 위에서 봤던 <code>retry</code> 함수를 <code>await</code> 을 이용해서 작성하면</p>
+
+<pre><code class="scala">def retry(times: Int)(block =&gt; Future[T]): Future[T] = async {  
+  val i = 0
+  var result: Try[T] = Failure(new Exception("sorry man!"))
+
+  while (i &lt; times &amp;&amp; result.isFailure) {
+    result = await { Try(block) }
+    i += 1
+  }
+
+  result.get
+}
+</code></pre>
+
+<p>코드가 좀 더 이해하기 쉬워졌다. 그리고 내부에서는 <em>mutable state</em> 를 사용할지라도 외부로는 여전히 <em>purely functional</em> 이다.</p>
+
+<p>내친김에 <code>filter</code> 도 구현해 보자.</p>
+
+<pre><code class="scala">def async[T](body: =&gt; T)  
+  (implicit context: ExecutionContext): Future[T]
+def await[T](future: Future[T]): T
+
+def filter(p: T =&gt; Boolean): Future[T] = async {  
+  val x = await { this }
+
+  if (!p(x)) throw new NoSuchElementException()
+  else x
+}
+</code></pre>
+
+<p>여기서 예외를 던지는 이유는 <em>empty future</em> 를 예외로 간주하기 때문이다. 앞서 코드에서도 그랬듯이.</p>
+
+<p><code>flatMap</code> 은 어떨까?</p>
+
+<pre><code class="scala">def async[T](body: =&gt; T)  
+  (implicit context: ExecutionContext): Future[T]
+def await[T](future: Future[T]): T
+
+def flatMap[S](f: T =&gt; Future[S]): Future[S] =  
+  async { await { f(await {this}) }}
+</code></pre>
+
+<h3 id="promise">Promise</h3>
+
+<p><code>await</code> 없이 <code>filter</code> 를 만들려면 <code>Promise</code> 를 사용할 수 있다.</p>
+
+<pre><code class="scala">def filter(pred: T =&gt; Boolean): Future[T] = {  
+  val p = Promise[T]()
+
+  this onComplete {
+    case Failure(e) =&gt; p.failure(e)
+    case Success(x) =&gt; 
+      if (!pred(x)) p.failure(new NoSuchElementException)
+      else p.success(x)
+  }
+
+  p.future
+}
+</code></pre>
+
+<p><code>Promise</code> 의 정의를 보면</p>
+
+<pre><code class="scala">trait Promise[T] {  
+  def future: Future[T]
+  def complete(result: Try[T]): Unit
+  def tryComplete(result: Try[T]): Boolean
+}
+
+trait Future[T] {  
+  def onCompleted(f: Try[T] =&gt; Unit): Unit
+}
+</code></pre>
+
+<p><code>Promise</code> 는 <code>Future</code> 를 담고 있는데, <code>Future.onCompleted</code> 에 등록된 콜백 <code>f: Try[T] =&gt; Unit</code> 은, <code>Promise.complete</code> 에 의해 호출된다. </p>
+
+<p><code>Promise.complete</code> 는 한번만 호출될 수 있다. 상식적으로 생각해봐도 그렇다. 따라서 <code>tryComplete</code> 를 만들어, 이미 완료되었으면 <code>false</code> 를 얻어 검사한다.</p>
+
+<p>재미난 예제를 하나 더 보자.</p>
+
+<pre><code class="scala">import scala.concurrent.ExecutionContext.Implicits.global
+
+def race[T](left: Future[T], right: Future[T]): Future[T] = {  
+  val p = Promise[T]()
+
+  left  onComplete { p.tryComplete(_) }
+  right onComplete { p.tryComplete(_) }
+
+  p.future
+}
+</code></pre>
+
+<p>두 <code>left, right</code> <em>computation</em> 중 먼저 끝나는 연산이 돌려주는 <code>Try[T]</code> 가 <code>p.future.onComplete</code> 의 콜백에 삽입된다. </p>
+
+<p>어떤 리소스를 얻길 원하는데 로컬 캐싱값과 리모트 값 둘 중 먼저 얻어오는 것을 사용하려고 할 때 이런 코드를 작성할 수 있다. <em>HTML5</em> 에도 <em>worker</em>(?) 라고 이렇게 활용할 수 있는 기능이 있는걸로 안다.</p>
+
+<p><code>Promise</code> 에는 몇 가지 함수들이 더 있다.</p>
+
+<pre><code class="scala">trait Promise[T] {  
+  def future: Future[T]
+  def complete(result: Try[T]): Unit
+  def tryComplete(result: Try[T]): Boolean
+
+  // helper method
+  def success(value: T): Unit = this.complete(Success(value))
+  def failure(t: Throwable): Unit = this.complete(Failure(t))
+}
+</code></pre>
+
+<p>이제 아까 <code>filter</code> 로 다시 돌아가자.</p>
+
+<pre><code class="scala">// async version
+def filter(p: T =&gt; Boolean): Future[T] = async {  
+  val x = await { this }
+
+  if (!p(x)) throw new NoSuchElementException()
+  else x
+}
+
+// promise version
+def filter(pred: T =&gt; Boolean): Future[T] = {  
+  val p = Promise[T]()
+
+  this onComplete {
+    case Failure(e) =&gt; p.failure(e)
+    case Success(x) =&gt; 
+      if (!pred(x)) p.failure(new NoSuchElementException)
+      else p.success(x)
+  }
+
+  p.future
+}
+</code></pre>
+
+<p><code>zip</code> 도 <code>Promise</code> 와 <code>await</code> 이용해 작성해 보자.</p>
+
+<pre><code class="scala">// promise version
+def zip[S, R](that: Future[S], f: (T, S) =&gt; R): Future[R] = {  
+  val p = Promise[R]()
+
+  this onComplete {
+    case Failure(e) =&gt; p.failure(e)
+    case Success(x) =&gt; that onComplete {
+      case Failure(e) =&gt; p.failure(e)
+      case Success(y) =&gt; p.success(f(x, y))
+    }
+  }
+
+  p.future
+}
+
+// async version
+def zip[S, R](p: Future[S], f: (T, S) =&gt; R): Future[R] = async {  
+  f(await { this }, await {that })
+}
+</code></pre>
+
+<p><del>갓 async</del> </p>
+
+<p>시퀀스도 <code>await</code> 을 이용해서 구현하면</p>
+
+<pre><code class="scala">def sequence[T](fs: List[Future[T]]): Future[List[T]] = async {  
+  var _fs = fs
+  var r = ListBuffer[T]()
+  while (_fs != Nil) {
+    r += await { _fs.head }
+    _fs = _fs.tail
+  }
+
+  r.result
+}
+</code></pre>
+
+<p>즉 <code>Future[T]</code> 를 하나씩 <em>async</em> 하게 얻어, 리스트로 돌려준다. 만약 이걸 <code>Promise</code> 로 구현하면</p>
+
+<pre><code class="scala">def sequence[T](fs: List[Future[T]]): Future[List[T]] = {  
+  val successful = Promise[List[T]]()
+  successful.success(Nil)
+
+  fs.foldRight(successful.future) {
+    (f, acc) =&gt; for {x &lt;- f; xs &lt;- acc} yield x :: xs
+  }
+}
+</code></pre>
+
+<p><code>Future[T]</code> 를 누적해서 리스트를 만들어야 하기 때문에 <code>Promise.complete(Nil)</code> 을 세팅해 이것의 <code>Promise.future</code> 를 <code>foldRight</code> 의 초기값으로 사용한다.</p>
+
+<p>그리고 <em>for expression</em> 에서 <code>f: Future[T], acc: Future[List[T]]</code> 다. 따라서 <code>for</code> 구문에서 모나드가 벗겨져 <code>x: T, xs: List[T]</code> 이며 성공적으로 <code>x</code> 를 가져오면 컨싱한다.</p>
+
+<p>지금까지 <code>Try</code> 와 <code>Future</code> 를 살펴봤다. 다음엔 하나의 값이 아니라 컬렉션을 <em>async</em> 하게 어떻게 처리하나 알아보자.</p>
+
+<pre><code>                  One           Many
+
+Synchronous     T/Try[T]     Iterable[T]  
+Asynchronous    Future[T]    Observable[T]  
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong>  </p>]]></description><link>http://1ambda.github.io/reactive-programming-3/</link><guid isPermaLink="false">9519a124-ef47-4ab8-9521-c7641b60eb23</guid><category><![CDATA[coursera]]></category><category><![CDATA[reactive programming]]></category><category><![CDATA[ scala]]></category><category><![CDATA[futures]]></category><category><![CDATA[promises]]></category><category><![CDATA[awaitable]]></category><category><![CDATA[try]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 21 Dec 2014 11:09:38 GMT</pubDate></item><item><title><![CDATA[Reactive Programming 2, Stateful]]></title><description><![CDATA[<p>지금까지 우리가 작성한 프로그램은 <em>side-effect free</em> 였기 때문에, <strong>time</strong> 이 중요한 요소가 아니였다. 무슨말인고 하니, 모든 프로그램은 <em>sequence of actions</em> 에 대해 항상 같은 결과를 주게 되어있었다.</p>
+
+<p>이건 <em>substitution model</em> 에 반영되어 있다. </p>
+
+<h3 id="substitutionmodel">Substitution Model</h3>
+
+<p><em>substitution model</em> 을 복습해 보면, 프로그램의 <em>evaluation</em> 은 <em>rewriting</em> 이다.</p>
+
+<pre><code class="scala">def f(x1, ..., xn) = B; ... f(v1, ..., vn)  
+</code></pre>
+
+<p>은 다음처럼 평가된다. 여기서 <code>B</code> 는 펑션 바디. </p>
+
+<pre><code class="scala">def f(x1, ..., xn) = B; ... f(v1/x1, ..., vn/xn) B  
+</code></pre>
+
+<p>예를 들어</p>
+
+<pre><code class="scala">def interate(n: Int, f: Int =&gt; Int, x: Int) =  
+  if (n == 0) x else iterate(n-1, f, f(x))
+
+def square(x: int) = x * x  
+</code></pre>
+
+<p><code>iterate(1, square, 3)</code> 은 이렇게 평가된다.</p>
+
+<pre><code class="scala">if (1 == 0) 3 else iterate(1-1, square, square(3))  
+iterate(0, square, square(3))  
+iterate(0, square, 3 * 3)  
+iterate(0, square, 9)  
+if (0 == 0) 9 else iterate(0-1, square, square(9))  
+9  
+</code></pre>
+
+<p>그런데 여기서 재미난 부분이 있다. <em>rewriting</em> 은 어느 <em>term</em> 에서나 일어날 수 있고, 모든 <em>종료되는</em> <em>rewriting</em> 은 같은 결과를 만든다.</p>
+
+<blockquote>
+  <p>Rewriting can be done anywhere in a term, and all rewritings which terminated lead to the same solution</p>
+</blockquote>
+
+<p>그리고 이 개념이 람다 대수와, 함수형 프로그래밍의 기반이다. 아래의 두 식은 같은 식이다. </p>
+
+<pre><code class="scala">if (1 == 0) 3 iterate(1 - 1, square, square(3))
+
+// ==
+iterate(0, square, square(3))
+
+// ==
+if (1 == 0) 3 else iterate(1 - 1, square, 3 * 3)  
+</code></pre>
+
+<p>어느 부분에 집중하냐에 따라 <em>term</em> 에서의 <em>rewriting</em> 이 달라질 수는 있으나, 결과는 같다. 이걸 <em>confluence (합류)</em> 라 부르기도 하고 <a href='http://en.wikipedia.org/wiki/Church%E2%80%93Rosser_theorem' >Church-Rosser Theorem</a> 이라 부르기도 한다.</p>
+
+<h3 id="statefulobject">Stateful Object</h3>
+
+<p>지금까지는 <em>pure functional world</em> 의 이야기였다. 이제 좀 바깥 세상 이야기를 해보자. 상태가 변하고 하는것들.</p>
+
+<p>일반적으로 <em>world</em> 를 <em>a set of objects</em> 로 정의할 수 있으며, 이 <em>object</em> 들은 시간이 지남에 따라 <em>change</em> 가 일어난다. </p>
+
+<blockquote>
+  <p>An object <strong>has a state</strong> if its behavior is influenced by its history</p>
+</blockquote>
+
+<p>예를 들어서 <em>은행 계좌</em> 는 <em>state</em> 를 가지고 있다. 왜냐하면 다음 질문의 답이</p>
+
+<blockquote>
+  <p><strong>"Can I withdraw 100 CHF?"</strong></p>
+</blockquote>
+
+<p>계좌의 이전 상태들이 어땠는지에 따라 달라지기 때문이다. (<em>may vary over the course of the lifetime of the account</em>)</p>
+
+<p>모든 <em>mutable state</em> 는 <em>variable</em> 을 이용해 만들 수 있는데 스칼라에서는 <em>value definition</em> 인 <code>val</code> 대신에 <em>variable definition</em> 인 <code>var</code> 을 이용한다.</p>
+
+<p>실제로는 <code>var</code> 보다는 다수의 <em>variable</em> 을 가진 <em>object</em> 를 이용해 오브젝트를 나타낸다. 아래는 은행 계좌 예제</p>
+
+<pre><code class="scala">  class BankAccount {
+    private var balance = 0
+
+    def deposit(amount: Int): Unit = {
+      if (amount &gt; 0) balance = balance + amount
+    }
+
+    def withdraw(amount: Int): Unit = {
+      if (0 &lt; amount &amp;&amp; amount &lt;= balance) balance = balance - amount
+      else throw new Error("insufficient")
+    }
+  }
+</code></pre>
+
+<p>여기서 <code>BankAcoount</code> 는 <code>deposit</code> 과 <code>withdraw</code> 가 어떻게 얼마나 호출되었는지(히스토리)에 따라 상태 <code>balance</code> 가 달라진다. </p>
+
+<p>여기서 지난번에 배웠던 <code>Stream</code> 의 구현을 잠깐 보자. 이건 <em>stateful object</em> 일까?</p>
+
+<pre><code class="scala">def const[T](hd: T, tl: =&gt; Stream[T]) = new Stream[T] {  
+  def head = hd
+  private var tlOpt = Option[Stream[T]] = None
+  def tail: T = tlOpt match {
+    case Some(x) =&gt; x
+    case None =&gt; tlOpt = Some(tl); tail
+  }
+}
+</code></pre>
+
+<p>이건 시스템이 어떠한가 하는 <em>가정</em> 에 따라 참일수도, 아닐수도 있다.</p>
+
+<p>(1) 만약에 <code>tl</code> 연산에서 <em>side-effct</em> 가 없다면 <code>tlOpt</code> 를 캐시하기 위한 최적화는 이 클래스 외부에 대해 어떤 영향도 없으므로 스트림은 <em>stateful object</em> 가 아니다.</p>
+
+<p>(2) 반대로 <code>tl</code> 을 계산하는 과정에서 <em>print</em> 나 등등 <em>side-effect</em> 가 발생한다면 첫번째로 <code>tl</code> 을 호출하냐, 두번째로 호출하냐에 따라 <em>print</em> 가 발생할 수, 아닐수도 있으므로 <em>stateful object</em> 다.</p>
+
+<p>그럼 이제 이런 은행계좌 클래스를 생각해 보자.</p>
+
+<pre><code class="scala">class BankAccountProxy(ba: BankAccount) {  
+  def deposit(amount: Int) = ba.deposit(amount)
+  def withdraw(amount: Int) = ba.withdraw(amount)
+}
+</code></pre>
+
+<p>사실 이 <code>BankAccountProxy</code> 클래스는 어느 <em>varaible</em> 도 가지고 있지 않지만, 이 클래스의 <em>behavior</em> 이 <code>ba</code> 의 <em>state</em> 를 결정하기 때문에 <em>stateful object</em> 다.</p>
+
+<h3 id="identityandchange">Identity and Change</h3>
+
+<p>이번엔 두 <em>state</em> 가 같은지를 판별하는 문제를 생각해 보자.</p>
+
+<p><em>assignment</em> 는 두 <em>expression</em> 이 서로 같은지(<em>the same</em>)에 대한 질문을 던진다.</p>
+
+<p>예를 들어 <code>val x = E; val y = E</code> 라 하자. 여기서 <code>E</code> 는 임의의 <em>expression</em>. 여기서 <em>assignment</em> 가 없다면 아래 식 처럼 바꿔 쓸 수 있다.</p>
+
+<pre><code class="scala">val x = E; val y = x  
+</code></pre>
+
+<p><em>property</em> 를 <strong>referential transparency</strong> 라 부른다. 근데 만약 <em>assigment</em> 가 있으면, 두 <em>formulation</em> 은 다를 수 있다.</p>
+
+<pre><code class="scala">val x = new BankAccount  
+val y = new BankAccount  
+</code></pre>
+
+<h4 id="operationalequivalence">Operational Equivalence</h4>
+
+<p>두 변수가 같은지를 판별하기 위해서, <em>같다</em> 라는 말을 좀 더 엄밀히 정의해 보자. </p>
+
+<blockquote>
+  <p>The precise meaning of <strong>"being the same"</strong> is defined by the property of <em>operational equivalence</em>*</p>
+</blockquote>
+
+<p><code>x, y</code> 두 개의 <em>definition</em> 을 가지고 있다고 하자. </p>
+
+<blockquote>
+  <p><code>x</code> and <code>y</code> are operationally equivalent if <strong>no possible test</strong> can disingquish between them</p>
+</blockquote>
+
+<p>그러므로 우리는 <code>x, y</code> 가 같은지 비교하기 위해 </p>
+
+<blockquote>
+  <p>Execute the definitions followed by an arbitrary sequence <code>f</code> of operations that involves <code>x</code> an <code>y</code>, observing the possible outcomes.</p>
+</blockquote>
+
+<pre><code class="scala">val x = new BankAccount  
+val y = new BankAccount  
+f(x, y)
+
+// another execution
+val x = new BankAccount  
+val y = new BankAccount  
+f(x, x)  
+</code></pre>
+
+<blockquote>
+  <p>Then, execute the definitions with another sequence <code>S'</code> obtains by renaming all occurences of <code>y</code> by <code>x</code> in <code>S</code></p>
+</blockquote>
+
+<p>만약 이 실행 결과가 다르다면 <code>x, y</code> 는 다른것이고 그 반대로 모든 <code>(S, S')</code> 가 같은 결과를 돌려준다면 <code>x, y</code> 는 같다. 왜냐하면 더이상 구분할 수 없기 때문이다. 이게 바로 <em>operationally equivalence</em></p>
+
+<p>이제 이 <em>operational equvalence</em> 를 이용해서 위에서 나온 질문을 해결해 보자. <em>counter example</em> 로,</p>
+
+<pre><code class="scala">// sequence S
+val x = new BankAccount  
+val y = new BankAccount
+
+x deposit 30  // 30  
+y withdraw 20 // error: insufficient
+
+// sequnece S'
+val x = new BankAccount  
+val y = new BankAccount
+
+x deposit 30  // 30  
+x withdraw 20 // 10  
+</code></pre>
+
+<p>따라서 <code>x, y</code> 는 서로 다르다. 반면 <code>val y = x</code> 로 정의한다면 어떤 <em>operation</em> 도 두 변수를 구분할 수 없기 때문에 똑같다.</p>
+
+<h4 id="assignmentandsubstitutionmodel">Assignment and Substitution Model</h4>
+
+<p>지금까지 논의한 바를 정리해 보면 <em>assignment</em> 가 도입됨에 따라 우리가 가진 <em>computation model</em> 이 적용 불가능해 졌다.</p>
+
+<pre><code class="scala">val x = new BankAccount  
+val y = x
+
+// will be replaced to, but not correct
+val x = new BankAccount  
+val y = new BankAccount  
+</code></pre>
+
+<p>위 식은 아래 식처럼 치환되지만, 절대 같은 결과가 아니다. 다른 프로그램이 된다!</p>
+
+<blockquote>
+  <p><em>The substitution model</em> <strong>ceases</strong> to be valid when we add the <em>assignment</em></p>
+</blockquote>
+
+<p><em>store</em> 개념을 도입하면 <em>substituion model</em> 을 적용 가능하지만, 이건 프로그램을 상당히 복잡하게 만든다.</p>
+
+<p><em>purely functional world</em> 에서 벗어나니 세상이 복잡해졌다. 어떻게 두 세계를 잘 버무릴수 있을까?</p>
+
+<h3 id="loops">Loops</h3>
+
+<p>사실 <em>loop</em> 는 <em>imperative programming</em> 에서 필수적인 요소는 아니다. <em>variable</em> 만으로 절차형 언어를 모델링하기에 충분하긴 한데, 어쨌든 있긴 하니까 함수형 언어에서도 모델링 할 수 있는 방법을 강구해보자. <em>function</em> 으로 할 수 있다. </p>
+
+<pre><code class="scala">def power(x: Double. exp: Int): Double = {  
+  var r = 1.0
+  var i = exp
+
+  while (i &gt; 0) { r = r * x; i = i - 1}
+  r
+}
+</code></pre>
+
+<p>스칼라에서 <code>while</code> 은 키워드니까, <code>WHILE</code> 을 이용해 루프를 모델링하는 함수를 만들어 보자.</p>
+
+<pre><code class="scala">def WHILE(condition: =&gt; Boolean)(body: =&gt; Unit): Unit = {  
+  if (condition) {
+    body
+    WHILE(condition)(body)
+  } else ()
+}
+</code></pre>
+
+<ul>
+<li><em>re-evaluation</em> 을 피하기 위해서 (인자로넘길때) <code>condition, body</code> 는 <em>by name</em> 으로 넘겨야 한다. </li>
+<li><code>WHILE</code> 은 <em>tail-recursive</em> 이므로 <em>constant stack-size</em> 를 가진다.</li>
+</ul>
+
+<p><em>repeat</em> 는 이런식으로</p>
+
+<pre><code class="scala">def REPEAT(body: =&gt; Unit)(condition: =&gt; Boolean): Unit = {  
+  body
+  if (condition) ()
+  else REPEAT(body)(condition)
+}
+</code></pre>
+
+<p><em>until</em> 을 만들고 싶으면 내부 함수를 만들면 된다.</p>
+
+<pre><code class="scala">// ref: https://gist.github.com/metasim/7503601
+def REPEAT(body: =&gt; Unit) = new {  
+  def UNTIL(condition: =&gt; Boolean): Unit = {
+    body
+    if (condition) ()
+    else UNTIL(condition)
+  }
+}
+
+// test code
+REPEAT {  
+  x = x + 1
+} UNTIL (x &gt; 3)
+</code></pre>
+
+<h4 id="forloops">For-Loops</h4>
+
+<p>자바의 <em>for-loop</em> 를 단순히 <em>higher-order function</em> 를 사용하는것 만으로는 모델링하기 어렵다. 왜냐하면 <code>i</code> 의 <em>declaration</em> 이 포함되어있기 때문이다.</p>
+
+<pre><code class="java">for (int i = 1; i &lt; 3; i = i + 1) { System.out.print(i + " "); }  
+</code></pre>
+
+<p>스칼라에서도 비슷한 루프를 제공하긴 하는데, 위 루프보다는 <em>extended</em> 루프에 더 가깝다.</p>
+
+<pre><code class="scala">for (i &lt;- 1 until 3) { System.out.print(i + " ") }  
+</code></pre>
+
+<p><em>for loop</em> 는 <em>foreach combinator</em> 로  번역 된다. 참고로 <em>for expression</em> 은 <code>map, flatMap</code> 으로 번역된다.</p>
+
+<pre><code class="scala">def foreach(f: T =&gt; Unit): Unit =  
+  // apply 'f' to each element of the collection
+
+// example
+for (i &lt;- 1 until 3; j &lt;- "abc") println(i + " " + j)
+
+// translated to
+(1 until 3).foreach(i =&gt; "abc" foreach (j =&gt; println(i + " " + j)))
+</code></pre>
+
+<h3 id="discreteeventsimulation">Discrete Event Simulation</h3>
+
+<p>지금까지 <em>world</em> 를 모델링 할 수 있는 <em>state</em> 와, 여기에 적용할 수 있는 <em>control structure</em> 를 살펴봤는데, 이걸 이용해서 시뮬레이션을 해보자.</p>
+
+<h4 id="digitalcircuit">Digital Circuit</h4>
+
+<p><em>digital circuit</em> 은 <strong>wires</strong> 와 <strong>functional components</strong> 로 구성된다. </p>
+
+<blockquote>
+  <p>Wires transport signals thar are transformed by components</p>
+</blockquote>
+
+<p><em>signal</em> 을 <code>True, False</code> 로 표현하자. 그리고 기본 <em>components</em> 로</p>
+
+<ul>
+<li>Inverter</li>
+<li>AND Gate</li>
+<li>OR Gate</li>
+</ul>
+
+<p>그러면 다른 컴포넌트들은 이 조합으로 만들 수 있다. 그리고 각 컴포넌트는 <em>delay</em> 를 가질 수 있다.</p>
+
+<pre><code class="scala">def inverter(input: Wire, output: Wire): Unit  
+def andGate(a1: Wire, a2: Wire, output: Wire): Unit  
+def orGate(o1: Wire, o2: Wire, output: Wire): Unit  
+</code></pre>
+
+<p>이제 <em>half adder, HA</em> 를 만들어 보면 </p>
+
+<p><img src='http://i.msdn.microsoft.com/dynimg/IC141779.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://msdn.microsoft.com/' >http://msdn.microsoft.com</a>)</p>
+
+<pre><code class="scala">def halfAdder(a: Wire, b: Wire, c: Wire, s: Wire): Unit = {  
+  val d = new Wire
+  val e = new Wire
+
+  orGate(a, b, d)
+  andGate(a, b, e)
+  inverter(c, e)
+  andGate(d, e, s)
+}
+</code></pre>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Full_Adder_Blocks.svg/2000px-Full_Adder_Blocks.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikibooks.org/' >http://en.wikibooks.org</a>)</p>
+
+<p><img src='http://hyperphysics.phy-astr.gsu.edu/hbase/electronic/ietron/fulladd.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://hyperphysics.phy-astr.gsu.edu/' >http://hyperphysics.phy-astr.gsu.edu</a>)</p>
+
+<p>그러면 <em>full adder</em> 는</p>
+
+<pre><code class="scala">def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire): Unit = {  
+  val s = new Wire
+  val c1 = new Wire
+  val c2 = new Wire
+
+  halfAdder(b, cin, s, c1)
+  halfAdder(a, s, sum, c2)
+  orGate(c1, c2, cout)
+}
+</code></pre>
+
+<h4 id="action">Action</h4>
+
+<p><em>discrete event simulator</em> 는 특정 <em>moment</em> 에서의 수행되는 <em>actions</em> 이다. 아무런 파라미터도 필요없는 <em>action</em> 은</p>
+
+<pre><code class="scala">type Action = () =&gt; Unit  
+</code></pre>
+
+<p>어떤 <em>side-effect</em> 를 수행하면서 <em>time</em> 을 시뮬레이션 할 수 있다.</p>
+
+<h4 id="simulator">Simulator</h4>
+
+<pre><code class="scala">  trait Simulation {
+    def currentTime: Int = ???
+    def afterDelay(delay: Int)(block: =&gt; Unit): Unit = ???
+    def run(): Unit = ???
+  }
+</code></pre>
+
+<ul>
+<li><code>currentTime</code> returns the current simulated time</li>
+<li><code>afterDelay</code> registeres an action to perform after a certain delay</li>
+<li><code>run</code> performs the simulation until there are no more actions wating</li>
+</ul>
+
+<p>이렇게 시뮬레이터 <em>trait</em> 를 만들고 상속 구조를 만들면</p>
+
+<pre><code class="scala"> Simulation
+     |
+   Gates     // Wire, AND, OR, INV
+     |
+  Circuits   // HA, ADDER  
+     |
+MySimulation // implementation  
+</code></pre>
+
+<h4 id="wire">Wire</h4>
+
+<pre><code class="scala">class Wire {  
+  private var sigVal = false
+  private var actions: List[Action] = List()
+
+  def getSignal: Boolean = sigVal
+  def setSignal(s: Boolean): Unit =
+    if (s != sigVal) {
+      sigVal = s
+      actions foreach (_())
+    }
+
+ def addAcion(a: Action): Unit = {
+    actions = a :: actions
+    a()
+  }
+}
+</code></pre>
+
+<h4 id="inverterandorgates">Inverter, AND, OR Gates</h4>
+
+<p><em>input wire</em> 로 부터의 입력을 뒤집어서 <em>output wire</em> 에다 돌려주는 <code>inverter</code> 를 구현할 수 있다. 근데 회로에서는 <em>delay</em> 가 있기 때문에 바로는 뒤집기 보다는 <code>InvertDelay</code> 이후에 신호를 반전시키는 <em>action</em> 을 구현하자. 아까 <code>Simulation</code> 내의 <code>afterDelay</code> 를 구현하면 된다.</p>
+
+<pre><code class="scala">  def andGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def andAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(AddGateDelay) { output setSignal (in1Signal &amp; in2Signal) }
+    }
+
+    in1 addAction andAction
+    in2 addAction andAction
+  }
+
+  def orGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def orAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(OrGateDelay) { output setSignal (in1Signal | in2Signal) }
+    }
+
+    in1 addAction orAction
+    in2 addAction orAction
+  }
+
+  def inverter(input: Wire, output: Wire): Unit = {
+    def invertAction(): Unit = {
+      val inputSig = input.getSignal
+      afterDelay(InverterDelay) { output setSignal (!inputSig) }
+    }
+    input addAction invertAction
+  }
+</code></pre>
+
+<p><br/></p>
+
+<p><del>혼란이 오기 시작했다</del></p>
+
+<blockquote>
+  <p>What happens if we compute <code>in1Sig</code> and <code>in2Sig</code> inline inside <code>afterDelay</code> instead of computing them as value?</p>
+</blockquote>
+
+<p>당연히 <em>delay</em> 후의 <em>signal</em> 값을 가지고 <em>action list</em> 에 추가하므로 제대로 모델링하지 못한다.</p>
+
+<pre><code class="scala">afterDelay(OrGateDelay) {  
+  output setSignal (in1.getSignal | in2.getSignal)
+}
+</code></pre>
+
+<h3 id="thesimulationtrait">The Simulation Trait</h3>
+
+<p>지금까지를 정리하면, <code>Wire</code> 클래스는 <em>statefule object</em> 를 나타낸다. 상태 <code>signal</code>, <code>actions</code> 는 <code>addAction, setSignal</code> 호출에 의해 정해진다. 이 함수들의 호출은 일종의 <em>event</em> 이며, <em>delay</em> 와 <em>action</em> 으로 구성된다.</p>
+
+<p>그리고 이 모든 <code>Event</code> 는 <code>Simulation</code> <em>trait</em> 내 리스트로 저장된다. 일종의 할일 목록이나, <em>history</em> 로 보면 쉬울듯. </p>
+
+<pre><code class="scala">type Action = () =&gt; Unit  
+case class Event(time: Int, action: Action)  
+private type Agenda = List[Event]  
+private var agenda: Agenda = List()
+
+private var curtime: Int = 0  
+def currentTime: Int = curtime  
+</code></pre>
+
+<p>현재 시뮬레이션 타임을 기록하기 위해 <code>curtime</code> 정의하고, 이를 이용해 <code>Event</code> 를 정의할 수 있다. <code>Event(curtime + delay, () =&gt; block)</code> 처럼</p>
+
+<pre><code class="scala">def afterDelay(delay: Int)(block: =&gt; Unit): Unit = {  
+  val item = Event(currentTime + delay, () =&gt; block)
+  agenda = insert(agenda, item)
+}
+
+private def insert(ag: List[Event], item: Event): List[Event] = ag match {  
+  case first :: rest if first.time &lt;= item.time =&gt; first :: insert(rest, item)
+  case _ =&gt; item :: ag
+}
+</code></pre>
+
+<p>그리고 <code>agenda</code> 에 있는 액션들을 처리할 <code>loop</code> 와 시뮬레이션을 돌릴 <code>run</code> 함수를 구현하면</p>
+
+<pre><code class="scala">private def loop(): Unit = agenda match {  
+  case first :: rest =&gt;
+    agenda = rest
+    curtime = first.time
+    first.action()
+    loop()
+  case _ =&gt;
+}
+
+def run(): Unit = {  
+  afterDelay(0) {
+    println("*** simulation started, time = " + currentTime + " ***")
+  }
+
+  loop()
+}
+</code></pre>
+
+<p>그리고 시뮬레이션 자체는 아무런 <em>output</em> 도 주지 않기 때문에, 디버깅에 유용한 <code>probe</code> 함수를 추가하자. 디버깅용 <em>action</em> 을 추가한다 생각하면 쉽다. 일종의 <em>gate</em> 이기도 하다.</p>
+
+<pre><code class="scala">def probe(name: String, wire: Wire): Unit = {  
+  def probeAction(): Unit = {
+    println(s"$name $currentTime value = ${wire.getSignal}")
+  }
+
+  wire addAction probeAction
+}
+</code></pre>
+
+<p>이제 각 게이트마다의 딜레이를 위한 <em>trait</em> 를 만들자. 회로를 무엇으로 구성하냐에 따라 다를 수 있으므로 <em>trait</em> 으로 만드는건 좋은 선택이다.</p>
+
+<pre><code class="scala">trait Parameters {  
+  def InverterDelay = 2
+  def AndGateDelay = 2
+  def OrGateDelay = 2
+}
+</code></pre>
+
+<h4 id="implementation">Implementation</h4>
+
+<pre><code class="scala">
+</code></pre>
+
+<h4 id="test">Test</h4>
+
+<pre><code class="scala">trait Simulation {  
+  type Action = () =&gt; Unit
+  case class Event(time: Int, action: Action)
+  private type Agenda = List[Event]
+  private var agenda: Agenda = List()
+
+  private var curtime: Int = 0
+  def currentTime: Int = curtime
+
+  def afterDelay(delay: Int)(block: =&gt; Unit): Unit = {
+    val item = Event(currentTime + delay, () =&gt; block)
+    agenda = insert(agenda, item)
+  }
+
+  private def insert(ag: List[Event], item: Event): List[Event] = ag match {
+    case first :: rest if first.time &lt;= item.time =&gt; first :: insert(rest, item)
+    case _ =&gt; item :: ag
+  }
+
+  private def loop(): Unit = agenda match {
+    case first :: rest =&gt;
+      agenda = rest
+      curtime = first.time
+      first.action()
+      loop()
+    case _ =&gt;
+  }
+
+  def run(): Unit = {
+    afterDelay(0) {
+      println("*** simulation started, time = " + currentTime + " ***")
+    }
+
+    loop()
+  }
+
+}
+
+abstract class Gates extends Simulation {
+
+  def AndGateDelay: Int
+  def OrGateDelay: Int
+  def InverterGateDelay: Int
+
+  class Wire {
+    private var sigVal = false
+    private var actions: List[Action] = List()
+
+    def getSignal: Boolean = sigVal
+    def setSignal(s: Boolean): Unit =
+      if (s != sigVal) {
+        sigVal = s
+        actions foreach (_())
+      }
+
+    def addAction(a: Action): Unit = {
+      actions = a :: actions
+      a()
+    }
+  }
+
+  def andGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def andAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(AndGateDelay) { output setSignal (in1Signal &amp; in2Signal) }
+    }
+
+    in1 addAction andAction
+    in2 addAction andAction
+  }
+
+  def orGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def orAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(OrGateDelay) { output setSignal (in1Signal | in2Signal) }
+    }
+
+    in1 addAction orAction
+    in2 addAction orAction
+  }
+
+  def inverter(input: Wire, output: Wire): Unit = {
+    def invertAction(): Unit = {
+      val inputSig = input.getSignal
+      afterDelay(InverterGateDelay) { output setSignal (!inputSig) }
+    }
+    input addAction invertAction
+  }
+
+  def probe(name: String, wire: Wire): Unit = {
+    def probeAction(): Unit = {
+      println(s"$name $currentTime value = ${wire.getSignal}")
+    }
+
+    wire addAction probeAction
+  }
+}
+
+abstract class Circuits extends Gates {
+
+  // input a, b
+  // output sum, carry
+  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire): Unit = {
+    val d = new Wire
+    val e = new Wire
+
+    orGate(a, b, d)
+    andGate(a, b, c)
+    inverter(c, e)
+    andGate(d, e, s)
+  }
+
+  def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire): Unit = {
+    val s = new Wire
+    val c1 = new Wire
+    val c2 = new Wire
+
+    halfAdder(b, cin, s, c1)
+    halfAdder(a, s, sum, c2)
+    orGate(c1, c2, cout)
+  }
+}
+
+trait Parameters {  
+  def InverterGateDelay = 2
+  def AndGateDelay = 3
+  def OrGateDelay = 5
+}
+</code></pre>
+
+<p>테스트코드는</p>
+
+<pre><code class="scala">object test extends Circuits with Parameters  
+import test._  
+val in1, in2, sum, carry = new Wire
+
+halfAdder(in1, in2, sum, carry)  
+probe("sum", sum)  
+probe("carry", carry)
+
+in1.setSignal(true)  
+test.run()  
+in2.setSignal(true)  
+test.run()  
+</code></pre>
+
+<p>결과는</p>
+
+<pre><code class="scala">sum 0 value = false  
+carry 0 value = false  
+*** simulation started, time = 0 ***
+sum 8 value = true  
+*** simulation started, time = 8 ***
+carry 11 value = true  
+sum 16 value = false  
+</code></pre>
+
+<p>흐름을 정리해 보면,</p>
+
+<p>(1) <code>halfAdder</code> <br />
+(2) <code>orGate, andGate, invertGate</code> <br />
+(3) <code>addAction</code>
+(4) <code>a()</code> -> <code>afterDelay</code> <br />
+(5) <code>insert</code> 에서 시간을 고려해 이벤트리스트에 삽입 <br />
+(6) <code>loop</code> 가 돌아가면서 모든 <code>action</code> 실행</p>
+
+<h4 id="avariant">A Variant</h4>
+
+<p><em>OR gate</em> 는 <em>AND, Invert</em> 로 구성될 수 있다. <code>a | b = ~(~a &amp; ~b)</code> 이기 때문인데</p>
+
+<pre><code class="scala">def orGateAlt(in1: Wire, in2: Wire, output: Wire): Unit = {  
+  def orAction(): Unit = {
+    val notIn1, notIn2, notOut = new Wire
+    inverter(in1,notIn1);
+    inverter(in2,notIn2);
+    andGate(notIn1, notIn2, notOut)
+    inverter(notOut, output)
+  }
+}
+</code></pre>
+
+<p>만약에 이 <em>OR Gate</em> 를 사용하면 어떻게 될까? 시간은 당연히 달라지고, 추가적인 이벤트도 발생한다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<ul>
+<li><em>state</em> 와 <em>assignment</em> 는 모델을 더 복잡하게 만든다. </li>
+<li><em>referential transparency</em> 도 포기해야 한다</li>
+</ul>
+
+<p>반면</p>
+
+<ul>
+<li><em>discrete event simulation</em> 같은 특정 형태의 프로그램을 우아하게 작성할 수 있다</li>
+<li>시스템은 <em>mutable list of actions</em> 로 표현되고</li>
+<li><em>action</em> 이 호출되면 그 효과로 인해 오브젝트의 상태가 변한다</li>
+<li>미래에 호출될 <em>action</em> 을 <em>install</em> 할 수 있다.</li>
+</ul>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong> <br />
+(2) <a href='http://msdn.microsoft.com/en-us/library/aa288734' (v=vs.71).aspx">MSDN: Half Adder</a></p>]]></description><link>http://1ambda.github.io/reactive-programming-2/</link><guid isPermaLink="false">1f0f0056-8b79-426c-abcb-ce9071c541bb</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[reactive programming]]></category><category><![CDATA[referential transparency]]></category><category><![CDATA[operational equivalence]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 21 Dec 2014 01:57:05 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 9]]></title><description><![CDATA[<h3 id="intro">Intro</h3>
+
+<p>이번시간엔 함수형 프로그래밍에서 <em>property</em> 를 증명하는 방법인 <em>induction</em> 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 <em>Rose Tree</em> 를 구현하면서 <em>Functor, Monoid, Foldable</em> 등에 대해 좀 알아봅시다.</p>
 
 <p>수학에서 다음 두 식은 똑같습니다.</p>
 
@@ -6296,958 +7796,4 @@ for all other vertice</li>
 (5) <a href='http://www.csupomona.edu/' ~ftang">CS241 Lecture Notes: Graph Algorithms</a> <br />
 (6) <a href='http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation.htm' >Seam Carving for Content-Aware Image Resizing</a> <br />
 (7) <a href='http://algs4.cs.princeton.edu/44sp/' >Algorithms: Shortest Path</a> <br />
-(8) <a href='http://stackoverflow.com/questions/19760077/what-does-bellman-ford-algorithm-detects-negative-weight-or-negative-cycle' >What does bellman ford algorithm</a></p>]]></description><link>http://1ambda.github.io/graph-challenges-minimum-spanning-trees/</link><guid isPermaLink="false">22c06085-7f5c-45eb-8efc-31870d3ed425</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[graph]]></category><category><![CDATA[minimum spanning tree]]></category><category><![CDATA[shortest-path]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 03 Dec 2014 06:01:51 GMT</pubDate></item><item><title><![CDATA[Hash Table, Universal Hashing, Bloom filters]]></title><description><![CDATA[<h3 id="hashtable">Hash Table</h3>
-
-<p>해시 테이블의 연산은 <em>key</em> 를 이용해 이런 작업들을 한다.</p>
-
-<p>(1) <strong>insert:</strong> add new record <br />
-(2) <strong>delete:</strong> delete existing record <br />
-(2) <strong>lookup:</strong> check for a particular record</p>
-
-<p>가끔 사람들이 <em>dictionary</em> 라 부르기도 하는데, 해시테이블은 알파벳 순서같은 특정 <em>order</em> 로 데이터를 저장하진 않는다.</p>
-
-<p>이 3가지 연산이 거의 <code>O(1)</code> 라 보면 된다. 물론 이건 해시테이블을 잘 설계 했을때다. 슬프게도, 해시테이블은 <em>잘못</em> 구현하기 쉽다. 해시테이블이 <code>O(1)</code> 성능이 나오려면</p>
-
-<ul>
-<li>properly implemented</li>
-<li>non-pathological data</li>
-</ul>
-
-<p>여기서 <em>non-pathological</em> 이란 <em>collision</em> 을 만들지 않는 데이터를 말한다.</p>
-
-<h4 id="application">Application</h4>
-
-<p>(1) 주어진 <em>object stream</em> 을 <em>de-duplication</em> 하기 위해 해시테이블을 쓸 수 있다. 해시테이블에 들어오는 객체를 <em>lookup</em> 해 보고 없으면 채워 넣고, 있으면 무시한다.</p>
-
-<p>(2) <em>2-Sum Problem</em> 에도 해시테이블을 쓸 수 있다. <em>2-Sum</em> 을 푸는 <code>O(n logn)</code> 방법은, (<code>x + y = t</code>)</p>
-
-<p>먼저 정렬 후 <code>A</code> 의 원소 <code>x</code> 에 대해 <code>t - x</code> 를 이진탐색하는 방법이다. 이렇게 하면 <code>O(n logn)</code> 으로 해결할 수 있다.</p>
-
-<p>해시테이블을 이용하면 정렬 할 필요도 없고, 이진탐색 대신 <em>lookup</em> 으로 <code>O(1)</code> 시간에 원소를 검색할 수 있으므로 더 빨라진다.     </p>
-
-<p>해시 테이블을 만드는데 <code>O(n)</code>, 탐색에 <code>O(1 * n)</code> 에서, <code>O(n)</code> 만에 <em>2-Sum</em> 을 해결할 수 있다.</p>
-
-<p>(3) 이외에도</p>
-
-<ul>
-<li>symbol tables in compilers</li>
-<li>blocking network traffic</li>
-<li>search algorithm (e.g <strong>game tree exploration</strong>)</li>
-</ul>
-
-<h3 id="hashtableimplementation">Hash Table Implementation</h3>
-
-<p>모든 집합을 의미하는 <em>universe <code>u</code></em> 에 대해 a reasonable size* 의 <em>evolving set</em> <code>s &lt;= u</code>* 을 유지하면 된다.</p>
-
-<ul>
-<li>배열로 구현할 경우 <em>lookup</em> 은 <code>O(1)</code> 이지만 메모리가 <code>O(|u|)</code> 다.</li>
-<li>리스트로 구현할 경우 <code>O(|s|)</code> 의 메모리를 차지하지만, <em>lookup</em> 이 <code>O(|s|)</code> 다.</li>
-</ul>
-
-<p>더 나은 방법은 없을까?</p>
-
-<p>(1) <em>bucket size</em> 인 <code>n ~ |s|</code> 인 <code>n</code> 을 고른다. 이 때 <code>|s|</code> 는 그렇게 많이 안 변한다고 가정하자. <br />
-(2) 그 후 <em>hash function</em> <code>h: u -&gt; {0, 1, ..., n-1}</code> 인 <code>h</code> 를 고르면 된다. <br />
-(3) 길이 <code>n</code> 의 배열 <code>A</code> 에, <code>A[h(x)]</code> 위치에 <code>x</code> 를 저장하면 된다.</p>
-
-<p>이제 충돌 문제를 고민해 보자. 한 방에 <code>23</code> 명만 있어도, 생일이 같은 2명이 존재할 확률이 <code>50%</code> 가 넘으므로, </p>
-
-<p><code>n</code> 에 비해 그리 크지 않은 <em>input size</em> 에 대해서도 충돌이 발생할 확률이 꽤 높다.</p>
-
-<blockquote>
-  <p><strong>Collision:</strong> dinstinct <code>x, y in u</code> such that <code>h(x) = h(y)</code></p>
-</blockquote>
-
-<h3 id="resolvingcollisions">Resolving Collisions</h3>
-
-<p>충돌을 해결하기 위한 첫 번째 방법은</p>
-
-<p>(1) <strong>Chaining:</strong></p>
-
-<p><code>A[h(x)]</code> 을 리스토로 만들어 충돌이 발생하는 원소를 리스트에 저장한다.</p>
-
-<p>(2) <strong>Open Addressing:</strong></p>
-
-<p>충돌이 발생하면 새로운 <em>bucket</em> 을 찾도록 해 하나의 <em>bucket</em> 당 하나의 원소만 들어갈 수 있도록 한다.</p>
-
-<blockquote>
-  <p>hash function now specifies probe sequence <code>h_1(x), h_2(x), ...</code> keep trying til find open slot.</p>
-</blockquote>
-
-<p><br/></p>
-
-<p><em>open addressing</em> 에서는 <em>probing, 탐사</em> 방식을 통해 비어있는 <em>bucket</em> 을 찾는다. 몇 가지 방법이 있는데</p>
-
-<ul>
-<li><strong>linear probing:</strong> 순차적으로 탐색한다. 캐쉬 히트는 높으나, 클러스터링에 취약하다.</li>
-<li><strong>double hashing probing:</strong> 해쉬 함수 충돌이 발생하면 2차 해쉬 함수를 이용한다. 계산 비용이 비싸고, 캐쉬효율도 낮지만, 클러스터링에 영향을 받지 않는다.</li>
-<li><strong>quadratic probing:</strong> 2차 함수를 이용해서 탐색을 위치를 찾는데, 캐싱과 클러스터링에서 두 방식의 중간정도의 성능을 보여준다.</li>
-</ul>
-
-<h4 id="clustering">Clustering</h4>
-
-<p><em>key <code>k</code></em> 에 대한 최초의 해쉬 함수 값 <code>h(k)</code> <em>home position</em> 이라 부르는데, 같은 <em>home position</em> 를 갖는 <em>key</em> 들을 모아 <em>cluster</em> 라 부른다. <em>cluster</em> 가 커지면 커질수록, 클러스터의 중간을 <em>home position</em> 으로 하는 키가 들어올 확률도 높아지고, 인접한 클러스터와 합쳐지는 속도도 빨라진다.</p>
-
-<p>결국 <em>linear probing</em> 의 경우 <em>load factor</em> 가 높아질수록 해쉬 테이블의 성능이 <code>O(n)</code> 으로 떨어진다.</p>
-
-<h4 id="chainingvsopenaddessing">Chaining vs Open-addessing</h4>
-
-<p><a href='http://sweeper.egloos.com/viewer/925740' >여기</a>를 인용하면</p>
-
-<p><em>chaining</em> 은 <em>open addressing</em> 에 비해 다음의 장점을 가진다.</p>
-
-<blockquote>
-  <p>삭제 작업이 간단하다. 삭제 작업이 빈번하다면 <em>open addressing</em> 보다는 <em>chaining</em> 이 낫다.</p>
-  
-  <p><strong>chaining</strong> 은 클러스터링에 거의 영향을 받지 않아 충돌의 최소화만 고려하면 된다. 반면 <strong>open addressing</strong> 은 클러스터링까지 피해야 하므로 해쉬함수를 구현하기가 쉽지 않다.</p>
-  
-  <p><em>load factor</em> 가 높아져도 성능 저하가 선형적이다. 아래 그림에서 볼 수 있듯이, <em>open-addressing</em> 방법처럼 급격히 <em>lookup time</em> 이 늘지 않는다. 따라서 테이블 확장을 상당히 늦출 수 있다.</p>
-</blockquote>
-
-<p><img src='http://pds5.egloos.com/pds/200702/14/32/d0014632_11023351.jpg'  alt="" /></p>
-
-<blockquote>
-  <p>데이터의 크기가 <em>5 words and more</em> 이면, <em>open addressing</em> 보다 메모리 사용량이 적다. </p>
-</blockquote>
-
-<p>반면 <em>open addressing</em> 은</p>
-
-<blockquote>
-  <p>어떠한 포인터도 저장할 필요가 없고, 테이블 외부에 추가적인 공간이 필요 없으므로 메모리 효율이 높다.</p>
-  
-  <p>특히 <em>linear probing</em> 에서 뛰어난 <em>locality</em> 때문에 데이터가 캐쉬라인을 채울 정도로 크지 않다면 좋은 성능을 낼 수 있다.</p>
-</blockquote>
-
-<p>정리하자면,</p>
-
-<blockquote>
-  <p>open-addressing 방식은 테이블에 모두 저장될 수 있고 캐쉬 라인에 적합할 수 있을 정도로 데이터의 크기가 작을수록 성능이 더 좋아진다. 메모리 비용을 아끼려면, 이 방법이 적합하다.</p>
-  
-  <p>반면 테이블의 높은 load factor가 예상되거나, 데이터가 크거나, 데이터의 길이가 가변일 때 chained 해쉬 테이블은 open-addressing 방식보다 적어도 동등하거나 훨씬 더 뛰어난 성능을 보인다. 삭제가 중요하고, 빈번한 연산이라면 <em>chianing</em> 이 더 낫다.</p>
-</blockquote>
-
-<h3 id="whatmakesagoodhashfunction">What Makes a Good Hash Function?</h3>
-
-<p><em>chaining</em> 을 생각해 보자. </p>
-
-<ul>
-<li><strong>insert:</strong> <code>O(1)</code></li>
-<li><strong>lookup, delete:</strong> <code>O(list length in the bucket)</code></li>
-</ul>
-
-<p>이때 하나의 버켓에 들어있는 <em>list length</em> 는 <code>m/n</code> 부터 <code>m</code> 까지 일 수 있기 때문에 (<code>m</code> 개의 오브젝트에 대해), 해쉬 함수에 따라 성능이 정말 달라진다.</p>
-
-<p>이로부터 좋은 해쉬함수의 기준을 알 수 있다.</p>
-
-<blockquote>
-  <ol>
-  <li>Should lead to good performance => <em>"spread data out"</em> <br />
-  (gold standard: completely random hashing)</li>
-  <li>Should be easy to store / very fast to evaluate  </li>
-  </ol>
-</blockquote>
-
-<h3 id="quickanddirtyhashfunction">Quick and Dirty Hash Function</h3>
-
-<p>좋은 해쉬함수를 설계할 수 있다면 좋겠지만, 시간이 없을때 객체 <code>u</code> 를 받아 정수 <code>n</code> 으로 만들어 <em>bucket</em> 을 찾는 해쉬함수를 이렇게 디자인할 수 있다.</p>
-
-<ul>
-<li><code>u -&gt; n</code>: <em>hash code</em></li>
-<li><code>n -&gt; bucket</code>: <em>compression function</em> using <code>mod</code></li>
-</ul>
-
-<p>여기서 <code>n</code> 은 어떻게 고를까? </p>
-
-<p>(1) 우리가 <em>compression function</em> 으로 <code>mod</code> 를 사용하기 때문에 소수여야 한다. 소수가 아니라면, <code>n</code> 으로 나누어지는 모든 수는 <code>mod n == 0</code> 이 되어, 같은 <em>bucket</em> 에 할당될 것이다. 물론 이 수는 너무 커서는 안되고, 객체를 담을 수 있을만한 적당한 숫자여야 한다.</p>
-
-<p>(2) <em>input data</em> 의 패턴을 고려해 <code>n</code> 을 정해야 한다. 예를 들어 <em>memory location</em> 이 4의 배수일 때, 테이블 사이즈 <code>n</code> 을 <code>2^j</code> 로 정해버리면, <code>mod n == 0</code> 이 되는 경우가 많아 <em>empty bucket</em> 이 많이 생길 것이다.</p>
-
-<p>그리고 <code>n</code> 을 <code>2^k, 10^k</code> 로 정해버리는 경우 <code>mod</code> 연산이 시프팅으로 쉽게 구현되는데 이는 나머지 데이터를 고려하지 않고 일부의 데이터만으로 버킷을 찾아가므로 별로 좋은 선택이 아니다.</p>
-
-<h3 id="loadfactor">Load Factor</h3>
-
-<p><em>evenly spread out</em> 에 대해 고민해 보았으니, 이제 <em>non-pathological</em> 을 생각해 보자.</p>
-
-<p>용어부터 정의하고 가면 <em>load factor</em> 는 해시테이블에 들어있는 오브젝트 수를, 버킷 수로 나눈 것이다.</p>
-
-<p><em>open addressing</em> 의 경우에는 <em>load factor</em> 가 1보다 클 수 없지만 <em>chaining</em> 은 가능하다.</p>
-
-<p>(1) <em>load factor</em> <code>a = O(1)</code> 이어야 연산이 <em>constant time</em> 이다. <br />
-(2) <em>open addressing</em> 이라면 <code>x &lt;&lt; 1</code> 이어야 한다.</p>
-
-<p>따라서 해시 테이블의 성능을 위해서는 <em>load factor</em> 를 조절해야 한다.</p>
-
-<h3 id="pathologicaldatasets">Pathological Data Sets</h3>
-
-<p>모든 데이터에 대해 <em>evenly spread out</em> 할 수 있는 해시함수가 있다면 좋겠지만, <strong>그런 해시 함수는 없다.</strong></p>
-
-<p>모든 해시 함수는 자신만의 <em>pathological data set</em> 이 있다. 이는 쉽게 보일 수 있는데, <em>universe <code>u</code></em> 와 대해 버켓 수 <code>n</code> 에 대해 해시함수 <code>h: u -&gt; {0, 1, ..., n-1}</code> 이 있다고 하자.</p>
-
-<p>비둘기 집 원리에 의해 모든 <em>bucket</em> 은 적어도 <code>|u|/n</code> 개의 데이터를 담고 있다. 따라서 <code>u</code> 중에서 어느 한 <em>bucket</em> 에만 담을 수 있는 데이터 셋을 고르면, 그것이 바로 <em>pathological data set</em> 이다.</p>
-
-<p>이런 <em>pathological data set</em> 은 <em>service attack</em> 에 쓰이기도 한다. 따라서 오픈소스라면 리버스엔지니어링 하기 쉽지 않게끔 해시함수를 설계하는 것도 필요하다.</p>
-
-<p>그럼 모든 해시 함수가 이런 데이터 셋을 가지고 있고, 심지어 공격에도 이용할 수 있다면 어떻게 해시함수를 설계해야 이런 문제를 조금이나마 피할 수 있을까?</p>
-
-<p>(1) <strong>use a cryptographic hash function</strong> (e.g., <strong>SHA-2</strong>)  </p>
-
-<p>infeasible to reverse engineer a pathological data set</p>
-
-<p>(2) <strong>use randomization</strong>  </p>
-
-<p>design a family <code>H</code> of hash funcitons such that data sets <code>S</code>, "almost all" functions <code>h in H</code> spread <code>S</code> out "pretty evenly" (compare to quicksort guarantee)</p>
-
-<p>이제 <em>universal hashing</em> 이 무엇인지 알아보자</p>
-
-<h3 id="universalhashingfunctions">Universal Hashing Functions</h3>
-
-<blockquote>
-  <p>Let <code>H</code> be a set of hash functions from <code>u</code> to <code>{0, 1, ..., n-1}</code></p>
-  
-  <p><code>H</code> is <strong>universal</strong> if and only if,</p>
-  
-  <p>for all <code>x, y in u (x != y)</code> <code>P[h(x) = h(y)] &lt;= 1/n</code> when <code>h</code> is chosen unifomly at random from <code>H</code> where <code>n</code> is the number of buckets. </p>
-</blockquote>
-
-<h4 id="hashingipaddresses">Hashing IP Addresses</h4>
-
-<p><em>IP Address</em> 를 예로 들어 설명해보면 <em>IP</em> 를 <code>(x1, x2, x3, x4)</code> (<code>xi = 0 to 255</code>), <em>bucket</em> 수 <code>n</code> 을 소수라 하자.</p>
-
-<p><em>tuple <code>a = (a1, a2, a3, a4), where ai in {0, ..., n-1}</code></em> 에 대해서</p>
-
-<p><code>h_a</code> 를 이렇게 정의하자. 이러면 <code>h_a</code> 는 <code>n^4</code> 개 존재한다.</p>
-
-<p><code>h_a(x1, x2, x3, x4) = (a1x2 + a2x2 + a3x3 + a4x4) mod n</code></p>
-
-<p>이제 <code>h_a</code> 의 집합 <code>H</code> 는 <em>universal</em> 이다.</p>
-
-<p><code>H = { h_a | a1, a2, a3, a4 in {0, 1, ..., n-1} }</code></p>
-
-<h4 id="proof">Proof</h4>
-
-<p>서로 다른 <em>IP</em> <code>(x1, x2, x3, x4), (y1, y2, y3, y4)</code> 를 생각해보자.</p>
-
-<p>만약 <code>x4 != y4</code> 라면, 충돌이 일어날 확률은 얼마일까? 충돌에 대한 식을 좀 정리하면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?collision%5C%20means%20%5C%5C%20%5C%5C%20%28a_1x_1%20&plus;%20a_2x_2%20&plus;%20a_3x_3%20&plus;%20a_4x_4%29%20%5Cmod%20n%20%3D%20%28a_1y_1%20&plus;%20a_2y_2%20&plus;%20a_3y_3%20&plus;%20a_4y_4%29%20%5Cmod%20n%20%5C%5C%20%5C%5C%20so%2C%20%5C%5C%20%5C%5C%20a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n'  alt="" /></p>
-
-<p>이 때 <code>a1, a2, a3</code> 를 고정하면 얼마나 많은 <code>a4</code> 에 대해 아래 식이 성립할까? </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n'  alt="" /></p>
-
-<p><code>xi, yi, a1, a2, a3</code> 가 <em>fixed</em> 기 때문에 우변은 <code>{0, ..., n-1}</code> 사이의 숫자고 <code>a4</code> 만 랜덤이다.</p>
-
-<p>이 때</p>
-
-<ul>
-<li><code>x4 != y4</code> 이므로 <code>x4 - y4 != 0</code> 이다</li>
-<li><code>n</code> 이 <code>ai</code> 의 최대값보다 큰수이면서 동시에 소수인데다가</li>
-<li><code>a4</code> 가 <em>uniform at random</em> 이기 때문에</li>
-</ul>
-
-<blockquote>
-  <p>left-hand side equally likely to be any of <code>{0, 1, ..., n-1}</code>.</p>
-</blockquote>
-
-<p>따라서 좌변이 특정 숫자인 우변과 같을 확률은 <code>1/n</code> 이다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?P%5Bh_a%28x%29%20%3D%20h_a%28y%29%5D%20%3D%20%7B1%20%5Cover%20n%7D'  alt="" /></p>
-
-<h3 id="analysisofchaining">Analysis of Chaining</h3>
-
-<p><em>universal hash functions</em> 의 정의를 한번 더 보고 넘어가면,</p>
-
-<p><code>H</code> 가 해시함수 <code>u -&gt; {0, ..., n-1}</code> 의 집합일때 <code>H</code> 가 다음을 만족하면 <em>universal</em> 하다.</p>
-
-<ul>
-<li><code>x != y</code> 인 <code>u</code> 내의 <code>x, y</code> 에 대해 충돌이 일어날 확률 <code>P &lt;= 1/n</code> 이고</li>
-<li><code>H</code> 내에서 <code>h</code> 가 <em>uniformly at random</em> 하게 선택될때</li>
-</ul>
-
-<p>만약 해시 테이블이 <em>chaining</em> 을 이용해 구현되었을때, <em>universal family</em> <code>H</code> 로부터 해시함수 <code>h</code> 가 <em>uniformly a random</em> 하게 선택되면 모든 연산이 <code>O(1)</code> 이다.</p>
-
-<p>그리고, <code>|S| = O(n)</code> 다시 말해 <em>load factor</em> <code>alpha = |S| / n = O(1)</code> 임을, 해시 함수를 평가하는데 <code>O(1)</code> 임을 가정한다.</p>
-
-<h4 id="proof">Proof</h4>
-
-<p><em>unsuccessful lookup</em> 을 분석할건데, 다른 연산이 이보다는 항상 더 빠르므로 다른 연산의 <em>upper bound</em> 라 보면 된다.</p>
-
-<p><code>S</code> 를 <code>|S| = O(n)</code> 인 데이터셋이라 하자. <code>x not in S</code> 인 <code>x</code> 를 <em>lookup</em> 한다 하면 <em>running time</em> 은</p>
-
-<p><code>O(1) + O(list length in A[h(x)])</code> 다. 즉 <code>h(x)</code> 를 평가하는데 걸리는 시간과 해당 버킷 내의 리스트를 순회하는 시간의 합이다.</p>
-
-<p>그런데 여기서 <code>A[h(x)]</code> 버킷의 리스트 길이를 <code>L</code> 이라 하면 이 <code>L</code> 은 <code>h</code> 선택에 따라 달라지는 <em>random variable, 확률변수</em> 다.</p>
-
-<p>그럼 <em>average list length</em> 를 구해, <code>O(L)</code> 을 구해보자. 기대값의 선형성을 이용할건데, <code>E(L)</code> 을 위한 <code>1 or 0</code> 의 확률변수를 도입하자.</p>
-
-<p><code>x != y</code> 인 <code>y in S</code> 에 대해 <code>z_y</code> 를 충돌이 날경우 <code>1</code> 로, 아닐 경우를 <code>0</code> 으로 하면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?z_y%3D%20%5Cbegin%7Bcases%7D%201%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%3D%20h%28y%29%20%5C%5C%200%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%5Cneq%20h%28y%29%20%5Cend%7Bcases%7D'  alt="" /></p>
-
-<p>이 때 해시함수가 무엇이든, 충돌이 날 경우에만 같은 버킷으로 들어가므로 버킷의 길이는 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?L%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y'  alt="" /></p>
-
-<p>따라서</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?E%28L%29%20%5C%5C%20%5C%5C%20%3D%20E%5B%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y%5D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20E%28z_y%29%20%5C%20%5C%20%5Cmbox%7B%28apply%20linearity%20of%20expectation%29%7D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%20%5C%20S%7D%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%5Cleq%20%7CS%7C%20' *%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%20O%281%29" alt="" /></p>
-
-<p>중간에 <code>H</code> 가 <em>universal</em> 이므로 <code>P[h(y) = h(x)] &lt;= 1/n</code> 이다.</p>
-
-<h3 id="openaddressingperformance">Open Addressing Performance</h3>
-
-<p><em>open addressing</em> 퍼포먼스를 계산할건데, <em>quick and dirty idealized analysis</em> 를 위해 <em>heuristic assumtion</em> 을 도입하면,</p>
-
-<blockquote>
-  <p>All <code>n!</code> probe sequences equally likely    </p>
-</blockquote>
-
-<p>이상적인 경우를 가정하면 얻어지는 것은</p>
-
-<blockquote>
-  <p>expected insertion time ~= <code>1 / (1 - a)</code> where <code>a = load factor</code></p>
-</blockquote>
-
-<p>다시 말해서, <code>a = 0.5</code> 라면 새로운 데이터를 집어넣기 위해 <code>2</code> 만큼 <em>probe</em> 해야한다는 소리다. 반면 <code>a ~= 1</code> 이면 (<code>1</code>에 가까워지면) <em>insertion</em> 타임은 어마어마하게 커진다.</p>
-
-<blockquote>
-  <p>A random probe finds an empty slot with probability <code>1 - a</code></p>
-</blockquote>
-
-<p>이 문제를 "<em>head</em> 를 얻기 위해 동전을 몇번 뒤집어야 하는가" 로 치환할 수 있다. 여기서 <code>Pr[heads] = 1 - a</code> 라 보면</p>
-
-<p><em>head</em> 를 얻기 위해 동전을 뒤집는 수 <code>N</code> 에 대해 기대값 <code>E[N]</code> 은</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%201%20&plus;%20%5Calpha%20%5C%20E%5BN%5D'  alt="" /></p>
-
-<p>식을 풀면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%20%7B1%20%5Cover%201-%20%5Calpha%7D'  alt="" /></p>
-
-<h4 id="linearprobing">Linear Probing</h4>
-
-<p><em>open addressing</em> 방법으로 <em>linear probing</em> 을 사용할 경우, 아까의 <em>heuristic assumption</em> 자체가 성립하지 않는다.</p>
-
-<p>따라서 다른 가정으로</p>
-
-<blockquote>
-  <p>initial probe uniformly random, independent for different keys.</p>
-</blockquote>
-
-<p>그러면 가정아래,  <em>expected insertion time</em> 은 <code>1 / (1 - a)^2</code> 에 가까워진다. (<em>D.E Knuth</em> 가 발견했다고 한다.)</p>
-
-<h3 id="bloomfilter">Bloom Filter</h3>
-
-<p>하던대로 <em>supported operation</em> 부터 이야기 하자.</p>
-
-<p>블룸 필터는 해시테이블과 비슷하게 빠른 삽입, 탐색을 지원한다. 해시테이블과 비교했을때 메모리가 덜 든다. 반면 단점은</p>
-
-<p>(1) Can't store an associated object <br />
-(2) No deletions <br />
-(3) small <strong>false positive</strong> pobability (but no false negative)</p>
-
-<p>블룸 필터는 다양한 곳에 사용한다. </p>
-
-<ul>
-<li>early spell checkers (original)</li>
-<li>list of forbidden passwords (canonical)</li>
-<li>network routers (mordern)</li>
-</ul>
-
-<p>만약 메모리가 아주 비싸고, <em>false positive</em> 를 참을만 하다면 블룸필터는 좋은 선택이다. 연산도 아주 빠르다.</p>
-
-<p>블룸 필터의 구성요소를 보자.</p>
-
-<p>(1) 자료구조는 <code>n</code> 비트의 배열이다. <br />
-(2) <code>k</code> 개의 해시 함수가 필요하다. (<code>k</code> 는 <em>small constant</em>)</p>
-
-<p><em>insertion</em> 은 <code>i = 1, ..., k</code> 에 대해 <code>A[h_i(x)] = 1</code> 로 세팅하면 된다. 이미 <code>1</code> 이어도 덮어쓴다. 참고로 덮어쓰기때문에 <em>false positive</em> 는 있어도 <em>false negative</em> 는 없다. 자그마한 종양만 보여도 무조건 암이라 주장하는 소심한 의사라 보면 이해가 쉽다.</p>
-
-<p><em>lookup</em> 은 <code>i = 1, ..., k</code> 에 대해 모든 <code>A[h_i(x)] = 1</code> 이면 찾으려는 <code>x</code> 가 존재한다.</p>
-
-<p><em>false positive</em> 는 <code>A[h_i(x)]</code> 가 다른 <em>insertion</em> 에 의해 <code>1</code> 로 세팅 되었을때 발생한다.</p>
-
-<p>블룸필터를 이미지로 보면</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Bloom_filter.svg/720px-Bloom_filter.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
-
-<p>블룸필터를 쓰는 것이 합리적인 선택이 되려면</p>
-
-<p>(1) <code>n / |S|</code> 즉, 오브젝트당 비트 수가 충분히 작아야 한다. <br />
-(2) <em>false positive</em>, 즉 에러 확률이 작아야한다.</p>
-
-<p>동시에 두 조건을 작은 값으로, 모두 만족시키지 못한다면 그냥 해시 테이블을 쓰는 것이 더 낫다. </p>
-
-<p>근데, 자세히 살펴보면 <em>space</em> 와 <em>error prob</em>, 이 두 조건은 <em>trade-off</em> 다.  </p>
-
-<h3 id="bloomfilterheuristicanalysis">Bloom Filter: Heuristic Analysis</h3>
-
-<p><em>heuristic assumption</em> 은</p>
-
-<blockquote>
-  <p>all <code>h_i(x)</code>' is uniformly random and independent (across different <code>i</code>'s and <code>x</code>'s</p>
-</blockquote>
-
-<p><code>k</code> 개의 해시함수를 가지는 <code>n</code> 비트 블룸 필터에 데이터셋 <code>S</code> 를 먼저 넣어놓자. 이제 블룸필터 <code>A</code> 의 각 비트가 1일 확률은,</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D'  alt="" /></p>
-
-<p>인데 이것은 한 비트가 <code>0</code> 일 확률을 <code>1</code> 에서 뺀 것이다. <code>0</code> 일 확률은 <code>k</code> 개의 해쉬 함수를 <code>|S|</code> 개의 모든 원소를 다 집어 넣은 후에도 <code>0</code> 인 확률이므로 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D'  alt="" /></p>
-
-<p>이 때 <code>e^x</code> 가 <code>1 + x</code> 의 <em>upper bound</em> 임을 이용하면, 각 비트가 1일 확률은</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%20%5Cmbox%7B%5C%20%5C%20%281/n%20%5Csim%200%29%7D'  alt="" /></p>
-
-<p>이 때 <code>n / |S| = b</code>, <code>b</code> 는 오브젝트당 비트 수 이므로</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%201%20-%20e%5E%7B-k%20/%20b%7D'  alt="" /></p>
-
-<p>이제 블룸필터에 한번도 입력되지 않은 데이터에 대해 <em>false positive</em> 확률 <code>P[FP]</code> 를 계산하면,</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5C%5C%20%5C%5C%20%5Cleq%20%281%20-%20e%5E%7B-k%20/%20b%7D%29%5Ek%20%5C%5C%20%5C%5C'  alt="" /></p>
-
-<p>이 때 고정된 수 <code>b</code> 에 대해 에러일 확률 <code>P[FP]</code> 를 최소화 하는 <code>k</code> 를 찾으면</p>
-
-<p><code>k ~ (ln2) * b</code> 다. 로그를 계산하면, <code>k ~ 0.693 * b</code> </p>
-
-<p>따라서 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5Csim%20%28%7B1%20%5Cover%202%7D%29%5E%7B%28ln2%29b%7D'  alt="" /></p>
-
-<p>이므로 오브젝트당 비트수 <code>b</code> 에 따라서 <em>false positive</em>, 즉 에러 확률이 <em>exponentially</em> 작아진다.</p>
-
-<p>식을 거꾸로 풀면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?b%20%5Csim%201.44%20' *%20log_2%7B1%20%5Cover%20P%5BFP%5D%7D" alt="" /></p>
-
-<p>이 두 식은 오브젝트당 비트수 <code>b</code> 와 <em>false positive</em> 의 <em>trade off</em> 를 보여준다.</p>
-
-<p>만약 <code>b = 8</code> 이고 <code>k = 5, 6</code> 이면 에러 확률은 <code>2%</code> 정도다. </p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
-(2) <a href='http://sweeper.egloos.com/viewer/925740' >Hash Table</a> <br />
-(3) <a href='http://www.slideshare.net/tanmaytan21/application-of-hashing-in-better-alg-design-tanmay' >http://www.slideshare.net/tanmaytan21</a> <br />
-(4) <a href='http://en.wikipedia.org/wiki/Hash_table' >Wikipedia: Hash Table</a> <br />
-(5) <a href='http://www.slideshare.net/sajidmarwatt/advance-algorithm-hashing-lec-ii' >http://www.slideshare.net/sajidmarwatt</a> <br />
-(6) <a href='http://en.wikipedia.org/wiki/Primary_clustering' >Wikipedia: Primary Clustering</a> <br />
-(7) <a href='http://en.wikipedia.org/wiki/Bloom_filter' >Wikipedia: Bloom Filter</a>    </p>]]></description><link>http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/</link><guid isPermaLink="false">883e3230-b261-4993-9b7c-566513bcf026</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[universal hashing]]></category><category><![CDATA[bloom filter]]></category><category><![CDATA[open addressing]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 01 Dec 2014 07:44:37 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 8]]></title><description><![CDATA[<p>이번시간에는 <em>PCA</em> 와 <em>clustering</em> 을 배운다. <em>PCA</em> 가 어떻게 돌아가는지 알기위해 <em>covariance matrix</em>, <em>eigen decomposition</em>, <em>singular value decomposition</em> 등의 배경지식도 익혀보자. <del>K-means 는 거들뿐</p>
-
-<h3 id="unsupervisedlearningintro">Unsupervised Learning Intro</h3>
-
-<p><em>clustering</em> 은 다양한 분야에 활용할 수 있다.</p>
-
-<ul>
-<li>Market Segmentation</li>
-<li>Social Network Analysis</li>
-<li>Organize Computing Clusters</li>
-<li>Astronomical Data Analysis</li>
-</ul>
-
-<h3 id="kmeans">K-Means</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360978231_7390.png'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360978245_9923.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>랜덤한 위치에 <em>centroid</em> 를 잡고, 가까운 점들을 색칠 한뒤 그 점들의 중심으로 <em>centroid</em> 를 옮겨가면서 집단을 만들어 낸다.</p>
-
-<p><em>k-means</em> 의 인풋은 <em>centroid</em> 의 수인 <code>k</code> 와 <code>x1, x2, ... , xm</code> 의 트레이닝 셋이다. 구체적인 알고리즘은</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360978315_1086.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>매 이터레이션마다 <code>i to m</code> 까지 루프를 돌면서 클러스터링된 원소들의 배열인 <code>c^(i)</code> 에 <code>1 to K</code> 사이의 값을 넣는다. 이때 <code>c^(i)</code> 에 삽입될 값은, 해당 원소로부터 가장 가까운 <em>centroid</em> 의 인덱스다.</p>
-
-<blockquote>
-  <p><code>c^(i)</code> is index of cluster <code>(1, ..., K)</code> to which example <code>x^(i)</code> is currently assigned</p>
-</blockquote>
-
-<p>따라서 각 원소로부터의 거리를 최소로 하는 <code>k</code> 에 대해 <code>c^(i) = k</code> 다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_k%20%5Cleft%20%7B%20%5C%7C%20x%5E%7B%28i%29%7D%20-%20%5Cmu_k%20%5Cright%20%5C%7C%20%7D%20%5C%5C%20%5C%5C%20%5CRightarrow%20c%5E%7B%28i%29%7D%20%3D%20k'  alt="" /></p>
-
-<h3 id="optimizationobjective">Optimization Objective</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360979250_8035.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>k-means</em> 에서 최소화 하려는 <em>cost function</em> 은</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?J%28c%5E%7B%281%29%7D%2C%20...%2C%20c%5E%7B%28m%29%7D%2C%20%5Cmu_1%2C%20...%2C%20%5Cmu_K%29%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%5Cleft%20%5C%7C%20x%5E%7B%28i%29%7D%20-%20%5Cmu_%7Bc%5E%7B%28i%29%7D%7D%20%5Cright%20%5C%7C'  alt="" /></p>
-
-<p>다시 말해서 각 점에서 <em>centroid</em> 까지의 거리를 최소화 하는 것이 목표다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%7Bc%5E%7B%281%29%7D%2C%20...%2C%20c%5E%7B%28m%29%7D%2C%20%5Cmu_1%2C%20...%2C%20%5Cmu_K%7D%20%5C%20%5C%20J%28c%5E%7B%281%29%7D%2C%20...%2C%20c%5E%7B%28m%29%7D%2C%20%5Cmu_1%2C%20...%2C%20%5Cmu_K%29'  alt="" /></p>
-
-<p>이 함수 <code>J</code> 를 다른말로는 <em>distortion function</em> 이라 부른다. 알고리즘을 다시 보면</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360979289_8146.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>(1) <em>clustering assignment step</em> 에서는 <code>mu</code> 를 고정시키고 <code>c^(i)</code> 에 대해서 <code>J</code> 를 최소화 한다. <br />
-(2) <em>move centroid step</em> 에서는 <code>c^(i)</code> 를 고정시키고 <code>mu</code> 에 대해서 <code>J</code> 를 최소화 한다.</p>
-
-<h3 id="randominitialization">Random Initialization</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360980200_9803.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>위쪽 예제는 <em>centroid</em> 의 랜덤 초기화에서 좋게 배치된 경우이고, 아래쪽은 운이 나쁜 경우를 설명하는 그림이다. 이것이 설명하는 바는 <em>centroid</em> 의 초기화에 따라 결과가 달라질 수 있다는 것이다. 아래 그림을 보면</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360980222_7891.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>따라서 <em>local optima</em> 를 피가히 위해, 그리고 좋은 <em>clustering</em> 을 얻기 위해 <em>random initialization</em> 이용하여 <em>k-mean</em> 를 여러번 돌릴 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360980246_7140.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>여러번 <em>k-mean</em> 를 돌려 얻은 <code>J</code> 에 대해 최소값을 가지는 <code>J</code> 를 이용해 클러스터링을 얻을 수 있다.</p>
-
-<p>그러나 <code>K</code> 가 매우 크다면, <em>random initialization</em> 들어가는 계산 비용에 비해 별로 좋은 결과를 돌려주지 못할 것이다. </p>
-
-<p><em>random initialization</em> 을 하는 방법으로</p>
-
-<blockquote>
-  <p>Pick <code>k</code> distinct random integers <code>i_1, ..., i_k</code> from <code>{1, ..., m}</code>. <br />
-  Set <code>mu_1 = x^(i_1), ..., mu_k = x^(i_k)</code></p>
-</blockquote>
-
-<h3 id="choosingthenumberofcluster">Choosing the Number of Cluster</h3>
-
-<p><code>K</code> 값을 선택하기 위해 <em>Elbow method</em> 를 이용할 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/16/1360981609_7528.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><code>K</code> 값의 변화에 따라 <em>distortion function</em> <code>J</code> 값이 급격히 감소하는 지점을 선택하는 방법이다. 그런데 <code>J</code> 값이 오른쪽 그림처럼 좀 애매하게 감소하면 어떻게 할까?</p>
-
-<blockquote>
-  <p>Sometimes, you are running K-means to get clusters to use for some later / downstream purpose. Evaluate K-means based on a metric for hwo well it perfomrs for that later purpose.</p>
-</blockquote>
-
-<p>예를 들어서, 몸무게 / 키 에 따라 집단을 분류해 그에 맞추어 티셔츠를 만든다고 할 때 <code>K = 3 or 5</code> 에 대해서는 단순히 좋은 클러스터링을 얻는것은 물론  어떤 <code>K</code> 가 수지타산이 더 맞을지 티셔츠 비즈니스적인 관점에서 생각을 해봐야 한다.</p>
-
-<p><img src='http://my.csdn.net/uploads/201208/28/1346132804_2121.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>)</p>
-
-<h3 id="dimensionalityreduction">Dimensionality Reduction</h3>
-
-<p>이번엔 <em>unsupervised learning</em> 의 또 다른 기법인 <em>dimensionality reduction</em> 을 알아보자. 이 기법의 <em>motivation</em> 은 2가지다.</p>
-
-<p>(1) Data Compression <br />
-(2) Data Visualization  </p>
-
-<h3 id="datacompression">Data Compression</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361235893_4367.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>두 축을 보면 하나는 인치로, 다른 하나는 센치다. <em>highly redundant data</em> 이기 때문에 하나의 차원으로 축소할 수 있다.</p>
-
-<p>중복된 <em>feature</em>만 차원을 줄일 수 있는 것은 아니다</p>
-
-<p>예를 들어 데이터의 한 축을 <em>pilot skill</em> 다른 축을 <em>pilot enjoyment</em> 라 하고 두 <em>feature</em> 간 관계를 거의 직선으로 나타낼 수 있다고 하자. 이 새로운 직선을 <em>pliot aptitude</em> 라 부르고 두개의 <em>feature</em> 를 대신하는 새로운 <em>feature</em> 로 사용할 수 있다.</p>
-
-<p><em>feature</em> 가 한 두개면 중복되는 것을 걸러내거나, 새로운 <em>feature</em> 로 만들기 쉬운데 만약 수백개라면 이것도 일이다.</p>
-
-<p>위 그림을 다시 보면 <code>x_1, x_2</code> 를 <code>z_1</code> 으로 대신하고 있다. <em>feature</em> 의 수가 줄어든 것이다.</p>
-
-<p>이렇게 차원을 줄이면 연산량이 줄어들의 전체 알고리즘의 성능도 빨라진다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361235907_7086.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>위 그림이 <em>dimensionality reduction</em> 에 대한 <em>intuition</em> 을 제공한다. 3차원의 데이터를 2차원의 평면으로 투영해 새로운 <em>feature set</em> 인 <code>z</code> 를 사용해 데이터를 나타낼 수 있다.</p>
-
-<p>그림은 3차원 -> 2차원 이지만, 만약 10000 개를 1000 개를 줄일 수 있다면 어마어마한 중복을 줄일 수 있다.</p>
-
-<p>조금 더 이해가 잘되는 3차원 그림을 가져오면</p>
-
-<p><img src='http://scipy-lectures.github.io/_images/pca_3d_axis.jpg'  alt="" />
-<img src='http://scipy-lectures.github.io/_images/pca_3d_aligned.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://scipy-lectures.github.io/' >http://scipy-lectures.github.io</a>)</p>
-
-<h3 id="datavisualization">Data Visualization</h3>
-
-<p><em>dimensionality reduction</em> 의 두 번째 <em>motivation</em> 은 바로 <em>data visualization</em> 이다. </p>
-
-<p><em>GDP</em>, <em>Country size</em> 등 다양한 <em>feature</em> 500개를 2개로 줄여 그래프에 그려보면 데이터에 대한 어떤 <em>intuition</em> 을 얻을 수도 있다. 즉 데이터가 주로 어떤 종류의 <em>feature</em> 에 의해 많이 영향을 받는지 파악할수 있다는 것이다.</p>
-
-<p>강의에 나온 예제에서는 <code>z_1</code> 은 <em>country size / GDP</em>, <code>z_2</code> 는 <em>per person GDP</em> 였다.</p>
-
-<p><em>visualization</em> 을 위한 경우 <code>2, 3</code> 개 정도로 차원을 줄일 수 있다.</p>
-
-<h3 id="principalcomponentanalysisproblemformulation">Principal Component Analysis Problem Formulation</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236095_4842.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>2개의 <em>feature</em> <code>x_1, x_2</code> 를 하나로 줄인다고 하자. 이 경우 <em>projection error</em> (파란선의 길이) 를 최소로 하는 선 (빨강)을 찾으려고 할 것이다. 반면 자주색 선의 경우 <em>projection error</em> 가 가장 큰 선이라 볼 수있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236100_6448.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>따라서 <code>n</code> 차원을 <code>k</code> 차원으로 축소할때는 각 데이터를 <code>k</code> 개의 벡터 <code>u</code> 에 대해 투영시켰을때의 <em>projection error</em> 를 최소로 하는 벡터 <code>u</code> 를 찾으면 된다. </p>
-
-<blockquote>
-  <p>Reduce from <code>n</code>-dimension to <code>k</code>-dimension, find <code>k</code> vectors <code>u^1, ..., u^k</code> onto wihch to project the data, so as to minimized the projection error</p>
-</blockquote>
-
-<p>쉽게 생각하면 <code>k</code> 개의 <em>direction</em> 을 찾는다고 생각하면 된다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236106_9904.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>왼쪽 그림은 <em>linear regression</em> 에서 찾아내는 오차, 즉 <code>y</code> 값과 <em>prediction</em> 간의 거리이고 </p>
-
-<p>우측 그림은 <em>PCA</em> 로 찾아낸 선과 각 점사이의 <em>projection error</em> 를 파란샌으로 나타냈다. </p>
-
-<p>두 그림에서 볼 수 있듯이 <em>PCA</em> 는 <em>linear regression</em> 이 아니다. <em>PCA</em> 에서는 <code>y</code> 값이란 개념이 없다. </p>
-
-<h3 id="pcaalgorithm">PCA Algorithm</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236182_1422.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>PCA</em> 전에는 <em>preprocessing step</em> 을 거친다. 이는 다양한 <em>feature</em> 간 스케일이 다르기 때문에 비교할만한 스케일을 얻기 위함이다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236421_3927.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>그 후에는 <code>n</code> 차원으로부터 <em>projection error</em> 가 최소인 <code>k</code> 개의 벡터를 얻는 계산을 수행한다.</p>
-
-<p>(1) 먼저 <code>Sigma</code> 라 부르는 <em>covariance matrix</em> 를 계산하고 (작은 시그마) <br />
-(2) 그 후에 <code>Sigma</code> 의 <em>eigenvectors</em> 를 계산한다.  </p>
-
-<p>여기서 <code>svd</code> 는 <em>sigular value decomposition</em> 을 의미한다. </p>
-
-<p><code>Sigma</code> 를 얻기 위한 <em>vectorization</em> 은 <code>(1/m) * X' * X</code> 다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236425_3920.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><code>svd</code> 함수의 리턴값으로 <code>U</code> 매트릭스가 나오는데, 이건 <code>n x n</code> 매트릭스다. 여기서 첫 <code>k</code> 개의 컬럼을 취한다. 이 매트릭스를 <code>Y</code> 라 부르면 새로운 <em>feature vector</em>  <code>z</code> 는</p>
-
-<p><code>z = Y^T * x</code></p>
-
-<p>정리하면 아래 그림과 같다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236428_5117.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<h3 id="pcadetails">PCA Details</h3>
-
-<p>넘어가기 전에 잠깐 <em>PCA</em> 에서 다룬 <em>covariance matrix</em> 나 <em>eigen vector</em> 를 좀 보고 넘어가자.</p>
-
-<h4 id="covariance">Covariance</h4>
-
-<p>두 확률 변수 <code>X</code>, <code>Y</code> 에 대해서 <em>covariance</em> 는 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csigma%28X%2C%20Y%29%20%3D%20E%5B%28X%20-%20E%28X%29%29%28Y%20-%20E%28Y%29%29%5D%20%5C%5C%20%5C%5C%20%3D%20E%28XY%29%20-%20E%28X%29E%28Y%29%20%5C%20%7B%5Ccolor%7BBlue%7D%20%28by%5C%20linearity%5C%20of%5C%20expectation%29%7D'  alt="" /></p>
-
-<p>보면 알겠지만, 독립이면 <em>covariance</em> 값이 <code>0</code> 이다. 따라서 두 변수간 상관정도라 보면 된다. 공분산이 양수면 양의 상관관계를, 음수이면 음의 상관관계를 가진다. </p>
-
-<p>이해를 위해서 <a href='http://darkpgmr.tistory.com/110' >여기</a>로 부터 인용을 하자면</p>
-
-<blockquote>
-  <p>x의 분산은 x들이 평균을 중심으로 얼마나 흩어져 있는지를 나타내고, x와 y의 공분산은 x, y의 흩어진 정도가 얼마나 서로 상관관계를 가지고 흩어졌는지를 나타낸다. 예를 들어, x와 y 각각의 분산은 일정한데 x가 E(x)보다 클때 y도 E(y)보다 크면 공분산은 최대가 되고, x가 E(x)보다 커질때 y는 E(y)보다 작아지면 공분산은 최소(음수가 됨), 서로 상관관계가 없으면 공분산은 0이 된다.</p>
-</blockquote>
-
-<p>공분산은 몇 가지 성질이 있는데 </p>
-
-<p>(1) <code>X, Y</code> 가 독립이면 <em>covariance = <code>0</code></em> 이다. 그러나 역은 <em>gaussian random variable</em> 일때만 성립한다.  </p>
-
-<p>(2) <img src='http://upload.wikimedia.org/math/0/6/0/060cda617e0812f174f5f75b6032b3dd.png'  alt="" title="" /></p>
-
-<p>(3) <img src='http://upload.wikimedia.org/math/5/e/9/5e9674eac71398dcb022fc5cb76e2717.png'  alt="" title="" />  </p>
-
-<p>(4) <img src='http://upload.wikimedia.org/math/8/2/3/823d4a54cac228efe1658718bfa7707a.png'  alt="" title="" />  </p>
-
-<p>공분산마다 값이 다르기 때문에 비교를 위해 <code>X</code>, <code>Y</code> 의 표준편차로 나눈 것을 <em>correlation, 상관계수</em> 라 부른다.</p>
-
-<p><img src='http://upload.wikimedia.org/math/0/7/6/076d3820a46afe55ee680f3c85e34c76.png'  alt="" /></p>
-
-<p><br/></p>
-
-<h4 id="covariancematrix">Covariance Matrix</h4>
-
-<p>이제 <em>covariance matrix</em> 를 알아보자. 공분산 행렬은 데이터 <code>X</code> (벡터) 에 대해 <code>X</code> 의 두 원소 <code>X^(i), X^(j)</code> 간 공분산을 구한 행렬이다. <code>X</code> 를 <code>n</code> 벡터라 하면, <code>X</code> 의 공분산 행렬은 <code>n x n</code> 행렬이다. 그리고 <code>Cov(X, Y) = Cov(Y, X)</code> 이므로 <em>symmetric matrix, 대칭행렬</em> 이기도 하다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236421_3927.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<h4 id="eigenvectoreigenvalue">Eigen vector, Eigen value</h4>
-
-<p>아까 슬라이드에서 잠깐 <em>eigen vector</em> 가 나왔는데, 우리말로 <em>고유벡터</em> 라 부른다. 고유벡터 <code>v</code> 는 행렬 <code>A</code> 곱했을때 상수 <code>λ</code> 와 다음의 관계를 가진다. (<code>A</code> 는 <code>n x n</code> 매트릭스)</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?Av%20%3D%20%5Clambda%20v'  alt="" /></p>
-
-<p>이해를 위해 <a href='http://darkpgmr.tistory.com/105' >여기</a>서 인용하면</p>
-
-<blockquote>
-  <p><em>square matrix</em> <code>A</code> 를 선형변환으로 봤을 때, 선형 변환 <code>A</code> 에 의한 변환 결과가 자기 자신의 상수배 <code>λ</code> 가 되는 <code>0</code> 이 아닌 벡터 <code>v</code> 를 <em>eigen vector</em> 라 하고, 이 <code>λ</code> 를 <em>eigen value</em> 라 한다.</p>
-</blockquote>
-
-<p>기하학적으로 보면</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Eigenvalue_equation.svg/375px-Eigenvalue_equation.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
-
-<h4 id="diagonalization">Diagonalization</h4>
-
-<p><em>SVD</em> 에 대해 이야기 하기 전에 <em>matri diagonalizaion, 행렬 대각화</em> 도 좀 보자. </p>
-
-<p>대각행렬은 <em>principal diagonal</em> 원소를 제외한 모든 원소가 0 인 <em>sqaure matrix</em> 인데, <em>sqaure matrix, 정방행렬</em> <code>A</code> 에 대해서</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?P%5E%7B-1%7DAP%20%3D%20D'  alt="" /></p>
-
-<p>인 <code>P</code> 와 <code>D</code> 가 존재하면 <code>A</code> 는 <em>diagonalizable matrix, 대각화 가능 행렬</em> <code>P</code> 를 <em>diagonalizing matrix, 대각화하는 행렬</em> 이라 부른다. </p>
-
-<p>위 식에서 <code>D</code> 는 <em>diagonal matrix</em> 인데, </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?D%20%3D%20%5Cbegin%7Bbmatrix%7D%20%5Clambda_1%20%26%200%20%26%20...%20%26%200%5C%5C%200%20%26%20%5Clambda_2%20%26%20...%20%26%200%5C%5C%20%5Cvdots%20%26%20%5Cvdots%20%26%20%5C%20%26%20%5Cvdots%5C%5C%200%20%26%200%20%26%20%5Ccdots%20%26%20%5Clambda_n%20%5Cend%7Bbmatrix%7D'  alt="" /></p>
-
-<p>저 식에서 <code>A</code> 위주로 정리하면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?A%20%3D%20PDP%5E%7B-1%7D'  alt="" /></p>
-
-<p>이 때 <code>P</code> 가 고유벡터를 열벡터로 하는 행렬이고, <code>D</code> 가 고유값들을 대각 원소로 하는 대각행렬이면 <em>eigen decomposition</em> 이라 부른다.</p>
-
-<p>위에서 <em>covariance matrix</em> 는 대칭행렬이라 말했는데, (<code>A = A^T</code>) 이 대칭행렬은</p>
-
-<p>(1) 항상 <em>eigen decomposition</em> 이 가능하며 <br />
-(2) <em>orthogonal matrix</em> 로 대각화가 가능하다. (<code>P^-1 = P^T)</code>  </p>
-
-<h3 id="singularvaluedecomposition">Singular Value Decomposition</h3>
-
-<p>이제, <em>Sigular Value Decomposition, 특이값 분해</em> 에 대해 이야기 하자. <em>SVD</em> 도 행렬을 대각화 하는 한 방법인데, <em>eigen decomposition</em> 과 달리 <code>m x n</code> 행렬에 적용 가능하다.</p>
-
-<p><code>m x n</code> 행렬 <code>A</code> 에 대해 <em>SVD</em> 는 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?A%20%3D%20U%20%5CSigma%20V%5ET'  alt="" /></p>
-
-<p>여기서 <code>m x m</code> 의 <code>U</code> 는 <code>AA^T</code> 를 <em>eigen decomposition</em> 해서 얻은 <em>orthogonal matrix</em> 고, <code>U</code> 의 열벡터를 <code>A</code> 의 <em>left singular vector</em> 라 부른다. </p>
-
-<p>이 때 <code>U</code> <em>eigen decomposition</em> 해서 나온 <em>diagonalizing matrix</em> 이므로 <code>U</code> 의 열벡터는 <code>AA^T</code> 의 <em>eigen vectors</em> 다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?AA%5ET%20%3D%20U%28%5CSigma%20%5CSigma%5ET%29U%5ET'  alt="" /></p>
-
-<p><code>n x n</code> 의 <code>V</code> 는 <code>A^TA</code> 를 <em>eigen decomposition</em> 해서 얻은 <em>orthogonal matrix</em> 고 <code>V</code> 의 열벡터를 <code>A</code> 의 <em>right singular vector</em> 라 부른다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?A%5ETA%20%3D%20V%28%5CSigma%5ET%20%5CSigma%29V%5ET'  alt="" /></p>
-
-<p>마찬가지로 <code>V</code> 도 <em>eigen decomposition</em> 의 결과로 얻은 <em>diagonalizing matrix</em> 이므로 <code>V</code> 의 열벡터는 <code>A^TA</code> 의 <em>eigen vectors</em> 다 </p>
-
-<p><code>\\Sigma</code> 는 <code>AA^T, A^TA</code> 를 <em>eigen decomposition</em> 해서 얻은 <em>eigen value</em> 의 <em>square root</em> 를 대각원소로 하는 <code>m x n</code> 의 직사각 대각행렬이다. 이 때 대각 원소들이 <code>A</code> 의 <em>singular value, 특이값</em> 이다.</p>
-
-<p><img src='http://cfile5.uf.tistory.com/image/277E3949525F5A872F520E'  alt="" /></p>
-
-<p>(관련 그림과 설명은 <a href='http://darkpgmr.tistory.com/106' >여기</a>서 참조했습니다.)</p>
-
-<p>이 때 <code>AA^T</code> 와 <code>A^TA</code> 의 고유값 <code>λ</code> 는 동일하며 0 이상이다. 그렇기 때문에 <em>square root</em> 를 씌우고, 동일한 행렬 <code>\\Sigma</code> 로 표현할 수 있다. (자세한 설명은 <a href='http://darkpgmr.tistory.com/106' >여기</a> 참조)</p>
-
-<p><code>AA^T</code> 와 <code>A^TA</code> 의 공통의 고유값에 대해 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csigma_1%5E2%20%3E%3D%20%5Csigma_2%5E2%20%3E%3D%20%5Ccdots%20%3E%3D%20%5Csigma_s%5E2%20%3E%3D%200%20%5C%20%5C%20%28s%20%3D%20min%28m%2C%20n%29%29'  alt="" /></p>
-
-<p>이고 여기에 <em>square root</em> 를 취한 것이 <code>A</code> 의 <em>singular value, 특이값</em> 이며, 이 특이값들을 대각원소로 하는 <code>m x n</code> 행렬이 <code>\\Sigma</code> 다.</p>
-
-<p>이 때 <code>A</code> 의 특이값과 <em>left singular value</em> <code>u_i</code>, <em>right singular value</em> <code>v_i</code> 에 대해 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?Av_i%20%3D%20%5Csigma_i%20u_i'  alt="" /></p>
-
-<p><em>SVD</em> 의 기하학적 의미는 <a href='http://darkpgmr.tistory.com/106' >여기</a>를 인용하면</p>
-
-<blockquote>
-  <p>행렬을 x' = Ax와 같이 좌표공간에서의 선형변환으로 봤을 때 직교행렬(orthogonal matrix)의 기하학적 의미는 회전변환(rotation transformation) 또는 반전된(reflected) 회전변환, 대각행렬(diagonal maxtrix)의 기하학적 의미는 각 좌표성분으로의 스케일변환(scale transformation)이다.</p>
-  
-  <p>행렬 R이 직교행렬(orthogonal matrix)이라면 RRT = E이다. 따라서 det(RRT) = det(R)det(RT) = det(R)2 = 1이므로 det(R)는 항상 +1, 또는 -1이다. 만일 det(R)=1라면 이 직교행렬은 회전변환을 나타내고 det(R)=-1라면 뒤집혀진(reflected) 회전변환을 나타낸다.</p>
-  
-  <p>따라서 식 (1), A = UΣVT에서 U, V는 직교행렬, Σ는 대각행렬이므로 Ax는 x를 먼저 VT에 의해 회전시킨 후 Σ로 스케일을 변화시키고 다시 U로 회전시키는 것임을 알 수 있다.</p>
-</blockquote>
-
-<p><img src='http://cfile2.uf.tistory.com/image/2725C84C5260AA5F28DFCA'  alt="" /></p>
-
-<p align="center">(<a href='http://darkpgmr.tistory.com/106' >http://darkpgmr.tistory.com/106</a>)</p>
-
-<p><br/></p>
-
-<p>다시 처음의 슬라이드로 돌아가면 </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236421_3927.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>여기서 <code>svd</code> 함수의 인자 <code>Sigma</code> 가 <em>covariant matrix</em> 고 리턴값 <code>U, S, V</code> 가 각각 위에서 본 <code>U, \\Sigma, V</code> 다. </del>변수 이름을 헷갈리게 지으심;~~</p>
-
-<p>마지막 질문이다. <em>PCA</em> 에서 데이터 매트릭스 <code>X</code> 에 대해 <em>covariant matrix</em> <code>XX^T</code> 로 구한 <em>eigen vector</em> 의 열벡터가, 왼쪽부터 순서대로 분산을 최대로 하는 벡터(방향)인데, (<a href='http://darkpgmr.tistory.com/110' >여기</a>참조)</p>
-
-<p>왜 우리는 <em>SVD</em> 의 <code>U</code> 를 택하는 것일까? 다시 말해 <em>PCA</em> 와 <em>SVD</em> 는 무슨 관계일까?</p>
-
-<p><a href='http://math.stackexchange.com/questions/3869/what-is-the-intuitive-relationship-between-svd-and-pca' >What is the intuitive relationship between SVD and PCA</a> 를 참조하면,</p>
-
-<p>데이터 매트릭스 <code>X</code> 에 대해서, 공분산 매트릭스 <code>XX^T</code> 에 대해</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?XX%5ET%20%3D%20WDW%5ET'  alt="" /></p>
-
-<p>이 때 <code>X</code> 의 <em>SVD</em> 는</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?X%20%3D%20U%20%5CSigma%20V%5ET'  alt="" /></p>
-
-<p><code>U, V</code> 는 위에서 언급했듯이 <code>XX^T, X^TT</code> 의 고유값 분해로 얻은 대칭행렬 이므로 <code>VV^T = I, UU^T = I</code> 이다. 따라서</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?XX%5ET%20%3D%20%28U%20%5CSigma%20V%5ET%29%28U%20%5CSigma%20V%5ET%29%5ET%20%5C%5C%20%5C%5C%20%3D%20%28U%20%5CSigma%20V%5ET%29%28V%20%5CSigma%20U%5ET%29%20%5C%5C%20%5C%5C%20%3D%20U%20%5CSigma%5E2%20U%5ET'  alt="" /></p>
-
-<p>이므로 분산이 큰 순서대로의 벡터를 열벡터로 담고 있는 <code>XX^T = WDW^T</code> 에서의 <code>W</code> 가 바로 <em>SVD</em> 의 결과인 <code>U</code> 다.</p>
-
-<p>실제로 <em>PCA</em> 를 하기 위해 <em>SVD</em> 를 이용하는건 <em>numerically</em> 더 낫다고 한다.</p>
-
-<blockquote>
-  <p>In fact, using the SVD to perform PCA makes much better sense numerically than forming the covariance matrix to begin with, since the formation of XX⊤ can cause loss of precision. This is detailed in books on numerical linear algebra, but I'll leave you with an example of a matrix that can be stable SVD'd, but forming XX⊤ can be disastrous</p>
-</blockquote>
-
-<p>다 정리하고 보니 드는 생각이, </p>
-
-<blockquote>
-  <p>"왜 공분산 행렬을 <em>eigen decomposition</em> 한 결과 <code>XX^T = WDW^T</code> 에서 <code>W</code> 가 공분산 행렬, 즉 데이터간 상관관계, 즉 데이터 그 자체를 설명하는 걸까?"</p>
-</blockquote>
-
-<p><a href='http://math.stackexchange.com/questions/23596/why-is-the-eigenvector-of-a-covariance-matrix-equal-to-a-principal-component' >여기</a> 에서 얻은 답은,</p>
-
-<p>공분산 매트릭스 자체는 <em>diagonal matrix</em> 가 아니다. 다시 말해 데이터 <code>X</code> 의 각 변수간 상관 관계를 담고 있다. </p>
-
-<p>그런데, 공분산 매트릭스를 대각화 한다면 변수간 상관관계는 사라진다. 다시 말해</p>
-
-<p><code>XX^T = WDW^T</code> 에서 <code>D</code> 자체에는 본래 데이터 <code>X</code>의 변수간 상관 관계가 포함되어 있지 않다. 그러면, 그 데이터는 다 <code>W</code> 와 <code>W^T</code> 에 들어있다는 소리인데, <code>W^T</code> 는 <code>W</code> 로 표현 가능하므로 <code>W</code> 에 데이터간 상관 관계가 모두 담겨있다는 소리다.</p>
-
-<blockquote>
-  <p>Covariance matrix Cy (it is symmetric) encodes the correlations between variables of a vector. In general a covariance matrix is non-diagonal (i.e. have non zero correlations with respect to different variables).</p>
-  
-  <p>But it's interesting to ask, is it possible to diagonalize the covariance matrix by changing basis of the vector?. In this case there will be no (i.e. zero) correlations between different variables of the vector.</p>
-  
-  <p>Diagonalization of this symmetric matrix is possible with eigen value decomposition.</p>
-</blockquote>
-
-<p>그러면 마지막 질문, <code>W</code> 의 좌측열부터가 왜 높은 분산을 가질까? </p>
-
-<h3 id="choosingthenumberofpca">Choosing the number of PCA</h3>
-
-<p>적절한 <code>k</code> 의 수는 어떻게 구할까?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236222_7050.png'  alt="" /></p>
-
-<p align="cener">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>위에서 언급했듯이 <em>PCA</em> 가 하는 일은 <em>projection error</em> 를 최소화 하는 것이다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%7B1/m%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%5Cleft%20%5C%7C%20x%5E%7B%28i%29%7D%20-%20x_%7Bapprox%7D%5E%7B%28i%29%7D%20%5Cright%20%5C%7C%20%5Cover%201/m%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%5Cleft%20%5C%7C%20x%5E%7B%28i%29%7D%20%5Cright%20%5C%7C%20%7D%20%5Cleq%200.01'  alt="" /></p>
-
-<p>인 <code>k</code> 를 구하면 99% 의 <em>variance</em> 가 유지된다. 적당한 <em>treshold</em> 값에 해당하는 <code>k</code> 값을 찾으면 된다.</p>
-
-<p>알고리즘은 이런데 (좌측),</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236236_2278.png'  alt="" /></p>
-
-<p align="cener">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>매번 계산하는건 굉장히 비 효율적이다. 따라서 우측처럼 데이터에 대한 <em>singular value</em> 를 이용하면 더 계산이 쉬워진다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%7B%5Csum_%7Bi%20%3D%201%7D%5Ek%20%5Cover%20%5Csum_%7Bi%20%3D%201%7D%5En%20%7D%20%5Cgeq%200.99'  alt="" /></p>
-
-<h3 id="reconstructionfromcompressedrepresentation">Reconstruction from Compressed Representation</h3>
-
-<p>잘 보면 <em>PCA</em> 가 하는 일은 높은 차원의 데이터를 최대한 보존하면서 차수를 줄이는 일이다. 압축 알고리즘과 비슷하다. (실제로 이미지 압축에 쓴다고 한다.)</p>
-
-<p>그럼 압축된 차원 <code>z</code> 에서 다시 본래의 데이터 차원 <code>x</code> 를 복구하려면 어떻게 해야할까?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236299_8368.png'  alt="" /></p>
-
-<p align="cener">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>위 그림처럼 <code>z = U^T * x</code> 라 할때 좌변에 <code>U</code> 를 곱하면 <code>x_app = U * z</code> 에서 <code>x_app</code> 는 거의 <code>x</code> 에 가까워진다.</p>
-
-<h3 id="adviceforapplypca">Advice for Apply PCA</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236320_8959.png'  alt="" /></p>
-
-<p align="cener">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>supervised learning</em> 의 속도를 올리는데도 쓸 수 있다. 이미지가 <code>100 x 100</code> 이면 <code>10000</code> 개의 <em>feature</em> 인데, 이건 어마어마하다.</p>
-
-<p>먼저 <em>input</em> <code>x</code> 를 뽑아내 여기에 대해 <em>PCA</em> 를 실행하면 차원을 줄인 <em>training set</em> 을 얻을 수 있다.</p>
-
-<p>주의할점은 <code>U</code> 를 찾을때 <em>training set</em> 에만 하고 <em>cross validation</em> 이나 <em>test</em> 까지 포함해서 <code>U</code> 를 찾으면 안된다. 나중에 <em>training set</em> 으로만 찾아낸 <code>U</code> 를 이용해서 <em>CV, test</em> 에 대해 다시 <em>PCA</em> 하자.</p>
-
-<p><br/></p>
-
-<p>다른 <em>PCA</em> 응용으로는 </p>
-
-<ul>
-<li>Reduce memory, disk needed to store data</li>
-<li>Speed up learning algorithm</li>
-<li>Visualization (<code>k = 2 or 3</code>)</li>
-</ul>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236325_5356.png'  alt="" /></p>
-
-<p align="cener">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>PCA</em> 를 이용하면 <em>feature</em> 의 수가 줄기 때문에 <em>overfitting</em> 을 방지하기 위해 사용할 수 있다고 생각하겠지만, 별로 좋은 생각은 아니다.</p>
-
-<p>작동은 할지 모르겠지만 <em>regularization</em> 을 이용하는 편이 낫다. </p>
-
-<p>왜냐하면 <em>PCA</em> 는 <code>y</code> 값이 없는 상태에서 작동하기 때문에 <code>y</code> 를 고려하지 않은 데이터가 손실이 발생할 수 있다. <code>1%</code> 만 손실된다 하더라도, 그 <code>1%</code> 가 <code>y</code> 와 관련해 굉장히 중요한 정보일 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236329_4045.png'  alt="" /></p>
-
-<p align="cener">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>또 다른 잘못된 <em>PCA</em> 의 사용으로는, 그냥 무작정 <em>PCA</em> 를 사용하는 것이다.</p>
-
-<p><em>original data</em> <code>x</code> 에 대해 알고리즘을 구현도 안해보고, 바로 <em>PCA</em> 의 결과인 <code>z</code> 를 이용하려는건 좋은 생각이 아니다.</p>
-
-<p><code>x</code> 대해 작업 해보고 결과가 별로일때 <em>PCA</em> 를 고려하자.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
-(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
-(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a> <br />
-(4) <a href='http://scipy-lectures.github.io/' >http://scipy-lectures.github.io</a> <br />
-(5) <a href='http://en.wikipedia.org/wiki/Correlation_and_dependence' >Wiki: Correlation and dependence</a> <br />
-(6) <a href='http://en.wikipedia.org/wiki/Covariance' >http://en.wikipedia.org/wiki/Covariance</a> <br />
-(7) <a href='http://darkpgmr.tistory.com/110' >http://darkpgmr.tistory.com/110</a> <br />
-(8) <a href='http://darkpgmr.tistory.com/105' >http://darkpgmr.tistory.com/105</a> <br />
-(9) <a href='http://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors' >Wiki: Eigenvalues and Eigenvectors</a> <br />
-(10) <a href='http://www.ktword.co.kr/abbr_view.php?m_temp1=4695&amp;id=762' >http://www.ktword.co.kr</a> <br />
-(11) <a href='http://darkpgmr.tistory.com/106' >http://darkpgmr.tistory.com/106</a> <br />
-(12) <a href='http://math.stackexchange.com/questions/3869/what-is-the-intuitive-relationship-between-svd-and-pca' >What is the intuitive relationship between SVD and PCA</a></p>]]></description><link>http://1ambda.github.io/machine-learning-week-8/</link><guid isPermaLink="false">7890e1dc-6d1c-4bc9-89a7-809af5f1ec82</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine lerning]]></category><category><![CDATA[k-means clustering]]></category><category><![CDATA[unsupervised learning]]></category><category><![CDATA[PCA]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 30 Nov 2014 05:39:31 GMT</pubDate></item></channel></rss>
+(8) <a href='http://stackoverflow.com/questions/19760077/what-does-bellman-ford-algorithm-detects-negative-weight-or-negative-cycle' >What does bellman ford algorithm</a></p>]]></description><link>http://1ambda.github.io/graph-challenges-minimum-spanning-trees/</link><guid isPermaLink="false">22c06085-7f5c-45eb-8efc-31870d3ed425</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[graph]]></category><category><![CDATA[minimum spanning tree]]></category><category><![CDATA[shortest-path]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 03 Dec 2014 06:01:51 GMT</pubDate></item></channel></rss>
