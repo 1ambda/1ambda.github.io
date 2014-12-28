@@ -1,5 +1,496 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 27 Dec 2014 13:44:19 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Reactive Programming 5, Actor]]></title><description><![CDATA[<p><img src='http://prabhubuzz.files.wordpress.com/2012/09/demo1.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 28 Dec 2014 17:39:14 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Maximum Flow]]></title><description><![CDATA[<p><img src='https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png'  alt="" /></p>
+
+<h3 id="mincut">Min Cut</h3>
+
+<p><em>edge weighted</em> 그래프에서 <code>st</code>-<em>cut</em> 이란 <em>vertices</em> 를 두개의 <em>disjont sets</em> 으로 나누는 것이다. 이때 <code>s</code>, <code>t</code> 는 각각 다른 집합 <code>A</code>, <code>B</code> 에 속해있다.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Min-cut.svg/220px-Min-cut.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<p><strong>capacity</strong> 란 컷으로 나뉘어진 두 집합 <code>A</code>, <code>B</code> 를 기준으로 <code>A</code> 에서 <code>B</code> 로 가기 위한 모든 <em>edge</em> 의 <em>weight</em> 를 모두 합친 것이다. <code>B</code> 에서 <code>A</code> 로의 <em>edge</em> 는 세지 않는 다는 것에 주의하자.</p>
+
+<p><em>mincut problem</em> 은 <em>min capacity</em> 를 갖는 <em>cut</em> 을 찾는 문제다. 응용으로는</p>
+
+<ul>
+<li>실제 전쟁에서 보급로를 끊거나</li>
+<li>독재 정부에서 커뮤니케이션을 제한하거나</li>
+</ul>
+
+<h3 id="maxflow">Max Flow</h3>
+
+<p><img src='http://kunuk.files.wordpress.com/2010/11/fordfulkerson1.gif?w=700'  alt="" /></p>
+
+<p align="center">(<a href='http://kunuk.wordpress.com/' >http://kunuk.wordpress.com</a>)</p>
+
+<p><em>edge</em> 에 <em>weight</em> 이외에도 <em>flow</em> 를 할당할 수 있다. 이 플로우는 몇 가지 성질을 만족하는데</p>
+
+<ul>
+<li><strong>capacity constraint:</strong> <code>0 &lt;= edge's flow &lt;= edge's capa</code></li>
+<li><strong>local equilibrium:</strong> <code>inflow = outflow</code> at every vertex except <code>s</code> and <code>t</code></li>
+</ul>
+
+<p>즉 한 에지에서 캐퍼시티는 항상 플로우보다 크거나 같고, <code>s, t</code> 를 제외한 모든 노드에서 <em>inflow = outflow</em> 다.</p>
+
+<p><em>flow</em> 의 <em>value</em> 는 <code>t</code> 에서의 <em>inflow</em> 다. 이때 <code>s</code> 를 가리키는 노드가 없고, <code>t</code> 가 가리키는 노드가 없다고 가정한다. 다시 말해 <code>s</code> 는 시작점, <code>t</code> 는 종료지점이다.</p>
+
+<p>따라서 플로우를 어떻게 할당하냐에 따라 <em>value</em> 가 달라질 수 있다. 이 때 <em>maximum flow</em> 문제는 최대 값을 갖는 <em>flow</em> 를 찾는 문제다.</p>
+
+<p><em>max flow</em> 의 응용은</p>
+
+<ul>
+<li>운송량을 최대로 하는 보급로를 찾기</li>
+</ul>
+
+<h4 id="summary">Summary</h4>
+
+<p>정리하면 <em>weighted digraph</em> 에서 <em>source vertex</em> <code>s</code>, <em>target vertex</em> <code>t</code> 에 대해</p>
+
+<p>두 가지 문제를 정의할 수 있다.</p>
+
+<ul>
+<li><strong>min cut:</strong> Find a cut of minimum capacity</li>
+<li><strong>max flow:</strong> Find a flow of maximum value</li>
+</ul>
+
+<p>사실 이 문제는 상당히 유사한데, <em>dual</em> 관계다. 하나를 풀면 다른 하나도 풀 수 있다.</p>
+
+<h3 id="fordfulkersonalgorithm">Ford-Fulkerson Algorithm</h3>
+
+<p>기본적인 아이디어는 <em>augmenting path</em> 를 찾으면서 <em>flow</em> 값을 증가시키는 것이다.</p>
+
+<ul>
+<li><em>forward edge</em> (not full) 을 이용해서 <em>flow</em> 값을 증가시키고</li>
+<li><em>backward edge</em> (not empty) 를 이용해서 감소시킬 수 있다</li>
+</ul>
+
+<p><em>backward edge</em> 의 아이디어는 <em>local equilibrium</em> 이다. 진행할 수 없는 상황에서 <em>backward edge</em> 를 만들고, 거기서 <em>flow</em> 의 평형을 맞추는 값만큼 뺀 후 다시 진행한다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWXljek0wSTJNaWRqWTNZVEx6RWpaaDF5TTVZMk10TWpabVZUTDVNR1ppbHpZaUJ6TDNNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>더이상 <em>augmenting path</em> 를 찾을 수 없을 때 알고리즘이 종료된다. 이건 <em>full forward edge</em> 가 존재하거나 <em>empty backword edge</em> 가 만들어졌기 때문이다.</p>
+
+<p><img src='http://www.cs.princeton.edu/courses/archive/spr13/cos226/lectures/summaries/maxFlowCheckpoint.png'  alt="" /></p>
+
+<p align="center">(<a href='http://www.cs.princeton.edu/' >http://www.cs.princeton.edu/</a>)</p>
+
+<p>알고리즘을 서술하면</p>
+
+<pre><code>// Fold-Fulkerson algorithm
+
+Start with 0 flow  
+While there exists an augmenting path  
+- find an augmenting path
+- compute bottleneck capacity
+- increase flow on that path by bottleneck capacity
+</code></pre>
+
+<p>그럼, 이제 문제는 <em>min cut</em> 은 어떻게 계산하고 <em>augmenting path</em> 는 어떻게 찾을지로 치환된다.</p>
+
+<p>그리고 추가적인 질문으로 <em>FF</em> 알고리즘이 <em>max flow</em> 를 찾는지, 그리고 항상 종료된다는 걸 보장하는지, 종료된다면 얼마만큼의 <em>augmentations</em> 를 찾아내는지를 물어볼 수 있다.</p>
+
+<p>좀 더 자세한 알고리즘 설명은 이 <a href='http://www.cs.princeton.edu/courses/archive/spring13/cos226/lectures/64MaxFlow.pdf' >슬라이드</a> 를 참조할 것</p>
+
+<h3 id="maxflowmincuttheorem">Maxflow-Mincut Theorem</h3>
+
+<p><em>cut</em> 과 <em>flow</em> 는 무슨 관계일까? </p>
+
+<p><em>net flow accros cut</em> <code>(A, B)</code> 는 <code>A-&gt;B</code> 로의 <em>flow</em> 를 모두 합한 것에서 <code>B-&gt;A</code> 로의 <em>flow</em> 를 모두 뺀 것이다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWhKV1lsRkRaeVFtTTVZV0xtVkRPaTF5TTFjek10TXpZbGxUTGxCRE1pWkRaaFZ6TDVNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<blockquote>
+  <p><em>flow-value lemma:</em> Let <code>f</code> be any flow and let <code>(A, B)</code> be any cut. Then the net flow accros <code>(A, B)</code> equals the value of <code>f</code></p>
+</blockquote>
+
+<p><code>B</code> 의 사이즈에 대해 귀납법을 이용하면 증명은 어렵지 않다.</p>
+
+<p>(1) Base case <code>B = { t }</code></p>
+
+<p><em>base case</em> 에선 당연히 <em>value</em> 와 <em>net flow accros</em> 가 동일하다.</p>
+
+<p>(2) Inductive case</p>
+
+<p><code>A</code> 에서 <code>B</code> 로 <em>vertex</em> 를 하나씩 옮겨도 <em>local equilibrium</em> 이 참이므로 이 속성은 유지된다. 옮기려는 <em>vertex</em> 를 <code>k</code> 라 하면</p>
+
+<p><code>k</code> 를 기준으로 <em>inflow</em></p>
+
+<ul>
+<li><code>A -&gt; k</code></li>
+<li><code>B -&gt; k</code></li>
+</ul>
+
+<p>는 다음의 <em>outflow</em> 와 동일하다.</p>
+
+<ul>
+<li><code>k</code> -> <code>A</code></li>
+<li><code>k</code> -> <code>B</code></li>
+</ul>
+
+<p>그런데 <code>k</code> 를 <code>B</code> 로 옮기게 되면 <em>net flow accros</em> 에 미치는 영향이 <em>inflow</em>, <em>outflow</em> 간 반대가 되지만 어쨌든 <em>local equilibrium</em> 에 의해 값은 같으므로 어차피 <em>value</em> 와 같다.</p>
+
+<p>그리고 결국 <code>k</code> 를 계속 옮기다 보면<code>s</code> 의 <em>outflow</em> 는 <code>t</code> 의 <em>inflow</em> 와 같고 이것인 <em>value of flow</em> 와 같다.</p>
+
+<h4 id="weakduality">Weak Duality</h4>
+
+<p><em>weak duality</em> 란 <code>f</code> 를 아무 플로우, <code>(A, B)</code> 를 어느 컷이라 할 때 </p>
+
+<blockquote>
+  <p><em>value of flow</em> <code>&lt;=</code> <em>capacity of cut</em></p>
+</blockquote>
+
+<p>이 성립함을 말한다. 따라서 <em>max flow</em> 는 <em>min cut</em> 이다. 증명과정을 좀 보자. 위에서 귀납법으로 참임을 보인 성질에 의해 다음이 성립한다. <del>뜬금없이 증명해버림</del></p>
+
+<p><em>value of flow</em> <code>f</code> = *net flow accros <code>(A, B)</code> &lt;= capacity of <code>(A, B)</code></p>
+
+<ul>
+<li><strong>Augmenting path theorem:</strong> A flow <code>f</code> is a maxflow iff no augmenting paths</li>
+<li><strong>Maxflow-mincut theorem:</strong> Value of the maxflow = capacity of mincut</li>
+</ul>
+
+<p>즉 이 말은 <del>동어 반복의 향연</del></p>
+
+<p>(1) 플로우 <code>f</code> 의 <em>value</em> 와 동일한 값의 <em>capacity</em> 를 가지는 어떤 컷이 있다. <br />
+(2) <code>f</code> 는 <em>max flow</em> 다 <br />
+(3) <code>f</code> 에 대해 <em>augmenting path</em> 가 없다.</p>
+
+<p>정리해 보면 <em>max flow</em> 로 부터 <em>min cut</em> 을 계산할 수 있다는 소리가 된다. 잘 보면 <em>max flow</em> <code>f</code> 에서는 <em>augmenting path</em> 가 없다.</p>
+
+<p>다시 말해 </p>
+
+<ul>
+<li>한 집합은 <code>s</code> 에서 <em>non-full forward</em> 로 출발하지만 <em>empty backward</em> 에 의해 막히고</li>
+<li>다른 집단은 <em>full foraward</em> 때문에 <code>t</code> 로의 <em>non empty backword</em> 가 막힌다.</li>
+<li>이 두집단의 자르는 <em>cut</em> 은 <em>full forward</em>, <em>empty backward</em> 로만 구성된다.</li>
+</ul>
+
+<p>이 컷은 <em>net flow accros cut</em> 고 첫번째 집단은 <code>A</code>, 두번째 집단은 <code>B</code> 가 된다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjVZR05sSlRPaE4yTm1KVEw1TVdZNTBDTzJnek10VW1ZaUZXTG1CRFpoRkRaaU56THpRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>따라서 러닝타임은 <em>max flow</em> <code>f</code> 가 주어진다면 모든 <em>vertex</em>, <em>edge</em> 를 한번씩 보며 <code>A</code> 를 찾는 시간이므로 <code>V + E</code> 다.</p>
+
+<h3 id="runningtimeanalysis">Running Time Analysis</h3>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WTBJRE40a3pNMklXWW1KVEx5SVRaNTB5WWpaek10QVROaGhUTGlSV1lqUkdPM1V6TDNRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p>아까 했던 질문들에 답해보면</p>
+
+<ul>
+<li><em>mincut</em> 을 계산하긴 쉽다.</li>
+<li><em>BFS</em> 로 <em>augmenting path</em> 를 찾을 수 있다.</li>
+<li><em>Ford-Fulkerson</em> 이 종료되면 <em>max flow</em> 를 찾을 수 있다</li>
+<li><em>capacity</em> 가 정수거나, <em>argumenting path</em> 를 신중히 고른다면 <em>FF</em> 는 종료된다.</li>
+<li>얼마나 많은 <em>augmentations</em> 가 있을진 생각좀 해봐야 한다.</li>
+</ul>
+
+<p>간단한 경우부터 좀 보자.</p>
+
+<h4 id="integercapacities">Integer Capacities</h4>
+
+<p><em>edge capacities</em> 가 <code>[1, U]</code> 사이의 값이면 <em>FF</em> 알고리즘에 걸쳐서 모든 <em>flow</em> 값은 정수다. 쉽게 증명 가능한데</p>
+
+<ul>
+<li>Bottleneck capacity is an integer</li>
+<li>Flow on an edge increases / decreases by bottleneck capa</li>
+</ul>
+
+<blockquote>
+  <p><code># of augmentations &lt;= max flow value</code></p>
+</blockquote>
+
+<p>다시 말해 <em>augmentations</em> 의 수는 <em>max flow value</em> 보다 작거나 같다. 왜냐하면 처음에 <code>0</code> 부터 시작해서 매 <em>augmentation</em> 마다 적어도 <em>value</em> 를 1 씩 증가시키기 때문이다.</p>
+
+<ul>
+<li><strong>Integrality theorem:</strong> There exists an integer-values maxflow </li>
+</ul>
+
+<p>이 때 <em>FF</em> 알고리즘이 종료되면 <em>max flow</em> 를 찾아내고, 이것은 위에서 보였듯이 <em>integer-value</em> 를 가진다.</p>
+
+<h4 id="badcaseforff">Bad case for FF</h4>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTW1Oek15RW1Zd0FqTWlWVExpbHpZNTBDWmhSMk10VURad01UTDJZek1oTldNeEl6THhVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p><em>integer value max flow</em> 에선 운이 나쁠 경우 <em>max flow value</em> 만큼 <em>augmentation</em> 이 일어난다. 위 슬라이드에서 볼 수 있듯이 그래프 사이즈에 비해 어마어마한 <em>augmentation</em> 이 일어날 수 있다.</p>
+
+<p>다행히도 <em>shortest, fattest path</em> 를 이용해 이런 상황을 피할 수 있다.</p>
+
+<ul>
+<li><em>shortest path:</em> augmenting path with <strong>fuwest number of edges</strong></li>
+<li><em>fattest path:</em> augmenting path with <strong>maximum bottleneck capacity</strong></li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWtWMk4yTUdNbFZUWmpWVEx6UVdZaTFDTWtOMk10UVdNaUJUTGlaR1owTVRNbVoyTDFVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p>따라서 <em>FF</em> 알고리즘의 성능은 어떤 <em>augmenting path</em> 를 선택하느냐에 따라 달라질 수 있다.</p>
+
+<h3 id="implementation">Implementation</h3>
+
+<p><em>Ford-Fulkerson</em> 알고리즘을 구현함에 있어서 실제로 사용하게 될 값은 두 가지다.</p>
+
+<ul>
+<li><em>forward edge residual capacity</em> = <code>c - f</code></li>
+<li><em>backward edge residual capacity</em> = <code>f</code></li>
+</ul>
+
+<p>따라서 <em>flow</em>, <em>capacity</em> 보다는 <em>residual capacity</em> 를 <em>edge</em> 의 가중치로 표시하는 <em>residual network</em> 를 이용하는편이 더 직관적이다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2lSMk1rRkdNNGN6WTVVVExsRjJZNTB5WWlsek10RVRPeVFXTDRjak41TVRObVp6TDNVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p>실제 클래스 구현은</p>
+
+<pre><code class="java">public class FlowEdge {
+
+  private final int v, w;
+  private final double capacity;
+  private double flow;
+
+  public FlowEdge(int v, int w, double capacity) {
+    this.v = v; 
+    this.w = w;
+    this.capacity = capacity;
+  }
+
+  public int from() { return v; }
+  public int to() { return w; }
+  public double capacity() { return capacity; }
+  public double flow() { return flow; }
+
+  // other endpoint
+  int other(int vertex) {
+    if (vertex == v) return w;
+    else if (vertex == w) return v;
+    else throw new RuntimeException("Illegal endpoint");
+  }
+
+  // residual capacity toward v
+  double residualCapacityTo(int vertex) {
+    if (vertex == v)      return flow;            // backward edge
+    else if (vertex == w) return capacity - flow; // forward edge
+    else throw new IllegalArgumentException();
+  }
+
+  // add delta flow toward v
+  void addResidualFlowTo(int vertex, double delta) {
+    if (vertex == v)      flow -= delta; // backward edge
+    else if (vertex == w) flow += delta; // forward edge
+    else throw new IllegalArgumentException();
+  } 
+}
+</code></pre>
+
+<p><code>FlowNetwork</code> 는</p>
+
+<pre><code class="java">public class FlowNetwork {  
+  private final int V;
+  // Bag is a list without remove op
+  private Bag&lt;FlowEdge&gt;[] adj;
+
+  public FlowNetwork(int V) {
+    this.V = V;
+    adj = (Bag&lt;FlowEdge&gt;[]) new Bag[V];
+    for (int v = 0; v &lt; V; v++)
+      adj[v] = new Bag&lt;FlowEdge&gt;();
+  }
+
+  public void addEdge(FlowEdge e) {
+    int v = e.from();
+    int w = e.to();
+    adj[v].add(e); // add forward edge
+    adj[w].add(e); // add backward edge
+  }
+
+  public Iterable&lt;FlowEdge&gt; adj(int v) { 
+    return adj[v];
+  }
+
+  public int V() { return V; }
+}
+</code></pre>
+
+<p><em>FF</em> 알고리즘 구현은 아래와 같다. <em>shortest augmenting path</em> 를 찾기 위해 <em>BFS</em> 를 이용했다.</p>
+
+<pre><code class="java">public class FordFulkerson {
+
+  private boolean[] marked;  // ture if s-&gt;v path in residual network
+  private FlowEdge[] edgeTo; // last edge on s-&gt;v path
+  private double value;      // value of flow
+
+  public FordFulkersen(FlowNetwork G, int s, int t) {
+    value = 0.0;
+
+    while (hasAugmentingPath(G, s, t)) {
+      double bottle = Double.POSITIVE_INFINITY;
+
+      // compute bottleneck capacity
+      for (int v = t; v != s; v = edgeTo[v].other(v))
+        bottle = Math.min(bottle, edgeTo[v].residualCapacityTo(v));
+
+      // augment flow
+      for (int v = t; v != s; v = edgeTo[v].other(v))
+        edgeTo[v].addResidualFlowTo(v, bottle);
+
+      value += bottle;
+    }
+  }
+
+  // find a shortest augmenting path using BFS
+  private boolean hasAugmentingPath(FlowNetwork G, int s, int t) {
+    edgeTo = new FlowEdge[G.V()];
+    marked = new boolean[G.V()];
+
+    Queue&lt;Integer&gt; q = new LinkedList&lt;Integer&gt;();
+    q.add(s);
+    marked[s] = true;
+
+    while (!q.isEmpty()) {
+      int v = q.remove();
+
+      for (FlowEdge e : G.adj(v)) {
+        int w = e.other(v);
+
+        // path s-&gt;w is in the residual network?
+        if (e.residualCapacityTo(w) &gt; 0 &amp;&amp; !marked[w]) {
+          edgeTo[w] = e;
+          marked[w] = true;
+          q.add(w);
+        }
+      }
+    }
+
+    return marked[t];
+  }
+
+  public double value() { return value; }
+  // is `v` reachable from s in residual network?
+  public boolean inCut(int v) { return marked[v]; } 
+}
+</code></pre>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Max-flow_min-cut_example.svg/288px-Max-flow_min-cut_example.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
+
+<p>테스트 코드도 좀 돌려보자. 예제는 위와 같고, 코드는 아래에 있다.</p>
+
+<pre><code class="java">public class FordFulkensonTest {
+
+  @Test
+  public void test() {
+    int E = 5;
+
+    int s = 0;
+    int t = 3;
+
+    // http://en.wikipedia.org/wiki/Max-flow_min-cut_theorem#Example
+    FlowEdge[] edges = new FlowEdge[E];
+    edges[0] = new FlowEdge(s, 1, 4.0);
+    edges[1] = new FlowEdge(s, 2, 3.0);
+    edges[2] = new FlowEdge(1, 2, 3.0);
+    edges[3] = new FlowEdge(1, t, 4.0);
+    edges[4] = new FlowEdge(2, t, 5.0);
+
+    int V = 4;
+    FlowNetwork G = new FlowNetwork(V);
+
+    for (FlowEdge e : edges)
+      G.addEdge(e);
+
+    FordFulkerson FF = new FordFulkerson(G, s, t);
+
+    assert(FF.value() == 7);
+  }
+}
+</code></pre>
+
+<h3 id="maxflowapplication">Max Flow Application</h3>
+
+<p><em>shortest path</em> 처럼 <em>max flow</em> 도 정말 많은 곳에 응용할 수 있다.</p>
+
+<ul>
+<li>Bipartite maching</li>
+<li>Network reliability</li>
+<li>Baseball elimination</li>
+<li>Image segmentation</li>
+<li>Distributed computing</li>
+<li>...</li>
+</ul>
+
+<h4 id="bipartitemachingproblem">Bipartite maching problem</h4>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTTRNalowTVdPNE1UTTBVV0x6TVRONDBDTzFVMk10WUROakZUTDJVMk0wVUROa056THhZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p><code>N</code> 명의 <em>student</em> 가 <code>N</code> 개의 <em>company</em> 로부터 각각 몇개씩의 주문을 받았을 때, <code>1:1</code> 로 대응하는 그래프를 그릴 수 있느냐의 문제다. </p>
+
+<p><em>max flow</em> 알고리즘을 이용해 <em>bipartite maching</em> 문제를 풀 수 있다.</p>
+
+<ul>
+<li>Create <code>s</code>, <code>t</code>, one vertex for each student, and one vertex for each company(job)</li>
+<li>Add edge from <code>s</code> to each student (capacity 1)</li>
+<li>Add edge from each job to <code>t</code> (capacity 1)</li>
+<li>Add edge from student to each job offered (infinite capacity)</li>
+</ul>
+
+<p>이렇게하면 <em>local equilibrium</em> 에 의해 각 <em>student</em> 마다 하나씩의 <em>out-flow</em> 밖에 가지지 못하고, 마찬가지로 <em>job</em> 도 하나씩의 <em>in-flow</em> 밖에 가지지 못하므로 <code>1:1</code> 대응을 만들 수 있다.</p>
+
+<p>완벽히 매칭이 이루어지는지, 아닌지를 <em>min cut</em> 을 이용해 알 수 있다. 그림을 보자.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTm1OV08xSUdOd1VtWTJNVExsQnpNaDFTWjJRek10WXpNaUZUTGlWMk4wZ1ROa0p6THpZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<ul>
+<li>Let <code>S</code> = students on <code>s</code> side of cut.</li>
+<li>Let <code>T</code> = companies on <code>s</code> side of cut.</li>
+<li><code>|S|</code> > <code>|T|</code>; students in <code>S</code> can be matched only to companies in <code>T</code>.</li>
+</ul>
+
+<h4 id="baseballelimination">Baseball elimination</h4>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TWhWVE9oZERNeGNET2paVEx6a0RPaDFDTm1WMk10UXpNMllUTGhKVFppSlRZME16TDFZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<blockquote>
+  <p>Which teams have a chance of finishing the season with the most wins?</p>
+</blockquote>
+
+<p>이건 게임이 얼마나 남았느냐 뿐만 아니라, 누구와 상대하냐도 문제가 되기 때문에 이렇게 그래프를 그려 풀 수 있다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTTm1SR08yVTJZMlFqTTRnVEwxTURNaTFTWmpoek10TVRZaVJXTDJFMk5sSkdPakp6TDNZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p>여기서 디트로이트 (<code>4</code>) 는 수학적으로 봤을때 우승이 불가능하므로 미리 제거했다. 그리고, <code>s</code> 에서 출발하는 <em>edge</em> 를 각 팀간 남은 경기로, 그리고 <code>t</code> 로 들어가는 <em>edge</em> 를 디트로이트의 남은경기, 이긴경기에서 해당 팀의 이긴경기를 빼서 <em>upper bound</em> 를 설정한다.</p>
+
+<blockquote>
+  <p>Team 4 (디트로이트) not eliminated iff all edges pointing from <code>s</code> are full in max flow</p>
+</blockquote>
+
+<h3 id="performance">Performance</h3>
+
+<p><em>max flow</em> 문제의 경우 <em>FF</em> 알고리즘을 이용하면 <em>worst case</em> 에서 <code>E^2U</code> 성능이 나온다고 한다. 근데 이건 1955년도에 발견된 알고리즘이고, 가장 최근에는 <em>compact network</em> 라는 기법이 2012년에 만들어졌다. 이건 <code>E^2 / log E</code> 의 <em>worst case performance</em> 라고 함.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Ro$bert Sedgewick</strong> <br />
+(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
+(3) <a href='https://graph-tool.skewed.de/static/doc/flow.html' >https://graph-tool.skewed.de/</a> <br />
+(4) <a href='http://en.wikipedia.org/wiki/Cut_' (graph_theory)">Wikipedia: Cut</a> <br />
+(5) <a href='http://kunuk.wordpress.com/2010/11/09/graph-flow-ford-fulkerson-algorithm-example-with-c/' >http://kunuk.wordpress.com - Flow</a> <br />
+(6) <a href='http://www.programering.com/a/MDN0gDNwATY.html' >http://www.programering.com</a> <br />
+(7) <a href='http://en.wikipedia.org/wiki/Max-flow_min-cut_theorem' #Example">Wikipeda - Max Flow</a></p>]]></description><link>http://1ambda.github.io/maximum-flow/</link><guid isPermaLink="false">90497f41-cd0f-4eb0-99bf-f59bbd7d1871</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[maximum flow]]></category><category><![CDATA[ford-fulkerson]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 28 Dec 2014 08:04:11 GMT</pubDate></item><item><title><![CDATA[Reactive Programming 5, Actor]]></title><description><![CDATA[<p><img src='http://prabhubuzz.files.wordpress.com/2012/09/demo1.png'  alt="" /></p>
 
 <p align="center">(<a href='http://prabhubuzz.wordpress.com/' >http://prabhubuzz.wordpress.com</a>)</p>
 
@@ -8486,376 +8977,4 @@ myClique = maxClique(trialGraph)
 <p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br />
 (2) <a href='http://en.wikipedia.org/wiki/Heuristic_function' >Wikipedia: Huristic Function</a> <br />
 (3) <a href='http://www.alanfielding.co.uk/multivar/dend.htm' >http://www.alanfielding.co.uk</a> <br />
-(4) <a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet">Wikipedia - Anscombe's quartet</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-4/</link><guid isPermaLink="false">a07909c0-49d7-4a0a-9dd8-5e52550b331f</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[graph]]></category><category><![CDATA[hierarchical clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 03:23:13 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 9]]></title><description><![CDATA[<p>이번시간엔 <em>anomaly detection</em> 과 <em>recommender system</em> 을 배운다.</p>
-
-<h3 id="anomalydectection">Anomaly Dectection</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236753_7590.png'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236757_2205.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>anomaly</em> 는 정상집단에서 떨어진 데이터라 보면 된다. 공장에서 품질이 떨어지는 제품을 골라낼때 사용할 수 있는데, 위 그림은 비행기 엔진 공장을 예로 들어 설명한다.</p>
-
-<p>데이터로부터 <code>p(x)</code> 를 만들어, 검사할 데이터가 <em>threshold</em> 를 넘는지 안넘는지 검사해 <em>anomaly</em> 로 판정할 수 있다.</p>
-
-<p>참고로, <em>anomaly</em> 가 너무 많으면, <em>false positive</em> 가 높은 것인데 이 때는  <em>threshold</em> 를 줄이면 된다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236761_2830.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>anomaly detection</em> 은 <em>fraud detection</em> 에 많이 사용된다. 데이터로부터 모델 <code>p(x)</code> 를 만들고 <em>unusual user</em> 를 검사하기 위해 <code>p(x) &lt; e</code> 인지 검사하면 된다.</p>
-
-<p>이외에도 항공기 엔진 예제처럼 제품의 품질 관리나, 데이터 센터에서의 노드 과부하 탐지등에 사용할 수 있다.</p>
-
-<h3 id="gaussiandistribution">Gaussian Distribution</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>gaussian density</em> 공식은</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?P%28x%3B%20%5Cmu%2C%20%5Csigma%5E2%29%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20%5Cexp%28-%20%7B%28x%20-%20%5Cmu%29%5E2%20%5Cover%202%5Csigma%5E2%7D%29'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236839_1788.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>평균과 분산은</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5C%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csigma%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29'  alt="" /></p>
-
-<p><br/></p>
-
-<h3 id="anomalydetectionalgorithm">Anomaly Detection Algorithm</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236899_7015.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>각 <em>feature</em> 가 가우시안 분포를 따른다고 하면, </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20p%28x_1%3B%20%5Cmu_1%2C%20%5Csigma_1%5E2%29%5C%20p%28x_2%3B%20%5Cmu_2%2C%20%5Csigma_1%5E2%29%20%5Ccdots%5C%20p%28x_n%3B%20%5Cmu_n%2C%20%5Csigma_1%5En%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%20%3D%201%7D%5En%20p%28x_j%3B%20%5Cmu_j%2C%20%5Csigma_j%5E2%29'  alt="" /></p>
-
-<p>이렇게 가정하려면, 각 <em>feature</em> 가 독립적이어야 하지만 실제로는 독립적이지 않더라도 어느정도 동작한다. 이 때 </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Cmu_j%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x_j%5E%7B%28i%29%7D'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csigma_j%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%7B%28x_j%5E%7B%28i%29%7D%20-%20%5Cmu_j%29%5E2%7D'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236904_6921.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>따라서 <code>p(x)</code> 는 아래 식이 된다. <code>p(x)</code> 는 <em>feature</em> 가 나올 확률로 이해하면 된다. 이 때 <code>p(x)</code> 가 상당히 작으면, 평균에 가깝지 않은 <em>feature</em> 가 많이 나왔다는 뜻이므로 <em>anomaly</em> 라 볼 수 있다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%3D1%7D%5En%20%5C%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma_j%5E2%7D%7D%20%5C%20%5Cexp%28-%7B%28x_j%20-%20%5Cmu_j%29%5E2%20%5Cover%202%5Csigma_j%5E2%7D%29'  alt="" /></p>
-
-<p><br/></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236907_7102.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>두 <em>feature</em> <code>x1, x2</code> 의 가우시안 분포를 3차원으로 조합하면 <code>p(x)</code> 가 좌측 하단 3차원 원뿔의 높이가 된다.</p>
-
-<h3 id="evaluatinganomalydetection">Evaluating Anomaly Detection</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236992_3664.png'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361236996_4034.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>anomaly</em> 를 잘 나타낼거 같은 <em>feature</em> 를 골라내고, 이를 이용해 모델을 만든다. </p>
-
-<p>우리가 가진 데이터가 <em>anomaly</em> 를 알려주는 <code>y</code> 가 있다면, 위 그림처럼 <em>training set</em> 으로 <em>non-anomalous</em> 을 이용하고, <em>CV, Test Set</em> 으로 나머지를 반반씩 분할하면 된다.</p>
-
-<p>즉 <em>good example</em> 로 모델을 만들고, <em>anomaly</em> 가 섞여있는 <em>cv, test set</em> 으로 평가한다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361237001_5250.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>이 때 <em>skewed classess</em> 이기 때문에 (<code>y = 0</code> 이 대다수, <code>y = 1</code> 은 희박) 단순히 정확도로 평가하긴 좀 무리가 있다. <em>precision, recall, f1 score</em> 등을 이용해 평가해야 한다.</p>
-
-<p><em>threshold</em> 인 <code>e</code> (엡실론) 를 고르기 위해 <em>cross validation</em> 을 이용할 수 있다. <em>f1 score</em> 를 최대화 하는 <code>e</code> 를 고른다거나.</p>
-
-<h3 id="anomalydectectionvssupervisedlearning">Anomaly Dectection vs Supervised Learning</h3>
-
-<p><code>y</code> 값이 있는 데이터라면, 왜 <em>supervised learning</em> 을 이용하지 않을까? </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361242897_8389.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<h4 id="anomalydetection">Anomaly Detection</h4>
-
-<p><em>anomaly detection</em> <em>skewed class</em> 가 있을 때 사용한다.</p>
-
-<blockquote>
-  <p>Many different <strong>types</strong> of anomalies. Hard for any algorithm to learn from positive examples what the anomalies look like</p>
-  
-  <p>Future anomalies may look nothing like any of the anomalous examples we've seen so far</p>
-</blockquote>
-
-<p>보면 알겠지만 <em>anomaly</em> 가 굉장히 다양할 수 있기 때문에 <em>anomaly</em> 를 특정 형태로 구분짓는 알고리즘을 쓰긴 좀 힘들다.</p>
-
-<p>게다가, 가지고 있는 데이터 셋에서 보지 못했던 새로운 종류의 <em>anomaly</em> 가 나올 수도 있다.</p>
-
-<h4 id="supervisedlearning">Supervised Learning</h4>
-
-<p><em>positive, negative example</em> 이 많을 때 사용한다.</p>
-
-<blockquote>
-  <p>Enough positive examples for algorithms to get a sense of what positive examples are like, futre positive example likly to be similar to ones in training set</p>
-</blockquote>
-
-<p><em>supervised learning</em> 에서 <em>positive example</em> 은 어떤 특정 형태기 때문에, 미래에 발견할 <em>positive example</em> 도 비슷한 형태라 생각될 때 사용한다.</p>
-
-<p><em>SPAM filtering</em> 에서는 다양한 타입의 <em>positive example</em> 이 있어도, 우리가 충분한 양의 <em>positive example</em> 이 있기 때문에 커버할 수 있어 <em>supervised learning</em> 을 사용한다.</p>
-
-<p><br/></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361243087_2169.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><br/></p>
-
-<h3 id="choosingwhatfeaturestouse">Choosing What Features to Use</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361244210_3429.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>feature</em> 의 분포가 가우시안이면 고맙지만, 아닐경우 변환이 필요하다. 왼쪽 아래 분포에 로그를 씌우면, 가우시안 분포 비슷하게 보인다.</p>
-
-<p>다른 방법으로는 <code>log(x_2 + c)</code>, <code>sqrt(x_3)</code> 등등이 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361245473_5316.png'  alt="" /></p>
-
-<p>흔한 에러는 <code>p(x)</code> 가 <em>normal, anomalous</em> 에 대해서 모두 높은 경우인데, 슬라이드의 아래쪽에서 볼 수 있듯이 <code>x2</code> 라는 <em>feature</em> 를 만들어서 <em>anomaly</em> 를 발견하는 알고리즘을 만들 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361246077_9679.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>anomaly</em> 를 위한 <em>feature</em> 를 고를 때 특이하게 높거나, 낮을 수 있는 것을 고르면 된다. 데이터 센터 예제에서는 <em>CPU load / network traffic</em> 등이 있을 수 있다. 네트워크 트래픽이 낮은데 <em>CPU load</em> 가 높다면 확실히 <em>anomaly</em> 기 때문이다.</p>
-
-<h3 id="multivariategaussiandistribution">Multivariate Gaussian Distribution</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361257865_7961.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>feature</em> 를 <em>CPU laod, memory use</em> 로 했을 때 낮은 CPU 부하에도 메모리 사용량이 높으면 <em>anomaly</em> 라 볼 수 있다.</p>
-
-<p>그런데, 슬라이드의 왼쪽 그림에서 녹색으로 표시한 <em>anomaly</em> 는 지금까지 설명했던 알고리즘으로 찾기가 힘들다. 적당한 수준의 <em>memory use</em> 와 그리 낮지 않은 <em>cpu load</em> 를 가지기 때문이다.</p>
-
-<p>실제 <em>normal example</em> 이 타원형이기 때문에, 원으로 <em>anomaly</em> 를 찾기는 어렵다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361258533_5107.png'  alt="" /></p>
-
-<p>따라서 <code>p(x_1)p(x_2)...</code> 을 이용한 모델 말고 다른 방법으로 모델을 만들어야 한다. </p>
-
-<p><code>u</code> 를 <code>n</code> 벡터라 하고, <code>Sigma</code> 를 <code>u</code> 의 <em>convariance matrix</em> 라 하자. 그러면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?p%28x%3B%20%5Cmu%2C%20%5CSigma%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%282%5Cpi%29%5E%7Bn/2%7D%20%5C%20%7C%5CSigma%7C%5E%7B1/2%7D%7D%20%5C%20%5Cexp%28-%7B1%5Cover%202%7D%28x%20-%20%5Cmu%29%5ET%20%5C%20%5CSigma%5E%7B-1%7D%28x%20-%20%5Cmu%29%29'  alt="" /></p>
-
-<p>여기서 <code>|Sigma|</code> 는 <code>Sigma</code> 의 행렬식인데, 여기를 참고하자.</p>
-
-<ul>
-<li><a href='http://ghebook.blogspot.com/2011/06/matrix.html' >행렬</a></li>
-<li><a href='http://ghebook.blogspot.com/2011/06/determinant.html' >행렬식</a></li>
-<li><a href='http://ghebook.blogspot.kr/2011/06/geometric-meaning-of-determinant.html' >행렬식의 기하학적 의미</a></li>
-<li><a href='http://darkpgmr.tistory.com/104' >행렬식과 기하학적 활용</a></li>
-</ul>
-
-<p>이제 위 식을 이용해서 나온 <code>p(x)</code> 를 3차원, 2차원으로 보면</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259228_7695.png'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259243_2967.png'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259236_1052.png'  alt="" /></p>
-
-<p><br/></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259583_5151.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5CSigma%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%20%5C%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%5ET'  alt="" /></p>
-
-<p><br/></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361259728_6035.png'  alt="" /></p>
-
-<p><code>u, Sigma</code> 를 찾아 <code>p(x)</code> 를 만들고, 테스트 데이터에 대해 <code>p(x) &lt; e</code> 인지 비교한다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361260300_1768.png'  alt="" /></p>
-
-<p><em>original model</em> 은 <em>multivariate model</em> 에서 각 <em>feature</em> 간 상관 관계가 없는 (독립), 즉 <em>covariance matrix</em> 가 <em>diagonal matrix</em> 인 경우다. (</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/19/1361260755_3407.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<ul>
-<li><strong>Original model</strong></li>
-</ul>
-
-<p>수동으로 <em>feature</em> 를 만들때 사용할 수 있다. 또는 적은 연산을 원할때, 다시 말해서 <code>n</code> 이 커서 연산이 무지막지하게 클 때 좋다.</p>
-
-<p><code>m</code> 이 작아도 쓸 수 있다.</p>
-
-<ul>
-<li><strong>Multivariate Gaussian</strong></li>
-</ul>
-
-<p>계산 비용이 비싸지만, 자동으로 <em>feature</em> 간 상관관계를 모델에 포함시킨다.</p>
-
-<p><code>Sigma</code> 가 <em>invertible</em> 이기 위해서는 <code>m &gt; n</code> 이어야 한다. 실제로는 <code>m</code> 이 <code>n</code> 보다 훨씬 클 때 사용하는 경우가 많다. (e.g. <code>m &gt;= 10n</code>)</p>
-
-<p>만약에 <code>m &gt; n</code> 인데, <code>Sigma</code> 가 <em>non-invertible</em> 이면 <em>redundant feature</em> 가 있는 경우니 확인해 보자. (흔한 오류라고 함)</p>
-
-<h3 id="recommendersystem">Recommender System</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361324993_7588.png'  alt="" /></p>
-
-<h3 id="contentbasedrecommendations">Content Based Recommendations</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361325560_4034.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>위 슬라이드는 유저 <code>j</code> 로 부터 <code>theta^(j)</code> 를 얻어, <em>feature</em> <code>x</code> 와 곱함으로써 <em>linear regression</em> 문제로 변경했다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361326084_2070.png'  alt="" /></p>
-
-<p><code>theta^(j)</code> 는 어떻게 훈련시킬까?</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202m%5E%7B%28j%29%7D%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202m%5E%7B%28j%29%7D%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
-
-<p>여기서 <code>m^(j)</code> 는 유저 <code>j</code> 에 의해 점수를 받은 영화의 수인데, 어차피 상수이므로 제거하면</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361326247_4648.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>이 때 각 유저마다의 <code>theta(j)</code> 를 합 해 최소화 시키는 방식으로 전체 <code>theta</code> 를 훈련시킬 수 있다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361326573_9477.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>gradient descent</em> 는</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20%5C%20%28for%5C%20k%20%3D%200%29'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20&plus;%20%5Clambda%5Ctheta_k%5E%7B%28j%29%7D%5C%20%28for%5C%20k%20%5Cneq%200%29'  alt="" /></p>
-
-<h3 id="collaborativefiltering">Collaborative Filtering</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361327928_4438.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>content-based recommendation</em> 에서 <em>feature</em> 를 구하긴 사실 어려운 일이다. 누가 이 영화가 얼마만큼 로맨스고, 아닌지를 판별해줄까? </p>
-
-<p>문제를 좀 변경해서, 만약에 유저로부터 <code>theta(j)</code> 를 얻어낼 수 있다면 그 정보로 부터 <em>feature</em> <code>x(i)</code> 를 추출할 수 있다. 왜냐하면 <code>(\theta^(j))^T * x^(i) ~ y^(i, j)</code> 이기 때문이다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361328443_4320.png'  alt="" /></p>
-
-<p><code>x^(i)</code> 를 얻기 위해, </p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?min_%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%20%5Csum_%7Bi%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/20/1361330430_7394.png'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<ul>
-<li><code>theta</code> 가 주어지면 <code>x</code> 를 훈련할 수 있고</li>
-<li><code>x</code> 가 주어지면 <code>theta</code> 를 훈련할 수 있다.</li>
-</ul>
-
-<p>따라서 최초의 랜덤 <code>theta</code> 에 대해 <code>x</code> 를 훈련하고, 다시 <code>theta</code> 를 훈련하고, 반복하면 된다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361495687_3476.jpg'  alt="" /></p>
-
-<p><code>theta</code> 와 <code>x</code> 를 반복해서 훈련시키는 것보다, 동시에 훈련시키는 것이 좀 더 효율적이다. 따라서</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?J%28%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%2C%20%5Ctheta%5E%7B%28i%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7B%28i%2C%20j%29%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2'  alt="" /></p>
-
-<p>를 최소화 시키면 된다. 참고로 <code>x_0</code> 은 <em>collaborative filtering</em> 에서 필요가 없다. 알고리즘 자체가 <em>feature</em> 를 직접 찾아내니 <em>hard coded</em> 된 <em>feature</em> 는 사용하지 않는다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361495692_7530.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p>(1) <code>x</code>, <code>theta</code> 를 작은 값으로 초기화 한다.</p>
-
-<p>이는 <em>symmetry breaking</em> 을 하기 위함이다. 작은 랜덤값들로 초기화 하여 <code>x^(i)</code> 가 서로 다른 값들을 가지도록 도와준다.</p>
-
-<p>(2) <em>cost function</em> <code>J</code> 를 <em>gradient descent</em> 등으로 최소화 시킨다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?x_k%5E%7B%28i%29%7D%20%3A%3D%20x_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bj%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Ctheta_k%5E%7B%28j%29%7D%20&plus;%20%5Clambda%20x_k%5E%7B%28i%29%7D'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28i%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Cx_k%5E%7B%28i%29%7D%20&plus;%20%5Clambda%20%5Ctheta_k%5E%7B%28j%29%7D'  alt="" /></p>
-
-<p>(3) 유저의 <em>parameter</em> <code>theta</code> 와 영화의 <em>feature</em> <code>x</code> 에 대해 <code>theta^T * x</code> 를 이용해 예측하면 된다.</p>
-
-<h3 id="vectorizationlowrankmatrixfactorization">Vectorization: Low Rank Matrix Factorization</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361496844_8727.jpg'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361496849_5252.jpg'  alt="" /></p>
-
-<p><em>collaborative filtering</em> 은 <em>low rank matrix factoriazation</em> 이라 부르기도 한다. 위 슬라이드처럼 <code>X, THETA</code> 를 구성하고 <code>X * THETA^T</code> 를 구하면 된다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361496854_2443.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>low rank matrix factorization</em> 을 이용해서 <em>feature</em> 를 찾으면, 두 영화 <code>i, j</code> 가 얼마나 유사한지 <code>||x^(i) - x^(j)||</code> 으로 판단할 수 있다.</p>
-
-<h3 id="implementationdetailmeannormalization">Implementation Detail: Mean Normalization</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361497832_3797.jpg'  alt="" /></p>
-
-<p>만약 위 슬라이드의 <code>Eve</code> 처럼 아무 영화도 평가 안한 사람에게는, <code>theta</code> 가 <code>0</code> 으로 나온다. (첫번째 <em>term</em> 이 <code>0</code> 이고, <em>regularization term</em> 은 <code>theta</code> 를 최소화한다.)</p>
-
-<p>그렇게 되면, 어떤 영화도 높은 <em>rating</em> 을 받을 수 없으므로 (<code>theta^T * x</code>). 추천할 거리가 없다. 이건 별로 좋은 상황이 아닌데, <em>mean normalization</em> 을 이용하면 이 문제를 해결할 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361497813_3878.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1' >http://blog.csdn.net/linuxcumt1</a>)</p>
-
-<p><em>mean normalized</em> 데이터를 이용하면, 추천 안한 사람이 <code>theta = 0</code> 을 갖더라도, 남들이 추천한 선호도 <code>u</code> 에 따라서 영화를 추천받을 수 있다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20&plus;%20%5Cmu_i'  alt="" /></p>
-
-<p>잘보면 <em>feature scaling</em> 과는 다르게 특정 <em>range</em> 로 나누질 않는데, 이건 이미 <em>rating</em> 자체가 일정 범위 <code>1-5</code> 를 갖기 때문이다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
-(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
-(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a> <br />
-(4) <a href='http://ghebook.blogspot.com/2011/06/matrix.html' >http://ghebook.blogspot.com</a> <br />
-(5) <a href='http://darkpgmr.tistory.com/104' >http://darkpgmr.tistory.com</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-9/</link><guid isPermaLink="false">0247c02a-4927-4ae8-957c-adf6590fac09</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine learning]]></category><category><![CDATA[anomaly detection]]></category><category><![CDATA[recommender system]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 07 Dec 2014 15:39:40 GMT</pubDate></item></channel></rss>
+(4) <a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet">Wikipedia - Anscombe's quartet</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-4/</link><guid isPermaLink="false">a07909c0-49d7-4a0a-9dd8-5e52550b331f</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[graph]]></category><category><![CDATA[hierarchical clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 03:23:13 GMT</pubDate></item></channel></rss>
