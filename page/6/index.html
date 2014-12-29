@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
   <title>Old Lisper</title>
-  <meta name="description" content="Lisp, Emacs, Scala" />
+  <meta name="description" content="Functional Programming" />
 
   <meta name="HandheldFriendly" content="True" />
   <meta name="MobileOptimized" content="320" />
@@ -67,14 +67,14 @@
 <body>
 
   
-  <script src="../../public/jquery.js?v=8fc741370f"></script>
+  <script src="../../public/jquery.js?v=7a66dda120"></script>
 
   
 
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Lisp, Emacs, Scala</h4>
+  <h4 class="text book">Functional Programming</h4>
   
   <div class="social border solid top_small bottom_small padding_medium">
   <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
@@ -85,6 +85,24 @@
 </header>
 
 <main class="site_width" role="main">
+  
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../haskell-intro6">하스켈로 배우는 함수형 언어 6</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-25">Tuesday, November 25, 2014</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/haskell-intro6/" data-disqus-identifier="66">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p></p></i>
+      <p>이번시간엔 어떻게 type 과 class 를 정의하는지 배울겁니다. 이렇게 commonality 를  추출해서 type 과 class 로 만듦으로써 작업의 양을 줄일 수 있습니다. 이 과정을 추상화라 부르기도 합니다. 마지막엔 이제까지 배운바를 적용해 봅시다. 항상 참인 명제를 검사하는 tautology checker 와 평가 시점을 조절하는 abstract machine 을 만들어 보겠습니다. Type Declarations 하스켈에선&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../haskell-intro6">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
   
 
   <article class="margin_bottom_big">
@@ -154,24 +172,6 @@
       <p><p></p></i>
       <p>키보드를 읽거나 화면에 무엇인가 쓰는 intertactive program 은 side-effect 를 만듭니다. 그런데, 하스켈은 side-effect 가 없지요. 그럼 입출력이 불가능한 것일까요?  당연히 그렇지 않습니다. IO 모나드 를 사용할겁니다. pure expression 부분과 side-effect 를 만들어내는 impure action 을 구분하여 하스켈에서 입출력을 할 수 있습니다.   Interactive program can be written in Haskell using&hellip;</p>
       <h5><a class="text book small uppercase color c_blue" href="../../haskell-intro5">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-  
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="../../haskell-intro4">하스켈로 배우는 함수형 언어 4</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-19">Wednesday, November 19, 2014</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/haskell-intro4/" data-disqus-identifier="62">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><p></p></i>
-      <p>이번시간엔 모나드를 배웁니다. 네. 올것이 왔습니다. 간단한 파서를 구현하는 것 부터 시작해 보겠습니다. What is a Parser Parser (파서) 란 텍스트 조각을 분석하여 syntaxtic structure 를 만들어 내는 프로그램(코드)를 말합니다. 많은 프로그램들이 자신만의 파서를 가지고 있습니다. GHC 는 haskell , UNIX 는 shell script, explorer 는 HTML 분석합니다. The&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="../../haskell-intro4">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
     </section>
   </article>
 

@@ -1,5 +1,335 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Lisp, Emacs, Scala]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 28 Dec 2014 17:39:14 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Maximum Flow]]></title><description><![CDATA[<p><img src='https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 29 Dec 2014 05:41:53 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Regular Expression, NFA]]></title><description><![CDATA[<p><img src='http://4.bp.blogspot.com/-esm-BsLlh_U/UzlC63ecqEI/AAAAAAAAADs/lgZ2I71OGgs/s1600/2013-02-10-regular-expression-problems.png'  alt="" /></p>
+
+<h3 id="regularexpression">Regular Expression</h3>
+
+<p>이전까지 배웠던 패턴매칭 기법들은 모두 하나의 결과만을 돌려줬었다. (e.g <em>substring search</em>) 주어진 패턴에 대해서 하나의 결과가 아니라 일치하는 <strong>집합</strong> 을 원한다면 어떻게 해야할까? </p>
+
+<p>예를 들어 유전자 분석에서는 <em>Fragile X syndrome</em> 은 <code>GCG(CGG|AGG)*CTG</code>  패턴에서 더 많이 반복될수록 <em>fragile x</em> 신드롬일 확률이 높다. 이 경우에는 하나가 아니라 몇번 일치하는지가 중요한 결과값이 된다.</p>
+
+<p>따라서 단순한 패턴이 아니라 <strong>집합</strong> 으로 지정된 패턴을 찾아낼 수 있는 알고리즘이 필요하다.</p>
+
+<p><em>regex</em> 의 응용은</p>
+
+<ul>
+<li>natural language processing</li>
+<li>scan for virus signatures</li>
+<li>syntax highlighting</li>
+<li>text filtering</li>
+<li>parsing text (compiler, crawler)</li>
+</ul>
+
+<blockquote>
+  <p>A <strong>regular expression</strong> is a notation to specify a set of string</p>
+</blockquote>
+
+<p>사용 가능한 연산으로</p>
+
+<p><img src='http://homepages.ius.edu/RWISMAN/C431/html/ch2-15.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://homepages.ius.edu/RWISMAN' >http://homepages.ius.edu/RWISMAN</a>)</p>
+
+<ul>
+<li><em>concat</em> (3)</li>
+<li><em>or</em> (4)</li>
+<li><em>closure</em> (2)</li>
+<li><em>parenthesis</em> (1)</li>
+</ul>
+
+<p>괄호 안은 우선순위다. 편의를 위한 연산으로</p>
+
+<ul>
+<li><em>wildcard</em> <code>.</code></li>
+<li><em>character class</em> <code>[A-Za-z][a-z]*</code></li>
+<li><em>at lest 1</em> <code>+</code></li>
+<li><em>exactly k</em> <code>[0-9]{5}</code></li>
+</ul>
+
+<p><code>[A-E]+</code> 를 기본 연산으로 풀어쓰면 <code>(A|B|C|D|E)(A|B|C|D|E)*</code> 다.</p>
+
+<p>정규표현식을 작성하는 것은 프로그램을 만드는 것과 비슷하다</p>
+
+<ul>
+<li>need to understand programming model</li>
+<li>can be easier to write than read</li>
+<li>can be difficult to debug</li>
+</ul>
+
+<blockquote>
+  <p>Res are amazingly powerful and expressive. but using them in applications can be amazingly complex and error-prone</p>
+</blockquote>
+
+<h3 id="resandnfa">REs and NFA</h3>
+
+<p><em>RE</em> 와 <em>DFA</em> 는 <em>dual</em> 이다. </p>
+
+<ul>
+<li><strong>RE:</strong> concise way to desribe a set of string</li>
+<li><strong>DFA:</strong> machine to recognize whether a given string in a given set</li>
+</ul>
+
+<p><em>Kleene's theorem</em> 에 의하면</p>
+
+<p>어떤 <em>DFA</em> 든 같은 문자열 집합을 기술하는 <em>RE</em> 가 존재하고, 역으로 어느 <em>RE</em> 에 대해서도 같은 문자열 집합을 인식할 수 있는 <em>DFA</em> 가 존재한다.</p>
+
+<p>따라서 <em>RE</em> 로 부터 <em>DFA</em> 를 만들고, 이걸 인풋에 대해 돌리면 된다. 그리고 <em>DFA</em> 를 사용하기 때문에 <em>KMP</em> 알고리즘처럼</p>
+
+<ul>
+<li>no backup in text input stream</li>
+<li>linear-time guarantee</li>
+</ul>
+
+<p>하지만 실제로는 <em>DFA</em> 를 사용하기가 어렵다. 이는 <em>DFA</em> 가 수 많은 상태를 가질 수 있기 때문이다. 따라서 <em>DFA</em> 대신 <em>NFA</em> 를 이용하는 방법이 개발되었다. 
+<em>NFA</em> 를 이용하면 <em>quadratic-time guarantee</em> 다.</p>
+
+<p><em>NFA, Nondeterministic finite-state automata</em> 에서는</p>
+
+<ul>
+<li><em>RE</em> enclosed in parentheses</li>
+<li>One state per <em>RE</em> character (start=<code>0</code>, accpet=<code>M</code>)</li>
+<li><em>ε-transition</em> (change state, but dn't scan text)</li>
+<li>accept if <strong>any</strong> sequence of transitions ends in accpet state</li>
+</ul>
+
+<p>뭔소린가 해서 구글링을 좀 해보니</p>
+
+<blockquote>
+  <ul>
+  <li><p>If it’s a <strong>DFA</strong>, we know that each word completely determines the final state of the automaton, and we say that the word is accepted if that state is an acceptor state.</p></li>
+  <li><p>If it’s an <strong>NFA</strong>, there might be several possible final states that could result from reading a given word; as long as at least one of them is an acceptor state, we say that the automaton accepts the word.</p></li>
+  </ul>
+</blockquote>
+
+<p><em>DFA</em> 는 입력에 대해 결과값이 항상 하나로 일정하지만, <em>NFA</em> 에서는 복수개의 <em>final state</em> 가 만들어질 수 있다. 그리고 이 때 하나라도 <em>accept</em> 되면,  입력값이 <em>accept</em> 된 것으로 본다.</p>
+
+<p>이 때 다양한 <em>final state</em> 가 만들어 지는 이유는 스캔 없이 상태를 변경하는 <em>ε-transition</em> 때문이다. 따라서 같은 입력이라도, 올바르게 파싱할수도, 그렇지 않을수도 있다.</p>
+
+<p>따라서 <em>NFA</em> 에서는 모든 가능한 경우에 대해 시뮬레이션 해야한다. 그런데, 하나씩 다 해보긴 비효율적이므로 매 문자를 읽을때마다 <em>all possible states</em> 를 유지하면서 <em>match, ε-transition</em> 을 적용해 나간다. 그리고 모든 문자를 다 읽었을때 <em>possible state</em> 에 <em>accept</em> 가 있으면 성공적으로 패턴이 매칭된 것이다.</p>
+
+<p>따라서 <em>possible state</em> 를 얻기 위해 <em>reachability</em> 를 계산해야 하는데 <em>digraph</em> 를 사용하면 문제가 쉬워진다. 방문하지 않은 <em>vertex</em> 가 없을때까지 <em>DFS</em> 를 돌리면 된다. 러닝타임은 <code>E + V</code></p>
+
+<h3 id="nfasimulation">NFA Simulation</h3>
+
+<p>코드는 </p>
+
+<pre><code class="java">public class NFA {  
+    private char[] re; // match transition
+    private Digraph G; // epsilon transition
+    private int M;     // # of states
+
+    public NFA(String regex) {
+        M = regex.length();
+        re = regex.toCharArray();
+        G = buildEpsilonTransitionDigraph();
+    }
+
+    private Digraph buildEpsilonTransitionDigraph() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean recognizes(String txt) {
+
+        Bag&lt;Integer&gt; rs = new Bag&lt;Integer&gt;(); // reachable states
+        DirectedDFS dfs = new DirectedDFS(G, 0); 
+
+        // get reachable states initially
+        for (int v = 0; v &lt; G.V(); v++) 
+            if (dfs.marked(v)) rs.add(v);
+
+        for (int i = 0; i &lt; txt.length(); i++) {
+
+            // match transition
+            Bag&lt;Integer&gt; match = new Bag&lt;Integer&gt;();
+            for (int v : rs) {
+                if (v == M) continue;
+                if ((re[v] == txt.charAt(i)) || re[v] == '.')
+                    match.add(v + 1); // add next state 
+            }
+
+            // run epsilon transition with match
+            dfs = new DirectedDFS(G, match);
+            rs = new Bag&lt;Integer&gt;();
+            for (int v = 0; v &lt; G.V(); v++)
+                if (dfs.marked(v)) rs.add(v);
+        }
+
+        for (int v : rs) 
+            if (v == M) return true;
+
+        return false;
+    }
+}
+</code></pre>
+
+<p><em>NFA simulation</em> 은 <code>N</code> 길이의 텍스트, <code>M</code> 길이의 패턴에 대해서 <em>worst case</em> 일 때 <code>MN</code> 의 성능을 보인다.</p>
+
+<p>이는 <code>N</code> 개의 텍스트에서, 한 문자를 스캔할때 마다 최대 <code>M</code> 개의 <em>state</em> 가 있을 수 있고, 여기에 대해 <em>ε-transition</em> 를 찾기 위해 <em>DFS</em> 를 돌리기 때문이다. </p>
+
+<p>쉽게 말해서 노드 수가 <code>M</code> 인 그래프에 대해 <em>DFS</em> 를 돌리는데, <code>N</code> 번 돌리기 때문에 최악의 경우 <code>MN</code> 의 성능을 보여준다는 것이다.</p>
+
+<p>그리고 뒤에서 자세히 언급하겠지만 <em>NFA construction</em> 에서 그래프의 <em>edge</em> 수가 <code>&lt;= 3M</code> 임을 보장한다. </p>
+
+<h3 id="nfaconstruction">NFA Construction</h3>
+
+<p><em>regex</em> 에 대응하는 <em>NFA</em> 를 만드는 과정은 <em>match, ε-transition</em> 로 이어진 그래프를 만드는것과 동일하다. <em>regex</em> 에서 각 연산들에 대해</p>
+
+<ul>
+<li><strong>concatenation:</strong> add <em>match-transition</em> edge from state corresponding to chars in the alphabet to next state</li>
+</ul>
+
+<p>알파벳으로부터만 연결하므로 <code>( -&gt; )</code> 등은 <em>match transition</em> 으로 연결하지 않는다.</p>
+
+<ul>
+<li><p><strong>parentheses:</strong> add <em>ε-transition</em> edge from parentheses to next state</p></li>
+<li><p><strong>closure:</strong> add three <em>ε-transition</em> edges for each <code>*</code> operator</p></li>
+</ul>
+
+<p>예를 들어 <code>A*B</code> 의 경우, <code>A -&gt; *</code>, <code>* -&gt; A</code>, <code>* -&gt; B</code> 3개의 <em>ε-transition</em> 을 추가한다. </p>
+
+<ul>
+<li><strong>or:</strong> add two <em>ε-transition</em> edges for each <code>|</code> operator</li>
+</ul>
+
+<p>예를 들어 <code>( A | B )</code> 의 경우 <code>( -&gt; B</code>, <code>| -&gt; )</code> 로 <em>ε-transition</em> 을 추가한다.</p>
+
+<p><em>NFA</em> 를 만드는데 있어서 한 가지 어려운점은 <em>closure</em> 을 만들기 위해서는 <code>(</code> 를 기억해야 하고, <em>or</em> 을 만들기 위해서는 <code>(</code> 와 <code>|</code> 의 위치를 알고 있어야 한다는 점이다. 스택을 쓰면 된다.</p>
+
+<ul>
+<li><code>(</code> 를 만나면 <code>(</code> 를 스택에 넣고</li>
+<li><code>|</code> 를 만나면 <code>|</code> 를 스택에 넣자</li>
+<li><code>)</code> 를 만나면 <code>(</code> 를 스택에서 빼고, <code>|</code> 도 있다면 그것도 빼자. 스택엣 제거한 <code>(, |</code> 의 위치를 이용해 <em>closure</em>, <em>or</em> 을 만들 수 있다. </li>
+</ul>
+
+<p><a href='http://www.youtube.com/watch?v=RYNN-tb9WxI' >Regex to NFA</a> 를 보는게 이해가 더 쉬울듯. (강의 끝부분에 약간 틀린곳이 있으니 댓글을 참조하자.)</p>
+
+<p>구현은</p>
+
+<pre><code class="java">    private Digraph buildEpsilonTransitionDigraph() {
+
+        Digraph G = new Digraph(M + 1); // including the accept state
+        Stack&lt;Integer&gt; ops = new Stack&lt;Integer&gt;();
+
+        for (int i = 0; i &lt; M; i++) {
+            int lp = i;
+
+            // keep '(', '|' to implement closure, OR
+            if (re[i] == '(' || re[i] == '|') ops.push(i);
+
+            // OR
+            else if (re[i] == ')') {
+                int or = ops.pop();
+
+                if (re[or] == '|') { // if '|' exists
+                    lp = ops.pop();
+                    G.addEdge(lp, or + 1);
+                    G.addEdge(or, i);
+                } 
+                else lp = or;        // left paren
+            }
+
+            if (i &lt; M - 1 &amp;&amp; re[i + 1] == '*') {
+                G.addEdge(lp, i + 1);
+                G.addEdge(i + 1, lp);
+            }
+
+            if (re[i] == '*' || re[i] == '(' || re[i] == ')')
+                G.addEdge(i, i + 1);
+        }
+
+        return G;
+    }
+</code></pre>
+
+<p>만약 <code>+</code> 를 만들고 싶다면 <code>*</code> 과 같지만 <code>i -&gt; i + 1</code> 또는 괄호가 있을때는 <code>lp -&gt; i + 1</code> <em>edge</em> 하나를 제거해야 한다. (바로 넘어가는 경우가 없기 때문)</p>
+
+<p><em>NFA</em> 를 만들때 <code>M</code> 길이의 패턴에 대해 시간과 공간 비용은 <code>M</code> 에 비례한다. 이는 아무리 많아봐야 한 <em>state</em> 에 대해 3개의 <em>ε-transition</em>, 2개의 스택 연산이 필요하기 때문이다.</p>
+
+<h3 id="regexapplication"> Regex Application</h3>
+
+<pre><code class="java">String regex = ".*" + p + ".*";  
+NFA nfa = new NFA(regex);
+
+while (stdin.hasNext) {  
+  String line = stdin.readLine();
+
+  if (nfa.recognize(line))
+    println(line)
+}
+</code></pre>
+
+<p>자주 쓰는 프로그램인 <em>grep</em> 도 <em>regex</em> 를 사용한다. 패턴을 <code>p</code> 를 받아 <code>(.*p.*)</code> 처럼 <em>regex</em> 를 만들어 라인마다 검사할 수 있다. 근데, <em>worst case</em> 에는 라인마다 <code>MN</code> 이니까 <em>brute force substring search</em> 랑 별 차이가 없다.</p>
+
+<p><em>validation</em> 을 위해 사용할수도 있다. 컴파일러에서 변수 이름이 규칙에 맞는지 검사하거나, 사용자의 입력이 올바른 이메일인지 등등.</p>
+
+<p><em>regex</em> 는 대부분의 언어에서 라이브러리 형태로 사용할 수도 있다. 자바에서도 지원하는데</p>
+
+<pre><code class="java">import java.util.regex.Pattern;  
+import java.util.regex.Matcher
+
+String regex = args[0];  
+Pattern p = Pattern.compile(regex) // create NFA from RE  
+Matcher m = p.matcher(input)       // build NFA simulator
+
+while (m.find()) {  
+  do something using m.group()
+}
+</code></pre>
+
+<h4 id="algorithmiccomplexityattacks">Algorithmic complexity attacks</h4>
+
+<p>그리고 대부분의 구현(자바, 그렙, 펄을 포함해서)이 <em>performance</em> 를 보장하지 않는다고 한다.</p>
+
+<pre><code>java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaac             1.6 seconds  
+java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac           3.7 seconds  
+java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac         9.7 seconds  
+java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac      23.2 seconds  
+java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac    62.2 seconds  
+java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac 161.6 seconds  
+</code></pre>
+
+<p>스팸 필터기에 <code>spammer@x.......................................</code> 따위의 주소로 이메일을 보낸다거나.</p>
+
+<h4 id="backreferences">Back References</h4>
+
+<p><code>\1</code> 은 보통 바로 전에 매칭된 부분을 의미한다. 대부분의 언어에서 지원하긴 하는데</p>
+
+<blockquote>
+  <p>Pattern matching with back-references in intractable</p>
+</blockquote>
+
+<p>요것도 퍼포먼스 어택이 올 수 있다고 함.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p><em>language</em>, <em>abstract machine</em>, <em>non-deterministic</em> 등은 컴퓨터 과학의 중요한 이론적 토대가 된다.</p>
+
+<p>지금까지 공부한 알고리즘은 <em>machine code</em> 를 돌려주는 일종의 컴파일러라 볼 수 있다.</p>
+
+<ul>
+<li><strong>KMP:</strong> string -> DFA</li>
+</ul>
+
+<p>파서는 필요없고, <em>DFA simulator</em> 를 이용해 실행</p>
+
+<ul>
+<li><strong>Grep:</strong> regex -> NFA</li>
+</ul>
+
+<p><em>legal</em> 인지 확인할 파서가 필요하며 <em>NFA simulator</em> 를 이용</p>
+
+<ul>
+<li><strong>Javac:</strong> java langugage -> java byte code</li>
+</ul>
+
+<p>마찬가지로 파서가 필요하며 <em>JVM</em> 을 이용해 실행</p>
+
+<h3 id="reference">Reference</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
+(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
+(3) <a href='http://homepages.ius.edu/RWISMAN/C431/html/Chapter2.htm' >http://homepages.ius.edu/RWISMAN</a> <br />
+(4) <a href='http://math.stackexchange.com/questions/563829/difference-between-nfa-and-dfa' >Difference between NFA and DFA</a>  </p>]]></description><link>http://1ambda.github.io/regex-nfa/</link><guid isPermaLink="false">1ffd482b-3d2c-426f-9638-75ff1708d6c8</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[NFA]]></category><category><![CDATA[regex]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Dec 2014 01:10:54 GMT</pubDate></item><item><title><![CDATA[Maximum Flow]]></title><description><![CDATA[<p><img src='https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png'  alt="" /></p>
 
 <h3 id="mincut">Min Cut</h3>
 
@@ -8505,476 +8835,4 @@ winstwins
 (6) <a href='http://crsouza.blogspot.kr/2009/12/performing-discriminant-power-analysis.html' >Confusion matrix</a> <br />
 (7) <a href='http://en.wikipedia.org/wiki/Business_Process_Model_and_Notation' #mediaviewer/File:BPMN_gateway_types.png">Wikipedia - BPMN</a> <br />
 (8) <a href='http://tynerblain.com/blog/2006/07/27/bpmn-gateways/' >BPMN Gateway</a> <br />
-(9) <a href='http://www.ijmijournal.com/' >http://www.ijmijournal.com</a></p>]]></description><link>http://1ambda.github.io/process-mining-week3/</link><guid isPermaLink="false">43e49375-88bc-4ec0-aff0-93f098b34d10</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[BPMN]]></category><category><![CDATA[dependency graph]]></category><category><![CDATA[C-nets]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 10:44:29 GMT</pubDate></item><item><title><![CDATA[Intro to Computational Thinking and Data Science 4]]></title><description><![CDATA[<p>그래프는 네트워크를 표현하는 것 뿐만 아니라, <em>state</em> 를 표현할 수 있다.</p>
-
-<ul>
-<li>Nodes represent states of system</li>
-<li>Edges represent actions that cause a change of state</li>
-</ul>
-
-<p>그러면 그래프 문제는 </p>
-
-<ul>
-<li>Finding sequence of actions to convert system to desired state</li>
-</ul>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/8puzzle_example.svg/2000px-8puzzle_example.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/' >http://en.wikipedia.org</a>)</p>
-
-<p><em>8 puzzle</em> 도 이렇게 그래프 문제로 변환할 수 있다. 그런데, <code>9! = 362880</code> 의 <em>node</em> 와 노드당 <code>2~4</code> 개의 <em>edge</em> 를 가지고 있으므로 문제의 사이즈가 어마어마하게 커진다. 거의 백만개의 <em>edge</em> 를 가진다.</p>
-
-<h3 id="animplicitgraph">An Implicit Graph</h3>
-
-<p>그래서, 처음부터 모든 <em>state</em> 를 만들기 보다는 초기 상태로부터 <em>action</em> 을 취해가면서 <em>desired state</em> 를 찾는 방식으로 해결하자.</p>
-
-<p>퍼즐의 상태를 문자열로 표현하면</p>
-
-<pre><code class="python">class puzzle(object):  
-    def __init__(self, order):
-        self.label = order
-
-        for i in range(9):
-            if order[i] == '0':
-                self.spot = i
-                return None
-
-    def transition(self, to):
-        currentLabel = self.label
-        blank = self.spot
-        # current slot value which will be filled with blank
-        current = str(currentLabel[to]) 
-        nextLabel = ''
-
-        for i in range(9):
-            if i == to:
-                nextLabel += '0'
-            elif i == blank:
-                nextLabel += current
-            else:
-                nextLabel += str(currentLabel[i])
-
-        return puzzle(nextLabel)
-
-    def __str__(self):
-        return "{0} {1} {2}\n{3} {4} {5}\n{6} {7} {8}\n".format(self.label[0],
-                                                                self.label[1],
-                                                                self.label[2],
-                                                                self.label[3],
-                                                                self.label[4],
-                                                                self.label[5],
-                                                                self.label[6],
-                                                                self.label[7],
-                                                                self.label[8])
-</code></pre>
-
-<p>그리고 각 슬롯의 이동 가능한 방향을 딕셔너리로 만들면</p>
-
-<pre><code class="python">shiftDict = {}  
-shiftDict[0] = [1, 3]  
-shiftDict[1] = [0, 2, 4]  
-shiftDict[2] = [1, 5]  
-shiftDict[3] = [0, 4, 6]  
-shiftDict[4] = [1, 3, 5, 7]  
-shiftDict[5] = [2, 4, 8]  
-shiftDict[6] = [3, 7]  
-shiftDict[7] = [4, 6, 8]  
-shiftDict[8] = [5, 7]  
-</code></pre>
-
-<p>이제 <em>state</em> 를 변경해 나아가면서 그래프를 만들 수 있다 <em>state</em>, 즉 <em>node</em> 를 변경해 나아가면서 그래프를 탐색하는 방법은 2개가 있는데, <em>BFS, DFS</em> 다. 코드는 거의 유사하다. 스택을 쓰냐 큐를 쓰냐의 차이다.</p>
-
-<pre><code class="python">def notInPath(state, path):  
-    for s in path:
-        if s.label == state.label:
-            return False
-
-    return True
-
-
-def BFS(start, end, q=[]):  
-    initPath = [start]
-    q.append(initPath)
-
-    while len(q) != 0:
-        currentPath = q.pop(0)
-        lastState = currentPath[len(currentPath) - 1]
-
-        if lastState.label == end.label:
-            return currentPath
-
-        for s in shifts[lastState.spot]:
-            nextState = lastState.transition(s)
-
-            if notInPath(nextState, currentPath):
-                nextPath = currentPath + [nextState]
-                q.append(nextPath)
-
-    return None
-
-
-def DFS(start, end, stack=[]):  
-    initPath = [start]
-    stack.insert(0, initPath)
-
-    while len(stack) != 0:
-        currentPath = stack.pop(0)
-        lastState = currentPath[len(currentPath) - 1]
-
-        if lastState.label == end.label:
-            return currentPath
-
-        for s in shifts[lastState.spot]:
-            nextState = lastState.transition(s)
-
-            if notInPath(nextState, currentPath):
-                nextPath = currentPath + [nextState]
-                stack.insert(0, nextPath)
-
-    return None
-</code></pre>
-
-<p>테스트는</p>
-
-<pre><code class="python">def test():  
-    goal = puzzle('012345678')
-    test1 = puzzle('125638047')
-    answer = BFS(test1, goal)
-
-    for state in answer:
-        print state
-</code></pre>
-
-<p>비교해 보면 <em>BFS</em> 가 훨씬 빠르다.</p>
-
-<h3 id="maximumcliques">Maximum Cliques</h3>
-
-<blockquote>
-  <p>For some problems, finding sugraphs of a graph that are complete can be important</p>
-</blockquote>
-
-<p>여기서 <em>complete</em> 란 노드가 다른 노드 모두와 연결되어 있다는 뜻이다.</p>
-
-<ul>
-<li>Finding sets of people in a social network that all know each other</li>
-<li>Finin subjects in an infected population that all have had contact with one another</li>
-</ul>
-
-<p>두 번째 예제는 <em>complete subgraph</em> 를 찾는 것의 중요성을 잘 보여준다.</p>
-
-<p><em>clique</em> 는 communication networks, gene expression data 등에도 이용할 수 있다.</p>
-
-<h4 id="bruteforce">Brute Force</h4>
-
-<p><em>maximum clique</em> 문제를 <em>brute force</em> 로 풀려면, 가능한 모든 서브 그래프를 찾고, <em>clique</em> 인지 판별하면서 큰 사이즈의 <em>clique</em> 를 유지하면 된다.</p>
-
-<p>모든 서브 그래프를 찾을려면, <a href='http://1ambda.github.io/edx-600-2x-3/' >지난시간</a> 에 <em>knapsack problem</em> 을 풀 때 이용했던 <em>power set</em> 을 도입하면 된다.</p>
-
-<p><em>knapsack</em> 문제도 <em>brute force</em> 로 풀기 위해서 가능한 모든 집합을 구했었다. 후에는 <em>search space</em> 를 줄이기 위해 <em>decision tree</em> 를 도입하고, 반복 계산을 피하기 위해 <em>memoization</em> 이용했었다.</p>
-
-<p><em>clique</em> 문제도 마찬가지로 각 노드를 숫자로 표현할 수 있으므로 <code>n</code> 자리의 이진수를 만들어 <em>power set</em> 을 생성할 수 있다. 지난 시간에 이용했었던 대강의 로직은 </p>
-
-<pre><code class="python">count = 2 ** len(nodes)
-
-binStrs = []
-
-for i in range(count):  
-  binStrs.append(int2bin(i, len(nodes))
-
-powerSet = []
-
-for bs in binStrs:  
-  subGraph = []
-
-  for i range(len(bs)):
-    if bs[i] == '1':
-      subGraph.append(nodes[i])
-
-  powerSet.append(subGraph)
-
-return powerSet  
-</code></pre>
-
-<p>이번시간엔 재귀를 이용해서 <em>power set</em> 을 구해보자. 하스켈로 로직을 표현하면,</p>
-
-<pre><code class="haskell">powerset [] = [[]]  
-powerset (x:xs) = xs' ++ map (x:) xs'  
-  where xs' = powerset xs
-</code></pre>
-
-<p>따라서 파이선 코드는</p>
-
-<pre><code class="python">def powerSet(xs):  
-    if len(xs) == 0:
-        return [[]]
-
-    else:
-        # xs = head:tail
-        head = xs[0]
-        tail = xs[1:]
-
-        prev = powerSet(tail)
-        incl = map(lambda sub: sub + [head], prev)
-        return prev + incl
-</code></pre>
-
-<p>이걸 이용해 모든 <em>sub graph</em> 를 만들고, <em>clique</em> 인지 검사하는 함수를 만들면</p>
-
-<pre><code class="python">def powerGraph(graph):  
-    nodes = []
-
-    for n in graph.nodes:
-        nodes.append(n)
-
-    pSet = powerSet(nodes)
-    return pSet
-
-
-def isClique(graph, subGraph):  
-    for n in subGraph:
-        for m in subGraph:
-            if not m == n:
-                if n not in graph.childrenOf(m):
-                    return False
-
-    return True
-
-
-def maxClique(graph):  
-    maximum = None
-    maxLen = 0
-    subGraphs = powerGraph(graph)
-
-    for sub in subGraphs:
-        if isClique(graph, sub):
-            if len(sub) &gt; maxLen:
-                maximum = sub
-                maxLen = len(sub)
-
-    return maximum
-</code></pre>
-
-<p><a href='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/clique.py' >지난시간에 작성했던 Graph 코드</a> 는 여기로, </p>
-
-<p>테스트 코드는 </p>
-
-<pre><code class="python">def testGraph():  
-    nodes = []
-    for name in range(5):
-        nodes.append(Node(str(name)))
-    g = Graph()
-    for n in nodes:
-        g.addNode(n)
-    g.addEdge(Edge(nodes[0],nodes[1]))
-    g.addEdge(Edge(nodes[1],nodes[2]))
-    g.addEdge(Edge(nodes[2],nodes[0]))
-    g.addEdge(Edge(nodes[2],nodes[4]))
-    g.addEdge(Edge(nodes[4],nodes[3]))
-    return g
-
-
-trialGraph = testGraph()  
-myClique = maxClique(trialGraph)  
-</code></pre>
-
-<p><code>myClique</code> 를 출력하면, <em>node</em> 가 3개 나와야 한다.</p>
-
-<h3 id="machinelearning">Machine Learning</h3>
-
-<blockquote>
-  <p><strong>Automating automation</strong></p>
-  
-  <p>Computer programs can automatically follow rules. <br />
-  How do we determine these rules automatically?</p>
-  
-  <p><strong>ML fources on getting computers to program themselves</strong></p>
-  
-  <p>Let the data do the work. <br />
-  Automatically generate programs that create useful outputs from data</p>
-</blockquote>
-
-<p>전통적인 프로그래밍에선 <em>data</em> 와 <em>program</em> 을 넣고 <em>output</em> 을 기대했다면, </p>
-
-<p><em>machine learning</em> 에서는 <em>data, output</em>  을 넣고 <em>program</em> 을 만든다. 이 프로그램은 다음번에 <em>data</em> 가 들어왔을 때 <em>output</em> 을 만들어 낸다. 다시 말해서 머신러닝은 일종의 <em>generalization</em> 이다.</p>
-
-<blockquote>
-  <p><strong>Supervised</strong></p>
-  
-  <p>Given a set of feature/label pairs, find a rule that predicts the label associated with a previously unseen input</p>
-  
-  <p><strong>Unsupervied</strong></p>
-  
-  <p>Given a set of feature vectors (without labels), group them into "natural clusters"</p>
-</blockquote>
-
-<p>예를 들어 다음은 <em>supervised learning</em> 이다.</p>
-
-<blockquote>
-  <p>A group of 1000 students are asked for a sample of their handwriting. Researchers make pairs of (handwritten text, typed text). Given a new handwriting sample from a new student, we want to determine what the typed version of the handwriting sample would be.</p>
-</blockquote>
-
-<h3 id="clustering">Clustering</h3>
-
-<ul>
-<li>Low intra-cluster dissimilarity</li>
-<li>High inter-cluster dissimilarity</li>
-</ul>
-
-<p>간단하긴 한데, 연산 비용이 비싸다. <em>k-means</em> 와 <em>hierarchical clustering</em> 을 살펴보자.</p>
-
-<h4 id="hierarchicalclustering">Hierarchical Clustering</h4>
-
-<p>(1) Start by assigning each item to a cluster, so that if you have <code>N</code> items, you now have <code>N</code> clusters, each containing just one item.</p>
-
-<p>(2) Find the closest (most similar) pair of clusters and merge them into a single cluster, so that now you have one cluster fewer.</p>
-
-<p>(3) Continue the process until all items are clustered into a single cluster of size <code>N</code></p>
-
-<p><img src='http://www.alanfielding.co.uk/multivar/images/dend5.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://www.alanfielding.co.uk/' >http://www.alanfielding.co.uk</a>)</p>
-
-<blockquote>
-  <p><strong>Linkage Criteria</strong></p>
-  
-  <p>in <strong>single-linkage</strong> clustering (also called the <em>connectedness</em> or <em>minimum</em> method), we consider the distance between one cluster and another cluster to be equal to the shortest distance from any member of one cluster to any member of th other cluster</p>
-  
-  <p>in <strong>complete-linkage</strong> clustering (also called the <em>diameter</em> or <em>maximum</em> method), we consider the distance between one cluster and another cluster to be equal to th greatest distance from any member of one cluster to any member of the other cluster</p>
-  
-  <p>in <strong>average-linkage</strong>, we consider the distance between one cluster and another cluster to be equal to th average distance from any member of one cluster to any member of the other cluster. A slight variant of this uses the median instead of the mean</p>
-</blockquote>
-
-<p><em>single-linkage</em> 클러스터 간 거리를 두 클러스터 사이의 최소 거리로, <em>complete-linkage</em> 는 최대 거리로, <em>average-linkage</em> 는 평균 거리로 본다.</p>
-
-<pre><code class="python">    def singleLinkageDist(self, other):
-        """ Returns the float distance between the points that 
-        are closest to each other, where one point is from 
-        self and the other point is from other. Uses the 
-        Euclidean dist between 2 points, defined in Point."""
-        minDist = float("inf")
-        for p1 in self.points:
-            for p2 in other.points:
-                dist = p1.distance(p2)
-                if dist &lt; minDist:
-                    minDist = dist
-
-        return minDist
-
-    def maxLinkageDist(self, other):
-        """ Returns the float distance between the points that 
-        are farthest from each other, where one point is from 
-        self and the other point is from other. Uses the 
-        Euclidean dist between 2 points, defined in Point."""
-        maxDist = float(0)
-        for p1 in self.points:
-            for p2 in other.points:
-                dist = p1.distance(p2)
-                if dist &gt; maxDist:
-                    maxDist = dist
-
-        return maxDist
-
-    def averageLinkageDist(self, other):
-        """ Returns the float average (mean) distance between all 
-        pairs of points, where one point is from self and the 
-        other point is from other. Uses the Euclidean dist 
-        between 2 points, defined in Point."""
-        dists = []
-        for p1 in self.points:
-            for p2 in other.points:
-                dists.append(p2.distance(p1))
-
-        return sum(dists) / float(len(dists))
-</code></pre>
-
-<h3 id="kmeansclustering">K-Means Clustering</h3>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Csum_%7Bc%3D1%7D%5EK%20%5Csum_%7Bx%5C%20%5Cin%5C%20c%7D%20%5Cleft%20%5C%7C%20x%20-%20%5Cmu_c%20%5Cright%20%5C%7C%5E2'  alt="" /></p>
-
-<ul>
-<li>Final result can depend upon initial centroids</li>
-<li>Greedy algorihm can find different local optima</li>
-<li>Choosing the <em>wrong</em> <code>K</code> can lead to nonsense</li>
-</ul>
-
-<p>따라서</p>
-
-<ul>
-<li>Use priori knowledge about application domain</li>
-<li>Try multiple times</li>
-</ul>
-
-<p><em>hierarchical</em> 과 비교하면</p>
-
-<blockquote>
-  <p>Hierarchical looks at different numbers of clusters From 1 to n</p>
-  
-  <p>K-means looks at many ways of createing k clusters.</p>
-</blockquote>
-
-<p><em>hierarchical</em> 은 좀 느린편이고 <em>deterministic</em> 이다. 반면 <em>K-means</em> 는 비교적 빠르고, <em>stochastic</em> 이다.</p>
-
-<p>아래는 <em>K-means</em> 로 분류하기 어려운 몇 가지 예제들</p>
-
-<p><img src='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/k1.png'  alt="" /></p>
-
-<p><img src='https://courses.edx.org/c4x/MITx/6.00.2_2x/asset/k3.png'  alt="" /></p>
-
-<p align="center">(<a href='https://courses.edx.org/c4x/MITx/6.00.2_2x' >https://courses.edx.org/c4x/MITx/6.00.2_2x</a>)</p>
-
-<h3 id="scaling">Scaling</h3>
-
-<p><em>odd ratio</em> 는 <em>acutal / expected</em> 값인데, 1에 가까우면 클러스터링이 랜덤에 비해 별로 나을게 없다는 소리다. (좋은 클러스터링이 아니란 뜻)</p>
-
-<p>강의에서 나온 환자 예제는 이 값이 1에 근접하는데, 이는 <em>HR, age</em> 값이 단위가 커서 이 <em>feature</em> 에 영향을 많이 받기 때문이다.</p>
-
-<p>따라서 평균 0, 표준편차 1을 가지도록 모든 <em>feature</em> 를 스케일링 하고 다시 돌리면  <em>odd ratio</em> <code>0.18, 1.45</code> 의 두 클러스터를 얻을 수 있다. 하나는 <em>heart attack</em> 이 잘 안올 환자, 다른 하나는 위험한 환자.</p>
-
-<p>아래 예제는 스케일링 하면 안되는 경우</p>
-
-<blockquote>
-  <p>The percent concentration of a virus in a random sampling of healthy and unhealthy people.</p>
-  
-  <p>The angle of refraction of light (degree that light bends) observed when entering water vs. glass vs a diamond.</p>
-</blockquote>
-
-<h3 id="statisticalfallacies">Statistical Fallacies</h3>
-
-<p>세상에는 3 종류의 거짓말이 있다고 한다.</p>
-
-<ul>
-<li>LIES</li>
-<li>DAMNED LIES</li>
-<li><strong>STATISTICS</strong></li>
-</ul>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/638px-Anscombe%27s_quartet_3.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet'>http://en.wikipedia.org/wiki/Anscombe's_quartet</a>)</p>
-
-<p>보면 데이터가 정말 다르게 분포해 있지만, <em>mean, variance, correlation, linear regression</em> 이 동일하다.</p>
-
-<p>흔한 오류 중 하나로, <em>correlation => causation</em> 도 있다. </p>
-
-<p>학교가 문을 여는 시즌에, 독감이 많이 유행한다고 해서 상관 관계가 있다고 단정짓긴 어렵다. 어쩌면 다른 요인이 있을지도 모른다.</p>
-
-<p><em>non response bias</em> 도 생각해봐야 한다. 예를 들어 전화조사에서, 응답자와 비응답자의 정치 성향이 다를 수도 있다는 것이다.</p>
-
-<h3 id="dataenhancement">Data Enhancement</h3>
-
-<p><em>texas sharpshotter fallacy (텍사스 명사수의 오류)</em> 란 것도 있다. <a href='http://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy' >위키</a> 에서 인용하면</p>
-
-<blockquote>
-  <p>The Texas sharpshooter fallacy is an informal fallacy which is committed when differences in data are ignored, but similarities are stressed.</p>
-</blockquote>
-
-<p>텍사스의 총잡이가 헛간에 총을 마구마구 쏜 후, 밀집한 지역 중심으로 원을 그리면! 그 총잡이는 명사수처럼 보이게 된다는 것에서 유래한 오류다.</p>
-
-<p>바꿔 말하면, 우연도 필연으로 해석한다는 것이다. (존재하지도 않는 패턴을 찾으려고 하는것에 비유하기도 함)</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br />
-(2) <a href='http://en.wikipedia.org/wiki/Heuristic_function' >Wikipedia: Huristic Function</a> <br />
-(3) <a href='http://www.alanfielding.co.uk/multivar/dend.htm' >http://www.alanfielding.co.uk</a> <br />
-(4) <a href='http://en.wikipedia.org/wiki/Anscombe' s_quartet">Wikipedia - Anscombe's quartet</a></p>]]></description><link>http://1ambda.github.io/edx-600-2x-4/</link><guid isPermaLink="false">a07909c0-49d7-4a0a-9dd8-5e52550b331f</guid><category><![CDATA[edx]]></category><category><![CDATA[python]]></category><category><![CDATA[graph]]></category><category><![CDATA[hierarchical clustering]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 03:23:13 GMT</pubDate></item></channel></rss>
+(9) <a href='http://www.ijmijournal.com/' >http://www.ijmijournal.com</a></p>]]></description><link>http://1ambda.github.io/process-mining-week3/</link><guid isPermaLink="false">43e49375-88bc-4ec0-aff0-93f098b34d10</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[BPMN]]></category><category><![CDATA[dependency graph]]></category><category><![CDATA[C-nets]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 09 Dec 2014 10:44:29 GMT</pubDate></item></channel></rss>
