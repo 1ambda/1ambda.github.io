@@ -15,7 +15,7 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Regular Expression, NFA">
-  <meta name="twitter:description" content=" Regular Expression 이전까지 배웠던 패턴매칭 기법들은 모두 하나의 결과만을 돌려줬었다. (e.g substring search) 주어진 패턴에 대해서 하나의 결과가 아니라 일치하는 집합 을 원한다면 어떻게 해야할까?  예를 들어 유전자 분석에서는 Fragile X syndrome 은 GCG(CGG|AGG)*CTG  패턴에서 더 많이 반복될수록 fragile x 신드롬일 확률이 높다. 이 경우에는 하나가">
+  <meta name="twitter:description" content=" Regular Expression 이전까지 배웠던 패턴매칭 기법들은 모두 단일 패턴만을 찾았었. (e.g substring search) 일치하는 집합 을 원한다면 어떻게 해야할까?  예를 들어 유전자 분석에서는 Fragile X syndrome 은 GCG(CGG|AGG)*CTG  패턴에서 더 많이 반복될수록 fragile x 신드롬일 확률이 높다. 이 경우에는 하나가 아니라 몇번 일치하는지가 중요한 결과값이 된다">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/regex-nfa/">
@@ -113,11 +113,11 @@
 
 <h3 id="regularexpression">Regular Expression</h3>
 
-<p>이전까지 배웠던 패턴매칭 기법들은 모두 하나의 결과만을 돌려줬었다. (e.g <em>substring search</em>) 주어진 패턴에 대해서 하나의 결과가 아니라 일치하는 <strong>집합</strong> 을 원한다면 어떻게 해야할까? </p>
+<p>이전까지 배웠던 패턴매칭 기법들은 모두 단일 패턴만을 찾았었. (e.g <em>substring search</em>) 일치하는 <strong>집합</strong> 을 원한다면 어떻게 해야할까? </p>
 
 <p>예를 들어 유전자 분석에서는 <em>Fragile X syndrome</em> 은 <code>GCG(CGG|AGG)*CTG</code>  패턴에서 더 많이 반복될수록 <em>fragile x</em> 신드롬일 확률이 높다. 이 경우에는 하나가 아니라 몇번 일치하는지가 중요한 결과값이 된다.</p>
 
-<p>따라서 단순한 패턴이 아니라 <strong>집합</strong> 으로 지정된 패턴을 찾아낼 수 있는 알고리즘이 필요하다.</p>
+<p>따라서 문자열 같은 단일 패턴이 아니라 <strong>집합</strong> 으로 지정된 패턴을 찾아낼 수 있는 알고리즘이 필요하다.</p>
 
 <p><em>regex</em> 의 응용은</p>
 
