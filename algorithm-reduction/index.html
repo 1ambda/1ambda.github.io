@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Problem Reduction</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Problem Reduction">
+  <meta name="twitter:description" content=" 앞으로 남은 3챕터에서 배울 내용은 reduction, linear programming, intractability 이다. 따라서 지금까지의 관심에서 좀 벗어나  from individual problems to problem-solving models from linear / quadratic to polynomial / exponential scale from details of implementation to conceptual framework Intro to Reduction reduction 챕터에서는 다음의 내용을 다룬다. design algorithms  estabilish lower bounds classify problems">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/algorithm-reduction/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/algorithm-reduction/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=965587f762"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Functional Programming</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-algorithm tag-coursera tag-reduction tag-convex-hull">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="../tag/reduction">reduction</a>, <a href="../tag/convex-hull">convex hull</a></h5>
+      <h1 class="margin_bottom_medium">Problem Reduction</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-30">Tuesday, December 30, 2014</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/algorithm-reduction/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><img src="https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png" alt="" /></p>
+
+<p>앞으로 남은 3챕터에서 배울 내용은</p>
+
+<p><strong>reduction</strong>, <strong>linear programming</strong>, <strong>intractability</strong> 이다.</p>
+
+<p>따라서 지금까지의 관심에서 좀 벗어나 </p>
+
+<ul>
+<li>from individual problems to <em>problem-solving models</em></li>
+<li>from linear / quadratic to <em>polynomial / exponential scale</em></li>
+<li>from details of implementation to <em>conceptual framework</em></li>
+</ul>
+
+<h3 id="introtoreduction">Intro to Reduction</h3>
+
+<p><em>reduction</em> 챕터에서는 다음의 내용을 다룬다.</p>
+
+<ul>
+<li>design algorithms </li>
+<li>estabilish lower bounds</li>
+<li>classify problems</li>
+</ul>
+
+<p><em>reduction</em> 의 정의부터 보면</p>
+
+<blockquote>
+  <p>Problem <code>X</code> <strong>reduces to</strong> problem <code>Y</code> if you can use an algorithm that solves <code>Y</code> to help solve <code>X</code></p>
+</blockquote>
+
+<p>따라서 <code>X</code> 를 푸는데 드는 비용은 <em>reduction</em> 과, <code>Y</code> 를 해결하는 비용의 합이다.</p>
+
+<p><em>median</em> 을 찾는 문제의 경우, 정렬문제로 변환할 수 있다. 이 때의 비용은 <code>N logN + 1</code>인데, <em>reduction</em> (<em>post or preprocessing</em>) 비용이 <code>1</code> 이다.</p>
+
+<p>중복 원소를 제거하는 문제의 경우 정렬뒤, 인접한 원소간 비교하여 제거하는 문제로 치환할 수 있다. <code>N logN + N</code> 의 비용으로, 이 경우 <em>reduction</em> 비용은 <code>N</code> 이다.</p>
+
+<p><em>min cut</em> 의 경우 <em>max flow</em> 알고리즘을 이용해서 풀 수 있고, <em>reduction</em> 하는데 <em>DFS</em> 또는 <em>BFS</em> 로 한번 돌려야 하므로, 치환 비용은 <code>V + E</code> 다.</p>
+
+<p>이외에도 다양한 <em>reduction</em> 예제가 있다.</p>
+
+<ul>
+<li>3-collinear -> sorting</li>
+<li>CPM -> topological sorting</li>
+<li>arbitrage -> shortest path (벨만포드)</li>
+<li>Burrows-Wheeler transform -> suffix sort</li>
+</ul>
+
+<p>따라서 <code>Y</code> 문제를 풀 수 있을때, <code>X</code> 에 적용 가능한지가 문제가 된다.</p>
+
+<h3 id="convexhull">Convex hull</h3>
+
+<p><img src="http://cgm.cs.mcgill.ca/~orm/images/mergech.gif" alt="" /></p>
+
+<p align="center">(<a href='http://cgm.cs.mcgill.ca/~orm'>http://cgm.cs.mcgill.ca/~orm</a>)</p>
+
+<p><em>convex hull</em> 은 <em>sorting</em> 으로 바꿀 수 있다.</p>
+
+<blockquote>
+  <p><strong>convex hull:</strong> Given <code>N</code> points in the plane, identify the extream points of the convex hull (in counterclockwise order)</p>
+  
+  <p><strong>sorting:</strong> Given <code>N</code> distinct integers, rearrange them in ascending order</p>
+</blockquote>
+
+<p><em>reduction</em> 가능한지는 <em>Graham scan algorithm</em> 으로 증명된다. 비용은 <code>N logN + N</code> 으로, <em>reduction</em> 에 <code>N</code> 만큼의 비용이 든다.</p>
+
+<h4 id="grahamscan">Graham Scan</h4>
+
+<p>먼저 <em>cross product (외적)</em> 에 대해 잠깐 보고가자. 내적은 스칼라지만, 외적은 또 다른 벡터를 돌려준다. 두 벡터에 대해 수직인 벡터를 돌려주고, 그 크기는 두 벡터로 만들어지는 평행사변형의 넓이다.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Cross_product_parallelogram.svg/220px-Cross_product_parallelogram.svg.png" alt="" /></p>
+
+<p>외적은 벡터를 돌려주고, 그 방향이 <code>sin</code> 에 기반하기 때문에 두 벡터 <code>a, b</code> 의 외적 <code>a x b</code> 의 값에 따라 <code>a</code> 를 기준으로 <code>b</code> 가 좌측에 있는지, 우측에 있는지 알 수 있다. 위 그림에서 <code>b</code> 가 아래쪽을 향할때 <code>a x b</code> 의 방향이 어디가 될지 생각해 보자.</p>
+
+<p><img src="https://lh3.googleusercontent.com/MIO3c8kg5MTNkze8w5Y6AGfDNWF9Vx4EVvlui8S5grVNWbgXBcpIch7E4R2DRr4B4HSlbLOHSBy39UMHLhTOqLkbnjQMCqtN-VBYkcEfeOEDjAyoCFzMllfpUHUicltzfw" alt="" />
+<img src="https://lh6.googleusercontent.com/aaQEU_goK5dBbB_sct7YxtFafk5968K4yDH5nssYy2RSrieKv0yl-FSQbwgxKgc6sRyxum057PTPW9CfJ83Hr3B3aR4yXWTkaQj3mQEPu35-mhB3epOF1IrFCqsBVKiK3g" alt="" /></p>
+
+<p align="center">(<a href='http://blog.secmem.org/554'>http://blog.secmem.org/554</a>)</p>
+
+<p>이제 <em>graham scan</em> 알고리즘을 보면</p>
+
+<ul>
+<li>choose point <code>p</code> with smallest y-coordinate</li>
+<li><strong>sort</strong> points by polar angle with <code>p</code> to get simple polygon</li>
+<li>consider points in order, and discard those that would create a clockwise turn</li>
+</ul>
+
+<p><em>polar angle</em> 은</p>
+
+<p><img src="http://cf.ydcdn.net/1.0.1.26/images/main/polar%20coordinate.jpg" alt="" /></p>
+
+<p align="center">(<a href='http://www.yourdictionary.com'>http://www.yourdictionary.com</a>)</p>
+
+<p>그리고 <em>clockwise turn(시계방향)</em> 인지 아닌지 외적으로 구할 수 있다. 외적값이 음수면 시계방향이다. </p>
+
+<p>따라서 최초의 다각형에서, 선분을 순회하면서 현재 선분과 다음 점을 외적해서 반시계 방향인 점들만 택하면 된다. 그러므로 정렬 + 순회이므로 <em>linear time</em> 이다.</p>
+
+<p><a href="http://www.hanbit.co.kr/network/view.html?bi_id=1462">더 읽을거리: Gift wrapping</a></p>
+
+<h4 id="shortestpath">Shortest Path</h4>
+
+<p>(non-negative weights) <em>undirected graph</em> 의 최단거리도 <em>directed graph</em> 로 치환해서 풀 수 있다. 각 <em>edge</em> 에 양쪽으로 모두 방향을 추가하면 된다. 러닝타임은 <code>E logV + E</code>, 여기서 <code>E</code> 는 <em>reduction cost</em> 다.</p>
+
+<blockquote>
+  <p>Can still solve shortest paths problem in undirected graphs (if no negative cycles), but need omre sophistcated techniques</p>
+</blockquote>
+
+<h4 id="lineartimereductions">Linear-time reductions</h4>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/1.png" alt="" /></p>
+
+<h3 id="establishinglowerbounds">Establishing Lower Bounds</h3>
+
+<p><em>comparison-sorting</em> 알고리즘의 <em>lower bound</em> 는 <code>n log n</code> 임을 이전 강의에서 봤었다. <a href="http://1ambda.github.io/randomized-selection/#lowerboundforsorting">Lower bound for sorting</a> 참조</p>
+
+<p>일반적으로 어떤 문제의 <em>lower bound</em> 를 알긴 상당히 난해한데, <em>reduction</em> 을 이용해서 어떤 문제가 <em>sorting</em> 처럼 이미 <em>lower bound</em> 가 알려진 문제로 변경할 수 있다면 <em>lower bound</em> 를 알 수 있다. (<em>reduction cost</em> 가 그리 크지 않다고 한다면)</p>
+
+<h4 id="lineartimereductions">Linear-time reductions</h4>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/3.png" alt="" title="" /> </p>
+
+<blockquote>
+  <p>Problem <code>X</code> <strong>linear-time reduces</strong> to problem <code>Y</code> if <code>X</code> can be solved with</p>
+  
+  <ul>
+  <li>Linear number of standard computational steps</li>
+  <li>Constant number of calls to <code>Y</code></li>
+  </ul>
+</blockquote>
+
+<p>따라서 문제 <code>X</code> 를 <code>Y</code> 로 <em>linear-time reduction</em> 이 가능하다면 같은 <em>lower bound</em> 를 적용할 수 있다. <code>X</code> 가 <code>k</code> 시간이 걸린다면, <code>Y</code> 도 그러하다는 것이다.</p>
+
+<p>그리고 <code>Y</code> 를 더 빨리 풀 수 있는 기법이 개발되면 <code>X</code> 에도 적용 가능하다는 뜻이다.</p>
+
+<h4 id="lowerboundforconvexhull">Lower bound for convex hull</h4>
+
+<blockquote>
+  <p><strong>Proposition:</strong> in quadratic decision tree model (allows linear or quadratic tests), any algorithms for sorting <code>N</code> integers requires <code>Ω(N logN)</code> steps</p>
+  
+  <p><strong>Proposition:</strong> sorting linear-time reduces to convex hull. So if I can solve convex hull efficiently, I can sort efficiently</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/2.png" alt="" title="" /> 
+이미지를 잘 보면 <em>convex hull</em> 이 <code>y = x^2</code> 선 위에 있다. 그리고 이 위에 있는 모든 점들이 정렬된 순서인걸 볼 수 있다. 그리고 정렬 대상이 2차원 좌표긴 하지만 <em>quadratic decision tree model</em> 내에 있으므로 정렬 문제로 <em>linear-time reduction</em> 이 가능하다.</p>
+
+<blockquote>
+  <p><strong>Implication:</strong> Any <em>ccw-based</em> convex hull algorithm requires <code>Ω(N logN)</code> ops (linear or quadratic tests)</p>
+</blockquote>
+
+<p>이외에도</p>
+
+<blockquote>
+  <ul>
+  <li><p>Element distinctness linear-time reduces to finding the mode because if the most frequent integer occurs more than once, then there is a duplicated integer.</p></li>
+  <li><p>Closest pair linear-time reduces to element distinctness because the distance between the closest pair is zero if and only if there is a duplicated integer.</p></li>
+  </ul>
+</blockquote>
+
+<p>두 원소가 같을때만 제거하므로, 위의 문제들로 <em>linear-time reduction</em> 이 가능하다.</p>
+
+<h3 id="classifyingproblems">Classifying Problems</h3>
+
+<p>두 문제 <code>X, Y</code> 가 복잡도가 같음을 보이고 싶다면</p>
+
+<ul>
+<li>show that <code>X</code> <em>linear-time reduces</em> to <code>Y</code></li>
+<li>show that <code>Y</code> <em>linear-time reduces</em> to <code>X</code></li>
+</ul>
+
+<p>그러면 <code>X</code>, <code>Y</code> 가 같은 복잡도를 가지고 있다고 말할 수 있다. 심지어 복잡도를 모름에도.</p>
+
+<p>그리고 서로 <em>reduction</em> 이 가능하므로 한 문제에 대해 빠른 알고리즘을 개발해서, 다른 곳으로 적용이 가능하다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/4.jpg" alt="" title="" /> </p>
+
+<ul>
+<li>use exact algorithm for tractable problems</li>
+<li>use heuristics for intractable problems</li>
+</ul>
+
+<h3 id="reference">Reference</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br />
+(3) <a href="https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png">xkcd image</a> <br />
+(4) <a href="http://cgm.cs.mcgill.ca/~orm/mergech.html">Convex hull image</a> <br />
+(5) <a href="http://ghebook.blogspot.kr/2010/07/vector.html">전파거북이 - 좌표계 기반 벡터</a> <br />
+(6) <a href="http://blog.secmem.org/554">소프트웨멤버십 - Convex hull</a> <br />
+(7) <a href="http://www.yourdictionary.com/polar-coordinate">Polar angle image</a> <br />
+(8) <a href="http://web.cs.dal.ca/~mhe/csci3110/handouts/lecture9.htm">sorting - convex hull image</a>  </p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '93';
+  var disqus_url = 'http://1ambda.github.io/algorithm-reduction/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>
