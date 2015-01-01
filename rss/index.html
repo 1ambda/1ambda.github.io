@@ -1,5 +1,623 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 30 Dec 2014 12:51:54 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Problem Reduction]]></title><description><![CDATA[<p><img src='https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 01 Jan 2015 13:38:12 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Intractability]]></title><description><![CDATA[<p><img src='http://simonsoftware.se/xkcdsw/comics/np_complete.png'  alt="" /></p>
+
+<ul>
+<li>What is a general-purpose computer?</li>
+<li>Are there limits on the power of digital computers?</li>
+<li>Are there limits on the power of machines we can build?</li>
+</ul>
+
+<p>컴퓨터 과학자들이 <em>computation</em> 에 관해 질문해 온 것들이다. 이 문제에 답하기 위해 <em>computation model</em> 을 좀 살펴보자.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WXdJalozUVRNd1lUTTBJV0xqSlRNNDBpTmpsek10TVdaM0VUTHpVRE1tWkRPbVoyTHdRVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>긴 테이프가 있고, 기계는 테이프를 하나씩 읽어 <code>0</code>인지 <code>1</code> 인지 판별한다. 여기서 읽는것 뿐만 아니라 출력까지 가능하면 <em>turing machine</em> 이 된다. 일종의 <em>universal computation model</em> 이다.</p>
+
+<p><img src='http://physics.kenyon.edu/coolphys/thrmcmp/turing.jpg'  alt="" /></p>
+
+<p align="center">(<a href='http://physics.kenyon.edu/' >http://physics.kenyon.edu</a>)</p>
+
+<p>근데 놀랍게도 이것보다 더 진보한 연산 모델이 있느냐? 라는 질문에 대해 <strong>없음</strong> 이란 연구 결과가 나왔다고 한다.</p>
+
+<blockquote>
+  <p><strong>Church-Turing thesis:</strong></p>
+  
+  <p>Turing machines can compute any function that can be computed by a physically harnessable process of the natural world.</p>
+</blockquote>
+
+<p>여기서 <em>thesis</em> 인 이유는 증명이 아니기 때문이다. <em>mathmatical theorem (정리)</em> 가 아니다. 결국 이것이 의미하는 바는</p>
+
+<ul>
+<li>No need to seek more powerful machines or languages</li>
+<li>Enables rigorous study of computation (in this universe)</li>
+<li>Turing machine is a simple and universal model of computation</li>
+</ul>
+
+<p><em>Church-Turing thesis</em> 에 대해 80 년동안이나 반례가 발견되지 않았다. 그리고 수 많은 <em>computation model</em> 이 발견되었지만 모두 <em>turing machine</em> 과 동일한 것으로 밝혀졌다. (lambda caculus, URM, SKI 등)</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWWtOR1owa1ROMFkyTjVnVEx6WWpaNTB5TWxWek10VVRPaFZXTDRVek16Z1RPd1UyTHlRVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>일반적으로 <em>useful algorithm</em> 이란 모든종류의 입력 에 대해 <em>polynomial time</em> <code>aN^b</code> 시간 내에 풀 수 있는 것을 <em>useful algorithm</em> 이라 말한다. </p>
+
+<p><em>polynomial time</em> 알고리즘은 대부분 작은 <code>a, b</code> 를 가지기 때문에 다양한 문제로 적용하는것도 가능하다. 그러나 <code>a, b</code> 가 큰 경우 풀수 없는것과 마찬가지 일때도 있다.</p>
+
+<blockquote>
+  <p>Exponential growth dwarfs technological change</p>
+</blockquote>
+
+<p>유용하지 않은 알고리즘의 예로, <code>N</code> 지점에 대한 <em>TSP</em> 는 <em>brute force</em> 를 이용하면 <code>N!</code> 이다.</p>
+
+<p>얼마나 유용하지 않은가를 좀 더 생각해보자. 만들 수 있는 가장 큰 병렬 슈퍼컴퓨터를 가정 해보면</p>
+
+<ul>
+<li>Suppose you have a giant parallel computing device</li>
+<li>With as many processors as eletron in the universe</li>
+<li>And each processor has power of today's supercomputers</li>
+<li>ANd each processor works for the life of the universe</li>
+</ul>
+
+<p>1000 도시의 <em>TSP</em> 를 <em>brute force</em> 로 풀려면, 이 병렬 슈퍼컴퓨터를 우주의 일생동안 돌려도 불가능하다.</p>
+
+<p><code>1000! &gt; 10^1000 &gt; 10^79 * 10^13 * 10^17</code></p>
+
+<p>이런 이유에서 어떤 문제가 <em>polynomial time</em> 내에 풀 수 없으면 <em>intractable</em> 하다고 말한다.</p>
+
+<p>결국 우리가 풀 수 있는 문제는 <em>poly-time algorithm</em> 이 있는 경우이며, 어떤 문제가 이런 <em>poly-time algorithm</em> 을 가질까? 그건 쉽지 않다. 연구중이라고 함.</p>
+
+<p>연구된 바로는 두 종류의 문제가 <em>exponential time</em> 일 것으로 본다.</p>
+
+<ul>
+<li>Given a constant-size program, does it half it at most K steps? (input size = <code>c + lgK</code>)</li>
+<li>Given <code>N</code>-by-<code>N</code> checkers board position, can the first player foce a win?</li>
+</ul>
+
+<h3 id="fourfundamentalproblems">Four fundamental problems</h3>
+
+<p>(1) <strong>LSOLVE:</strong> Given a system of <strong>linear equations</strong>, find a solution</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3hVR1ppRkRaeFlETmhaV0x3TVdPaTF5TW1Sek10Z1ROMFlUTG1GVE16UVdZbUYyTDJRVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>가우시안 소거법으로 <em>N-by-N</em> 시스템에서 <code>N^3</code> 시간 안에 해결된다.</p>
+
+<p>(2) <strong>LP:</strong> Given a system of <strong>linear inequalities</strong>, find a solution</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWjRFbVl4STJZNWtET2pGV0xsUkRNaTFDTmpGek10a1RZbFZXTDNrek5sWlRZd1l6TDRRVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p><em>Ellipsoid</em> 알고리즘을 이용하면 <em>poly-time</em></p>
+
+<p>(3) <strong>ILP:</strong> Given a system of <strong>linear inequalties</strong>, find <code>0-1</code> solution</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWjFNRE4yWVdNaFZUWnpRV0xrSnpZaTF5TXprek10WUdOaEpUTDRRak5sZGpObGx6THdVVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>no <em>poly-time</em> algorithm known. 있을거 같긴 한데 모른다고 함</p>
+
+<p>(4) <strong>SAT:</strong> Given a system of <strong>boolean equations</strong>, find a binary solution</p>
+
+<p>no <em>poly-time</em> algorithm known 이것도 있을거 같긴 한데 모른다고 함</p>
+
+<h3 id="searchproblems">Search Problems</h3>
+
+<blockquote>
+  <p>Given an instance <code>I</code> of a problem, find a solution <code>S</code> or report none exists</p>
+</blockquote>
+
+<p>답이 있거나, 없음을 말해줘야 하는데 이를 위해서 효율적으로 (<em>poly-time</em>) <code>S</code> 가 정답인지 검사할 수 있어야 한다.</p>
+
+<p>위에서 본 <em>LSOLVE</em>, <em>LP</em>, <em>ILP</em>, <em>SAT</em> 문제 같은 경우 정답이 있으면 대입해서 <em>poly-time</em> 내에 검증할 수 있으므로 <em>search problem</em> 이다.</p>
+
+<p><em>factor problem</em> 도 <em>search problem</em> 이다. 주어진 <code>n</code> 비트 정수에 대해서, <em>nontrivial factor</em> 인지 아닌지는 나눠보면 되니까.</p>
+
+<p>즉 <em>search problem</em> 에서는 답을 누군가 제공할때 그것이 답인지 아닌지를 <em>poly-time</em> 으로 검사할수 있냐 없냐가 중요하다.</p>
+
+<h3 id="np">NP</h3>
+
+<ul>
+<li><strong>NP:</strong> is the class of all search problems. (class definition limits <strong>NP</strong> to yes-no problem)</li>
+</ul>
+
+<p>앞에서 본 <em>LSOLVE</em>, <em>LP</em>, <em>ILP</em>, <em>SAT</em>, <em>FACTOR</em> 모두 <strong>NP</strong> 다.</p>
+
+<ul>
+<li><strong>P:</strong> is the class of search problems solvable in <em>poly-time</em></li>
+</ul>
+
+<p><em>LSOLVE</em>, <em>LP</em>, <em>SORT</em>, <em>STCONN</em> 의 문제는 모두 <strong>P</strong> 다.</p>
+
+<p>즉 답을 <em>poly-time</em> 내에 검증이 가능하면 <strong>NP</strong> 고, 거기에 답을 <em>poly-time</em> 내에 찾는것이 가능하면 <strong>P</strong> 란 이야기. <strong>P</strong> 가 중요한 이유는, 현실적으로 계산 가능한 문제이기 때문이다. </p>
+
+<p>이론적으로는 <code>1010401 * N ^(10^23)</code> 도 계산 가능하다고 본다. <del>음!?!</del></p>
+
+<h3 id="nondeterminism">Nondeterminism</h3>
+
+<blockquote>
+  <p>Nondeterministic machine can <strong>guess</strong> the desired solution</p>
+</blockquote>
+
+<p><em>regex</em> 의 패턴매칭을 구현할때 했었던 <em>NFA</em> 처럼 일종의 <em>nondeterministic machine</em> 이 있다 하고, 이 기계가 답을 찾아준다고 하자. 예를 들면 이런 느낌이다.</p>
+
+<pre><code class="java">int[] a = new int[N];  
+</code></pre>
+
+<p>자바에선 <code>0</code> 으로 초기화 되는데, <em>nondeterministic machine</em> 을 이용하면 답으로 초기화 해주는 것이다.</p>
+
+<p><em>DFA</em> 를 <em>NFA</em> 로 바꾸었듯이, 같은 입력에 대해 다수의 상태를 가지도록 함으로써 튜링 머신(이하 <em>TM</em>) 도 쉽게 <em>nondeterministic</em> 로 만들 수 있다. </p>
+
+<p>그러면 이제 <strong>NP</strong> 가 의미하는 바를 확실히 이해할 수 있다. <em>nondeterministic polynomial time</em>, 다시 말해 <em>search problem</em> 이 <em>nondeterministic TM</em> 위에서 <em>poly-time</em> 내에 풀 수 있다는 것이다.</p>
+
+<p>(1) <em>nondeterministic TM</em> 이 답을 제공한다 <br />
+(2) <em>search problem</em> 은 <em>poly-time</em> 내에 답인지 아닌지 판별이 가능하다.</p>
+
+<p>조금 더 이해를 위해 <a href='http://ko.wikipedia.org/wiki/P-NP_%EB%AC%B8%EC%A0%9C' >위키</a>를 인용하면</p>
+
+<blockquote>
+  <p>P는 결정론적 튜링 기계를 사용해 다항 시간 내에 답을 구할 수 있는 문제의 집합이고, NP는 비결정론적 튜링 기계를 사용해 다항 시간 내에 답을 구할 수 있는 문제의 집합이다. 여기에서 결정론적 튜링 기계에 사용한 프로그램을 비결정론적 튜링 기계에 적용할 수 있으므로, P는 NP의 부분집합이 된다. 하지만 여기에서 P와 NP가 같은 집합인지, 아니면 P가 NP의 진부분집합인지는 아직 밝혀지지 않았다. 현재 2000년에 클레이 수학연구소가 100만 달러를 걸었다.</p>
+</blockquote>
+
+<h3 id="extendedchurchturingthesis">Extended Church-Turing Thesis</h3>
+
+<p>이제까지 나온바를 정리하면</p>
+
+<ul>
+<li><strong>NP:</strong> search problems solvable in <em>poly-time</em> on a <strong>nondetermimistic TM</strong></li>
+</ul>
+
+<p>그리고 <em>extended Church-Turing thesis</em> 에 의하면</p>
+
+<ul>
+<li><strong>P:</strong> search problems solvable in <em>poly-time</em> in the <strong>natural world</strong></li>
+</ul>
+
+<p>따라서 </p>
+
+<ul>
+<li>To make future computers more efficient, suffices to focus on impoving implementation of existing design</li>
+</ul>
+
+<h3 id="pvsnp">P vs NP</h3>
+
+<p><strong>P</strong> = <strong>NP</strong> 일까? 이게 사실이라면, <em>search problem</em> 에서 <em>exponential time</em> 의 <em>brute force</em> 방법을 사용하지 않아도 된다. <em>poly-time</em> 알고리즘이 있다는 이야기니까.</p>
+
+<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/P_np_np-complete_np-hard.svg/800px-P_np_np-complete_np-hard.svg.png'  alt="" /></p>
+
+<p align="center">(<a href='http://commons.wikimedia.org/' >http://commons.wikimedia.org/</a>)</p>
+
+<p><code>P = NP</code> 일 경우 <em>nondeterministic TM</em> 이 별 도움이 안된단 이야기고, <code>P != NP</code> 일 경우, </p>
+
+<blockquote>
+  <p>If no, Would learn something fundamental about our universe</p>
+</blockquote>
+
+<p>대부분의 학자들은 <code>P != NP</code> 라 믿는다. 이는 <em>non-deterministic TM</em> 이 이전까지 우리가 사용했던 머신보다 더 강력하기 때문이라고 한다. 즉, 문제를 해결하기 위해 필요한 머신의 성능이 훨씬 좋아야 하므로 <code>NP</code> 가 <code>P</code> 와 같진 않을거라는 이야기</p>
+
+<h3 id="classifyingproblems">Classifying Problems</h3>
+
+<ul>
+<li><strong>SAT problem:</strong> Given a system fo boolean equations, find a solution</li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWXpFVE81TUdNMWdUTjFVVExqUnpOaTFTTWtKek10Z0RPNU1UTGhCRFp3QVRabVp6THlVVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p><code>n</code> 변수의 <em>SAT</em> 문제를 <em>exhausitve search</em> 로 풀면, <code>2^n</code> 의 모든 경우를 다 시도 해봐야 한다. 더 빠른, <em>poly-time</em> 알고리즘으로 풀수는 없을까?</p>
+
+<p>슬프게도 많은 학자들이 연구해 왔지만, 아직까지 발견되지 않았고 대부분의 학자들이 <em>SAT</em> 문제가 <strong>NP</strong> 라는 것에 동의한다. 증명되지 않았으므로 일종의 가정인데, 이 가정을 이용해 <em>reduction</em> 을 해 보자. 그럼 <em>intractable</em> 한 알고리즘을 찾아낼 수 있다.</p>
+
+<blockquote>
+  <p>Problem <code>X</code> <strong>poly-time reduces</strong> to problem <code>Y</code> If <code>X</code> can be solved with:</p>
+  
+  <ul>
+  <li>Polynomial number of standard computational steps</li>
+  <li>Polynomial number of calls to <code>Y</code></li>
+  </ul>
+</blockquote>
+
+<p>따라서 <em>SAT</em> 를 문제 <code>Y</code> 로 <em>poly-time reduction</em> 가능하면, <code>Y</code> 는 (거의) <em>intractable</em> 이다. </p>
+
+<ul>
+<li>If <code>X</code> cannot be solved in <em>poly-time</em>, then <code>Y</code> connot be solved in *poly-time</li>
+<li>If <code>Y</code> can be solved in <em>poly-time</em>, then so can <code>X</code></li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WTNFRE0zSXpOd1lHTWpsVEx6RWpZNTB5WTBjek10TW1aeVFXTGpKRE40QXpZa056TDJZVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWXpnalkzWXpZbWRqTmpKVEx6SW1NaTFTTmlSMk10a2pZMlVXTDVVV1p4VVRabUoyTDVZVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<h3 id="npcompleteness">NP-Completeness</h3>
+
+<blockquote>
+  <p>An <em>NP</em> problem is <strong>NP-complete</strong> if all problems in NP <em>poly-time reduce</em> to it</p>
+</blockquote>
+
+<p>즉 모든 <em>NP</em> 문제가 어떤 문제 <code>A</code> 로 <em>poly-time reduction</em> 이 되면 <code>A</code> 는 <em>NP-complete</em> 라는건데, <em>Cook, 1971</em> 에 의해 <em>SAT</em> 가 <em>NP-complete</em> 임이 증명되었다.</p>
+
+<p>증명을 간단히 요약하면</p>
+
+<ul>
+<li>Convert <em>non-deterministic TM</em> notation to <em>SAT</em> notation</li>
+<li>If you can solve <em>SAT</em>, you can solve any problem in <em>NP</em></li>
+</ul>
+
+<p>일종의 <em>reduction</em> 이다.<em>SAT</em> 인스턴스를 <em>poly-time</em> 으로 풀면 <em>non-deterministic TM</em> 문제로 풀 수 있는 <em>NP</em> 문제도 <em>poly-time</em> 으로 풀수 있게된다. </p>
+
+<ul>
+<li><em>SAT</em> 를 <em>poly-time</em> 으로 풀면 <code>P = NP</code></li>
+<li><em>NP</em> 문제에 대해 <em>poly-time</em> 알고리즘이 없으면 <em>SAT</em> 에 대해서도 없다.</li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWWloVE0zTVdPMlVUWTNNVExoTmpNaTFTWjNJMk10TVdPMVFUTDRJR01sVjJNMEF6TDBjVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TmxKVE16VURaa2hqWXdVVExqVkRaNTBDTmlWMk10SVdZaVpXTHpRVE94WXpNbGR6TDJjVE8xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>많은 문제가 <em>NP-complete</em> 다.</p>
+
+<h3 id="copingwithintractability">Coping With Intractability</h3>
+
+<p>암호학 같은 경우 <em>intractability</em> 가 널리 쓰인다. <em>RSA</em> 의 경우 </p>
+
+<ul>
+<li>To use: multiply two <code>n</code>-bit integers (<em>poly-time</em>)</li>
+<li>To break: factor a 2 <code>n</code>-bit integer (unlikely <em>poly-time</em>)</li>
+</ul>
+
+<p>근데 1994년에 양자 컴퓨터로는 <code>n</code> 비트 <em>FACTOR</em> 문제가 <code>n^3</code> 안에 풀릴 수 있다는 가설이 제기되었다. 그럼 실 세계에서는 <code>P</code> 만 <em>poly-time</em> 으로 풀린다는 <em>extended Church-Turing thesis</em> 는..</p>
+
+<p>아무튼 <em>intractability</em> 를 해결하기 위해서 쓸 수 있는 몇 가지 테크닉이 있다.</p>
+
+<p>(1) Solve arbitrary instances of the problem</p>
+
+<p><em>specialc cases</em> 는 <em>tractable</em> 일 수 있다. 예를 들어 <code>2-SAT</code> 은 <em>linear time</em> 이다.</p>
+
+<p>(2) Solve the problem to optimality</p>
+
+<p><em>heuristic</em> 을 이용해 알고리즘을 만드는 방법도 있다. 최적은 아니지만 좋은 결과를 낼 수도 있기 때문이다. (TSP assigment heuristics)</p>
+
+<p>그리고 대부분 좋은 결과를 돌려주는 <em>approximation algorithm</em> 을 이용할 수도 있다. <code>MAX-3SAT</code> 은 <code>87.5%</code> 는 보장한다고 함.</p>
+
+<p>(3) Solve the problem in <em>poly-time</em></p>
+
+<p>Complexity theory deals with worst case behavior</p>
+
+<h4 id="hamiltonpath">Hamilton path</h4>
+
+<p>해밀턴 경로의 경우 모든 정점을 한번씩 방문해야 하는데, <em>NP-complete</em> 문제라고 한다. 오일러 경로(<em>edge</em>) 는 쉽다고 함. </p>
+
+<p><em>exponential time</em> 으로 구현할 수 있다. 일반 <em>DFS</em> 와 다른점은 <em>clean up</em> 부분.</p>
+
+<pre><code class="java">public class HamiltonPath  
+{
+    private boolean[] marked; // vertices on current path
+    private int count = 0; // number of Hamiltonian paths
+
+    public HamiltonPath(Graph G)
+    {
+        marked = new boolean[G.V()];
+        for (int v = 0; v &lt; G.V(); v++)
+            dfs(G, v, 1);
+    }
+
+    //depth is the length of current path (depth of recursion)
+    private void dfs(Graph G, int v, int depth)
+    {
+        marked[v] = true;
+        if (depth == G.V()) count++;
+        for (int w : G.adj(v))
+            if (!marked[w]) dfs(G, w, depth+1); //backtrack if w is already part of path
+        marked[v] = false; // clean up
+    }
+}
+</code></pre>
+
+<h3 id="summary">Summary</h3>
+
+<ul>
+<li><strong>P:</strong> Class of search problems solvable in <em>poly-time</em></li>
+<li><strong>NP:</strong> Clas of all search problems, some of which seem wickedly hard</li>
+<li><strong>NP-complete:</strong> Hardest problems in <em>NP</em></li>
+<li><p><strong>Intractable:</strong> Problem with no <em>poly-time</em> algorithm</p></li>
+<li><p>A <em>poly-time</em> algorithm for an <strong>NP-complete</strong> problem would be a stunning breakthrough (a proof that <code>P = NP</code>)</p></li>
+<li>You will confront <strong>NP-complete</strong> problems in your career</li>
+<li>Safe yo assume that <code>P != NP</code> and that such problem are intractable</li>
+<li>Identify these situations and proceed accordingly</li>
+</ul>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
+(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
+(3) <a href='http://www.programering.com/a/MDN4QTMwATQ.html' >Lecture note: intractability</a> <br />
+(4) <a href='http://simonsoftware.se/xkcdsw/comic.php?id=44' >xkcd image</a> <br />
+(5) <a href='http://physics.kenyon.edu/coolphys/thrmcmp/newcomp.htm' >Turing machine image</a> <br />
+(6) <a href='http://ko.wikipedia.org/wiki/P-NP_%EB%AC%B8%EC%A0%9C' >Wikipedia: P-NP 문제</a>  </p>]]></description><link>http://1ambda.github.io/intractability/</link><guid isPermaLink="false">720fd787-5da7-4853-9742-ecf8045586a3</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[intractability]]></category><category><![CDATA[P vs NP]]></category><category><![CDATA[NP completeness]]></category><category><![CDATA[search problem]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 18:47:29 GMT</pubDate></item><item><title><![CDATA[Linear Programming]]></title><description><![CDATA[<p><img src='https://d262ilb51hltx0.cloudfront.net/max/800/1' *WBYODRJUgH8h_QEPnaWS-w.png" alt="" /></p>
+
+<ul>
+<li><strong>linear programming:</strong> problem-solving model for optimal allocation of scarce resources, among a number of competing activities that <strong>encompasses</strong></li>
+</ul>
+
+<p><em>maxflow</em>, <em>MST</em>, <em>shortest paths</em>, <em>assigment</em>, <em>Ax = b</em>, <em>2-person zero-sum games</em> 등이 있다.</p>
+
+<p>다시 말해서, <em>constraints</em> 를 지키면서 특정 값을 <em>maximize</em> 하는 문제다. 따라서 주어진 문제를 아래의 형태로 <em>reduction</em> 해야 한다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<ul>
+<li>fast commercial colvers available</li>
+<li>widely applicable problem-solving model</li>
+<li>key subroutine for integer programming solves</li>
+</ul>
+
+<p>이므로 중요하다고 한다.</p>
+
+<h3 id="brewersproblem">Brewer's Problem</h3>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTWhKRE1pRldPM0lHTmlOV0x6a1RZaDFTTXpJMk10RVdZM1FXTDNJMk00SVROMkUyTDRFak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>양조장에서 맥주 <code>ale</code>, <code>beer</code> 를 생산하는데, 재료인 <code>corn</code>, <code>hops</code> <code>malt</code> 에 의해 생산량이 정해진다. 그리고 두 맥주는 들어가는 재료의 비율이 <del>당연히</del> 다르다.</p>
+
+<p>이 때, 이익을 최대로 하는 각 맥주의 생산량을 구하는 문제다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWnpNbVl5SXpOa0JUWnhnVEwya0ROaTFTWTBZek10VWpNNFFXTDRFbVkxUXpZeWt6THdJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" />
+<img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWTRjRE1tSjJZaWhqWTFRVEx6WUdaNDBTTWhsek10UXpNakpXTHpFR08zVUdaM0V6THpJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p>위 그림처럼 <em>contraints</em> 를 그래프 문제로 변환할 수 있다. 이 때 이익을 최대로 하는 <em>optimal solution</em> 은 <em>extreme point</em> 에 위치하는데 이 점들은 <em>2d</em> 에선 2개의 <em>constraints</em> (선분) 이 교차하는 지점에 위치한다.</p>
+
+<p>따라서</p>
+
+<blockquote>
+  <p><strong>Goal</strong> maximize linear objective function of <code>n</code> nonnegative variables, subjet to <code>m</code> linear equations</p>
+</blockquote>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TnhFV015UUdOaFpETjVJVExoWnpNaDFDTzNjek10TUdOemdUTDRNMk16STJNaEZ6TDFJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>문제를 <em>standard form</em> 으로 표시하면</p>
+
+<ul>
+<li>add variable <code>Z</code> and equation corresponding to objective function</li>
+<li>add <em>slack</em> variable to convert each inequality to an equality</li>
+</ul>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<h4 id="geometry">Geometry</h4>
+
+<ul>
+<li>Inequalities define <strong>halfspaces</strong>. feasible region is a <strong>convex polyhedron</strong></li>
+<li>A set is <strong>convex</strong> if for any two points <code>a</code> and <code>b</code> in the set, so is <code>1/2(a+b)</code></li>
+<li>An <strong>extreme point</strong> of a set is a point in the set that can't be written as <code>1/2(a+b)</code>, where <code>a</code> and <code>b</code> are two distinct points in the set.</li>
+</ul>
+
+<p><img src='http://mathworld.wolfram.com/images/eps-gif/ConvexConcave_1000.gif'  alt="" /></p>
+
+<p align="center">(<a href='http://mathworld.wolfram.com/Convex.html' >http://mathworld.wolfram.com/Convex.html</a>)</p>
+
+<p>즉 두 점이 있을때 그 가운데 위치하는 점도 집합 안에 있으면 그 집합은 <em>convex</em> 라 부른다. <em>extreme point</em> 는 도형의 가장 바깥쪽 부분으로 그것보다 외부의 점이 없기 때문에 <code>1/2(a+b)</code> 로 바꿀 수 없다.</p>
+
+<ul>
+<li><strong>Extreme point property:</strong></li>
+</ul>
+
+<p>If there exists an optimal solution to <code>P</code> (plane), then there exists one that is an extreme point</p>
+
+<p>(1) Number of extreme points to consider is <strong>finite</strong> <br />
+(2) But number of extreme points can be <strong>exponential</strong> <br />
+(3) Extreme point optimal iff no better adjacent extreme point (<em>greedy property</em>)</p>
+
+<p>특히 3번은 중요한데, <em>global optimum</em> 인지 알기 위해 인접부분만 검사하면 된다. 이는 <em>objective function</em> 이 선형이고, <em>feasible region</em> 이 <em>convex</em> 이기 때문이다.</p>
+
+<h3 id="simplexalgorithm">Simplex Algorithm</h3>
+
+<p>1947년에 만들어진 알고리즘으로 20세기를 대표하는 탑 10 알고리즘중 하나라고 한다. <em>generic algorithm</em> 인데</p>
+
+<ul>
+<li>start at some extreme point</li>
+<li><strong>Pivot</strong> from one extreme point to an adjacent one (never decreasing objective function)</li>
+<li>repeat until optimal</li>
+</ul>
+
+<p>위에서 언급했던 <em>greedy property</em> 를 보면 이해가 쉽다. <em>objective function</em> 을 증가시키는 방향으로 <em>extreme point</em> 를 옮겨가다보면 <em>global optimum</em>을 찾을 수 있다.</p>
+
+<h4 id="basicfeasiblesolution">Basic feasible solution</h4>
+
+<blockquote>
+  <p>A <strong>basis</strong> is a subset of <code>m</code> of the <code>n</code> variables</p>
+</blockquote>
+
+<ul>
+<li>set <code>n-m</code> nonbasic variables to <code>0</code>, solve for remaining <code>m</code> variables</li>
+<li>solve <code>m</code> equations in <code>m</code> unknowns</li>
+<li>if unique and feasible => BFS</li>
+<li>BFS &lt;=> extream point</li>
+</ul>
+
+<p>뭔소린가 한참을 쳐다봤는데, 그림으로 이해하는게 더 쉽다. <code>n</code> 개의 변수중 <code>m</code> 개를 제외한 것을 다 <code>0</code> 으로 하고, 방정식을 풀면 된다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT21WMlloUm1aM2dUTmxKV0xsSm1ONTBDT3pVek10STJZM0lUTGtoVE9rTldaeWN6TDFRak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p><em>slack variables</em> 로 구성된 <em>basis</em> 부터 시작해서 <em>pivot</em> 연산을 해 나아가면 된다. </p>
+
+<ul>
+<li>use the variable whose coefficient in objective function is positive to replace some one in the basis  (each unit increase in that variable from 0 increases objective value due to positive coefficient)</li>
+</ul>
+
+<p><em>objective function</em> 에서 계수가 양수인 수를 골라 치환하기 때문에 <code>Z</code> 값이 증가할수 밖에 없다. </p>
+
+<ul>
+<li>which variable to replace: </li>
+</ul>
+
+<p>Preserves feasibility by ensuring <code>RHS ≥ 0</code> and use minimum ratio rule: <code>min { 480/15, 160/4, 1190/20 }</code></p>
+
+<ul>
+<li>when to stop: When no objective function coefficient is positive.</li>
+</ul>
+
+<p>처음상태 <code>basis = {SC, SH, SM}</code> 에서 <em>constraint</em> <code>B</code> 를 <code>B = (1/15)(450 - 5A - SC)</code> 로 치환하면 <code>B</code> 가 <code>SC</code> 를 대신에 <em>basis</em> 에 들어간다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWjJFRE5qUkdNeElqTjNRV0wzVTJOaDFpTTNVMk10VVRPMGNUTDVZelkwWUdaMUl6THdVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" />
+<img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWhWVE5rbERabFJtTTRFV0xqRlRONTBpWmpWek10a1ROMFlXTGtOVFl5QWpNNUV6THlVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
+
+<p><code>A</code> 까지 치환하면 <em>objective function</em> 에 양수 계수를 가지는 변수가 없으므로  <code>Z</code> 가 더 증가할 여지가 없다. </p>
+
+<h3 id="implementation">Implementation</h3>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTmtGRE1pZHpObEoyWXdrVEwwVVRZNDBTWjBNek10UWpaMVVUTHlJRE1pRkRNMEUyTDBNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWpkVFpqUkRad0FETjFFV0w1VW1aNTBpWTJVMk10Z0RONU1UTG1GV1kwQUROelEyTDNNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<pre><code class="java">public class Simplex  
+{
+    private double[][] a; // simplex tableaux
+    private int m, n; // M constraints, N variables
+
+    public Simplex(double[][] A, double[] b, double[] c)
+    {
+        m = b.length;
+        n = c.length;
+        a = new double[m+1][m+n+1];
+        for (int i = 0; i &lt; m; i++)
+            for (int j = 0; j &lt; n; j++)
+                a[i][j] = A[i][j];
+        for (int j = n; j &lt; m + n; j++) a[j-n][j] = 1.0;
+        for (int j = 0; j &lt; n; j++) a[m][j] = c[j];
+        for (int i = 0; i &lt; m; i++) a[i][m+n] = b[i];
+    }
+
+    //Find entering column q using Bland's rule: index of first column whose objective function coefficient is positive.
+    private int bland()
+    {
+        for (int q = 0; q &lt; m + n; q++)
+            if (a[M][q] &gt; 0) return q;
+                return -1;
+    }
+
+    //Find leaving row p using min ratio rule.
+    private int minRatioRule(int q)
+    {
+        int p = -1;//leaving row
+        for (int i = 0; i &lt; m; i++)
+        {
+            if (a[i][q] &lt;= 0) continue; //consider only positive entries
+            else if (p == -1) p = i;
+            else if (a[i][m+n] / a[i][q] &lt; a[p][m+n] / a[p][q])
+                p = i;
+        }
+        return p;
+    }
+
+    public void pivot(int p, int q)
+    {
+        for (int i = 0; i &lt;= m; i++)
+            for (int j = 0; j &lt;= m+n; j++)
+                if (i != p &amp;&amp; j != q)
+                    a[i][j] -= a[p][j] * a[i][q] / a[p][q];
+
+        for (int i = 0; i &lt;= m; i++)
+            if (i != p) a[i][q] = 0.0;
+        for (int j = 0; j &lt;= m+n; j++)
+            if (j != q) a[p][j] /= a[p][q];
+        a[p][q] = 1.0;
+    }
+
+    public void solve()
+    {
+        while (true)
+        {
+            int q = bland();
+            if (q == -1) break;//entering column q (optimal if -1)
+            int p = minRatioRule(q);//leaving row p (unbounded if -1)
+            if (p == -1) ...
+            pivot(p, q);
+        }
+}
+</code></pre>
+
+<p>원본은 이리로 <a href='http://algs4.cs.princeton.edu/65reductions/Simplex.java.html' >Simplex.java</a></p>
+
+<p>메인 로직 자체는 간단하다.</p>
+
+<p>(1) <code>bland()</code> 로 <em>positive coefficient</em> 인 변수를 찾고 <br />
+(2) <code>minRatioRule()</code> 로 어떤 <em>row</em> 택할지 결정한다 <br />
+(3) <code>pivot</code> </p>
+
+<p>변수의 수를 <code>N</code>, 제약조건(= <em>inequalities</em>)의 수를 <code>M</code> 이라 했을때 <code>M &gt;= N</code> 이면 러닝타임은 <code>M^2</code> 이다. 이는 <code>pivot</code> 연산이 대부분의 시간을 잡아먹기 때문.</p>
+
+<p>근데 실제 돌려보면 <code>2(M+N) pivot</code> 내에 끝난다고 한다. 왜 그런지는 연구중이라고 함.</p>
+
+<blockquote>
+  <p><strong>Pivoting rules:</strong> Carefully balance the cost of finding an entering variable with the number of pivots needed.</p>
+  
+  <ul>
+  <li><p>No pivot rule is known that is guaranteed to be polynomial.</p></li>
+  <li><p>Most pivot rules are known to be exponential (or worse) in worst-case.</p></li>
+  </ul>
+</blockquote>
+
+<h4 id="degeneracy">Degeneracy</h4>
+
+<p>똑같은 <em>extreme point</em> 에 대해서 <em>basis</em> 만 바뀌는 것을 말하는데 위에서 본 <em>bland's rule</em> 이 작은 값부터 차례대로 사용 가능한 변수를 돌려주므로 유한한 수의 피벗이 일어남을 보장한다. </p>
+
+<pre><code class="java">// Find entering column q using Bland's rule: 
+// index of first column whose objective function coefficient is positive.
+private int bland() {  
+    for (int q = 0; q &lt; m + n; q++)
+        if (a[M][q] &gt; 0) return q;
+            return -1;
+}
+</code></pre>
+
+<h4 id="implementationissues">Implementation Issues</h4>
+
+<ul>
+<li>Avoid stalling (degeneracy): requires artful engineering</li>
+<li>Maintain sparsity: requires fancy data structures</li>
+<li>Numerical stability: requires advances math</li>
+<li>Detect Infeasibility: run "phase i" simplex algorithm</li>
+<li>Detect unboundedness: no leaving row</li>
+</ul>
+
+<p>그러므로 직접 구현하지 말자.. <del>사실 이해도 어렵다. 만드는 것은 둘째치고</del></p>
+
+<h3 id="reductions">Reductions</h3>
+
+<p><em>unrestricted variable</em> <code>B</code> 가 있는 <em>minimization</em> 문제를 <em>standard form</em> 으로 <em>reduction</em> 하려면</p>
+
+<p>(1) <code>min(13A + 15B)</code> 를 <code>max(-13A - 15B)</code> 로 변경 <br />
+(2) <code>4A + 4B &gt; 160</code> <em>constraint</em> 를 <code>4A + 4B - S = 160</code> (<code>S &gt;= 0)</code> <br />
+(3) <code>B = B0 - B1</code> (<code>B0 &gt;= 0</code>, <code>B1 =&gt; 0</code>)</p>
+
+<h4 id="maxflow">Max Flow</h4>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTm1Cak4xRURNemNUTXpFVEx3UURNNTBpTjNNek10VWpZalZUTDNNVFoxWURPaUZ6TDVRek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p><em>capacity</em>, <em>flow</em> 를 <em>constraint</em> 로 쉽게 바꿀 수 있다. 앞에서 본 <em>max flow</em> 알고리즘과 비교했을때의 장점은 문제가 더 복잡해지더라도 <em>constraint</em> 만 추가하면 간단하다는 점이다. (성능은 더 느릴수 있다고 함)</p>
+
+<h4 id="bipartitematching">Bipartite Matching</h4>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjJJelloQnpOeFVtWjJJVEx5RWpNNTBTWjNVek10a1RZbWxUTGlKR04zWVdabUp6THpVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<p>여기서 <code>X_ij</code> 는 사람 <code>i</code> 에게 작업 <code>j</code> 가 할당되었는지의 여부다.</p>
+
+<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT2pCRE1oaFRPd2dET2hCVExpUm1OaTFpTndJMk10Y3pNbU5XTDNZbVp6SVRNalp6THhVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
+
+<h3 id="summary">Summary</h3>
+
+<p><em>LP</em> 가 범용적이긴 한데, 먼저 <em>specialized algorithm</em> 을 사용해 보고 안되면 <em>LP</em> 를 쓰자.</p>
+
+<p><a href='https://medium.com/@_marcos_otero/the-real-10-algorithms-that-dominate-our-world-e95fa9f16c04' >읽을거리: The real 10 algorithms that dominate our world</a></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
+(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
+(3) <a href='http://www.explainxkcd.com/wiki/index.php/287:_NP-Complete' >getRandomNumber image</a> <br />
+(4) <a href='http://www.programering.com/a/MzM2IDNwATM.html' >Lecture note</a> <br />
+(5) <a href='http://mathworld.wolfram.com/Convex.html' >Mathword convex</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-linear-programming/</link><guid isPermaLink="false">13fdf909-5ce5-407a-a94f-1d9c14b9ef80</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[linear programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 08:28:26 GMT</pubDate></item><item><title><![CDATA[Problem Reduction]]></title><description><![CDATA[<p><img src='https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png'  alt="" /></p>
 
 <p>앞으로 남은 3챕터에서 배울 내용은</p>
 
@@ -7779,785 +8397,4 @@ a1 c1 c2 e1 e2 e3 &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt;
 (5) <a href='http://fluxicon.com/' >http://fluxicon.com</a> <br />
 (6) <a href='http://www.win.tue.nl/' ~mpechen/projects/edm/">http://www.win.tue.nl</a> <br />
 (7) <a href='http://www.slideshare.net/caise2013vlc/ramezani-taghiabadi-temporal-compliance-checking-2' >Temporal Compliance Checking</a> <br />
-(9) <a href='http://www.slideshare.net/aryaadriansyah/alignment-based-precision-checking' >Alignment-based onformance Checking</a></p>]]></description><link>http://1ambda.github.io/process-mining-week4/</link><guid isPermaLink="false">c0ec136c-9e68-46bc-b21f-0cd5f8661eb9</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[conformance checking]]></category><category><![CDATA[token-based]]></category><category><![CDATA[footprint-based]]></category><category><![CDATA[alignment-based]]></category><category><![CDATA[dotted chart]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 00:59:53 GMT</pubDate></item><item><title><![CDATA[R-way, Ternary Search Tries]]></title><description><![CDATA[<h3 id="stringsymboltable">String Symbol Table</h3>
-
-<p>지난 시간에 <em>symbol-table</em> 의 구현으로 <em>red-black tree, hash table</em> 의 성능을 살펴봤었다.</p>
-
-<p><em>red black tree</em> 는 <em>search, insertion, delete</em> 에 <code>compareTo</code> 를 이용해 <code>log N</code>, <em>hash table</em> 은 <code>equals, hashCode</code> 를 이용해 <code>1</code> (under uniform hashing assumption) 의 성능을 확인했다. </p>
-
-<p><em>red black tree</em> 의 경우에는 <em>rank</em> 같은 다른 연산도 하는것도 봤다. 그런데, 이보다 더 빠르게 만들 순 없을까?</p>
-
-<p>가능하다. 스트링 정렬처럼, <em>entire key</em> 를 모두 검사하지 않으면 더 빠르게 만들 수 있다. 먼저 시작 전에 <em>String symbol table API</em> 를 좀 보고가면</p>
-
-<pre><code class="java">public class StringST&lt;Value&gt; {  
-  ...
-
-  void put(String key, Value value)
-  Value get(String key)
-  void delete(String key)
-
-  ...
-}
-</code></pre>
-
-<h3 id="tries">Tries</h3>
-
-<p><em>red black tree</em> 나 <em>hash table</em> 과는 다르게 한 노드에 <em>key</em> 가 아니라 <em>character</em> 를 저장한다. 아래 짤방을 보는게 이해가 더 빠를듯. 끝 초록색 노드에 붙어있는 숫자가 바로 <em>value</em> 다.</p>
-
-<p><img src='http://t2.hhg.to/V12-d3.png'  alt="" /></p>
-
-<p align="center">(<a href='http://t2.hhg.to/' >http://t2.hhg.to</a>)</p>
-
-<p>이름은 re<strong>trie</strong>val 에서 왔다고 한다. <em>try</em> 랑 똑같이 발음함. 허프만 코드랑 비슷하게도 보인다.</p>
-
-<ul>
-<li>For now, store <em>char</em> in nodes (not keys)</li>
-<li>Each node has <code>R</code> children, one or each possible chars</li>
-<li>Store values in nodes corresponding to last chars in keys</li>
-</ul>
-
-<p><em>value</em> 는 항상 끝에만 있을 수 있는건 아니고 <code>shell</code>, <code>she</code> 둘 다 저장했을때 <code>e</code> 에도 <code>she</code> 를 위한 <em>value</em> 를     저장할 수 있다.</p>
-
-<h4 id="trieperformance">Trie Performance</h4>
-
-<ul>
-<li>Search hit</li>
-</ul>
-
-<p><code>L</code> 개의 문자를 모두 탐색해야 한다. 그리 긴 시간은 아님.</p>
-
-<ul>
-<li>Search miss</li>
-</ul>
-
-<p>첫 번째 문자부터 탐색에 실패할 확률도 있다. 전형적인 경우는 몇 개의 문자를 탐색하다 실패하는 경우이므로 <em>sublinear</em> 한 퍼포먼스를 보여준다.</p>
-
-<p>각 <code>leaf</code> 마다 <code>R</code> 개의 널 링크가 필요한데, 그래도 <em>sublinear</em> 라고 말할 수 있는 것이 짧은 문자열들은 <em>common prefix</em> 를 공유한다.</p>
-
-<blockquote>
-  <p>Fast search hit and evn faster search miss, but waste spaces.</p>
-</blockquote>
-
-<p><em>search miss</em> 의 성능이 <code>log_R N</code> 으로 빨라져서 좋긴 한데, <em>space</em> 가 <code>(R + 1) * N</code> 이라 좀 부담이다. (<em>search hit, insert</em> 는 해시 테이블처럼 <code>L</code>)</p>
-
-<p>유니코드면 <em>65536-way trie</em> 를 만들어야 한다.</p>
-
-<p>유명한 <em>job interview</em> 로 <em>efficient spell checking</em> 의 자료구조를 구현하는 것이 있는데. <em>26-way tries</em> 를 만들면 된다. <em>value</em> 는 <em>bit</em> 로</p>
-
-<h4 id="deletioninanrwaytrie">Deletion in an R-way Trie</h4>
-
-<p>만약 마지막 노드가 <em>all null links</em> 를 가지고 있으면 제거하면 된다. 그리고 백트래킹 하면서 <em>value</em> 를 만나기 전 까지 삭제되면 됨.</p>
-
-<h4 id="rwaytriesimplementation">R-way Tries Implementation</h4>
-
-<pre><code class="java">public class TrieST&lt;Value&gt; {
-
-    private static final int R = 256; // extended ASCII
-    private Node root = new Node();
-    private int N;
-
-    private static class Node {
-        private Object val;
-        private Node[] next = new Node[R];
-    }
-
-    public TrieST() { N = 0; }
-
-    public int size() { return N; }
-
-    public boolean isEmpty() { return size() == 0; }
-
-    public Value get(String key) {
-        Node x = get(root, key, 0);
-
-        if (x == null) return null;
-        return (Value) x.val;
-    }
-
-    public void delete(String key) {
-        root = delete(root, key, 0);
-    }
-
-    private Node delete(Node x, String key, int d) {
-        if (x == null) return null;
-
-        if (d == key.length()) {
-            if (x.val != null) N--;
-            x.val = null;
-        } else {
-            char c = key.charAt(d);
-            x.next[c] = delete(x.next[c], key, d + 1);
-        }
-
-        // remove subtrie rooted at x if it is completely empty
-        if (x.val != null) return x;
-        for (int c = 0; c &lt; R; c++)
-            if (x.next[c] != null) return x;
-
-        return null;
-    }
-
-    private Node get(Node x, String key, int d) {
-        if (x == null) return null;
-        if (d == key.length()) return x;
-        char c = key.charAt(d);
-        return get(x.next[c], key, d + 1);
-    }
-
-    public boolean contains(String key) {
-        return get(key) != null;
-    }
-
-    public void put(String key, Value val) {
-        if (val == null) delete(key);
-        else root = put(root, key, val, 0);
-    }
-
-    private Node put(Node x, String key, Value val, int d) {
-        if (x == null) x = new Node();
-        if (d == key.length()) {
-            if (x.val == null) N++;
-            x.val = val;
-            return x;
-        }
-
-        char c = key.charAt(d);
-        x.next[c] = put(x.next[c], key, val, d + 1);
-        return x;
-    }
-}
-</code></pre>
-
-<h3 id="ternarysearchtries">Ternary Search Tries</h3>
-
-<p>이전의 <em>R-way</em> 는 <code>R</code> 개의 자식들을 가졌지만, <em>ternary</em> 에서는 <code>3</code> 개만 가진다. <del>이것도 교수님이 만듬</del></p>
-
-<ul>
-<li>Store chars and values in nodes (not keys)</li>
-<li>Each node has 3 children; smaller, equal, larger</li>
-</ul>
-
-<p><em>binary search</em> 와 거의 유사하다. 그냥 <em>key</em> 를 <em>string</em> 로 사용하고 효율적인 검색을 위해 노드에 <em>character</em> 를 저장한다는 점만 다르고. 이 차이점을 그냥 교수님은 <em>tree</em> 가 아니라 <em>trie</em> 라 부르는 것 같다.</p>
-
-<p>어쨌든 <em>ternary</em> 는 <em>r-way</em> 보다 <em>null link</em> 자체가 훨씬 적다. 따라서 메모리 사용량에 부담 없고, <em>hash table</em> 보다 상당히 빠른 <em>search miss</em> 를 보여준다. 구현은 <a href='http://algs4.cs.princeton.edu/52trie/TST.java.html' >여기로</a></p>
-
-<h4 id="tstimpelementation">TST Impelementation</h4>
-
-<pre><code class="java">public class TernaryST&lt;Value&gt; {
-
-    private int N;
-    private Node root;
-
-    private class Node {
-        private char c;
-        private Value val;
-        private Node left, mid, right;
-    }
-
-    public TernaryST() { N = 0; }
-
-    public int size() { return N; }
-    public boolean isEmpty() { return size() == 0; }
-
-    public boolean contains(String key) {
-        return get(key) != null;
-    }
-
-    public Value get(String key) {
-        if (key == null) throw new NullPointerException();
-        if (key.length() == 0) throw new IllegalArgumentException("key shouldn't be empty");
-
-        Node x = get(root, key, 0);
-        if (x == null) return null;
-        return x.val;
-    }
-
-    private Node get(Node x, String key, int d) {
-        if (key == null) throw new NullPointerException();
-        if (key.length() == 0) throw new IllegalArgumentException("key shouldn't be empty");
-        if (x == null) return null;
-
-        char c = key.charAt(d);
-        if      (c &lt; x.c)               return get(x.left, key, d);
-        else if (c &gt; x.c)               return get(x.right, key, d);
-        else if (d &lt; key.length() - 1)  return get(x.mid, key, d + 1);
-        else                            return x;
-    }
-
-    public void put(String key, Value val) {
-        if (!contains(key)) N++;
-        root = put(root, key, val, 0);
-    }
-
-    private Node put(Node x, String key, Value val, int d) {
-        char c = key.charAt(d);
-
-        if (x == null) {
-            x = new Node();
-            x.c = c;
-        }
-
-        if      (c &lt; x.c)               x.left = put(x.left, key, val, d);
-        else if (c &gt; x.c)               x.right = put(x.right, key, val, d);
-        else if (d &lt; key.length() - 1)  x.mid = put(x.mid, key, val, d + 1);
-        else                            x.val = val;
-
-        return x;
-    }   
-}
-</code></pre>
-
-<p>항상 느끼는건데, <em>imperative</em> 언어에서의 재귀가 더 어려운 것 같다.</p>
-
-<h4 id="tstperformance">TST Performance</h4>
-
-<p>(1) <strong>R-way trie</strong></p>
-
-<ul>
-<li><strong>search hit:</strong> <code>L</code></li>
-<li><strong>search miss:</strong> <code>log_R N</code></li>
-<li><strong>insert:</strong> <code>L</code></li>
-<li><strong>space:</strong> <code>(R + 1) * N</code></li>
-</ul>
-
-<p>(2) <strong>Ternary trie(TST)</strong></p>
-
-<ul>
-<li><strong>search hit:</strong> <code>L + ln N</code></li>
-<li><strong>search miss:</strong> <code>ln N</code></li>
-<li><strong>insert:</strong> <code>L + ln N</code></li>
-<li><strong>space:</strong> <code>4N</code></li>
-</ul>
-
-<p>메모리가 <code>4N</code> 밖에 안든다! 해싱은 모든 연산이 <code>L</code> 이겠지만, 대신 메모리가 <code>4N ~ 16N</code> 이다.</p>
-
-<p>따라서 <em>ternary symbol table</em> 은 <em>hash table</em> 만큼 빠르고, 메모리도 덜 든다.</p>
-
-<p>참고로 <em>rotation</em> 연산을 이용해서 <em>balanced TST</em> 를 만들면 <em>worst case</em> 에도 <code>L + logN</code> 이 나온다.</p>
-
-<h4 id="tstwithr2branchingatroot">TST with R2 Branching at root</h4>
-
-<p>꼭대기엔 <code>R^2-way</code> 로 짓고, 자식은 <em>TST</em> 로 지을 수 있다. 분석 결과로는 일반 <em>TST</em> 보다 더 빠르다고 한다.</p>
-
-<h4 id="tstvshashing">TST vs Hashing</h4>
-
-<p>(1) Hashing</p>
-
-<ul>
-<li>Need to examine entier key</li>
-<li>Search hits and misses cost about the same</li>
-<li>Performance relies on hash function</li>
-<li>Does not support ordered symbol table operations.</li>
-</ul>
-
-<p>(2) TST</p>
-
-<ul>
-<li>Works only for strings (or digital keys)</li>
-<li>Only examines just enough key characters</li>
-<li>Search miss may involve only a few characters</li>
-<li>Supports ordered symbol table operations (plus others!).</li>
-</ul>
-
-<p>정리하면, <em>TST</em> 는 해싱만큼 빠르고 <em>search miss</em> 는 더 빠르다. 그리고 <em>red-black BST</em> 보다 유연하다. 그러나 자료의 형태에 제한이 있다.</p>
-
-<h3 id="characterbasedoperations">Character-Based Operations</h3>
-
-<p><em>string symbol table</em> 의 경우에는 유용한 <em>chars-based operation</em> 을 제공한다. </p>
-
-<ul>
-<li><em>prefix match</em> </li>
-<li><em>wildcard match</em> </li>
-<li><em>longest prefix</em></li>
-</ul>
-
-<p><em>API</em> 를 보면</p>
-
-<pre><code class="java">public class SymbolST&lt;Value&gt; {
-
-  ...
-  ...
-
-  Iterable&lt;String&gt; keys()
-  Iterable&lt;String&gt; keysWithPrefix  (String s)
-  Iterable&lt;String&gt; keysThatMatch   (String s)
-  String           longestPrefixOf (String s) 
-
-  ...
-  ...
-}
-</code></pre>
-
-<p>이 외에도 <em>ordered ST</em> 를 위한 <em>floor, rank</em> 등의 연산도 추가할 수 있다.</p>
-
-<h4 id="inordertraverseoftrie">Inorder Traverse of Trie</h4>
-
-<p>탐색이 이진트리하고 좀 다른게, 매 문자열마다 시작점부터 시작해야 된다. <em>leaf</em> 까지 방문하는건 같은데</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Trie_example.svg/250px-Trie_example.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Trie' >http://en.wikipedia.org/wiki/Trie</a>)</p>
-
-<pre><code class="java">public Iterable&lt;String&gt; keys() {  
-  Queue&lt;String&gt; q = new Queue&lt;String&gt;();
-  collect(root, "", q);
-  return q;
-}
-
-public void collect(Node x, String prefix, Queue&lt;String&gt; q) {  
-  if (x == null) return;
-  if (x.val != null) q.enequeue(prefix);
-
-  for (char c = 0; c &lt; R; c++)
-    collect(x.next[c], prefix + c, q);
-}
-</code></pre>
-
-<p><em>queue</em> 는 단순히 <code>she</code> 를 방문할때 <code>she</code> 를 저장하기 위한 용도다. <code>val != null</code> 일 때 저장하므로 <code>s, sh</code> 등은 저장하지 않는 다는 점에 유의하자.</p>
-
-<p>그리고 여기서 큐는 <em>DFS, BFS</em> 처럼 로직에 쓰이지 않는다. 모든 노드를 방문하긴 하는데 <code>c = 0</code> 부터 시작하니 왼쪽부터 방문하는 재귀 순회라 보면 쉽다.</p>
-
-<p>여기서 <code>collect</code> 함수는 인자로 받은 노드 <code>x</code> 를 기준으로 하위에 있는 <em>substring</em> 을 찾아낸다.</p>
-
-<p>실제 구현에서는 <code>StringBuilder</code> 를 사용한다.</p>
-
-<pre><code class="java">    private void collect(Node x, StringBuilder prefix, Queue&lt;String&gt; q) {
-        // TODO Auto-generated method stub
-
-        if (x == null) return;
-        if (x.val != null) q.add(prefix.toString());
-
-        for (char c = 0; c &lt; R; c++) {
-            prefix.append(c);
-            collect(x.next[c], prefix, q);
-            prefix.deleteCharAt(prefix.length() - 1);
-        }
-    }
-
-    public Iterable&lt;String&gt; keys() { return keysWithPrefix(""); }
-</code></pre>
-
-<h4 id="prefixmatchs">Prefix Matchs</h4>
-
-<p>구글링 하면서 매일 사용하는 기능이다. 구현은 위의 <code>collect</code> 함수를 사용하면 쉽다. <code>keyWithPrefix("sh")</code> 라면, <code>sh</code> 까지 내려간 뒤 <code>collect</code> 를 호출하면 된다.</p>
-
-<pre><code class="java">public Iterable&lt;String&gt; keysWithPrefix(String prefix) {  
-  Queue&lt;String&gt; q = new Queue&lt;String&gt;();
-  Node x = get(root, prefix, 0);
-  collect(x, prefix, q);
-  return q;
-}
-</code></pre>
-
-<p>자바의 <code>Queue</code> 는 인터페이스이므로 실제 구현은</p>
-
-<pre><code class="java">    public Iterable&lt;String&gt; keysWithPrefix(String prefix) {
-        Queue&lt;String&gt; q = new LinkedList&lt;String&gt;();
-        Node x = get(root, prefix, 0);
-        collect(x, new StringBuilder(prefix), q);
-        return q;
-    }
-</code></pre>
-
-<h4 id="longestprefix">Longest Prefix</h4>
-
-<p>라우터에서 자주 사용한다. 아이피를 문자열로 표현하고, 자기가 알고 있는 인접한 라우터중 어디로 보낼지를 결정하기 위해 <em>longest prefix</em> 를 알아내 보낸다. </p>
-
-<pre><code class="java    ">longestPrefixOf("128.112.136.11")  
-// 128.112.136
-</code></pre>
-
-<p>아이디어는 간단하다. <code>null</code> 이나 찾으려는 문자열의 마지막 문자를 만나기 전까지의 문자열을 모아 돌려주면 된다.</p>
-
-<pre><code class="java">public String longestPrefixOf(String query) {  
-  int length = search(root, query, 0, 0);
-  return query.substring(0, length);
-}
-
-public int search(Node x, String query, int d, int length) {
-
-  if (x == null) return length;
-  if (x.val != null) length =  d;
-  if (d == query.length) return length;
-
-  char c = query.charAt(d);
-  return search(x.next[c], query, d + 1, length);
-}
-</code></pre>
-
-<h4 id="patriciatrie">Patricia Trie</h4>
-
-<p><code>shells, shellfish</code> 를 넣으면 브랜칭이 길게 이루어진다. 메모리 낭비가 있을 수 있는데, <code>shell</code> 밑에 <code>s, fish</code> 를 자식으로 만들면 괜찮다.</p>
-
-<p>그러나 이 강의의 범위를 넘어서는 것이라 안알려준다고 함 ㅠㅠ. 이미지를 구해서 첨부하면</p>
-
-<p><img src='http://2.bp.blogspot.com/-0B8D2LHyQVc/USMklcwZnMI/AAAAAAAAAKc/UBmZnHflOa0/s640/radix_tries.png'  alt="" /></p>
-
-<p><img src='http://3.bp.blogspot.com/-nQ0ZUeIpDrQ/USMkvNUKHBI/AAAAAAAAAKk/rrvVaYU4Pwo/s640/fractal+tries.png'  alt="" /></p>
-
-<p align="center">(<a href='http://aketa.blogspot.kr/' >http://aketa.blogspot.kr</a>)</p>
-
-<p>아마도 통짜로 삽입 후 이후에 비슷한 <em>suffix</em> 의 문자열이 들어오면 분리를 시키는 것 같다. </p>
-
-<h4 id="suffixtree">Suffix Tree</h4>
-
-<p><img src='http://marknelson.us/attachments/1996/suffix-trees/FIGURE2.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://marknelson.us/' >http://marknelson.us</a>)</p>
-
-<p>문자열 <em>suffix</em> 의 <em>patricia trie</em> 인데 <em>linear time</em> 으로 만들 수 있다고 한다.</p>
-
-<ul>
-<li>longest repeated substring</li>
-<li>longest common substring</li>
-</ul>
-
-<p>등에 쓸 수 있단다.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p>(1) Red-Black BST</p>
-
-<ul>
-<li><strong>Performance guarantee:</strong> <code>lg N</code> key compares</li>
-<li>Supports ordered symbol table API</li>
-</ul>
-
-<p>(2) Hash Table</p>
-
-<ul>
-<li><strong>Performance guarantee:</strong> <em>constant</em> number of probes</li>
-<li>Requires good hash function for key type</li>
-</ul>
-
-<p>(3) R-way, TST</p>
-
-<ul>
-<li><strong>Performance guarantee:</strong> <code>lg N</code> <em>character</em> accessed </li>
-<li>Supports <em>character-based</em> operations</li>
-</ul>
-
-<blockquote>
-  <p>You can get at anything by examining 50-100 bits!</p>
-</blockquote>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href='http://t2.hhg.to/V12-lausn.html' >http://t2.hhg.to</a> <br />
-(3) <a href='http://en.wikipedia.org/wiki/Trie' >Wikipedia: Trie</a> <br />
-(4) <a href='http://aketa.blogspot.kr/2013/02/squeezed-tries-fractal-compression-for.html' >Squeezed Tries, Fractal Compression</a> <br />
-(5) <a href='http://marknelson.us/1996/08/01/suffix-trees/' >Mark Nelson</a></p>]]></description><link>http://1ambda.github.io/r-way-ternary-search-tries/</link><guid isPermaLink="false">68259e58-854a-4a4f-a621-ee864f210992</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[r-way trie]]></category><category><![CDATA[ternary trie]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 16 Dec 2014 08:49:07 GMT</pubDate></item><item><title><![CDATA[Machine Learning, Week 10]]></title><description><![CDATA[<p>이번 주에는 <em>mini-batch, stochastic graident descent</em>, <em>online learning</em>, <em>map-reduce</em> 등의 개념에 대해 배운다.</p>
-
-<h3 id="learningwithlargedatasets">Learning With Large Datasets</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361499744_2717.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>왜 그렇게 큰 데이터 셋이 필요할까? 좋은 퍼포먼스를 얻기 위한 한 가지 방법이, <em>low bias</em> 알고리즘에 <em>massive data</em> 를 활용해 훈련하는 것이기 때문이다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361499747_9327.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>그러나 커다란 데이터 셋을 연산하기 위해서는 연산비용이 정말 비싸다. 예를 들어 
-<code>m = 100,000,000</code> 이라 하면 <em>gradient</em> 를 계산하기 위해 매번 <code>k * m</code> 의 연산이 필요하다.</p>
-
-<p>따라서 모든 데이터를 이용해 알고리즘을 훈련하기 보다는, 랜덤하게 고른 작은 서브셋에 대해서 알고리즘을 개발하고, 이후에 전체 데이터에 대해서 훈련하는 방법을 쓰기도 한다.</p>
-
-<p>그러면 <code>m</code> 이 작아도 알고리즘이 충분히 잘 훈련된다는 것을 어떻게 보장할까? 이는 <em>learning curve</em> 를 그려보면 된다.</p>
-
-<p>위 슬라이드에서 우측 하단은 <em>high bias</em> 알고리즘인데 <code>m</code> 을 많이 투입해도 별다른 이득이 없으므로 적당한 수준에서 <code>m</code> 을 정하면 된다.</p>
-
-<p>물론 만든 알고리즘이 우측처럼 <em>high bias</em> 로 나오면, 좀 더 자연스러운 생각은 <em>hidden layer</em> 를 추가한다거나, 새로운 <em>feature</em> 를 도입해서 <em>bias</em> 를 낮추는 것이다.</p>
-
-<p><br/></p>
-
-<h3 id="stochsticgradientdescent">Stochstic Gradient Descent</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361500908_4667.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>gradient descent</em> 를 이용하는 <em>linear regression</em> 에서</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?h_%5Ctheta%28x%29%20%3D%20%5Csum_%7Bj%3D0%7D%5En%20%5C%20%5Ctheta_jx_j'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?J_%7Btrain%7D%28%5Ctheta%29%20%3D%20%7B1%20%5Cover%202m%7D%20%5Csum_%7Bi%3D1%7D%5Em%5C%20%28h_%5Ctheta%28x%29%5E%7B%28i%29%7D%20-%20y%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
-
-<p>이미 언급했듯이 <em>batch gradient descent</em> 의 문제는, <code>m</code> 이 크면 <code>J</code> 의 연산이 어마어마하게 많아진다는 것이다. 매 스텝마다 <code>m</code> 을 읽고, 계산값을 저장하기 때문이다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361501694_2445.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>이 문제를 해결하기 위해 <em>stochastic gradient descent</em> 에서는 한 턴에 한 쌍의 <code>x, y</code> 에 대해서만 <em>gradient</em> 를 계산한다.</p>
-
-<p><em>batch gradient decsent</em> 에서는 한 턴마다 모든 모든 쌍의 <code>x, y</code> 에 대해     <em>gradient</em> (= <code>theta_j</code>) 를 계산 했었다.</p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?cost%28%5Ctheta%2C%20%28x%5E%7B%28i%29%7D%2C%20y%5E%7B%28i%29%7D%29%29%20%3D%20%7B1%20%5Cover%202%7D%5C%20%28h_%5Ctheta%28x%5E%7B%28i%29%7D%20-%20y%5E%7B%28i%29%7D%29%5E2'  alt="" /></p>
-
-<p><img src='http://latex.codecogs.com/gif.latex?J_%7Btrain%7D%28%5Ctheta%29%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%20cost%28%5Ctheta%2C%20%28x%5E%7B%28i%29%7D%2C%20y%5E%7B%28i%29%7D%29%29'  alt="" /></p>
-
-<p>라고 하면</p>
-
-<pre><code>- Randomly shuffle dataset  
-- Repeat for i = 1 to m
-  - 0_j := 0_j - a * derivative of cost(0, (xi, yi)
-</code></pre>
-
-<p>즉 <code>J_train</code> 의 미분 대신에 <code>cost</code> 의 미분값을 이용해서 연산을 줄이는 방법이다. 이 때 데이터가 이미 랜덤하게 섞였다는 점을 기억하자. 기하학적으로 보면</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361502040_9252.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>batch</em> 에서는 올바른 방향을 향해 가지만, 보폭이 좀 좁다. <em>stochastic</em> 은 이리 갔다, 저리 갔다 하지만 결국에는 최저점을 향해 간다. 다만 <em>global optima</em> 에 도달하지 못하고 그 근처에 도착할 수 있다.</p>
-
-<p><code>m</code> 이 굉장히 크면, <em>repeat</em> 부분의 루프를 1번만 돌려도 될 테지만, 작으면 여러번 돌려서 최대한 좋은 퍼포먼스를 내도록 훈련시킬 수 있다.</p>
-
-<p><br/></p>
-
-<h3 id="minbatchgradientdescent">Min-Batch Gradient Descent</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361503946_9357.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<ul>
-<li><strong>Batch gradient descent:</strong> Use all <code>m</code> examples in each iteration</li>
-<li><strong>Stochastic gradient descent:</strong> Use <code>1</code> example in each iteration</li>
-<li><strong>Batch gradient descent:</strong> Use <code>b</code> examples in each iteration</li>
-</ul>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Ctheta_j%20%3A%3D%20%5Ctheta-j%20-%20%7B%5Calpha%20%5Cover%20b%7D%20%5Csum_%7Bk%20%3D%20i%7D%5E%7Bi%20&plus;%20b%20-%201%7D%20%28h_%5Ctheta%28x%5E%7B%28k%29%7D%29%20-%20y%5E%7B%28k%29%7D%29%20x_j%5E%7B%28k%29%7D'  alt="" /></p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361504164_4561.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><code>b</code> 는 보통 <code>2 - 100</code> 사이의 값이기 때문에 <em>batch</em> 보다 훨씬 빠르다. 또한 <em>vectorization</em> 을 이용하면 <em>gradient computation</em> 을 <em>partially parallelize</em> 할 수 있기 때문에 <em>stochastic</em> 보다 더 빠를 수 있다. <del>병렬화의 미덕</del></p>
-
-<p>단점으로는 추가적인 파라미터 <code>b</code> 가 필요하다는 점이다. 그러나 <em>vectorization</em> 을 잘 이용하면 더 빨라지므로 문제 없다.</p>
-
-<p><br/></p>
-
-<h3 id="stochasticgradientdescentconvergence">Stochastic Gradient Descent Convergence</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361519060_5993.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>convergence</em> 를 검증하는 방법으로, 훈련시키는 동안 얻은 <code>cost(0, (xi yi)</code> 평균값을 이용해 플롯을 그릴 수 있다.     </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361519096_5186.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>stochastic</em> 은 <em>global optimum</em> 을 찾아내지 못할 수도 있기 때문에, 그 주변에서 알짱거릴 수도 있다.</p>
-
-<p>더 많은 <code>m</code> 을 투입하면, 까끌거리는 선보다 좀 매끄러운 곡선을 얻을 수도 있다.</p>
-
-<p>때때로 알고리즘이 전혀 학습하지 못하는 것 처럼 보일수도 있는데, 그럴 경우 <code>m</code> 을 더 투입하면 좀 경사가 낮은 커브로 조금씩 <em>decreasing</em> 할 수 있다. 이를 보면 결국 훈련되긴 하는데, 평균값을 플랏으로 그리니 들쭉날쭉 해 보이는 것이다. (물론 학습하지 못하는 경우도 있다. <code>m</code> 을 더 늘려서 확인해 보자.)</p>
-
-<p><code>cost</code> 값이 증가한다면 더 작은 <em>learning late</em> 값을 이용하자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361519184_7199.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>learning rate</em> 와 관련해서 위 슬라이드처럼 식을 만들면, 이터레이션 넘버가 천천히 증가하면서 <code>alpha</code> 가 감소해 <em>converge</em> 하는 결과를 얻을 수 있다.</p>
-
-<blockquote>
-  <p>If we reduce learning rate <code>alpha</code> (and run stochastic gradient descent long enough), it's possible that we may find a set of better parameters than with large <code>alpha</code></p>
-</blockquote>
-
-<p><br/></p>
-
-<h3 id="onlinelearning">Online Learning</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361520551_7175.jpg'  alt="" /></p>
-
-<p><em>online learning</em> 에서는 데이터를 얻어 <code>theta</code> 를 업데이트하는데 사용하고, 버린다. 큰 사이트라면 데이터가 지속적으로 들어오기 때문에, <em>trianing data</em> 를 볼 필요가 없다. 다시 말해 같은 데이터를 두번 이상 쓰지 않는다는 말이다.</p>
-
-<p>또 다른 장점으로는 사용자의 취향 변화를 빠르게 반영할 수 있다는 점이다.</p>
-
-<blockquote>
-  <p>Can adopt to changing user preference</p>
-</blockquote>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361520594_9988.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>product search</em> 에 <em>predicted CTR</em> 를 이용해, 검색어와 잘 매칭되는 상품을 결과로 돌려수 있다. 이때 매 검색마다 돌려주는 검색결과는 일종의 <em>training set</em> 이 된다.</p>
-
-<ul>
-<li>special offers</li>
-<li>customized selection</li>
-</ul>
-
-<p>등에도 사용할 수 있다.</p>
-
-<p><br/></p>
-
-<h3 id="mapreduceanddataparallelism">Map Reduce and Data Parallelism</h3>
-
-<p>데이터가 어마어마하게 많으면, 하나의 컴퓨터에서 머신러닝 알고리즘을 돌리기가 좀 힘들다. 어떻게 해결할까?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361522176_1942.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/22/1361522180_7521.jpg'  alt="" /></p>
-
-<p>쉽게 말하면, 분산해서 처리할 수 있는 결과는 <code>map</code> 으로 해결하고, 이 결과들을 이용해 전체적인 결과는 <code>reduce</code> 가 계산한다. (실제로는 <code>reduce</code> 도 여러개 일 수 있다)</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361522184_5033.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<blockquote>
-  <p>Many lenaring algorithms can be expressed as computing sums of functions over the training set</p>
-</blockquote>
-
-<p>이렇기 때문에 <em>map-reduce</em> 가 큰 데이터셋에 대한 계산 처리 방법으로 좋은 해결책이 될 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/22/1361522188_9650.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>요즘엔 대부분의 프로세서가 멀티코어이기 때문에, 하나의 컴퓨터에서도 병렬화를 이용해 계산을 빠르게 해 낼 수 있다. 이 경우는 <em>network latency</em> 등에 대해 생각을 안해도 된다. 참고로 좋은 라이브러리들은 자동으로 연산을 병렬화한다. </p>
-
-<p><br/></p>
-
-<h3 id="photoocrandpipeline">Photo OCR and Pipeline</h3>
-
-<p>머신러닝 예제로 <em>Photo OCR</em> 을 알아보자.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361935712_3407.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><em>Photo OCR pipeline</em> 은 </p>
-
-<ul>
-<li>Image</li>
-<li>Text detection</li>
-<li>Character segmentation</li>
-<li>Character recognition</li>
-</ul>
-
-<p>의 단계를 거친다. 각 단계마다 머신러닝을 적용할 수 있다.</p>
-
-<p><br/></p>
-
-<h3 id="slidingwindows">Sliding Windows</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361936303_5994.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361936307_1350.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361937647_2708.jpg'  alt="" /></p>
-
-<p>텍스트나, 보행자등 특정 패턴을 검색하기 위해 이동하는 <em>rectangle</em> 의 단위를 <em>step-size, slide</em> 라 부른다. <em>slide</em> 의 사이즈를 변경해 가면서 패턴을 파악하는 방법을 <em>sliding window</em> 라 부른다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361937654_3410.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361937664_2466.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>텍스트를 인식해서, 근처의 텍스트와 묶는 <em>expansion</em> 작업을 하고 <em>character segmentation</em> 단계로 넘어간다. </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361937671_6657.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361937676_4874.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><br/></p>
-
-<h3 id="artificialdata">Artificial Data</h3>
-
-<p><em>low bias</em> 에 <em>massive data set</em> 을 조합하면 좋은 퍼포먼스가 나오긴 하는데, 어디서 커다란 데이터셋을 구할까? 작은 데이터 셋으로 커다란 데이터셋을 인위적으로 만들 수 있을까?</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361948453_3756.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361948457_9107.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361948462_1113.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>스케일링, 로테이션, 디스토션, 백그라운드 수정 등 다양한 조합을 통해 진짜처럼 보이는 <em>synthetic data</em> 를 얻을 수 있다. 마찬가지로, <em>speech recognition</em> 에도 <em>synthetic data</em> 를 만들어 퍼포먼스를 높일 수 있다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361948466_5032.jpg'  alt="" /></p>
-
-<ul>
-<li><em>synthetic data</em> 를 만들기 전에 <em>low bias classifier</em> 인지 확인하자.</li>
-<li>데이터를 조합하는데 들어가는 노력이 얼마나 들까 생각해보자</li>
-<li><em>crowd source</em> 를 고려하자. (e.g. Amazon Mechanical Turk)</li>
-</ul>
-
-<p>10 초당 1개의 <em>example</em> 을 수동으로 얻는다면, 10000 개를 얻는데 대략 3.5일의 시간이 걸린다.</p>
-
-<h3 id="ceilinganalysis">Ceiling Analysis</h3>
-
-<p>이전의 <em>Photo OCR</em> 문제에서 퍼포먼스를 높이려면 파이프라인의 각 단계 중 어느 부분에 가장 많은 노력을 들여야할까? </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361952527_2269.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p>각 단계에서 수동으로 정확도 100% 를 만들었을때와, 전체적인 정확도를 비교해서 어느 부분을 향상 시켰을때 가장 효율적일지를 파악할수 있다.  </p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361952535_9451.jpg'  alt="" />
-<img src='http://img.my.csdn.net/uploads/201302/27/1361952540_1528.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><br/></p>
-
-<h3 id="summary">Summary</h3>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361952938_3624.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a>)</p>
-
-<p><strong>supervised learning</strong> 의 종류로</p>
-
-<ul>
-<li>linear regresison</li>
-<li>logistic regression</li>
-<li>neural networks</li>
-<li>SVM</li>
-</ul>
-
-<p><strong>unsupervised learning</strong> 으로</p>
-
-<ul>
-<li>k-means</li>
-<li>PCA</li>
-<li>anomaly detection</li>
-</ul>
-
-<p>또한 머신 러닝의 응용으로</p>
-
-<ul>
-<li>recommender system</li>
-<li>large scale ML</li>
-</ul>
-
-<p>마지막으로 머신러닝에 도움이 되는 주제로</p>
-
-<ul>
-<li>bias vs variance</li>
-<li>regularization</li>
-<li>evaluation technique</li>
-<li>learning curve</li>
-<li>error analysis</li>
-<li>ceiling analysis</li>
-</ul>
-
-<p>등을 배웠다.</p>
-
-<p><img src='http://img.my.csdn.net/uploads/201302/27/1361953290_6926.jpg'  alt="" /></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
-(2) <a href='http://blog.csdn.net/linuxcumt' >http://blog.csdn.net/linuxcumt</a> <br />
-(3) <a href='http://blog.csdn.net/abcjennifer' >http://blog.csdn.net/abcjennifer</a>  </p>]]></description><link>http://1ambda.github.io/machine-learning-week-10/</link><guid isPermaLink="false">5ffe5848-c50e-42ff-84ab-153d47f0c7d3</guid><category><![CDATA[coursera]]></category><category><![CDATA[machine learning]]></category><category><![CDATA[stochastic gradient descent]]></category><category><![CDATA[mini-batch gradient descent]]></category><category><![CDATA[online learning]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 15 Dec 2014 03:14:52 GMT</pubDate></item></channel></rss>
+(9) <a href='http://www.slideshare.net/aryaadriansyah/alignment-based-precision-checking' >Alignment-based onformance Checking</a></p>]]></description><link>http://1ambda.github.io/process-mining-week4/</link><guid isPermaLink="false">c0ec136c-9e68-46bc-b21f-0cd5f8661eb9</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><category><![CDATA[conformance checking]]></category><category><![CDATA[token-based]]></category><category><![CDATA[footprint-based]]></category><category><![CDATA[alignment-based]]></category><category><![CDATA[dotted chart]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 00:59:53 GMT</pubDate></item></channel></rss>
