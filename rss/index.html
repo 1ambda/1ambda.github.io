@@ -1,5 +1,423 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 17 Jan 2015 17:22:31 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[AI Planning 1, Intro]]></title><description><![CDATA[<p><img src='http://www.jcjones.com/Portals/96864/images/IT%20strategic%20planning.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 25 Jan 2015 01:52:05 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[AI Planning 2, Heuristic Search and STRIPS]]></title><description><![CDATA[<p><img src='http://imgs.xkcd.com/comics/ai.png'  alt="" /></p>
+
+<p>이번 시간에는 <em>A* algorithm</em>, <em>heuristics</em>, <em>forward search</em> 등을 배운다.</p>
+
+<h3 id="heuristicsearchstrategies">Heuristic Search Strategies</h3>
+
+<p><em>FIFO</em> 나 <em>LIFO</em> 는 와 달리 <em>heuristic algorithm</em> 은 <em>search space</em> 에 대한 정보를 이용한다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/heuristic_function.png'  alt="" /></p>
+
+<p><em>heuristic function</em> <code>h: state space -&gt; R</code> 은, <em>problem-specific knowledge</em> 를 <em>problem-independent way</em> 로 표현한다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/best_first_search.png'  alt="" /></p>
+
+<p><em>best-first search</em> 알고리즘은 <em>general tree search</em> 알고리즘의 인스턴스로, 가장 낮은 <code>f(n)</code> 값을 가지는 노드를 선택해 탐색한다. 이를 위해 <code>f(n)</code> 값을 오름차순으로 정렬하는 <em>priority queue</em> 이용한다. </p>
+
+<p>만약 <code>f(n) = h(n)</code> 이면, <em>greedy best-first search</em> 라 부른다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/greedy_best_fs.png'  alt="" /></p>
+
+<p><em>optimal</em> 이 아닐 수 있다는 점에 유의하자.</p>
+
+<p>루마니아 투어 문제를 다시 보자.</p>
+
+<p><img src='https://spark-public.s3.amazonaws.com/aiplan/resources/touring-romania-map.png'  alt="" />
+<img src='https://spark-public.s3.amazonaws.com/aiplan/resources/touring-romania-heuristic.png'  alt="" /></p>
+
+<p><em>heuristic function</em> 으로 <em>straight line distance</em> 를 이용했는데, 실제 거리와는 차이가 있다. (꼬불꼬불하니까)</p>
+
+<h3 id="aalgorithm">A* algorithm</h3>
+
+<p><em>greedy best-first search</em> 알고리즘은 쉽지만, 항상 <em>optmial solution</em> 를 돌려주지 않는다는 단점이 있다. 여기서 배울 <em>A* algorithm</em> 은 항상 <em>optimal solution</em> 을 찾아낸다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_algorithm.png'  alt="" /></p>
+
+<p><code>h(n)</code> 은 휴리스틱 펑션이고, <code>g(n)</code> 은 <code>n</code> 에 도달하기 까지의 비용이다. 그리고 이 두 함수를 이용해 만든 <em>evaluation function</em> <code>f(n)</code> 을 <em>best-first search</em> 에 적용해 최적의 해를 찾아낸다.</p>
+
+<blockquote>
+  <p>A* search is optimal if <code>h(n)</code> is admissible</p>
+</blockquote>
+
+<p><em>A* search</em> 를 이용해 <em>Touring Romania</em> 문제를 풀어보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_touring.png'  alt="" /></p>
+
+<p><em>greedy best-first search</em> 와 비교해보면 트리가 좀 더 큰데, 이건 <em>A* search</em> 가 일반적으로 좀 더 느리다는 사실을 보여준다.</p>
+
+<p><br/></p>
+
+<p><em>8-puzzle</em> 문제도 <em>A* search</em> 로 풀어보자. <em>empty tile</em> 을 옮긴다고 생각하고, <em>cost function</em> <code>g(n)</code> 은 모든 경우 <code>1</code> 로 볼 수 있다. 몇 가지 <code>h(n)</code> 을 생각해 볼 수 있는데,</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/eight_puzzle_heuristics.png'  alt="" /></p>
+
+<p><em>Manhattan block distance</em> 는 제 자리까지 얼마나 더 움직여야하는지를 의미한다.</p>
+
+<h3 id="propertiesofa">Properties of A*</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/admissible_heuristics.png'  alt="" /></p>
+
+<p><em>admissible</em> 이란 말은, 항상 <code>h(n) &lt;= actual distance</code> 임을 의미한다. <code>f(n) = g(n) + h(n)</code> 이므로, <em>heuristic function</em> 이 <em>admissible</em> 하면 가장 적은 <code>f(n)</code> 을 찾는 <em>A* search</em> 는 <em>optimal solution</em> 을 돌려준다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_completeness.png'  alt="" /></p>
+
+<p><em>A* search</em> 는 <em>complete</em> 하다. 이는 탐색 과정에서 <em>goal node</em> 를 포함한 <em>contour</em> (윤곽, 등고선) 에 도달하기 때문이다. 여기서 <em>contour</em> 란 같은 비용으로 도달할 수 있는 <em>sets of state</em> 다. <em>initial node</em> 에서 시작해서 <em>f-value</em> 가 증가하는 방향으로 탐색이 이루어지므로 결국 꼭지점(<em>goal</em>) 에 도달한다. 사실 <em>heuristics</em> 이 없다면 <em>A* search</em> 는 다익스트라 알고리즘과 동일하다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/touring_romania_contours.png'  alt="" /></p>
+
+<p>기하학적으로 보면 <em>heuristic</em> 이 더 정밀해질 수록 타원이 <em>goal state</em> 에 가깝게 넓어진다.</p>
+
+<p>그리고 <em>completeness</em> 속성은, 거꾸로 말하면 <em>optimal path</em> 를 찾기 위해서 그보다 더 적은 <em>cost</em> 를 가지는 모든 <em>path</em> 를 탐색해야 함을 말한다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_optimally_efficient.png'  alt="" /></p>
+
+<p><em>A*star</em> 알고리즘은 같은 <em>heuristic</em> 을 이용해, 가장 적은 수의 <em>node</em> 를 확장하면서 <em>optimal solution</em> 을 돌려준다. 만약 이보다 더 적은 <em>node</em> 를 확장하면서, <em>optimal solution</em> 을 돌려준다면 <em>optmial solution</em> 이 아닐 수 있다.</p>
+
+<p>물론 효율성을 결정하는건 <em>heuristic</em> 의 연산 비용 등이 있겠지만, 적어도 <em>node</em> 수와 관련해서는 <em>A* search</em> 가 최적이다.</p>
+
+<h3 id="agraphsearch">A* Graph Search</h3>
+
+<pre><code>function aStarTreeSearch(problem, h)  
+  fringe &lt;- priorityQueue(new searchNode(problem.initialState))
+  allNodes &lt;- hashTable(fringe)
+
+  loop
+    if empty(fringe) then return failure
+
+    node &lt;- selectFrom(fringe) // lowest f-value
+
+    if problem.goalTest(node.state) then
+      return pathTo(node)
+
+    for successor in expand(problem, node)
+      if not allNodes.contains(successor) then
+        fringe &lt;- fringe + successor @ f(successor) // g + h
+        allNodes.add(successor)
+</code></pre>
+
+<p>여기서 <code>fringe &lt;- fringe + successor @ f(successor)</code> 부분은 <code>fringe</code> 가 우선순위 큐이므로, 우선순위를 결정할 값으로 <em>f-value</em> 인 <code>f(successor)</code> 을 이용한다는 뜻이다.</p>
+
+<p>그리고 <code>if not allNodes.contains(successor) then</code> 부분에서, 사실 노드를 두번째로 발견할 때 더 짧은 경로일 수 있으므로 비교하는 부분이 필요하다. 그러나 <em>heuristic</em> 이 <em>admissible</em> 하지 않으므로 <em>A* search</em> 가 최적해를 돌려주지 않을 수 있다.</p>
+
+<p>최악의 경우 <em>A*</em> 알고리즘은 <code>O(b)</code> 의 <em>time, space complexity</em> 를 가진다. 여기서 <code>b</code> 는 <em>branching factor</em> 이란 뜻이다. 다시 말해서 <em>exponential complexity</em> 란 말이다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/eight_puzzle_search_space.png'  alt="" /></p>
+
+<p><em>eight-puzzle</em> 문제를 다시 보자.</p>
+
+<p>그림에서 볼 수 있듯이, 빈 타일을 움직이다 보면 <em>initial state</em> 로 돌아올 수 있다. 만약 이 문제를 그래프로 표현하면 이미 방문한 노드를 다시 방문하고 있는지 해시테이블을 이용해 검사할 수 있다. 대신, 해시테이블을 만들고 사용하기 위한 비용이 든다. </p>
+
+<p>반면 트리로 문제를 풀게되면, <em>exponential</em> 하게 <em>search space</em> 가 증가하기 때문에 <em>worst case</em> 에선 최적해를 찾기 위해 상당한 시간이 걸릴 수 있다.</p>
+
+<p>한가지 더 생각해볼 문제는 <em>permutation</em> 이다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/permutation.png'  alt="" /></p>
+
+<p>만약 모든 <em>action</em> 이 <em>independent</em> 하다면, <em>solution</em> 까지의 <code>n</code> <em>action</em> 중  <code>n-1</code> <em>contour</em> 를 모두 방문해야 하므로 <code>(n-1)!</code> 의 성능이 나온다.</p>
+
+<h3 id="goodheuristics">Good Heuristics</h3>
+
+<p><em>heuristics</em> 이란 <em>goal node</em> 까지의 <em>estimatied value</em> 를 돌려주는 함수라고 기술적으로 정의할 수 있다.</p>
+
+<ul>
+<li><strong>heuristics</strong> are criteria, methods, or principles for deciding which among several alternative courses of action promises to be the most effeictive in order to achieve some goal</li>
+</ul>
+
+<p>그렇다면, 무엇이 <em>good heuristics</em> 일까?</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/good_heuristics.png'  alt="" /></p>
+
+<p>평가해야할 <em>state</em> 를 줄이고, 적정 시간 내에 <em>solution</em> 을 찾을 수 있어야 한다. 간단할수록 정확도가 떨어지며, 정확할수록 복잡해진다. <em>accuracy</em> 와 관련해서는, 최적의 <em>actions</em> 을 찾아낸다는 보장은 없지만 <em>good heuristics</em> 이라면 그렇지 않은 것 보다 더 자주 <em>best course of actions</em> 를 찾을 수 있어야 한다.</p>
+
+<ul>
+<li>문제가 주어졌을때, 어떻게 좋은 <em>heuristics</em> 을 찾아낼 수 있을까?</li>
+<li>이 과정을 자동화 할 수 있을까?</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/relaxed_problem.png'  alt="" /></p>
+
+<p><em>heuristics</em> 을 찾는 한 가지 방법은 <em>relaxed problem</em> 을 이용하는 것이다. <em>original problem</em> 에서 <em>action</em> 에 대한 <em>restriction</em> 을 좀 제거해서, 이에 대해 얻은 <em>optimal solution</em> 의 비용은 원본 문제에 대한 <em>admissible and consistent heuristic</em> 이다.</p>
+
+<p>이는 <em>restriction</em> 이 제거되었기 때문에, 아무리 많아봐야 (<em>at most</em>) <em>original problem</em> 에 대한 <em>cost</em> 를 가지기 때문이다. 그러므로 <em>admissible</em> 하다. <em>eight-puzzle</em> 을 예로 들어보면 타일을 움직이는 <em>action</em> 에 대해 <em>adjacent</em> 또는 <em>blank</em> 조건을 버릴 수 있다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/8_puzzle_relaxed.png'  alt="" /></p>
+
+<p>지금까지 배운내용들을 좀 정리하면</p>
+
+<ul>
+<li><p>Heuristic funciton encodes problem specific knowledge in a problem-independent way by mapping a state to a real number. This information about search states can be used to make the search more efficient</p></li>
+<li><p>Greedy best-first search simply uses the heuristic function as the evaluation function. But better solution is provided by the A* algorithm. The evaluation function used by A* algorithm is simply the sum of the heuristic function for a node plus the cost of getting to thast node in the first place.</p></li>
+<li><p>A* is optimal. It does not expand more nodes than absolutely necessary. But A* is not the answer to all questions, specifically when it comes to graph search.</p></li>
+</ul>
+
+<h3 id="strips">STRIPS</h3>
+
+<p>이제부터는 <em>STRIPS</em> 에 대해 알아보자. <em>planning</em> 의 본질은 원하는 <em>goal</em> 을 얻기 위한 <em>action</em> 을 결정하는 것이다. 즉, 시스템이 이런 결정을 내릴 수 있도록 해 주는 장치가 <em>planner</em> 인데, <em>STRIPS</em> 도 플래너다. </p>
+
+<p><a href='http://en.wikipedia.org/wiki/STRIPS' >Wikipedia: STRIPS</a> 에 의하면</p>
+
+<blockquote>
+  <p>In artificial intelligence, STRIPS (Stanford Research Institute Problem Solver) is an <strong>automated planner</strong> developed by Richard Fikes and Nils Nilsson in 1971 at SRI International. The same name was later used to refer to the formal language of the inputs to this planner. This language is the base for most of the languages for expressing automated planning problem instances in use today; such languages are commonly known as action languages.</p>
+</blockquote>
+
+<p><em>STRIPS</em> 는 어떤 <em>action</em> 을 사용할지를 결정하는 시스템이므로 <em>representation</em> 과 <em>algorithm</em> 이 필요하다. </p>
+
+<h3 id="structuredstates">Structured States</h3>
+
+<p><em>representation</em> 의 일부인 <em>state</em> 에 대해 먼저 알아보자. <em>state</em> 에 <em>access</em> 할때는 </p>
+
+<ul>
+<li>goal test</li>
+<li>applicable actions, successor states</li>
+<li>equality test, hash function</li>
+<li>heuristics estimate</li>
+</ul>
+
+<p>이런 행동을 하려면 <em>standardized</em> 된 <em>action</em> <em>state</em> 의 표현 방법이 있어야 하는데, <em>STRIPS repsentation</em> 이 하는 일이 바로 이것이다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_object.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_PDDL.jpg'  alt="" /></p>
+
+<p>먼저 <em>object</em> 를 정의하고, 이를 <em>PDDL</em> <em>(Planning Domain Definition Language)</em> 로 작성한다. <em>robot</em> 은 쉽게 오브젝트라 생각할 수 있지만 <em>piles</em>, <em>pallet</em> 은 떠오르지 않을 수 있다. </p>
+
+<p>두 <em>object</em> 간 관계는 <em>predicates</em> 라 부른다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_predicates.jpg'  alt="" /></p>
+
+<p>여기서 <code>?l1</code>, <code>?l2</code> 등 물음표로 시작하는 것은 변수고 그 타입은 <code>- location</code> 처럼 뒤에 나온다. <a href='https://spark-public.s3.amazonaws.com/aiplan/resources/DWR-operators.txt' >DWR-operators</a> 링크에서 예제 <em>PDDL</em> 을 볼 수 있다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/states_in_strips.jpg'  alt="" /></p>
+
+<p>우리가 작성한 <em>language</em> <code>L</code> 에는 많은 <em>predicates</em>, <em>objects (constant symbols)</em> 이 있지만, <em>functional symbol</em> 은 없다. </p>
+
+<blockquote>
+  <p>A state in a STRIPS planning domain is <strong>a set of ground atoms</strong> of <code>L</code></p>
+</blockquote>
+
+<p>여기서 <em>atom</em> 이란 <em>a predicate</em> 고, <em>ground</em> 하다는 것은 <em>predicate</em> 과 관련된 <em>object</em> 가 <em>variable</em> 이 아니고, 구체적인 인스턴스라는 뜻이다. </p>
+
+<p>(1) <em>ground atom</em> <code>p</code> 가 <em>state</em> <code>s</code> 내에 있을때에만 <code>p</code> 가 참이다.</p>
+
+<p>(2) <em>literal</em> 은 <em>positive</em> 일 수도 있고, <em>negative</em> 일 수도 있는 <em>atom</em> 이다. 이 때 <em>ground literals</em> <code>g</code> 내에 있는 모든 <em>positive literal</em> 이 <code>s</code> 내에 있고, <code>g</code> 내에 있는 모든 <em>negative literal</em> 이 <code>s</code> 내에 없으면 <em>state</em> <code>s</code> 는 <em>ground literals</em> <code>g</code> 를 만족시킨다.</p>
+
+<h3 id="structuredoperators">Structured Operators</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/operators_actinos_strips.jpg'  alt="" /></p>
+
+<p><em>planning operators</em> 는 <em>name</em>, <em>pre-condition</em>, <em>effect</em> 로 구성되는데, <em>pre-cond</em> 과 <em>effect</em> 는 <em>literals</em> 의 집합이다.</p>
+
+<p>그리고 <em>action</em> 은 <em>planning operator</em> 의 <em>ground instance</em> 다. </p>
+
+<p>쉽게 말해서 <em>operator</em> 는 <em>variable</em> 가 있는 <em>predicate</em> 의 집합이고, <em>action</em> 은 거기서 변수를 <em>constant</em> (실제 <em>object</em>) 로 치환한 것이다. <em>operator</em> 가 좀 더 <em>generic</em> 하다고 보면 이해하기 쉽다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_operators.jpg'  alt="" /></p>
+
+<p>이 <em>operator</em> 를 <em>PDDL</em> 로 표현하면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_operators_PDDL.jpg'  alt="" /></p>
+
+<p>이제까지 본 <em>literals</em> 를 이용해 <em>applicable</em> 한지, 그리고 어떻게 <em>state transition</em> 을 하는지 살펴보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/state_transition_applicable.jpg'  alt="" /></p>
+
+<p><code>L+</code>, <code>L-</code> 를 각각 <em>positive</em> <em>negative literals</em> 이라고 하자.</p>
+
+<p><em>action</em> <code>a</code> <em>state</em> <code>s</code> 에 대해 <code>a</code> 의 <em>pre-cond+</em> 가 <code>s</code> 에 있고, <em>pre-cond-</em> 가 <code>s</code> 에 없으면 <em>applicable</em> 하다.</p>
+
+<p>그리고 <em>applicable action</em> 에 대해서 <em>state transition</em> <code>r</code> 는 <em>state</em> <code>s</code> 에서 <code>a</code> 의 <em>effect-</em> 를 빼고, 거기에 <em>effect+</em> 를 합치는 것으로 정의한다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/finding_applicable_action.jpg'  alt="" /></p>
+
+<ul>
+<li><code>A</code> 는 <em>applicable actions</em> 다. 초기에는 <em>empty</em> </li>
+<li><code>op</code> 는 <em>operator</em> </li>
+<li><code>precs</code> 는 <em>remaining pre-cond</em></li>
+<li>4번째 인자는 <em>value</em> 로 치환된 <em>substitution</em> 리스트다.</li>
+<li><code>s</code> 는 <em>state</em></li>
+</ul>
+
+<p>먼저 <code>precs+</code> 가 비었는지 검사하고, 무언가 있다면 <code>pp</code> <em>positive pre-cond</em> 를 뽑아내, <em>propositions of state</em> <code>sp</code> 에서 <em>state</em> <code>s</code> 를 하나씩 검사한다. 만약 <em>substitution</em> 이 <em>valid</em> 하면 재귀적으로 반복한다.</p>
+
+<p>더 이상 <code>precs+</code> 가 없으면 <code>precs-</code> 를 검사하면서, 만약 <em>state</em> 가 <em>negative pre-cond</em> <code>np</code> 를 만족하지 못하면, 리턴하고 모두 만족하면 <em>variable</em> 을 모두 치환하여 <em>applicable action</em> 리스트인 <code>A</code> 에 추가한다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/applicable_actions_ex.jpg'  alt="" /></p>
+
+<p>그림에서 왼쪽 케이스를 보면 로봇 <code>r1</code> 이 도착지점인 <code>loc2</code> 에 존재할 수 없기 때문에 <em>not valid</em> </p>
+
+<h3 id="domainsandproblems">Domains and Problems</h3>
+
+<p><em>classical planning</em> 은 다음의 요소로 구성된다.</p>
+
+<ul>
+<li><strong>task:</strong> find solution for planning prolem</li>
+<li><strong>planning problem:</strong> </li>
+</ul>
+
+<p>(1) initial state (atoms - relation, objects)
+(2) planning domain (operators - name, prec, effects)
+(3) goal</p>
+
+<ul>
+<li><strong>solution</strong> (plan) </li>
+</ul>
+
+<p>STRIPS 도 마찬가지로</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/STRIPS_planning_domains.jpg'  alt="" /></p>
+
+<p>따라서 <em>STRIPS planning</em> 문제는 <em>planning domain</em>, <em>inital state</em>, <em>goal</em> 로 구성된다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/STRIPS_planning_problems.jpg'  alt="" /></p>
+
+<p><em>DWR domain</em> 간단예제를 좀 보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_strips_ex1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_strips_ex2.jpg'  alt="" /></p>
+
+<p>전체 문제는 여기로 <a href='http://projects.laas.fr/planning/DWR-pb1' >DWR-pb1</a></p>
+
+<p><br/></p>
+
+<p>지금까지 본 것은 <em>planner</em> 에게 주어야할 <em>input</em> 이었다. 이제 <em>output</em> 인 <em>plan</em> 이 무엇인지 보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/classical_plans.jpg'  alt="" /></p>
+
+<h3 id="statespacesearch">State-Space Search</h3>
+
+<p>지금까지는 <em>representation</em> 에 대해 봤다. 지금부터는 STRIPS 에서 알고리즘을 어떻게 적용할지 알아보자. 기본적인 아이디어는</p>
+
+<ul>
+<li>search space is subset of state space</li>
+<li>nodes correspond to world states</li>
+<li>arcs correspond to state transitions</li>
+<li>path in the search space correspaonds to plan</li>
+</ul>
+
+<p>따라서 <em>standard search algorithm</em> (e.g BFS, DFS, A*) 를 <em>planning problem</em> 에 적용할 수 있다. 좀 더 자세히 보자. <em>state-space planning</em> 을 <em>search problem</em> 으로 바꾸기 위해</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/state_space_to_search_problem.png'  alt="" /></p>
+
+<p><em>initial state</em>, <em>goal</em>, 을 정하고 <em>path cost function</em> 으로 <em>action</em> 의 길이를 사용한다. <em>successor function</em> 은 </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/reachable_successor_states.png'  alt="" /></p>
+
+<p><em>successor state</em> 를 표시하기 위해 감마를 사용하고, 지수 위치에 있는 <code>0, m</code> 등은 몇번째 <em>succssor</em> 인지를 나타낸다. <code>U</code> 는 합집합, 유니온이다. 따라서 <em>transitive closure</em> 는 가능한 모든 합집합이다. (<em>reachable states from initial state</em>)</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/solution_existence.png'  alt="" /></p>
+
+<p>따라서 <em>STRIPS planning problem</em> 에서는 <em>goal state</em> <code>S_g</code> 와 <em>reachable state</em> 인 <em>transitive closure</em> 의 교집합이 <em>empty</em> 가 아니어야 솔루션이 존재한다.</p>
+
+<h3 id="forwardstatespacesearch">Forward State-Space Search</h3>
+
+<pre><code>function fwdSearch(O, s_i, g)  
+  state &lt;- s_i
+  plan &lt;- &lt;&gt;
+
+  loop
+    if state.satisfies(g) then 
+      return plan
+
+    applicables &lt;- {ground instance from O applicable in state}
+
+    if applicable.isEmpty() then 
+      return failure
+
+    action &lt;- applicable.chooseOne() ; non-deterministic
+    state &lt;- r(state, action)
+    plan &lt;- plan * &lt;action&gt; ; add action to plan
+</code></pre>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_example_fwd_search.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/forward_search_properties.png'  alt="" /></p>
+
+<p><em>forward search</em> 는 두가지 속성을 가지는데</p>
+
+<ul>
+<li><strong>sound:</strong> if the function returns a plan as a solution then this plan is indeed a solution</li>
+<li><strong>complete:</strong> if there exists solution plan then there is an execution trace of the function that will return this solution plan</li>
+</ul>
+
+<h3 id="backwardstatespacesearch">Backward State-Space Search</h3>
+
+<p><em>backward search</em> 는 <em>intial state</em> 부터 시작하는 것이 아니라 <em>goal</em> 부터 시작해서 거꾸로 진행하는 알고리즘이다. 먼저 <em>relevant</em> 와 <em>regression set</em> 의 개념부터 알아보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/relevance_regression_sets.png'  alt="" /></p>
+
+<p><em>action</em> <code>a</code>, <em>goal state</em> <code>g</code> 에 대해 </p>
+
+<ul>
+<li><code>g</code> 와 <code>effect(a)</code> 의 교집합이 <em>empty</em> 가 아니고</li>
+<li><code>g+</code> 와 <code>effect-(a)</code>, <code>g-</code> 와 <code>effect+(a)</code> 의 교집합이 <em>empty</em> 이면</li>
+</ul>
+
+<blockquote>
+  <p><code>a</code> is relevant for <code>g</code></p>
+</blockquote>
+
+<p>이 때 <em>releavant action</em> <code>a</code> 에 대해 <code>g</code> 의 <em>regression set</em> 은 </p>
+
+<p><code>r^(-1) (g, a) = (g - effect(a)) U precond(a)</code> 로 정의한다. <em>relavant action</em> 의 <em>effect</em> 를 제거하고, 그의 <em>pre-condition</em> 을 넣으면 <em>previous state</em> 가 되기 때문이다. 예제를 좀 보면</p>
+
+<pre><code>(define (problem random-pbl1)
+  (:domain random-domain)
+  (:init
+     (S B B) (S C B) (S A C)
+     (R B B) (R C B))
+  (:goal (and (S A A))))
+
+(define (domain random-domain)
+  (:requirements :strips)
+  (:action op1
+    :parameters (?x1 ?x2 ?x3)
+    :precondition (and (S ?x1 ?x2) (R ?x3 ?x1))
+    :effect (and (S ?x2 ?x1) (S ?x1 ?x3) (not (R ?x3 ?x1))))
+  (:action op2
+    :parameters (?x1 ?x2 ?x3)
+    :precondition (and (S ?x3 ?x1) (R ?x2 ?x2))
+    :effect (and (S ?x1 ?x3) (not (S ?x3 ?x1)))))  
+</code></pre>
+
+<p>여기서 <em>relevant action</em> 은 <code>(op1 A A A)</code>, <code>(op1 A A C)</code>, <code>(op1 A B A)</code> 다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/regression_function.png'  alt="" /></p>
+
+<p>따라서 <em>backward search</em> 알고리즘을 이용하면, <em>state-space planning</em> 을 <em>search problem</em> 으로 바꿀때는</p>
+
+<ul>
+<li>initial state <code>g</code></li>
+<li>goal test: <code>s_i</code> satisfies <code>s</code></li>
+<li>path cost function: length of actions</li>
+<li>successor function: <code>r^-1 (s)</code></li>
+</ul>
+
+<p>예제를 좀 보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/regression_with_operators.png'  alt="" /></p>
+
+<h3 id="summary">Summary</h3>
+
+<p><em>STRIPS</em> 세션을 정리하면</p>
+
+<ul>
+<li>STRIPS representation provides a standardized way of representing the <strong>internal structure of states</strong>, namely a sets of ground atoms. So we have objects thar are related by some relations, and sets of these atoms describe what the world states look like.</li>
+<li>define interal structure of operators look like. negative effects, positive effects.</li>
+<li>define planning domains (initial, goal state), problem using PDDL</li>
+<li>to solve planning problem, we can use forward, backward search. Buy they are actually inefficient</li>
+</ul>
+
+<p>따라서 다음시간엔 <em>forward, backward</em> 보다 더 효율적인 알고리즘을 배운다.</p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
+(2) <a href='http://imgs.xkcd.com/comics/ai.png' >xkcd image</a> <br />
+(3) <a href='http://en.wikipedia.org/wiki/STRIPS' >Wikipedia - STRIPS</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-2/</link><guid isPermaLink="false">03874979-cc59-4b5f-b9b1-eccfefd1ccc2</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[STRIPS]]></category><category><![CDATA[heuristic]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 18 Jan 2015 00:26:31 GMT</pubDate></item><item><title><![CDATA[AI Planning 1, Intro]]></title><description><![CDATA[<p><img src='http://www.jcjones.com/Portals/96864/images/IT%20strategic%20planning.png'  alt="" /></p>
 
 <p><br/></p>
 
@@ -7435,751 +7853,4 @@ return N;
 (4) <a href='http://www-igm.univ-mlv.fr/' ~lecroq/string/node4.html">Automaton</a> <br />
 (5) <a href='http://somemoreacademic.blogspot.kr/2012/09/boyer-moore-string-matching-algorithm.html' >Boyer Moore string matching algorithm</a> <br />
 (6) <a href='http://xenostudy.tistory.com/72' >보이어 무어 알고리즘에 대한 고찰</a> <br />
-(7) <a href='http://terpconnect.umd.edu/' ~sthomas2/rabin-karp.html">Rabin-Karp Algorithm</a></p>]]></description><link>http://1ambda.github.io/substring-search/</link><guid isPermaLink="false">2c08e92e-2241-4624-988e-32d552ed67e1</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[substring search]]></category><category><![CDATA[boyer-moore]]></category><category><![CDATA[rabin-karp]]></category><category><![CDATA[knuth-morris-pratt]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 15:16:42 GMT</pubDate></item><item><title><![CDATA[Reactive Programming 1, Monads]]></title><description><![CDATA[<h3 id="whatisreactiveprogramming">What is Reactive Programming?</h3>
-
-<p><em>reactive</em> 란 뜻은</p>
-
-<ul>
-<li><em>React to events</em> <strong>(event-driven)</strong></li>
-<li><em>React to load</em> <strong>(scalable)</strong></li>
-<li><em>React to failures</em> <strong>(resilient)</strong></li>
-<li><em>React to users</em> <strong>(responsive)</strong></li>
-</ul>
-
-<h4 id="eventdriven">Event-driven</h4>
-
-<p><em>event-driven</em> 을 통해 <em>scalable, resilient</em> 해질 수 있고, 이 3가지를 통해 <em>responsive</em> 한 서비스를 만들 수 있다.</p>
-
-<p>옛날에는 시스템이 <em>multi-threaded</em> 로 구성되어 <em>shared, synchronized state</em> 를 통해 커뮤니케이션 했었다. 그래서</p>
-
-<blockquote>
-  <p>Strong coupling, hard to compose</p>
-</blockquote>
-
-<p>근데 요즘 시스템은 <em>loosely coupled even handlers</em> 로 구성되기 때문에</p>
-
-<blockquote>
-  <p>Events can be handled asynchoronously, without blokcing</p>
-</blockquote>
-
-<h4 id="scalable">Scalable</h4>
-
-<blockquote>
-  <p>An application is <strong>scalable</strong> if it is able to be expanded according ot its usage</p>
-</blockquote>
-
-<ul>
-<li><strong>scale up:</strong> make use of parallelism in multi-core systems</li>
-<li><strong>scale out:</strong> make use of multiple server nodes</li>
-</ul>
-
-<blockquote>
-  <p><strong>Important for scalability:</strong> minimize shared mutable state</p>
-  
-  <p><strong>Important for scale out:</strong> location transparency, resilience</p>
-</blockquote>
-
-<h4 id="resilient">Resilient</h4>
-
-<blockquote>
-  <p>An application is <strong>resilient</strong> if it can recover quickly from failures</p>
-</blockquote>
-
-<p>일반적으로 <em>resilience</em> 는 나중에 (<em>afterthought</em>) 추가하기 어렵다. 시작부터 디자인의 일부로 고려해야한다. 이를 위해</p>
-
-<ul>
-<li>loose coupling</li>
-<li>strong ecapsulation of state</li>
-<li>pervasive supervisor hierarchies</li>
-</ul>
-
-<h4 id="responsive">Responsive</h4>
-
-<blockquote>
-  <p>An application is <strong>responsive</strong> if it provides rich, real-time interaction with its users even under load and in the presence of failures.</p>
-  
-  <p>Responsive applications can be built on an event-driven, scalable, and resilient architecture</p>
-  
-  <p>Still need careful attention to algorithms, system design, back-pressure, and many other details.</p>
-</blockquote>
-
-<h4 id="callback">Callback</h4>
-
-<p>보통 이벤트를 다루기 위해 <em>callback</em> 이 사용되는데 자바를 예로 들면</p>
-
-<pre><code class="scala">class Counter extends ActionListener {  
-  private var count = 0
-  button.addActinoListener(this)
-
-  def actionPerformed(e: ActionEvent): Unit = {
-    count += 1
-  }
-}
-</code></pre>
-
-<p>여기서 볼 수 있는 문제는 </p>
-
-<p>(1) <em>shared mutable state</em> 가 필요하다 <br />
-(2) <em>composing</em> 하기 힘들다 <br />
-(3) 시스템이 커지면 <em>callback hell</em> 이 될 수 있다</p>
-
-<h4 id="composableeventabstraction">Composable Event Abstraction</h4>
-
-<p>일반적으로 함수형 프로그래밍에서 이를 해결하기 위한 방법은 <em>composable event abstraction</em> 이다.</p>
-
-<ul>
-<li>Events are first class</li>
-<li>Events are often represented as messages</li>
-<li>Handlers of events are also first-class</li>
-<li>Complex handlers can be composed from primitive ones</li>
-</ul>
-
-<p>이 수업에서 다룰 내용은 <em>monad</em>, <em>future</em>, <em>observables</em>, <em>actor</em>, <em>supervisor</em>, <em>distributed actor</em> 등이다.</p>
-
-<h4 id="functionpatternmaching">Function, Pattern Maching</h4>
-
-<p>잠깐 복습하고 가면 <em>JSON</em> 을 모델링 하기 위해서</p>
-
-<pre><code class="scala">abstract class JSON  
-case class JSeq (elems: List[JSON])           extends JSON  
-case class JObj (bindings: Map[String, JSON]) extends JSON  
-case class JNum (num: Double)                 extends JSON  
-case class JStr (str: String)                 extends JSON  
-case class JBool (b: Boolean)                 extends JSON  
-case class JNull                              extends JSON  
-</code></pre>
-
-<p>그러면 요로코롬 데이터를 표현할 수 있다.</p>
-
-<pre><code class="scala">  val data = JObj(Map(
-    "firstName"   -&gt; JStr("Jason"),
-    "lastName"    -&gt; JStr("Bone"),
-    "phoneNumber" -&gt; JSeq(List(
-      JObj(Map(
-        "type" -&gt; JStr("home"), "number" -&gt; JStr("212 555 3347"),
-        "type" -&gt; JStr("fax"),  "number" -&gt; JStr("33312 555 3347")
-      ))
-    ))
-  ))
-</code></pre>
-
-<p>자바스크립트에서 이거랑 똑같다. 좀 스칼라 버전이 복잡해 보이는데, 오더스키 말로는 더 문법적으로 간편하도록 작성할 수 있다고 한다. 아마 어디 라이브러리에 구현되어있을듯</p>
-
-<pre><code class="javascript">data = {  
-  "firstName": "Json",
-  "lastName": "Bone",
-  "phoneNumber": [
-    { "type: "home", "number", "212 555 3347" },
-    { "type: "fax",  "number", "33312 555 3347" }
-  ]
-}
-</code></pre>
-
-<p>이제 <code>JSON</code> 을 출력하는 <code>show</code> 함수를 만들어 보면</p>
-
-<pre><code class="scala">  def show(json: JSON): String = json match {
-    case JSeq(elems) =&gt; "[" + (elems map show mkString ", ") + "]"
-    case JObj(bindings) =&gt;
-      val assocs = bindings map {
-        case (key, value) =&gt; "\"" + key + "\":" + show(value)
-      }
-      "{" + (assocs mkString ", ") + "}"
-
-    case JNum(num) =&gt; num.toString
-    case JStr(str) =&gt; "\"" + str + "\""
-    case JBool(b) =&gt; b.toString
-    case JNull() =&gt; "null"
-  }
-</code></pre>
-
-<p><em>case class</em> 가 나와서 잠깐 보면 다음 타입은 무엇일까?</p>
-
-<pre><code class="scala">{ case (key, value) =&gt; ...  }
-</code></pre>
-
-<p>이것 자체로는 아무 타입이 아닌데, 타입을 지정해 주면 <em>function</em> 이 될 수 있다. 무슨말인고 하니</p>
-
-<pre><code class="scala">type JBinding = (String, JSON)  
-val f = { case (key, value) =&gt; ...  } // error  
-val f: JBinding =&gt; String = { case (key, value) =&gt; ...  }  
-</code></pre>
-
-<p>두 번째 <code>val</code> 만 성공적으로 컴파일된다. 그리고 스칼라에서 모든 구체적인 타입은 <em>class</em> 나 <em>trait</em> 의 구현체인데 <em>function</em> 도 마찬가지다.</p>
-
-<p><code>JBinding =&gt; String</code> 은 <code>scala.Function1[JBinding, String]</code> 이다. 다시 말해서 모든 함수는 <code>Function</code> <em>trait</em> 의 구현이다.</p>
-
-<pre><code class="scala">trait Function[-A, +R] {  
-  def apply(x: A): R
-}
-</code></pre>
-
-<p>여기서 <code>-A</code>, <code>+R</code> 등은 <em>variance</em> 와 관련된 것인데, 이 <em>variance</em> 란 것이 어떤 두 타입사이에 관계가 있다면, 컨테이너에 넣었을때의 관계는 어떠한가를 기술하는 것이다. </p>
-
-<ul>
-<li><code>S &lt;: T</code> means <strong>S is a subtype of T</strong></li>
-<li><code>S :&gt; T</code> means <strong>S is a supertype of T</strong></li>
-</ul>
-
-<p>이걸 <em>bound</em> 라 부른다. 따라서 <em>mixed bound</em> 도 있다. <code>S &gt;: NonEmpty &lt;: IntSet]</code> 이라던지.</p>
-
-<p><code>A &lt;: B</code>, 즉 <em>lower bound</em> 가 있고, 컨테이너 <code>C</code> 가 있을때</p>
-
-<ul>
-<li><code>C[A] &lt;: C[B]</code> means <strong>C is covariant</strong>, <code>C[+A]</code></li>
-<li><code>C[A] &gt;: C[B]</code> means <strong>C is contravariant</strong>, <code>C[-A]</code></li>
-<li>상관 없으면 <strong>C is non-variant</strong>, <code>C[A]</code></li>
-</ul>
-
-<p>위에서 봤듯이 함수의 파라미터는 <em>contravariant</em>, 리턴타입은 <em>covariant</em> 인데 이는 파라미터를 나중에 함수 호출할 수 있기 때문이다.</p>
-
-<p>더 자세한 내용은 <a href='http://1ambda.github.io/functional-programming-in-scala-chapter-4/' >Functional Programming in Scala Chapter4</a> 를 참조하자.</p>
-
-<p>함수는 <em>trait</em> 의 구현이고, <code>Map</code> 은 <code>Function1</code> 의 서브클래스다. 따라서 맵을 사용할때 <code>exampleMap(key)</code> 처럼 사용할 수 있다.</p>
-
-<p><code>Seq</code> 도 마찬가지로 서브클래스다. 그래서 <code>Vector(3)</code> 처럼 사용할 수 있다.</p>
-
-<h4 id="collection">Collection</h4>
-
-<p>컬렉션도 잠깐 복습해 보자.</p>
-
-<p><img src='http://librairie.immateriel.fr/baw/9780596155957/httpatomoreillycomsourceoreillyimages322250.png'  alt="" /></p>
-
-<p align="center">(<a href='http://librairie.immateriel.fr/' >http://librairie.immateriel.fr</a>)</p>
-
-<p><img src='http://i.stack.imgur.com/2fjoA.png'  alt="" /></p>
-
-<p align="center">(<a href='http://stackoverflow.com/' >http://stackoverflow.com</a>)</p>
-
-<p><em>filter, map</em> 과 같은 메소드들은 다양한 컬렉션을 지원하지만, <em>list</em> 에서는 <em>tail recursive</em> 하게 정의되어 있다고 한다.</p>
-
-<h3 id="forexpression">For Expression</h3>
-
-<p>스칼라에서 <code>for</code> 구문은 <code>map, flatMap</code> 그리고 <em>lazy variant</em> <code>filter</code> 로 번역된다.</p>
-
-<p>(1) <code>for (x &lt;- e1) yield e2</code> 는</p>
-
-<p><code>e1.map(x =&gt; e2)</code> 다.</p>
-
-<p>(2) <code>for (x &lt;- e1 if f; s) yield e2</code> 는</p>
-
-<p>여기서 <code>f</code> 는 <em>filter</em> 고 <code>s</code> 는 <em>sequence of generators and filters</em> 다. 따라서</p>
-
-<p><code>for (x &lt;- e1.withFilter(x =&gt; f); s) yield e2</code> 로 번역된다. 외울 필요는 없고 <code>for</code> 루프를 쓸 때 <code>withFilter</code> 때문에 메모리 낭비가 적다는 사실 정도만 알고 있으면 된다.</p>
-
-<blockquote>
-  <p>You can think of <code>withFilter</code> as a variant of <code>filter</code> that doesn't produce an intermediate list, but instead filters the following <code>map</code> or <code>flatMap</code> function application</p>
-</blockquote>
-
-<p>(3) <code>for (x &lt;- e1; y &lt;- e2; s) yield e3</code> 는</p>
-
-<p><code>e1.flatMap(x =&gt; for (y &lt;- e2; s) yield e3)</code> 로 번역된다.</p>
-
-<p>(4) <code>for</code> 구문에서 <em>generator</em> 의 <em>left-hand side</em> 가 패턴일 수 있다. 무슨말인고 하니</p>
-
-<pre><code class="scala">val data: List[JSON] = ...
-
-for {  
-  JObj(bindings) &lt;- data
-  JSeq(phones) &lt;- bindings("phoneNumber")
-  JObj(phone) &lt;- phones
-  JStr(digits) = phone("number")
-  if digits startWith "212"
-} yield (bindings("firstName"), bindings("lastName"))
-</code></pre>
-
-<p><code>pattern &lt;- expr</code> 은 이렇게 번역된다.</p>
-
-<pre><code class="scala">x &lt;- expr withFilter {  
-        case pattern =&gt; true
-        case _ =&gt; false
-     } map {
-       case pattern =&gt; x
-     }
-</code></pre>
-
-<h3 id="functionalrandomgenerators">Functional Random Generators</h3>
-
-<p><code>for</code> 구문은 <em>collection</em> 에만 쓸 수 있지 않다. <code>map, flatMap, withFilter</code> 만 구현 된다면 다른 곳으로의 응용도 가능하다. (LINQ 도 그 예라고 본것 같음)</p>
-
-<p><em>random value generator</em> 가 하나의 예제인데, 뭔지 살펴보자.</p>
-
-<pre><code class="scala">  trait Generator[+T] {
-    def generate: T
-  }
-
-  val integers = new Generator[Int] {
-    val rand = new java.util.Random
-    def generate = rand.nextInt()
-  }
-
-  val booleans = new Generator[Boolean] {
-    def generate = integers.generate &gt; 0
-  }
-
-  val pairs = new Generator[(Int, Int)] {
-    def generate = (integers.generate, integers.generate)
-  }
-</code></pre>
-
-<p>말 그대로 랜덤한 값들을 타입별로 생성해주는거다. 근데, 매번 해야하는 <em>boilerplate</em> 땜에 귀찮타. 더 좋은 방법은 없을까? 예를 들어 이렇게 쓸 수 있다면,</p>
-
-<pre><code class="scala">val booleans = for (x &lt;- integers) yield x &gt; 0
-
-def pairs[T, U](t: Generator[T], u: Generator[U]) = for {  
-  x &lt;- t
-  y &lt;- u
-} yield (x, y)
-</code></pre>
-
-<p><del>존나</del> 쿨하다! 근데 이게 스칼라에서 이렇게 번역되기 때문에</p>
-
-<pre><code class="scala">val booleans = integers map (x =&gt; x &gt; 0)
-
-def pairs[T, U](t: Generator[T], u: Generator[U]) =  
-  t flatMap(x =&gt; u map (y =&gt; (x, y)))
-</code></pre>
-
-<p><em>generator</em> 을 위한 <code>map</code>, <code>flatMap</code> 을 만들어야 한다. 이 함수들이  새로운 타입을 위한 <code>Generator</code> 를 돌려주면 된다. <del>모나드 느낌이 솔솔 난다</del></p>
-
-<pre><code class="scala">trait Generator[+T] {  
-  self =&gt; // an alias for "this"
-  def generate: T
-
-  def map[S](f: T =&gt; S): Generator[S] = new Generator[S] {
-    def generate = f(self.generate)
-  }
-
-  def flatMap[S](f: T =&gt; Generator[S]): Generator[S] = 
-    new Generator[S] {
-      def generate = f(self.generate).generate
-    }
-}
-</code></pre>
-
-<p>여기서 <code>self</code> 가 필요한 이유는 <code>map</code> 함수 내부에서 <code>this</code> 컨텍스트를 사용할 수 없기 때문이다. <code>map</code> 의 <code>this</code> 로 해석되어 무한루프에 빠진다.</p>
-
-<p>이렇게 <code>Generator</code> 를 위한 <code>map, flatMap</code> 을 만들면 <code>booleans</code> 가 이렇게 번역된다.</p>
-
-<pre><code class="scala">val booleans = for (x &lt;- integers) yield x &gt; 0
-
-val booleans = integers map { x =&gt; x &gt; 0 }
-
-val booleans = new Generator[Booelan] {  
-  def generate = (x =&gt; x &gt; 0)(integers.generate)
-}
-
-val booleans = new Generator[Booelan] {  
-  def generate = integers.generate &gt; 0
-}
-</code></pre>
-
-<pre><code class="scala">def pairs[T, U](t: Generator[T], u: Generator[U]) = t flatMap {  
-  x =&gt; u map { y =&gt; (x, y) }
-}
-
-...
-...
-...
-
-def pairs[T, U](t: Generator[T], u: Generator[U]) =  
-  new Generator[(T, U)] {
-    def generate = (t.generate, u.generate)
-  }
-</code></pre>
-
-<p>여기 몇개 더 유용한 <em>generator</em> 를 좀 살펴보면</p>
-
-<pre><code class="scala">  def single[T](x: T): Generator[T] = new Generator[T] {
-    def generator = x
-  }
-
-  def choose(l: Int, h: Int): Generator[Int] =
-    for (x &lt;- integers) yield l + x % (h - l)
-
-  def oneOf[T](xs: T*): Generator[T] =
-    for (i &lt;- choose(0, xs.length)) yield xs(i)
-</code></pre>
-
-<p>재밌는 사실은 <em>Generator</em> 가 <em>building block</em> 이 된다는 사실이다. <em>Generator</em> 를 조합해 <em>Generator</em> 를 만들고.</p>
-
-<p>처음에 <em>reactive programming</em> 에 관해서 잠깐 이야기 하면서 <em>compose</em> 란 단어가 나왔는데, 이게 바로 <em>composing</em> 의 강력함이다.</p>
-
-<h4 id="listgenerator">List Generator</h4>
-
-<pre><code class="scala">  def lists: Generator[List[Int]] = for {
-    isEmpty &lt;- booleans
-    list &lt;- if (isEmpty) emptyLists else nonEmptyLists
-  } yield list
-
-  def emptyLists = single(Nil)
-
-  def nonEmptyLists = for {
-    head &lt;- integers
-    tail &lt;- lists
-  } yield head :: tail
-</code></pre>
-
-<h4 id="treegenerator">Tree Generator</h4>
-
-<pre><code class="scala">  // tree generator
-  trait Tree
-  case class Leaf(x: Int)                   extends Tree
-  case class Inner(left: Tree, right: Tree) extends Tree
-
-  def leafs: Generator[Leaf] = for {
-    x &lt;- integers
-  } yield Leaf(x)
-
-  def inners: Generator[Inner] = for {
-    l &lt;- trees
-    r &lt;- trees
-  } yield Inner(l, r)
-
-  def trees: Generator[Tree] = for {
-    isLeaf &lt;- booleans
-    tree &lt;- if (isLeaf) leafs else inners
-  } yield tree
-</code></pre>
-
-<p>코드를 보면, 좀 뭔가 감이 올테다. 바로 <code>map</code>, <code>flatMap</code> 을 <code>Geneartor</code> 에 대해서 정의했기 때문에 <code>for</code> 내부에서 <code>Generator</code> 에서 <code>T</code> 타입을 빼올 수 있다. 그리고 <code>yield</code> 를 이용해 만드는 것 또한 <code>Generator</code> 가 된다. </p>
-
-<p><del>오더스키 교수는 진짜 천재같다. 모나드를 이렇게 설명하다니. 예전 강의 들을때도 정말 쉽게 설명한다는 느낌을 많이 받았는데</del></p>
-
-<h4 id="applicationrandomtesting">Application: Random Testing</h4>
-
-<p>유닛테스팅을 할때 <em>input</em> 에 대해서 <em>expected output</em> 과 비교해 테스팅을 진행하는데, <em>input</em> 을 직접 만들지 않고 테스팅이 가능할까?</p>
-
-<blockquote>
-  <p>Yes, By generating random test inputs</p>
-</blockquote>
-
-<pre><code class="scala">def randomTest[T](g: Generator[T], times: Int = 100)(f: T =&gt; Boolean): Unit = {  
-  for (i &lt;- 0 until times) {
-    val value = g.generate
-    assert(f(value), "test failed for" + value)
-  }
-  println("passed " + times + "tests")
-}
-</code></pre>
-
-<p>이런 테스팅을 한다면, </p>
-
-<pre><code class="scala">randomTest(pairs(lists, lits)) {  
-  case (xs, ys) =&gt; (xs ++ ys).length &gt; xs.length
-}
-</code></pre>
-
-<p>실패할 것이다. 둘다 <code>Nil</code> 이면 실패한다.</p>
-
-<p>우리는 <em>test</em> 를 작성할 필요가 없고, 항상 참이어야 하는 <em>properties</em> 만 작성하면 된다. 그게 <a href='http://www.scalacheck.org/' ><em>ScalaCheck</em></a> 도구의 기본 아이디어다.</p>
-
-<p><em>ScalaCheck</em> 튜토리얼을 보면 </p>
-
-<pre><code class="scala">import org.scalacheck.Properties  
-import org.scalacheck.Prop.forAll
-
-object StringSpecification extends Properties("String") {
-
-  property("startsWith") = forAll { (a: String, b: String) =&gt;
-    (a+b).startsWith(a)
-  }
-
-  property("concatenate") = forAll { (a: String, b: String) =&gt;
-    (a+b).length &gt; a.length &amp;&amp; (a+b).length &gt; b.length
-  }
-
-  property("substring") = forAll { (a: String, b: String, c: String) =&gt;
-    (a+b+c).substring(a.length, a.length+b.length) == b
-  }
-}
-</code></pre>
-
-<p>하스켈의 <a href='https://www.haskell.org/haskellwiki/Introduction_to_QuickCheck1' ><em>QuickCheck</em></a> 가 먼저 구현되었다고 한다.</p>
-
-<pre><code class="haskell">*A&gt; quickCheck ((\s -&gt; (reverse.reverse) s == s) :: [Char] -&gt; Bool)
-</code></pre>
-
-<h3 id="monads">Monads</h3>
-
-<p><del>올것이 왔다</del></p>
-
-<blockquote>
-  <p>Data structures with <code>map</code> and <code>flatMap</code> seem to be quite common.</p>
-  
-  <p>In fact there's a name that describe this class of a data structure together with some algebraic laws that they hould have</p>
-  
-  <p>They are called <strong>monads</strong></p>
-</blockquote>
-
-<p>모나드는 <code>M[T]</code> 타입으로 표시하는데, 다음의 함수들을 구현해야 한다. 하스켈에서 <code>&gt;&gt;=, return</code> 과 동일하다.</p>
-
-<pre><code class="scala">trait M[T] {  
-  // `&gt;&gt;=` called bind
-  def flatMap[U](f: T =&gt; M[U]): M[U]
-}
-
-// return
-def unit[T](x: T): M[T]  
-</code></pre>
-
-<p>이미 우리가 모르는 사이에 썼던 모나드를 보면</p>
-
-<ul>
-<li><code>List</code> is a monad with <code>unit(x) = List(x)</code></li>
-<li><code>Set</code> is a monad with <code>unit(x) = Set(x)</code></li>
-<li><code>Option</code> is a monad with <code>unit(x) = Some(x)</code></li>
-<li><code>Generator</code> is a monad with <code>unit(x) = single(x)</code></li>
-</ul>
-
-<p><code>flatMap</code> 은 이들 타입에 두루 쓰일 수 있는 반면 스칼라에서 <code>unit</code> 은 각 모나드 마다 다르다. </p>
-
-<p>그리고 <code>map</code> 은 모나드에서 <code>flatMap</code> 과 <code>unit</code> 을 조합해 만들 수 있다.</p>
-
-<pre><code class="scala">m map f
-
-== m flatMap (x =&gt; unit(f(x)))
-== m flatMap (f andThen unit) // composing functions
-</code></pre>
-
-<p>즉 <code>f</code> 를 받아 적용하고, <code>unit</code> 으로 모나드로 감싼뒤 <code>flatMap</code> 을 이용해 <em>flattening</em> 하면 <code>map</code> 의 결과가 나온다.</p>
-
-<h4 id="monadlaws">Monad Laws</h4>
-
-<ul>
-<li><em>associativity</em></li>
-</ul>
-
-<pre><code class="scala">m flatMap f flatMap g == m flatMap (x =&gt; f(x) flatMap g)  
-</code></pre>
-
-<ul>
-<li><em>left unit</em></li>
-</ul>
-
-<pre><code class="scala">unit(x) flatMap f == f(x)  
-</code></pre>
-
-<ul>
-<li><em>right unit</em></li>
-</ul>
-
-<pre><code class="scala">m flatMap unit = m  
-</code></pre>
-
-<p><a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' #Monad_Laws">하스켈 문법</a>으로 보면</p>
-
-<pre><code class="haskell">(m &gt;&gt;= f) &gt;&gt;= g  =  m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)  -- associativity
-
-return x &gt;&gt;= f   =  f x                      -- left unit
-
-m &gt;&gt;= return     =  m                        -- right unit  
-</code></pre>
-
-<p><em>associativity</em> 와 관련해서, <em>monoid</em> 란 것도 있는데 이건 <em>bind</em> 가 없는 모나드라 생각하면 쉽다. 예를 들어 <em>integer</em> 는 모노이드다</p>
-
-<pre><code>(x + y) + z = x + (y + z)
-</code></pre>
-
-<p><em>monad laws</em> 를 확인하기 위해 <code>Option</code> 을 좀 보자.</p>
-
-<pre><code class="scala">abstract class Option[+T] {  
-  def flatMap[U](f: T =&gt; Option[U]): Option[U] = this match {
-    case Some(x) =&gt; f(x)
-    case None =&gt; None
-  }
-}
-</code></pre>
-
-<p><em>left unit</em> 을 보이려면 <code>return x &gt;&gt;&gt; f   =   f x</code>, 즉</p>
-
-<pre><code class="scala">Some(x) flatMap f == f(x)
-
-// ==
-Some(x) match {  
-  case Some(x) =&gt; f(x)
-  case None =&gt; None
-}
-
-// == 
-f(x)  
-</code></pre>
-
-<p><em>right unit</em> 을 보이려면 <code>m &gt;&gt; return     =    m</code> 임을 보이면 된다.</p>
-
-<pre><code class="scala">opt flatMap Some // == opt
-
-// == 
-opt match {  
-  case Some(x) =&gt; Some(x)
-  case None =&gt; None
-}
-</code></pre>
-
-<p><em>associative law</em> 를 보이려면 </p>
-
-<pre><code class="haskell">(m &gt;&gt;= f) &gt;&gt;= g     =     m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)
-</code></pre>
-
-<p>따라서 스칼라에선</p>
-
-<pre><code class="scala">opt flatMap f flatMap g  
-// == opt flatMap (x =&gt; f(x) flatMap g)
-
-opt flatMap f flatMap g
-
-// ==
-opt match { case Some(x) =&gt; f(x) case None =&gt; None }  
-    match { case Some(y) =&gt; g(y) case None =&gt; None }
-
-// ==
-opt match {  
-  case Some(x) =&gt;
-    f(x) match { case Some(y) =&gt; g(y) case None =&gt; None }
-  case None =&gt;
-    None match { case Some(y) =&gt; g(y) case None =&gt; None }
-}
-
-// ==
-opt match {  
-  case Some(x) =&gt; f(x) match {
-    case Some(y) =&gt; g(y) case None =&gt; None
-  }
-  case None =&gt; None
-}
-
-// ==
-opt match{  
-  case Some(x) =&gt; f(x) flatMap g
-  case None =&gt; None
-}
-
-// ==
-opt flatMap (x =&gt; f(x) flatMap g)  
-</code></pre>
-
-<p>결국 <code>Option</code> 은 모나드다. 근데 이런 <em>monad laws</em> 를 지키면 얻는게 뭘까? </p>
-
-<p><em>associativity</em> 가 지켜지면, 중첩된 <em>for-loop</em> 를 <em>inline</em> 할 수 있다.</p>
-
-<pre><code class="scala">for (y &lt;- for (x &lt;- m; y &lt;- f(x)) yield y  
-     z &lt;- g(y)) yield z
-
-// ==
-for (x &lt;- m;  
-     y &lt;- f(x)
-     z &lt;- g(y)) yield z
-</code></pre>
-
-<p><em>right unit</em> 은 </p>
-
-<pre><code class="scala">for (x &lt;- m) yield x
-
-== m
-</code></pre>
-
-<p>애석하게도 <em>left unit</em> 은 마땅한 <em>for-loop</em> 가 없다.</p>
-
-<blockquote>
-  <p>Left unit does not have an analogue for <em>for-expression</em></p>
-</blockquote>
-
-<h3 id="anothertypetry">Another type: Try</h3>
-
-<p>강의 후반부에서 <code>Try</code> 라는 타입을 다룰건데, 이 타입은 <code>Option</code> 과 비슷하다. 서브타입이 <code>Success, Failure</code> 로 <em>exception</em> 이 발생할 경우와 아닐 경우를 처리하는데 쓸 수 있다.</p>
-
-<pre><code class="scala">abstract class Try[+T]  
-case class Success[T](x: T)         extends Try[T]  
-case class Failure[T](e: Exception) extends Try[Nothing]  
-</code></pre>
-
-<p>이 <code>Try</code> 를 예외가 발생할 수 있는 <em>computation (연산)</em> 을 <em>thread, computer</em> 간 넘겨주는데 사용할 수 있다. 참고로 스칼라에서 <code>Nothing</code> 은 <em>bottom type</em> 이다.</p>
-
-<p>이 <code>Try</code> 를 이용해 <em>computation</em> 을 감쌀 수 있다. <code>Try(expr)</code> 처럼</p>
-
-<pre><code class="scala">object Try {  
-  def apply[T](expr: =&gt; T): Try[T] =
-    try Success(expr)
-    catch {
-      case NonFatal(e) =&gt; Failure(e)
-    }
-}
-</code></pre>
-
-<p>여기서 <code>=&gt; T</code> 로 <code>expr</code> 를 <em>by name</em> 으로 받는 이유는 연산을 나중에 하기 위해서다.</p>
-
-<p><code>Try</code> 를 <em>for-loop</em> 에 활용하면</p>
-
-<pre><code class="scala">for {  
-  x &lt;- computeX
-  y &lt;- computeY
-} yield f(x, y)
-</code></pre>
-
-<p>이 구문이 하는 일은, <code>computeX</code>, <code>computeY</code> 가 모두 성공할 경우에만 <code>Success(f(x, y))</code> 를 돌려준다. 둘 중 하나라도 실패하면 <code>Failure(e)</code> 를 반환할 것이다.</p>
-
-<p><code>Try</code> 를 위한 <code>map</code>, <code>flatMap</code> 은</p>
-
-<pre><code class="scala">abstract class Try[T] {  
-  def flatMap[U](f: T =&gt; Try[U]): Try[U] = this match {
-    case Success(x) = try f(x) 
-                      catch { case NonFatal(e) =&gt; Failure(ex)
-    case fail: Failure =&gt; fail
-  }
-
-  def flatMap[U](f: T =&gt; U): Try[U] = this match {
-    case Success(x) =&gt; Try(f(x))
-    case fail: Failure =&gt; fail
-  }
-}
-
-
-// t map f
-// == t flatMap (f andThen Try)
-</code></pre>
-
-<p><code>Try</code> 를 모나드라 생각해 보자. <em>monad law</em> 중 실패하는 것이 있을까? 다시 한번 보면</p>
-
-<pre><code class="haskell">return x &gt;&gt;= f     =    f x    -- left unit  
-m &gt;&gt;= return       =    m      -- right unit  
--- associativity
-(m &gt;&gt;= f) &gt;&gt;= g    =    m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g) 
-</code></pre>
-
-<p>아까 <em>for-expression</em> 에 사용했으니 <em>right unit, associativity</em> 는 맞을 거고 <em>left unit</em> 을 살펴보자.</p>
-
-<pre><code class="scala">// return x &gt;&gt;= f     =    f x
-Try(x) flatmap f
-
-// ==
-this match {  
-  Success(x) =&gt; try f(x) 
-                catch { case NonFatal(e) =&gt; Failure(ex)
-  case fail: Failure =&gt; fail
-}
-</code></pre>
-
-<p>보면 알겠지만, 예외가 발생하지 않을 경우에만 <em>left unit</em> 이 성립한다.</p>
-
-<pre><code class="scala">Try(expr) flatMap f != f(expr)  
-</code></pre>
-
-<p>좌변은 예외를 그냥 던지지않고, 감싸서 준다. 반면 우측은 예외를 던질 수 있다. 즉 예외를 던지지 않는 <em>law</em> 를 얻기 위해 <em>left unit</em> 을 희생했다고 보면 된다.</p>
-
-<blockquote>
-  <p>An expression composed from <code>Try</code>, <code>map</code>, <code>flatMap</code> will never throw a non-fatal exception</p>
-</blockquote>
-
-<p>이거 <em>bullet-proof principle</em> 이라 부른다.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p>이제까지 <em>collection</em> 뿐만 아니라 다양한 타입에 대해 <em>for-expression</em> 을 쓸 수 있음을 배웠다. <code>map</code>, <code>flatMap</code>, <code>withFilter</code> 등을 구현하면 된다.</p>
-
-<p><code>flatMap</code> 을 구현한 많은 타입이 <em>monad</em> 다. 만약에 <code>withFilter</code> 를 구현하면 <em>monad with zero</em> 라 부른다.</p>
-
-<p>모나드 법칙은 <em>API</em> 를 구현할때 가이드라인이 되지만, <code>Try</code> 의 예에서 봤듯이 모나드 법칙을 버려서 다른 이득을 얻을 수도 있다. <del>만만한 left unit</del></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://stackoverflow.com/questions/1722137/scala-2-8-collections-design-tutoria$l' >Scala 2.8 Collection</a> <br />
-(2) <a href='http://en.wikibooks.org/wiki/Haskell/Understanding_monads' #Monad_Laws">Haskell Wiki: Monad</a>  </p>]]></description><link>http://1ambda.github.io/reactive-programming-1/</link><guid isPermaLink="false">c49814fa-24c5-4f5f-83c4-d1a196a8b687</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[variance]]></category><category><![CDATA[monad]]></category><category><![CDATA[reactive programming]]></category><category><![CDATA[generator]]></category><category><![CDATA[scala check]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 07:30:37 GMT</pubDate></item></channel></rss>
+(7) <a href='http://terpconnect.umd.edu/' ~sthomas2/rabin-karp.html">Rabin-Karp Algorithm</a></p>]]></description><link>http://1ambda.github.io/substring-search/</link><guid isPermaLink="false">2c08e92e-2241-4624-988e-32d552ed67e1</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[substring search]]></category><category><![CDATA[boyer-moore]]></category><category><![CDATA[rabin-karp]]></category><category><![CDATA[knuth-morris-pratt]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 15:16:42 GMT</pubDate></item></channel></rss>
