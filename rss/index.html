@@ -1,5 +1,660 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 25 Jan 2015 01:55:14 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[AI Planning 2, Heuristic Search and STRIPS]]></title><description><![CDATA[<p><img src='http://imgs.xkcd.com/comics/ai.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 01 Feb 2015 06:14:39 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[AI Planning 4, STN, HTN]]></title><description><![CDATA[<p><img src='http://uxmag.com/sites/default/files/legacy/articleimage_15.jpg'  alt="" /></p>
+
+<p>지금까지 <em>State-Space Planning</em>, <em>Plan-Space Planning</em> 기법을 배웠는데, 이 두 가지는 같은 문제를 푸는 방법이었다. 이제 문제를 조금 변형해, 인간의 사고와 비슷하게 <em>Task</em> 중심으로 분할해서 해결하는 법을 배워보자. </p>
+
+<h3 id="stn">STN</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning.jpg'  alt="" /></p>
+
+<p><em>terms</em> 는 <em>constant</em>, <em>variable</em>, <em>object</em> 따위의 것들이고 <em>literals</em> 는 참이거나 거짓이 될 수 있는 <em>proposition</em> 이다. </p>
+
+<p><em>task network</em> 에서 새롭게 도입되는 것은</p>
+
+<ul>
+<li><strong>task:</strong> to be performed</li>
+<li><strong>method:</strong> describing ways in which tasks can be performed</li>
+<li><strong>organized collections of tasks:</strong> called task networks</li>
+</ul>
+
+<p><em>DWR</em> 예제로 보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/DWR_STN_example.jpg'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="task">Task</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/tasks_def.jpg'  alt="" /></p>
+
+<p><em>task</em> 는 <code>T_S</code> 처럼 <em>non-primitive</em> 일 수도, <code>t1, ..., tn</code> 처럼 <em>subsete</em> 에 속하는 <em>primitive task</em> 일 수 있다. </p>
+
+<p><em>task</em> 를 <code>t_i(r1, ..., rk)</code> 라 표기하는데, <code>r</code> 은 <em>task</em> 에 의해 조작되는 <em>object</em> 등의 <em>term</em> 이다. </p>
+
+<p>그리고 슬라이드에 나와 있듯이 <em>ground task</em> 는 <em>variable</em> 이 아니라 <em>action</em> 처럼 <em>constant</em> 를 가져야 하고, <em>action</em> 은 <em>ground primitive task</em> 만 <em>accomplish</em> 할 수 있다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/simple_task_network_def.jpg'  alt="" /></p>
+
+<p><em>STN</em> 은 <em>acyclic directed graph</em> <code>(U, E)</code> 다. 각 <em>node</em> 는 <em>task</em> 고, <em>edge</em> 는 <em>task</em> 의 <em>partial ordering</em> 을 정의한다. <code>t_i &lt; t_j</code> 처럼</p>
+
+<p>그리고 <em>task network</em> 는 모든 <em>node</em> 가 <em>ground/primitive</em> 일때만 <em>ground/primitive</em> 고, 하나라도 아니라면 <em>unground/non-primitive</em> 다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/total_ordered_STN.jpg'  alt="" /></p>
+
+<p><em>STN</em> <code>w</code> 는 위상 정렬처럼, 모든 <em>edge</em> 가 <em>node</em> 에 대해 순서를 정의할 수 있으면 <em>totally ordered</em> 하다고 말한다. 그러면 <code>w</code> 는 <em>task</em> 의 시퀀스로 나타낼 수 있다. <code>w = &lt;t1, ..., tn&gt;</code></p>
+
+<p>그리고 <code>w</code> 가 <em>totally ordered</em>, <em>ground</em>, <em>primitive</em> 이면 <code>w</code> 를 위한 <em>plan</em> <code>ㅠ</code> 는</p>
+
+<p><code>ㅠ(w) = &lt;a1, ..., an&gt;</code> where <code>ai = ti</code>, <code>1 &lt;= i &lt;= n</code></p>
+
+<p><br/></p>
+
+<p>DWR 예제로 STN 의 표기법을 알아보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STNs_DWR_ex.jpg'  alt="" /></p>
+
+<p><code>take</code> <em>task</em> 는 똑같은 <em>operator</em> 이름이 있으므로 <em>primitive</em> 고, 변수가 없으므로 <em>ground</em> 다. </p>
+
+<p><code>move-stack</code> 은 <em>DWR domain</em> 에 정의한 같은 이름의 <em>operator</em> 가 없으므로 <em>non-primitive</em> 이고, 변수가 있으므로 <em>unground</em> 다.</p>
+
+<p>이 3개의 <em>task</em> 를 기반으로 <em>task network</em> 를 구성할 수 있다.</p>
+
+<p><code>w1</code> 은 <code>(t1, t2), (t1, t3)</code> 고, <code>t2, t3</code> 에 대한 <em>ordering</em> 이 없으므로 <em>partially ordered network</em> 다.</p>
+
+<p><br/></p>
+
+<h3 id="methodsrefinements">Methods (Refinements)</h3>
+
+<blockquote>
+  <p><strong>method:</strong> describing ways in which tasks can be performed</p>
+</blockquote>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_def.jpg'  alt="" /></p>
+
+<p>메소드는 <em>name</em>, <em>task</em>, <em>precond</em> <em>network</em> 로 구성되어 있다.</p>
+
+<ul>
+<li><em>name(m)</em>: <code>n(x1, ..., xk)</code> 의 형태로 <em>unique</em> 한 심볼 <code>n</code> 과 다뤄지는 <em>variable</em> 인 <code>x</code> 를 포함한다</li>
+<li><em>task(m)</em>: <em>non-primitive task</em></li>
+<li><em>precond(m)</em>: set of literals</li>
+<li><em>network(m)</em>: task network <code>(U, E)</code> containing the set of subtasks <code>U</code> of <code>m</code></li>
+</ul>
+
+<p>잘 보면 <em>effect</em> 가 없는데, 여기선 <em>goal</em> 을 달성하는 것이 아니라 <em>task</em> 를 수행해야 하기 때문에 <em>effect</em> 는 없고 <em>precond</em> 만 신경쓴다.</p>
+
+<p>그리고 <em>task</em> 는 무엇을 달성해야 하는지를 나타내기 때문에, <em>task</em> 가 같으면 같은 <em>method</em> 가 아니냐고 질문할 수 있으나, <em>network</em> 때문에 다르다. <em>network</em> 는 <em>subtask</em> 를 <em>ordering</em> 한 것으로 <strong>어떻게</strong> <em>task</em> 를 수행할지를 나타내기 때문이다.</p>
+
+<p>만약 <em>method</em> 의 <em>network</em> 가 <em>partially ordered</em> 이면 <em>method</em> 도 <em>partially ordered metohd</em> 라 부른다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex2.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex3.jpg'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/app_relev.jpg'  alt="" /></p>
+
+<p><em>appicability</em> 는 <em>action</em> 과 비슷하다. </p>
+
+<p>만약 <em>substitution</em> <code>σ</code> 에 대해, <code>σ(t) = task(m)</code> 이면 메소드 인스턴스 <code>m</code> 이 태스크 <code>t</code> 와 <em>relevant</em> 하다고 말한다. <del>왜죠?</del></p>
+
+<p>무슨 뜻인가 하면, 우리가 달성하려고 하는 <code>t</code> 에 대해 <code>σ(t)</code> 가 메소드의 태스크인 <code>task(m)</code> 과 동일하면, 해당 <code>t</code> 를 위해 메소드 <code>m</code> 을 사용할 수 있다는 뜻이다.</p>
+
+<p>그리고 태스크 <code>t</code> 와 <em>relevant</em> 인 <em>method</em> <code>m</code> 에 대해 </p>
+
+<ul>
+<li><code>δ(t, m, σ) = σ(network(m))</code> 또는</li>
+<li><code>δ(t, m, σ) = σ(&lt;subtasks(m)&gt;)</code> if <code>m</code> is <strong>totally ordered</strong></li>
+</ul>
+
+<p>로 <em>decomposition</em> 할 수 있다. 그냥 분해인데, 표기법을 저렇게 사용한다고 보면 된다. 당연히 <em>decomposition</em> 되면 <em>subtask</em> 가 되는데, <em>totally ordered</em> 면 <em>subtask</em> 만 돌려주면 되고, 아니라면 <em>network</em> 를 돌려주면 된다는 이야기. DWR 예제로 보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex2.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/method_app_relev_DWR_ex.jpg'  alt="" /></p>
+
+<p><em>substitution</em> 을 적용했을때<em>task</em> 이름이 같으므로 <em>relevant</em> 하고 <em>precond</em> 를 검사해보면 <em>applicable</em> 하다는 것을 알 수 있다.</p>
+
+<p><br/></p>
+
+<h3 id="decomposition">Decomposition</h3>
+
+<p><em>method decomposition</em> 을 자세히 살펴보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/method_decomp_DWR_ex.jpg'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/decomposition_def.jpg'  alt="" /></p>
+
+<p><code>w</code> 를 <em>STN</em> 이라고 하면, <code>U</code> 에 속하는 <em>task</em> <code>t</code> (<em>predecessors</em> 가 없는) 에 대해 <em>relevant</em> 메소드 <code>m</code> 이 있고, <em>substitution</em> <code>σ</code> 와, <code>m</code> 의 <em>network</em> <code>(U_m, E_m)</code> 이 있다. 이 때 <em>decomposition</em> <code>δ(w, t, m, σ)</code> 은</p>
+
+<ul>
+<li><code>t</code> is replaced in <code>U</code> by <code>σ(U_m)</code></li>
+<li>edges in <code>E</code> involving <code>t</code> are replaced by edges to appropriate nodes in <code>σ(U_m)</code></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="domainsproblemsandsolution">Domains, Problems and Solution</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_domain.jpg'  alt="" /></p>
+
+<p><em>STN planning domain</em> <code>D = (O, M)</code> 이다. <code>O</code> 는 <em>STRIPS planning operators</em>, <code>M</code> 은 <em>STN methods</em> 다. 만약 모든 메소드가 <em>totally ordered</em> 이면 <code>D</code> 도 <em>total-order STN planning domain</em> 이다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_problem.jpg'  alt="" /></p>
+
+<p><em>STN planning problem</em> <code>P</code> 는 <code>P = (s_i, w_i, O, M)</code> 으로 구성된다. 잘보면 <em>goal</em> 대신 <em>initial state network</em> 인 <code>w_i</code> 가 있다. <code>w_i</code> 와 <code>D = (O, M)</code> 이 <em>totally ordered</em> 면 <code>P</code> 를 <em>total order STN planning problem</em> 이라 부른다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_solution.jpg'  alt="" /></p>
+
+<p>(1) <code>w_i</code> 와 <em>plan</em> <code>ㅠ</code> 가 <em>empty</em> 여서 태스크가 없거나  </p>
+
+<p>(2) <em>predecessors</em> 가 없는 <em>primitive task</em> <code>t</code> 에 대해, <code>a1 = t</code> 가 <code>s_i</code> 에 <em>applicable</em> 하고, <code>ㅠ = &lt;a2, ..., an&gt;</code> 이 <code>P' = (γ(s_i, a1), w_i - {t}, O, M)</code> 의 솔루션이거나  </p>
+
+<p>(3) <em>predecessors</em> 가 없는 <em>non-primitive task</em> <code>t</code> 에 대해 <em>relevant</em> 메소드 <em>m</em> 이 <code>s_i</code> 에 대해 <em>applicable</em> 하고, <code>ㅠ</code> 가 <code>P' = (s_i, δ(w, t, m, σ), O, M)</code> 면 된다.</p>
+
+<p>즉 <em>primitive task</em> 일때는 <em>action</em> 으로 시작하고, 아닐때는 <em>decomposition</em> 한 네트워크에 대해 <code>ㅠ</code> 를 찾으면 된다.</p>
+
+<p></br></p>
+
+<h3 id="stnplanning">STN Planning</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/state_vs_plan_planner.jpg'  alt="" /></p>
+
+<p>여기서 <em>TFD</em> 는 <em>Total-order Forward Decomposition</em> 의 약자다.</p>
+
+<pre><code>function Ground-TFD(s, &lt;t, ..., tk&gt;, O, M)  
+  // empty plan, no task
+  if k = 0 return &lt;&gt;
+
+  if t1.isPrimitive() thne
+    actions = {(a, σ), a = σ(t1) and a applicable in s}
+
+    if actions.isEmpty() then return failure
+    (a, σ) = actions.chooseOne()
+    plan &lt;- Ground-TFD(γ(s, a), σ(&lt;t2, ..., tk&gt;), O, M)
+
+    if plan = failure then return failure
+    else return &lt;a&gt; * plan // add plan 
+
+  else 
+    methods = {(m, σ) | m is relevant for σ(t1) and m is appicable in s}
+
+    if methods.isEmpty then return failure
+
+    (m, σ) = methods.chooseOne()
+    // prepend subtasks
+    plan &lt;- subtasks(m) * σ(&lt;t2, ..., tk&gt;)
+
+    return Ground-TFD(s, plan, O, M)
+</code></pre>
+
+<p><em>DWR</em> 예제를 보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/DWR_decompos_tree_ex.jpg'  alt="" /></p>
+
+<p><code>move-stack</code> 은 <em>non-primitive</em> 이므로 <em>decomposition</em> 하고, 이 과정을 반복하면서 <em>ground, primitive task</em> 를 얻어 <em>action</em> 으로 해결한다.</p>
+
+<p><br/></p>
+
+<h3 id="tfdvsfowardbackwardsearch">TFD vs Foward/Backward Search</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/TFD_vs_fwd_backwd.jpg'  alt="" /></p>
+
+<ul>
+<li>TFD consider only applicable actions like forward search</li>
+<li>TFD consider only relevant actions like backward search</li>
+<li>TFD generate actions execution order. current world state always known</li>
+<li>Ground-TFD can be generalized to Lifted-TFD resulting in same advantages as lifted backward search</li>
+</ul>
+
+<p><em>TFD</em> 의 경우 <em>action execution order</em> 를 생성하기 때문에, 현재 어디에 위치해 있는지를 알 수 있다. 이 때문에 <em>goal</em> 까지 더 빠르게 가기 위한 <em>good heuristics</em> 를 적용할 수 있다.</p>
+
+<p><em>Lifted-TFD</em> 는 <em>variable</em> 을 최대한 유지해, 불필요한 <em>binding</em> 을 막는다.</p>
+
+<p><br/></p>
+
+<p><em>Partial-order FD</em> 코드도 살펴보자.</p>
+
+<pre><code>function Ground-PFD(s, w, O, M)  
+  if w.U = {} return &lt;&gt;
+
+  task &lt;- { t ∈ U | t has no predecessors in w.E}.chooseOne()
+
+  if task.isPrimitive() then
+    actions = {(a, σ) | a = σ(t1) and a applicable in s}
+
+    if actions.isEmpty() then return failure
+
+    (a, σ) = actions.chooseOne()
+    plan &lt;- Ground-PFD(γ(s, a), σ(w-{task}), O, M)
+
+    if plan = failure then return failure
+    else return &lt;a&gt; * plan
+
+  else
+    methods = {(m, σ) | m is relevant for σ(t1) and m is applicable in s}
+
+    if methods.isEmpty then return failure
+
+    (m, σ) = methods.chooseOne()
+
+    return Gound-PFD(s, δ(w, task, m, σ), O, M)    
+</code></pre>
+
+<p><em>TFD</em> 와 별 차이가 없다. 초기에 <em>TFD</em> 가 아니므로 인자로 <em>network</em> 인 <code>w</code> 를 받아, <code>task</code> 를 직접 구하는거 이외에는.</p>
+
+<p><br/></p>
+
+<h3 id="htnplanning">HTN Planning</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/precond_STN_planning.jpg'  alt="" /></p>
+
+<p><em>STN planning</em> 에서는 <em>ordering constaints</em> 를 유지해야 하고, <em>applicability</em> 를 테스트하기 위해서 <em>precondition</em> 을 이용했다. 또한 <em>effect</em> 없이 <em>precond</em> 만 이용하므로 반드시 <em>forward search</em> 를 해야 했다.</p>
+
+<p><em>HTN planning</em> 에서는 <em>ordering constaints</em> 나 <em>precondition</em> 이외에 추가적으로 <em>general constraints</em> 를 유지하여 다른 종류의 <em>constraints</em> 를 조합하는 등 더 유연하게 플래닝할 수 있다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_methods_def.jpg'  alt="" /></p>
+
+<p>예를 들어 <em>HTN methods</em> 는 <code>constr(m)</code> 을 포함한다. <em>DWR</em> 예제를 보자.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_method_DWR_ex.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_method_DWR_ex2.jpg'  alt="" /></p>
+
+<p><code>move-one</code> 같은 경우 <code>no-move</code> 대신 이용하는데, 이는 <em>HTN planning</em> 에서는 <em>task</em> 가 없으면 <em>constraints</em> 를 추가할 수 없기 때문이다. </p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_vs_STRIPS.jpg'  alt="" /></p>
+
+<p><em>HTN</em> 은 <em>STN</em> 의 더 유연한 버전이고, <em>STN</em> 은 <em>undecidable</em> 한 문제를 풀 수 있지만, <em>STRIPS</em> 에서는 불가능하다. <em>STRIPS</em> 에서는 유한한 오브젝트, 아톰 등으로 구성된 유한한 상태 공간을 탐색하기 때문이다. 반대로 <em>STN</em> 이 <em>background</em> 를 더 필요로 하지만, 더 <em>expressie</em> 함을 알 수 있다.</p>
+
+<p>그렇다고 <em>STRIPS</em> 가 후지다는 것이 아니라, 서로 다른 종류의 문제를 풀 수 있는 두개의 방법이라 보면 된다.</p>
+
+<p>참고로 <em>non-recursive STN</em> 은 <em>STRIPS</em> 로 번역될 수 있다고 한다. 그리고 <em>regular STN</em> 은 <em>STRIPS</em> 와 동일하다고 하는데, <em>regular</em> 란 뜻은 <em>recursive call</em> 이 그리 많지 않은 것을 의미한다.</p>
+
+<h3 id="sipe2htnplanner">SIPE-2 HTN Planner</h3>
+
+<p><a href='https://www.youtube.com/watch?v=gE0wPgT2qrw' >Youtube: SIPE-2 HTN Planner by David Wilkins</a></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
+(2) <a href='http://uxmag.com/articles/psychological-usability-heuristics' >brain image</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-4/</link><guid isPermaLink="false">6235b69f-6206-4ec8-af7f-780a8f1d76cb</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[STN]]></category><category><![CDATA[HTN]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 01 Feb 2015 02:42:11 GMT</pubDate></item><item><title><![CDATA[AI Planning 3, PSP, PoP]]></title><description><![CDATA[<p><img src='http://www.dailygalaxy.com/.a/6a00d8341bf7f753ef019affc63311970d-800wi'  alt="" /></p>
+
+<h3 id="partialplan">Partial Plan</h3>
+
+<p>이 전까지는 <em>plan</em> 을 <em>goal state</em> 를 달성하기 위한 <em>action</em> 의 나열로서 봤다. <em>plan</em> 자체를 하나의 솔루션으로 본 것이다. <em>partial plan</em> 은 이와 달리, 탐색 공간이 <em>state</em> 가 아니라 <em>plan</em> 으로 구성되어있다는 생각에서 시작한다.</p>
+
+<ul>
+<li><strong>state-space search:</strong> search through graph of nodes rpresenting world states</li>
+<li><strong>plan-space search:</strong> search through graph of plans.</li>
+</ul>
+
+<p>(1) <strong>nodes</strong> are partially specified plans. <br />
+(2) <strong>arcs</strong> are plan refinement opreations. <br />
+(3) <strong>solutions</strong> are partial-order plans.</p>
+
+<p><em>partial plan</em> 이란</p>
+
+<ul>
+<li>subset of the actions</li>
+<li>subset of the organizational structure including temporal ordering of actions and rationale (<em>what the action achieves in the plan</em>)</li>
+<li>subset of varaible bindings</li>
+</ul>
+
+<p>좀 더 <em>formal</em> 한 정의는</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/partial_plan_def.jpg'  alt="" /></p>
+
+<ul>
+<li><code>A</code> 는 <em>partially instantiated</em> 된 <em>operators</em> 다.</li>
+<li><code>&lt;</code> 는 <em>ordering constraint</em></li>
+<li><code>B</code> 는 <em>variable binding</em></li>
+<li><code>L</code> 은 <em>casual links</em> 로 <em>action</em> 간 <em>ordering</em> 과 여기에 필요한 <em>proposition</em> (<em>effect</em>, <em>precond</em>), <em>binding constraint</em> 를 포
+함한다. <code>a_i</code> 를 <em>producer</em> <code>a_j</code> 를 <em>consumer</em> 라 부르기도 한다. </li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="planrefinemeents">Plan Refinemeents</h3>
+
+<p><em>partial plan</em> 의 구성요소는</p>
+
+<ul>
+<li>initial state</li>
+<li>goal conditions</li>
+<li>set of operators with different varaibles</li>
+</ul>
+
+<h4 id="addingactions">Adding Actions</h4>
+
+<p><em>unsatisfied pre-cond</em>, <em>unsatisfied goal condition</em> 을 위해서 <em>partial plan</em> 에 <em>action</em> 을 추가해야 한다. <em>forward search</em> 나 <em>backward search</em> 에서는 앞이나 뒤에만 <em>action</em> 을 추가할 수 있었지만 <em>partial plan</em> 에선 그런 제약이 없다. </p>
+
+<p>예제를 보면 <em>initial state</em> 와 <em>goal</em> 로만 구성된 <em>empty plan</em> 에서 시작해서 <em>partial plan</em> 을 점점 키워간다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_action_ex.jpg'  alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="addingcasuallinks">Adding Casual Links</h4>
+
+<p>위에서 언급했듯이 <em>partial plan</em> 은 <em>action</em> 간 <em>casual links</em> 를 포함하고 있다. <em>action</em> 간 <em>invalid pre-cond, effect</em> 를 방지하기 위해서 필요하다. </p>
+
+<p>두 종류의 <em>provider</em> 가 있을 수 있다.</p>
+
+<p>(1) <em>action</em> 의 <em>effect</em> <br />
+(2) <em>initial state</em> 를 담고있는 <em>atom</em> </p>
+
+<p>마찬가지로 <em>consumer</em> 도</p>
+
+<p>(1) <em>action</em> 의 <em>pre-condition</em> 거나 
+(2) <em>goal condition</em> 일 수 있다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_casual_links_ex.jpg'  alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="addingvariablebindng">Adding Variable Bindng</h4>
+
+<ul>
+<li>new operators introduce new (copies of) variables into the plan</li>
+<li>solution plan must contain actions</li>
+<li>varaible binding constraints keep track of possible values for varaibles and co-designation</li>
+</ul>
+
+<p>새로운 <em>operator</em> 가 사용될때 마다, 새로운 <em>varaible</em> 이 <em>plan</em> 에 추가된다. 그런데 솔루션에는 <em>action</em> 이 있어야 하므로 <em>possible value</em> 를 테이블로 유지해야 한다. <em>casual links</em> 를 추가하면서 <em>effect</em> 와 <em>pre-cond</em> 를 연결했지만, <em>variable</em> 까지 고려하면 <em>invalid</em> 한 경우가 생길수도 있으므로 이를 막기 위해 <em>varaible binding</em> 이 필요하다. 예제를 보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_variable_ex.jpg'  alt="" /></p>
+
+<h4 id="addingorderingconstraints">Adding Ordering Constraints</h4>
+
+<p><em>partial plan</em> 은 <em>ordering constraint</em> 를 포함하고 있다. </p>
+
+<ul>
+<li>binary relation specifying the temporal order between actions in the plan</li>
+</ul>
+
+<p><em>ordering constraints</em> 를 추가해야 하는 이유는</p>
+
+<ul>
+<li>all actions must come after initial state</li>
+<li>all actions must come before goal</li>
+<li>casual link implies ordering constaint</li>
+<li>to avoid possible interference between actions</li>
+</ul>
+
+<p>예제를 보자. 그림에서 <em>variable binding</em> 이 표시되어 있진 않지만, 있다고 보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_ordering_const.jpg'  alt="" /></p>
+
+<h3 id="planspacesearch">Plan-Space Search</h3>
+
+<p>지금까지 <em>partial plan</em> 을 구성하는 방법에 대해 배웠고, 이제 <em>partial plan</em> 을 노드로 삼는 <em>plan-space search</em> 에 대해 알아보자.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/initial_search_state.jpg'  alt="" /></p>
+
+<p>최초에는 두개의 더미 <em>action</em> 인 <em>init</em>, <em>goal</em> 을 가지고 <code>init &lt; goal</code> 의 <em>ordering constaint</em> 를 가진다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/initial_search_state_ex.jpg'  alt="" /></p>
+
+<p>이제 <em>plan refinement operators</em> 를 적용해서 하나 이상의 <em>successor</em> 를 찾기 위한 <em>successor function</em> 을 정의해 보자.</p>
+
+<ul>
+<li>adding an action to <code>A</code></li>
+<li>adding an ordering constaint to <code>&lt;</code></li>
+<li>adding a binding constaint to <code>B</code></li>
+<li>adding a casual link to <code>L</code></li>
+</ul>
+
+<p>보면 알겠지만 <em>plan-space search</em> 는 두 가지 문제를 <em>decoupling</em> 한다.</p>
+
+<p>(1) <em>which actions to execute as part of our plan</em> <br />
+(2) <em>how to organize these actions?</em>, <em>what is the organizational structure that underlies our plan?</em></p>
+
+<p><em>plan-space search</em> 를 다른관점에서 볼 수도 있다. <em>possible plan</em> 을 <em>partial plan</em> 으로 줄여가는 것이다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/total_vs_partial_order.jpg'  alt="" /></p>
+
+<p><em>planning problem</em> <code>P</code> 는 <em>state transition system</em>, <em>initial state</em>, <em>goal</em> 로 구성된다. 이때 <em>plan</em> <code>ㅠ</code> 에 대해 <code>r(s_i, ㅠ)</code> 가 <code>g</code> 를 만족시키면, <code>ㅠ</code> 는 솔루션이다.</p>
+
+<p><code>r(s_i, ㅠ)</code> 는 <em>ground action</em> 의 시퀀스로만 정의되는데</p>
+
+<ul>
+<li>partial order corresponds to total order in which all partial order constaints are respected</li>
+<li>partial instantiation corresponds to grounding in which variables are assigned values consistent with binding constraints</li>
+</ul>
+
+<p>생각해보면 <em>partially instantiated varaibles</em> 을 <em>fully ground plan</em> 으로 바꿀 수 있는 경우의 수가 많기 때문에 어떤 것을 사용할지 결정해야 한다. 이를 위해 <em>partial order solution</em> 을 정의하면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/partial_order_solution.jpg'  alt="" /></p>
+
+<p>위 슬라이드에서 볼 수 있듯이 두 가지 조건이 갖추어지면 <em>plan</em> <code>ㅠ</code> 가 <em>(partial order) solution</em> 이 될 수 있다.</p>
+
+<ul>
+<li>its ordering constaints <code>&lt;</code> and binding constraints <code>B</code> are consistent and</li>
+<li>for every total order seq <code>&lt;a1, ... , ak&gt;</code> of all the actions in <code>A - {init, goal}</code> that is </li>
+</ul>
+
+<p>(1) totally ordered and grounded and respects <code>&lt;</code> and <code>B</code> <br />
+(2) <code>r(s_i, &lt;a1, ..., ak&gt;)</code> must satisfy <code>g</code></p>
+
+<p>흥미로운점은 <em>casual links</em> 가 아무런 역할도 하지 않는다는 것이다. 두번째는 위 과정을 <em>goal test</em> 로 쓰기 위해 <em>computational procedure</em> 로 바꾸면, 퍼포먼스가 별로라는 사실도 알 수 있다.</p>
+
+<p>만약 우리가 모든 <em>total order seq</em> 를 테스트 해야하고, 수 많은 <em>seq</em> 가 있다면 <em>goal</em> 을 검증하기 위해 수 많은 작업을 해야한다.</p>
+
+<p>물론 <em>plan</em> 을 만드는 과정에서 <em>action</em> 의 <em>pre-cond</em> 가 <em>casual links</em> 에 의해 지정되기 때문에, 우리가 만들고 있는 <em>plan</em> 이 <em>goal</em> 을 만족하는지, 아닌지 알 수 있다. 문제는 <em>pre-cond</em> 만으로는 <em>goal</em> 을 만족하는지 아닌지 충분하지 않다는 점이다.</p>
+
+<h3 id="threatsandflaws">Threats and Flaws</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/threat_example.jpg'  alt="" /></p>
+
+<p>위 그림에서 <em>action</em> <code>3</code> 과 <code>1</code> 은 <code>at(robot, loc1)</code> 을 서로 추가하고, 삭제한다. 따라서 병렬로 실행되면 <em>dummy action</em> 인 <em>goal</em> 이 실행되지 않을 수 있다. 이 경우를 <em>threat</em> 라고 부르며, 간단한 해결 방법으로 <em>action</em> <code>2</code> 에서 <code>1</code> 로 <em>ordering</em> 을 추가할 수 있다. 정의를 보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/threat_def.jpg'  alt="" /></p>
+
+<p><em>casual link</em> <code>a_i -&gt; [p] -&gt; a_j</code> 에 에 대해 <em>threat</em> <code>a_k</code> 는 <code>p</code> 와 <em>unifiable effect</em> <code>~ q</code> 를 가지고 있고, <em>ordering constraint</em> <code>a_i &lt; a_k</code>, <code>a_k  &lt; a_j</code> 가 있다. 다시 말해 <code>a_i</code> 의 <em>effect</em> 를 상쇄할 수 있다는 말이다.</p>
+
+<p><em>unsatisfied sub-goal</em> 과 <em>threat</em> 같은 것들을 <em>flaw</em> 라 부른다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flaws_def.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flawless_plan.jpg'  alt="" /></p>
+
+<p>만약 <em>partial plan</em> <code>ㅠ = (A, &lt;, B, L)</code> 가 </p>
+
+<p>(1) <code>ㅠ</code> has no flaws <br />
+(2) the ordering constaints <code>&lt;</code> are not circular <br />
+(3) the variable bindings <code>B</code> are consistent  </p>
+
+<p>이면 <em>partial plan</em> <code>ㅠ</code> 는 <em>planning problem</em> <code>P</code> 의 솔루션이다.</p>
+
+<p><br/></p>
+
+<h3 id="pspalgorithm">PSP algorithm</h3>
+
+<p><em>plan-space planning</em> 을 잠깐 복습해보면,</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/psp_as_search_prb.jpg'  alt="" /></p>
+
+<p><em>operator</em>, <em>initial state</em> <em>goal</em> 로 구성된 <em>planning problem</em> 이 주어졌을때, <em>search problem</em> 은 위 슬라이드처럼 정의할 수 있다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PSP_basic_ops.jpg'  alt="" /></p>
+
+<p><em>PSP, Plan-Space Planner</em> 의 기본적인 아이디어는 <em>partial plan</em> <code>ㅠ</code> 가 <em>flaw</em> 가 없을때 까지 <code>&lt;</code>, <code>B</code> 를 <em>valid</em> 하게 유지하면서 <em>refine</em> 하는 것이다. 따라서 <em>flaw</em> 를 찾고, 이걸 해결할 수 있는 <em>resolvers</em> 를 구한 뒤 적절히 선택해 나아가면 된다. 알고리즘은 </p>
+
+<pre><code>function PSP(plan)  
+  allFlaws &lt;- plan.openGoals() + plan.threats()
+
+  if allFlaws.empty() then return plan
+
+  flaw &lt;- allFlaws.selectOne()
+  allResolvers &lt;- flaw.getResolvers(plan)
+
+  if allResolver.empty() then return failure
+
+  resolver &lt;- allResolvers.chooseOne()
+  newPlan &lt;- plan.refine(resolver)
+
+  return PSP(newPlan)
+</code></pre>
+
+<p>여기서 <code>chooseOne()</code> 과 <code>selectOne()</code> 이라는 두개의 선택 함수를 볼 수 있는데</p>
+
+<ul>
+<li><code>chooseOne()</code> is non-deterministic choice</li>
+<li><code>selectOne()</code> is deterministic selection</li>
+</ul>
+
+<p><code>chooseOne()</code> 의 경우 <em>non-deterministic</em> 이기 때문에 실패할 경우 <em>backtracking</em> 할 수 있도록 해야 한다.</p>
+
+<p>반면 <code>selectOne()</code> 은 <em>deterministic</em> 이기 때문에 <em>backtracking</em> 이 필요 없다. 대신 고려해야 할 것은</p>
+
+<p>(1) <em>order</em> 가 <em>effcientcy</em> 에 영향을 미치기 때문에 어떤걸 선택하느냐가 중요하다. (<em>order</em> 는 <em>completeness</em> 와는 관련 없다) <br />
+(2) 모든 <em>flaw</em> 는 <em>plan</em> 이 <em>solution</em> 이 되기 전에 <em>resolved</em> 되야 한다.  </p>
+
+<p><br/></p>
+
+<h3 id="pspimplementation">PSP Implementation</h3>
+
+<pre><code>function PSP(plan)  
+  allFlaws &lt;- plan.openGoals() + plan.threats()
+
+  if allFlaws.empty() then return plan
+
+  flaw &lt;- allFlaws.selectOne()
+  allResolvers &lt;- flaw.getResolvers(plan)
+
+  if allResolver.empty() then return failure
+
+  resolver &lt;- allResolvers.chooseOne()
+  newPlan &lt;- plan.refine(resolver)
+
+  return PSP(newPlan)
+</code></pre>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/plan_openGoals.jpg'  alt="" /></p>
+
+<p><em>unachieved sub-goal</em> 의 리스트는 <em>action</em> 을 추가하면서 <em>precondition</em> 때문에 늘어나고, <em>casual link</em> 을 추가할때는 <em>protected proposition</em> 때문에 감소한다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/plan_threats.jpg'  alt="" /></p>
+
+<p><em>threat</em> 의 경우에는 새로운 액션 <code>a_new</code> 에 대해 기존의 링크 <code>L</code> 내에 있는 모든 <code>a_i -&gt; [p] -&gt; a_j</code> 에 대해 <code>a_new &lt; a_i</code>, <code>a_j &lt; a_new</code> 인지 검사하고, 참이면 패스한다. 참이 아닐경우 <code>p</code> 와 <code>~q</code> 의 <em>effect</em> 가 상쇄되는지 검사하여 <em>threat</em> 인지 검사한다.</p>
+
+<p><em>casual link</em> <code>a_i -&gt; [p] -&gt; a_j</code> 를 추가할때는 기존의 <em>action</em> <code>a_old</code> 에 대해 <em>threat</em> 가 될 수 있는지 위처럼 검사한다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flaw_getResolvers.jpg'  alt="" /></p>
+
+<p>먼저 <em>unachieved precondition</em> 을 제거하는 <em>resolver</em> 를 구하는 방법을 알아보자. 기존의 <em>valid action</em> 의 <em>effect</em> <code>q</code> 에 대해 <em>unachieved precondition</em> <code>p</code> 를 해겨할 수 있으면 <em>resolver</em> 를 추가한다. <em>operator</em> 로 부터 직접 <em>action</em> 을 만들어 <em>casual link</em> 까지 추가할 수도 있다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flaw_getResolvers2.jpg'  alt="" /></p>
+
+<p><em>threat</em> 를 제거하는 <em>resolver</em> 는 위처럼 구할 수 있다. <code>a_i -&gt; [p] -&gt; a_j</code> 에 대한 <em>threat</em> <code>a_t</code> 에 대해 <code>a_t &lt; a_i</code>, <code>a_j &lt; a_t</code> 를 추가하거나, <em>variable binding</em> 을 추가하는 방법이 있다. <code>v</code> 의 <em>substitution</em> 이 <code>v</code> 와 다르면서, 동시에 <code>B</code> 와 <em>consistent</em> 해야만 <em>resolver</em> 다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/plan_refine.jpg'  alt="" /></p>
+
+<p><em>ordering</em> 이나 <em>binding constraints</em>, <em>casual links</em>, <em>new action</em> 을 추가하면서 <em>refinement</em> 를 할 수 있다. 이 때 <em>resolver</em> 를 찾기 위한 <em>unachieved precondition</em>, <em>threat</em> 를 업데이트 해야 한다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/maintain_ordering_consts.jpg'  alt="" /></p>
+
+<p><em>ordering constaints</em> 는 질의하거나, 새로운 <em>ordering</em> 을 추가하기 위해 유지해야 한다. 이를 위한 표현 방법으로 위 슬라이드처럼 3가지 방법중 하나를 사용할 수 있다.</p>
+
+<p><em>transitive closure</em> 를 유지하는 방법의 경우, <em>query (질의)</em> 는 빠르나 새로운 연산의 추가가 느릴 수 있다. 그러나 <em>planner</em> 의 경우 <em>query</em> 가 더 자주사용되는 연산이므로 좋은 표현 방법이다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/maintain_vcs.jpg'  alt="" /></p>
+
+<p><em>unary constriants</em> 와 <em>equality</em> 는 <em>linear time</em> 으로 구할 수 있다. <em>inequality</em> 의 경우에는 <em>exponential time</em> 이 필요하고, 일반적으로 <em>NP-complete</em> 문제라고 알려져 있다.</p>
+
+<p><em>inequality</em> 를 도입하는 것은 <em>threat</em> 를 풀 수 있는 <em>resolver</em> 이기 때문에 꼭 필요한데, 퍼포먼스가 문제가 될 수 있다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PSP_sound_comp.jpg'  alt="" /></p>
+
+<p><em>sound</em> 는, <em>planner</em> 가 리턴하는 것이 <em>solution</em> 이란 뜻이고 <em>complete</em> 하다는 것은 <em>solution</em> 이 있으면 <em>planner</em> 가 반드시 찾아낸다는 뜻이다. </p>
+
+<p><br/></p>
+
+<h3 id="thepopplanner">The PoP Planner</h3>
+
+<p><em>Partial Order Planning</em></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PSP_data_flow.jpg'  alt="" /></p>
+
+<p><em>PoP</em> 플래너는 모든 <em>threat</em> 를 위 슬라이드에 표시된 초록색 부분에서 루프로 다룬다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PoP_impl.jpg'  alt="" /></p>
+
+<p><em>action</em>, <em>precondition</em> 을 하나의 <em>set</em> 으로 하여 <em>agenda</em> 라는 <em>input</em> 으로 취급한다. 그리고 <em>flaw type</em> 에 의해서 <em>search control</em> 이 진행된다. 코드로 보면</p>
+
+<pre><code>funciton PoP(plan, agenda)  
+  if agenda.empty then return plan
+
+  (a_g, p_g) &lt;- agenda.selectOne()
+  agenda &lt;- agenda - (a_g, p_g)
+  relevant &lt;- plan.getProviders(p_g)
+
+  if relevant.empty() then return failure
+
+  // non-deterministic, use backtracking
+  (a_p, p_p, σ) &lt;- relevant.chooseOne() 
+  plan.L &lt;- plan.L ∪ &lt;a_p -&gt; [σ(p_g)] -&gt; a_g&gt;
+  plan.B &lt;- plan.B ∪ σ
+
+  if a_p is not in plan.A then
+    plan.add(a_p)
+    agenda &lt;- agenda + a_p.preconditions
+
+  newPlan &lt;- plan
+
+  for each threat on &lt;a_p -&gt; [p] -&gt; a_g&gt; or due to a_p do
+    allResolvers &lt;- threat.getResolvers(newPlan)
+
+    // backtracking
+    if allResolvers.empty() then return failure
+
+    resolver &lt;- allResolvers.chooseOne()
+    newPlan &lt;- newPlan.refine(resolver)
+
+  return PoP(newPlan, agenda)
+</code></pre>
+
+<p><em>back-propagation</em> 과 비슷하게 <em>goal</em> 부터 시작한다. <em>plan</em> 의 <em>casual links</em>, <em>binding</em> 을 추가해 가면서 진행한다.</p>
+
+<h4 id="statespacevsplanspace">State-Space vs Plan-Space</h4>
+
+<p><em>state-space</em> 플래너와 <em>plan-space</em> 플래너를 비교하면, </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/state_vs_plan_planner.jpg'  alt="" /></p>
+
+<p>(1) <em>state-space</em> 는 유한한 탐색 공간을 가진다. 매 스탭마다 유한한 수의 오브젝트와 릴레이션을 다루기 때문이다. 반면 <em>plan-space</em> 에선 탐색공간이 무한할 수 있다. 그러나 무한한 공간을 모두 다 탐색하는 것은 아니고, 솔루션을 찾기 위해 그 일부만 탐색한다.</p>
+
+<p>(2) <em>state-space</em> 는 보통 <em>graph</em> 로 표현되고, 실제로는 <em>tree</em> 를 탐색한다.  반면 <em>plan-space</em> 에서는 어떤 <em>intermediate representation</em> 을 사용하는지 명확하지 않다. 이건 상당히 중요한데, 대부분의 모던 휴리스틱 기법들이 <em>explicit representation of intermediate states</em> 에 의존하기 때문이다.</p>
+
+<p>(3) <em>state-space</em> 기법에선 <em>action ordering</em> 이 어떻게 탐색할지를 결정하는 반면 <em>plan-space</em> 에서 <em>action</em> 의 선택과 <em>organization</em> 은 독립적이다. 더 유연하다.</p>
+
+<p>(4) <em>state-space</em> 에선 <em>casual structure</em> 가 <em>implicit</em> 한 반면 <em>plan-space</em> 에선 <em>casual links</em> 라는 <em>explicit representation</em> 으로 보여진다. 왜 이 <em>action</em> 을 사용하는지에 대한 명확한 기준이 있기 때문에 <em>current plan</em> 이 잘못되었을 때 수정하기 더 쉽다.</p>
+
+<p>(5) <em>state-space</em> 에서는 <em>search-node</em> 가 더 간단하다. <em>set of ground atoms</em> 기 때문에 <em>successor</em> 를 계산하기도 더 쉽다. 반면 <em>plan-space</em> 에서는 <em>constraint network</em> 를 유지해야 하기 때문에 복잡하고, <em>successor</em> 를 계산하기도 쉽지 않다.</p>
+
+<p>요즘에는 효율적인 휴리스틱 때문에 <em>state-space</em> 가 좀 더 많이 이용되는 편이라고 한다.</p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
+(2) <a href='http://www.dailygalaxy.com/my_weblog/2013/10/artificial-intelligence-will-it-end-the-human-epoch.html' >brain image</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-3/</link><guid isPermaLink="false">6a780098-7f04-4775-882d-bfcb570c396b</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[PSP]]></category><category><![CDATA[PoP]]></category><category><![CDATA[state-space]]></category><category><![CDATA[plan-space]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 25 Jan 2015 04:59:52 GMT</pubDate></item><item><title><![CDATA[AI Planning 2, Heuristic Search and STRIPS]]></title><description><![CDATA[<p><img src='http://imgs.xkcd.com/comics/ai.png'  alt="" /></p>
 
 <p>이번 시간에는 <em>A* algorithm</em>, <em>heuristics</em>, <em>forward search</em> 등을 배운다.</p>
 
@@ -6538,1319 +7193,4 @@ sum 16 value = false
 <h3 id="references">References</h3>
 
 <p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong> <br />
-(2) <a href='http://msdn.microsoft.com/en-us/library/aa288734' (v=vs.71).aspx">MSDN: Half Adder</a></p>]]></description><link>http://1ambda.github.io/reactive-programming-2/</link><guid isPermaLink="false">1f0f0056-8b79-426c-abcb-ce9071c541bb</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[reactive programming]]></category><category><![CDATA[referential transparency]]></category><category><![CDATA[operational equivalence]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 21 Dec 2014 01:57:05 GMT</pubDate></item><item><title><![CDATA[하스켈로 배우는 함수형 언어 9]]></title><description><![CDATA[<h3 id="intro">Intro</h3>
-
-<p>이번시간엔 함수형 프로그래밍에서 <em>property</em> 를 증명하는 방법인 <em>induction</em> 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 <em>Rose Tree</em> 를 구현하면서 <em>Functor, Monoid, Foldable</em> 등에 대해 좀 알아봅시다.</p>
-
-<p>수학에서 다음 두 식은 똑같습니다.</p>
-
-<pre><code>xz + yz = (x + y)z  
-</code></pre>
-
-<p>근데, 잘 보면 연산의 수가 다릅니다. 좌측은 3개고, 우측은 2개면 되지요. 하스켈에서도 이런 생각들을 좀 해봅시다. <em>built-in</em> 연산자에 대해서뿐만 아니라, <em>user-defined</em> 연산자 (함수) 에 대해서도 생각할 수 있으니까, 좀 다양하겠네요.</p>
-
-<h3 id="reasoningabouthaskell">Reasoning about Haskell</h3>
-
-<pre><code class="haskell">double :: Int -&gt; Int  
-double x = x + x  
-</code></pre>
-
-<p>이제 모든 <code>x + x</code> 는 <code>double x</code> 로, 바꿀 수 있죠. 그 반대도 가능하고요. 근데, <em>multiple equations</em> 를 쓰면 좀 얘기가 다릅니다.</p>
-
-<pre><code class="haskell">isZero :: Int -&gt; Bool  
-isZero 0 = True  
-isZero n = False  
-</code></pre>
-
-<p>첫번째 식 <code>isZero 0 = True</code> 는 어느 방향으로든 자유롭게 적용가능하지만, 두번째는 아닙니다. 사실은 이런 뜻이거든요</p>
-
-<pre><code class="haskell">isZero 0          = True  
-isZero n | n /= 0 = False  
-</code></pre>
-
-<p>이제 좌우를 쉽게 치환할 수 있습니다. 이렇게 식의 순서에 의존하지 않는 패턴을 <em>disjoint</em> 혹은 <em>non-overlapping</em> 이라 부릅니다.</p>
-
-<blockquote>
-  <p>Patterns that do not rely on the order in which the are matched are called <em>disjoint</em> or <em>non-overlapping</em></p>
-</blockquote>
-
-<p>프로그램에 대해서 <em>reasoning</em> 할 땐 가능하면 <em>non-overlapping</em> 패턴을 사용하는게 좋습니다. <em>standard library</em> 에 있는 대부분의 함수들은 이런식으로 작성 되어있습니다.</p>
-
-<h3 id="simpleexamples">Simple examples</h3>
-
-<pre><code class="haskell">reverse :: [a] -&gt; [a]  
-reverse [] = []  
-reverse (x:xs) reverse xs ++ [x]  
-</code></pre>
-
-<p>이 구현을 보면 <code>reverse [x] = [x]</code> 입니다. 근데, 이걸 연산하려면</p>
-
-<pre><code class="haskell">reverse [x]  
-reverse (x:[])  
-reverse [] ++ [x]  
-[] ++ [x]
-[x]
-</code></pre>
-
-<p>따라서 <code>reverse [x] = [x]</code> 를 추가해서 효율적인 구현을 할 수 있습니다. </p>
-
-<h3 id="inductiononnumbers">Induction on numbers</h3>
-
-<p>함수형 프로그램은 종종 재귀를 이용해 작성되는데, 여기에 <em>induction</em> 을 이용할 수 있습니다. 예전에 본 자연수 타입 <code>Nat</code> 의 정의를 떠올려 보면</p>
-
-<pre><code class="haskell">data Nat = Zero | Succ Nat  
-</code></pre>
-
-<p>어떤 유한한 수에 대해서 어떤 <em>property</em> <code>p</code> 를 증명하려고 할 때, 먼저 <em>base case</em> 인 <code>Zero</code> 에 대해 보이고, <em>inductive case</em> <code>Succ</code> 에 대해서 보이면 됩니다. 더 자세히는, 어떤 자연수 <code>n</code> 에 대해서 <code>p</code> 가 참일때 (<em>induction hypothesis</em>), <code>Succ n</code> 에 대해서도 참임을 보이면 됩니다.</p>
-
-<p>구체적인 예제를 보도록 하죠. 두 <code>Nat</code> 를 더해 <code>Nat</code> 를 만드는 <code>add</code> 함수를 만들면</p>
-
-<pre><code class="haskell">add :: Nat -&gt; Nat -&gt; Nat  
-add Zero m = m  
-add (Succ n) m = Succ (add n m)  
-</code></pre>
-
-<p>첫 번째씩 <code>add Zero m = m</code> 은 모든 자연수 <code>m</code> 에 대해 참이기 때문에, <code>add n Zero = n</code> 을 증명하겠습니다. 이걸 가설 <code>p</code> 라 부릅시다. </p>
-
-<p>(1) <em>base case</em></p>
-
-<pre><code class="haskell">add Zero Zero  
-Zero  
-</code></pre>
-
-<p>(2) <em>inductive case</em></p>
-
-<p>이 단계에서는 <code>p</code> 가 자연수 <code>n</code> 에 대해 참일때 <code>p (Succ n)</code> 이 참임을 보이면 됩니다. 다시 말해 가설 <code>p</code> <code>add n Zero = n</code> 을 이용해 <code>add (Succ n) Zero = Succ n</code> 임을 보여야 합니다.</p>
-
-<pre><code class="haskell">add (Succ n) Zero -- should be `Succ n`
-
-= Succ (add n Zero) 
-
-= Succ n -- by induction hypothesis
-</code></pre>
-
-<p>다른 속성으로 <em>associativity</em> 를 증명할 수도 있습니다. </p>
-
-<pre><code class="haskell">add x (add y z) = add (add x y) z  
-</code></pre>
-
-<p>인자가 3개인데 무엇부터 시작해야 할까요? <code>add</code> 는 패턴매칭을 이용해 작성되었고, 재귀 부분이  첫번째 인자를 주로 이용하므로 <code>x</code> 를 선택하는게 자연스러울 겁니다. <code>y</code>는 1 번 쓰이고, <code>z</code>는 첫번째 인자로 한번도 안쓰이네요. </p>
-
-<p>(1) <em>base case</em></p>
-
-<pre><code class="haskell">add Zero (y z) -- should be `add (add Zero y) z`
-
-= add y z
-= add (add Zero y) z -- unapplying add
-</code></pre>
-
-<p>(2) <em>inductive case</em></p>
-
-<p><code>p</code> 는 `add x (add y z) = add (add x y) z</p>
-
-<pre><code class="haskell">add (Succ x) (add y z) -- should be 'add (add (Succ x) y) z`
-
-= Succ (add x (add y z)) -- apply outer add
-= Succ (add (add x y) z) -- induction hypothesis
-= add (Succ (add x y) z) -- unapply outer add
-= add (add (Succ x) y) z -- unapply inner add
-</code></pre>
-
-<p>이렇게 <em>unapply, apply</em> 를 편하게 할 수 있는 이유는 위에서 <code>add</code> 를 <em>non-overlapping</em> 패턴으로 작성했기 때문이지요.</p>
-
-<p><em>induction</em> 을 <em>recursive type</em> 인 <code>Nat</code> 에 적용했지만, <code>Integer</code> 타입에도 적용할 수 있습니다.</p>
-
-<p>어떤 <em>property</em> <code>p</code> 를 <code>n &gt;= 0</code> 에 대해 증명하려고 할 때는 먼저 <em>base case</em> 인 <code>0</code> 에 대해 참임을 보이고, <code>n &gt;= 0</code> 일때, <code>n + 1</code> 에 대해서도 참임을 보이면 됩니다.</p>
-
-<pre><code class="haskell">replicate :: Int -&gt; a -&gt; [a]  
-replicate 0 _       = []  
-replicate (n + 1) x = x : replicate n x  
--- replicate n x = x : replicate (n - 1) x
-</code></pre>
-
-<p>요즘 컴파일러는 <code>n + 1</code> 패턴을 막아서 아마 주석처리부분처럼 작성해야 합니다. 무튼 저 정의대로만 보면, <code>n</code> 에 대해 참일때 <code>n + 1</code> 일때도 참임을 보이는건 정말 쉽습니다. 정의 그 자체가 <em>induction</em> 이니까요.</p>
-
-<h3 id="inductiononlists">Induction on lists</h3>
-
-<p>재귀는 자연수에만 쓸 수 있는건 아니고, 리스트와 같은 다양한 재귀적인 타입에 사용할 수 있습니다. <em>base case</em> 는 <code>[]</code> 이 되겠고, <em>successor function</em> 은 <code>:</code> 이 되겠네요.</p>
-
-<p>그러므로 리스트에 대해 어떤 <em>property</em> <code>p</code> 를 증명하려면, 먼저 <code>[]</code> 에 대해 참임을 보이고 <code>p xs</code> 가 참일때 <code>p x:xs</code> 가 참임을 보이면 됩니다. <del>참 쉽죠?</del></p>
-
-<p><em>reverse</em> 연산에 대해 <code>reverse (reverse xs) = xs</code> 를 증명해 봅시다.</p>
-
-<p>(1) <em>base case</em></p>
-
-<pre><code class="haskell">reverse (reverse []) -- should be '[]'
-
-= reverse []
-= []
-</code></pre>
-
-<p>(2) <em>inductive case</em></p>
-
-<pre><code class="haskell">-- induction hypothesis
-
-reverse (reverse xs) = xs  
-</code></pre>
-
-<p>증명은</p>
-
-<pre><code class="haskell">reverse (reverse x:xs) -- = x:xs
-
-= reverse (reverse xs ++ [x])
-= reverse [x] ++ reverse (reverse xs) -- by distributivity
-= [x] ++ xs -- induction hypothesis
-= x:xs
-</code></pre>
-
-<p>여기서 사용한 성질중에 하나가 <em>distributivity</em> 인데,</p>
-
-<pre><code class="haskell">-- induction hypothesis
-reverse (xs ++ ys) = reverse ys ++ reverse xs  
-</code></pre>
-
-<p>(1) <em>base-case</em> </p>
-
-<pre><code class="haskell">reverse ([] ++ ys) -- reverse ys ++ reverse [] 
-
-= reverse ys
-= [] ++ reverse ys -- unapply ++
-= reverse [] ++ reverse ys
-</code></pre>
-
-<p>(2) <em>inductive case</em></p>
-
-<pre><code class="haskell">reverse ((x:xs) ++ ys) -- reverse ys ++ reverse (x:xs)
-
-= reverse (x:(xs ++ ys))
-= reverse (xs ++ ys) ++ [x]
-= reverse ys ++ (reverse xs ++ [x])
-= reverse ys ++ (reverse (x:xs)) -- unapply second reverse
-</code></pre>
-
-<p>이 증명은 <code>++</code> 가 <em>associative</em> 라는 사실을 이용해 증명했는데, 이것도 마찬가지로 증명할 수 있습니다.</p>
-
-<h3 id="markingappendvanish">Marking append vanish</h3>
-
-<p>많은 재귀 함수들이 <code>++</code> 연산을 이용해 작성되었는데, 편하긴 하지만 재귀적으로 사용되면 비용이 좀 듭니다. 따라서 이번에는 <code>++</code> 를 제거 해서 좀 더 효율적으로 함수를 작성해봅시다.</p>
-
-<p><code>reverse</code> 함수부터 해 보면</p>
-
-<pre><code class="haskell">reverse :: [a] -&gt; [a]  
-reverse [] = []  
-reverse (x:xs) = reverse xs ++ [x]  
-</code></pre>
-
-<p>이렇게 작성된 <code>reverse</code> 함수의 성능은 어떨까요? 먼저 생각해 볼 것은 <code>xs ++ ys</code> 을 <em>evaluation</em> 하기 위해 얼마의 스텝이 필요할까? 입니다. <code>xs ++ ys</code> 는 <code>xs</code> 를 쪼개가면서 <code>xs</code> 에 붙이기 때문에, <code>xs + 1</code> 만큼의 스텝이 필요하죠.</p>
-
-<p>참고로 <code>append</code> 의 정의는</p>
-
-<pre><code class="haskell">append :: [a] -&gt; [a] -&gt; [a]  
-append [ ] xs    = xs  
-append (x:xs) ys = x : append xs ys  
-</code></pre>
-
-<p>좀 간단히 생각하기 위해 <code>xs, ys</code> 가 <em>fully evaluated</em> 되었다 합시다. 그 결과로 <code>++</code> 는 첫 번째 인자 <code>xs</code> 의 길이에 비례하는 <em>linear time</em> 퍼포먼스를 보여줍니다.</p>
-
-<p>결과적으로 <code>reverse xs</code> 의 성능은, 길이를 <code>n</code> 이라 했을 때 <code>1 + 2 + ... + n + 1</code> 입니다. <code>(n^2 + 3n + 2) / 2</code> 겠네요. 이는 <code>reverse</code> 함수가 <em>quadratic time</em> 의 함수라는걸 말해줍니다. 1000 개를 뒤집으려면, 10000000 번만큼 연산을 해야한다는 소리지요.</p>
-
-<p>다행히도 <em>induction</em> 을 이용해 쓸모없는 <code>++</code> 부분을 제거하고, 성능을 개선할 수 있습니다.</p>
-
-<p><code>reverse</code> 와 <code>++</code> 를 합친 좀 더 <em>general</em> 한 함수를 만듭시다. <code>reverse'</code> 라 부를건데, <code>reverse xs += ys</code> 와 같은 일을 할겁니다. </p>
-
-<pre><code class="haskell">reverse' xs ys -- = reverse xs ++ ys  
-</code></pre>
-
-<p>이렇게 만들면 <code>reverse</code> 자체는 이렇게 정의할 수 있습니다. <code>[]</code> 가 <em>append</em> 를 위한 <em>identity</em> 라는 점을 이용한 것이지요.</p>
-
-<pre><code class="haskell">reverse xs = reverse' xs []  
-</code></pre>
-
-<p>신기하게도 이 속성을 증명하면서, 이 <code>reverse'</code> 의 정의 자체를 얻을 수 있습니다. </p>
-
-<p>(1) <em>base case</em></p>
-
-<pre><code class="haskell">reverse' [] ys 
-
-= reverse [] ++ ys 
-= [] ++ ys
-= ys
-</code></pre>
-
-<p>(2) <em>inductive case</em></p>
-
-<pre><code class="haskell">reverse' (x:xs) ys
-
-= reverse (x:xs) ++ ys
-= (reverse xs ++ [x]) ++ ys
-= reverse xs ++ ([x] ++ ys]) -- by associativity of ++
-= reverse' xs ([x] ++ ys) -- by induction hypothesis
-= reverse' xs (x:ys)
-</code></pre>
-
-<p>따라서 <code>reverse'</code> 의 정의는</p>
-
-<pre><code class="haskell">reverse' [a] -&gt; [a] -&gt; [a]  
-reverse' [] y = ys  
-reverse' (x:xs) ys = reverse' xs (x:ys)  
-</code></pre>
-
-<p>아까 언급했던대로 <code>reverse</code> 를 다시 만들면</p>
-
-<pre><code class="haskell">reverse :: [a] -&gt; [a]  
-reverse xs = reverse' xs []  
-</code></pre>
-
-<p>이제는 <code>x:ys</code> 처럼, 하나씩 분리해 나가면서 붙기때문에 성능이더 빠릅니다. 정확히는 <code>n + 2</code>  연산이 필요하지요. <em>linear time</em> 입니다. </p>
-
-<p>사실은 7장 에서 이미 개선된 <em>reverse</em> 를 봤었습니다. <code>reverse = foldl (:) []</code> 기억 나시나요?</p>
-
-<h4 id="flatten">flatten</h4>
-
-<pre><code class="haskell">data Tree = Leaf Int | Node Tree Tree  
-flatten :: Tree -&gt; [Int]  
-flatten (Leaf n) = [n]  
-flatten (Node l r) = flatten l ++ flatten r  
-</code></pre>
-
-<p>이 <code>flatten</code> 도 <code>++</code> 때문에 느립니다. 위 <code>reverse</code> 처럼 개선해 보면</p>
-
-<pre><code class="haskell">flatten' t ns = flatten t ++ [ns]  
-</code></pre>
-
-<p>(1) <em>base case</em></p>
-
-<pre><code class="haskell">flatten' (Leaf n) ns
-
-= flatten (Leaf n) ++ ns
-= [n] ++ ns
-n:ns  
-</code></pre>
-
-<p>(2) <em>inductive case</em></p>
-
-<pre><code class="haskell">flatten' (Node l r) ns
-
-= (flatten l ++ flatten r) ++ ns
-= flatten l ++ (flatten r ++ ns) -- associativity
-= flatten' l ++ (faltten r ++ ns) -- hypothesis
-= flatten' l (flatten' r ns)
-</code></pre>
-
-<p>따라서 <code>flatten'</code>, <code>flatten</code> 은</p>
-
-<pre><code class="haskell">flatten' :: Tree -&gt; [Int] -&gt; [Int]  
-flatten' (Leaf n) ns = n:ns  
-flatten' (Node l r) ns = flatten' l (flatten' r ns)
-
-flatten :: Tree -&gt; [Int]  
-flatten t = flatten' t []  
-</code></pre>
-
-<h3 id="compilercorrectness">Compiler Correctness</h3>
-
-<pre><code class="haskell">data Expr = Val Int | Add Expr Expr
-
-eval :: Expr -&gt; Int  
-eval (Val n) = n  
-eval (Add x y) = eval x + eval y  
-</code></pre>
-
-<p>지난번에 만들었던 이 계산 기계를 잘 보면, <em>expression</em> 이 간접적으로 <em>evaluated</em> 됩니다. 스택을 이용해 실행되는 코드의 도움을 받아서요. </p>
-
-<p>자세히 보면 스택은 <em>integer list</em> 고, 코드는 <em>push, add</em> 연산의 리스트입니다. 따라서</p>
-
-<pre><code class="haskell">type Stack = [Int]  
-type Code = [Op]  
-data Op = PUSH Int | ADD  
-</code></pre>
-
-<p>결국 코드를 실행한다는 말은 초기 스택을 받아, 이걸 이용해 계산을 하고 다시 스택을 돌려준다는 뜻입니다.</p>
-
-<pre><code class="haskell">exec :: Code -&gt; Stack -&gt; Stack  
-exec []         s       = s  
-exec (PUSH n:c) s       = exec c (n:s)  
-exec (ADD:c)    (m:n:s) = exec c (m+n:s)  
-</code></pre>
-
-<p>이제 <code>Expr</code> 을 <code>Code</code> 로 변경하는 함수 <code>compile</code> 를 만들면</p>
-
-<pre><code class="haskell">compile' :: Expr -&gt; Code  
-compile' (Val n) = [PUSH n]  
-compile' (Add x y) = compile x ++ compile y ++ [ADD]
-
-compile :: Expr -&gt; Code  
-compile e = compile' e  
-</code></pre>
-
-<p>그리고 화면에 출력을 위해 <code>Show</code> 를 구현하고 샘플식 <code>e</code> 를 만들면</p>
-
-<pre><code class="haskell">instance Show Expr where  
-  show (Val n) = "(Val " ++ show n ++ ")"
-  show (Add x y) = "(Add " ++ show x ++ " " ++ show y ++ ")"
-
-instance Show Op where  
-  show (PUSH n) = "(PUSH " ++ show n ++ ")"
-  show (ADD) = "(ADD)"
-
-e :: Expr  
-e = (Add (Add (Val 2) (Val 3)) (Val 4))  
-</code></pre>
-
-<pre><code class="haskell">&gt; e
--- (Add (Add (Val 2) (Val 3)) (Val 4))
-
-&gt; eval e
--- 9
-
-&gt; compile e
--- [(PUSH 2),(PUSH 3),(ADD),(PUSH 4),(ADD)]
-</code></pre>
-
-<p>잘 보면, 식을 컴파일해서 초기스택 <code>[]</code> 와 함께 실행시킨 것은, <code>[eval e]</code> 와 같다는 것을 알 수 있지요. <code>[]</code> 대신 임의의 스택 <code>s</code> 를 이용하면</p>
-
-<pre><code class="haskell">exec (compile e) s = eval e:s  
-</code></pre>
-
-<p>(1) <em>base-case:</em> <code>(Val n)</code></p>
-
-<pre><code class="haskell">exec (compile (Val n)) s
-
-= exec [PUSH n] s
-= n : s
-eval (Val n) : s -- unapply eval  
-</code></pre>
-
-<p>(2) <em>inductive case:</em> <code>(Add x y)</code></p>
-
-<pre><code class="haskell">exec (compile (Add x y)) s
-
-= exec (compile x ++ compile y ++ [ADD]) s
-= exec (compile x ++ (compile y ++ [ADD])) s -- associativity
-= exec (compile y ++ [ADD]) (exec (compile x) s) -- distributivity of exec
-= exec (compile y ++ [ADD]) (eval x:s) -- induction hypothesis for x
-= exec [ADD] (exec (compile y) (eval x:s)) -- distributivity
-= exec [ADD] (eval y : eval x : s)
-= (eval x + eval y) : s -- apply exec
-= eval (Add x y) : s -- unapply eval
-</code></pre>
-
-<p>위에서 쓴 <code>exec</code> 의 <em>distributivity</em> 를 보이면</p>
-
-<pre><code class="haskell">exec (c ++ d) s = exec d (exec c s)  
-</code></pre>
-
-<p><code>c</code> 가 <code>PUSH</code> 일때, 그리고 <code>ADD</code> 일때로 나눠서 증명하면 되죠.</p>
-
-<p>(1) <em>base case</em></p>
-
-<pre><code class="haskell">exec ([] ++ d) s 
-
-= exec d s
-= exec d (exec [] s) -- unapply exec
-</code></pre>
-
-<p>(2-1) <em>inductive case:</em> <code>PUSH n</code></p>
-
-<pre><code class="haskell">exec ((PUSH n : c) ++ d) s
-
-= exec (PUSH n : (c ++ d)) s
-= exec (c ++ d) (n:s)
-= exec d (exec c (n:s)) -- induction hypothesis
-= exec d (exec (PUSH n:c) s) -- unapply exec
-</code></pre>
-
-<p>(2-2) <em>inductive case:</em> <code>ADD</code></p>
-
-<pre><code class="haskell">exec ((ADD : c) ++ d) s  
-= exec (ADD : (c ++ d)) s
-= exec (ADD : (c ++ d)) (m:n:s') -- assume s == m:n:s'
-= exec (c ++ d) (m+n:s') -- apply exec
-= exec d (exec c (m+n:s')) -- induction hypothesis
-= exec d (exec (ADD : c) (m:n:s')) -- unapply exec
-= exec d (exec (ADD : c) s)
-</code></pre>
-
-<p><code>s</code> 를 <code>m:n:s'</code> 로 의 가정은 <em>underflow error</em> 를 겪을 수 있는것처럼 보이지만, 실제로는 그렇지 않습니다. 왜냐하면 <code>ADD</code> 연산이 들어있다는 자체가 최소한 두개의 숫자는 스택에 포함한다는 뜻이기 때문입니다. (<code>exec</code> 의 정의를 보세요)</p>
-
-<p>그리고 이전 장에서 <em>append</em> 연산에 적용했던 테크닉을 다시 가져와서, <em>distributivity property</em> 의 <em>underflow</em> 이슈를 예방할 수 있습니다. 이 속성을 유지하도록 하면요</p>
-
-<pre><code class="haskell">compile' e c = compile e ++ c  
-</code></pre>
-
-<p>이 속성을 <em>induction</em> 을 이용해서 차근차근 풀면, 아래와 같은 정의를 얻을 수 있습니다.</p>
-
-<pre><code class="haskell">compile' :: Expr -&gt; Code -&gt; Code  
-compile' (Val n) c = PUSH n : c  
-compile' (Add x y) = compile' x (compile' y (ADD : c))
-
-compile e = compile' e []  
-</code></pre>
-
-<p>그러면 <em>compiler correctness</em> 는 </p>
-
-<pre><code class="haskell">exec (compiler' e c) s = exec c (eval e : s)  
-</code></pre>
-
-<p>해석은 원문을 첨부하겠습니다.</p>
-
-<blockquote>
-  <p>That is, compiling an expression and then executing the resulting code together with arbitrary additional code gives the same result as executing the additional code with the value of the expression on top of the original stack</p>
-  
-  <p>Note that with <code>s = c = [ ]</code>, this new result simplifies to <code>exec (compile e) [] = [eval e]</code>, our original statement of correctness. </p>
-  
-  <p>In addition to avoiding the problem of stack underflow in the correctness proof, the accumulator version of the compiler has two further benefits. </p>
-  
-  <p>First of all, <strong>it avoids the use of ++,</strong> and is hence more efficient. And, </p>
-  
-  <p>secondly, <strong>the new proof is less than half the combined length of our previous two proofs.</strong> As is often the case in formal reasoning, generalising a result in the appropriate manner can considerably simplify its proof. Mathematics is an excellent tool for guiding the development of efficient programs with simple proofs!</p>
-</blockquote>
-
-<h3 id="rosetree">Rose Tree</h3>
-
-<p>로즈 트리는 원소의 개수가 <em>unbounded</em> 인 트리입니다. 이렇게 정의할 수 있습니다.</p>
-
-<pre><code class="haskell">data a = a :&gt; [Rose a] deriving Show  
-</code></pre>
-
-<p>여기서 <code>:&gt;</code> 는 <em>constructor</em> 입니다. 생성자가 <em>infix</em> 연산자로 올때는 <code>:</code> 로 시작해야 합니다. <code>deriving Show</code> 는 좀 디버깅 쉬우라고, 화면에 출력하기 위해 사용했습니다.</p>
-
-<p>몇 가지 헬퍼 함수를 만들면,</p>
-
-<pre><code class="haskell">root :: Rose a -&gt; a  
-root (x :&gt; xs) = x
-
-children :: Rose a -&gt; [Rose a]  
-children (x :&gt; xs) = r
-
-size :: Rose a -&gt; Int  
-size (x :&gt; xs) = 1 + sum (map size xs)
-
-leaves :: Rose a -&gt; Int  
-leaves (_ :&gt; []) = 1  
-leaves (_ :&gt; xs) = 1 + sum (map leaves xs)  
-</code></pre>
-
-<p>샘플 로즈 트리를 만들어 봅시다. </p>
-
-<pre><code class="haskell">tree = 'x' :&gt; map (flip (:&gt;) []) ['a'..'z']
-
--- same as
-tree = 'x' :&gt; map (\c -&gt; c :&gt; []) ['a'..'z'] 
-
-&gt; tree
--- 'x' :&gt; ['a' :&gt; [],'b' :&gt; [],'c' :&gt; [],'d' :&gt; [],'e' :&gt; [],'f' :&gt; [],'g' :&gt; [],'h' :&gt; [],'i' :&gt; [],'j' :&gt; [],'k' :&gt; [],'l' :&gt; [],'m' :&gt; [],'n' :&gt; [],'o' :&gt; [],'p' :&gt; [],'q' :&gt; [],'r' :&gt; [],'s' :&gt; [],'t' :&gt; [],'u' :&gt; [],'v' :&gt; [],'w' :&gt; [],'x' :&gt; [],'y' :&gt; [],'z' :&gt; []]
-
-&gt; size tree
--- 27
-
-&gt; leaves tree
--- 26
-</code></pre>
-
-<h3 id="functor">Functor</h3>
-
-<p>좀 삼삼하죠? 할게 별로 없으니. <em>rose tree</em> 를 <em>functor</em> 로 만들어 봅시다. 아래 짤방이 아마 세상에서 펑터를 가장 쉽게 설명할겁니다. <code>fmap (+3) (Just 2)</code> 에 대해</p>
-
-<p><img src='http://adit.io/imgs/functors/fmap_just.png'  alt="" /></p>
-
-<p align="center">(<a href='http://adit.io/' >http://adit.io</a>)</p>
-
-<p>즉, <code>Just</code> 는 펑터이므로 <code>2</code> 를 꺼내 <code>+3</code> 을 적용하고, 다시 <code>Just</code> 를 씌워 <code>Just 5</code>로 만들어 줍니다. 그게 <code>fmap</code> 이 하는 일이고, 모든 <em>functor</em> 는 <code>fmap</code> 이 적용 가능합니다. <em>functor</em> 의 정의를 보면</p>
-
-<pre><code class="haskell">class  Functor f  where  
-    fmap        :: (a -&gt; b) -&gt; f a -&gt; f b
-</code></pre>
-
-<p>타입이 직관적이죠? <code>a -&gt; b</code> 함수를 받아, <code>f a</code> 에 함수를 적용해서 <code>f b</code> 를 만듭니다. <code>f</code> 는 컨테이너라고 보시면 됩니다. <code>Maybe</code> 같은 것들요 대표적인 <code>Functor</code> 로</p>
-
-<pre><code class="haskell">instance  Functor Maybe  where  
-    fmap f Nothing = Nothing
-    fmap f (Just x) = Just (f x)
-
-
-instance  Functor []  where  
-    fmap = map 
-</code></pre>
-
-<p>그럼 우리가 만든 <code>Rose</code> 는 어떻게 해야 <code>Functor</code> 로 만들 수 있을까요?</p>
-
-<pre><code class="haskell">instance Functor Rose  where  
-    fmap g (x :&gt; xs) = g x :&gt; map (fmap g) xs  
-</code></pre>
-
-<p>직관적으로 보면 됩니다. 루트에 <code>g</code> 를 적용하고, <code>xs</code> 는 <code>[Rose]</code> 이므로 <code>x :&gt; xs</code> 와 똑같이 취급해서 <code>fmap g</code> 를 적용하면 됩니다. 이 때 지켜줘야 하는 <em>functor laws</em> 는</p>
-
-<pre><code class="haskell">fmap id  ==  id  
-fmap (f . g)  ==  fmap f . fmap g  
-</code></pre>
-
-<p>그럼 이제, 좀 재미난걸 할 수 있습니다. 이젠 <code>Rose</code> 가 <em>functor</em> 니까요. 다양한 함수를 적용할 수 있죠. </p>
-
-<pre><code class="haskell">tree' = 1 :&gt; map (flip (:&gt;) []) [1..5]
-
-&gt; tree'
--- 1 :&gt; [1 :&gt; [],2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; []]
-
-&gt; fmap (+1) tree'
--- 2 :&gt; [2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; [],6 :&gt; []]
-
-&gt; fmap (*10) tree'
--- 10 :&gt; [10 :&gt; [],20 :&gt; [],30 :&gt; [],40 :&gt; [],50 :&gt; []]
-
-&gt; fmap (:&gt; []) tree'
--- (1 :&gt; []) :&gt; [(1 :&gt; []) :&gt; [],(2 :&gt; []) :&gt; [],(3 :&gt; []) :&gt; [],(4 :&gt; []) :&gt; [],(5 :&gt; []) :&gt; []]
-</code></pre>
-
-<h3 id="monoid">Monoid</h3>
-
-<p><em>monoid</em> 는 <code>mempty</code>, <code>mappend</code> 두개의 함수를 가지고 있는 <code>m</code> 타입의 인스턴스입니다.</p>
-
-<ul>
-<li><code>mappend :: m -&gt; m -&gt; m</code> 은 <em>associative</em> 한 연산자로, 두 <code>m</code> 을 받아서, 하나의 <code>m</code> 으로 합칩니다. </li>
-<li><code>mempty :: m</code> 은 <code>mappend</code> 의 <em>neutral element</em> 를 표현합니다. </li>
-</ul>
-
-<p>뭔소리야 하실텐데, 우리 주변의 많은 것들이 <em>monoid</em> 입니다. 예제를 봅시다.</p>
-
-<pre><code class="haskell">&gt; (5 + 6) + 10 == 5 + (6 + 10)
-True
-
-&gt; (5 * 6) * 10 == 5 * (6 * 10)
-True
-
-&gt; ("Hello" ++ " ") ++ "world!" == "Hello" ++ (" " ++ "world!")
-True  
-</code></pre>
-
-<p><code>[Char]</code> 에서 <code>mempty</code> 는 <code>[]</code> <code>mappend</code> 는 <code>++</code> 입니다. <code>Integer</code> 의 <code>mappend</code> 는 다양한데, <code>+</code> 라면 <code>mempty</code> 가 <code>0</code> 이고, <code>*</code> 라면 <code>mempty</code> 가 <code>1</code> 일 겁니다. 항등원 기억나시죠? 그거랑 비슷합니다.</p>
-
-<pre><code class="haskell">class  Monoid a  where  
-    mappend :: a -&gt; a -&gt; a
-    mempty  :: m
-    mconcat :: [a] -&gt; a
-    mconcat :: foldr mappend mempty
-</code></pre>
-
-<p><code>mconcat</code> 은 <code>foldr (++) []</code> 를 생각하시면 이해가 쉽습니다. 네! 리스트도 모노이듭니다!</p>
-
-<pre><code class="haskell">instance  Monoid [a]  where  
-    mempty = []
-    mappend = (++)
-</code></pre>
-
-<p>모노이드를 일종의 연산과 그에 대한 항등원이 구현된 클래스라 보셔도 됩니다. 그러면 <code>Sum</code>, <code>Product</code> 모노이드를 만들어 보죠. <code>Rose</code> 에 적용할 수 있을 것 같아요.</p>
-
-<pre><code class="haskell">newtype Sum a = Sum { getSum :: a } deriving Show  
-newtype Product a = Product a deriving Show
-
-unProduct :: Product a -&gt; a  
-unProduct (Product x) = x
-
-instance Num a =&gt; Monoid (Sum a) where  
-  mempty = Sum 0
-  Sum x `mappend` Sum y = Sum (x + y)
-
-instance Num a =&gt; Monoid (Product a) where  
-  mempty = Product 1
-  Product x `mappend` Product y = Product (x * y)
-</code></pre>
-
-<p>중간에 보면 <code>unProduct</code> 란게 있는데, 생성자에서 <code>getSum</code> 처럼 <em>accessor</em> 를 만들어 주면 필요 없고, 안만들어 주면 저렇게 만들어서 써야 합니다. 차이점을 보여드리기 위해 두 방법을 모두 사용 해봤어요. 근데, <em>accessor</em> 가 있으면 출력때 같이 나와서 좀 불편합니다.</p>
-
-<pre><code class="haskell">-- 6 * (3 + 4)
-&gt; unProduct (Product 6 `mappend` (Product . getSum $ Sum 3 `mappend` Sum 4))
-
--- 42
-</code></pre>
-
-<p>무튼, 이제 모노이드도 있겠다, <code>Rose</code> 에 적용할 수 있습니다. 이게 무슨 뜻이냐면, <code>Rose</code> 컨테이너가 가진 <em>value</em> 가 <code>Product</code>, <code>Sum</code> 연산이 가능하게끔 바꿀 수 있다는 뜻입니다.</p>
-
-<pre><code class="haskell">&gt; tree'
--- 1 :&gt; [1 :&gt; [],2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; []]
-
-&gt; fmap Sum tree'
--- Sum 1 :&gt; [Sum 1 :&gt; [],Sum 2 :&gt; [],Sum 3 :&gt; [],Sum 4 :&gt; [],Sum 5 :&gt; []]
-
-&gt; fmap Product tree'
--- Product 1 :&gt; [Product 1 :&gt; [],Product 2 :&gt; [],Product 3 :&gt; [],Product 4 :&gt; [],Product 5 :&gt; []]
-</code></pre>
-
-<h3 id="foldable">Foldable</h3>
-
-<p><img src='https://www.haskell.org/wikiupload/thumb/3/39/FunctorHierarchy.svg/558px-FunctorHierarchy.svg.png'  alt="" /></p>
-
-<p align="center">(<a href='https://www.haskell.org/' >https://www.haskell.org</a>)</p>
-
-<p><em>foldable</em> 은 진짜 말 그대로 접을 수 있는 연산 <code>fold</code> 를 지원하는 인스턴스를 말합니다.</p>
-
-<pre><code class="haskell">class Foldable t where  
-    fold    :: Monoid m =&gt; t m -&gt; m
-    foldMap :: Monoid m =&gt; (a -&gt; m) -&gt; t a -&gt; m
-
-    foldr   :: (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
-    foldr'  :: (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
-
-    foldl   :: (b -&gt; a -&gt; b) -&gt; b -&gt; t a -&gt; b
-    foldl'  :: (b -&gt; a -&gt; b) -&gt; b -&gt; t a -&gt; b
-
-    foldr1  :: (a -&gt; a -&gt; a) -&gt; t a -&gt; a
-    foldl1  :: (a -&gt; a -&gt; a) -&gt; t a -&gt; a
-</code></pre>
-
-<p>여기선 <code>fold, foldMap</code> 만 다루도록 하죠. <code>fold</code> 의 타입을 보면 아시겠지만, <code>Monoid  m</code> 의 컨테이너인 <code>Foldable t</code> 를 접어서 단일 <code>m</code> 으로 만듭니다.</p>
-
-<p>따라서 복수개의 <code>Sum, Product</code> 를 접어 하나로 만들수 있지요. 어차피 이 두 모노이드에 대해 연산 자체는 정해져 있기 때문에 접는법만 알려주면 됩니다. </p>
-
-<p>그리고 더 중요한 사실은, <code>Rose</code> 가 <code>Foldable</code> 이 되면 <code>Sum</code> 등이 적용된 <code>Rose</code> 를 접어 계산할 수 있습니다. 다시 말해 컨테이너에, 연산을 추가하고, <code>fold</code> 할 수 있다는 이야기지요. </p>
-
-<p>아참! <code>foldMap</code> 은 이름에서 볼 수 있듯이 <code>fmap</code> 후 <code>fold</code> 한다고 생각하면 쉽습니다. <code>fold . fmap</code> 처럼요.</p>
-
-<pre><code class="haskell">class Functor f =&gt; Foldable f where  
-  fold :: Monoid m    =&gt; f m -&gt; m
-  foldMap :: Monoid m =&gt; (a -&gt; m) -&gt; (f a -&gt; m)
-  foldMap = fold $ fmap g a
-
-instance Foldable Rose where  
-  fold (x :&gt; xs) = (h.g) xs `mappend` x
-    where g = map (fold)
-          h = foldr (mappend) mempty
-</code></pre>
-
-<p>직관적으로 보면 쉽습니다. <code>h</code> 는 모노이드 <code>m</code> 을 펼치는 역할을 합니다. <code>g</code> 는 <code>f m</code> 을  재귀적으로 펼치구요. 이는 로즈 트리가, 복수개의 자식 노드를 가질 수 있기 때문에 그런건데, 어찌 되었든 펼치면서 노드를 끝에다 붙여 나갑니다. </p>
-
-<p>먼저 로즈 트리를 펼친 후에 모노이드를 합칠거니까, 순서는 <code>(g.h)</code> 입니다.</p>
-
-<p>이제 그러면, 로즈트리가 <em>functor</em> 이므로 모노이드로 감쌀 수 있고 (연산을 지정할 수 있고)    게다가 <em>foldable</em> 이므로 그 연산을 이용해 하나로 접을 수 있습니다. </p>
-
-<pre><code class="haskell">&gt; tree'
--- 1 :&gt; [1 :&gt; [],2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; []]
-
-&gt; fmap Sum tree'
--- Sum 1 :&gt; [Sum 1 :&gt; [],Sum 2 :&gt; [],Sum 3 :&gt; [],Sum 4 :&gt; [],Sum 5 :&gt; []]
-
-&gt; fold $ fmap Sum tree'
--- Sum 16
-
-&gt; unSum $ fold $ fmap Sum tree'
--- 16
-</code></pre>
-
-<p><del>갓스켈</del></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <strong>DelftX FP 101x</strong> <br />
-(2) <em>Programming in Haskell</em> <br />
-(3) <a href='http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html' >Functor, Monad, Applicative</a> <br />
-(4) <a href='http://en.wikibooks.org/wiki/Haskell/Monoids' >Haskell WikiBooks - Monoids</a> <br />
-(5) <a href='https://www.haskell.org/haskellwiki/Foldable_and_Traversable' >Foldable, Traversable</a> <br />
-(6) <a href='http://blog.jakubarnold.cz/2014/07/30/foldable-and-traversable.html' >foldable and traversable</a></p>]]></description><link>http://1ambda.github.io/haskell-intro9/</link><guid isPermaLink="false">129bd89e-f8b4-4154-8c14-4f5c61aa2a43</guid><category><![CDATA[edx]]></category><category><![CDATA[haskell]]></category><category><![CDATA[induction]]></category><category><![CDATA[functor]]></category><category><![CDATA[monoid]]></category><category><![CDATA[foldable]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 18 Dec 2014 08:24:13 GMT</pubDate></item><item><title><![CDATA[Substring Search Algorithm]]></title><description><![CDATA[<h3 id="introtosubstringsearch">Intro to Substring Search</h3>
-
-<p><code>N</code> 길이의 텍스트에서 <code>M</code> 길이의 패턴을 찾는 문제다. 일반적으로 <code>N &gt;&gt; M</code> 이다. <code>N</code> 이 좀 많이 (무한히) 길기 때문에 지난시간까지 배운 알고리즘을 적용하기가 좀 힘들다.</p>
-
-<p>(1) <em>suffix sort</em> 를 쓰려고 보니 <em>suffixes</em> 를 만드는 것 자체가 어렵다. 따라서 <em>manber-myers MSD</em> 도 패스.</p>
-
-<p>(2) <em>R-way</em> 든 <em>Ternary</em> 든 <em>tries</em> 자체를 만들기 어렵다. 탐색해야 할 문서는 어마어마하기 때문에 메모리의 양이 모자랄 수 밖에 없다. </p>
-
-<p>뭔가 문서를 <em>streaming</em> 취급하면서 처리할 수 있는 알고리즘이 필요하다.</p>
-
-<p>주된 <em>application</em> 은</p>
-
-<ul>
-<li><strong>computer forensics:</strong> search memory, disk for signatures</li>
-<li><code>CTRL + F</code></li>
-<li><strong>spam filtering:</strong> 특정 패턴이 발견되면 스팸이라 볼 수 있다.</li>
-<li><strong>internet traffic monitoring:</strong> 보안</li>
-<li><strong>screen scraping:</strong> 관련있는 패턴을 추출할 수 있다.</li>
-</ul>
-
-<p>자바에서는 <code>indexOf</code> 메소드가 문자열에서 해당 패턴을 발견해 시작 인덱스를 돌려준다.</p>
-
-<h3 id="bruteforce">Brute Force</h3>
-
-<p><del>언젠가 양자 컴퓨터가 나오면 쓸모 있을까</del></p>
-
-<pre><code class="java">public static int bruteForce(String pattern, String docs) {  
-    int M = pattern.length();
-    int N = docs.length();
-
-    for (int i = 0; i &lt; N - M; i ++) {
-        int j;
-
-        for (j = 0; j &lt; M; j++) 
-            if (pattern.charAt(j) != docs.charAt(i + j)) break;
-
-        if (j == M) return i;
-    }
-
-    return N;
-}
-</code></pre>
-
-<p>성능은 <em>worst case</em> 에서 <code>~M N</code> 번의 <em>char compares</em> 가 필요하다. 예를 들어 문서가 <code>AAAAAAAAAAAB</code> 고 패턴이 <code>AAAAAB</code> 면 최악이다.</p>
-
-<h4 id="backup">Backup</h4>
-
-<p>대부분의 <em>application</em> 에서 <em>backup</em> 하길 원치 않는다. 서론에 언급했듯이 스트림처럼 취급하고싶은데, <em>brute force</em> 에서는 <em>backup</em> 이 필요하기 때문에 <em>last <code>M</code> characters</em> 의 버퍼를 유지한다거나의 방법을 쓸 수 있다.</p>
-
-<p>아래의 구현은 똑같은 비교 회수를 가지는데, <em>backup</em> 한다는걸 확실히 보여준다.</p>
-
-<ul>
-<li><code>i</code> points to end of sequence of already-matched chars in docs</li>
-<li><code>j</code> stores # of already-matched chars (end of sequence in pattern)</li>
-</ul>
-
-<pre><code class="java">public static int bruteForceBackup(String pattern, String docs) {  
-    int i, N = docs.length();
-    int j, M = pattern.length();
-
-    for (i = 0, j = 0; i &lt; N &amp;&amp; j &lt; M; i++) 
-        if (docs.charAt(i + j) == pattern.charAt(j)) j++;
-        else { i -= j; j = 0; }
-
-    if (j == M) return i - M;
-    else return N;
-}
-</code></pre>
-
-<p>이게 <code>M</code> 이 작으면 문제가 안되는데, <code>M</code> 이 크면 문제가 될 수 있다.</p>
-
-<p>우리가 풀어야 할 문제는</p>
-
-<p>(1) <em>linear-tme guarantee</em> 가 필요 <br />
-(2) <em>backup</em> 하지 않기</p>
-
-<h3 id="knuthmorrispratt">Knuth-Morris-Pratt</h3>
-
-<p>아이디어는 간단하다. 매칭에 실패했을 경우, 현재까지 처리한 문자들에 대한 <em>정보</em> 를 가지고 있기 때문에, 이걸 이용해서 필요 없는 부분을 건너 뛴다.</p>
-
-<pre><code>// pattern: BAAAAAAAAA
-
-A B A A A A B A A A A A A A A A  
-  B A A A A ^ // fail
-            B // ignore previous chars
-</code></pre>
-
-<h4 id="dfa">DFA</h4>
-
-<p><em>Knuth-Morris-Pratt</em> 알고리즘은 <em>deterministic finite state automation, DFA</em> 란 것에 이론적으로 기반한다.</p>
-
-<p><em>DFA</em> 는 <em>abstract string-searching machine</em> 이다.</p>
-
-<ul>
-<li>Finite number of states (including start and halt)</li>
-<li><strong>Exactly one transition</strong> for each char in alphabet</li>
-<li>Accept if sequence of transitions leads to half state</li>
-</ul>
-
-<p><img src='http://www-igm.univ-mlv.fr/' ~lecroq/string/images/rwadfa2.png" alt="" /></p>
-
-<p align="center">(<a href='http://www-igm.univ-mlv.fr/' >http://www-igm.univ-mlv.fr</a>)</p>
-
-<p>더 크게 보면 <em>DFA</em> 는 <em>Finite State Machine, FSM</em> 의 한 종류다. <em>DFA</em> 말고도 <em>Nondeterministic Finite Automata, NFA</em> 가 있는데,  차이점은 이렇다.</p>
-
-<blockquote>
-  <p>비결정적 유한 오토마타는 결정적 유한 오토마타와는 다르게 입력 기호에 대해서 <code>\epsilon</code>-transition 에 의해 0개 이상의 이동이 가능하다. 만약 가능한 다음 상태의 경우가 없다면, 기계는 입력을 거부한다.</p>
-</blockquote>
-
-<p>결정적 유한 오토마타는 입력값에 대해 출력 값이 1개라는 소리 같은데, 좀 모호해서 더 찾아봤다. <a href='http://math.stackexchange.com/questions/563829/difference-between-nfa-and-dfa' >여기</a> 에 의하면</p>
-
-<blockquote>
-  <p>Each input to a <strong>DFA</strong> or <strong>NFA</strong> affects the state of the automaton: if it was in state q immediately before the input, either it will be in some state q′ after the input, or the input will cause it to choke. (Note that q′ may be the same as q.) Suppose that we have an automaton in a state q. The difference in behavior between a DFA and an NFA is this:</p>
-  
-  <ul>
-  <li><p>If it’s a <strong>DFA</strong>, each possible input determines the resulting state q′ uniquely. Every input causes a state change, and the new state is completely determined by the input. Moreover, the automaton can change state only after reading an input.</p></li>
-  <li><p>If it’s an <strong>NFA</strong>, some inputs may allow a choice of resulting states, and some may cause the automaton to choke, because there is no new state corresponding to that input. Moreover, the automaton may be constructed so that it can change state to some new state q′ without reading any input at all.</p></li>
-  </ul>
-  
-  <p>As a consequence of this difference in behavior, DFA’s and NFA’s differ in another very important respect.</p>
-  
-  <ul>
-  <li><p>If you start a <strong>DFA</strong> in its initial state and input some word w, the state q in which the DFA ends up is completely determined by w: inputting w to the DFA will always cause it to end up in state q. This is what is meant by calling it deterministic.</p></li>
-  <li><p>If you start an <strong>NFA</strong> in its initial state and input some word w, there may be several possible states in which it can end up, since some of the inputs along the way may have allowed a choice of state changes. Consequently, you can’t predict from w alone in exactly which state the automaton will finish; this is what is meant by calling it nondeterministic. (And it’s actually a little worse than I’ve indicated, since an NFA is also allowed to have more than one initial state.)</p></li>
-  </ul>
-  
-  <p>Finally, these differences affect how we determine what words are accepted (or recognized) by an automaton.</p>
-  
-  <ul>
-  <li><p>If it’s a <strong>DFA</strong>, we know that each word completely determines the final state of the automaton, and we say that the word is accepted if that state is an acceptor state.</p></li>
-  <li><p>If it’s an <strong>NFA</strong>, there might be several possible final states that could result from reading a given word; as long as at least one of them is an acceptor state, we say that the automaton accepts the word.</p></li>
-  </ul>
-</blockquote>
-
-<p><del>갓 아메리카</del></p>
-
-<p>똑같은 입력에 대해 <em>NFA</em> 는 다양한 최종상태를 만들 수 있다고 한다. 그래서 그 중 하나라도 <em>accept</em> 되면, 처리 된 것으로 받아들인다고 함. 어디서 주워들은 <em>NP hardness</em> 와 비스무리한 개념인것 같다. 그림을 다시 보면</p>
-
-<p><img src='http://www-igm.univ-mlv.fr/' ~lecroq/string/images/rwadfa2.png" alt="" /></p>
-
-<p align="center">(<a href='http://www-igm.univ-mlv.fr/' >http://www-igm.univ-mlv.fr</a>)</p>
-
-<p>검색하려는 패턴, 즉 <em>desired state</em> 나열하고 <em>transition</em> 를 그려가며 <em>DFA</em> 를 만든다. 이를 이용해 텍스트를 파싱하면서 <em>final state</em> 에 도달하는지 보면 된다.    </p>
-
-<p>구현은 </p>
-
-<pre><code class="java">public int kmpStringSearch(String docs, String pattern) {  
-  int i, j;
-  int N = docs.length(), M = pattern.length();
-  Int[][] dfa = createDFA(pattern);
-
-  for (i = 0, j = 0; i &lt; N &amp;&amp; j &lt; M; i++) {
-    j = dfa[txt.charAt(i)][j];
-  }
-
-  if (j == M) return i - M 
-  else N
-}
-</code></pre>
-
-<p>재밌는 사실은 <em>backup</em> 이 더이상 필요 없기 때문에 입력을 <em>stream</em> 으로 받을 수도 있다.</p>
-
-<pre><code>public int kmpStringSearch(In in, String pattern) {  
-  int i, j;
-  int M = pattern.length();
-  Int[][] dfa = createDFA(pattern);
-
-  for (i = 0, j = 0; !in.isEmpty() &amp;&amp; j &lt; M; i++) {
-    j = dfa[in.readChar()][j];
-  }
-
-  if (j == M) return i - M 
-  else N
-}
-</code></pre>
-
-<p>따라서 <em>running time</em> 은 <em>DFA</em> 만 있다면 확실히 <code>N</code> 번의 <em>char access</em> 다. 그럼 이제 문제는, <em>DFA</em> 를 만드는데 얼마나 시간이 걸릴것 인가? </p>
-
-<p><em>DFA</em> 를 만들면서 알아보자. <code>ABABAC</code> 의 패턴이 있을때</p>
-
-<p>(1) <em>match transition</em></p>
-
-<p>현재 상태가 <code>j</code> 이고 다음 문자인 <code>c</code> 가 <code>c == pattern.charAt(j)</code> 이면 <em>match transition</em> 이므로 <code>j++</code> 이다.</p>
-
-<p>따라서 패턴 <code>ABABAC</code> 의 <em>DFA</em> 는</p>
-
-<pre><code>               j     0 1 2 3 4 5 
-pattern.charAt(j)    A B A B A C
-
-dfa[][j]          A  1   3   5  
-                  B    2   4  
-                  C            6                  
-</code></pre>
-
-<p>(2) <em>mismatch transition</em></p>
-
-<p>상태 <code>j</code> 에서 <code>c != pattern.chatAt(j)</code> 이면, <em>mismatch</em> 다. 그러면  방금 전까지 만든 <code>j-1</code> 까지의 <em>DFA</em> 를 이용해서 <code>pattern[1 .. j-1]</code> 까지를 인풋으로 넣어 돌리면 된다. 무슨말인고 하니</p>
-
-<p><code>ABABAC</code> 에서 현재 <em>state</em> 가 <code>5</code> 면, 다음 인풋으로 <code>C</code> 를 받아야한다. <code>ABABA^C</code> 이렇게 표기하자. 그러면, <code>ABABA</code> 까지의 <em>DFA</em> 를 만들었으므로, 첫 문자 <code>A</code> 를 버리고 다음 문자 <code>C</code> 를 포함해서 <code>BABAC</code> 를 인풋으로 해서 <em>DFA</em> 를 돌리면 된다.</p>
-
-<p>예를 들어 <code>j = 5</code>, <code>c = A, B</code> 에 대해 <code>j = 4</code> 까지의 <em>DFA</em> 를 짓고</p>
-
-<pre><code>               j     0 1 2 3 4 5 
-pattern.charAt(j)    A B A B A C
-
-dfa[][j]          A  1 1 3 1 5  
-                  B  0 2 0 4 0
-                  C  0 0 0 0 0 6                  
-</code></pre>
-
-<p>에 대해서 <code>BABA</code> 를 반복하면, <code>j = 3</code> 이다. 따라서</p>
-
-<ul>
-<li><code>dfa['A'][5] = dfa['A'][3] = 1</code></li>
-<li><code>dfa['B'][5] = dfa['B'][3] = 4</code></li>
-</ul>
-
-<p>이게 잘 보면 매번 <code>j - 1</code> 의 스텝을 반복해야하는 걸로 보일 수 있는데, 그러지 말고 <code>pattern[1 .. j-1]</code> 을 <em>state</em> <code>X</code> 라 부르고, 이걸 유지하면 <em>transition</em> 을 <em>constant time</em> 으로 지을 수 있다. 즉 <code>j</code> 가 하나 증가할 때 마다 </p>
-
-<p><code>X = dfa[pattern.charAt(j)][X]</code></p>
-
-<p>이렇게 <code>X</code> 를 업데이트하면, <code>j - 1</code> 까지의 상태가 <code>X</code> 다. 따라서 <em>DFA</em> 를 <em>linear time</em> 으로 만들 수 있다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT3lJR08zSUdOalZUTm1WV0x6UVRPaDFDTmhkek10RXpZeFFXTGpWR1p3a1RZekkyTDRnek0wOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<h4 id="performance">Performance</h4>
-
-<p><em>DFA</em> 를 만드는 속도는 <code>M</code> <em>char access</em> 이므로 전체 문서를 검색하는데 걸리는 시간은 <code>M + N</code> <em>char access</em> 다. (<code>M</code> 은 패턴의 길이, <code>N</code> 은 문서의 길이)</p>
-
-<p>그러나 <em>DFA</em> 를 만드는데 필요한 메모리가 <code>R * M</code> 이다.</p>
-
-<p><em>NFA</em> 를 이용하면 <em>KMP</em> 알고리즘을 더 개선할 수 있다. <code>M</code> 에 비례하는 시간, 공간만으로도 패턴을 문서에서 탐색할 수 있다고 한다. <a href='http://algs4.cs.princeton.edu/53substring/KMPplus.java.html' >KMPplus.java</a></p>
-
-<h4 id="kmpimplementation">KMP Implementation</h4>
-
-<p>구현하면</p>
-
-<pre><code class="java">public class DFA {
-
-    int[][] dfa;
-
-    public DFA(String pattern, int R) {
-        int M = pattern.length();
-
-        // initialize
-        dfa = new int[R][];
-        for (int r = 0; r &lt; R; r++)
-            dfa[r] = new int[M];
-
-        dfa[pattern.charAt(0)][0] = 1;
-
-        // build DFA
-        for (int X = 0, j = 1; j &lt; M; j++) {
-            // mismatch
-            for (int c = 0; c &lt; R; c++)
-                dfa[c][j] = dfa[c][X];
-
-            // match
-            dfa[pattern.charAt(j)][j] = j + 1;
-
-            // update X
-            X = dfa[pattern.charAt(j)][X];
-        }
-    }
-
-    public int search(String docs) {
-
-        int i, j, M = pattern.length(), N = docs.length();
-
-        for (i = 0, j = 0; i &lt; N &amp;&amp; j &lt; M; i++) {
-            j = dfa[docs.charAt(i)][j];
-        }
-
-        if (j == M) return i - M;
-        else return N;
-    }
-}
-</code></pre>
-
-<h3 id="boyermoore">Boyer-Moore</h3>
-
-<p><em>KMP</em> 알고리즘은 <em>linear time</em> 인데, 이보다 더 빠르게 할 수 있을까?</p>
-
-<p><br/></p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTmtkVE5qaHpZaWRUWWhSVEx5STJNaDFDWmlCek10SUdaeFlUTGlGVE0yRVdPakp6TDRJRE4wOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<p>패턴의 우측부터 매칭해 가면, 꽤나 많은 <code>M</code> 사이즈의 텍스트를 빠르게 제낄 수 있다. 문제는 패턴이 어디까지 매칭되었는지에 따라 스킵할 수 있는 문자가 다르다는 것이다. 경우를 좀 나눠서 살펴보자 <code>i</code> 는 현재 문서의 탐색할 인덱스를, <code>^</code> 는 <em>mismatch</em> 를 나타낸다.</p>
-
-<pre><code class="java">// case 1
-
-          i     ^
-. . . . . . . . T L E . . . . 
-          N E E D L E
-
-                  i
-. . . . . . . . T L E . . . . 
-                  N E E D L E
-</code></pre>
-
-<p><em>case 1</em> 은 운이 좋아서, 미스매치 <code>T</code> 가 패턴에 없기 때문에 <code>T</code> 다음으로 <code>i</code> 를 옮길 수 있다.</p>
-
-<pre><code class="java">// case 2a
-
-          i     ^
-. . . . . . . . N L E . . . . 
-          N E E D L E
-
-                i 
-. . . . . . . . N L E . . . . 
-                N E E D L E
-</code></pre>
-
-<p>여기선 <em>mismatch</em> 문자 <code>N</code> 이 패턴에 있기 때문에 <em>rightmost</em> <code>N</code> 을 찾아 다시 비교를 시작한다. (우측부터 비교하기 때문)</p>
-
-<pre><code class="java">// case 2b
-
-          i     ^
-. . . . . . . . E L E . . . . 
-          N E E D L E
-
-// rightmost 'E'          
-
-      i          
-. . . . . . . . E L E . . . . 
-      N E E D L E
-
-
-// just increament `i` by 1
-
-                i         
-. . . . . . . . E L E . . . . 
-            N E E D L E
-</code></pre>
-
-<p>이 경우엔 <em>rightmost</em> <code>E</code> 가 별로 도움이 안되므로, 그냥 <code>i</code> 를 증가시킨다.</p>
-
-<p>다시 한번 정리하면, </p>
-
-<p>(1) 우측부터 시작해서 비교하다 <em>mismatch</em> 문자가 있을 때 필요 없는 문자를 몇개나 제낄 수 있느냐 하는 문제는, 패턴 안에서 해당 <em>mismatch</em> 문자가 있느냐 없느냐에 따라 다르다.</p>
-
-<p>(2) 없다면 모두 제껴버리면 되는거고, </p>
-
-<p>(3) 있다면 그 문자가 얼마나 우측에 오느냐에 따라 스킵할 수 있는 문자의 수가 달라진다. 우측에 오면 올 수록 거기서 부터 다시 비교해야 하기 때문에, <em>heuristic</em> 이 별로 도움이 안될 수도 있다. <em>case 2b</em> 가 바로 그 예다. 그럴때는 그냥 1 만큼 증가시키는것이 더 나을 수도 있다. </p>
-
-<p><em>skip table</em> 을 만들면</p>
-
-<pre><code class="java">int M = pattern.length();  
-int[] right = new int[R];
-
-for (i = 0; i &lt; R; i++) right[i] = -1;  
-for (j = 0; j &lt; M; j++) right[pattern.charAt(j)] = j;  
-</code></pre>
-
-<p>이 테이블을 이용해 탐색을 하면</p>
-
-<pre><code class="java">int N = docs.length();  
-int M = pattern.length();
-
-for (int i = 0; i &lt;= N - M; i++) {  
-  int skip = 0;
-
-  for (int j = M - 1; j &gt;=0; j--) {
-    if (docs.charAt(i + j) != pattern.charAt(j)) {
-      skip = Math.max(1, j - right[docs.charAt(i + j)]);
-      break;
-    }
-  }
-
-  if (skip == 0) return i;
-}
-
-return N;  
-</code></pre>
-
-<p>이 알고리즘에서 <code>skip</code> 을 계산하는 부분을 잘 보면</p>
-
-<pre><code class="java">skip = Math.max(1, j - right[docs.charAt(i + j)]);  
-</code></pre>
-
-<p>현재 비교가 진행된 <code>j</code> 에서 <em>mismatch</em> 문자의 인덱스를 뺄셈해서 1 보다 큰지를 비교한다. 만약 1 보다 작다면, 다시 말해 <code>0</code> 이나 음수라면 <code>skip</code> 이 마이너스로, 즉 왼쪽으로 되기 때문에 스킵할 필요가 없다. 그냥 우측으로 <code>+1</code> 해서 다시 비교하면 된다.</p>
-
-<p>전체 코드는</p>
-
-<pre><code class="java">public class BoyerMoore {
-
-    int[] right;
-    String pattern;
-
-    public BoyerMoore(String pattern, int R) {
-
-        this.pattern = pattern;
-        int M = pattern.length();
-
-        // initialize skip table
-        right = new int[R];
-        for (int i = 0; i &lt; R; i++) right[i] = -1;
-        for (int j = 0; j &lt; M; j++) right[pattern.charAt(j)] = j;
-    }
-
-    public int search(String docs) {
-
-        int M = pattern.length();
-        int N = docs.length();
-
-        for (int i = 0; i &lt;= N - M; i++) {
-            int skip = 0;
-
-            for (int j = M - 1; j &gt;=0; j--) {
-                if (pattern.charAt(j) != docs.charAt(i + j)) {
-                    // calculate skip value
-                    skip = Math.max(1, j - right[docs.charAt(i + j)]);
-                    break;
-                }
-            }
-
-            if (skip == 0) return i;
-        }
-
-        return N;
-    }
-}
-</code></pre>
-
-<p>이건 <em>bad character</em> 라는 특성을 이용한 방법이고, <em>good suffix</em> 등을 과 비교하여 얼마나 더 스킵할지를 결정할 수 있다. </p>
-
-<p>보이어 무어 알고리즘에 대한 설명은 <a href='http://xenostudy.tistory.com/72' >여기</a>가 제일 잘 되어있다. </p>
-
-<h4 id="performance">Performance</h4>
-
-<p>일반적으로는(휴리스틱) <code>~N/M</code> 의 <em>char compare</em> 비교를 한다고 알려져있다. <em>sublinear</em> 한건데, </p>
-
-<p><em>worst case</em> 에서는 <code>~ MN</code> 이다. 예를 들어 패턴이 <code>ABBBB</code> 고 문서가 <code>BBBBBBBBBBBBBBBBB..</code> 일때 최악이다.</p>
-
-<p><em>worst case</em> 를 <code>~3N</code> 까지 개선할 수 있다. <em>KMP-like rule</em> 을 더해 반복적인 패턴을 비하면 된다.</p>
-
-<p>실제로 보이어 무어 알고리즘은 검색할 문자열이 길때 효과가 있다. 그래야 스킵할것이 많기 때문이다. 그러나 대부분의 경우 검색어가 그다지 길지 않다는 것.</p>
-
-<h3 id="rabinkarp">Rabin-Karp</h3>
-
-<p><img src='http://terpconnect.umd.edu/' ~sthomas2/images/rabinkarp.jpg" alt="" /></p>
-
-<p align="center">(<a href='http://terpconnect.umd.edu/' >http://terpconnect.umd.edu</a>)</p>
-
-<p>기본 아이디어는 <em>modular hashing</em> 이다. 인덱스를 하나씩 증가시켜가면서 문자열의 해싱 값을 비교한다.</p>
-
-<p>먼저 해야할 일은 <em>hash function</em> 을 만드는 건데, <code>t_i</code> 를 문서(<code>txt</code>) 의 <code>i</code> 번째 캐릭터라 하면</p>
-
-<p><img src='http://chart.apis.google.com/chart?cht=tx&amp;chl=x_t%20%3D%20t_i%20R%5E%7BM-1%7D%5C%20%20%2B%5C%20%20t_%7Bi%2B1%7D%20R%5E%7BM-2%7D%5C%20%20%2B%5C%20%20%5Ccdots%20%5C%20%5C%20%20%2B%5C%20%20%20t_%7Bi%2BM-1%7D%20R%5E%7B0%7D%5C%20%5C%20%20' (mod)%5C%20%5C%20%20Q" alt="" /></p>
-
-<p>여기서 <code>M</code>-<em>digit</em>, <code>R</code>-<em>base</em>, <code>Q</code> modulo 다. <code>M</code>-<em>degree</em> 다항식인데, <em>Horner's method</em> 를 쓰면 중복된 계산 없이 <em>linear time</em> 으로 <em>evaluation</em> 가능하다. </p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjBnak1rUkRPeUVqWWpSVEwwRW1NaDFpWjVVek10WVROME1UTDNjVFl4SUdaemt6TDNjRE4wOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com/</a>)</p>
-
-<p>난 첨에 뭔소린가 했는데 다항식의 값을 구할 때 중복된 계산을 피하기 위해 이렇게 구현하는걸 말한다.</p>
-
-<p><img src='http://web-ext.u-aizu.ac.jp/course/alg1/ex/uk/ex04/horner2.png'  alt="" /></p>
-
-<p><code>R</code> 에 대한 다항식이기 때문에, 해싱함수의 구현은</p>
-
-<pre><code class="java">private long hash(String key, int M, int Q) {  
-  long h = 0;
-
-  for(int j = 0; j &lt; M; j++)
-    h = (R * h + key.charAt(j)) % Q;
-
-  return h;
-}
-</code></pre>
-
-<p><code>x_i</code> 의 해싱값을 계산하고, 매칭이 안되면 다음으로 넘어가 <code>x_(i+1)</code> 을 계산해야 한다. 그런데, 좀 더 효율적으로 할 수 있는 방법이 없을까? 당연히 가능하다. 두 해싱값 서로 다른 1개의 항 빼고는 모두 같은 항을 가지고 있기 때문이다. </p>
-
-<p><img src='http://chart.apis.google.com/chart?cht=tx&amp;chl=x_i%5C%20%20%3D%5C%20t_iR%5E%7BM-1%7D%5C%20%2B%5C%20t_%7Bi%2B1%7DR%5E%7BM-2%7D%5C%20%2B%5C%20%5Ccdots%5C%20%2B%5C%20t_%7Bi%20%2B%20M%20-%201%7DR%5E0%5C%5C%0A%5C%20%5C%5C%20%0A%5C%20%5C%5C%0A%5C%20%5C%5C%0A%5C%20%5C%5C%0A%5C%20%5C%5C%0Ax_i%5C%20%20%3D%5C%20t_%7Bi%20%2B%201%7DR%5E%7BM-1%7D%5C%20%2B%5C%20t_%7Bi%2B1%7DR%5E%7BM-2%7D%5C%20%2B%5C%20%5Ccdots%5C%20%2B%5C%20t_%7Bi%20%2B%20M%7DR%5E0'  alt="" /></p>
-
-<p>따라서 <code>x_(i+1)</code> 은</p>
-
-<p><img src='http://chart.apis.google.com/chart?cht=tx&amp;chl=x_%7Bi%2B1%7D%5C%20%20%3D%5C%20%20' (x_i%5C%20%20%5C%20-%20t_iR%5E%7BM-1%7D)%5C%20%20*%5C%20%20R%5C%20%2B%5C%20%20t_%7Bi%2BM%7D%20" alt="" /></p>
-
-<p>이므로, 상수 시간 내에 다음 문자열의 해시값을 구할 수 있다. 따라서 매 <code>i</code> 마다 상수 시간이므로 <code>~N</code> 으로 패턴을 찾을 수 있다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTmhKR00yWVROaEpHT2psVEwzTW1ONTBpWndjek10Z1RNbGxUTHpNR054WVdPM1l6TDVjRE4wOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com/</a>)</p>
-
-<h4 id="implementation">Implementation</h4>
-
-<p>전체 코드는 <a href='http://algs4.cs.princeton.edu/53substring/RabinKarp.java.html' >RabinKarp.java</a> 로</p>
-
-<pre><code class="java">public class RabinKarp {
-
-    String pattern;
-    long patternHash;
-    int M;
-    long Q;
-    int R;
-    long RM; // R^(M-1) % Q
-
-    public RabinKarp(String pattern) {
-        this.pattern = pattern;
-
-        R = 25;
-        M = pattern.length();
-        Q = longRandomPrime();
-
-        // pre-compute R^(M-1) % Q for use in removing leading digit
-        RM = 1;
-        for (int i = 1; i &lt;= M-1; i++)
-            RM = (RM * R) % Q;
-
-        patternHash = hash(pattern, M);
-    }
-
-    private long hash(String key, int M) {
-        long h = 0;
-
-        for (int j = 0; j &lt; M; j++)
-            h = (R * h + key.charAt(j)) % Q; 
-        return h;
-    }
-
-    private static long longRandomPrime() {
-        BigInteger prime = BigInteger.probablePrime(31, new Random());
-        return prime.longValue();
-    }
-
-    public int search(String docs) {
-        int N = docs.length();
-        long docsHash = hash(docs, M);
-
-        if (docsHash == patternHash) return 0;
-
-        for (int i = M; i &lt; N; i++) {
-            // remove leading digit
-            docsHash = (docsHash + Q - RM * docs.charAt(i-M) % Q) % Q;
-            // add trailing digit
-            docsHash = (docsHash * R + docs.charAt(i)) % Q;
-
-            // match
-            if (patternHash == docsHash) return i - M + 1;
-        }
-
-        return N;
-    }
-}
-</code></pre>
-
-<p>참고로, 해시값을 비교하는 것에는 두 가지 버전이 있다.</p>
-
-<p>(1) <strong>Monte Carlo version:</strong> return match if hash match <br />
-(2) <strong>Las Vegas version:</strong> check for substring match if hash match and continue search if false collision.</p>
-
-<p>몬테 카를로는 확률적으로 여러번 구해서 맞는 값을 찾는거다. 근데 만약에 <code>Q</code> 가 <code>MN^2</code> 정도로 상당히 크다면, 충돌이 일어날 확률은 <code>1/N</code> 이다.</p>
-
-<p>실제 돌려보면 <code>Q</code> 를 충분히 크게 고르되, 오버플로우가 안 일어나면 <code>1/Q</code> 의 적은 확률로 충돌이 일어난다.</p>
-
-<p>따라서</p>
-
-<p>(1) <strong>Monte Carlo version</strong></p>
-
-<ul>
-<li>Always runs in linear time</li>
-<li>Extremely likely to return correct answer (but not always)</li>
-</ul>
-
-<p>(2) <strong>Las Vegas version</strong></p>
-
-<ul>
-<li>Always returns correct answer</li>
-<li>Extremely likely to run in linear time (but worst case is <code>M N</code>)</li>
-</ul>
-
-<p>라스베가스 버전에서 <em>worst case</em> 는, 충돌이 매번 나고 매번 검사하는건데. 그럴 일은 거의 없다.</p>
-
-<h4 id="prosandcons">Pros and cons</h4>
-
-<p><em>rabin-karp</em> 알고리즘은 앞서 보았던 <em>KMP</em> 나 <em>boyed moore</em> 에 비해 장점이 있는데</p>
-
-<ul>
-<li>Extends to 2d patterns</li>
-<li>Extends to finding multiple patterns</li>
-</ul>
-
-<p>예를 들어서 다양한 패턴을 찾고싶다 하면, 그 패턴들의 심볼 테이블을 만들어 놓고 검색하면 된다.</p>
-
-<p>단점으로는</p>
-
-<ul>
-<li>Arithmetic ops slower than char compares</li>
-<li>라스베가스 버전은 백업을 필요로 함</li>
-<li>poor worst case guarantee</li>
-</ul>
-
-<h3 id="summary">Summary</h3>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWTVNMlkxWVdOMUVXTXdJV0w0TWpZaDF5TjJrek10WTJZM0lXTDRjek5pSldabFIyTDBrRE4wOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Ro$bert Sedgewick</strong> <br />
-(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
-(3) <a href='http://math.stackexchange.com/questions/563829/difference-between-nfa-and-dfa' >Difference between NFA and DFA</a> <br />
-(4) <a href='http://www-igm.univ-mlv.fr/' ~lecroq/string/node4.html">Automaton</a> <br />
-(5) <a href='http://somemoreacademic.blogspot.kr/2012/09/boyer-moore-string-matching-algorithm.html' >Boyer Moore string matching algorithm</a> <br />
-(6) <a href='http://xenostudy.tistory.com/72' >보이어 무어 알고리즘에 대한 고찰</a> <br />
-(7) <a href='http://terpconnect.umd.edu/' ~sthomas2/rabin-karp.html">Rabin-Karp Algorithm</a></p>]]></description><link>http://1ambda.github.io/substring-search/</link><guid isPermaLink="false">2c08e92e-2241-4624-988e-32d552ed67e1</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[substring search]]></category><category><![CDATA[boyer-moore]]></category><category><![CDATA[rabin-karp]]></category><category><![CDATA[knuth-morris-pratt]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 17 Dec 2014 15:16:42 GMT</pubDate></item></channel></rss>
+(2) <a href='http://msdn.microsoft.com/en-us/library/aa288734' (v=vs.71).aspx">MSDN: Half Adder</a></p>]]></description><link>http://1ambda.github.io/reactive-programming-2/</link><guid isPermaLink="false">1f0f0056-8b79-426c-abcb-ce9071c541bb</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[reactive programming]]></category><category><![CDATA[referential transparency]]></category><category><![CDATA[operational equivalence]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 21 Dec 2014 01:57:05 GMT</pubDate></item></channel></rss>
