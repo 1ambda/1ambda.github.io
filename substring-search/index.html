@@ -77,7 +77,7 @@
 <body>
 
   
-  <script src="../public/jquery.js?v=9d90c66bcd"></script>
+  <script src="../public/jquery.js?v=9d5555be33"></script>
 
   
 
@@ -170,7 +170,7 @@
     int j, M = pattern.length();
 
     for (i = 0, j = 0; i &lt; N &amp;&amp; j &lt; M; i++) 
-        if (docs.charAt(i + j) == pattern.charAt(j)) j++;
+        if (docs.charAt(i) == pattern.charAt(j)) j++;
         else { i -= j; j = 0; }
 
     if (j == M) return i - M;
