@@ -1,5 +1,258 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 13 Feb 2015 12:43:07 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Coding The Matrix 1, Function, Field and Vector]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 15 Feb 2015 16:09:11 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, MapReduce]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<h3 id="intro">Intro</h3>
+
+<p><em>map</em> 과 <em>reduce</em> 라는 단어는 <em>functional language</em> 에서 왔다.</p>
+
+<ul>
+<li><em>map:</em> processes each record sequentially and independently</li>
+<li><em>reduce:</em> processes set of all records in batches</li>
+</ul>
+
+<pre><code class="lisp">(map square '(1 2 3 4))
+;; (1 4 9 16)
+
+(reduce + '(1 4 9 16))
+;; (+16 (+9 (+4 1)))
+;; 30
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="mapreduce">MapReduce</h3>
+
+<p><img src='http://webmapreduce.sourceforge.net/docs/User_Guide/images/map-reduce.png'  alt="" /></p>
+
+<p align="center">(<a href='http://webmapreduce.sourceforge.net/' >http://webmapreduce.sourceforge.net/</a>)</p>
+
+<blockquote>
+  <p><em>Map:</em> <strong>Parallelly</strong> process <strong>a large number</strong> of individual records to generate intermediate key/value pairs
+  <br/> <br />
+  <em>Reduce:</em> processes and merges all intermediate values associated per key</p>
+</blockquote>
+
+<p>각 키는 하나의 <em>reducer</em> 에 할당되고, <em>partitioning keys</em> 에 의해 <em>reduce</em> 가 진행된다. 자주 쓰이는 기법으로 <em>hash partitioning</em> 이 있다. <code>hash(key) % # of reduce servers</code></p>
+
+<pre><code class="java">public static class MapClass extends MapReduceBase  
+            implements Mapper&lt;LongWriteable, Text, Text, IntWritable&gt; {
+
+  private final static IntWritable one = new IntWritable(1);
+  private Text word = new Text();
+
+  public void map(LongWritable key, Text value, 
+                  OutputCollector&lt;Text, IntWritable&gt; output,
+                  Reporter reporter) throws IOException {
+
+    String line = value.toString();
+    StringTokenizer itr = new StringTokenizer(line);
+
+    while (itr.hasMoreTokens()) {
+      word.set(itr.nextToken());
+      output.collect(word, one);
+    }
+  }
+}
+
+public static class ReduceClass extends MapReduceBase  
+            implements Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
+
+  public void reduce(Text key, Iterator&lt;IntWritable&gt; values,
+                     OutputCollector&lt;Text, IntWritable&gt; output,
+                     Reporter reporter) throw IOException {
+
+    int sum = 0;
+    while (values.hasNext()) {
+      sum += values.next().get();
+    }
+
+    output.collect(key, new IntWritable(sum));
+  }                     
+}
+
+public void run(String inputPath, String outputPath) throw Exception {
+
+  // The job
+  JobConf conf = new JobConf(WordCount.class);
+  conf.setJobName("mywordcount");
+
+  // The keys are words
+  (srings) conf.setOutputKeyClass(Text.class);
+
+  // The values are counts (ints)
+  conf.setOutputValueClass(IntWritable.class);
+  conf.setMapperClass(MapClass.class);
+  conf.setReducerClass(ReduceClass.class);
+
+  FileInputFormat.addInputPat(conf, new Path(inputPath);
+  FileOutputFormat.setOutputPath(conf, new Path(outputPath));
+
+  JobClient.runJob(conf);
+}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="mapreduceapplication">MapReduce Application</h3>
+
+<p>(1) <strong>Distributed Grep</strong> </p>
+
+<ul>
+<li><em>input:</em> large set of files</li>
+<li><em>output:</em> lines that match pattern</li>
+<li><em>map:</em> emits a line if it matches the supplied pattern</li>
+<li><em>reduce:</em> copies the intermediate data to output</li>
+</ul>
+
+<p>(2) <strong>Reverse Web-Link Graph</strong></p>
+
+<ul>
+<li><em>input:</em> web graph(tuple <code>(a,b)</code> where page <code>a</code> -> page <code>b</code>)</li>
+<li><em>output:</em> for each page, list of pages that link to it</li>
+<li><em>map:</em> process we log and for each input <code>&lt;source, target&gt;</code>, it outputs <code>&lt;target, source&gt;</code></li>
+<li><em>reduce:</em> emits <code>&lt;target, list(source)&gt;</code></li>
+</ul>
+
+<p>(3) <strong>Count of URL Access Frequency</strong></p>
+
+<ul>
+<li><em>input:</em> log of accessed URLs</li>
+<li><p><em>output:</em> for each URL, the number of total accesses for that URL</p></li>
+<li><p><em>map:</em> process web log and outputs <code>&lt;URL, 1&gt;</code></p></li>
+<li><em>multiple reducers:</em> emits `<URL, URL_count></li>
+<li><strong>chain another MapReduce job to calculate</strong> <code>overall_count</code></li>
+</ul>
+
+<p>(4) <em>Sort</em></p>
+
+<ul>
+<li><em>map</em> task's output is sorted (e.g., <em>quicksort</em>)</li>
+<li><em>reduce</em> task's input is osrted (e.g., <em>mergesort</em>)</li>
+</ul>
+
+<p>따라서 정렬을 하기 위해</p>
+
+<ul>
+<li><em>map:</em> <code>&lt;key, value&gt;</code> -> <code>&lt;value, _&gt;</code> (identity)</li>
+<li><em>reduce:</em> <code>&lt;key, value&gt;</code> -> <code>&lt;key, value&gt;</code> (identity)</li>
+</ul>
+
+<p>이 때 <em>parttition key</em> 로 <em>range</em> 를 사용하는 것이 가능하다. 다만, 특정 구간에 <em>data</em> 가 몰려있을 수 있으므로 <em>dstiribution</em> 을 고려해 <em>reducer</em> 에게 할당해주면 된다.</p>
+
+<p><br/></p>
+
+<h3 id="scheduling">Scheduling</h3>
+
+<p>일반 <em>user</em> 는</p>
+
+<ul>
+<li>Write a Map program, write a Reduce program</li>
+<li>Submit job; wait for result</li>
+<li>Need to know nothing about parallel/distributed programming</li>
+</ul>
+
+<p>그러나 내부적으로는</p>
+
+<ul>
+<li>Parallelize Map</li>
+<li>Transfer data from Map to Reduce</li>
+<li>Parallelize Reduce</li>
+<li>Implement Stroage for Map input, Map output, Reduce input, Reduce output</li>
+</ul>
+
+<p>그리고 <em>reduce</em> 가 시작되기 전에 반드시 <em>map</em> 이 끝나야 한다. 다시 말해서 <em>map phase</em> 와 <em>reduce phase</em> 사이에는 <em>barrier</em> 가 있어야 한다. 그렇지 않으면 결과가 부정확할 수 있다.</p>
+
+<p>이제 하나하나씩 살펴보자.</p>
+
+<p>(1) <em>Parallelize Map:</em> Easy. Each map task is independent of the other</p>
+
+<p>(2) <em>Transfer data from Map to Reduce:</em> All map output records with same key assigned to same Reduce task. Use <strong>Partitionning Function</strong></p>
+
+<p>(3) <em>Parallelize Reduce:</em> Easy. Each reduce task is independent of the other</p>
+
+<p>(4) <em>Implement Storage for Map input, Map output, Reduce input and Reduce output:</em></p>
+
+<ul>
+<li>Map input: from <strong>distributed file system</strong></li>
+<li>Map output: to local disk at Map node; Use <strong>local file systems</strong></li>
+<li>Reduce input: from (multiple) remote disks; Uses local file systems</li>
+<li>Reduce output: to <strong>distributed file system</strong></li>
+</ul>
+
+<p>DFS 의 예로 <em>Google File System</em>, <em>HDFS</em> 등이 있다.</p>
+
+<p><br/></p>
+
+<p>하둡은 스케쥴러로 <em>YARN, Yet Another Resouce Negotiator</em>를 사용한다. <em>YARN</em> 은 각 서버를 <em>a collection of containers</em> 로 취급한다. 여기서 <em>container = some CPU + some Memory</em> 다.</p>
+
+<p><em>YARN</em> 은 크게 3파트로 나눌 수 있는데</p>
+
+<ul>
+<li><em>Global Resource Manager(RM):</em> scheduling</li>
+<li><em>Per-server Node Manager(NM):</em> Daemon and server-specific functions</li>
+<li><em>Per-application(job) Application Master(AM):</em> Container negotiation with RM and NMs, Detecting task failures of that job</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week1/YARN.jpg'  alt="" /></p>
+
+<p><em>container</em> 가 필요하면 <em>AM1</em> 이 <em>RM</em> 에게 알리고, <em>Node B</em> 의 <em>NM2</em> 에서 <em>Task</em> 가 끝나면, <em>RM</em> 이 <em>Node A</em> 의 <em>AM1</em> 에게 사용 가능한 컨테이너가 있다는 사실을 알려 <em>AM1</em> 이 <em>NM2</em> 에게 컨테이너를 사용하겠다는 요청을 보내는 식이다.</p>
+
+<p><br/></p>
+
+<h3 id="faulttolerance">Fault-Tolerance</h3>
+
+<p>(1) Server Failure</p>
+
+<ul>
+<li><em>NM</em> hearbeats to <em>RM</em>. If server fails <em>RM</em> lets all affected <em>AMs</em> know, and <em>AMs</em> take action</li>
+<li><em>NM</em> keeps track of each task running at its server. If task fails while in-progress, mark the task as idle and restart it</li>
+<li><em>AM</em> heartbeats to <em>RM</em>. On failure, <em>RM</em> restarts <em>AM</em>, which then syncs up with its running tasks</li>
+</ul>
+
+<p>(2) RM Failure</p>
+
+<ul>
+<li>Use old checkpoints and bring up secondary <em>RM</em></li>
+<li>Heartbeats also used to piggyback container requests. Avoids extra mesages</li>
+</ul>
+
+<p>요약하자면, <em>NM</em>, <em>AM</em> 은 <em>RM</em> 에게 <em>heartbeat</em> 를 보낸다. <em>NM</em> 에서 오류가 나면 <em>RM</em> 이 영향을 받는 <em>AM</em> 에게 알리고, 해당 <em>AM</em> 이 적절히 처리한다. 또한 <em>NM</em> 은 <em>task</em> 를 유지하면서, <em>task</em> 에러가 발생하면 재시작한다. <em>AM</em> 에서 오류가 나면 <em>RM</em> 이 재시작하고, 해당 <em>AM</em> 의 태스크와 싱크를 맞춘다. <em>RM</em> 에서 오류가 날 경우엔 <em>secondary RM</em> 을 이용한다.</p>
+
+<h3 id="stragglers">Stragglers</h3>
+
+<p><em>slow nodes</em> 를 부르는 다른말이다. <em>speculative execution</em> 으로 해결할 수 있다. 보통 느린 이유는 <em>disk</em>, <em>network bandwidth</em>, <em>CPU</em>, <em>memory</em> 등 때문인데 <em>task</em> 를 복제해서 다른 <em>node</em> 에서 돌린 뒤 먼저 완료되는 노드의 결과를 이용하는 방식이다.</p>
+
+<blockquote>
+  <p>Perform backup (replicated) execution of straggler task: task considered done when first replica completed</p>
+</blockquote>
+
+<h3 id="locality">Locality</h3>
+
+<p><em>cloud</em> 의 <em>hierarchical topology</em> 때문에 <em>GFS</em>, <em>HDFS</em> 등은 각 <em>chunk</em> 를 3군데에 복제한다. 이때 같은 <em>rack</em> 에 위치할수도 아닐수도 있다.</p>
+
+<p><em>MapReduce</em> 연산에서는 <em>map task</em> 를 스케쥴링할때 가능하면 다음의 순서로 배치한다.</p>
+
+<p>(1) <em>chunk</em> 가 있는 머신에 or failing that <br />
+(2) 아니면 같은 <em>rack</em> 에 or failing that <br />
+(3) Anywhere  </p>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<p>(1) MapReduce uses parallelization + aggregation to schedule applications across clusters.</p>
+
+<p>(2) Need to deal with failure</p>
+
+<p>(3) Plenty of ongoing research work in scheduling and fault-tolerance for Mapreduce and Hadoop</p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera <br />
+(3) <a href='http://webmapreduce.sourceforge.net/docs/User_Guide/sect-User_Guide-Introduction-What_is_Map_Reduce.html' >MapReduce Image</a>  </p>]]></description><link>http://1ambda.github.io/cloud-computing-1-1/</link><guid isPermaLink="false">663ff3ef-8d2f-4c15-8897-90acbda32548</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[MapReduce]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 13 Feb 2015 12:34:11 GMT</pubDate></item><item><title><![CDATA[Coding The Matrix 1, Function, Field and Vector]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
 
 <h3 id="thefunction">The Function</h3>
 
@@ -1368,6 +1621,28 @@ until no frequent or candidate set can be generated
 <li><p>Greedy best-first search simply uses the heuristic function as the evaluation function. But better solution is provided by the A* algorithm. The evaluation function used by A* algorithm is simply the sum of the heuristic function for a node plus the cost of getting to thast node in the first place.</p></li>
 <li><p>A* is optimal. It does not expand more nodes than absolutely necessary. But A* is not the answer to all questions, specifically when it comes to graph search.</p></li>
 </ul>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<p>(1) <em>heuristic function</em> <code>h: state space -&gt; R</code> 은 <em>problem-specific knowledge</em> 를 <em>problem-independent way</em> 로 표현한다. 여기서 <code>h(n)</code> 값은 노드 <code>n</code> 에서 <em>goal</em> 까지의  <em>estimated cost</em> 의 최소 값이다.</p>
+
+<p>(2) <em>best-first search</em> 는 <em>evaluation function</em> 인 <code>f</code> 를 기준으로 <code>f-value</code> 를 정렬해 다음에 어떤 노드를 탐색할지 결정한다.</p>
+
+<p>(3) 만약 <code>f = h</code> 이면 <em>greedy best-first search</em> 라 부른다.</p>
+
+<p>(4) <em>A* Search</em> 는 <em>evaluation function</em> <code>f(n) = h(n) + g(n)</code> 을 이용한다. <code>h(n)</code> 은 <em>heuristic function</em>, <code>g(n)</code> 은 <code>n</code> 까지 도달하는 비용이다. </p>
+
+<p>(5) 따라서 <code>f(n)</code> 은 <code>n</code> 을 통과하여 <em>goal</em> 까지 도달하는데 걸리는 <em>cheapest solution</em> 의 <em>estimated cost</em> 다.</p>
+
+<p>(6) 만약 <em>heuristic function</em> <code>h(n)</code> 이 <em>admissible</em> 하면, 다시 말해 <code>h(n) &lt;= actual distance</code> 이면 <em>A*</em> 는 <em>optimal solution</em> 을 돌려준다. 이는 <code>f(n) = g(n) + h(n)</code> 이기 때문이다.</p>
+
+<p>(7) <em>A* search</em> 는 <em>complete</em> 하다. 이 말은 탐색과정에서 같은 비용으로 도달할 수 있는 모든 <em>state</em> 의 집합인 <em>contour</em> (등고선) 을 방문하면서 결국에는 <em>goal node</em> 를 찾는다는 뜻이다. </p>
+
+<p>(8) 기하학적으로 보면 <em>heuristic</em> 이 정밀해질 수록 타원(등고선) 이 <em>goal state</em> 에 가깝게 넓어진다. </p>
+
+<p><br/></p>
 
 <h3 id="strips">STRIPS</h3>
 
@@ -5994,264 +6269,4 @@ val xs = range(1, 10)
 
 <p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong> <br />
 (2) <a href='http://reactivex.io/' >http://reactivex.io/</a> <br />
-(3) <a href='https://github.com/iirvine/principles-of-reactive-programming/blob/master/notes/week-4/002-basic-combinators-on-observable-collections.md' >https://github.com/iirvine</a>  </p>]]></description><link>http://1ambda.github.io/reactive-programming-4/</link><guid isPermaLink="false">d34db484-100f-49c7-b55a-670970d19b33</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[observable]]></category><category><![CDATA[rx]]></category><category><![CDATA[scheduler]]></category><category><![CDATA[subscription]]></category><category><![CDATA[subject]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 26 Dec 2014 09:58:19 GMT</pubDate></item><item><title><![CDATA[Process Mining, Week5]]></title><description><![CDATA[<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-3-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>지난 4주간 배운바를 간단히 정리해보면</p>
-
-<ul>
-<li>첫 2주는 <em>model discovery</em></li>
-<li>지난 2주는 <em>conformance checking</em> </li>
-</ul>
-
-<p>이 것들은 <em>control flow</em> 에 관련된 것들이었다. 이제는 기본적인 <em>event log</em> 의 데이터 뿐만 아니라 <em>time, resource, data</em> 등을 이용하면서 <em>model enhancement</em> 를 할 수 있는 기법들을 배워보자.</p>
-
-<p>앞으로 이야기 할 내용은</p>
-
-<ul>
-<li>mining decision points</li>
-<li>mining bottlenecks</li>
-<li>mining social networks</li>
-<li>comparative process mining</li>
-<li>operational support: detect, predict, recommend</li>
-</ul>
-
-<h3 id="miningdecisionpoints">Mining Decision Points</h3>
-
-<p><em>model enhancement</em> 은 <em>conformance checking</em> 과는 다르게, 모델을 더 나은 방향으로 <strong>변형</strong>하는 것을 목표로 한다.</p>
-
-<ul>
-<li><strong>extend:</strong> adding additional perspectives to the model using event data</li>
-<li><strong>repair:</strong> improving the quality of the model using event data</li>
-</ul>
-
-<p>먼저 <em>extend</em> 에 대해 이야기 해 보자. <em>decision point</em> 를 마이닝 할 건데, 인풋으로 </p>
-
-<ul>
-<li><em>event log</em></li>
-<li><em>process model</em></li>
-</ul>
-
-<p>이 필요하다. 그리고 로그와 모델이 <strong>aligned</strong> 되어 있다는 가정하에 마이닝을 시작한다.</p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-33-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><em>decision tree</em> 에서 했던것 처럼 <em>predictor variable</em> 을 이용해 <em>response variable</em> 인 <em>transition</em> 을 선택할 수 있다. 이 때 <em>predictor variable</em> 은 <em>event log</em> 에 있는 <em>attribute</em> 다. 예를 들어</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-35-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>여기서 우측 하단에 <em>inclusive OR</em> 이 있는데, 하나만 택하거나 둘 모두 택할 수 있는 <em>place</em> 다. 이 것도 마찬가지로 <em>decision tree</em> 를 만들듯이 생성할 수 있다. 슬라이드에서는 <code>x, y</code> 로의 두 <em>guard</em> 를 만들었지만 둘다 택 할 수 있는 경우가 있다. 예를 들어 <code>amount &lt; 500, type = silver</code> 면 <code>y, z</code> 모두를 택한다.</p>
-
-<p><em>event log</em> 에 있는 정보 이외에도, <em>decision point</em> 를 마이닝 하기 위해 <em>predictor variable</em> 로 <em>last event</em> 나 <em>previous event</em> 를 사용할 수 있다.</p>
-
-<p>이외에도 <em>predictor variable</em> 는 프로세스 인스턴스의 <em>context</em> 에 근거해서 다양한 값일 수 있는데</p>
-
-<ul>
-<li>number of cases running</li>
-<li>number of resources present</li>
-<li>workload of reousrce</li>
-<li>day of the week 등</li>
-</ul>
-
-<p>한 가지 주의할점은 더 많은 변수, 더 많은 조합들이 있을수록 데이터가 희박해지기 때문에 <em>overfitting</em> 할 수 있다는 점이다. </p>
-
-<p>이벤트 로그의 속성을 이용해 만든 <em>decision tree</em> 로, 모델에 <em>guard</em> 를 추가할 수 있다. 하지만, 이 가드가 <em>prescriptive</em> 한 것은 아니다. 오히려 <em>descriptive</em> 에 가깝다.</p>
-
-<blockquote>
-  <p>The guard discovered are describing what has happend rather than what should have happended</p>
-</blockquote>
-
-<h3 id="miningbottlenecks">Mining Bottlenecks</h3>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-29-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-30-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>위 로그를 돌려보면, 이와 같은 <em>duration</em> 같은 정보를 얻을 수 있다.</p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-31-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-32-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>이런식으로 볼 수도 있다.</p>
-
-<h3 id="miningsocialnetworks">Mining Social Networks</h3>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-18-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>잘 보면 이벤트로그를 <em>arrtibute</em> <code>name</code> 과 연관 지었다. </p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-19-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>이 로그를 이용하면 누가 무엇을 얼마나 실행했는지 파악할 수 있고, 이를 이용해서 그래프를 그릴 수 있다. 한 가지 생각해 볼 점은 노드가 얼마나 <strong>중요한가</strong> 는 정의에 따라 다를 수 있다는 것이다. <em>closeness</em>, <em>out degree</em> 등등.</p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-21-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>이건 누구로 부터 누구로 일이 전달되었는가를 매트릭스로 표현한 것이다. 이걸 이용하면</p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-22-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>이름이 아니라 다른 <em>attribute</em> 인 <em>role</em> 을 이용하면</p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-23-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p>소셜 네트워크 마이닝을 위한 기법을 정리하면</p>
-
-<ul>
-<li><strong>Resource-activity matrix</strong> 로 누가 무엇을 하는지</li>
-<li><strong>Handover of work matrix</strong> 로 일이 어떻게 전달되는지</li>
-</ul>
-
-<p>를 파악할 수 있고, 이를 이용해 그래프를 만들 수 있다. 물론 이 외에도 다양한 방법들이 있다.</p>
-
-<h3 id="organizationalmining">Organizational Mining</h3>
-
-<p>클러스터링과 비슷하다고 보면 된다. 이벤트 로그를 기반으로 몇개의 집단으로 묶는 것이다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-24-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-25-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><br/></p>
-
-<p>위의 예에서는 <em>resource</em> 기반으로 묶었지만 <em>case</em> 로 묶어 <em>process variants</em> 를 확인할 수도 있다.</p>
-
-<p>그리고 위에서 발견한 <em>organizational perspective</em> 를 모델에 적용하면 이런 재미난 그림을 얻을 수 있다. 누가 어떤일을 하는지를 넘어, 어떤 집단이 어떤 일을 주로 하는지를 파악할 수 있는 것이다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-26-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><br/></p>
-
-<p>프로세스 마이닝을 실제 로그에 적용해 보면 스트레스 대비 일의 퍼포먼스를 설명하는 [<em>Yerkes-Dodson law</em>] 도 볼 수 있다고 한다.</p>
-
-<p><img src='http://sourcesofinsight.com/wp-content/uploads/2008/09/yerkes-dodson-human-performance-curve.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://sourcesofinsight.com/' >http://sourcesofinsight.com/</a>)</p>
-
-<p>프로세스 마이닝은 사회과학쪽으로도 유용할 것 같다. <del>근데 이 그래프는 너무 테일러리즘ㅠ</del></p>
-
-<h3 id="conbiningdifferentperspectives">Conbining Different Perspectives</h3>
-
-<p>이 전 까지 배웠던 다양한 <em>perspectives</em> 들</p>
-
-<ul>
-<li>data perspective</li>
-<li>resource perspective</li>
-<li>time perspective</li>
-<li>control-flow perspective</li>
-</ul>
-
-<p>이런 하나의 모델로 조합해 보자.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-37-728.jpg?cb=1305062373'  alt="" /></p>
-
-<p><br/></p>
-
-<p><em>control flow</em>, 즉 모델에 </p>
-
-<ul>
-<li><em>data perspective</em> 를 추가하면 <em>guard</em> 를 얻을 수 있고 </li>
-<li><em>time perspective</em> 는 <em>wating time</em>, <em>service time</em> 을 확인하는데 도움을 준다</li>
-<li><em>resource perspetive</em> 는 모델을 <em>role</em>, <em>individual</em> 관점에서 이해하는데 도움을 준다.</li>
-</ul>
-
-<p>이 조합된 모델에 <em>limitation</em> 이 있다는 것, 그리고 이 모든 것은 <em>descriptive</em>(<strong>as is</strong>) 하다는 것을 명심하자.</p>
-
-<p>다양한 관점이 적용된 모델을 이런 곳에 활용할 수 있다.</p>
-
-<ul>
-<li><em>diagnosis</em></li>
-<li><em>re-engineering</em></li>
-<li>예측이나 추천같은 <em>operational support</em> </li>
-<li><strong>What if</strong> 를 다루는 <em>simulation</em> </li>
-</ul>
-
-<h3 id="comparativeprocessminingusingprocesscubes">Comparative Process Mining Using Process Cubes</h3>
-
-<p><em>event log</em> 에는 다양한 <em>attribute</em> 를 가지고 있다. 이것들을 서로 비교해 가면서 더 좋은 프로세스 마이닝 모델을 선택할 수 있다. 즉, 다양한 조합의 액티비티, 케이스, 리소스 등을 선택해 가면서 가장 적합한 모델을 찾아내는 것이다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter10toolsupport-121219213613-phpapp01/95/process-mining-chapter10toolsupport-4-638.jpg?cb=1355974631'  alt="" /></p>
-
-<p>이 큐브의 각 축은 차원을 나타내고, 각 셀은 어떤 특정 패턴의 이벤트 로그를 나타낸다 볼 수 있다.</p>
-
-<p>이렇게 프로세스 큐브를 사용하면 다차원 분석이 가능하다. <em>data ware house</em> 나 <em>OLAP</em> 도 비슷한 일을 하긴 하는데, 프로세스 마이닝과의 큰 차이점이 하나 있다.</p>
-
-<blockquote>
-  <p>Related, but often data is aggregated it useless for process mining(events are lost)</p>
-</blockquote>
-
-<h3 id="refinedprocessminingframework">Refined Process Mining Framework</h3>
-
-<p>전체적인 큰 그림은 아래와 같다.</p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-4-728.jpg?cb=1305062304'  alt="" /></p>
-
-<p><br/></p>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-5-728.jpg?cb=1305062304'  alt="" /></p>
-
-<p>꼭대기부터 차근차근 보자. 여기서 <em>provenance</em> 란 수집하는 이벤트 로그가 신뢰성이 있어야 한다는 것을 의미한다. 그리고 이 이벤트 로그는 두 가지로 나뉘는데</p>
-
-<ul>
-<li><p><strong>Post mortem event data:</strong> refer to information about cases that have completed. i.e., these can be used for process improvement and auditing but not for influencing the cases they refer to</p></li>
-<li><p><strong>Pre mortem event data:</strong> If a case is still running, <strong>alive</strong>, then it may be possible that information in the event log about this case <strong>can be exploited</strong> to ensure the correct or efficient handling of this case</p></li>
-</ul>
-
-<p>즉 <em>pre mortem</em> 은 현재 진행중인 것을 말한다. <del>와이리 복잡하게 설명하시뮤ㅠ</del>  예를 들어 <em>student-related event data</em> 에서 </p>
-
-<blockquote>
-  <p><strong>post mortem:</strong> Understanding where and why students drop out or deviate. Should the curriculum be redesigned? What are the bottlenecks?</p>
-  
-  <p><strong>pre mortem:</strong> What advice can we give a particular student that is likely do drop out? How to signal the lecturer that the exam is likely to be a <em>massacre</em> due to inactivity of students?</p>
-</blockquote>
-
-<p><br/></p>
-
-<h4 id="dejurevsdefacto">De Jure vs De Facto</h4>
-
-<p>큰 그림에서 밑 부분을 보면 모델에도 두 종류가 있다.</p>
-
-<p><strong>de jure model</strong> 은 <em>normative</em> 즉 <strong>되어야 하는 것</strong> 을 설명하는 것이고, <strong>de facto model</strong> 은 <em>descriptive</em>, 즉 <strong>실제로 행해지는 것</strong> 을 설명한다.</p>
-
-<h4 id="cartography">Cartography</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-8-728.jpg?cb=1305062304'  alt="" /></p>
-
-<p>이벤트 로그를 이용해서 모델을 발견하고, 개선하고, 진단하는 과정을 말한다</p>
-
-<h4 id="auditing">Auditing</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-9-728.jpg?cb=1305062304'  alt="" /></p>
-
-<ul>
-<li><strong>detect:</strong> <em>de jure model</em> 과 <em>pre mortem</em> 을 비교해 <em>violation</em> 이 없는지 확인한다.</li>
-<li><strong>check:</strong> <em>detect</em> 에서 찾은 것을 수량화하고, 어떤 <em>deviation</em> 인가 확인한다.</li>
-<li><strong>compare:</strong> <em>defacto model</em> 과 비교해서 실제에서 어떤 <em>deviation</em> 이 있는가 본다. </li>
-<li><strong>promote:</strong> 위 정보를 토대로 모델을 개선한다.</li>
-</ul>
-
-<h4 id="navigation">Navigation</h4>
-
-<p><img src='http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-10-728.jpg?cb=1305062304'  alt="" /></p>
-
-<p>이 단계에서는 런타임에 <em>explore</em> 할 수도 있고, <em>prediction</em> 나 <em>recommendation</em> 도 가능하다.</p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <a href='http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483' >Book: Process Mining</a> <br />
-(2) <a href='http://www.slideshare.net/wvdaalst/process-mining-chapter08miningadditionalperspectives' >Slide</a> <br />
-(3) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst <br />
-(4) <a href='http://1ambda.github.io/www.processmining.org' >www.processmining.org</a> <br />
-(5) <a href='http://pais.hse.ru/en/' >http://pais.hse.ru/en/</a> <br />
-(6) <a href='http://sourcesofinsight.com/yerkes-dodson-human-performance-curve/' >http://sourcesofinsight.com/</a></p>]]></description><link>http://1ambda.github.io/process-mining-week5/</link><guid isPermaLink="false">0e6897a3-6487-4810-9b0c-3c555faba7d7</guid><category><![CDATA[coursera]]></category><category><![CDATA[process mining]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 24 Dec 2014 03:41:31 GMT</pubDate></item></channel></rss>
+(3) <a href='https://github.com/iirvine/principles-of-reactive-programming/blob/master/notes/week-4/002-basic-combinators-on-observable-collections.md' >https://github.com/iirvine</a>  </p>]]></description><link>http://1ambda.github.io/reactive-programming-4/</link><guid isPermaLink="false">d34db484-100f-49c7-b55a-670970d19b33</guid><category><![CDATA[scala]]></category><category><![CDATA[coursera]]></category><category><![CDATA[observable]]></category><category><![CDATA[rx]]></category><category><![CDATA[scheduler]]></category><category><![CDATA[subscription]]></category><category><![CDATA[subject]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 26 Dec 2014 09:58:19 GMT</pubDate></item></channel></rss>

@@ -77,7 +77,7 @@
 <body>
 
   
-  <script src="../public/jquery.js?v=9d5555be33"></script>
+  <script src="../public/jquery.js?v=37485c32ac"></script>
 
   
 
@@ -262,6 +262,28 @@
 <li><p>Greedy best-first search simply uses the heuristic function as the evaluation function. But better solution is provided by the A* algorithm. The evaluation function used by A* algorithm is simply the sum of the heuristic function for a node plus the cost of getting to thast node in the first place.</p></li>
 <li><p>A* is optimal. It does not expand more nodes than absolutely necessary. But A* is not the answer to all questions, specifically when it comes to graph search.</p></li>
 </ul>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<p>(1) <em>heuristic function</em> <code>h: state space -&gt; R</code> 은 <em>problem-specific knowledge</em> 를 <em>problem-independent way</em> 로 표현한다. 여기서 <code>h(n)</code> 값은 노드 <code>n</code> 에서 <em>goal</em> 까지의  <em>estimated cost</em> 의 최소 값이다.</p>
+
+<p>(2) <em>best-first search</em> 는 <em>evaluation function</em> 인 <code>f</code> 를 기준으로 <code>f-value</code> 를 정렬해 다음에 어떤 노드를 탐색할지 결정한다.</p>
+
+<p>(3) 만약 <code>f = h</code> 이면 <em>greedy best-first search</em> 라 부른다.</p>
+
+<p>(4) <em>A* Search</em> 는 <em>evaluation function</em> <code>f(n) = h(n) + g(n)</code> 을 이용한다. <code>h(n)</code> 은 <em>heuristic function</em>, <code>g(n)</code> 은 <code>n</code> 까지 도달하는 비용이다. </p>
+
+<p>(5) 따라서 <code>f(n)</code> 은 <code>n</code> 을 통과하여 <em>goal</em> 까지 도달하는데 걸리는 <em>cheapest solution</em> 의 <em>estimated cost</em> 다.</p>
+
+<p>(6) 만약 <em>heuristic function</em> <code>h(n)</code> 이 <em>admissible</em> 하면, 다시 말해 <code>h(n) &lt;= actual distance</code> 이면 <em>A*</em> 는 <em>optimal solution</em> 을 돌려준다. 이는 <code>f(n) = g(n) + h(n)</code> 이기 때문이다.</p>
+
+<p>(7) <em>A* search</em> 는 <em>complete</em> 하다. 이 말은 탐색과정에서 같은 비용으로 도달할 수 있는 모든 <em>state</em> 의 집합인 <em>contour</em> (등고선) 을 방문하면서 결국에는 <em>goal node</em> 를 찾는다는 뜻이다. </p>
+
+<p>(8) 기하학적으로 보면 <em>heuristic</em> 이 정밀해질 수록 타원(등고선) 이 <em>goal state</em> 에 가깝게 넓어진다. </p>
+
+<p><br/></p>
 
 <h3 id="strips">STRIPS</h3>
 
