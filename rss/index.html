@@ -1,5 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 20 Feb 2015 07:52:07 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Pattern Discovery 2]]></title><description><![CDATA[<p><img src='https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 21 Feb 2015 14:33:58 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Gossip Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<h3 id="multicast">Multicast</h3>
+
+<p>이번시간에 배울 내용은 <em>Gossip Protocol</em> (혹은 <em>Epidemic Protocol</em>) 입니다.</p>
+
+<p>기존에는 특정 그룹에게 메세지를 보내기 위해 <em>multicast</em> 를 이용했지만, 클라우드 컴퓨티 환경에서는</p>
+
+<ul>
+<li>프로세스가 죽어 노드가 크래쉬를 일으킬수도</li>
+<li>네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고</li>
+<li>노드가 빠르게 증가합니다.</li>
+</ul>
+
+<p>그러나 멀티캐스트는 <em>fault-tolerance</em> 와 <em>scalability</em> 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해 다양한 방법이 도입되었는데</p>
+
+<p>(1) <strong>Centralized:</strong> 중앙 서버에서 <em>TCP, UDP</em> 패킷을 날립니다. 간단한 구현이지만 중앙서버의 오버헤드가 높고, 수천개의 노드가 있을때 <em>latency</em> 가 생깁니다. 노드의 수를 <code>N</code> 이라 했을때, 모든 노드에 메시지가 전달되는데 <code>O(N)</code> 시간이 걸리지요.</p>
+
+<p>(2) <strong>Tree-Based:</strong> 전달 받은 노드에서, 다시 패킷을 전달하여 경로가 <em>tree</em> 형태로 구성됩니다. <em>balanced tree</em> 라면 어떤 그룹에 패킷이 전달되는데 <code>O(logN)</code> 의 시간이 걸립니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/tree_based_multicast.jpg'  alt="" /></p>
+
+<p>이 방법의 단점은 </p>
+
+<ul>
+<li><em>tree</em> 를 구성하고 유지하는데 필요한 오버헤드</li>
+<li><em>root</em> 에 가까운 곳에서 <em>failure</em> 가 발생했을때의 파급력</li>
+</ul>
+
+<p>일반적으로 <em>tree-based multicast</em> 프로토콜에서는 <em>spanning tree</em> 를 구성해서 최단비용으로 패킷을 전달합니다. 그리고 메시지가 올바르게 전달되었는지 <em>ACK</em> 또는 <em>NAK</em> 를 이용하는데 <em>SRM</em> 이던 <em>RMTP</em> 던 여전히 <code>O(N)</code> 만큼의 <em>ACK/NAK</em> 오버헤드가 발생합니다.</p>
+
+<p><br/></p>
+
+<h3 id="gossip">Gossip</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example2.jpg'  alt="" /></p>
+
+<p>가십 프로토콜은 위 그림처럼 작동합니다.</p>
+
+<ul>
+<li>주기적으로 랜덤한 타겟을 골라 <em>gossip message</em> 를 전송합니다</li>
+<li>그리고 이것을 받아 <em>infected</em> 상태가 된 노드도 똑같이 행동합니다.</li>
+</ul>
+
+<p>이걸 <em>Push gossip</em> 이라 부릅니다. <em>multiple message</em> 를 가십하기 위해 랜덤 서브셋을 선택하거나, <em>recently-received</em> 메시지를 를 선택하거나, <em>higher priority one</em> 을 고를 수 있습니다.</p>
+
+<p>어떤 가십 메시지에 대해 대부분의 노드가 <em>infected</em> 되었을때 <em>push gossip</em> 은 비효율적입니다. 이때는 <em>uninfected</em> 노드가, 새로운 가십메시지가 있는지 주변 노드에게 물어보는 <strong>pull gossip</strong> 이 오버헤드가 더 적습니다.</p>
+
+<ul>
+<li><strong>Pull gossip:</strong> Periodically poll a few random selected processes for new multicast meesages that you haven't received</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="gossipanalysis">Gossip Analysis</h3>
+
+<p>가십프로토콜은 다음의 특징을 가집니다.</p>
+
+<ul>
+<li><strong>lightweight</strong> in large groups</li>
+<li>spreads a multicast quickly</li>
+<li>highly <em>fault-tolerant</em></li>
+</ul>
+
+<p>이를 위해 간단한 증명을 해보도록 하겠습니다.</p>
+
+<ul>
+<li>전체 <code>n+1</code> 의 <em>population</em> 에 대해 </li>
+<li><em>uninfected individuals</em> 의 수를 <code>x</code></li>
+<li><em>infected individuals</em> 의 수를 <code>y</code> </li>
+<li><em>individual pair</em> 간의 <em>contract rate</em> 를 <code>β</code> 라 하면</li>
+</ul>
+
+<p>항상 <code>x + y = n + 1</code> 이고, 시작상태에서는 <code>x_0 = n, y_0 = 1</code> 입니다. 그리고 시간이 지날때마다 <em>uninfected</em> <code>y</code> 는 다음처럼 감소합니다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cfrac%7B%5Cmathrm%7Bd%7D%20x%7D%7B%5Cmathrm%7Bd%7D%20t%7D%20%3D%20-%5Cbeta%20xy'  alt="" /></p>
+
+<p>그러면 이 수식으로부터 다음을 이끌어 낼 수 있습니다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?x%20%3D%20%7B%20n%28n&plus;1%29%20%5Cover%20%7Bn%20&plus;%20e%5E%7B%5Cbeta%28n&plus;1%29t%7D%7D%7D'  alt="" /></p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?y%20%3D%20%7B%20%28n&plus;1%29%20%5Cover%20%7B1%20&plus;%20ne%5E%7B-%5Cbeta%28n&plus;1%29t%7D%7D%7D'  alt="" /></p>
+
+<p>그리고 <em>infected node</em> 가 랜덤하게 <code>b</code> 개의 노드를 고른다 하면 <code>β</code> 는 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%5Cbeta%20%3D%20%7Bb%20%5Cover%20b%7D'  alt="" /></p>
+
+<p>그리고 시간 <code>t</code> 를 가십이 진행되는 <em>round</em> 라 보고 <code>t = clog(n)</code> 이라 치환하겠습니다. 다음을 이끌어낼 수 있습니다.</p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?y%20%5Capprox%20%28n&plus;1%29%20-%20%7B1%20%5Cover%20n%5E%7Bcb-2%7D%7D'  alt="" /></p>
+
+<p>이 식으로부터 <em>gossip protocol</em> 이 <em>low latency</em>, <em>reliability</em>, <em>lightweight</em> 하다는 것을 알 수 있습니다.</p>
+
+<p>(1) <strong>low latency</strong></p>
+
+<p><code>c, b</code> 를 <code>n</code> 과 독립적으로 아주 작은 숫자로 세팅하면 <code>clog(n)</code> <em>round</em> 이므로 적은 시간 내에 메시지가 전파됩니다.</p>
+
+<p>(2) <strong>reliability</strong></p>
+
+<p><code>n</code> 이 매우 크면 <code>1 / n^{cb-2}</code> 가 <code>0</code> 에 가까워지므로, <code>1 / n^{cb-2}</code> 만큼의 노드를 제외한 모든 노드가 <em>infected</em> 된다는 것을 알 수 있습니다.</p>
+
+<p>(3) <strong>lightweight</strong></p>
+
+<p>각 노드는 <code>cb log(n)</code> 만큼의 <em>gossip message</em> 만 전파합니다. 이론적으로는 <code>log(N)</code> 은 상수가 아니지만, 실제로는 아주 천천히 증가하는 숫자기에 작은 숫자처럼 생각할 수 있습니다.</p>
+
+<p><br/></p>
+
+<h3 id="faulttolerance">Fault-Tolerance</h3>
+
+<p><em>50% packet loss</em> 를 생각해 봅시다. <code>b</code> 를 <code>2/b</code> 로 치환하면 됩니다. 그러면 이전과 같은 <em>reliability</em> <em>0% packet loss</em> 를 위하 두배의 <em>round</em> 만큼만 더 진행하면 됩니다.</p>
+
+<p><em>node failure</em> 는 어떨까요? 50% 노드에서 <em>failure</em> 가 발생한다면 <code>n, b</code> 을 <code>2/n, 2/b</code> 으로 치환하면 됩니다. 이는 <em>contract rate</em> 에서 가십 메시지를 전달하는 <code>n</code> 중 <code>2/n</code> 의 노드만 살아있고, 선택되는 <code>b</code> 중 <code>b/2</code> 노드만 살아있기 때문입니다. 이 경우에도 상수만 곱하면 이전과 같은 <em>reliability</em> 를 얻을 수 있습니다.</p>
+
+<p><em>failure</em> 와 관련해서 한 가지 생각해 볼 문제가 있습니다. 모든 노드가 죽는것이 가능할까요? 물론 가능합니다 초기에 모든 노드가 죽으면요. 그러나 <em>improbable</em> 입니다. 일단 몇개의 노드가 <em>infected</em> 되면, 이후에는 퍼지는 속도가 훨씬 더 빠르기 때문입니다. 루머나 바이러스가 퍼질 수 있는 이유를 생각하면 이해하기 쉽습니다.</p>
+
+<p><br/></p>
+
+<h3 id="pullgossip">Pull Gossip</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/pull_gossip_analysis.jpg'  alt="" /></p>
+
+<p>그림에서 볼 수 있듯이, 어떤 형태의 가십 프로토콜이던 <code>2/N</code> 까지 전달할때는 <code>O(logN)</code> 만큼의 시간이 걸립니다. 그 이후에는 <em>pull gossip</em> 이 훨씬 빠르죠.</p>
+
+<p><code>i</code> <em>round</em> 후에 남아있는 <em>uninfected node</em> 의 수를 <code>p_i</code> 라 합시다. <em>pull gossip</em> 을 이용할때 다음 단계에서도 <em>uninfected</em> 일 확률은 </p>
+
+<p><img src='http://latex.codecogs.com/gif.latex?p_%7Bi&plus;1%7D%20%3D%20p_i%5E%7Bk&plus;1%7D'  alt="" /></p>
+
+<p>이는 <code>p_i</code> 자체가 <em>uninfected</em> 여야 하고, 이 노드가 선택하는 <code>k = b</code> 만큼의 노드도 <em>uninfected</em> 여야 하는데, 이 확률은 극히 낮습니다. 슬라이드에서 보듯이 <em>super-exponential</em> 하고, 그렇기 때문에 <em>second half</em> 부터는 <em>pull gossip</em> 이 <code>O(log(logN))</code> 입니다.</p>
+
+<p><br/></p>
+
+<h3 id="topologyawaregossip">Topology-Aware Gossip</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/topology_aware_gossip.jpg'  alt="" /></p>
+
+<p>만약 <em>uninfected node</em> 를 <em>uniformly random</em> 하게 고른다면 위 그림에서 라우터의 오버헤드는 <code>O(N)</code> 이 됩니다. 더 정확하게는 <em>round</em> 마다 <code>b * (2/n)</code> 이 될겁니다. </p>
+
+<p>이를 해결하기 위해, 서브넷에 <code>n_i</code> 개의 노드가 있을때 자신이 속한 서브넷에 있는 <em>uninfected node</em> 를 더 자주 고르게, 확률을 <code>1 - (1/n_i)</code> 가 되도록 합니다. 그러면, 현재 서브넷에 있는 노드를 선택할 확률이 1 에 가까우므로 <code>O(logN)</code> 시간 내에 전파되고, 라우터의 오버헤드는 <code>(n_i) / (n_i)</code> 가 되어, <code>O(1)</code> 이 됩니다. </p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-gossip-protocol/</link><guid isPermaLink="false">791b3276-2b13-469d-96ff-21b0b279bfd2</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[gossip]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 21 Feb 2015 05:41:54 GMT</pubDate></item><item><title><![CDATA[Pattern Discovery 2]]></title><description><![CDATA[<p><img src='https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png'  alt="" /></p>
 
 <p>패턴 마이닝을 통해 만들어지는 수많은 <em>pattern</em>, <em>rule</em> 이 모두 유용한 것은 아닙니다. 따라서 <em>interestingness measure</em> 을 위해 객관적이거나, 주관적인 평가방법을 이용할 수 있습니다.</p>
 
@@ -4420,334 +4566,4 @@ public static void compress() {
 (2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
 (3) <a href='http://www.lawfareblog.com/2013/09/the-nsa-and-encryption/' >The NSA and Encryption</a> <br />
 (4) <a href='http://www.programering.com/a/MTO4YzNwATE.html' >Data Compression Lecture Note</a> <br />
-(5) <a href='http://lcm.csa.iisc.ernet.in/dsa/node88.html' >Huffman Algorithm</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-data-compression/</link><guid isPermaLink="false">58cf48f9-4e5e-4a17-80ca-be11ef6ffdc7</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[compression]]></category><category><![CDATA[run-length]]></category><category><![CDATA[huffman]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Dec 2014 06:20:14 GMT</pubDate></item><item><title><![CDATA[Regular Expression, NFA]]></title><description><![CDATA[<p><img src='http://4.bp.blogspot.com/-esm-BsLlh_U/UzlC63ecqEI/AAAAAAAAADs/lgZ2I71OGgs/s1600/2013-02-10-regular-expression-problems.png'  alt="" /></p>
-
-<h3 id="regularexpression">Regular Expression</h3>
-
-<p>이전까지 배웠던 패턴매칭 기법들은 모두 단일 패턴만을 찾았었. (e.g <em>substring search</em>) 일치하는 <strong>집합</strong> 을 원한다면 어떻게 해야할까? </p>
-
-<p>예를 들어 유전자 분석에서는 <em>Fragile X syndrome</em> 은 <code>GCG(CGG|AGG)*CTG</code>  패턴에서 더 많이 반복될수록 <em>fragile x</em> 신드롬일 확률이 높다. 이 경우에는 하나가 아니라 몇번 일치하는지가 중요한 결과값이 된다.</p>
-
-<p>따라서 문자열 같은 단일 패턴이 아니라 <strong>집합</strong> 으로 지정된 패턴을 찾아낼 수 있는 알고리즘이 필요하다.</p>
-
-<p><em>regex</em> 의 응용은</p>
-
-<ul>
-<li>natural language processing</li>
-<li>scan for virus signatures</li>
-<li>syntax highlighting</li>
-<li>text filtering</li>
-<li>parsing text (compiler, crawler)</li>
-</ul>
-
-<blockquote>
-  <p>A <strong>regular expression</strong> is a notation to specify a set of string</p>
-</blockquote>
-
-<p>사용 가능한 연산으로</p>
-
-<p><img src='http://homepages.ius.edu/RWISMAN/C431/html/ch2-15.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://homepages.ius.edu/RWISMAN' >http://homepages.ius.edu/RWISMAN</a>)</p>
-
-<ul>
-<li><em>concat</em> (3)</li>
-<li><em>or</em> (4)</li>
-<li><em>closure</em> (2)</li>
-<li><em>parenthesis</em> (1)</li>
-</ul>
-
-<p>괄호 안은 우선순위다. 편의를 위한 연산으로</p>
-
-<ul>
-<li><em>wildcard</em> <code>.</code></li>
-<li><em>character class</em> <code>[A-Za-z][a-z]*</code></li>
-<li><em>at lest 1</em> <code>+</code></li>
-<li><em>exactly k</em> <code>[0-9]{5}</code></li>
-</ul>
-
-<p><code>[A-E]+</code> 를 기본 연산으로 풀어쓰면 <code>(A|B|C|D|E)(A|B|C|D|E)*</code> 다.</p>
-
-<p>정규표현식을 작성하는 것은 프로그램을 만드는 것과 비슷하다</p>
-
-<ul>
-<li>need to understand programming model</li>
-<li>can be easier to write than read</li>
-<li>can be difficult to debug</li>
-</ul>
-
-<blockquote>
-  <p>Res are amazingly powerful and expressive. but using them in applications can be amazingly complex and error-prone</p>
-</blockquote>
-
-<h3 id="resandnfa">REs and NFA</h3>
-
-<p><em>RE</em> 와 <em>DFA</em> 는 <em>dual</em> 이다. </p>
-
-<ul>
-<li><strong>RE:</strong> concise way to desribe a set of string</li>
-<li><strong>DFA:</strong> machine to recognize whether a given string in a given set</li>
-</ul>
-
-<p><em>Kleene's theorem</em> 에 의하면</p>
-
-<p>어떤 <em>DFA</em> 든 같은 문자열 집합을 기술하는 <em>RE</em> 가 존재하고, 역으로 어느 <em>RE</em> 에 대해서도 같은 문자열 집합을 인식할 수 있는 <em>DFA</em> 가 존재한다.</p>
-
-<p>따라서 <em>RE</em> 로 부터 <em>DFA</em> 를 만들고, 이걸 인풋에 대해 돌리면 된다. 그리고 <em>DFA</em> 를 사용하기 때문에 <em>KMP</em> 알고리즘처럼</p>
-
-<ul>
-<li>no backup in text input stream</li>
-<li>linear-time guarantee</li>
-</ul>
-
-<p>하지만 실제로는 <em>DFA</em> 를 사용하기가 어렵다. 이는 <em>DFA</em> 가 수 많은 상태를 가질 수 있기 때문이다. 따라서 <em>DFA</em> 대신 <em>NFA</em> 를 이용하는 방법이 개발되었다. 
-<em>NFA</em> 를 이용하면 <em>quadratic-time guarantee</em> 다.</p>
-
-<p><em>NFA, Nondeterministic finite-state automata</em> 에서는</p>
-
-<ul>
-<li><em>RE</em> enclosed in parentheses</li>
-<li>One state per <em>RE</em> character (start=<code>0</code>, accpet=<code>M</code>)</li>
-<li><em>ε-transition</em> (change state, but dn't scan text)</li>
-<li>accept if <strong>any</strong> sequence of transitions ends in accpet state</li>
-</ul>
-
-<p>뭔소린가 해서 구글링을 좀 해보니</p>
-
-<blockquote>
-  <ul>
-  <li><p>If it’s a <strong>DFA</strong>, we know that each word completely determines the final state of the automaton, and we say that the word is accepted if that state is an acceptor state.</p></li>
-  <li><p>If it’s an <strong>NFA</strong>, there might be several possible final states that could result from reading a given word; as long as at least one of them is an acceptor state, we say that the automaton accepts the word.</p></li>
-  </ul>
-</blockquote>
-
-<p><em>DFA</em> 는 입력에 대해 결과값이 항상 하나로 일정하지만, <em>NFA</em> 에서는 복수개의 <em>final state</em> 가 만들어질 수 있다. 그리고 이 때 하나라도 <em>accept</em> 되면,  입력값이 <em>accept</em> 된 것으로 본다.</p>
-
-<p>이 때 다양한 <em>final state</em> 가 만들어 지는 이유는 스캔 없이 상태를 변경하는 <em>ε-transition</em> 때문이다. 따라서 같은 입력이라도, 올바르게 파싱할수도, 그렇지 않을수도 있다.</p>
-
-<p>따라서 <em>NFA</em> 에서는 모든 가능한 경우에 대해 시뮬레이션 해야한다. 그런데, 하나씩 다 해보긴 비효율적이므로 매 문자를 읽을때마다 <em>all possible states</em> 를 유지하면서 <em>match, ε-transition</em> 을 적용해 나간다. 그리고 모든 문자를 다 읽었을때 <em>possible state</em> 에 <em>accept</em> 가 있으면 성공적으로 패턴이 매칭된 것이다.</p>
-
-<p>따라서 <em>possible state</em> 를 얻기 위해 <em>reachability</em> 를 계산해야 하는데 <em>digraph</em> 를 사용하면 문제가 쉬워진다. 방문하지 않은 <em>vertex</em> 가 없을때까지 <em>DFS</em> 를 돌리면 된다. 러닝타임은 <code>E + V</code></p>
-
-<h3 id="nfasimulation">NFA Simulation</h3>
-
-<p>코드는 </p>
-
-<pre><code class="java">public class NFA {  
-    private char[] re; // match transition
-    private Digraph G; // epsilon transition
-    private int M;     // # of states
-
-    public NFA(String regex) {
-        M = regex.length();
-        re = regex.toCharArray();
-        G = buildEpsilonTransitionDigraph();
-    }
-
-    private Digraph buildEpsilonTransitionDigraph() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public boolean recognizes(String txt) {
-
-        Bag&lt;Integer&gt; rs = new Bag&lt;Integer&gt;(); // reachable states
-        DirectedDFS dfs = new DirectedDFS(G, 0); 
-
-        // get reachable states initially
-        for (int v = 0; v &lt; G.V(); v++) 
-            if (dfs.marked(v)) rs.add(v);
-
-        for (int i = 0; i &lt; txt.length(); i++) {
-
-            // match transition
-            Bag&lt;Integer&gt; match = new Bag&lt;Integer&gt;();
-            for (int v : rs) {
-                if (v == M) continue;
-                if ((re[v] == txt.charAt(i)) || re[v] == '.')
-                    match.add(v + 1); // add next state 
-            }
-
-            // run epsilon transition with match
-            dfs = new DirectedDFS(G, match);
-            rs = new Bag&lt;Integer&gt;();
-            for (int v = 0; v &lt; G.V(); v++)
-                if (dfs.marked(v)) rs.add(v);
-        }
-
-        for (int v : rs) 
-            if (v == M) return true;
-
-        return false;
-    }
-}
-</code></pre>
-
-<p><em>NFA simulation</em> 은 <code>N</code> 길이의 텍스트, <code>M</code> 길이의 패턴에 대해서 <em>worst case</em> 일 때 <code>MN</code> 의 성능을 보인다.</p>
-
-<p>이는 <code>N</code> 개의 텍스트에서, 한 문자를 스캔할때 마다 최대 <code>M</code> 개의 <em>state</em> 가 있을 수 있고, 여기에 대해 <em>ε-transition</em> 를 찾기 위해 <em>DFS</em> 를 돌리기 때문이다. </p>
-
-<p>쉽게 말해서 노드 수가 <code>M</code> 인 그래프에 대해 <em>DFS</em> 를 돌리는데, <code>N</code> 번 돌리기 때문에 최악의 경우 <code>MN</code> 의 성능을 보여준다는 것이다.</p>
-
-<p>그리고 뒤에서 자세히 언급하겠지만 <em>NFA construction</em> 에서 그래프의 <em>edge</em> 수가 <code>&lt;= 3M</code> 임을 보장한다. </p>
-
-<h3 id="nfaconstruction">NFA Construction</h3>
-
-<p><em>regex</em> 에 대응하는 <em>NFA</em> 를 만드는 과정은 <em>match, ε-transition</em> 로 이어진 그래프를 만드는것과 동일하다. <em>regex</em> 에서 각 연산들에 대해</p>
-
-<ul>
-<li><strong>concatenation:</strong> add <em>match-transition</em> edge from state corresponding to chars in the alphabet to next state</li>
-</ul>
-
-<p>알파벳으로부터만 연결하므로 <code>( -&gt; )</code> 등은 <em>match transition</em> 으로 연결하지 않는다.</p>
-
-<ul>
-<li><p><strong>parentheses:</strong> add <em>ε-transition</em> edge from parentheses to next state</p></li>
-<li><p><strong>closure:</strong> add three <em>ε-transition</em> edges for each <code>*</code> operator</p></li>
-</ul>
-
-<p>예를 들어 <code>A*B</code> 의 경우, <code>A -&gt; *</code>, <code>* -&gt; A</code>, <code>* -&gt; B</code> 3개의 <em>ε-transition</em> 을 추가한다. </p>
-
-<ul>
-<li><strong>or:</strong> add two <em>ε-transition</em> edges for each <code>|</code> operator</li>
-</ul>
-
-<p>예를 들어 <code>( A | B )</code> 의 경우 <code>( -&gt; B</code>, <code>| -&gt; )</code> 로 <em>ε-transition</em> 을 추가한다.</p>
-
-<p><em>NFA</em> 를 만드는데 있어서 한 가지 어려운점은 <em>closure</em> 을 만들기 위해서는 <code>(</code> 를 기억해야 하고, <em>or</em> 을 만들기 위해서는 <code>(</code> 와 <code>|</code> 의 위치를 알고 있어야 한다는 점이다. 스택을 쓰면 된다.</p>
-
-<ul>
-<li><code>(</code> 를 만나면 <code>(</code> 를 스택에 넣고</li>
-<li><code>|</code> 를 만나면 <code>|</code> 를 스택에 넣자</li>
-<li><code>)</code> 를 만나면 <code>(</code> 를 스택에서 빼고, <code>|</code> 도 있다면 그것도 빼자. 스택엣 제거한 <code>(, |</code> 의 위치를 이용해 <em>closure</em>, <em>or</em> 을 만들 수 있다. </li>
-</ul>
-
-<p><a href='http://www.youtube.com/watch?v=RYNN-tb9WxI' >Regex to NFA</a> 를 보는게 이해가 더 쉬울듯. (강의 끝부분에 약간 틀린곳이 있으니 댓글을 참조하자.)</p>
-
-<p>구현은</p>
-
-<pre><code class="java">    private Digraph buildEpsilonTransitionDigraph() {
-
-        Digraph G = new Digraph(M + 1); // including the accept state
-        Stack&lt;Integer&gt; ops = new Stack&lt;Integer&gt;();
-
-        for (int i = 0; i &lt; M; i++) {
-            int lp = i;
-
-            // keep '(', '|' to implement closure, OR
-            if (re[i] == '(' || re[i] == '|') ops.push(i);
-
-            // OR
-            else if (re[i] == ')') {
-                int or = ops.pop();
-
-                if (re[or] == '|') { // if '|' exists
-                    lp = ops.pop();
-                    G.addEdge(lp, or + 1);
-                    G.addEdge(or, i);
-                } 
-                else lp = or;        // left paren
-            }
-
-            if (i &lt; M - 1 &amp;&amp; re[i + 1] == '*') {
-                G.addEdge(lp, i + 1);
-                G.addEdge(i + 1, lp);
-            }
-
-            if (re[i] == '*' || re[i] == '(' || re[i] == ')')
-                G.addEdge(i, i + 1);
-        }
-
-        return G;
-    }
-</code></pre>
-
-<p>만약 <code>+</code> 를 만들고 싶다면 <code>*</code> 과 같지만 <code>i -&gt; i + 1</code> 또는 괄호가 있을때는 <code>lp -&gt; i + 1</code> <em>edge</em> 하나를 제거해야 한다. (바로 넘어가는 경우가 없기 때문)</p>
-
-<p><em>NFA</em> 를 만들때 <code>M</code> 길이의 패턴에 대해 시간과 공간 비용은 <code>M</code> 에 비례한다. 이는 아무리 많아봐야 한 <em>state</em> 에 대해 3개의 <em>ε-transition</em>, 2개의 스택 연산이 필요하기 때문이다.</p>
-
-<h3 id="regexapplication"> Regex Application</h3>
-
-<pre><code class="java">String regex = ".*" + p + ".*";  
-NFA nfa = new NFA(regex);
-
-while (stdin.hasNext) {  
-  String line = stdin.readLine();
-
-  if (nfa.recognize(line))
-    println(line)
-}
-</code></pre>
-
-<p>자주 쓰는 프로그램인 <em>grep</em> 도 <em>regex</em> 를 사용한다. 패턴을 <code>p</code> 를 받아 <code>(.*p.*)</code> 처럼 <em>regex</em> 를 만들어 라인마다 검사할 수 있다. 근데, <em>worst case</em> 에는 라인마다 <code>MN</code> 이니까 <em>brute force substring search</em> 랑 별 차이가 없다.</p>
-
-<p><em>validation</em> 을 위해 사용할수도 있다. 컴파일러에서 변수 이름이 규칙에 맞는지 검사하거나, 사용자의 입력이 올바른 이메일인지 등등.</p>
-
-<p><em>regex</em> 는 대부분의 언어에서 라이브러리 형태로 사용할 수도 있다. 자바에서도 지원하는데</p>
-
-<pre><code class="java">import java.util.regex.Pattern;  
-import java.util.regex.Matcher
-
-String regex = args[0];  
-Pattern p = Pattern.compile(regex) // create NFA from RE  
-Matcher m = p.matcher(input)       // build NFA simulator
-
-while (m.find()) {  
-  do something using m.group()
-}
-</code></pre>
-
-<h4 id="algorithmiccomplexityattacks">Algorithmic complexity attacks</h4>
-
-<p>그리고 대부분의 구현(자바, 그렙, 펄을 포함해서)이 <em>performance</em> 를 보장하지 않는다고 한다.</p>
-
-<pre><code>java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaac             1.6 seconds  
-java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac           3.7 seconds  
-java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac         9.7 seconds  
-java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac      23.2 seconds  
-java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac    62.2 seconds  
-java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac 161.6 seconds  
-</code></pre>
-
-<p>스팸 필터기에 <code>spammer@x.......................................</code> 따위의 주소로 이메일을 보낸다거나.</p>
-
-<h4 id="backreferences">Back References</h4>
-
-<p><code>\1</code> 은 보통 바로 전에 매칭된 부분을 의미한다. 대부분의 언어에서 지원하긴 하는데</p>
-
-<blockquote>
-  <p>Pattern matching with back-references in intractable</p>
-</blockquote>
-
-<p>요것도 퍼포먼스 어택이 올 수 있다고 함.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p><em>language</em>, <em>abstract machine</em>, <em>non-deterministic</em> 등은 컴퓨터 과학의 중요한 이론적 토대가 된다.</p>
-
-<p>지금까지 공부한 알고리즘은 <em>machine code</em> 를 돌려주는 일종의 컴파일러라 볼 수 있다.</p>
-
-<ul>
-<li><strong>KMP:</strong> string -> DFA</li>
-</ul>
-
-<p>파서는 필요없고, <em>DFA simulator</em> 를 이용해 실행</p>
-
-<ul>
-<li><strong>Grep:</strong> regex -> NFA</li>
-</ul>
-
-<p><em>legal</em> 인지 확인할 파서가 필요하며 <em>NFA simulator</em> 를 이용</p>
-
-<ul>
-<li><strong>Javac:</strong> java langugage -> java byte code</li>
-</ul>
-
-<p>마찬가지로 파서가 필요하며 <em>JVM</em> 을 이용해 실행</p>
-
-<h3 id="reference">Reference</h3>
-
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
-(3) <a href='http://homepages.ius.edu/RWISMAN/C431/html/Chapter2.htm' >http://homepages.ius.edu/RWISMAN</a> <br />
-(4) <a href='http://math.stackexchange.com/questions/563829/difference-between-nfa-and-dfa' >Difference between NFA and DFA</a>  </p>]]></description><link>http://1ambda.github.io/regex-nfa/</link><guid isPermaLink="false">1ffd482b-3d2c-426f-9638-75ff1708d6c8</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[NFA]]></category><category><![CDATA[regex]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Dec 2014 01:10:54 GMT</pubDate></item></channel></rss>
+(5) <a href='http://lcm.csa.iisc.ernet.in/dsa/node88.html' >Huffman Algorithm</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-data-compression/</link><guid isPermaLink="false">58cf48f9-4e5e-4a17-80ca-be11ef6ffdc7</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[compression]]></category><category><![CDATA[run-length]]></category><category><![CDATA[huffman]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Dec 2014 06:20:14 GMT</pubDate></item></channel></rss>
