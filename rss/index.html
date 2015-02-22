@@ -1,5 +1,275 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 21 Feb 2015 14:33:58 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Gossip Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 22 Feb 2015 07:03:32 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Membership Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<p>왜 <em>membership</em> 이란 개념이 클라우드 컴퓨팅에 필요할까요? </p>
+
+<p>한 노드가 <em>OS</em>, <em>Disk</em>, <em>Network</em> 등 때문에 10년 (120개월) 마다 한 번씩 고장난다고 합시다. 그러면 120개의 노드를 가지고 있다면 1개월마다  한 번씩입니다. 이정도는 참을만하죠? 그런데, 12,000 개의 서버를 가지고 있다면 <em>MMTF (mean time to failure)</em> 는 7.2 시간마다 한번씩입니다. 이건 큰 문제입니다. </p>
+
+<p>따라서 머신이 멀쩡한지 아닌지를 수동이 아니라 자동으로 판단하고 보고해줄 시스템이 필요합니다. <em>membership</em> 이 필요한 것이죠. 이 대상은</p>
+
+<p>(1) Process <em>group</em>-based systems</p>
+
+<ul>
+<li>Clouds / Datacenters</li>
+<li>Replicated servers</li>
+<li>Distributed databases</li>
+</ul>
+
+<p>(2) Cash-stop / Fail stop process failures</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/membership1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/membership2.jpg'  alt="" /></p>
+
+<p>멤버십 프로토콜은 다음처럼 구성되어 있습니다.</p>
+
+<ul>
+<li>멤버쉽 리스트 (<em>complete</em>, <em>almost-complete</em>, <em>partial-random</em>)</li>
+<li><em>dissemination</em> mechanism to inform about joins, leavs, and failures of processes</li>
+<li><em>failure detector</em></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="failuredetector">Failure Detector</h3>
+
+<p><em>distributed failure dectector</em> 를 평가할 수 있는 지표는</p>
+
+<ul>
+<li><strong>Completeness:</strong> each failure is detected</li>
+<li><strong>Accuracy:</strong> there is no mistaken detection</li>
+<li><strong>Speed:</strong> time to first detection of a failure</li>
+<li><strong>Scale:</strong> equal load on each member. network message load</li>
+</ul>
+
+<p>안타깝게도 <em>completeness</em> 와 <em>accuracy</em> 를 <em>lossy network</em> 에서 동시에 추구할 수 없다는 사실이 밝혀졌습니다. (<em>Chandra and Toueg</em>) </p>
+
+<p>현실적으로는</p>
+
+<ul>
+<li><em>completeness:</em> 100% guaranteed</li>
+<li><em>accuracy:</em> partial / probabilistic guarantee</li>
+</ul>
+
+<p><br></p>
+
+<p>(1) Centralized Heartbeating</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/centralized_heartbeating.jpg'  alt="" /></p>
+
+<p>중앙 집중형이기 때문에 <em>load</em> 가 한쪽으로만 쏠린다는 단점이 있습니다.</p>
+
+<p>(2) Ring Heartbeating</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/ring_heartbeating.jpg'  alt="" /></p>
+
+<p>링 형태로 구성되었기때문에 동시에 발생하는 다수개의 <em>failure</em> 를 탐지하지 못합니다.</p>
+
+<p>(3) All To All Heartbeating</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/all2all_heartbeating.jpg'  alt="" /></p>
+
+<p>우선 <em>equal load</em> 라는 장점이 있습니다. 개별 노드당 오버헤드가 큰 것처럼 보이는데, 뒤에서 다시 한번 보겠지만 사실 그렇게 크지 않습니다. </p>
+
+<p>(4) Gossip-Style Membership</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_heartbeating1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_heartbeating2.jpg'  alt="" /></p>
+
+<p><em>accuracy</em> 가 높다는 장점이 있습니다.</p>
+
+<p>동작 방식은 이렇습니다. <em>hearbeat</em> 가 <code>T_fail</code> 초 후에도 증가하지 않으면, 해당 멤버는 <em>failure</em> 를 일으킨 것으로 판별됩니다. 그리고 멤버 리스트에서는 <code>T_cleanup</code> 초 후에 제거됩니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/why_cleanup_time1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/why_cleanup_time2.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/why_cleanup_time3.jpg'  alt="" /></p>
+
+<p>왜 바로 제거하지 않고, <code>T_cleanup</code> 초 후에 제거할까요? 이는 위 슬라이드에서 볼 수 있듯이 <code>3</code> 번 노드가 <em>failure</em> 를 일으켰을때, <code>2</code> 번 노드의 멤버 리스트에서 바로 제거한다면 <code>1</code> 번 노드로부터 업데이트를 받아 멤버 리스트에 <em>failure</em> 가 발생하지 않은것처럼 추가될 수 있기 때문입니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_membership_analysis.jpg'  alt="" /></p>
+
+<p><code>T_gossip</code> 이 줄면, <em>bandwidth</em> 를 많이 잡아먹는 대신, <em>detection time</em> 이 줄어듭니다. <em>trade-off</em> 라 보면 되겠습니다.</p>
+
+<p>그리고 <code>T_fail, T_cleanup</code> 이 증가하면 <em>false positive rate</em> 는 줄어드는 대신, 당연히 <em>detection time</em> 이 늘어납니다.</p>
+
+<p><br/></p>
+
+<p>그러면 위에 나온 것 중 어느것이 가장 좋은 <em>failure detector</em> 일까요? 앞서 언급했던 기준들을 이용해서 살펴보겠습니다.</p>
+
+<ul>
+<li><em>Completeness:</em> guarantee always</li>
+<li><em>Accuracy:</em> a prob of mstake in time T <code>PM(T)</code></li>
+<li><em>Speed:</em> <code>T</code> time units</li>
+<li><em>Scale:</em> <code>N*L</code> Compare this across protocols</li>
+</ul>
+
+<p>(1) All-To-All Heartbeating</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/performance_all2all.jpg'  alt="" /></p>
+
+<p><em>work load</em> 가 <code>N</code> 에 비례합니다.</p>
+
+<p>(2) Gossip-Style Heartbeating</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/performance_gossip.jpg'  alt="" /></p>
+
+<p><code>tg</code> 를 <code>O(n)</code> 의 <em>gossip message</em> 를 보내는데 걸리는 <em>gossip period</em> 라 했을때, 한 <em>round</em> 에서의 전파 시간인 <code>logN</code> 을 곱해 <code>T = logN * tg</code> 입니다. 이때 오버헤드 <code>L = N/tg</code> 이므로, <code>L = N * logN / T</code> 입니다. </p>
+
+<p>오버헤드가 <em>all-to-all heartbeating</em> 보다 훨씬 높죠? 이는 <em>accuracy</em> 가 더 높기 때문입니다. 앞에서 <em>all-to-all</em> 가 더 비용이 많이 들것 같지만 실제로는 그렇지 않다고 했었는데, 이런 이유에서입니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/suboptimal_worstcase.jpg'  alt="" /></p>
+
+<ul>
+<li><em>worst case load per member</em> <code>L*</code> 라 하고</li>
+<li><code>P_ml</code> 을 독립적인 메시지 손실양 이라고 했을때, </li>
+</ul>
+
+<p><code>L*</code> 을 <code>T, PM(T), P_ml</code> 의 함수로 표시하면 </p>
+
+<p><img src='http://latex.numberempire.com/render?L%2A%20%3D%20%7B%20log%28PM%28T%29%29%20%5Cover%20log%28P_ml%29%20%7D%20%2A%20%7B1%20%5Cover%20T%20%7D&amp;sig=b21744720873bd544c3b394bd827b158'  alt="" /></p>
+
+<p>메시지 손실 <code>P_ml</code> 이 높을수록, 오버헤드 <code>L*</code> 는 당연히 작아져야 하고, <code>PM(T)</code> 가 높을수록 <em>false-positive</em> 가 많으므로 오버헤드가 높은 것 입니다. 잘 보면 <code>N</code> 변수와 없는데, 이는 <em>scale-free</em> 함을 보여줍니다.</p>
+
+<p>그리고 <em>all-to-all</em> 이나 <em>gossip-based</em> 는 <strong>suboptimal</strong> 입니다. 왜냐하면 </p>
+
+<ul>
+<li><code>L = O(N/T)</code></li>
+<li>try to achieve simultaneous dectection at all processes</li>
+<li>fail to distinguish <strong>failure dectection</strong> and <strong>dissemination components</strong></li>
+</ul>
+
+<p>따라서 두개의 컴포넌트를 분리하고, <em>non heatbeat-based failure dectection</em> 을 이용하면 됩니다.</p>
+
+<p><br/></p>
+
+<h3 id="swimfailuredectector">SWIM Failure Dectector</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/SWIM_intro.jpg'  alt="" /></p>
+
+<p><em>SWIM</em> 은 <em>probabilistic failure detector protocol</em> 입니다. </p>
+
+<p><em>period</em> <code>T</code> 동안 프로세스(노드) <code>pi</code> 는 <code>pj</code> 를 랜덤하게 골라 <em>ping</em> 을 보냅니다. <em>ack</em> 가 오면, 남은 <em>period</em> 동안 아무것도 하지 않습니다. 그러나 위 슬라이드에서 볼 수 있듯이 <code>pj</code> 가 응답하지 않으면 랜덤하게 <code>K</code> 개의 프로세스를 선택해서, <em>ping</em> 을 날리고, 이를 통해 <em>indirect</em> 한 방법으로 <code>pj</code> 의 응답을 검사합니다.</p>
+
+<p><em>SWIM</em> 의 퍼포먼스는 <em>heartbeat</em> 와 비교했을때 어떨까요?</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/SWIM_vs_heartbeating.jpg'  alt="" /></p>
+
+<p><code>X</code> 축은 <strong>process load</strong>, <code>Y</code> 축은 <em>first detection time</em> 입니다. <em>false-positive rate</em> 와 <em>message loss rate</em> 는 고정되어있다고 가정합니다.</p>
+
+<p><em>heartbeat</em> 의 경우에는 앞서 봤듯이 <em>detection time</em> 읖 높이면 <em>work load</em> 가 낮아지고 (= <em>low bound on the bandwidth</em>), 반대로 <em>detection time</em> 을 낮추면, <em>work load</em> 가 높아집니다. 반면 <em>SWIM</em> 은 둘다 적죠.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/SWIM_parameters.jpg'  alt="" /></p>
+
+<p>슬라이드에서 볼 수있듯이 <em>first detection time</em>, <em>process load</em> 는 <em>constant</em> 입니다. <em>process load</em> 의 경우에는 <em>15% packet loss</em> 가 있을때 <em>optimal</em> 의 8배인 <code>8L*</code> 보다 적습니다.</p>
+
+<p><em>false positive rate</em> 는 <code>K</code> 를 증가시켜서 줄일 수 있습니다. <code>K</code> 가 증가함에 따라 <em>false positive rate</em> 는 지수적으로 감소합니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/SWIM_accuracy_load.jpg'  alt="" /></p>
+
+<p><del>쿨하게 페이퍼를 보시라는 교수님</del></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/SWIM_detection_time.jpg'  alt="" /></p>
+
+<p>어째서 <em>expected detection time</em> 이 <code>1 / e-1</code> 일까요? 하나의 프로세스가 죽었을때, 핑 되려면 다른 프로세스의 멤버쉽 리스트에 있어야 하고, 랜덤하게 선택되야 합니다. </p>
+
+<p>랜덤하게 선택될 확률은 <code>1/N</code> 이고, 선택되지 않을 확률은 <code>1 - 1/N</code> 입니다. 다른 <code>N-1</code> 개의 프로세스에 의해 모두 선택되지 않을 확률은 <code>(1-1/N)^N-1</code> 이고, <code>1</code> 에서 이 값을 빼면 선택될 확률입니다. 그리고 익히 알려진 바대로 <del>응?</del> <code>N</code> 이 매우 커지면 이 값은 <code>1-e^-1</code> 과 같습니다.</p>
+
+<p>그리고 확률론을 잘 안다면 <del>응?</del> 이 값에 기대값을 취하면 <code>e / e-1</code> 이 됩니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/time_bounded_completeness.jpg'  alt="" /></p>
+
+<p>여기에 간단한 트릭을 이용하면 <em>worst case</em> 로 <code>O(N)</code>, 정확히는 <code>2N-1</code> <em>period</em> 내에 <em>failure</em> 가 발견되도록 할 수 있습니다. <em>membership list</em> 를 순회하다가, 마지막에 도달하면 랜덤하게 재배열 하는 것입니다. </p>
+
+<p>그러면 최악의 경우 2번째 멤버에 대해 <em>ping</em> 을 날릴때 첫번째 멤버에 <em>failure</em> 가 발생하고, 재 배열했을때 첫번째 멤버가 마지막에 있다면 <code>(N-1) + (N)</code> 의 <em>period</em> 가 걸립니다. 그리고 이것은 <em>accuracy</em> 등 다른 <em>failure detector</em> 의 속성들을 그대로 유지한채 <em>worst case</em> 시간을 줄이는 결과를 만듭니다.</p>
+
+<p><br/></p>
+
+<h4 id="disseminationandsuspicion">Dissemination and Suspicion</h4>
+
+<p><em>dissemiantion</em> 방법으로</p>
+
+<p>(1) <strong>Multicast</strong> (Hardware / IP)</p>
+
+<ul>
+<li>unreliable</li>
+<li>multiple simultaneous multicasts</li>
+</ul>
+
+<p>(2) <strong>Point-To-Point</strong> (TCP / UDP)</p>
+
+<ul>
+<li>expensive</li>
+</ul>
+
+<p>(3) <strong>Zero extra message:</strong> Piggyback on Failure Detector messages</p>
+
+<ul>
+<li>Infection-style Dissemination (like <em>SWIM</em>)</li>
+</ul>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/infection_style_dissemination.jpg'  alt="" /></p>
+
+<p>슬라이드에서 볼 수 있듯이 <em>infection style dissemination</em> 은 <code>λ log(N)</code> <em>protocol periods</em> 후에 <code>N^-(2λ-2)</code> 개의 프로세스만 업데이트되지 않습니다. 바꿔말하면 <code>O(logN)</code> 후에 대부분의 프로세스는 발견돈 <em>failure</em> 정보를 업데이트 한다는 뜻입니다. </p>
+
+<p>여기서 <code>λ</code> 는 <em>consistency level</em> 을 결정하는 상수입니다. 어떤 경에서든 <em>SWIM detector</em> 가 <em>failure</em> 를 <code>2N-1</code> 내에 발견하기 때문에 <em>completeness</em> 는 100% 보장됩니다.</p>
+
+<p><br/></p>
+
+<h3 id="suspicionmechanism">Suspicion Mechanism</h3>
+
+<p><em>false positive</em> 가 발생하는 이유는</p>
+
+<ul>
+<li>perturbed processes</li>
+<li>package losses (e.g from congestion)</li>
+</ul>
+
+<p><em>SWIM</em> 에서 사용했던 <em>indirect pinging</em> 도 이 문제를 해결하지 못할 수 있습니다. (e.g <em>correlated message losses near pinged host</em>)</p>
+
+<p>먼저 <em>failure</em> 가 발견되었을때 다른 노드들에게 알리기 전에 먼저 <em>suspect</em> 한다면 <em>false positive</em> 비율을 줄일 수 있습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/suspicon_mechanism_state_machine.jpg'  alt="" /></p>
+
+<p>그림이 좀 복잡한데, 프로세스(노드) <code>pi</code> 기준으로 <em>state</em> 가 어떻게 변하는지를 나타낸 그림이라고 보면 됩니다. <code>pj</code> 에게 핑을 날려 응답하지 않으면 <em>suspected</em> 상태로 변하고, 여기서 <em>timeout</em> 되면 <em>failed</em> 되어 <code>pj</code> 가 <em>failure</em> 라고 <em>dissemination</em> 하는 상태가 됩니다.</p>
+
+<p>한 가지 발생할 수 있는 문제점은 <em>suspected</em> 상태에서 <em>alive</em> 상태로 반복적으로 전환될 수 있다는 점입니다. 이러한 혼란을 피하기 위해 <em>incarnation number</em> 를 사용할 수 있습니다.</p>
+
+<p>프로세스 <code>pj</code> 가 <em>suspected</em> 메세지를 받았을때, <em>incarnation number</em> 를 증가시킬 수 있는 것은 <code>pj</code> 만 가능합니다. 그리고 <em>increase incarnation number</em> 메시지를 받은 다른 프로세스들은 <em>alive</em> <code>pj</code> 메시지를 전달합니다.</p>
+
+<p>높은 숫자의 <em>incarnation number</em> 가 더 우선합니다. 그리고 <em>suspect</em> 와 <em>alive</em> 같은 값이라면 <em>suspect</em> 메시지로 처리됩니다. 그리고 <em>failed</em> 메시지는 다른 어떤 메시지보다 더 높은 우선순위를 가지고 있습니다.</p>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<ul>
+<li>failures the norm, not the exception in datacenters</li>
+<li>every distributed system uses a failure detector</li>
+<li>many distributed systems use a membership service</li>
+<li>ring failure detection underlies <em>IBM SP2</em> and many other similar clusters</li>
+<li>Gossip-style failure detection underlies AWS EC2/S3 (rumored)</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>잘 보면 <code>N</code> 변수와 관련 없는데,
+(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-membership-protocol/</link><guid isPermaLink="false">146da27a-1df0-44d0-a8e1-3020c05f0d22</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[membership]]></category><category><![CDATA[SWIM]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 22 Feb 2015 07:02:52 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, Gossip Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
 
 <h3 id="multicast">Multicast</h3>
 
@@ -4000,570 +4270,4 @@ private int bland() {
 (5) <a href='http://ghebook.blogspot.kr/2010/07/vector.html' >전파거북이 - 좌표계 기반 벡터</a> <br />
 (6) <a href='http://blog.secmem.org/554' >소프트웨멤버십 - Convex hull</a> <br />
 (7) <a href='http://www.yourdictionary.com/polar-coordinate' >Polar angle image</a> <br />
-(8) <a href='http://web.cs.dal.ca/' ~mhe/csci3110/handouts/lecture9.htm">sorting - convex hull image</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-reduction/</link><guid isPermaLink="false">0e589543-7f20-4371-9067-2c2db77adb31</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[reduction]]></category><category><![CDATA[convex hull]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 30 Dec 2014 09:05:04 GMT</pubDate></item><item><title><![CDATA[Data Compression]]></title><description><![CDATA[<p><img src='http://www.lawfareblog.com/wp-content/uploads/2013/09/Encryption-in-the-Real-World.jpg'  alt="" /></p>
-
-<h3 id="datacompression">Data Compression</h3>
-
-<p>주된 이유는 전송 시간과 저장 공간을 절약하기 위해서다. 무어의 법칙이 말해주듯이 제품의 성능은 점점 좋아지는데, 그럼에도 불구하고 사람들이 만들어 내는 데이터의 양은 더 급격히 증가한다. 그래서 압축이 필요하다.</p>
-
-<p>이번시간에 배울 기법은 3 가지다.</p>
-
-<ul>
-<li>Run-length</li>
-<li>Huffman</li>
-<li>LZW</li>
-</ul>
-
-<p><em>data compression</em> 응용은</p>
-
-<ul>
-<li><em>generic file compression</em></li>
-</ul>
-
-<p>GZIP 같은 파일 압축이나, PKZIP 같은 아키이빙. 그리고 파일시스템에서도 압축을 할 수 있다.</p>
-
-<ul>
-<li><em>multimedia</em>, <em>communication</em>, <em>database</em></li>
-</ul>
-
-<p><em>GIF</em>, <em>MP3</em>, <em>V.42 bis model</em>(?) 등 다양한 곳에 압축을 활용한다고 한다.</p>
-
-<p><br/></p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2paRE5qTnpZMEVXTjNNVEw0Z1RONDBDTjFFMk10RWpad0VUTGtWRE41SWpNMGt6THlnVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<p>강의에서 사용하는 용어를 좀 정리하고 가자. 바이너리 <code>B</code> 에 대해 <em>compression, 압축</em> <code>C(B)</code> 를 하고 <em>expansion, 복원(?)</em> 를 해서 <code>B</code> 를 얻는다. 중요한점은 <em>loseless</em> 여야 한다는 것.</p>
-
-<p><em>compression ratio</em> 는 <code>C(B) / B</code> 로 정의한다. <em>natural language</em> 의 경우 <code>50~75%</code> 이상의 압축이 가능하다고 한다.</p>
-
-<h4 id="binarystream">Binary Stream</h4>
-
-<p>구현에 사용할 바이너리 스트림 API 를 보자. 코드는 <a href='http://introcs.cs.princeton.edu/java/stdlib/BinaryStdIn.java.html' >BinaryStdIn.java</a> <a href='http://introcs.cs.princeton.edu/java/stdlib/BinaryStdOut.java.html' >BinaryStdOut.java</a> 에서 구할 수 있다.</p>
-
-<pre><code class="java">public class BinaryStdIn {  
-    boolean readBoolean() {} //read 1 bit and return as a boolean
-    char readChar() {} //read 8 bits and return as a char
-    char readChar(int r) {} //read r bitsand return as a char
-    [similar methods for byte (8 bits); short (16 bits); int (32 bits); long and double (64 bits)]
-    boolean isEmpty() {} //is the bitstream empty?
-    void close() {} //close the bitstream
-}
-
-public class BinaryStdOut {  
-    void write(boolean b) {} //write the specified bit
-    void write(char c) {} //write the specified 8-bit char
-    void write(char c, int r) {} //write the r least significant bits of the specified char
-    [similar methods for byte (8 bits); short (16 bits); int (32 bits); long and double (64 bits)]
-    void close() {} //close the bitstream
-}
-</code></pre>
-
-<p>찾아보니까 자바에서 기본적으로 제공되는건 <code>ByteArrayStream</code> 이 있더라.</p>
-
-<h4 id="datarepresentation">Data Representation</h4>
-
-<p><code>12/31/1999</code> 를 표시하는 법을 생각해 보자.</p>
-
-<p>(1) <code>char</code> 면 <em>8 bit</em>  10개니까 <em>80 bit</em> <br />
-(2) <code>int</code>  면 <em>32 bit</em>  3개니까 <em>96 bit</em> <br />
-(3) <code>bit</code> 단위를 지정할 수 있다면 <em>4 + 5 + 12 + 3(align) = 24 bit</em> </p>
-
-<pre><code class="java">month = 12  
-day = 31  
-year = 199
-
-BinaryStdOut.write(month, 4)  
-BinaryStdOut.write(day, 5)  
-BinaryStdOut.write(year, 12)  
-</code></pre>
-
-<p>이는 데이터 표현만 잘 해도 알고리즘 없이 상당부분 압축할 수 있다는 소리다. 일레로 1990년도에 만들어졌던 유전자 데이터베이스는 아스키로 <code>AGCT</code> 를 표현했다고 한다. 4종류의 문자밖에 없으니까 <em>2 bit</em> 로 표현 가능함에도 불구하고</p>
-
-<h3 id="universaldatacompression">Universal Data Compression</h3>
-
-<blockquote>
-  <p>No algorithm can compress every bitstring</p>
-</blockquote>
-
-<p><em>contraction</em> 을 이용해 증명하면</p>
-
-<ul>
-<li>모든 비트스트림을 압축할 수 있는 알고리즘 <code>U</code> 가 있다 하자.</li>
-<li>주어진 비트스트링 <code>b0</code> 을 압축해서 더 작은 사이즈의 <code>b1</code> 을 얻고</li>
-<li>이 과정을 반복하면 사이즈가 <code>0</code> 이 될때까지 압축이 가능하다. 이건 말이 안된다. </li>
-<li>따라서 모든 비트스트림을 압축할 수 있는 알고리즘 <code>U</code> 는 없다.</li>
-</ul>
-
-<h3 id="runlengthencoding">Run-Length Encoding</h3>
-
-<p><code>0000000000000001111111000000011111111111</code> 의 비트가 있을때 <em>n-bit</em> 로 <code>0</code> 또는 <code>1</code> 의 <em>runs</em> (긴 나열을 말하는 듯함) 을 표시한다. </p>
-
-<p>예를 들어 위의 데이터를 4비트 카운트를 이용해 표시하면</p>
-
-<pre><code>bin  1111 0111 0111 1011  
-dec    15    7    7   11  
-</code></pre>
-
-<p>만약에 <em>run</em> 의 길이가 지정된 <em>n-bit</em> 로 표시할 수 있는 수보다 크면 <code>0</code> 부터 다시 세면 된다. <em>JPEG</em>, <em>ITU-T T4 Group 3</em> 등에 응용한다고 함.</p>
-
-<p>구현은</p>
-
-<pre><code class="java">// http://algs4.cs.princeton.edu/55compression/RunLength.java.html
-public class RunLength {
-
-  private final static int R = 256; // max run-length count
-  private final static int lgR = 8; // # of bits per count
-
-  public static void compress() {
-    int run = 0;
-    boolean old = false;
-
-    while (!BinaryStdIn.isEmpty()) {
-      boolean current = BinaryStdIn.readBoolean();
-
-      // alternate bit
-      if (current != old) {
-        BinaryStdOut.write(run, lgR);
-        run = 1;
-        old = !old;
-      }
-      // same bit
-      else {
-        // max count
-        if (run == R - 1) {
-          BinaryStdOut.write(run, lgR);
-          // print dummy alternate bit whose length is 0
-          run = 0;
-          BinaryStdOut.write(run, lgR); 
-        }
-
-        run++;
-      }
-    }
-
-    BinaryStdOut.write(run, lgR);
-    BinaryStdOut.close();
-  }
-
-  public static void expand() {
-    boolean bit = false;
-
-    while (!BinaryStdIn.isEmpty()) {
-      int run = BinaryStdIn.readInt(lgR); // read lgR bit
-
-      for (int i = 0; i &lt; run; i ++)
-        BinaryStdOut.write(bit);
-
-      bit = !bit;
-    }
-
-    BinaryStdOut.close();
-  }
-}
-</code></pre>
-
-<p><del>테스틀 어찌해야하는가</del></p>
-
-<p><br/></p>
-
-<p><img src='http://help.adobe.com/en_US/Director/11.0/images/vector_bitmap_image.png'  alt="" /></p>
-
-<p align="center">(<a href='http://help.adobe.com/' >http://help.adobe.com</a>)</p>
-
-<p><em>bitmap</em> 을 압축하는데 <em>run-length</em> 를 사용하면 효과적이다. 글자에서 대부분의 비트가 <code>0</code> (흰색) 이기 때문이다.</p>
-
-<p>흑백 그림을 예로 들어보자. 인치당 <code>300</code> 픽셀이고, 사이즈가 <code>8.5 x 11</code> 인치라 했을때, 한 이미지를 표시하기 위해 필요한 비트는 <code>300 * 8.5 * 300 * 11</code> = <code>8.415</code> 백만 비트가 필요하다.</p>
-
-<h3 id="huffmanencoding">Huffman Encoding</h3>
-
-<p><em>fixed-length code</em> 말고 모스코드같은 <em>variable-length code</em> 를 생각해 보자. </p>
-
-<p>모스코드에서 <code>* * * - - - * * *</code> 는 여러 방법으로 해석될 수 있다. <code>SOS</code>, <code>V7</code>, <code>IAMIE</code>, <code>EEWNI</code> 모두 가능하다. 모호한것이다. 모스부호에서는 이 문제를 해결하기 위해 글자마다 갭을 두어, 올바르게 해석될 수 있도록 한다. </p>
-
-<p>인코딩에서 <em>ambiguity</em> 를 해결하려면 어떤 <em>codeword</em> 도 다른 <em>code word</em> 의 <em>prefix</em> 가 되지 않도록 해야 한다. </p>
-
-<ul>
-<li>Fixed-length code</li>
-<li>Append special stop char to each codeword (e.g 모스)</li>
-<li>Prefix-free code</li>
-</ul>
-
-<p>이 중에서 <em>prefix-free</em> 인 코드를 만드는법을 살펴보자. <em>binary trie</em> 를 만들어 <em>leaf</em> 에 문자를 놓고, 그 문자까지 도달하는 경로가 인코딩 값이다. </p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTjJRVE9tTnpZemdETjVVVEw0UTJZaTF5WXdVek10WWpNNUlXTDJRek5oZFRPaWR6THlrVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<p><em>compression</em> 을 위해 심볼테이블을 만들거나, 아니면 <em>leaf</em> 부터 따라 올라가고, 그 <em>path</em> 를 뒤집어 출력할 수 있다.</p>
-
-<p><em>expansion</em> 은 루트부터 시작해서 <em>path</em> 를 따라 내려가다가 <em>leaf</em> 에서 만나는 문자를 출력하면 된다.</p>
-
-<p>한가지 생각해 볼 것은, 빈도가 많은 문자를 짧은 인코딩 값(<em>path</em>) 를 가지도록 해야 압축률이 높아진다는 것이다. 이를 위해 각 문자의 <em>frequency</em> 를 이용해야 한다.</p>
-
-<p>허프만 코드 API를 보면</p>
-
-<pre><code class="java">public class Huffman {
-
-    // support extended ASCII
-    private static final int R = 256;
-
-    private static class Node implements Comparable&lt;Node&gt; {
-
-        private char ch;
-        private int  freq;
-        private final Node left, right;
-
-        public Node(char ch, int freq, Node left, Node right) {
-            this.ch = ch;
-            this.freq = freq;
-            this.left = left;
-            this.right = right;
-        }
-
-        public boolean isLeaf() {
-            return left == null &amp;&amp; right == null;
-        }
-
-        @Override
-        public int compareTo(Node that) {
-            return this.freq - that.freq;
-        }
-    }
-
-    public static void compress()
-    public static void expand()
-    private static Node buildTrie(int[] freq)
-    private static void writeTrie(Node x)
-    private static void buildCode(String[] st, Node x, String s)
-    private static Node readTrie()
-}
-</code></pre>
-
-<p>이제 <em>expansion</em> 을 구현하자. 스트림의 가장 첫 부분에, 몇 개의 문자인지를 <em>int</em> 로 표시하는 규약을 정하면</p>
-
-<pre><code class="java">public void expand() {  
-  Node root = readTrie(); // read in encoding trie
-  int N = BinaryStdIn.readInt(); // read in # of chars
-
-  for (int i = 0; i &lt; N; i++) {
-    Node x = root;
-    while (!x.isLeaf()) {
-      if (!BinaryStdIn.readBoolean())
-        x = x.left;  // 0
-      else
-        x = x.right; // 1
-    }
-
-    BinaryStdOut.write(x.ch, 8); // print char
-  }
-
-  BinaryStdOut.close();
-}
-</code></pre>
-
-<p><em>running time</em> 은 <code>N</code> 에 비례한다. </p>
-
-<p><em>expansion</em> 하는 쪽에서도 <em>trie</em> 를 가지고 있어야한다. <em>trie</em> 를 전송하기 위해 <code>writeTrie</code> 함수를 만들어 보자. <em>trie</em> 를 <em>preorder</em> 로 순회하면서 <em>leaf</em> 의 경우 <code>1</code> 과 문자 값을, <em>internal node</em> 의 경우 <code>0</code> 을 출력한다.</p>
-
-<pre><code class="scala">private static void writeTrie(Node x) {  
-  if (x.isLeaf()) {
-    BinaryStdOut.write(true); // leaf
-    BinaryStdOut.write(x.ch, 8);
-    return;
-  }
-
-  BinaryStdOut.write(false);
-  writeTrie(x.left);
-  writeTrie(x.right);
-}
-</code></pre>
-
-<p>이러면 비트스트림으로 온 <em>trie</em> 를 해석하는 함수 <code>readTrie</code> 를 만들자. 마찬가지로 <em>pre-order</em> 로 읽는다.</p>
-
-<pre><code class="java">private static Node readTrie() {  
-  // leaf
-  if (BinaryStdIn.readBoolean()) {
-    char c = BinaryStdIn.readChar(8);
-    return new Node(c, 0, null, null);
-  }
-
-  Node l = readTrie(); 
-  Node r = readTrie();
-  return new Node('\0', 0, l, r);
-}
-</code></pre>
-
-<h4 id="shannonfanoalgorithm">Shannon-Fano algorithm</h4>
-
-<p>어떻게 가장 최적(압축률이 높은) <em>prefix-free code</em> 를 만들까? <em>Shannon-Fano</em> 알고리즘을 이용하면</p>
-
-<ul>
-<li><em>symbol</em> <code>S</code> 를 <code>freq</code> 으 합이 최대한 같은 두 집단으로 나눈다 <code>S0, S1</code></li>
-<li><code>S0</code> 은 <code>0</code> 부터 시작하고, <code>S1</code> 은 <code>1</code> 부터 시작하도록 <em>codeword</em> 를 만든다</li>
-<li>위 두 단계를 반복한다.</li>
-</ul>
-
-<p>근데 이 알고리즘은 보면 알겠지만, 최적이 아니다. 이는 <code>freq</code> 값이 <code>{5, 1}</code>, <code>{2, 1, 2, 1}</code> 처럼 구성될 수 있기 때문이다.</p>
-
-<h4 id="huffmanalgorithm">Huffman algorithm</h4>
-
-<p>허프만 알고리즘은 최적의 <em>prefix-free code</em> 를 만들기 위해 </p>
-
-<ul>
-<li>각 문자를 이용해 <em>single node trie</em> 를 만든다.</li>
-<li><code>freq</code> 값이 가장 작은 두개를 골라 합치고, <em>internal node</em> 에 값을 누적</li>
-<li>반복한다</li>
-</ul>
-
-<p><img src='http://lcm.csa.iisc.ernet.in/dsa/img161.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://lcm.csa.iisc.ernet.in/dsa' >http://lcm.csa.iisc.ernet.in/dsa</a>)</p>
-
-<p>이 과정에서 가장 낮은 <em>frequency</em> 를 갖는 문자가 아래로 가는 것을 보장하기 때문에 최적의 <em>prefix-free code</em> 를 찾는다 말할 수 있다. (좀 더 자세한 증명은 책을 보라고 함)</p>
-
-<p>구현은</p>
-
-<pre><code class="java">// construct huffman encoding trie 
-private static Node buildTree(int[] freq) {  
-    PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;Node&gt;();
-
-    for (char c = 0; c &lt; R; c++) 
-        if (freq[c] &gt; 0)
-            pq.add(new Node(c, freq[c], null, null));
-
-    // if only one char
-    if (pq.size() == 1) {
-        if (freq['\0'] == 0) pq.add(new Node('\0', 0, null, null));
-        else                 pq.add(new Node('\1', 0, null, null));
-    }
-
-    // merge two tries
-    while (pq.size() &gt; 1) {
-        Node l = pq.remove();
-        Node r = pq.remove();
-        Node p = new Node('\0', l.freq + r.freq, l, r); // parent
-        pq.add(p);
-    }
-
-    return pq.remove();
-}
-</code></pre>
-
-<h4 id="compression">Compression</h4>
-
-<p>구현은 </p>
-
-<pre><code class="java">public static void compress() {  
-    String s = BinaryStdIn.readString(); // input
-    char[] input = s.toCharArray();
-
-    // tabulate freq counts
-    int[] freq = new int[R];
-    for (int i = 0; i &lt; R; i++)
-        freq[input[i]]++;
-
-    // build huffman trie
-    Node root = buildTrie(freq);
-
-    // build syombol table
-    String[] st = new String[R];
-    buildCode(st, root, "");
-
-    // print trie for decoder
-    writeTrie(root);
-
-    // print N (# of input)
-    BinaryStdOut.write(input.length);
-
-    // encode
-    for (int i = 0; i &lt; input.length; i++) {
-        String code = st[input[i]];
-
-        // traverse huffman trie
-        for (int j = 0; j &lt; code.length(); i++) {
-            if (code.charAt(j) == '0')
-                BinaryStdOut.write(false);
-            else if (code.charAt(j) == '1')
-                BinaryStdOut.write(true);
-            else throw new IllegalStateException("Illegal State");
-        }
-    }
-
-    BinaryStdOut.close();
-}
-
-private static void buildCode(String[] st, Node x, String s) {  
-    if (!x.isLeaf()) {
-        buildCode(st, x.left, s + '0');
-        buildCode(st, x.right, s + '1');
-    } else {
-        st[x.ch] = s; 
-    }
-}
-</code></pre>
-
-<p>전체 코드는 <a href='http://1ambda.github.io/ko.thetimenow.com/pst/pacific_standard_time' >Huffman.java</a> 로</p>
-
-<h4 id="huffmansummary">Huffman Summary</h4>
-
-<p>정리하면 </p>
-
-<ul>
-<li>tabulate char frequencies and build trie</li>
-<li>encode file by traversing trie or lookup table</li>
-</ul>
-
-<p>러닝타임은 바이너리 힙을 이용할 경우(우선순위 큐) <code>N + RlogR</code> 이다. 여기서 <code>R</code> 은 알파벳 사이즈. <code>N</code> 은 입력 문자의 수다. </p>
-
-<p>즉 <code>N</code> 은 입력 문자를 인코딩 하는데, <code>R logR</code> 은 <code>R</code> 개의 문자에 대해 <code>freq</code> 값을 이용해 <em>trie</em> 를 만드는데 걸리는 시간</p>
-
-<h3 id="lzwcompression">LZW Compression</h3>
-
-<p><em>Lempel-Ziv-Welch</em> 의 약자다. 세 분이 만드신듯</p>
-
-<p>알고리즘을 보기 전에 데이터 압축 모델에 대해 좀 생각해보자.</p>
-
-<p>(1) 빠르고, 범용적이지만 최적은 아닌 <strong>static model</strong> (e.g ASCII)
-(2) 모델을 매번 생성하고, 전송해야하지만 최적인 <strong>Dynamic model</strong> (e.g Huffman)</p>
-
-<p>이 둘을 섞은 <em>adaptive model</em> 도 있다. 즉 매 텍스트마다 모델을 업그레이드 해 나가는 것이다. <del>머신러닝?!</del></p>
-
-<blockquote>
-  <p>Progressively learn and upate model as you read text</p>
-</blockquote>
-
-<ul>
-<li>More accurate modeling produces better compression</li>
-<li>Decoding must start from beginning</li>
-</ul>
-
-<p><em>LZW compression</em> 이 그 예다. <em>LZW</em> 압축 알고리즘은 모델을 읽으면서 만들기 때문에, 전송할 필요가 없다.</p>
-
-<p>텍스트를 읽다가 <em>codeword table</em> 에 이미 존재하면, 문자를 더 읽어 테이블에 없을 경우에만 추가한다. 그림으로 보면</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmlSR00yUW1OeVF6WWpaVEw0UTJNNDBTTjFVMk10a3pZM01XTHlFV05obGpZNU0yTHhBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<ul>
-<li>Create ST associating <code>W</code>-bit codewords with string keys</li>
-<li>Initialize ST with codewords for single-char keys</li>
-<li>Find longest string <code>s</code> in ST that is a prefix of unscanned part of input</li>
-<li>Write the <code>W</code>-bit codeword associated with <code>s</code></li>
-<li>Add <code>s + c</code> to ST where <code>c</code> is next char in the input</li>
-</ul>
-
-<p><em>LZW compression</em> 에선 <em>longest string matching</em> 이 필요하므로 <em>trie</em> 를 이용할 수 있다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmtsek5pRldPbVJtTmpSVEw1RVRZNTBDT3pFek10UVRZMElXTG1GVFk1TVdPbVZ6THpBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<h4 id="lzwimplementation">LZW Implementation</h4>
-
-<p>자세한 코드는 <a href='http://algs4.cs.princeton.edu/55compression/LZW.java.html' >LZW.java</a> 여기로. 그리고 메모리 사용량을 줄이기 위해 <em>ternary search trie</em> 를 이용한다. <a href='http://algs4.cs.princeton.edu/55compression/TST.java.html' >TST.java</a></p>
-
-<pre><code class="java">// ref: http://algs4.cs.princeton.edu/55compression/LZW.java.html
-private static final int R = 256;  // # of input chars  
-private static final int L = 4096; // # of codewords = 2^W  
-private static final int W = 12;   // codeword width
-
-public static void compress() {  
-  String input = BinaryStdIn.readString();
-
-  // codewords for single chars
-  TST&lt;Integer&gt; tst = new TST&lt;Integer&gt;();
-  for(int i = 0; i &lt; R; i++)
-    sts.put("" + (char) i, i);
-
-  int code = R + 1;
-
-  while (input.length() &gt; 0) {
-    String s = tst.longestPrefixOf(input);
-    BinaryStdOut.write(s, W);
-
-    int t = s.length();
-    if (t &lt; input.length() &amp;&amp; code &lt; L)
-      st.put(input.substring(0, t + 1), code++)
-
-    input = input.substring(t);
-  }
-
-  BinaryStdOut.write(R, W); // write "stop" codeword
-  BinaryStdOut.close();
-}
-</code></pre>
-
-<p><em>expansion</em> 은 테이블에서 <em>codeword</em> 를 읽어가면서 테이블을 만들면 된다. 심볼이 아니라 값으로 검색하므로 <code>2^W</code> 길이의 <em>array</em> 만 있으면 된다.</p>
-
-<p><em>tricky case</em> 가 있는데</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTTBNbVp3WVdaaloyWTRJVEwxY1RZaDF5TnlJMk10VUROaGRUTHdVVE4zWTJZM2t6TDFBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p><em>compression</em> 은 같은데 <em>expansion</em> 이 좀 복잡하다. <code>41 42 81 83 80</code> 에서 <code>83</code> 을 해석할때, 테이블에 있어야 해석을 하는데 없으므로 막혀버린다. </p>
-
-<p>이 경우를 잘 보면 <code>83</code> 을 해석해야 하고, 현재 테이블에 <code>82</code> 까지의 심볼만 존재한다. 그리고 방금 전 까지 읽은건 <code>81</code> 이다. <code>83</code> 은 <code>ABA</code> 인데, 이건 <code>81</code> 의 심볼을 <code>val</code> 이라 하면 <code>val + val.charAt(0)</code> 과 동일하다.</p>
-
-<p>구현은</p>
-
-<pre><code class="java">public static void expand() {  
-    String[] st = new String[L];
-    int i; // next available codeword value
-
-    for (i = 0; i &lt; R; i++) 
-        st[i] = "" + (char) i;
-
-    st[i++] = ""; // termination codeword
-
-    int codeword = BinaryStdIn.readInt(W);
-    if (codeword == R) return; // if empty message
-    String val = st[codeword];
-
-    while(true) {
-        BinaryStdOut.write(val);
-
-        codeword = BinaryStdIn.readInt(W);
-        if (codeword == R) break;
-
-        String s = st[codeword];
-
-        // tricky case
-        if (codeword == i) s = val + val.charAt(0);
-        // add string into table
-        if (i &lt; L) st[i++] = val + s.charAt(0);
-
-        val = s;
-    }
-
-    BinaryStdOut.close();
-}
-</code></pre>
-
-<p>해석할때 <code>val</code> 은 지난단계의 해석, <code>s</code> 는 현재 읽은 값의 해석이라 생각하면 쉽다.</p>
-
-<h4 id="losslessdatacompression">Lossless Data Compression</h4>
-
-<p><em>LZW</em> 같은 경우 특허가 있었는데, 2003년에 만료되었다고 한다. 이 알고리즘의 많은 변형이 있는데, <em>LZ77</em> 은 특허가 없어서 오픈소스에 많이 쓰인다고 함. <em>deflate  zlib</em> 는 <em>LZ77</em> 과 <em>Huffman</em> 을 섞여 쓰는 대표적인 압축 알고리즘</p>
-
-<p><em>bit / char</em> 를 기준으로 보면 아스키는 <code>7</code>, 허프만은 <code>4.7</code> 정도의 성능을 보여준다. 1995년에는 <em>Burrows-Wheeler</em> 알고리즘이 발명되었는데 <code>2.29</code> 정도까지 압축한다. 1999년에는 <em>RK</em> 알고리즘이 <code>1.89</code> 까지 압축에 성공함.</p>
-
-<h3 id="summary">Summary</h3>
-
-<ul>
-<li><strong>Huffman:</strong> represent <em>fixed-length symbols</em> with <em>variable-length codes</em></li>
-<li><strong>LZW:</strong> represent <em>variable-length symbols</em> with <em>fixed-length codes</em></li>
-</ul>
-
-<p><em>lossy compression</em> 의 경우 <em>FFT</em>, 프랙탈 등 수학적 도구를 이용해 만드 알고리즘들이 많다.</p>
-
-<p>그리고 압축의 이론적 한계는 <em>shanon entropy</em> 에 의해</p>
-
-<p><img src='http://crackingthenutshell.com/wp-content/uploads/file/shannons-formula-small.jpg'  alt="" /></p>
-
-<h3 id="reference">Reference</h3>
-
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
-(3) <a href='http://www.lawfareblog.com/2013/09/the-nsa-and-encryption/' >The NSA and Encryption</a> <br />
-(4) <a href='http://www.programering.com/a/MTO4YzNwATE.html' >Data Compression Lecture Note</a> <br />
-(5) <a href='http://lcm.csa.iisc.ernet.in/dsa/node88.html' >Huffman Algorithm</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-data-compression/</link><guid isPermaLink="false">58cf48f9-4e5e-4a17-80ca-be11ef6ffdc7</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[compression]]></category><category><![CDATA[run-length]]></category><category><![CDATA[huffman]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 29 Dec 2014 06:20:14 GMT</pubDate></item></channel></rss>
+(8) <a href='http://web.cs.dal.ca/' ~mhe/csci3110/handouts/lecture9.htm">sorting - convex hull image</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-reduction/</link><guid isPermaLink="false">0e589543-7f20-4371-9067-2c2db77adb31</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[reduction]]></category><category><![CDATA[convex hull]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 30 Dec 2014 09:05:04 GMT</pubDate></item></channel></rss>
