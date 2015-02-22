@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 22 Feb 2015 07:03:32 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Membership Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 22 Feb 2015 07:10:54 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Membership Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
 
 <p>왜 <em>membership</em> 이란 개념이 클라우드 컴퓨팅에 필요할까요? </p>
 
-<p>한 노드가 <em>OS</em>, <em>Disk</em>, <em>Network</em> 등 때문에 10년 (120개월) 마다 한 번씩 고장난다고 합시다. 그러면 120개의 노드를 가지고 있다면 1개월마다  한 번씩입니다. 이정도는 참을만하죠? 그런데, 12,000 개의 서버를 가지고 있다면 <em>MMTF (mean time to failure)</em> 는 7.2 시간마다 한번씩입니다. 이건 큰 문제입니다. </p>
+<p>한 노드가 <em>OS</em>, <em>Disk</em>, <em>Network</em> 등 때문에 10년 (120개월) 마다 한 번씩 고장난다고 합시다. 그러면 120개의 노드를 가지고 있다면 1개월마다  한 번씩입니다. 이정도는 참을만하죠? 그런데, 12,000 개의 서버를 가지고 있다면 <em>MTTF (mean time to failure)</em> 는 7.2 시간마다 한번씩입니다. 이건 큰 문제입니다. </p>
 
 <p>따라서 머신이 멀쩡한지 아닌지를 수동이 아니라 자동으로 판단하고 보고해줄 시스템이 필요합니다. <em>membership</em> 이 필요한 것이죠. 이 대상은</p>
 
@@ -137,7 +137,7 @@
 
 <p><img src='http://latex.numberempire.com/render?L%2A%20%3D%20%7B%20log%28PM%28T%29%29%20%5Cover%20log%28P_ml%29%20%7D%20%2A%20%7B1%20%5Cover%20T%20%7D&amp;sig=b21744720873bd544c3b394bd827b158'  alt="" /></p>
 
-<p>메시지 손실 <code>P_ml</code> 이 높을수록, 오버헤드 <code>L*</code> 는 당연히 작아져야 하고, <code>PM(T)</code> 가 높을수록 <em>false-positive</em> 가 많으므로 오버헤드가 높은 것 입니다. 잘 보면 <code>N</code> 변수와 없는데, 이는 <em>scale-free</em> 함을 보여줍니다.</p>
+<p>메시지 손실 <code>P_ml</code> 이 높을수록, 오버헤드 <code>L*</code> 는 당연히 작아져야 하고, <code>PM(T)</code> 가 높을수록 <em>false-positive</em> 가 많으므로 오버헤드가 높습니다. 수식을 보면 변수 <code>N</code> 이 없는데, 이는 <em>scale-free</em> 함을 보여줍니다.</p>
 
 <p>그리고 <em>all-to-all</em> 이나 <em>gossip-based</em> 는 <strong>suboptimal</strong> 입니다. 왜냐하면 </p>
 
