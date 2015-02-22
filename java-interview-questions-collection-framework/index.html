@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Java Interview Questions, Collection Framework</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Java Interview Questions, Collection Framework">
+  <meta name="twitter:description" content=" General (1) Explain Collections Hierarchy? (http://www.java-redefined.com) 크게 보면 Collection 과 Map 인터페이스로 구분되어 있습니다.  Map 은 key-value pair 컨테이너이기 때문에 단일 원소에 대한 컨테이너인 Collection 과 호환되지 않습니다. Set 은 중복된 원소를 허용하지 않습니다. Set 과 Map 에 정렬 기능이 필요하면 SortedSet,  SortedMap 인터페이스 구현체인 TreeMap, TreeSet">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/java-interview-questions-collection-framework/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+  
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/java-interview-questions-collection-framework/" />
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+<body>
+
+  
+  <script src="../public/jquery.js?v=6e3327de38"></script>
+
+  
+
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Functional Programming</h4>
+  
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="/about-me"><i class="fa fa-user"></i> <span class="margin_left_small desktop">About me</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-collection tag-java tag-interview">
+
+    
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/collection">collection</a>, <a href="../tag/java">java</a>, <a href="../tag/interview">interview</a></h5>
+      <h1 class="margin_bottom_medium">Java Interview Questions, Collection Framework</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-23">Monday, February 23, 2015</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/java-interview-questions-collection-framework/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><img src="http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png" alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="general">General</h3>
+
+<p>(1) <strong>Explain Collections Hierarchy?</strong></p>
+
+<p><img src="http://2.bp.blogspot.com/-M0M8nv5s2lQ/U3BcbRQcRvI/AAAAAAAAAec/oBBmQCPDm9Y/s1600/Collection-Classes.tif" alt="" /></p>
+
+<p><img src="http://4.bp.blogspot.com/-o9Jk4Z4Tohs/U3Be46CxGTI/AAAAAAAAAeo/Wq8-hhZ8dCA/s1600/Collection-Classes_Map.tif" alt="" /></p>
+
+<p align="center">(<a href='http://www.java-redefined.com'>http://www.java-redefined.com</a>)</p>
+
+<p>크게 보면 <em>Collection</em> 과 <em>Map</em> 인터페이스로 구분되어 있습니다. </p>
+
+<ul>
+<li><code>Map</code> 은 <em>key-value pair</em> 컨테이너이기 때문에 단일 원소에 대한 컨테이너인 <code>Collection</code> 과 호환되지 않습니다.</li>
+<li><code>Set</code> 은 중복된 원소를 허용하지 않습니다.</li>
+<li><code>Set</code> 과 <code>Map</code> 에 정렬 기능이 필요하면 <code>SortedSet</code>,  <code>SortedMap</code> 인터페이스 구현체인 <code>TreeMap</code>, <code>TreeSet</code> 등을 이용할 수 있습니다.</li>
+</ul>
+
+<p>(2) How do you remove an entry from a collection? and subsequently what is difference between <code>Collection.remove()</code> and <code>Iterator.remove()</code>, which one you will use, while removing elements during iteration?</p>
+
+<p>아래에서 언급하겠지만 <em>fail-fast</em> 와 관련된 문제입니다. 만약 순회하고 있지 않다면 <code>Collection.remove()</code> 를 사용해도 상관 없지만</p>
+
+<p><em>iterator</em> 를 이용해서 순회하는 동안 컬렉션의 <code>remove()</code> 메소드를 이용하면 <code>ConcurrentModificationException</code> 예외가 발생합니다.  따라서 <code>Iterator.remove()</code> 를 이용해야 합니다. <a href="http://stackoverflow.com/questions/14200489/collection-iterator-remove-vs-collection-remove">SO 답변</a>에서도 그 이유를 찾을 수 있습니다.</p>
+
+<pre><code class="java">// invalid
+List&lt;Integer&gt; l = new ArrayList&lt;Integer&gt;(Arrays.asList(1, 2, 3, 4));  
+for (int el : l) {  
+  if (el &lt; 3) {
+      l.remove(el);
+  }
+}
+
+// correct way
+Iterator&lt;Integer&gt; it = l.iterator();  
+while (it.hasNext()) {  
+  int el = it.next();
+  if (el &lt; 3) {
+      it.remove();
+  }
+}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="listinterfacerelated">List interface related</h3>
+
+<ul>
+<li><code>List</code> 는 중복된 원소를 허용하며 <em>ordered elements</em> 를 담는 컨테이너입니다. 때때로 <em>Sequence</em> 라 불리기도 합니다. </li>
+</ul>
+
+<p>(1) <code>Vector</code> vs <code>ArrayList</code> vs <code>LinkedList</code></p>
+
+<ul>
+<li><code>Vector</code> 의 모든 메소드는 <em>동기화 (synchronized)</em> 됩니다. <code>ArrayList</code> 는 <em>thread-unsafe</em> 합니다.</li>
+<li><code>Vector</code> 는 <em>JDK</em> 첫 릴리즈부터 포함되어있던 레거시 클래스고, <code>ArrayList</code> 는 <em>JDK 1.2</em> 에서 컬렉션 프레임워크 도입과 함께 추가되었습니다.</li>
+<li><em>default</em> 로 <code>Vector</code> 는 두배씩 사이즈가 커지는 반면, <code>ArrayList</code> 는 <em>50%</em> 씩 증가합니다.</li>
+<li><code>LinkedList</code> 도 <em>thread-unsafe</em> 하기 때문에 대신 <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html">ConcurrentLinkedQueue</a> 나 <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingDeque.html">LinkedBlockingDeque</a> 를 이용할 수 있습니다.</li>
+</ul>
+
+<p>(2) What is different between <code>Iterator</code> and <code>ListIterator</code></p>
+
+<ul>
+<li><code>Iterator</code> 를 이용해 <code>Set</code> 등 컬렉션을 순회할 수 있지만 <code>ListIterator</code> 는 <code>List</code> 밖에 못 합니다</li>
+<li><code>Iterator</code> 는 <em>forward-only</em> 지만, <code>ListIterator</code> 는 양방향 순회가 가능합니다</li>
+<li><code>ListIterator</code> 는 <em>add</em>, <em>replace</em>, <em>getting index position</em> 등의 기능이 더 있습니다. </li>
+</ul>
+
+<p>참고로 <em>iterator</em> 를 이용해 리스트를 순회하는 방법은</p>
+
+<pre><code class="java">List&lt;String&gt; strList = new ArrayList&lt;&gt;();  
+Iterator&lt;String&gt; it = strList.iterator();
+
+while(it.hasNext()){  
+  String obj = it.next();
+  System.out.println(obj);
+}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="setinterfacerelated">Set interface related</h3>
+
+<p><code>Set</code> 은 <em>uniqueness of elements</em> 를 보장합니다. 따라서 중복된 원소를 허용하지 않습니다. 만약 <em>ordering</em> 이 있는 <code>Set</code> 을 사용하고 싶다면 구현체로 <code>TreeSet</code> 을 선택하면 됩니다.</p>
+
+<p>(1) <strong>How HashSet store elements?</strong></p>
+
+<p><code>HashSet</code> 은 <em>uniqueness</em> 를 보장하기 위해 내부적으로 <code>Map</code> 을 이용합니다. <em>key-value</em> 를 저장하나, 모든 <em>value</em> 를 같게끔 하죠.</p>
+
+<pre><code class="java">private transient HashMap&lt;E, Object&gt; map;  
+// This is added as value for each key
+private static final Object PRESENT = new Object();
+
+public boolean add(E e) {  
+  return map.put(e, PRESENT) == null;
+}
+</code></pre>
+
+<p>(2) Can a null element added to a <code>TreeSet</code> or <code>HashSet</code>?</p>
+
+<p><code>HashMap</code>, <code>HashSet</code> 은 하나의 <em>null-key</em> 를 허용하지만, <code>TreeSet</code>, <code>TreeMap</code> 은 <em>null-key</em> 를 허용하지 않습니다. </p>
+
+<p><code>TreeMap</code> 은 <code>NavigableMap</code> 의 구현이고, <code>TreeSet</code> 은 내부적으로 <code>NavigableMap</code> 을 사용합니다. 그런데 <code>NavigableMap</code> 이 <em>null-key</em> 를 허용하지 않기 때문에, <code>TreeSet</code>, <code>TreeMap</code> 도 그렇습니다.</p>
+
+<p><br/></p>
+
+<h3 id="mapinterfacerelated">Map interface related</h3>
+
+<p><code>Map</code> 은 <em>key-value pair</em> 를 저장하기 위해 사용합니다. <code>Map</code> 인터페이스 구현체로 <code>HashMap</code>, <code>LinkedHashMap</code>, <code>HashTable</code>, <code>EnumMap</code>, <code>IdentityHashMap</code>, <code>Properties</code> 가 있습니다.</p>
+
+<p>(1) Difference between <code>HashMap</code> and <code>HashTable</code></p>
+
+<ul>
+<li><code>HashTable</code> 은 <em>동기화 (synchronized)</em> 되지만, <code>HashMap</code> 은 그렇지 않습니다.</li>
+<li><code>HashTable</code> 은 <em>null-key</em> 나 <em>null-value</em> 를 허용하지 않습니다.</li>
+<li><code>HashMap</code> 의 <em>iterator</em> 는 <strong>fail-fast</strong> 인 반면 <code>HashTable</code> 의 <em>enumerator</em> 는 그렇지 않습니다.</li>
+</ul>
+
+<p>참고로, <em>iterator</em> 는 <em>iteration</em> 동안 <em>caller</em> 가 <code>remove</code> 메소드를 이용해서 원소를 제거할 수 있지만, <em>enumerator</em> 를 이용할때는 원소를 추가하거나 제거할 수 없습니다. 이런 기능 차이 때문에 <em>enumerator</em> 가 기본적인 기능만 가지고 있고 더 빠릅니다. 또 다른 차이점은 <em>enumerator</em> 는 <code>Stack</code>, <code>Vector</code> 처럼 레거시 클래스에 대해 사용합니다.</p>
+
+<p>(2) Whjat are <code>IdentityHashMap</code> and <code>WeakHashMap</code>?</p>
+
+<p>이부분은 <a href="http://howtodoinjava.com/2013/07/09/useful-java-collection-interview-questions/#identityHashMap_weakHashMap_differences">원문</a>을 첨부합니다.</p>
+
+<blockquote>
+  <p><strong>IdentityHashMap</strong> is similar to HashMap except that <strong>it uses reference equality when comparing elements</strong>. IdentityHashMap class is not a widely used Map implementation. While this class implements the Map interface, it intentionally violates Map’s general contract, which mandates the use of the equals() method when comparing objects. IdentityHashMap is designed for use only in the rare cases wherein reference-equality semantics are required.</p>
+  
+  <p><strong>WeakHashMap</strong> is an implementation of the Map interface that <strong>stores only weak references to its keys</strong>. Storing only weak references allows a key-value pair to be garbage collected when its key is no longer referenced outside of the WeakHashMap. This class is intended primarily for use with key objects whose equals methods test for object identity using the == operator. Once such a key is discarded it can never be recreated, so it is impossible to do a look-up of that key in a WeakHashMap at some later time and be surprised that its entry has been removed.</p>
+</blockquote>
+
+<p><br/></p>
+
+<h3 id="morequestions">More Questions</h3>
+
+<p>(1) What do you understand by iterator <strong>fail-fast</strong> property?</p>
+
+<p><strong>fail-fast iterator</strong> 는 <em>iteration</em> 이 시작된 이후로 <em>collection</em> 이 변경되는걸 알아채는 순간 <code>ConcurrentModificationException</code> 을 던지면서 멈춥니다. 여기서 <em>변경</em> 이란 한 스레드가 컬렉션을 순회하는 동안, 컬렉션에 있는 원소의 삭제, 변경 혹은 추가가 일어나는 것을 말합니다.</p>
+
+<p><em>fail-fast</em> 는 <em>modification count</em> 란 것을 유지하고 있다가, <em>iteration thread</em> 가 <em>modification count</em> 의 변경을 알아채면 예외를 던지는 방식으로 구현됩니다.</p>
+
+<p>(2) What is difference between <strong>fail-fast</strong> and <strong>fail-safe</strong></p>
+
+<p><strong>fail-safe iterator</strong> 는 복사본에 대해 컬렉션 순회를 진행하기 때문에 원본에 변경이 일어나도 멈추지 않습니다. 일반적으로 <code>java.util.concurrent</code> 에 있는 클래스들의 (e.g <code>ConcurrentHashMap</code> 이나 <code>CopyOnWriteArrayList</code>) <em>iterator</em> 가 <em>fail-safe</em> 입니다.</p>
+
+<p>(3) How to avoid <code>ConcurrentModificationException</code> while iterating a collection?</p>
+
+<ul>
+<li>먼저 <em>fail-safe iterator</em> 를 사용할 수 있는지 확인합니다 <em>JDK 1.5</em> 이상을 사용한다면, <code>ConcurrentHashMap</code> 이나 <code>CopyOnWriteArrayList</code> 를 사용할 수 있습니다.</li>
+</ul>
+
+<p>위 방법이 불가능하면 다음을 고려할 수 있으나, 퍼포먼스가 떨어질 수 있다는 점을 유의해야 합니다. </p>
+
+<ul>
+<li><em>list</em> 를 <em>array</em> 로 바꾸어, 순회합니다</li>
+<li><em>list</em> 를 순회하는 동안 <em>synchronized block</em> 을 이용해 <em>lock</em> 을 겁니다.</li>
+</ul>
+
+<p>(4) What is difference between Synchronized Collection and Concurrent Collection?</p>
+
+<p><em>Java 5</em> 와 함께 <code>ConcurrentHashMap</code>, <code>CopyOnWriteArrayList</code>, <code>BlockingQueue</code> 등의 <em>concurrent collection</em> 클래스들이 추가 되었습니다. 이 클래스들은 <em>synchronized collection</em> 보다 성능이 더 나은데, 이는 일부분에만 <em>lock</em> 을 걸기 때문입니다. 더 자세한 내용은 <a href="http://javarevisited.blogspot.kr/2011/04/difference-between-concurrenthashmap.html">여기로</a></p>
+
+<p>(5) What is <code>Comparable</code> and <code>Comparator</code>?</p>
+
+<p>자바에서 <code>TreeSet</code> 이나 <code>TreeMap</code> 처럼 <em>automatic sorting</em> 기능이 있는 모든 컬렉션은 <code>compare</code> 메소드를 사용합니다. </p>
+
+<p>이 때 <em>element class</em> 는 정렬을 위해 <code>Comparator</code> <strong>또는</strong> <code>Comparable</code> 인터페이스를 반드시 구현해야 합니다. <em>wrapper class</em> 인 <code>Integer</code>, <code>Double</code> 등이 <code>Comparable</code> 인터페이스를 구현하는 이유가 바로 이것입니다.</p>
+
+<p><code>Comparable</code> 은 원소가 컬렉션에 추가될때 자동적으로 정렬되도록 (<em>natural sorting</em>) 하기 위해 사용하고, <code>Comparator</code> 는 추가적인 정렬방법을 이용하기 위해 정의할 수 있습니다. <a href="http://www.java2blog.com/2013/02/difference-between-comparator-and.html">여기</a>서 가져온 예제를 보면</p>
+
+<pre><code class="java">// Comparable
+public class Country implements Comparable&lt;Country&gt;{  
+       @Override
+    public int compareTo(Country country) {
+        return (this.countryId &lt; country.countryId ) ? -1: (this.countryId &gt; country.countryId ) ? 1:0 ;
+}} 
+
+// Comparator
+
+Country indiaCountry=new Country(1, "India");  
+Country chinaCountry=new Country(4, "China");  
+Country nepalCountry=new Country(3, "Nepal");  
+Country bhutanCountry=new Country(2, "Bhutan");  
+        
+List&lt;Country&gt; listOfCountries = new ArrayList&lt;Country&gt;();  
+listOfCountries.add(indiaCountry);  
+listOfCountries.add(chinaCountry);  
+listOfCountries.add(nepalCountry);  
+listOfCountries.add(bhutanCountry); 
+
+Collections.sort(listOfCountries,new Comparator&lt;Country&gt;() {  
+  @Override
+  public int compare(Country o1, Country o2) {
+    return o1.getCountryName().compareTo(o2.getCountryName());
+  }
+});
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://howtodoinjava.com/2013/07/09/useful-java-collection-interview-questions/#why_map_not_extend_collection">Useful Java Collection Interview Questions</a> <br />
+(2) <a href="http://websphereemerge.blogspot.kr/">Title Image</a> <br />
+(3) <a href="http://www.java-redefined.com/2014/05/java-collection-interview-questions.html">http://www.java-redefined.com</a> <br />
+(4) <a href="http://www.java2blog.com/2013/02/difference-between-comparator-and.html">http://www.java2blog.com/</a> <br />
+(5) <a href="http://www.javatpoint.com/java-collections-interview-questions">http://www.javatpoint.com</a> <br />
+(6) <a href="http://stackoverflow.com/questions/14200489/collection-iterator-remove-vs-collection-remove">SO:  Iterator.remove() vs Collection.remove()</a></p>
+    </section>
+
+    <footer>
+      
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+      
+    </footer>
+
+    
+
+    
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '109';
+  var disqus_url = 'http://1ambda.github.io/java-interview-questions-collection-framework/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    </article>
+</main>
+
+
+  
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+
+  </body>
+  </html>

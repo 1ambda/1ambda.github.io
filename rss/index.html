@@ -1,5 +1,214 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 22 Feb 2015 11:35:03 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Membership Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 22 Feb 2015 16:39:20 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Java Interview Questions, Collection Framework]]></title><description><![CDATA[<p><img src='http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="general">General</h3>
+
+<p>(1) <strong>Explain Collections Hierarchy?</strong></p>
+
+<p><img src='http://2.bp.blogspot.com/-M0M8nv5s2lQ/U3BcbRQcRvI/AAAAAAAAAec/oBBmQCPDm9Y/s1600/Collection-Classes.tif'  alt="" /></p>
+
+<p><img src='http://4.bp.blogspot.com/-o9Jk4Z4Tohs/U3Be46CxGTI/AAAAAAAAAeo/Wq8-hhZ8dCA/s1600/Collection-Classes_Map.tif'  alt="" /></p>
+
+<p align="center">(<a href='http://www.java-redefined.com/' >http://www.java-redefined.com</a>)</p>
+
+<p>크게 보면 <em>Collection</em> 과 <em>Map</em> 인터페이스로 구분되어 있습니다. </p>
+
+<ul>
+<li><code>Map</code> 은 <em>key-value pair</em> 컨테이너이기 때문에 단일 원소에 대한 컨테이너인 <code>Collection</code> 과 호환되지 않습니다.</li>
+<li><code>Set</code> 은 중복된 원소를 허용하지 않습니다.</li>
+<li><code>Set</code> 과 <code>Map</code> 에 정렬 기능이 필요하면 <code>SortedSet</code>,  <code>SortedMap</code> 인터페이스 구현체인 <code>TreeMap</code>, <code>TreeSet</code> 등을 이용할 수 있습니다.</li>
+</ul>
+
+<p>(2) How do you remove an entry from a collection? and subsequently what is difference between <code>Collection.remove()</code> and <code>Iterator.remove()</code>, which one you will use, while removing elements during iteration?</p>
+
+<p>아래에서 언급하겠지만 <em>fail-fast</em> 와 관련된 문제입니다. 만약 순회하고 있지 않다면 <code>Collection.remove()</code> 를 사용해도 상관 없지만</p>
+
+<p><em>iterator</em> 를 이용해서 순회하는 동안 컬렉션의 <code>remove()</code> 메소드를 이용하면 <code>ConcurrentModificationException</code> 예외가 발생합니다.  따라서 <code>Iterator.remove()</code> 를 이용해야 합니다. <a href='http://stackoverflow.com/questions/14200489/collection-iterator-remove-vs-collection-remove' >SO 답변</a>에서도 그 이유를 찾을 수 있습니다.</p>
+
+<pre><code class="java">// invalid
+List&lt;Integer&gt; l = new ArrayList&lt;Integer&gt;(Arrays.asList(1, 2, 3, 4));  
+for (int el : l) {  
+  if (el &lt; 3) {
+      l.remove(el);
+  }
+}
+
+// correct way
+Iterator&lt;Integer&gt; it = l.iterator();  
+while (it.hasNext()) {  
+  int el = it.next();
+  if (el &lt; 3) {
+      it.remove();
+  }
+}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="listinterfacerelated">List interface related</h3>
+
+<ul>
+<li><code>List</code> 는 중복된 원소를 허용하며 <em>ordered elements</em> 를 담는 컨테이너입니다. 때때로 <em>Sequence</em> 라 불리기도 합니다. </li>
+</ul>
+
+<p>(1) <code>Vector</code> vs <code>ArrayList</code> vs <code>LinkedList</code></p>
+
+<ul>
+<li><code>Vector</code> 의 모든 메소드는 <em>동기화 (synchronized)</em> 됩니다. <code>ArrayList</code> 는 <em>thread-unsafe</em> 합니다.</li>
+<li><code>Vector</code> 는 <em>JDK</em> 첫 릴리즈부터 포함되어있던 레거시 클래스고, <code>ArrayList</code> 는 <em>JDK 1.2</em> 에서 컬렉션 프레임워크 도입과 함께 추가되었습니다.</li>
+<li><em>default</em> 로 <code>Vector</code> 는 두배씩 사이즈가 커지는 반면, <code>ArrayList</code> 는 <em>50%</em> 씩 증가합니다.</li>
+<li><code>LinkedList</code> 도 <em>thread-unsafe</em> 하기 때문에 대신 <a href='http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html' >ConcurrentLinkedQueue</a> 나 <a href='http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingDeque.html' >LinkedBlockingDeque</a> 를 이용할 수 있습니다.</li>
+</ul>
+
+<p>(2) What is different between <code>Iterator</code> and <code>ListIterator</code></p>
+
+<ul>
+<li><code>Iterator</code> 를 이용해 <code>Set</code> 등 컬렉션을 순회할 수 있지만 <code>ListIterator</code> 는 <code>List</code> 밖에 못 합니다</li>
+<li><code>Iterator</code> 는 <em>forward-only</em> 지만, <code>ListIterator</code> 는 양방향 순회가 가능합니다</li>
+<li><code>ListIterator</code> 는 <em>add</em>, <em>replace</em>, <em>getting index position</em> 등의 기능이 더 있습니다. </li>
+</ul>
+
+<p>참고로 <em>iterator</em> 를 이용해 리스트를 순회하는 방법은</p>
+
+<pre><code class="java">List&lt;String&gt; strList = new ArrayList&lt;&gt;();  
+Iterator&lt;String&gt; it = strList.iterator();
+
+while(it.hasNext()){  
+  String obj = it.next();
+  System.out.println(obj);
+}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="setinterfacerelated">Set interface related</h3>
+
+<p><code>Set</code> 은 <em>uniqueness of elements</em> 를 보장합니다. 따라서 중복된 원소를 허용하지 않습니다. 만약 <em>ordering</em> 이 있는 <code>Set</code> 을 사용하고 싶다면 구현체로 <code>TreeSet</code> 을 선택하면 됩니다.</p>
+
+<p>(1) <strong>How HashSet store elements?</strong></p>
+
+<p><code>HashSet</code> 은 <em>uniqueness</em> 를 보장하기 위해 내부적으로 <code>Map</code> 을 이용합니다. <em>key-value</em> 를 저장하나, 모든 <em>value</em> 를 같게끔 하죠.</p>
+
+<pre><code class="java">private transient HashMap&lt;E, Object&gt; map;  
+// This is added as value for each key
+private static final Object PRESENT = new Object();
+
+public boolean add(E e) {  
+  return map.put(e, PRESENT) == null;
+}
+</code></pre>
+
+<p>(2) Can a null element added to a <code>TreeSet</code> or <code>HashSet</code>?</p>
+
+<p><code>HashMap</code>, <code>HashSet</code> 은 하나의 <em>null-key</em> 를 허용하지만, <code>TreeSet</code>, <code>TreeMap</code> 은 <em>null-key</em> 를 허용하지 않습니다. </p>
+
+<p><code>TreeMap</code> 은 <code>NavigableMap</code> 의 구현이고, <code>TreeSet</code> 은 내부적으로 <code>NavigableMap</code> 을 사용합니다. 그런데 <code>NavigableMap</code> 이 <em>null-key</em> 를 허용하지 않기 때문에, <code>TreeSet</code>, <code>TreeMap</code> 도 그렇습니다.</p>
+
+<p><br/></p>
+
+<h3 id="mapinterfacerelated">Map interface related</h3>
+
+<p><code>Map</code> 은 <em>key-value pair</em> 를 저장하기 위해 사용합니다. <code>Map</code> 인터페이스 구현체로 <code>HashMap</code>, <code>LinkedHashMap</code>, <code>HashTable</code>, <code>EnumMap</code>, <code>IdentityHashMap</code>, <code>Properties</code> 가 있습니다.</p>
+
+<p>(1) Difference between <code>HashMap</code> and <code>HashTable</code></p>
+
+<ul>
+<li><code>HashTable</code> 은 <em>동기화 (synchronized)</em> 되지만, <code>HashMap</code> 은 그렇지 않습니다.</li>
+<li><code>HashTable</code> 은 <em>null-key</em> 나 <em>null-value</em> 를 허용하지 않습니다.</li>
+<li><code>HashMap</code> 의 <em>iterator</em> 는 <strong>fail-fast</strong> 인 반면 <code>HashTable</code> 의 <em>enumerator</em> 는 그렇지 않습니다.</li>
+</ul>
+
+<p>참고로, <em>iterator</em> 는 <em>iteration</em> 동안 <em>caller</em> 가 <code>remove</code> 메소드를 이용해서 원소를 제거할 수 있지만, <em>enumerator</em> 를 이용할때는 원소를 추가하거나 제거할 수 없습니다. 이런 기능 차이 때문에 <em>enumerator</em> 가 기본적인 기능만 가지고 있고 더 빠릅니다. 또 다른 차이점은 <em>enumerator</em> 는 <code>Stack</code>, <code>Vector</code> 처럼 레거시 클래스에 대해 사용합니다.</p>
+
+<p>(2) Whjat are <code>IdentityHashMap</code> and <code>WeakHashMap</code>?</p>
+
+<p>이부분은 <a href='http://howtodoinjava.com/2013/07/09/useful-java-collection-interview-questions/' #identityHashMap_weakHashMap_differences">원문</a>을 첨부합니다.</p>
+
+<blockquote>
+  <p><strong>IdentityHashMap</strong> is similar to HashMap except that <strong>it uses reference equality when comparing elements</strong>. IdentityHashMap class is not a widely used Map implementation. While this class implements the Map interface, it intentionally violates Map’s general contract, which mandates the use of the equals() method when comparing objects. IdentityHashMap is designed for use only in the rare cases wherein reference-equality semantics are required.</p>
+  
+  <p><strong>WeakHashMap</strong> is an implementation of the Map interface that <strong>stores only weak references to its keys</strong>. Storing only weak references allows a key-value pair to be garbage collected when its key is no longer referenced outside of the WeakHashMap. This class is intended primarily for use with key objects whose equals methods test for object identity using the == operator. Once such a key is discarded it can never be recreated, so it is impossible to do a look-up of that key in a WeakHashMap at some later time and be surprised that its entry has been removed.</p>
+</blockquote>
+
+<p><br/></p>
+
+<h3 id="morequestions">More Questions</h3>
+
+<p>(1) What do you understand by iterator <strong>fail-fast</strong> property?</p>
+
+<p><strong>fail-fast iterator</strong> 는 <em>iteration</em> 이 시작된 이후로 <em>collection</em> 이 변경되는걸 알아채는 순간 <code>ConcurrentModificationException</code> 을 던지면서 멈춥니다. 여기서 <em>변경</em> 이란 한 스레드가 컬렉션을 순회하는 동안, 컬렉션에 있는 원소의 삭제, 변경 혹은 추가가 일어나는 것을 말합니다.</p>
+
+<p><em>fail-fast</em> 는 <em>modification count</em> 란 것을 유지하고 있다가, <em>iteration thread</em> 가 <em>modification count</em> 의 변경을 알아채면 예외를 던지는 방식으로 구현됩니다.</p>
+
+<p>(2) What is difference between <strong>fail-fast</strong> and <strong>fail-safe</strong></p>
+
+<p><strong>fail-safe iterator</strong> 는 복사본에 대해 컬렉션 순회를 진행하기 때문에 원본에 변경이 일어나도 멈추지 않습니다. 일반적으로 <code>java.util.concurrent</code> 에 있는 클래스들의 (e.g <code>ConcurrentHashMap</code> 이나 <code>CopyOnWriteArrayList</code>) <em>iterator</em> 가 <em>fail-safe</em> 입니다.</p>
+
+<p>(3) How to avoid <code>ConcurrentModificationException</code> while iterating a collection?</p>
+
+<ul>
+<li>먼저 <em>fail-safe iterator</em> 를 사용할 수 있는지 확인합니다 <em>JDK 1.5</em> 이상을 사용한다면, <code>ConcurrentHashMap</code> 이나 <code>CopyOnWriteArrayList</code> 를 사용할 수 있습니다.</li>
+</ul>
+
+<p>위 방법이 불가능하면 다음을 고려할 수 있으나, 퍼포먼스가 떨어질 수 있다는 점을 유의해야 합니다. </p>
+
+<ul>
+<li><em>list</em> 를 <em>array</em> 로 바꾸어, 순회합니다</li>
+<li><em>list</em> 를 순회하는 동안 <em>synchronized block</em> 을 이용해 <em>lock</em> 을 겁니다.</li>
+</ul>
+
+<p>(4) What is difference between Synchronized Collection and Concurrent Collection?</p>
+
+<p><em>Java 5</em> 와 함께 <code>ConcurrentHashMap</code>, <code>CopyOnWriteArrayList</code>, <code>BlockingQueue</code> 등의 <em>concurrent collection</em> 클래스들이 추가 되었습니다. 이 클래스들은 <em>synchronized collection</em> 보다 성능이 더 나은데, 이는 일부분에만 <em>lock</em> 을 걸기 때문입니다. 더 자세한 내용은 <a href='http://javarevisited.blogspot.kr/2011/04/difference-between-concurrenthashmap.html' >여기로</a></p>
+
+<p>(5) What is <code>Comparable</code> and <code>Comparator</code>?</p>
+
+<p>자바에서 <code>TreeSet</code> 이나 <code>TreeMap</code> 처럼 <em>automatic sorting</em> 기능이 있는 모든 컬렉션은 <code>compare</code> 메소드를 사용합니다. </p>
+
+<p>이 때 <em>element class</em> 는 정렬을 위해 <code>Comparator</code> <strong>또는</strong> <code>Comparable</code> 인터페이스를 반드시 구현해야 합니다. <em>wrapper class</em> 인 <code>Integer</code>, <code>Double</code> 등이 <code>Comparable</code> 인터페이스를 구현하는 이유가 바로 이것입니다.</p>
+
+<p><code>Comparable</code> 은 원소가 컬렉션에 추가될때 자동적으로 정렬되도록 (<em>natural sorting</em>) 하기 위해 사용하고, <code>Comparator</code> 는 추가적인 정렬방법을 이용하기 위해 정의할 수 있습니다. <a href='http://www.java2blog.com/2013/02/difference-between-comparator-and.html' >여기</a>서 가져온 예제를 보면</p>
+
+<pre><code class="java">// Comparable
+public class Country implements Comparable&lt;Country&gt;{  
+       @Override
+    public int compareTo(Country country) {
+        return (this.countryId &lt; country.countryId ) ? -1: (this.countryId &gt; country.countryId ) ? 1:0 ;
+}} 
+
+// Comparator
+
+Country indiaCountry=new Country(1, "India");  
+Country chinaCountry=new Country(4, "China");  
+Country nepalCountry=new Country(3, "Nepal");  
+Country bhutanCountry=new Country(2, "Bhutan");  
+        
+List&lt;Country&gt; listOfCountries = new ArrayList&lt;Country&gt;();  
+listOfCountries.add(indiaCountry);  
+listOfCountries.add(chinaCountry);  
+listOfCountries.add(nepalCountry);  
+listOfCountries.add(bhutanCountry); 
+
+Collections.sort(listOfCountries,new Comparator&lt;Country&gt;() {  
+  @Override
+  public int compare(Country o1, Country o2) {
+    return o1.getCountryName().compareTo(o2.getCountryName());
+  }
+});
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href='http://howtodoinjava.com/2013/07/09/useful-java-collection-interview-questions/' #why_map_not_extend_collection">Useful Java Collection Interview Questions</a> <br />
+(2) <a href='http://websphereemerge.blogspot.kr/' >Title Image</a> <br />
+(3) <a href='http://www.java-redefined.com/2014/05/java-collection-interview-questions.html' >http://www.java-redefined.com</a> <br />
+(4) <a href='http://www.java2blog.com/2013/02/difference-between-comparator-and.html' >http://www.java2blog.com/</a> <br />
+(5) <a href='http://www.javatpoint.com/java-collections-interview-questions' >http://www.javatpoint.com</a> <br />
+(6) <a href='http://stackoverflow.com/questions/14200489/collection-iterator-remove-vs-collection-remove' >SO:  Iterator.remove() vs Collection.remove()</a></p>]]></description><link>http://1ambda.github.io/java-interview-questions-collection-framework/</link><guid isPermaLink="false">617c586a-498c-458f-aad2-67156cb56b52</guid><category><![CDATA[collection]]></category><category><![CDATA[java]]></category><category><![CDATA[interview]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 22 Feb 2015 16:27:11 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, Membership Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
 
 <p>왜 <em>membership</em> 이란 개념이 클라우드 컴퓨팅에 필요할까요? </p>
 
@@ -224,7 +433,7 @@
 
 <p>슬라이드에서 볼 수 있듯이 <em>infection style dissemination</em> 은 <code>λ log(N)</code> <em>protocol periods</em> 후에 <code>N^-(2λ-2)</code> 개의 프로세스만 업데이트되지 않습니다. 바꿔말하면 <code>O(logN)</code> 후에 대부분의 프로세스는 발견돈 <em>failure</em> 정보를 업데이트 한다는 뜻입니다. </p>
 
-<p>여기서 <code>λ</code> 는 <em>consistency level</em> 을 결정하는 상수입니다. 어떤 경에서든 <em>SWIM detector</em> 가 <em>failure</em> 를 <code>2N-1</code> 내에 발견하기 때문에 <em>completeness</em> 는 100% 보장됩니다.</p>
+<p>여기서 <code>λ</code> 는 <em>consistency level</em> 을 결정하는 상수입니다. 어떤 경우에도 <em>SWIM detector</em> 는 <em>failure</em> 를 <code>2N-1</code> 내에 발견하기 때문에 <em>completeness</em> 100% 가 보장됩니다.</p>
 
 <p><br/></p>
 
@@ -267,8 +476,7 @@
 
 <h3 id="refs">Refs</h3>
 
-<p>잘 보면 <code>N</code> 변수와 관련 없는데,
-(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
 (2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-membership-protocol/</link><guid isPermaLink="false">146da27a-1df0-44d0-a8e1-3020c05f0d22</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[membership]]></category><category><![CDATA[SWIM]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 22 Feb 2015 07:02:52 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, Gossip Protocol]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
 
 <h3 id="multicast">Multicast</h3>
@@ -4082,192 +4290,4 @@ private int bland() {
 (2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
 (3) <a href='http://www.explainxkcd.com/wiki/index.php/287:_NP-Complete' >getRandomNumber image</a> <br />
 (4) <a href='http://www.programering.com/a/MzM2IDNwATM.html' >Lecture note</a> <br />
-(5) <a href='http://mathworld.wolfram.com/Convex.html' >Mathword convex</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-linear-programming/</link><guid isPermaLink="false">13fdf909-5ce5-407a-a94f-1d9c14b9ef80</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[linear programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 08:28:26 GMT</pubDate></item><item><title><![CDATA[Problem Reduction]]></title><description><![CDATA[<p><img src='https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png'  alt="" /></p>
-
-<p>앞으로 남은 3챕터에서 배울 내용은</p>
-
-<p><strong>reduction</strong>, <strong>linear programming</strong>, <strong>intractability</strong> 이다.</p>
-
-<p>따라서 지금까지의 관심에서 좀 벗어나 </p>
-
-<ul>
-<li>from individual problems to <em>problem-solving models</em></li>
-<li>from linear / quadratic to <em>polynomial / exponential scale</em></li>
-<li>from details of implementation to <em>conceptual framework</em></li>
-</ul>
-
-<h3 id="introtoreduction">Intro to Reduction</h3>
-
-<p><em>reduction</em> 챕터에서는 다음의 내용을 다룬다.</p>
-
-<ul>
-<li>design algorithms </li>
-<li>estabilish lower bounds</li>
-<li>classify problems</li>
-</ul>
-
-<p><em>reduction</em> 의 정의부터 보면</p>
-
-<blockquote>
-  <p>Problem <code>X</code> <strong>reduces to</strong> problem <code>Y</code> if you can use an algorithm that solves <code>Y</code> to help solve <code>X</code></p>
-</blockquote>
-
-<p>따라서 <code>X</code> 를 푸는데 드는 비용은 <em>reduction</em> 과, <code>Y</code> 를 해결하는 비용의 합이다.</p>
-
-<p><em>median</em> 을 찾는 문제의 경우, 정렬문제로 변환할 수 있다. 이 때의 비용은 <code>N logN + 1</code>인데, <em>reduction</em> (<em>post or preprocessing</em>) 비용이 <code>1</code> 이다.</p>
-
-<p>중복 원소를 제거하는 문제의 경우 정렬뒤, 인접한 원소간 비교하여 제거하는 문제로 치환할 수 있다. <code>N logN + N</code> 의 비용으로, 이 경우 <em>reduction</em> 비용은 <code>N</code> 이다.</p>
-
-<p><em>min cut</em> 의 경우 <em>max flow</em> 알고리즘을 이용해서 풀 수 있고, <em>reduction</em> 하는데 <em>DFS</em> 또는 <em>BFS</em> 로 한번 돌려야 하므로, 치환 비용은 <code>V + E</code> 다.</p>
-
-<p>이외에도 다양한 <em>reduction</em> 예제가 있다.</p>
-
-<ul>
-<li>3-collinear -> sorting</li>
-<li>CPM -> topological sorting</li>
-<li>arbitrage -> shortest path (벨만포드)</li>
-<li>Burrows-Wheeler transform -> suffix sort</li>
-</ul>
-
-<p>따라서 <code>Y</code> 문제를 풀 수 있을때, <code>X</code> 에 적용 가능한지가 문제가 된다.</p>
-
-<h3 id="convexhull">Convex hull</h3>
-
-<p><img src='http://cgm.cs.mcgill.ca/' ~orm/images/mergech.gif" alt="" /></p>
-
-<p align="center">(<a href='http://cgm.cs.mcgill.ca/' ~orm'>http://cgm.cs.mcgill.ca/~orm</a>)</p>
-
-<p><em>convex hull</em> 은 <em>sorting</em> 으로 바꿀 수 있다.</p>
-
-<blockquote>
-  <p><strong>convex hull:</strong> Given <code>N</code> points in the plane, identify the extream points of the convex hull (in counterclockwise order)</p>
-  
-  <p><strong>sorting:</strong> Given <code>N</code> distinct integers, rearrange them in ascending order</p>
-</blockquote>
-
-<p><em>reduction</em> 가능한지는 <em>Graham scan algorithm</em> 으로 증명된다. 비용은 <code>N logN + N</code> 으로, <em>reduction</em> 에 <code>N</code> 만큼의 비용이 든다.</p>
-
-<h4 id="grahamscan">Graham Scan</h4>
-
-<p>먼저 <em>cross product (외적)</em> 에 대해 잠깐 보고가자. 내적은 스칼라지만, 외적은 또 다른 벡터를 돌려준다. 두 벡터에 대해 수직인 벡터를 돌려주고, 그 크기는 두 벡터로 만들어지는 평행사변형의 넓이다.</p>
-
-<p><img src='http://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Cross_product_parallelogram.svg/220px-Cross_product_parallelogram.svg.png'  alt="" /></p>
-
-<p>외적은 벡터를 돌려주고, 그 방향이 <code>sin</code> 에 기반하기 때문에 두 벡터 <code>a, b</code> 의 외적 <code>a x b</code> 의 값에 따라 <code>a</code> 를 기준으로 <code>b</code> 가 좌측에 있는지, 우측에 있는지 알 수 있다. 위 그림에서 <code>b</code> 가 아래쪽을 향할때 <code>a x b</code> 의 방향이 어디가 될지 생각해 보자.</p>
-
-<p><img src='https://lh3.googleusercontent.com/MIO3c8kg5MTNkze8w5Y6AGfDNWF9Vx4EVvlui8S5grVNWbgXBcpIch7E4R2DRr4B4HSlbLOHSBy39UMHLhTOqLkbnjQMCqtN-VBYkcEfeOEDjAyoCFzMllfpUHUicltzfw'  alt="" />
-<img src='https://lh6.googleusercontent.com/aaQEU_goK5dBbB_sct7YxtFafk5968K4yDH5nssYy2RSrieKv0yl-FSQbwgxKgc6sRyxum057PTPW9CfJ83Hr3B3aR4yXWTkaQj3mQEPu35-mhB3epOF1IrFCqsBVKiK3g'  alt="" /></p>
-
-<p align="center">(<a href='http://blog.secmem.org/554' >http://blog.secmem.org/554</a>)</p>
-
-<p>이제 <em>graham scan</em> 알고리즘을 보면</p>
-
-<ul>
-<li>choose point <code>p</code> with smallest y-coordinate</li>
-<li><strong>sort</strong> points by polar angle with <code>p</code> to get simple polygon</li>
-<li>consider points in order, and discard those that would create a clockwise turn</li>
-</ul>
-
-<p><em>polar angle</em> 은</p>
-
-<p><img src='http://cf.ydcdn.net/1.0.1.26/images/main/polar%20coordinate.jpg'  alt="" /></p>
-
-<p align="center">(<a href='http://www.yourdictionary.com/' >http://www.yourdictionary.com</a>)</p>
-
-<p>그리고 <em>clockwise turn(시계방향)</em> 인지 아닌지 외적으로 구할 수 있다. 외적값이 음수면 시계방향이다. </p>
-
-<p>따라서 최초의 다각형에서, 선분을 순회하면서 현재 선분과 다음 점을 외적해서 반시계 방향인 점들만 택하면 된다. 그러므로 정렬 + 순회이므로 <em>linear time</em> 이다.</p>
-
-<p><a href='http://www.hanbit.co.kr/network/view.html?bi_id=1462' >더 읽을거리: Gift wrapping</a></p>
-
-<h4 id="shortestpath">Shortest Path</h4>
-
-<p>(non-negative weights) <em>undirected graph</em> 의 최단거리도 <em>directed graph</em> 로 치환해서 풀 수 있다. 각 <em>edge</em> 에 양쪽으로 모두 방향을 추가하면 된다. 러닝타임은 <code>E logV + E</code>, 여기서 <code>E</code> 는 <em>reduction cost</em> 다.</p>
-
-<blockquote>
-  <p>Can still solve shortest paths problem in undirected graphs (if no negative cycles), but need omre sophistcated techniques</p>
-</blockquote>
-
-<h4 id="lineartimereductions">Linear-time reductions</h4>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/1.png'  alt="" /></p>
-
-<h3 id="establishinglowerbounds">Establishing Lower Bounds</h3>
-
-<p><em>comparison-sorting</em> 알고리즘의 <em>lower bound</em> 는 <code>n log n</code> 임을 이전 강의에서 봤었다. <a href='http://1ambda.github.io/randomized-selection/' #lowerboundforsorting">Lower bound for sorting</a> 참조</p>
-
-<p>일반적으로 어떤 문제의 <em>lower bound</em> 를 알긴 상당히 난해한데, <em>reduction</em> 을 이용해서 어떤 문제가 <em>sorting</em> 처럼 이미 <em>lower bound</em> 가 알려진 문제로 변경할 수 있다면 <em>lower bound</em> 를 알 수 있다. (<em>reduction cost</em> 가 그리 크지 않다고 한다면)</p>
-
-<h4 id="lineartimereductions">Linear-time reductions</h4>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/3.png'  alt="" title="" /> </p>
-
-<blockquote>
-  <p>Problem <code>X</code> <strong>linear-time reduces</strong> to problem <code>Y</code> if <code>X</code> can be solved with</p>
-  
-  <ul>
-  <li>Linear number of standard computational steps</li>
-  <li>Constant number of calls to <code>Y</code></li>
-  </ul>
-</blockquote>
-
-<p>따라서 문제 <code>X</code> 를 <code>Y</code> 로 <em>linear-time reduction</em> 이 가능하다면 같은 <em>lower bound</em> 를 적용할 수 있다. <code>X</code> 가 <code>k</code> 시간이 걸린다면, <code>Y</code> 도 그러하다는 것이다.</p>
-
-<p>그리고 <code>Y</code> 를 더 빨리 풀 수 있는 기법이 개발되면 <code>X</code> 에도 적용 가능하다는 뜻이다.</p>
-
-<h4 id="lowerboundforconvexhull">Lower bound for convex hull</h4>
-
-<blockquote>
-  <p><strong>Proposition:</strong> in quadratic decision tree model (allows linear or quadratic tests), any algorithms for sorting <code>N</code> integers requires <code>Ω(N logN)</code> steps</p>
-  
-  <p><strong>Proposition:</strong> sorting linear-time reduces to convex hull. So if I can solve convex hull efficiently, I can sort efficiently</p>
-</blockquote>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/2.png'  alt="" title="" /> 
-이미지를 잘 보면 <em>convex hull</em> 이 <code>y = x^2</code> 선 위에 있다. 그리고 이 위에 있는 모든 점들이 정렬된 순서인걸 볼 수 있다. 그리고 정렬 대상이 2차원 좌표긴 하지만 <em>quadratic decision tree model</em> 내에 있으므로 정렬 문제로 <em>linear-time reduction</em> 이 가능하다.</p>
-
-<blockquote>
-  <p><strong>Implication:</strong> Any <em>ccw-based</em> convex hull algorithm requires <code>Ω(N logN)</code> ops (linear or quadratic tests)</p>
-</blockquote>
-
-<p>이외에도</p>
-
-<blockquote>
-  <ul>
-  <li><p>Element distinctness linear-time reduces to finding the mode because if the most frequent integer occurs more than once, then there is a duplicated integer.</p></li>
-  <li><p>Closest pair linear-time reduces to element distinctness because the distance between the closest pair is zero if and only if there is a duplicated integer.</p></li>
-  </ul>
-</blockquote>
-
-<p>두 원소가 같을때만 제거하므로, 위의 문제들로 <em>linear-time reduction</em> 이 가능하다.</p>
-
-<h3 id="classifyingproblems">Classifying Problems</h3>
-
-<p>두 문제 <code>X, Y</code> 가 복잡도가 같음을 보이고 싶다면</p>
-
-<ul>
-<li>show that <code>X</code> <em>linear-time reduces</em> to <code>Y</code></li>
-<li>show that <code>Y</code> <em>linear-time reduces</em> to <code>X</code></li>
-</ul>
-
-<p>그러면 <code>X</code>, <code>Y</code> 가 같은 복잡도를 가지고 있다고 말할 수 있다. 심지어 복잡도를 모름에도.</p>
-
-<p>그리고 서로 <em>reduction</em> 이 가능하므로 한 문제에 대해 빠른 알고리즘을 개발해서, 다른 곳으로 적용이 가능하다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/4.jpg'  alt="" title="" /> </p>
-
-<ul>
-<li>use exact algorithm for tractable problems</li>
-<li>use heuristics for intractable problems</li>
-</ul>
-
-<h3 id="reference">Reference</h3>
-
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
-(3) <a href='https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png' >xkcd image</a> <br />
-(4) <a href='http://cgm.cs.mcgill.ca/' ~orm/mergech.html">Convex hull image</a> <br />
-(5) <a href='http://ghebook.blogspot.kr/2010/07/vector.html' >전파거북이 - 좌표계 기반 벡터</a> <br />
-(6) <a href='http://blog.secmem.org/554' >소프트웨멤버십 - Convex hull</a> <br />
-(7) <a href='http://www.yourdictionary.com/polar-coordinate' >Polar angle image</a> <br />
-(8) <a href='http://web.cs.dal.ca/' ~mhe/csci3110/handouts/lecture9.htm">sorting - convex hull image</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-reduction/</link><guid isPermaLink="false">0e589543-7f20-4371-9067-2c2db77adb31</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[reduction]]></category><category><![CDATA[convex hull]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 30 Dec 2014 09:05:04 GMT</pubDate></item></channel></rss>
+(5) <a href='http://mathworld.wolfram.com/Convex.html' >Mathword convex</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-linear-programming/</link><guid isPermaLink="false">13fdf909-5ce5-407a-a94f-1d9c14b9ef80</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[linear programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 08:28:26 GMT</pubDate></item></channel></rss>
