@@ -1,5 +1,287 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 22 Feb 2015 16:46:09 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Java Interview Questions, Collection Framework]]></title><description><![CDATA[<p><img src='http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 28 Feb 2015 16:28:13 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, P2P Systems]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<p>P2P 시스템의 기술들은 <em>cloud computing</em> 의 많은 분야에서 활용됩니다. 뒤에서 배울 <em>Chord P2P hashing</em> 같은 경우는 <em>Cassandra</em>, <em>Voldmort</em> 등의 <em>key-value store</em> 에서 쓰이고 있습니다. </p>
+
+<p><br/></p>
+
+<h3 id="napster">Napster</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/napster.png'  alt="" /></p>
+
+<p>최초에 <em>peer</em> 는 서버에게 메세지를 보내 P2P 시스템에 가입했다는 사실을 알립니다.</p>
+
+<p><em>Napster</em> 에서는 중앙에 서버를 두어, 파일이 저장된 <em>peer</em> 를 기록합니다. 각 <em>peer</em> 는 파일이 어디있는지 검색하기 위해 중앙 서버에 질의해야 합니다. 그림에서 볼 수 있듯이, 각 파일은 서버가 아니라 <strong>클라이언트</strong> 에 저장되어 있습니다. 파일이 어느 클라이언트(<em>peer</em>) 에 저장되어있는지 알게되면, <em>ping</em> 을 날려 살아있는지 확인 후 파일을 다운 받습니다. </p>
+
+<p><em>Napster</em> 의 문제점은</p>
+
+<ul>
+<li>중앙 서버로의 요청이 너무나 많습니다.</li>
+<li><p>서버가 다운되면, 시스템이 멈춥니다.</p>
+
+<p><br/></p></li>
+</ul>
+
+<h3 id="gnutella">Gnutella</h3>
+
+<p><em>Gnutella</em> 는 <em>Napster</em> 시스템에서 <strong>서버</strong>를 제거했습니다. 각 클라이언트 (<em>peer</em>) 는 파일이 어디 저장되어있는지 파악하기 위해 서로 통신하지요. 이처럼 클라이언트가 서버처럼 행동하기때문에 <em>servent</em> 라 부르기도 합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella.png'  alt="" /></p>
+
+<p>위 슬라이드에서 알 수 있듯이, 각 피어는 근처에 있는 피어로의 링크를 가지고 있습니다. 이 링크는 <em>overlay graph</em> 라 부르기도 합니다.</p>
+
+<p><em>gnutella</em> 에서 피어간 통신에 사용되는 주요 메세지 타입은</p>
+
+<ul>
+<li><strong>Query:</strong> search</li>
+<li><strong>QueryHit:</strong> reponse to query</li>
+<li><strong>Ping:</strong> to probe network for other peers</li>
+<li><strong>Pong:</strong> reply to ping, contains address of another peer</li>
+<li><strong>Push:</strong> used to initiate file transfer</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_header.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_search_ttl.png'  alt="" /></p>
+
+<p>위 그림에서 <code>TTL = 2</code> 이기 때문에 <em>query</em> 메세지는 <em>2-hop</em> 까지만 전파됩니다. 그리고 <em>gnutella</em> 에서는 각 피어가 최근에 퍼트린 <em>query</em> 메세지 리스트를 유지하고 있기 때문에 같은 메세지를 다시 전파하지 않습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_queryhit_msg.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_queryhit_msg_ex.png'  alt="" /></p>
+
+<p>피어가 보낸 <em>query</em> 에 대해 해당하는 파일을 가지고 있다는 응답은 <em>query hit</em> 메세지를 통해 전달됩니다.</p>
+
+<p><em>gnutella</em> 에서는 과도한 트래픽을 방지하기 위해 다음의 방법을 사용합니다.</p>
+
+<ul>
+<li>to avoid duplicate transmissions, each peer maintains a list of recently received messages</li>
+<li>query forwarded to all neighbors except peer from which received</li>
+<li>each query (identified by <code>DescriptorID</code>) forwarded only once</li>
+<li><em>QueryHit</em> routed back only to peer from which <em>Query</em> received with same <code>DescriptorID</code></li>
+<li>for flooded messages, duplicates with same <code>DescriptorID</code> and <em>Payload descriptor</em> are dropped</li>
+<li><em>QueryHit</em> with <code>DescriptorID</code> for which <em>Query</em> not seen is dropped</li>
+</ul>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/after_receiving_queryhit.png'  alt="" /></p>
+
+<p><em>QueryHit</em> 메세지를 <em>requestor</em> 가 받으면 최적의 <em>responder</em> 를 고르고,  <strong>HTTP</strong> 를 이용해서 몇번의 통신을 한 뒤 파일을 전송받습니다. 여기서 <em>gnutella</em> 가 <em>HTTP</em> 를 이용하는 이유는, HTTP 가 <em>standard</em>, <em>well-debugged</em>, <em>widely used</em> 이기 때문입니다.</p>
+
+<p>그런데 만약, <em>responder</em> 가 방화벽(<em>firewall</em>) 뒤에 있으면 어떻게 될까요? 일반적으로 방화벽은 <em>incomming message</em> 를 필터링 합니다. <em>gnutella</em> 는 이럴 경우 대비해 <em>push</em> 를 만들어 놓았습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/dealing_with_firewalls.png'  alt="" /></p>
+
+<p><em>query hit</em> 메세지를 받은 후에 <em>requestor</em> 가 보내는 <em>HTTP</em> 메세지에 <em>responder</em> 가 응답하지 않으면 <em>overlay link</em> (이미 연결되어있는) 을 통해서 <em>push</em> 메세지를 <em>requestor</em> 가 보냅니다. <em>responder</em> 는 방화벽 뒤에 있어도, <em>overlay link</em> 를 통해 받은 <em>push</em> 메세지를 확인하고 파일 전송을 시작합니다.</p>
+
+<p>만약 <em>requestor</em> 가 방화벽 뒤에 있다면, <em>gnutella</em> 프로토콜로는 파일을 전송 받을 수 없습니다.</p>
+
+<p><br/></p>
+
+<p><em>gnutella</em> 에서 생기는 문제점은 </p>
+
+<ul>
+<li><em>ping/pong</em> constituted 50% traffic: use multiplex, cache and reduce freq of <em>ping/pong</em></li>
+<li>modem-conncted hosts do not have enough bandwidth for passing gnutella traffic: use a central server to act as proxy for such peers. or use <strong>FastTrack System</strong></li>
+<li>large number of <em>free loaders</em></li>
+<li>flooding causes excessive traffic: use <strong>Structured P2P system</strong> e.g <strong>Chord System</strong></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="fasttrac">FastTrac</h3>
+
+<p><em>FastTrac</em> 은 <em>Kazza</em>, <em>KazzaLite</em>, <em>Grokster</em> 라는 기술을 기반으로 한 <em>Napster</em> <em>Gnutella</em> 의 하이브리드입니다. </p>
+
+<p><em>healthier participants</em> 를 이용하겠다는 기본적인 아이디어로부터 출발했습니다. <em>gnutella</em> 와 비슷하지만 노드중 일부가 <em>supernode</em> 가 되어, 특별한 역할을 수행합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/fast_trac.jpg'  alt="" /></p>
+
+<ul>
+<li><em>supernode</em>는 <em>Napster server</em> 와 비슷하게 근처에 있는 노드의 <code>&lt;file name, peer point&gt;</code> 리스트를 저장합니다</li>
+<li><em>supernode</em> 의 멤버십은 시간이 지나면서 변합니다</li>
+<li>어떤 노드도 <em>supernode</em> 가 될 수 있습니다. 그러기 위해서는 <em>reputation</em> 을 얻어야 합니다</li>
+<li>각 노드는 데이터를 탐색하기 위해 <em>supernode</em> 에 질의합니다</li>
+</ul>
+
+<p>이 <em>reputation system</em> 은 <em>Kazaalite</em> 처럼 <em>upload</em> 한 파일의 양으로 결정할 수도 있고, 경제학적인 원리를 적용한 방법도 있습니다</p>
+
+<p><br/></p>
+
+<h3 id="bittorrent">BitTorrent</h3>
+
+<p>이전에 언급했듯이 <strong>다운만 받는 peer</strong> 도 존재할 수 있습니다. <em>BitTorrent</em> 는 업로드 하는 <em>peer</em> 에게 보상을 해 주어, <em>peer</em> 들의 업로드를 더 이끌어 낼 수 있습니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/bit_torrent_network.jpg'  alt="" /></p>
+
+<p><em>BitTorrent</em> 네트워크 구성은 위 슬라이드와 같습니다.</p>
+
+<ul>
+<li><strong>Tracker:</strong> 파일당 하나씩 존재하며 <em>heartbeat</em> 를 받아 <em>peer</em> 의 <em>join</em>, <em>leave</em> 를 관리합니다.</li>
+<li><strong>Seed:</strong> 전체 파일을 가지고 있는 <em>peer</em> </li>
+<li><strong>Leecher:</strong> 파일의 일부분을 가지고 있는 <em>peer</em> </li>
+</ul>
+
+<p><em>BitTorrent</em> 에서는 블럭단위로 파일을 전송하는데, 이 때 사용하는 몇 가지 규칙이 있습니다.</p>
+
+<ul>
+<li><em>Local Rarest First:</em> 파일을 다운받을때, 귀한 블럭부터 먼저 받습니다</li>
+<li><em>Tit for tat:</em> 업로드 하는 만큼, 다운로드 <em>bandwidth</em> 를 할당받습니다. 다시 말해서 업로드를 많이해야 빠르게 받을 수 있습니다</li>
+<li><em>Choking:</em> 동시에 업로드하는 <em>neighbor</em> 수를 제한해서 <em>bandwidth</em> 가 너무 많이 사용되지 않도록 합니다. <em>best neighbor</em> 를 선택하여 <em>unchoked set</em> 을 유지하고, 주기적으로 이 집합을 재평가합니다. 이외의 다른 <em>peer</em> 는 <em>choked set</em> 입니다. </li>
+</ul>
+
+<p><em>optimistic unchoke</em> 기법은 주기적으로 랜덤한 <em>neighbor</em> 를 <em>unchoke</em> 해서, <em>unchoked set</em> 을 <em>fresh</em> 하게 유지합니다. 여기서 <em>random choice choking</em> 을 쓰는 이유는</p>
+
+<ul>
+<li>To avoid the sysem from getting stuck where only a few peers receive service</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="dht">DHT</h3>
+
+<p>지금까지 본 <em>Napster</em>, <em>Gnutella</em>, <em>FastTrac</em> 은 일종의 <em>DHT, Distribute Hash Table</em> 입니다.</p>
+
+<p><em>DHT</em> 에서의 <em>performance concerns</em> 는</p>
+
+<ul>
+<li>load balancing</li>
+<li>fault-tolerance</li>
+<li>efficiency of lookup and inserts</li>
+<li>locality</li>
+</ul>
+
+<p>우리가 배울 <em>Chord</em> 는 이런 구조가 적용된 <em>structured peer to peer system</em> 입니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/performance_comparison_nap_gnu.jpg'  alt="" /></p>
+
+<p><em>Napster</em> 는 <em>peer</em> 의 경우 파일을 저장하지 않기 때문에 메모리가 많이 들지 않지만, <em>server</em> 에서 많은 메모리를 요구합니다. 서버로 질의가 가기때문에 <em>lookup latency</em> 나 <em>lookup</em> 을 위한 메세지 수 자체는 많지 않지만, 서버의 부하가 상당히 심할 수 있습니다.</p>
+
+<p>반면 <em>Gnutella</em> 에서는 서버가 없습니다. 그렇기 때문에 피어는 파일이 저장되어있는 주변 피어의 목록을 가지고 있어야 하는데, <code>N</code> 만큼의 이웃이 주변에 있을 수 있습니다. 따라서 한 피어에서 필요한 메모리 양은 <code>O(N)</code> 입니다.</p>
+
+<p>그리고 네트워크가 직선으로 구성되어 있다고 할때, <em>lookup latency</em> 는 <code>O(N)</code> (<code>N-1</code>) 이고 룩업을 위한 메세지 수도 <code>O(N)</code> (<code>2(N-1)</code>) 입니다.</p>
+
+<p>반면 <em>Chord</em> 는 모두 <code>O(log N)</code> 입니다. 이론적으로 <em>constant</em> 는 아니지만, <em>real world</em> 에서는 상당히 낮은 수가 될 수 있습니다.</p>
+
+<p><br/></p>
+
+<h3 id="chord">Chord</h3>
+
+<p><em>Chord</em> 는 <em>Berkeley</em> 와 <em>MIT</em> 에서 개발된 <em>P2P</em> 프로토콜입니다.<em>latency</em> 와 <em>message cost of routing</em> (<em>lookups</em>/<em>inserts</em>) 를 줄이기 위해 지능적으로 <em>neighbor</em> 를 선택하고 <em>Consistent Hashing</em> 기법을 사용합니다.</p>
+
+<p><em>Consistent Hasing</em> 값은 <em>peer</em> 에 부여되는 주소값으로</p>
+
+<ul>
+<li>IP 와 Port로 <em>SHA1</em> 로 해싱해서 160 비트 스트링을 만들고 </li>
+<li><code>m</code> 비트로 절단해서 사용합니다</li>
+<li><em>peer</em> 의 <em>ID</em> 라 불리기도 하는데, 이 값은 당연히 최대 <code>2^m - 1</code> 입니다</li>
+<li>해싱값이므로 <em>unique</em> 하진 않지만 충돌이 일어날 확률은 굉장히 적습니다</li>
+<li>그리고 이 값이 <code>2^m</code> 개의 점이 되어 하나의 원을 구성합니다</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/ring_of_peers.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_finger_table.png'  alt="" /></p>
+
+<p>각 노드는 (반) 시계방향으로의 <em>successor</em> 를 가지고 있고, 다른 노드를 가리키기 위한 <em>finger table</em> 을 가지고 있습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_file_saving.png'  alt="" /></p>
+
+<p>파일도 마찬가지로 <em>SHA-1</em> 으로 해싱해서, 160 비트로 짜른 뒤 <code>mod 2^m</code> 연산해서, 같은 값이거나 그보다 큰 값을 가지는 <em>peer</em> 에 저장합니다.</p>
+
+<p>만약 균일하게 해싱된다면 <code>K</code> 개의 키, <code>N</code> 개의 피어에서 파일은 각 피어당 <code>K/N</code> 개씩 저장되므로 피어당 걸리는 부하는 <code>O(K/N)</code> 입니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_search_process.png'  alt="" /></p>
+
+<p>위 그림에서 <code>N80</code> 피어가 <code>K42</code> 파일을 찾을때, </p>
+
+<ul>
+<li><em>finger table</em> 에 <code>42</code> 가 없으므로 최대한 먼 <code>N16</code> 에 질의하고, </li>
+<li><code>N16</code> 은 <code>N32</code> 와 <code>N80</code> 밖에 모르므로 <code>N32</code> 를 거쳐 <code>N45</code> 로 질의합니다.</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_search_analysis.png'  alt="" /></p>
+
+<p><em>chrod search</em> 는 <code>O(log N)</code> 의 시간이 듭니다. 증명에 대한 <em>intuition</em> 은 쉽습니다.</p>
+
+<p>만약 현재 <code>Here</code> 에서 <code>Key</code> 를 모른다고 합시다. 그러면 그 거리의 <code>1/2</code> 만큼은 점프를 해야합니다. 그것보다 더 적게 점프하면 거리를 <code>d</code> 라 합시다. <em>finger table entry</em> 값은 2배씩 증가하기 때문에, <code>2d</code> 만큼 점프할 수 있는 엔트리가 있어야 하고, 그럼 애초부터 <code>2d</code> 만큼 점프했어야 했기 때문에 모순입니다.</p>
+
+<p><code>log(N)</code> 만큼의 점프 뒤에는 <em>key</em> 까지의 거리는 아무리 멀어봐야 <code>2^m / N</code> 입니다. 균일하게 분포되는 해싱을 쓴다 가정하면, 이 사이에는 적은 수의 노드만 있습니다. 따라서 <code>O(logN)</code> 만큼만 더 점프한다면 높은 확률로 <em>key</em> 를 찾을 수 있습니다. <code>O(logN) + O(logN) = O(logN)</code> 이므로, <em>search</em> 는 <code>O(logN)</code> 입니다.</p>
+
+<p><em>insertion</em> 도 <em>searching</em> 과 마찬가지로 <code>O(logN)</code> 입니다. 그러나 이 성능은 <em>finger table</em> 과 <em>successor</em> 가 잘못되지 않았을 경우에만 참입니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_multiple_successor.png'  alt="" /></p>
+
+<p><em>chrod</em> 는 <em>successor</em> 한개만 가질땐 <em>failure</em> 에 취약하기 때문에, 위 그림처럼 다수개의 <em>successor</em> 를 가질 수 있습니다. 이 경우 성능은 어떻게될까요?</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/multiple_successor_analysis.png'  alt="" /></p>
+
+<p><code>2log(N)</code> 개의 <em>successor</em> 를 유지할 경우를 한번 생각해 봅시다. <code>50%</code> 씩 <em>failure</em> 가 발생하면</p>
+
+<ul>
+<li>하나의 노드에서 유지하는 <em>successor</em> 중, 적어도 하나의 <em>successor</em> 가 살아있을 확률은</li>
+</ul>
+
+<p><img src='http://latex.codecogs.com/gif.latex?1%20-%20%28%7B1%20%5Cover%202%7D%29%5E%7B2logN%7D%20%3D%201%20-%20%7B1%20%5Cover%20N%5E2%7D'  alt="" /></p>
+
+<ul>
+<li>위 확률은 모든 살아있는 노드(<code>50%</code>) 에서 참일때, 다시 말해서 모든 노드에서 적어도 하나의 <em>successor</em> 가 존재할 확률은 <code>N</code> 이 매우 클때</li>
+</ul>
+
+<p><img src='http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20N%5E2%7D%29%5E%7BN/2%7D%20%3D%20e%5E%7B-%7B1%5Cover%202N%7D%7D%20%5Capprox%201'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_joining.png'  alt="" /></p>
+
+<ul>
+<li>a new peer affects <code>O(logN)</code> other finger entires in the system, on average</li>
+<li>number of messages per peer join <code>O(logN * logN)</code></li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_stabilization_protocol.png'  alt="" /></p>
+
+<p><em>join</em>, <em>leave</em>, <em>failure</em> 등 <em>churn</em> 이 자주 일어나므로 <em>loop</em> 가 있는지 없는지 검사하기 위해 주기적으로 <em>stabilization protocol</em> 를 사용합니다.</p>
+
+<p><br/></p>
+
+<h3 id="pastry">Pastry</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/pastry_routing.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/pastry_locality.png'  alt="" /></p>
+
+<p><em>Pastry</em> 는 <em>chord</em> 처럼 <em>node</em> 에 <em>id</em> 를 부여합니다. <em>routing table</em> 은 <em>prefix matching</em> 에 기반하기 때문에 <code>log(N)</code> 의 성능을 보여줍니다. 그리고 짧은 <em>prefix</em> 일 수록 가까이에 있을 확률이 높습니다.</p>
+
+<p><br/></p>
+
+<h3 id="kelips">Kelips</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips2.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips3.png'  alt="" /></p>
+
+<p><em>Kelips</em> 는 <em>1-hop lookup</em> 을 보여줍니다. 이럴 수 있는 이유는 위 그림에서 보듯이 <em>affinity group</em> 이란걸 사용하기 때문입니다. 루트 <code>N</code> 에 가까운 숫자 <code>k</code> 를 정하고, 이 수로 <code>mod</code> 연산을 해, 그룹을 만듭니다. 각각의 그룹은 내에 있는 모든 노드는 서로 어떤 파일을 저장하는지 알고 있습니다. 그리고 각 노드는 다른 그룹으로의 링크를 하나씩 가지고 있습니다. 따라서 어딜가든 거의 1번 혹은 2번 내에 <em>lookup</em> 이 가능합니다.</p>
+
+<p><em>chord</em> 에 비해 메모리를 더 잡아먹긴 합니다. <code>O(logN)</code> 보단 많은 양이지만, 그렇게 많지도 않습니다. 메모리가 귀하다면 <em>chord</em> 나 <em>pastry</em> 를, 그렇지 않고 <em>lookup</em> 속도가 중요하다면 <em>kelips</em> 를 사용하면 됩니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips4.png'  alt="" /></p>
+
+<p><em>membership</em> 은 <em>gossip-based</em> 프로토콜로 관리할 수 있습니다. </p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-p2p-systems/</link><guid isPermaLink="false">6e527ab7-0598-4177-b199-dd4ef466f537</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[P2P]]></category><category><![CDATA[Napster]]></category><category><![CDATA[Gnutella]]></category><category><![CDATA[BitTorrent]]></category><category><![CDATA[FastTrack]]></category><category><![CDATA[Chord]]></category><category><![CDATA[Pastry]]></category><category><![CDATA[Kelips]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 28 Feb 2015 16:18:25 GMT</pubDate></item><item><title><![CDATA[Java Interview Questions, Collection Framework]]></title><description><![CDATA[<p><img src='http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png'  alt="" /></p>
 
 <p><br/></p>
 
@@ -3999,295 +4281,4 @@ until no frequent or candidate set can be generated
 (3) <a href='http://www.programering.com/a/MDN4QTMwATQ.html' >Lecture note: intractability</a> <br />
 (4) <a href='http://simonsoftware.se/xkcdsw/comic.php?id=44' >xkcd image</a> <br />
 (5) <a href='http://physics.kenyon.edu/coolphys/thrmcmp/newcomp.htm' >Turing machine image</a> <br />
-(6) <a href='http://ko.wikipedia.org/wiki/P-NP_%EB%AC%B8%EC%A0%9C' >Wikipedia: P-NP 문제</a>  </p>]]></description><link>http://1ambda.github.io/intractability/</link><guid isPermaLink="false">720fd787-5da7-4853-9742-ecf8045586a3</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[intractability]]></category><category><![CDATA[P vs NP]]></category><category><![CDATA[NP completeness]]></category><category><![CDATA[search problem]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 18:47:29 GMT</pubDate></item><item><title><![CDATA[Linear Programming]]></title><description><![CDATA[<p><img src='https://d262ilb51hltx0.cloudfront.net/max/800/1' *WBYODRJUgH8h_QEPnaWS-w.png" alt="" /></p>
-
-<ul>
-<li><strong>linear programming:</strong> problem-solving model for optimal allocation of scarce resources, among a number of competing activities that <strong>encompasses</strong></li>
-</ul>
-
-<p><em>maxflow</em>, <em>MST</em>, <em>shortest paths</em>, <em>assigment</em>, <em>Ax = b</em>, <em>2-person zero-sum games</em> 등이 있다.</p>
-
-<p>다시 말해서, <em>constraints</em> 를 지키면서 특정 값을 <em>maximize</em> 하는 문제다. 따라서 주어진 문제를 아래의 형태로 <em>reduction</em> 해야 한다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<ul>
-<li>fast commercial colvers available</li>
-<li>widely applicable problem-solving model</li>
-<li>key subroutine for integer programming solves</li>
-</ul>
-
-<p>이므로 중요하다고 한다.</p>
-
-<h3 id="brewersproblem">Brewer's Problem</h3>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTWhKRE1pRldPM0lHTmlOV0x6a1RZaDFTTXpJMk10RVdZM1FXTDNJMk00SVROMkUyTDRFak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p>양조장에서 맥주 <code>ale</code>, <code>beer</code> 를 생산하는데, 재료인 <code>corn</code>, <code>hops</code> <code>malt</code> 에 의해 생산량이 정해진다. 그리고 두 맥주는 들어가는 재료의 비율이 <del>당연히</del> 다르다.</p>
-
-<p>이 때, 이익을 최대로 하는 각 맥주의 생산량을 구하는 문제다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWnpNbVl5SXpOa0JUWnhnVEwya0ROaTFTWTBZek10VWpNNFFXTDRFbVkxUXpZeWt6THdJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" />
-<img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWTRjRE1tSjJZaWhqWTFRVEx6WUdaNDBTTWhsek10UXpNakpXTHpFR08zVUdaM0V6THpJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<p>위 그림처럼 <em>contraints</em> 를 그래프 문제로 변환할 수 있다. 이 때 이익을 최대로 하는 <em>optimal solution</em> 은 <em>extreme point</em> 에 위치하는데 이 점들은 <em>2d</em> 에선 2개의 <em>constraints</em> (선분) 이 교차하는 지점에 위치한다.</p>
-
-<p>따라서</p>
-
-<blockquote>
-  <p><strong>Goal</strong> maximize linear objective function of <code>n</code> nonnegative variables, subjet to <code>m</code> linear equations</p>
-</blockquote>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TnhFV015UUdOaFpETjVJVExoWnpNaDFDTzNjek10TUdOemdUTDRNMk16STJNaEZ6TDFJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p>문제를 <em>standard form</em> 으로 표시하면</p>
-
-<ul>
-<li>add variable <code>Z</code> and equation corresponding to objective function</li>
-<li>add <em>slack</em> variable to convert each inequality to an equality</li>
-</ul>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<h4 id="geometry">Geometry</h4>
-
-<ul>
-<li>Inequalities define <strong>halfspaces</strong>. feasible region is a <strong>convex polyhedron</strong></li>
-<li>A set is <strong>convex</strong> if for any two points <code>a</code> and <code>b</code> in the set, so is <code>1/2(a+b)</code></li>
-<li>An <strong>extreme point</strong> of a set is a point in the set that can't be written as <code>1/2(a+b)</code>, where <code>a</code> and <code>b</code> are two distinct points in the set.</li>
-</ul>
-
-<p><img src='http://mathworld.wolfram.com/images/eps-gif/ConvexConcave_1000.gif'  alt="" /></p>
-
-<p align="center">(<a href='http://mathworld.wolfram.com/Convex.html' >http://mathworld.wolfram.com/Convex.html</a>)</p>
-
-<p>즉 두 점이 있을때 그 가운데 위치하는 점도 집합 안에 있으면 그 집합은 <em>convex</em> 라 부른다. <em>extreme point</em> 는 도형의 가장 바깥쪽 부분으로 그것보다 외부의 점이 없기 때문에 <code>1/2(a+b)</code> 로 바꿀 수 없다.</p>
-
-<ul>
-<li><strong>Extreme point property:</strong></li>
-</ul>
-
-<p>If there exists an optimal solution to <code>P</code> (plane), then there exists one that is an extreme point</p>
-
-<p>(1) Number of extreme points to consider is <strong>finite</strong> <br />
-(2) But number of extreme points can be <strong>exponential</strong> <br />
-(3) Extreme point optimal iff no better adjacent extreme point (<em>greedy property</em>)</p>
-
-<p>특히 3번은 중요한데, <em>global optimum</em> 인지 알기 위해 인접부분만 검사하면 된다. 이는 <em>objective function</em> 이 선형이고, <em>feasible region</em> 이 <em>convex</em> 이기 때문이다.</p>
-
-<h3 id="simplexalgorithm">Simplex Algorithm</h3>
-
-<p>1947년에 만들어진 알고리즘으로 20세기를 대표하는 탑 10 알고리즘중 하나라고 한다. <em>generic algorithm</em> 인데</p>
-
-<ul>
-<li>start at some extreme point</li>
-<li><strong>Pivot</strong> from one extreme point to an adjacent one (never decreasing objective function)</li>
-<li>repeat until optimal</li>
-</ul>
-
-<p>위에서 언급했던 <em>greedy property</em> 를 보면 이해가 쉽다. <em>objective function</em> 을 증가시키는 방향으로 <em>extreme point</em> 를 옮겨가다보면 <em>global optimum</em>을 찾을 수 있다.</p>
-
-<h4 id="basicfeasiblesolution">Basic feasible solution</h4>
-
-<blockquote>
-  <p>A <strong>basis</strong> is a subset of <code>m</code> of the <code>n</code> variables</p>
-</blockquote>
-
-<ul>
-<li>set <code>n-m</code> nonbasic variables to <code>0</code>, solve for remaining <code>m</code> variables</li>
-<li>solve <code>m</code> equations in <code>m</code> unknowns</li>
-<li>if unique and feasible => BFS</li>
-<li>BFS &lt;=> extream point</li>
-</ul>
-
-<p>뭔소린가 한참을 쳐다봤는데, 그림으로 이해하는게 더 쉽다. <code>n</code> 개의 변수중 <code>m</code> 개를 제외한 것을 다 <code>0</code> 으로 하고, 방정식을 풀면 된다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT21WMlloUm1aM2dUTmxKV0xsSm1ONTBDT3pVek10STJZM0lUTGtoVE9rTldaeWN6TDFRak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<p><em>slack variables</em> 로 구성된 <em>basis</em> 부터 시작해서 <em>pivot</em> 연산을 해 나아가면 된다. </p>
-
-<ul>
-<li>use the variable whose coefficient in objective function is positive to replace some one in the basis  (each unit increase in that variable from 0 increases objective value due to positive coefficient)</li>
-</ul>
-
-<p><em>objective function</em> 에서 계수가 양수인 수를 골라 치환하기 때문에 <code>Z</code> 값이 증가할수 밖에 없다. </p>
-
-<ul>
-<li>which variable to replace: </li>
-</ul>
-
-<p>Preserves feasibility by ensuring <code>RHS ≥ 0</code> and use minimum ratio rule: <code>min { 480/15, 160/4, 1190/20 }</code></p>
-
-<ul>
-<li>when to stop: When no objective function coefficient is positive.</li>
-</ul>
-
-<p>처음상태 <code>basis = {SC, SH, SM}</code> 에서 <em>constraint</em> <code>B</code> 를 <code>B = (1/15)(450 - 5A - SC)</code> 로 치환하면 <code>B</code> 가 <code>SC</code> 를 대신에 <em>basis</em> 에 들어간다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWjJFRE5qUkdNeElqTjNRV0wzVTJOaDFpTTNVMk10VVRPMGNUTDVZelkwWUdaMUl6THdVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" />
-<img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWhWVE5rbERabFJtTTRFV0xqRlRONTBpWmpWek10a1ROMFlXTGtOVFl5QWpNNUV6THlVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p algin="center">(<a href='http://www.programering.com/' >http://www.programering.com</a>)</p>
-
-<p><code>A</code> 까지 치환하면 <em>objective function</em> 에 양수 계수를 가지는 변수가 없으므로  <code>Z</code> 가 더 증가할 여지가 없다. </p>
-
-<h3 id="implementation">Implementation</h3>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTmtGRE1pZHpObEoyWXdrVEwwVVRZNDBTWjBNek10UWpaMVVUTHlJRE1pRkRNMEUyTDBNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWpkVFpqUkRad0FETjFFV0w1VW1aNTBpWTJVMk10Z0RONU1UTG1GV1kwQUROelEyTDNNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<pre><code class="java">public class Simplex  
-{
-    private double[][] a; // simplex tableaux
-    private int m, n; // M constraints, N variables
-
-    public Simplex(double[][] A, double[] b, double[] c)
-    {
-        m = b.length;
-        n = c.length;
-        a = new double[m+1][m+n+1];
-        for (int i = 0; i &lt; m; i++)
-            for (int j = 0; j &lt; n; j++)
-                a[i][j] = A[i][j];
-        for (int j = n; j &lt; m + n; j++) a[j-n][j] = 1.0;
-        for (int j = 0; j &lt; n; j++) a[m][j] = c[j];
-        for (int i = 0; i &lt; m; i++) a[i][m+n] = b[i];
-    }
-
-    //Find entering column q using Bland's rule: index of first column whose objective function coefficient is positive.
-    private int bland()
-    {
-        for (int q = 0; q &lt; m + n; q++)
-            if (a[M][q] &gt; 0) return q;
-                return -1;
-    }
-
-    //Find leaving row p using min ratio rule.
-    private int minRatioRule(int q)
-    {
-        int p = -1;//leaving row
-        for (int i = 0; i &lt; m; i++)
-        {
-            if (a[i][q] &lt;= 0) continue; //consider only positive entries
-            else if (p == -1) p = i;
-            else if (a[i][m+n] / a[i][q] &lt; a[p][m+n] / a[p][q])
-                p = i;
-        }
-        return p;
-    }
-
-    public void pivot(int p, int q)
-    {
-        for (int i = 0; i &lt;= m; i++)
-            for (int j = 0; j &lt;= m+n; j++)
-                if (i != p &amp;&amp; j != q)
-                    a[i][j] -= a[p][j] * a[i][q] / a[p][q];
-
-        for (int i = 0; i &lt;= m; i++)
-            if (i != p) a[i][q] = 0.0;
-        for (int j = 0; j &lt;= m+n; j++)
-            if (j != q) a[p][j] /= a[p][q];
-        a[p][q] = 1.0;
-    }
-
-    public void solve()
-    {
-        while (true)
-        {
-            int q = bland();
-            if (q == -1) break;//entering column q (optimal if -1)
-            int p = minRatioRule(q);//leaving row p (unbounded if -1)
-            if (p == -1) ...
-            pivot(p, q);
-        }
-}
-</code></pre>
-
-<p>원본은 이리로 <a href='http://algs4.cs.princeton.edu/65reductions/Simplex.java.html' >Simplex.java</a></p>
-
-<p>메인 로직 자체는 간단하다.</p>
-
-<p>(1) <code>bland()</code> 로 <em>positive coefficient</em> 인 변수를 찾고 <br />
-(2) <code>minRatioRule()</code> 로 어떤 <em>row</em> 택할지 결정한다 <br />
-(3) <code>pivot</code> </p>
-
-<p>변수의 수를 <code>N</code>, 제약조건(= <em>inequalities</em>)의 수를 <code>M</code> 이라 했을때 <code>M &gt;= N</code> 이면 러닝타임은 <code>M^2</code> 이다. 이는 <code>pivot</code> 연산이 대부분의 시간을 잡아먹기 때문.</p>
-
-<p>근데 실제 돌려보면 <code>2(M+N) pivot</code> 내에 끝난다고 한다. 왜 그런지는 연구중이라고 함.</p>
-
-<blockquote>
-  <p><strong>Pivoting rules:</strong> Carefully balance the cost of finding an entering variable with the number of pivots needed.</p>
-  
-  <ul>
-  <li><p>No pivot rule is known that is guaranteed to be polynomial.</p></li>
-  <li><p>Most pivot rules are known to be exponential (or worse) in worst-case.</p></li>
-  </ul>
-</blockquote>
-
-<h4 id="degeneracy">Degeneracy</h4>
-
-<p>똑같은 <em>extreme point</em> 에 대해서 <em>basis</em> 만 바뀌는 것을 말하는데 위에서 본 <em>bland's rule</em> 이 작은 값부터 차례대로 사용 가능한 변수를 돌려주므로 유한한 수의 피벗이 일어남을 보장한다. </p>
-
-<pre><code class="java">// Find entering column q using Bland's rule: 
-// index of first column whose objective function coefficient is positive.
-private int bland() {  
-    for (int q = 0; q &lt; m + n; q++)
-        if (a[M][q] &gt; 0) return q;
-            return -1;
-}
-</code></pre>
-
-<h4 id="implementationissues">Implementation Issues</h4>
-
-<ul>
-<li>Avoid stalling (degeneracy): requires artful engineering</li>
-<li>Maintain sparsity: requires fancy data structures</li>
-<li>Numerical stability: requires advances math</li>
-<li>Detect Infeasibility: run "phase i" simplex algorithm</li>
-<li>Detect unboundedness: no leaving row</li>
-</ul>
-
-<p>그러므로 직접 구현하지 말자.. <del>사실 이해도 어렵다. 만드는 것은 둘째치고</del></p>
-
-<h3 id="reductions">Reductions</h3>
-
-<p><em>unrestricted variable</em> <code>B</code> 가 있는 <em>minimization</em> 문제를 <em>standard form</em> 으로 <em>reduction</em> 하려면</p>
-
-<p>(1) <code>min(13A + 15B)</code> 를 <code>max(-13A - 15B)</code> 로 변경 <br />
-(2) <code>4A + 4B &gt; 160</code> <em>constraint</em> 를 <code>4A + 4B - S = 160</code> (<code>S &gt;= 0)</code> <br />
-(3) <code>B = B0 - B1</code> (<code>B0 &gt;= 0</code>, <code>B1 =&gt; 0</code>)</p>
-
-<h4 id="maxflow">Max Flow</h4>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTm1Cak4xRURNemNUTXpFVEx3UURNNTBpTjNNek10VWpZalZUTDNNVFoxWURPaUZ6TDVRek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p><em>capacity</em>, <em>flow</em> 를 <em>constraint</em> 로 쉽게 바꿀 수 있다. 앞에서 본 <em>max flow</em> 알고리즘과 비교했을때의 장점은 문제가 더 복잡해지더라도 <em>constraint</em> 만 추가하면 간단하다는 점이다. (성능은 더 느릴수 있다고 함)</p>
-
-<h4 id="bipartitematching">Bipartite Matching</h4>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjJJelloQnpOeFVtWjJJVEx5RWpNNTBTWjNVek10a1RZbWxUTGlKR04zWVdabUp6THpVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<p>여기서 <code>X_ij</code> 는 사람 <code>i</code> 에게 작업 <code>j</code> 가 할당되었는지의 여부다.</p>
-
-<p><img src='http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT2pCRE1oaFRPd2dET2hCVExpUm1OaTFpTndJMk10Y3pNbU5XTDNZbVp6SVRNalp6THhVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg'  alt="" /></p>
-
-<h3 id="summary">Summary</h3>
-
-<p><em>LP</em> 가 범용적이긴 한데, 먼저 <em>specialized algorithm</em> 을 사용해 보고 안되면 <em>LP</em> 를 쓰자.</p>
-
-<p><a href='https://medium.com/@_marcos_otero/the-real-10-algorithms-that-dominate-our-world-e95fa9f16c04' >읽을거리: The real 10 algorithms that dominate our world</a></p>
-
-<h3 id="references">References</h3>
-
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href='http://introcs.cs.princeton.edu/java/73dfa/' >http://introcs.cs.princeton.edu</a> <br />
-(3) <a href='http://www.explainxkcd.com/wiki/index.php/287:_NP-Complete' >getRandomNumber image</a> <br />
-(4) <a href='http://www.programering.com/a/MzM2IDNwATM.html' >Lecture note</a> <br />
-(5) <a href='http://mathworld.wolfram.com/Convex.html' >Mathword convex</a>  </p>]]></description><link>http://1ambda.github.io/algorithm-linear-programming/</link><guid isPermaLink="false">13fdf909-5ce5-407a-a94f-1d9c14b9ef80</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[linear programming]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 08:28:26 GMT</pubDate></item></channel></rss>
+(6) <a href='http://ko.wikipedia.org/wiki/P-NP_%EB%AC%B8%EC%A0%9C' >Wikipedia: P-NP 문제</a>  </p>]]></description><link>http://1ambda.github.io/intractability/</link><guid isPermaLink="false">720fd787-5da7-4853-9742-ecf8045586a3</guid><category><![CDATA[Algorithm]]></category><category><![CDATA[coursera]]></category><category><![CDATA[intractability]]></category><category><![CDATA[P vs NP]]></category><category><![CDATA[NP completeness]]></category><category><![CDATA[search problem]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 31 Dec 2014 18:47:29 GMT</pubDate></item></channel></rss>
