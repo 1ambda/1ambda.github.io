@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Coding The Matrix 2, Vector Space</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Coding The Matrix 2, Vector Space">
+  <meta name="twitter:description" content=" Linear Combinations b 와 v1, ..., vn 이 주어졌을때  a1, ..., an 을 찾을 수 있을까요?  있다면 unique solution 인지 어떻게 알 수 있을까요? Span The set of all linear combinations of some vectors v1, ..., vn is called span of these vector 이브가 만약 위와 같은식을 만족한다는 사실을 알고 있다면, 패스워드의 모든">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/coding-the-matrix-2/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+  <script src="../assets/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/coding-the-matrix-2/" />
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-52181619-1', '1ambda.github.io');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body>
+
+  <script src="../public/jquery.js?v=5e102a0e1b"></script>
+
+  
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Functional Programming</h4>
+  <div class="social border solid top_small bottom_small padding_medium">
+    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+  </div>
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-coursera tag-linear-algebra tag-vector-space tag-span">
+
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/linear-algebra">linear algebra</a>, <a href="../tag/vector-space">vector space</a>, <a href="../tag/span">span</a></h5>
+      <h1 class="margin_bottom_medium">Coding The Matrix 2, Vector Space</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-05">Thursday, March 05, 2015</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/coding-the-matrix-2/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><img src="http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg" alt="" /></p>
+
+<h3 id="linearcombinations">Linear Combinations</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/linear_combinations.png" alt="" /></p>
+
+<p><code>b</code> 와 <code>v1, ..., vn</code> 이 주어졌을때 </p>
+
+<ul>
+<li><code>a1, ..., an</code> 을 찾을 수 있을까요? </li>
+<li>있다면 <em>unique solution</em> 인지 어떻게 알 수 있을까요?</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="span">Span</h3>
+
+<ul>
+<li>The set of all linear combinations of some vectors <code>v1, ..., vn</code> is called <strong>span</strong> of these vector</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/span.png" alt="" /></p>
+
+<p>이브가 만약 위와 같은식을 만족한다는 사실을 알고 있다면, 패스워드의 모든 <em>span</em> <code>{a1, ..., an}</code> 에 대해서 적절한 <em>response</em> 를 추출할 수 있습니다. 증명은 위처럼 간단합니다.</p>
+
+<p><br/></p>
+
+<p>Let <code>V</code> be a set of vectors if <code>v1, ..., vn</code> are vectors such that <code>V</code> = Span <code>{v1, ..., vn}</code> then</p>
+
+<ul>
+<li>we say <code>{v1, ..., vn}</code> is a generating set for <code>V</code></li>
+<li>we refer to the vectors <code>v1, ..., vn</code> as generators for <code>V</code></li>
+</ul>
+
+<p><code>[x, y, z]</code> = <code>x[1,0,0] + y[0,1,0] + z[0,0,1]</code> 을 <code>R^3</code> 의 <em>standard generator</em> 라 부릅니다. </p>
+
+<p><br/></p>
+
+<h3 id="geometryofsetsofvectors">Geometry of Sets of Vectors</h3>
+
+<ul>
+<li><em>Span of the empty set:</em> just the origin, <strong>Zero-dimensional</strong></li>
+<li><em>Span</em> <code>{[1,2], [3,4]}</code>: all points in the plane, <strong>Two-dimensional</strong></li>
+<li><em>Span</em> <code>{[1,0,1.65], [0,1,1]}</code> is a plain in three dimensions</li>
+</ul>
+
+<p><code>k</code> 벡터의 <em>span</em> 은 <em>k-dimensional</em> 일까요? 아닙니다.</p>
+
+<ul>
+<li>Span <code>{[0, 0]}</code> 은 <em>zero-dimensional</em> 입니다.</li>
+<li>Span <code>{[1,3], [2,6]}</code> 은 <em>one-dimensional</em> 입니다. </li>
+<li>Span <code>{[1,0,0], [0,1,0], [1,1,0]}</code> 은 <em>two-dimensional</em> 입니다.</li>
+</ul>
+
+<p>그러면 어떤 벡터 <code>v</code> 가 있을때 <em>dimensionality</em> 를 어떻게 알아낼 수 있을까요?</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/geometry_of_sets.png" alt="" /></p>
+
+<p>위 그림에서 볼 수 있듯이 <em>origin</em> 을 포함하는 <em>geometry object</em> 를 표현하는 방법은 두가지 입니다. 각각은 나름의 쓰임새가 있습니다.</p>
+
+<p>(1) <em>span</em> of some vectors <br />
+(2) 우변이 <code>0</code> 인 <em>linear equation system</em> 의 집합</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/two_representation1.png" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/two_representation2.png" alt="" /></p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/common_representation1.png" alt="" /></p>
+
+<p><em>field</em> 의 서브셋은 3가지 속성을 만족합니다. <em>field</em> 를 <code>R</code> 이라 하면</p>
+
+<ul>
+<li>subset contains the zero vector</li>
+<li>if subset contains <code>v</code> then it contains <code>av</code> for every scala <code>a</code></li>
+<li>if subset contains <code>u</code> and <code>v</code> then it contains <code>u+v</code></li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/common_representation2.png" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/common_representation3.png" alt="" /></p>
+
+<p><code>F^D</code> 의 세가지 속성을 만족하는 <em>subset</em> 을 <strong>vector space</strong> 라 부릅니다. 그리고 <code>U</code> 가 <em>vector space</em> 고 <em>vector space</em> <code>V</code> 의 <em>subset</em> 일때, <code>U</code> 를 <code>V</code> 의 <em>subspace</em> 라 부릅니다.</p>
+
+<p>뒤에서 배울테지만 모든 <code>R^D</code> 의 <em>subspace</em> 는 <em>span</em> <code>{v1, ..., vn}</code> 과 <code>{x: a1 * x = 0, ..., an * x = 0}</code> 의 형태로 쓸 수 있습니다.</p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/abstract_vector_space.png" alt="" /></p>
+
+<p>우리는 벡터에 대해 <em>sequence</em> 나, <em>function</em> 을 정의하지 않았습니다. 단순한 <em>operator</em> 와 공리를 만족하는지, 그리고 <em>property</em> <code>V1, V2, V3</code> 정도만 따졌습니다. 벡터에 대한 이런 추상적 접근은 많은 장점이 있습니다. 그러나 이 수업에서는 사용하지 않겠습니다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/convex_hull.png" alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="vectorspace">Vector Space</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/exclude_origin_line.png" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/exclude_origin_plain.png" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_space.png" alt="" /></p>
+
+<p>벡터 <code>c</code> 와 벡터 스페이스 <code>V</code> 에 대해 <code>c + V</code> 와 같은 형태를 <em>affine space</em> 라 부릅니다.</p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination.png" alt="" /></p>
+
+<p><code>u1, u2, u3</code> 를 담고있는 <em>plain</em> 을 <code>u1 + V</code> 형태로 표현하고 싶습니다. 어떻게 해야할까요?</p>
+
+<p><code>V</code> 를 <em>span</em> <code>{a, b}</code> 라 하고 <code>a = u2 - u1</code>, <code>b = u3 - u1</code> 라 하면 <code>u1 + V</code> 는 <em>plain</em> 의 변환이지만, 그 자체로서 <em>plain</em> 입니다</p>
+
+<ul>
+<li><em>span</em> <code>{a, b}</code> 는 <code>0</code> 을 포함하므로 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는 <code>u1</code> 를</li>
+<li><em>span</em> <code>{a, b}</code> 는 <code>u2 - u1</code> 도 을 포함하므로 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는 <code>u2</code> 를</li>
+<li><em>span</em> <code>{a, b}</code> 는 <code>u3 - u1</code> 도 을 포함하므로 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는  <code>u3</code> 를 포함합니다.</li>
+</ul>
+
+<p>따라서 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는 <code>u1, u2, u3</code> 를 모두 포함하는 평면입니다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination2.png" alt="" /></p>
+
+<p>더 간단히 <code>ru1 + au2 + bu3</code> (<code>r + a + b = 1</code>) 로 <em>affine combination</em> 을 표현할 수 있습니다. 그리고 더 <em>formal</em> 하게 정의하면,</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination3.png" alt="" /></p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_equation.png" alt="" /></p>
+
+<p><em>affine space</em> 를 <em>a solution set of a system of linear equations</em> 으로 표현할 수 있습니다. 그런데, 역으로 이 솔루션이 <em>affine space</em> 일까요?</p>
+
+<p>반례를 하나 들어보면 <code>1x = 1, 2x = 1</code> 일때 솔루션은 없습니다. 그러나 벡터 스페이스 <code>V</code> 는 <em>zero vector</em> 를 가져야 하므로 <em>affine space</em> <code>u + V</code> 는 적어도 하나의 <em>vector</em> 는 가져아합니다. 모순이 발생합니다.</p>
+
+<ul>
+<li><strong>Theorem:</strong> <em>solution set of a linear system</em> 은 <em>empty</em> 거나 <em>affine space</em> 입니다. 증명은 아래와 같습니다.</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination_proof1.png" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination_proof2.png" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination_proof3.png" alt="" /></p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/number_of_solutions.png" alt="" /></p>
+
+<p>지금까지 증명한 것은, <code>u1</code> 이 <em>linear system</em> 의 솔루션일때, <code>u1 + v</code> (<code>v</code> in <code>V</code>) 도 솔루션이란 사실입니다. 여기서 <code>V</code> 는 <em>homogeneous linear system</em> 입니다. (우변이 <code>0</code> 인)</p>
+
+<p>따라서 </p>
+
+<ul>
+<li><em>unique solution</em> 을 가질때는 <code>V</code> 가 <code>0</code> 을 해로 가질 때이고</li>
+<li><em>GF(2)</em> 의 솔루션 수는 <code>0</code> 이거나, <code>V</code> 와 같습니다.</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="checksumfunction">Checksum function</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/checksum1.png" alt="" /></p>
+
+<p><em>corrupted</em> 파일이 올바른 파일로 인식될 경우는 오리지널 바이너리 <code>p</code> 에 대해 손상된 파일 <code>p+e</code> 가 위 슬라이드의 방정식을 만족할 경우입니다. </p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/checksum2.png" alt="" /></p>
+
+<p>이 확률은 모든 가능한 <code>n</code> 벡터에 대해 존재하는 솔루션의 수 이므로 굉장히 낮습니다.</p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href="http://colorsark.deviantart.com/art/3D-Cube-342632998">Title image</a> <br />
+(2) <strong>Coding the Matrix</strong> by <em>Philip Klein</em>  </p>
+    </section>
+
+    <footer>
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+    </footer>
+
+
+    <div id="disqus_thread" class="margin_top_big"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+      var disqus_identifier = '113';
+      var disqus_url = 'http://1ambda.github.io/coding-the-matrix-2/';
+    
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    </article>
+</main>
+
+
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+  <script>
+  $(document).ready(function(){
+    // Target your .container, .wrapper, .post, etc.
+    $("section").fitVids();
+  });
+  </script>
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function () {
+   var s = document.createElement('script'); s.async = true;
+   s.type = 'text/javascript';
+   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+   }());
+  </script>
+
+
+  </body>
+  </html>

@@ -1,5 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 03 Mar 2015 16:04:47 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Pattern Discovery 3]]></title><description><![CDATA[<p><img src='https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 04 Mar 2015 16:28:57 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Coding The Matrix 2, Vector Space]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
+
+<h3 id="linearcombinations">Linear Combinations</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/linear_combinations.png'  alt="" /></p>
+
+<p><code>b</code> 와 <code>v1, ..., vn</code> 이 주어졌을때 </p>
+
+<ul>
+<li><code>a1, ..., an</code> 을 찾을 수 있을까요? </li>
+<li>있다면 <em>unique solution</em> 인지 어떻게 알 수 있을까요?</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="span">Span</h3>
+
+<ul>
+<li>The set of all linear combinations of some vectors <code>v1, ..., vn</code> is called <strong>span</strong> of these vector</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/span.png'  alt="" /></p>
+
+<p>이브가 만약 위와 같은식을 만족한다는 사실을 알고 있다면, 패스워드의 모든 <em>span</em> <code>{a1, ..., an}</code> 에 대해서 적절한 <em>response</em> 를 추출할 수 있습니다. 증명은 위처럼 간단합니다.</p>
+
+<p><br/></p>
+
+<p>Let <code>V</code> be a set of vectors if <code>v1, ..., vn</code> are vectors such that <code>V</code> = Span <code>{v1, ..., vn}</code> then</p>
+
+<ul>
+<li>we say <code>{v1, ..., vn}</code> is a generating set for <code>V</code></li>
+<li>we refer to the vectors <code>v1, ..., vn</code> as generators for <code>V</code></li>
+</ul>
+
+<p><code>[x, y, z]</code> = <code>x[1,0,0] + y[0,1,0] + z[0,0,1]</code> 을 <code>R^3</code> 의 <em>standard generator</em> 라 부릅니다. </p>
+
+<p><br/></p>
+
+<h3 id="geometryofsetsofvectors">Geometry of Sets of Vectors</h3>
+
+<ul>
+<li><em>Span of the empty set:</em> just the origin, <strong>Zero-dimensional</strong></li>
+<li><em>Span</em> <code>{[1,2], [3,4]}</code>: all points in the plane, <strong>Two-dimensional</strong></li>
+<li><em>Span</em> <code>{[1,0,1.65], [0,1,1]}</code> is a plain in three dimensions</li>
+</ul>
+
+<p><code>k</code> 벡터의 <em>span</em> 은 <em>k-dimensional</em> 일까요? 아닙니다.</p>
+
+<ul>
+<li>Span <code>{[0, 0]}</code> 은 <em>zero-dimensional</em> 입니다.</li>
+<li>Span <code>{[1,3], [2,6]}</code> 은 <em>one-dimensional</em> 입니다. </li>
+<li>Span <code>{[1,0,0], [0,1,0], [1,1,0]}</code> 은 <em>two-dimensional</em> 입니다.</li>
+</ul>
+
+<p>그러면 어떤 벡터 <code>v</code> 가 있을때 <em>dimensionality</em> 를 어떻게 알아낼 수 있을까요?</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/geometry_of_sets.png'  alt="" /></p>
+
+<p>위 그림에서 볼 수 있듯이 <em>origin</em> 을 포함하는 <em>geometry object</em> 를 표현하는 방법은 두가지 입니다. 각각은 나름의 쓰임새가 있습니다.</p>
+
+<p>(1) <em>span</em> of some vectors <br />
+(2) 우변이 <code>0</code> 인 <em>linear equation system</em> 의 집합</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/two_representation1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/two_representation2.png'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/common_representation1.png'  alt="" /></p>
+
+<p><em>field</em> 의 서브셋은 3가지 속성을 만족합니다. <em>field</em> 를 <code>R</code> 이라 하면</p>
+
+<ul>
+<li>subset contains the zero vector</li>
+<li>if subset contains <code>v</code> then it contains <code>av</code> for every scala <code>a</code></li>
+<li>if subset contains <code>u</code> and <code>v</code> then it contains <code>u+v</code></li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/common_representation2.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/common_representation3.png'  alt="" /></p>
+
+<p><code>F^D</code> 의 세가지 속성을 만족하는 <em>subset</em> 을 <strong>vector space</strong> 라 부릅니다. 그리고 <code>U</code> 가 <em>vector space</em> 고 <em>vector space</em> <code>V</code> 의 <em>subset</em> 일때, <code>U</code> 를 <code>V</code> 의 <em>subspace</em> 라 부릅니다.</p>
+
+<p>뒤에서 배울테지만 모든 <code>R^D</code> 의 <em>subspace</em> 는 <em>span</em> <code>{v1, ..., vn}</code> 과 <code>{x: a1 * x = 0, ..., an * x = 0}</code> 의 형태로 쓸 수 있습니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/abstract_vector_space.png'  alt="" /></p>
+
+<p>우리는 벡터에 대해 <em>sequence</em> 나, <em>function</em> 을 정의하지 않았습니다. 단순한 <em>operator</em> 와 공리를 만족하는지, 그리고 <em>property</em> <code>V1, V2, V3</code> 정도만 따졌습니다. 벡터에 대한 이런 추상적 접근은 많은 장점이 있습니다. 그러나 이 수업에서는 사용하지 않겠습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/convex_hull.png'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="vectorspace">Vector Space</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/exclude_origin_line.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/exclude_origin_plain.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_space.png'  alt="" /></p>
+
+<p>벡터 <code>c</code> 와 벡터 스페이스 <code>V</code> 에 대해 <code>c + V</code> 와 같은 형태를 <em>affine space</em> 라 부릅니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination.png'  alt="" /></p>
+
+<p><code>u1, u2, u3</code> 를 담고있는 <em>plain</em> 을 <code>u1 + V</code> 형태로 표현하고 싶습니다. 어떻게 해야할까요?</p>
+
+<p><code>V</code> 를 <em>span</em> <code>{a, b}</code> 라 하고 <code>a = u2 - u1</code>, <code>b = u3 - u1</code> 라 하면 <code>u1 + V</code> 는 <em>plain</em> 의 변환이지만, 그 자체로서 <em>plain</em> 입니다</p>
+
+<ul>
+<li><em>span</em> <code>{a, b}</code> 는 <code>0</code> 을 포함하므로 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는 <code>u1</code> 를</li>
+<li><em>span</em> <code>{a, b}</code> 는 <code>u2 - u1</code> 도 을 포함하므로 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는 <code>u2</code> 를</li>
+<li><em>span</em> <code>{a, b}</code> 는 <code>u3 - u1</code> 도 을 포함하므로 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는  <code>u3</code> 를 포함합니다.</li>
+</ul>
+
+<p>따라서 <code>u1</code> + <em>span</em> <code>{a, b}</code> 는 <code>u1, u2, u3</code> 를 모두 포함하는 평면입니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination2.png'  alt="" /></p>
+
+<p>더 간단히 <code>ru1 + au2 + bu3</code> (<code>r + a + b = 1</code>) 로 <em>affine combination</em> 을 표현할 수 있습니다. 그리고 더 <em>formal</em> 하게 정의하면,</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination3.png'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_equation.png'  alt="" /></p>
+
+<p><em>affine space</em> 를 <em>a solution set of a system of linear equations</em> 으로 표현할 수 있습니다. 그런데, 역으로 이 솔루션이 <em>affine space</em> 일까요?</p>
+
+<p>반례를 하나 들어보면 <code>1x = 1, 2x = 1</code> 일때 솔루션은 없습니다. 그러나 벡터 스페이스 <code>V</code> 는 <em>zero vector</em> 를 가져야 하므로 <em>affine space</em> <code>u + V</code> 는 적어도 하나의 <em>vector</em> 는 가져아합니다. 모순이 발생합니다.</p>
+
+<ul>
+<li><strong>Theorem:</strong> <em>solution set of a linear system</em> 은 <em>empty</em> 거나 <em>affine space</em> 입니다. 증명은 아래와 같습니다.</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination_proof1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination_proof2.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/affine_combination_proof3.png'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/number_of_solutions.png'  alt="" /></p>
+
+<p>지금까지 증명한 것은, <code>u1</code> 이 <em>linear system</em> 의 솔루션일때, <code>u1 + v</code> (<code>v</code> in <code>V</code>) 도 솔루션이란 사실입니다. 여기서 <code>V</code> 는 <em>homogeneous linear system</em> 입니다. (우변이 <code>0</code> 인)</p>
+
+<p>따라서 </p>
+
+<ul>
+<li><em>unique solution</em> 을 가질때는 <code>V</code> 가 <code>0</code> 을 해로 가질 때이고</li>
+<li><em>GF(2)</em> 의 솔루션 수는 <code>0</code> 이거나, <code>V</code> 와 같습니다.</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="checksumfunction">Checksum function</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/checksum1.png'  alt="" /></p>
+
+<p><em>corrupted</em> 파일이 올바른 파일로 인식될 경우는 오리지널 바이너리 <code>p</code> 에 대해 손상된 파일 <code>p+e</code> 가 위 슬라이드의 방정식을 만족할 경우입니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/2-vector-space/checksum2.png'  alt="" /></p>
+
+<p>이 확률은 모든 가능한 <code>n</code> 벡터에 대해 존재하는 솔루션의 수 이므로 굉장히 낮습니다.</p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://colorsark.deviantart.com/art/3D-Cube-342632998' >Title image</a> <br />
+(2) <strong>Coding the Matrix</strong> by <em>Philip Klein</em>  </p>]]></description><link>http://1ambda.github.io/coding-the-matrix-2/</link><guid isPermaLink="false">5f630834-a38f-4833-a4a3-8d465a1c0b31</guid><category><![CDATA[coursera]]></category><category><![CDATA[linear algebra]]></category><category><![CDATA[vector space]]></category><category><![CDATA[span]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Wed, 04 Mar 2015 16:28:24 GMT</pubDate></item><item><title><![CDATA[Pattern Discovery 3]]></title><description><![CDATA[<p><img src='https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png'  alt="" /></p>
 
 <p>이번 시간에 배울 주제는 <em>Sequential Pattern Mining</em> 입니다.</p>
 
@@ -3750,444 +3927,4 @@ until no frequent or candidate set can be generated
 <h3 id="refs">Refs</h3>
 
 <p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
-(2) <a href='http://www.dailygalaxy.com/my_weblog/2013/10/artificial-intelligence-will-it-end-the-human-epoch.html' >brain image</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-3/</link><guid isPermaLink="false">6a780098-7f04-4775-882d-bfcb570c396b</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[PSP]]></category><category><![CDATA[PoP]]></category><category><![CDATA[state-space]]></category><category><![CDATA[plan-space]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 25 Jan 2015 04:59:52 GMT</pubDate></item><item><title><![CDATA[AI Planning 2, Heuristic Search and STRIPS]]></title><description><![CDATA[<p><img src='http://imgs.xkcd.com/comics/ai.png'  alt="" /></p>
-
-<p>이번 시간에는 <em>A* algorithm</em>, <em>heuristics</em>, <em>forward search</em> 등을 배운다.</p>
-
-<h3 id="heuristicsearchstrategies">Heuristic Search Strategies</h3>
-
-<p><em>FIFO</em> 나 <em>LIFO</em> 는 와 달리 <em>heuristic algorithm</em> 은 <em>search space</em> 에 대한 정보를 이용한다. </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/heuristic_function.png'  alt="" /></p>
-
-<p><em>heuristic function</em> <code>h: state space -&gt; R</code> 은, <em>problem-specific knowledge</em> 를 <em>problem-independent way</em> 로 표현한다. </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/best_first_search.png'  alt="" /></p>
-
-<p><em>best-first search</em> 알고리즘은 <em>general tree search</em> 알고리즘의 인스턴스로, 가장 낮은 <code>f(n)</code> 값을 가지는 노드를 선택해 탐색한다. 이를 위해 <code>f(n)</code> 값을 오름차순으로 정렬하는 <em>priority queue</em> 이용한다. </p>
-
-<p>만약 <code>f(n) = h(n)</code> 이면, <em>greedy best-first search</em> 라 부른다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/greedy_best_fs.png'  alt="" /></p>
-
-<p><em>optimal</em> 이 아닐 수 있다는 점에 유의하자.</p>
-
-<p>루마니아 투어 문제를 다시 보자.</p>
-
-<p><img src='https://spark-public.s3.amazonaws.com/aiplan/resources/touring-romania-map.png'  alt="" />
-<img src='https://spark-public.s3.amazonaws.com/aiplan/resources/touring-romania-heuristic.png'  alt="" /></p>
-
-<p><em>heuristic function</em> 으로 <em>straight line distance</em> 를 이용했는데, 실제 거리와는 차이가 있다. (꼬불꼬불하니까)</p>
-
-<h3 id="aalgorithm">A* algorithm</h3>
-
-<p><em>greedy best-first search</em> 알고리즘은 쉽지만, 항상 <em>optmial solution</em> 를 돌려주지 않는다는 단점이 있다. 여기서 배울 <em>A* algorithm</em> 은 항상 <em>optimal solution</em> 을 찾아낸다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_algorithm.png'  alt="" /></p>
-
-<p><code>h(n)</code> 은 휴리스틱 펑션이고, <code>g(n)</code> 은 <code>n</code> 에 도달하기 까지의 비용이다. 그리고 이 두 함수를 이용해 만든 <em>evaluation function</em> <code>f(n)</code> 을 <em>best-first search</em> 에 적용해 최적의 해를 찾아낸다.</p>
-
-<blockquote>
-  <p>A* search is optimal if <code>h(n)</code> is admissible</p>
-</blockquote>
-
-<p><em>A* search</em> 를 이용해 <em>Touring Romania</em> 문제를 풀어보면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_touring.png'  alt="" /></p>
-
-<p><em>greedy best-first search</em> 와 비교해보면 트리가 좀 더 큰데, 이건 <em>A* search</em> 가 일반적으로 좀 더 느리다는 사실을 보여준다.</p>
-
-<p><br/></p>
-
-<p><em>8-puzzle</em> 문제도 <em>A* search</em> 로 풀어보자. <em>empty tile</em> 을 옮긴다고 생각하고, <em>cost function</em> <code>g(n)</code> 은 모든 경우 <code>1</code> 로 볼 수 있다. 몇 가지 <code>h(n)</code> 을 생각해 볼 수 있는데,</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/eight_puzzle_heuristics.png'  alt="" /></p>
-
-<p><em>Manhattan block distance</em> 는 제 자리까지 얼마나 더 움직여야하는지를 의미한다.</p>
-
-<h3 id="propertiesofa">Properties of A*</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/admissible_heuristics.png'  alt="" /></p>
-
-<p><em>admissible</em> 이란 말은, 항상 <code>h(n) &lt;= actual distance</code> 임을 의미한다. <code>f(n) = g(n) + h(n)</code> 이므로, <em>heuristic function</em> 이 <em>admissible</em> 하면 가장 적은 <code>f(n)</code> 을 찾는 <em>A* search</em> 는 <em>optimal solution</em> 을 돌려준다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_completeness.png'  alt="" /></p>
-
-<p><em>A* search</em> 는 <em>complete</em> 하다. 이는 탐색 과정에서 <em>goal node</em> 를 포함한 <em>contour</em> (윤곽, 등고선) 에 도달하기 때문이다. 여기서 <em>contour</em> 란 같은 비용으로 도달할 수 있는 <em>sets of state</em> 다. <em>initial node</em> 에서 시작해서 <em>f-value</em> 가 증가하는 방향으로 탐색이 이루어지므로 결국 꼭지점(<em>goal</em>) 에 도달한다. 사실 <em>heuristics</em> 이 없다면 <em>A* search</em> 는 다익스트라 알고리즘과 동일하다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/touring_romania_contours.png'  alt="" /></p>
-
-<p>기하학적으로 보면 <em>heuristic</em> 이 더 정밀해질 수록 타원이 <em>goal state</em> 에 가깝게 넓어진다.</p>
-
-<p>그리고 <em>completeness</em> 속성은, 거꾸로 말하면 <em>optimal path</em> 를 찾기 위해서 그보다 더 적은 <em>cost</em> 를 가지는 모든 <em>path</em> 를 탐색해야 함을 말한다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/a_star_optimally_efficient.png'  alt="" /></p>
-
-<p><em>A*star</em> 알고리즘은 같은 <em>heuristic</em> 을 이용해, 가장 적은 수의 <em>node</em> 를 확장하면서 <em>optimal solution</em> 을 돌려준다. 만약 이보다 더 적은 <em>node</em> 를 확장하면서, <em>optimal solution</em> 을 돌려준다면 <em>optmial solution</em> 이 아닐 수 있다.</p>
-
-<p>물론 효율성을 결정하는건 <em>heuristic</em> 의 연산 비용 등이 있겠지만, 적어도 <em>node</em> 수와 관련해서는 <em>A* search</em> 가 최적이다.</p>
-
-<h3 id="agraphsearch">A* Graph Search</h3>
-
-<pre><code>function aStarTreeSearch(problem, h)  
-  fringe &lt;- priorityQueue(new searchNode(problem.initialState))
-  allNodes &lt;- hashTable(fringe)
-
-  loop
-    if empty(fringe) then return failure
-
-    node &lt;- selectFrom(fringe) // lowest f-value
-
-    if problem.goalTest(node.state) then
-      return pathTo(node)
-
-    for successor in expand(problem, node)
-      if not allNodes.contains(successor) then
-        fringe &lt;- fringe + successor @ f(successor) // g + h
-        allNodes.add(successor)
-</code></pre>
-
-<p>여기서 <code>fringe &lt;- fringe + successor @ f(successor)</code> 부분은 <code>fringe</code> 가 우선순위 큐이므로, 우선순위를 결정할 값으로 <em>f-value</em> 인 <code>f(successor)</code> 을 이용한다는 뜻이다.</p>
-
-<p>그리고 <code>if not allNodes.contains(successor) then</code> 부분에서, 사실 노드를 두번째로 발견할 때 더 짧은 경로일 수 있으므로 비교하는 부분이 필요하다. 그러나 <em>heuristic</em> 이 <em>admissible</em> 하지 않으므로 <em>A* search</em> 가 최적해를 돌려주지 않을 수 있다.</p>
-
-<p>최악의 경우 <em>A*</em> 알고리즘은 <code>O(b)</code> 의 <em>time, space complexity</em> 를 가진다. 여기서 <code>b</code> 는 <em>branching factor</em> 이란 뜻이다. 다시 말해서 <em>exponential complexity</em> 란 말이다.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/eight_puzzle_search_space.png'  alt="" /></p>
-
-<p><em>eight-puzzle</em> 문제를 다시 보자.</p>
-
-<p>그림에서 볼 수 있듯이, 빈 타일을 움직이다 보면 <em>initial state</em> 로 돌아올 수 있다. 만약 이 문제를 그래프로 표현하면 이미 방문한 노드를 다시 방문하고 있는지 해시테이블을 이용해 검사할 수 있다. 대신, 해시테이블을 만들고 사용하기 위한 비용이 든다. </p>
-
-<p>반면 트리로 문제를 풀게되면, <em>exponential</em> 하게 <em>search space</em> 가 증가하기 때문에 <em>worst case</em> 에선 최적해를 찾기 위해 상당한 시간이 걸릴 수 있다.</p>
-
-<p>한가지 더 생각해볼 문제는 <em>permutation</em> 이다. </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/permutation.png'  alt="" /></p>
-
-<p>만약 모든 <em>action</em> 이 <em>independent</em> 하다면, <em>solution</em> 까지의 <code>n</code> <em>action</em> 중  <code>n-1</code> <em>contour</em> 를 모두 방문해야 하므로 <code>(n-1)!</code> 의 성능이 나온다.</p>
-
-<h3 id="goodheuristics">Good Heuristics</h3>
-
-<p><em>heuristics</em> 이란 <em>goal node</em> 까지의 <em>estimatied value</em> 를 돌려주는 함수라고 기술적으로 정의할 수 있다.</p>
-
-<ul>
-<li><strong>heuristics</strong> are criteria, methods, or principles for deciding which among several alternative courses of action promises to be the most effeictive in order to achieve some goal</li>
-</ul>
-
-<p>그렇다면, 무엇이 <em>good heuristics</em> 일까?</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/good_heuristics.png'  alt="" /></p>
-
-<p>평가해야할 <em>state</em> 를 줄이고, 적정 시간 내에 <em>solution</em> 을 찾을 수 있어야 한다. 간단할수록 정확도가 떨어지며, 정확할수록 복잡해진다. <em>accuracy</em> 와 관련해서는, 최적의 <em>actions</em> 을 찾아낸다는 보장은 없지만 <em>good heuristics</em> 이라면 그렇지 않은 것 보다 더 자주 <em>best course of actions</em> 를 찾을 수 있어야 한다.</p>
-
-<ul>
-<li>문제가 주어졌을때, 어떻게 좋은 <em>heuristics</em> 을 찾아낼 수 있을까?</li>
-<li>이 과정을 자동화 할 수 있을까?</li>
-</ul>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/relaxed_problem.png'  alt="" /></p>
-
-<p><em>heuristics</em> 을 찾는 한 가지 방법은 <em>relaxed problem</em> 을 이용하는 것이다. <em>original problem</em> 에서 <em>action</em> 에 대한 <em>restriction</em> 을 좀 제거해서, 이에 대해 얻은 <em>optimal solution</em> 의 비용은 원본 문제에 대한 <em>admissible and consistent heuristic</em> 이다.</p>
-
-<p>이는 <em>restriction</em> 이 제거되었기 때문에, 아무리 많아봐야 (<em>at most</em>) <em>original problem</em> 에 대한 <em>cost</em> 를 가지기 때문이다. 그러므로 <em>admissible</em> 하다. <em>eight-puzzle</em> 을 예로 들어보면 타일을 움직이는 <em>action</em> 에 대해 <em>adjacent</em> 또는 <em>blank</em> 조건을 버릴 수 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/8_puzzle_relaxed.png'  alt="" /></p>
-
-<p>지금까지 배운내용들을 좀 정리하면</p>
-
-<ul>
-<li><p>Heuristic funciton encodes problem specific knowledge in a problem-independent way by mapping a state to a real number. This information about search states can be used to make the search more efficient</p></li>
-<li><p>Greedy best-first search simply uses the heuristic function as the evaluation function. But better solution is provided by the A* algorithm. The evaluation function used by A* algorithm is simply the sum of the heuristic function for a node plus the cost of getting to thast node in the first place.</p></li>
-<li><p>A* is optimal. It does not expand more nodes than absolutely necessary. But A* is not the answer to all questions, specifically when it comes to graph search.</p></li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="summary">Summary</h3>
-
-<p>(1) <em>heuristic function</em> <code>h: state space -&gt; R</code> 은 <em>problem-specific knowledge</em> 를 <em>problem-independent way</em> 로 표현한다. 여기서 <code>h(n)</code> 값은 노드 <code>n</code> 에서 <em>goal</em> 까지의  <em>estimated cost</em> 의 최소 값이다.</p>
-
-<p>(2) <em>best-first search</em> 는 <em>evaluation function</em> 인 <code>f</code> 를 기준으로 <code>f-value</code> 를 정렬해 다음에 어떤 노드를 탐색할지 결정한다.</p>
-
-<p>(3) 만약 <code>f = h</code> 이면 <em>greedy best-first search</em> 라 부른다.</p>
-
-<p>(4) <em>A* Search</em> 는 <em>evaluation function</em> <code>f(n) = h(n) + g(n)</code> 을 이용한다. <code>h(n)</code> 은 <em>heuristic function</em>, <code>g(n)</code> 은 <code>n</code> 까지 도달하는 비용이다. </p>
-
-<p>(5) 따라서 <code>f(n)</code> 은 <code>n</code> 을 통과하여 <em>goal</em> 까지 도달하는데 걸리는 <em>cheapest solution</em> 의 <em>estimated cost</em> 다.</p>
-
-<p>(6) 만약 <em>heuristic function</em> <code>h(n)</code> 이 <em>admissible</em> 하면, 다시 말해 <code>h(n) &lt;= actual distance</code> 이면 <em>A*</em> 는 <em>optimal solution</em> 을 돌려준다. 이는 <code>f(n) = g(n) + h(n)</code> 이기 때문이다.</p>
-
-<p>(7) <em>A* search</em> 는 <em>complete</em> 하다. 이 말은 탐색과정에서 같은 비용으로 도달할 수 있는 모든 <em>state</em> 의 집합인 <em>contour</em> (등고선) 을 방문하면서 결국에는 <em>goal node</em> 를 찾는다는 뜻이다. </p>
-
-<p>(8) 기하학적으로 보면 <em>heuristic</em> 이 정밀해질 수록 타원(등고선) 이 <em>goal state</em> 에 가깝게 넓어진다. </p>
-
-<p><br/></p>
-
-<h3 id="strips">STRIPS</h3>
-
-<p>이제부터는 <em>STRIPS</em> 에 대해 알아보자. <em>planning</em> 의 본질은 원하는 <em>goal</em> 을 얻기 위한 <em>action</em> 을 결정하는 것이다. 즉, 시스템이 이런 결정을 내릴 수 있도록 해 주는 장치가 <em>planner</em> 인데, <em>STRIPS</em> 도 플래너다. </p>
-
-<p><a href='http://en.wikipedia.org/wiki/STRIPS' >Wikipedia: STRIPS</a> 에 의하면</p>
-
-<blockquote>
-  <p>In artificial intelligence, STRIPS (Stanford Research Institute Problem Solver) is an <strong>automated planner</strong> developed by Richard Fikes and Nils Nilsson in 1971 at SRI International. The same name was later used to refer to the formal language of the inputs to this planner. This language is the base for most of the languages for expressing automated planning problem instances in use today; such languages are commonly known as action languages.</p>
-</blockquote>
-
-<p><em>STRIPS</em> 는 어떤 <em>action</em> 을 사용할지를 결정하는 시스템이므로 <em>representation</em> 과 <em>algorithm</em> 이 필요하다. </p>
-
-<h3 id="structuredstates">Structured States</h3>
-
-<p><em>representation</em> 의 일부인 <em>state</em> 에 대해 먼저 알아보자. <em>state</em> 에 <em>access</em> 할때는 </p>
-
-<ul>
-<li>goal test</li>
-<li>applicable actions, successor states</li>
-<li>equality test, hash function</li>
-<li>heuristics estimate</li>
-</ul>
-
-<p>이런 행동을 하려면 <em>standardized</em> 된 <em>action</em> <em>state</em> 의 표현 방법이 있어야 하는데, <em>STRIPS repsentation</em> 이 하는 일이 바로 이것이다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_object.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_PDDL.jpg'  alt="" /></p>
-
-<p>먼저 <em>object</em> 를 정의하고, 이를 <em>PDDL</em> <em>(Planning Domain Definition Language)</em> 로 작성한다. <em>robot</em> 은 쉽게 오브젝트라 생각할 수 있지만 <em>piles</em>, <em>pallet</em> 은 떠오르지 않을 수 있다. </p>
-
-<p>두 <em>object</em> 간 관계는 <em>predicates</em> 라 부른다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_predicates.jpg'  alt="" /></p>
-
-<p>여기서 <code>?l1</code>, <code>?l2</code> 등 물음표로 시작하는 것은 변수고 그 타입은 <code>- location</code> 처럼 뒤에 나온다. <a href='https://spark-public.s3.amazonaws.com/aiplan/resources/DWR-operators.txt' >DWR-operators</a> 링크에서 예제 <em>PDDL</em> 을 볼 수 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/states_in_strips.jpg'  alt="" /></p>
-
-<p>우리가 작성한 <em>language</em> <code>L</code> 에는 많은 <em>predicates</em>, <em>objects (constant symbols)</em> 이 있지만, <em>functional symbol</em> 은 없다. </p>
-
-<blockquote>
-  <p>A state in a STRIPS planning domain is <strong>a set of ground atoms</strong> of <code>L</code></p>
-</blockquote>
-
-<p>여기서 <em>atom</em> 이란 <em>a predicate</em> 고, <em>ground</em> 하다는 것은 <em>predicate</em> 과 관련된 <em>object</em> 가 <em>variable</em> 이 아니고, 구체적인 인스턴스라는 뜻이다. </p>
-
-<p>(1) <em>ground atom</em> <code>p</code> 가 <em>state</em> <code>s</code> 내에 있을때에만 <code>p</code> 가 참이다.</p>
-
-<p>(2) <em>literal</em> 은 <em>positive</em> 일 수도 있고, <em>negative</em> 일 수도 있는 <em>atom</em> 이다. 이 때 <em>ground literals</em> <code>g</code> 내에 있는 모든 <em>positive literal</em> 이 <code>s</code> 내에 있고, <code>g</code> 내에 있는 모든 <em>negative literal</em> 이 <code>s</code> 내에 없으면 <em>state</em> <code>s</code> 는 <em>ground literals</em> <code>g</code> 를 만족시킨다.</p>
-
-<h3 id="structuredoperators">Structured Operators</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/operators_actinos_strips.jpg'  alt="" /></p>
-
-<p><em>planning operators</em> 는 <em>name</em>, <em>pre-condition</em>, <em>effect</em> 로 구성되는데, <em>pre-cond</em> 과 <em>effect</em> 는 <em>literals</em> 의 집합이다.</p>
-
-<p>그리고 <em>action</em> 은 <em>planning operator</em> 의 <em>ground instance</em> 다. </p>
-
-<p>쉽게 말해서 <em>operator</em> 는 <em>variable</em> 가 있는 <em>predicate</em> 의 집합이고, <em>action</em> 은 거기서 변수를 <em>constant</em> (실제 <em>object</em>) 로 치환한 것이다. <em>operator</em> 가 좀 더 <em>generic</em> 하다고 보면 이해하기 쉽다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_operators.jpg'  alt="" /></p>
-
-<p>이 <em>operator</em> 를 <em>PDDL</em> 로 표현하면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_operators_PDDL.jpg'  alt="" /></p>
-
-<p>이제까지 본 <em>literals</em> 를 이용해 <em>applicable</em> 한지, 그리고 어떻게 <em>state transition</em> 을 하는지 살펴보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/state_transition_applicable.jpg'  alt="" /></p>
-
-<p><code>L+</code>, <code>L-</code> 를 각각 <em>positive</em> <em>negative literals</em> 이라고 하자.</p>
-
-<p><em>action</em> <code>a</code> <em>state</em> <code>s</code> 에 대해 <code>a</code> 의 <em>pre-cond+</em> 가 <code>s</code> 에 있고, <em>pre-cond-</em> 가 <code>s</code> 에 없으면 <em>applicable</em> 하다.</p>
-
-<p>그리고 <em>applicable action</em> 에 대해서 <em>state transition</em> <code>r</code> 는 <em>state</em> <code>s</code> 에서 <code>a</code> 의 <em>effect-</em> 를 빼고, 거기에 <em>effect+</em> 를 합치는 것으로 정의한다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/finding_applicable_action.jpg'  alt="" /></p>
-
-<ul>
-<li><code>A</code> 는 <em>applicable actions</em> 다. 초기에는 <em>empty</em> </li>
-<li><code>op</code> 는 <em>operator</em> </li>
-<li><code>precs</code> 는 <em>remaining pre-cond</em></li>
-<li>4번째 인자는 <em>value</em> 로 치환된 <em>substitution</em> 리스트다.</li>
-<li><code>s</code> 는 <em>state</em></li>
-</ul>
-
-<p>먼저 <code>precs+</code> 가 비었는지 검사하고, 무언가 있다면 <code>pp</code> <em>positive pre-cond</em> 를 뽑아내, <em>propositions of state</em> <code>sp</code> 에서 <em>state</em> <code>s</code> 를 하나씩 검사한다. 만약 <em>substitution</em> 이 <em>valid</em> 하면 재귀적으로 반복한다.</p>
-
-<p>더 이상 <code>precs+</code> 가 없으면 <code>precs-</code> 를 검사하면서, 만약 <em>state</em> 가 <em>negative pre-cond</em> <code>np</code> 를 만족하지 못하면, 리턴하고 모두 만족하면 <em>variable</em> 을 모두 치환하여 <em>applicable action</em> 리스트인 <code>A</code> 에 추가한다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/applicable_actions_ex.jpg'  alt="" /></p>
-
-<p>그림에서 왼쪽 케이스를 보면 로봇 <code>r1</code> 이 도착지점인 <code>loc2</code> 에 존재할 수 없기 때문에 <em>not valid</em> </p>
-
-<h3 id="domainsandproblems">Domains and Problems</h3>
-
-<p><em>classical planning</em> 은 다음의 요소로 구성된다.</p>
-
-<ul>
-<li><strong>task:</strong> find solution for planning prolem</li>
-<li><strong>planning problem:</strong> </li>
-</ul>
-
-<p>(1) initial state (atoms - relation, objects) <br />
-(2) planning domain (operators - name, prec, effects) <br />
-(3) goal  </p>
-
-<ul>
-<li><strong>solution</strong> (plan) </li>
-</ul>
-
-<p>STRIPS 도 마찬가지로</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/STRIPS_planning_domains.jpg'  alt="" /></p>
-
-<p>따라서 <em>STRIPS planning</em> 문제는 <em>planning domain</em>, <em>inital state</em>, <em>goal</em> 로 구성된다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/STRIPS_planning_problems.jpg'  alt="" /></p>
-
-<p><em>DWR domain</em> 간단예제를 좀 보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_strips_ex1.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_domain_strips_ex2.jpg'  alt="" /></p>
-
-<p>전체 문제는 여기로 <a href='http://projects.laas.fr/planning/DWR-pb1' >DWR-pb1</a></p>
-
-<p><br/></p>
-
-<p>지금까지 본 것은 <em>planner</em> 에게 주어야할 <em>input</em> 이었다. 이제 <em>output</em> 인 <em>plan</em> 이 무엇인지 보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/classical_plans.jpg'  alt="" /></p>
-
-<h3 id="statespacesearch">State-Space Search</h3>
-
-<p>지금까지는 <em>representation</em> 에 대해 봤다. 지금부터는 STRIPS 에서 알고리즘을 어떻게 적용할지 알아보자. 기본적인 아이디어는</p>
-
-<ul>
-<li>search space is subset of state space</li>
-<li>nodes correspond to world states</li>
-<li>arcs correspond to state transitions</li>
-<li>path in the search space correspaonds to plan</li>
-</ul>
-
-<p>따라서 <em>standard search algorithm</em> (e.g BFS, DFS, A*) 를 <em>planning problem</em> 에 적용할 수 있다. 좀 더 자세히 보자. <em>state-space planning</em> 을 <em>search problem</em> 으로 바꾸기 위해</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/state_space_to_search_problem.png'  alt="" /></p>
-
-<p><em>initial state</em>, <em>goal</em>, 을 정하고 <em>path cost function</em> 으로 <em>action</em> 의 길이를 사용한다. <em>successor function</em> 은 </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/reachable_successor_states.png'  alt="" /></p>
-
-<p><em>successor state</em> 를 표시하기 위해 감마를 사용하고, 지수 위치에 있는 <code>0, m</code> 등은 몇번째 <em>succssor</em> 인지를 나타낸다. <code>U</code> 는 합집합, 유니온이다. 따라서 <em>transitive closure</em> 는 가능한 모든 합집합이다. (<em>reachable states from initial state</em>)</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/solution_existence.png'  alt="" /></p>
-
-<p>따라서 <em>STRIPS planning problem</em> 에서는 <em>goal state</em> <code>S_g</code> 와 <em>reachable state</em> 인 <em>transitive closure</em> 의 교집합이 <em>empty</em> 가 아니어야 솔루션이 존재한다.</p>
-
-<h3 id="forwardstatespacesearch">Forward State-Space Search</h3>
-
-<pre><code>function fwdSearch(O, s_i, g)  
-  state &lt;- s_i
-  plan &lt;- &lt;&gt;
-
-  loop
-    if state.satisfies(g) then 
-      return plan
-
-    applicables &lt;- {ground instance from O applicable in state}
-
-    if applicable.isEmpty() then 
-      return failure
-
-    action &lt;- applicable.chooseOne() ; non-deterministic
-    state &lt;- r(state, action)
-    plan &lt;- plan * &lt;action&gt; ; add action to plan
-</code></pre>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/DWR_example_fwd_search.png'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/forward_search_properties.png'  alt="" /></p>
-
-<p><em>forward search</em> 는 두가지 속성을 가지는데</p>
-
-<ul>
-<li><strong>sound:</strong> if the function returns a plan as a solution then this plan is indeed a solution</li>
-<li><strong>complete:</strong> if there exists solution plan then there is an execution trace of the function that will return this solution plan</li>
-</ul>
-
-<h3 id="backwardstatespacesearch">Backward State-Space Search</h3>
-
-<p><em>backward search</em> 는 <em>intial state</em> 부터 시작하는 것이 아니라 <em>goal</em> 부터 시작해서 거꾸로 진행하는 알고리즘이다. 먼저 <em>relevant</em> 와 <em>regression set</em> 의 개념부터 알아보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/relevance_regression_sets.png'  alt="" /></p>
-
-<p><em>action</em> <code>a</code>, <em>goal state</em> <code>g</code> 에 대해 </p>
-
-<ul>
-<li><code>g</code> 와 <code>effect(a)</code> 의 교집합이 <em>empty</em> 가 아니고</li>
-<li><code>g+</code> 와 <code>effect-(a)</code>, <code>g-</code> 와 <code>effect+(a)</code> 의 교집합이 <em>empty</em> 이면</li>
-</ul>
-
-<blockquote>
-  <p><code>a</code> is relevant for <code>g</code></p>
-</blockquote>
-
-<p>이 때 <em>releavant action</em> <code>a</code> 에 대해 <code>g</code> 의 <em>regression set</em> 은 </p>
-
-<p><code>r^(-1) (g, a) = (g - effect(a)) U precond(a)</code> 로 정의한다. <em>relavant action</em> 의 <em>effect</em> 를 제거하고, 그의 <em>pre-condition</em> 을 넣으면 <em>previous state</em> 가 되기 때문이다. 예제를 좀 보면</p>
-
-<pre><code>(define (problem random-pbl1)
-  (:domain random-domain)
-  (:init
-     (S B B) (S C B) (S A C)
-     (R B B) (R C B))
-  (:goal (and (S A A))))
-
-(define (domain random-domain)
-  (:requirements :strips)
-  (:action op1
-    :parameters (?x1 ?x2 ?x3)
-    :precondition (and (S ?x1 ?x2) (R ?x3 ?x1))
-    :effect (and (S ?x2 ?x1) (S ?x1 ?x3) (not (R ?x3 ?x1))))
-  (:action op2
-    :parameters (?x1 ?x2 ?x3)
-    :precondition (and (S ?x3 ?x1) (R ?x2 ?x2))
-    :effect (and (S ?x1 ?x3) (not (S ?x3 ?x1)))))  
-</code></pre>
-
-<p>여기서 <em>relevant action</em> 은 <code>(op1 A A A)</code>, <code>(op1 A A C)</code>, <code>(op1 A B A)</code> 다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/regression_function.png'  alt="" /></p>
-
-<p>따라서 <em>backward search</em> 알고리즘을 이용하면, <em>state-space planning</em> 을 <em>search problem</em> 으로 바꿀때는</p>
-
-<ul>
-<li>initial state <code>g</code></li>
-<li>goal test: <code>s_i</code> satisfies <code>s</code></li>
-<li>path cost function: length of actions</li>
-<li>successor function: <code>r^-1 (s)</code></li>
-</ul>
-
-<p>예제를 좀 보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/2-heuristic-strips/regression_with_operators.png'  alt="" /></p>
-
-<h3 id="summary">Summary</h3>
-
-<p><em>STRIPS</em> 세션을 정리하면</p>
-
-<ul>
-<li>STRIPS representation provides a standardized way of representing the <strong>internal structure of states</strong>, namely a sets of ground atoms. So we have objects thar are related by some relations, and sets of these atoms describe what the world states look like.</li>
-<li>define interal structure of operators look like. negative effects, positive effects.</li>
-<li>define planning domains (initial, goal state), problem using PDDL</li>
-<li>to solve planning problem, we can use forward, backward search. Buy they are actually inefficient</li>
-</ul>
-
-<p>따라서 다음시간엔 <em>forward, backward</em> 보다 더 효율적인 알고리즘을 배운다.</p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
-(2) <a href='http://imgs.xkcd.com/comics/ai.png' >xkcd image</a> <br />
-(3) <a href='http://en.wikipedia.org/wiki/STRIPS' >Wikipedia - STRIPS</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-2/</link><guid isPermaLink="false">03874979-cc59-4b5f-b9b1-eccfefd1ccc2</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[STRIPS]]></category><category><![CDATA[heuristic]]></category><category><![CDATA[forward-search]]></category><category><![CDATA[backward-search]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 18 Jan 2015 00:26:31 GMT</pubDate></item></channel></rss>
+(2) <a href='http://www.dailygalaxy.com/my_weblog/2013/10/artificial-intelligence-will-it-end-the-human-epoch.html' >brain image</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-3/</link><guid isPermaLink="false">6a780098-7f04-4775-882d-bfcb570c396b</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[PSP]]></category><category><![CDATA[PoP]]></category><category><![CDATA[state-space]]></category><category><![CDATA[plan-space]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 25 Jan 2015 04:59:52 GMT</pubDate></item></channel></rss>
