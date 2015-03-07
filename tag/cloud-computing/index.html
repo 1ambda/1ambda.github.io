@@ -61,7 +61,7 @@
 </head>
 <body>
 
-  <script src="../../public/jquery.js?v=5e102a0e1b"></script>
+  <script src="../../public/jquery.js?v=674d3cdf7e"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
@@ -76,6 +76,57 @@
 </header>
 
 <main class="site_width" role="main">
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../cloud-computing-paxos">Cloud Computing, Paxos</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-08">Sunday, March 08, 2015</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/cloud-computing-paxos/" data-disqus-identifier="116">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
+      <p> 대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure Detection Leader Election Agreement (harder than consensus) 일반적으로 서버가 많으면&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../cloud-computing-paxos">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../cloud-computing-multicast">Cloud Computing, Multicast</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-08">Sunday, March 08, 2015</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/cloud-computing-multicast/" data-disqus-identifier="118">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
+      <p> multicast 는 클라우드 시스템에서 많이 사용됩니다. Cassandra 같은 분산 스토리지에서는 write/read 메세지를 replica gorup 으로 보내기도 하고, membership 을 관리하기 위해서 사용하기도 합니다 그런데, 이 multicast 는 ordering 에 따라서 correctness 에 영향을 줄 수 있기 때문에 매우 중요합니다. 자주 쓰이는 기법으로 FIFO, Casual, Total 이 있는데 하나씩 살펴보겠습니다&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../cloud-computing-multicast">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="../../cloud-computing-snapshot">Cloud Computing, Snapshots</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-07">Saturday, March 07, 2015</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/cloud-computing-snapshot/" data-disqus-identifier="115">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
+      <p> 이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on failure garbage collection of objects: object at servers that don't&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="../../cloud-computing-snapshot">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
 
   <article class="margin_bottom_big">
     <header class="text center margin_bottom_medium">
@@ -111,42 +162,9 @@
   </article>
 
 
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="../../cloud-computing-gossip-protocol">Cloud Computing, Gossip Protocol</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-21">Saturday, February 21, 2015</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/cloud-computing-gossip-protocol/" data-disqus-identifier="106">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
-      <p> Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance 와 scalability 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="../../cloud-computing-gossip-protocol">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="../../cloud-computing-1-1">Cloud Computing, MapReduce</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-13">Friday, February 13, 2015</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/cloud-computing-1-1/" data-disqus-identifier="102">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
-      <p> Intro map 과 reduce 라는 단어는 functional language 에서 왔다. map: processes each record sequentially and independently reduce: processes set of all records in batches (map square '(1 2 3 4)) ;; (1 4 9 16) (reduce + '(1 4 9 16)) ;; (+16 (+9 (+4 1))) ;; 30 MapReduce (http://webmapreduce&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="../../cloud-computing-1-1">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
   <nav class="pagination" role="navigation">
-    <span class="page-number">Page 1 of 1</span>
+    <span class="page-number">Page 1 of 2</span>
+        <a class="older-posts" href="page/2">Older Posts &rarr;</a>
 </nav>
 
 </main>

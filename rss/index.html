@@ -1,5 +1,502 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 04 Mar 2015 16:28:57 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Coding The Matrix 2, Vector Space]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 07 Mar 2015 19:45:51 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Paxos]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<p>대부분의 분산 서버 벤더들은 <code>99.99999%</code> 의 <em>reliability</em> 를 보장하지만, <code>100%</code>는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 <em>consensus</em> 문제 때문입니다.</p>
+
+<blockquote>
+  <p>The fault lies in the impossibility of consensus</p>
+</blockquote>
+
+<p><em>Consensus</em> 문제가 중요한 이유는, 많은 분산 시스템이 <em>consensus</em> 문제이기 때문입니다. </p>
+
+<ul>
+<li>Perfect Failure Detection</li>
+<li>Leader Election</li>
+<li>Agreement (harder than consensus)</li>
+</ul>
+
+<p><br/></p>
+
+<p>일반적으로 서버가 많으면 다음의 일들을 해야합니다.</p>
+
+<ul>
+<li><strong>Reliable Multicast:</strong> Make sure that all of them receive the same updates in the same order as each other</li>
+<li><strong>Membership/Failure Detection:</strong> To keep their own local lists where they know about each other, and when anyone leaves or fails, everyone is updated simultaneously</li>
+<li><strong>Leader Election:</strong> Elect a leader among them, and let everyone in the group know about it</li>
+<li><strong>Mutual Exclusion:</strong> To ensure mutually exclusive access to a critical resource like a file</li>
+</ul>
+
+<p>이 문제들은 대부분 <em>consensus</em> 와 연관되어 있습니다. 더 직접적으로 연관되어 있는 문제들은</p>
+
+<ul>
+<li>The ordering of messages</li>
+<li>The up/down status of a suspected failed process</li>
+<li>Who the leader is</li>
+<li>Who has access to the critical resource</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="consensusproblem">Consensus Problem</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_problem.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_problem2.png'  alt="" /></p>
+
+<p>모든 프로세스(노드, 서버)가 같은 <em>value</em> 를 만들도록 해야 하는데, 몇 가지 제약조건이 있습니다.</p>
+
+<ul>
+<li><strong>validity:</strong> if everyone propose same value, then that's what's decided</li>
+<li><strong>integrity:</strong> decided value must have been proposed by some process</li>
+<li><strong>non-triviality:</strong> there is at least one initial system state that leads to each of the all-<code>0</code>'s or all-<code>1</code>'s outcomes</li>
+</ul>
+
+<p><em>non-triviality</em> 는 쉽게 말해서, 모두 <code>0</code> 이거나 모두 <code>1</code> 일 수 있는 상태가 있어야 한다는 뜻입니다. 왜냐하면 항상 <code>0</code> 이거나 <code>1</code> 만 나오면 <em>trivial</em> 하기 때문입니다. 별 의미가 없죠.</p>
+
+<p><br/></p>
+
+<h3 id="models">Models</h3>
+
+<p><em>consensus</em> 문제는 분산 시스템 모델에 따라 달라집니다. 모델은 크게 2가지로 나눌 수 있는데</p>
+
+<p>(1) Synchronous Distributed System Model</p>
+
+<ul>
+<li>Each message is received within bounded time</li>
+<li>Drift of each process' local clock has a known bound</li>
+<li>Each step in a process takes <code>lb &lt; time &lt; ub</code></li>
+</ul>
+
+<p>동기 시스템 모델에서는 <em>consensus</em> 문제를 풀 수 있습니다.</p>
+
+<p>(2) Asynchronous Distributed System Model</p>
+
+<ul>
+<li>Nobounds on process execution</li>
+<li>The drift rate of a clock is arbitrary</li>
+<li>No bounds on message transmission delay</li>
+</ul>
+
+<p>일반적으로 비동기 분산 시스템 모델이 더 일반적입니다, 그리고 더 어렵죠. 비동기를 위한 프로토콜은 동기 모델 위에서 작동할 수도 있으나, 그 역은 잘 성립하지 않습니다.</p>
+
+<p>비동기 분산 시스템 모델에서는 <em>consensus</em> 문제는 풀 수 <strong>없습니다</strong></p>
+
+<ul>
+<li>Whatever protocol/algorithm you suggest, there is always a worst-case possible execution with failures and message delays that prevens the system from reaching consensus</li>
+<li>Powerful result(see the <strong>FLP</strong> proof)</li>
+<li>Subsequently, safe and <strong>probabilistic</strong> solution have become popular (e.g Paxos)</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="paxosinsyncronoussystems">Paxos in Syncronous Systems</h3>
+
+<p>동기 시스템이라 가정합니다. 따라서</p>
+
+<ul>
+<li>bounds on message dealy</li>
+<li>bounds on upper bound on clock drift rates</li>
+<li>bounds on max time for each process step</li>
+<li>processes can fail by stopping</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_in_sync_system.png'  alt="" /></p>
+
+<ul>
+<li>아무리 많아야 <code>f</code> 개의 프로세서에서 <em>crash</em> 가 나고</li>
+<li>모든 프로세서는 <em>round</em> 단위로 동기화 되고, 동작하며</li>
+<li><em>reliable communication</em> 을 통해 서로 통신합니다</li>
+</ul>
+
+<p><em>value_i^r</em> 을 <em>round</em> <code>r</code> 의 시작에 <code>P_i</code> 에게 알려진 <em>value</em> 의 집합이라 라 하겠습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos2.png'  alt="" /></p>
+
+<p><code>f+1</code> 라운드 후에 모든 <em>correct</em> 프로세스는 같은 값의 집합을 가지게 되는데, 귀류법으로 쉽게 증명할 수 있습니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_in_async.png'  alt="" /></p>
+
+<p>비동기 환경에서는, 아주아주아주아주아주 느린 프로세서와 <em>failed</em> 프로세서를 구분할 수 없기 때문에, 나머지 프로세서들이 이것을 결정하기 위해 영원히 기다려야 할지도 모릅니다. 이것이 기본적인 <em>FLP Proof</em> 의 아이디어입니다. 그렇다면, <em>consensus</em> 문제를 정말 풀기는 불가능한걸까요?</p>
+
+<p>풀 수 있습니다. 널리 알려진 <em>consensus-solving</em> 알고리즘이 있습니다. 실제로는 불가능한 <em>consensus</em> 문제를 풀려는 것이 아니라, <em>safety</em> 와 <em>eventual liveness</em> 를 제공합니다. 야후의 <em>zookeeper</em> 나 구글의 <em>chubby</em> 등이 이 알고리즘을 이용합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/yes_we_can_with_paxos.png'  alt="" /></p>
+
+<p><em>safety</em> 는 서로 다른 두개의 프로세서가 다른 값을 제출하지 않는것을 보장하고, (<em>No two non-faulty processes decide different values</em>) <em>eventual liveness</em> 는 운이 좋다면 언젠가는 합의에 도달한다는 것을 말합니다. 근데 실제로는 꽤 빨리 <em>consensus</em> 문제를 풀 수 있습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_simple.png'  alt="" /></p>
+
+<p>본래는 최적화때문에 더 복잡한데, 위 슬라이드에서는 간략화된 <em>paxos</em> 가 나와있습니다. <em>paxos</em> 의 <em>round</em> 마다 고유한 <em>ballot id</em> 가 할당되고, 각 <em>round</em> 는 크게 3개의 비동기적인 <em>phase</em> 로 분류할 수 있습니다.</p>
+
+<ul>
+<li><strong>election:</strong> a leader is elected</li>
+<li><strong>bill:</strong> leader proposes a value, processes ack</li>
+<li><strong>law:</strong> leader multicasts final value</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/election.png'  alt="" /></p>
+
+<p>먼저 <em>potential leader</em> 가 <em>unique ballot id</em> 를 고르고, 다른 프로세서들에게 보냅니다. 다른 프로세스들의 반응에 의해서 선출될 수도 있고, 선출되지 않으면 새로운 라운드를 시작합니다. </p>
+
+<ul>
+<li>Because becoming a leader requires a majority of votes, and any two majorities intersect in at least one process, and each process can only vote once.</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/bill.png'  alt="" /></p>
+
+<p>리더가 다른 프로세스들에게 <code>v</code> 를 제안하고, 프로세스들은 지난 라운드에 <code>v'</code> 를 결정했었으면 <code>v=v'</code> 를 이용해 값을 결정합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/decision.png'  alt="" /></p>
+
+<p>만약 리더가 <em>majority</em> 의 긍정적인 반응을 얻으면 모두에게 그 결정을 알리고 각 프로세서는 합의된 내용을 전달받고, 로그에 기록하게 됩니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_no_return.png'  alt="" /></p>
+
+<p>사실 이 과정은 응답을 리더가 받는 단계에서 결정되는 것이 아니라, 프로세서들이 <em>proposed value</em> 를 듣는순간 결정됩니다. 따라서 리더에서 <em>failure</em> 가 일어나도, 이전에 결정되었던 <code>v'</code> 을 이용할 수 있습니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_safety.png'  alt="" /></p>
+
+<p>이전에도 언급했듯이 <em>safety</em> 는 두개의 서로 다른 프로세서의 의해서 다른 값이 선택되지 않음을 보장합니다. 이는 잠재적 리더가 있다 하더라도 현재 리더와, 잠재적 리더에게 응답하는 <em>majority</em> (반수 이상) 을 교차하면 적어도 하나는 <code>v'</code> 를 응답하기 때문에 <em>bill phase</em> 에서 정의한대로 이전 결과인 <code>v'</code> 가 사용됩니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxsos_liveness.png'  alt="" /></p>
+
+<p>그림에서 볼 수 있듯이 영원히 끝나지 않을수도 있지만, 실제로는 꽤 빠른시간 내에 합의에 도달합니다. (eventualy-live in async systems)</p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-paxos/</link><guid isPermaLink="false">fa427789-33eb-4728-913a-ab4b1cfbf14e</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[paxos]]></category><category><![CDATA[consensus]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 07 Mar 2015 19:44:32 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, Multicast]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<p><em>multicast</em> 는 클라우드 시스템에서 많이 사용됩니다. <em>Cassandra</em> 같은 분산 스토리지에서는 <em>write/read</em> 메세지를 <em>replica gorup</em> 으로 보내기도 하고, <em>membership</em> 을 관리하기 위해서 사용하기도 합니다</p>
+
+<p>그런데, 이 <em>multicast</em> 는 <em>ordering</em> 에 따라서 <em>correctness</em> 에 영향을 줄 수 있기 때문에 매우 중요합니다. 자주 쓰이는 기법으로 <em>FIFO</em>, <em>Casual</em>, <em>Total</em> 이 있는데 하나씩 살펴보겠습니다.</p>
+
+<p><br/></p>
+
+<h3 id="ordering">Ordering</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Ordering_FIFO.png'  alt="" /></p>
+
+<p><em>FIFO</em> 를 이용한다면, 보낸 순서대로 도착하게 됩니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Ordering_casual.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Ordering_casual_example.png'  alt="" /></p>
+
+<p><em>casual ordering</em> 에서는 반드시 <em>casuality-obeying order</em> 로 전달해야 합니다. 예를 들어 위 그림에서는 <code>M1:1 -&gt; M3:1</code> 이기 때문에 반드시 그 순서대로 받아야 합니다. <em>concurrent event</em> 는 어떤 순서로 받아도 상관 없습니다.</p>
+
+<p><br/></p>
+
+<p><em>casual ordering</em> 이면 <em>FIFO ordering</em> 입니다. 왜냐하면 같은 프로세스에서 보낸 <em>casuality</em> 를 따르면 그게 바로 <em>FIFO</em> 이기 때문입니다. 역은 성립하지 않습니다.</p>
+
+<p>일반적으로는 <em>casual ordering</em> 을 사용합니다. 서로 다른 친구로부터 댓글이 달렸는데, 늦게 달린 친구의 댓글이 먼저 보인다면 당연히 말이 되지 않습니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Ordering_total.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Ordering_total_example.png'  alt="" /></p>
+
+<p><em>total ordering</em> 은 <em>atomic broadcast</em> 라 부르는데, 모든 프로세스가 같은 순서로 메시지를 받는것을 보장합니다.</p>
+
+<ul>
+<li>Since <em>FIFO/Casual</em> are orthogonal to <em>Total</em>, can have hybrid ordering protocol too (e.g <em>FIFO-total</em>, <em>Casual-total</em></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="fifoorderingimpl">FIFO Ordering Impl</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/FIFO_impl1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/FIFO_impl2.png'  alt="" /></p>
+
+<ul>
+<li>각 프로세스는 <em>seq number</em> 로 구성된 벡터를 유지하고, </li>
+<li>프로세스에서 메시지를 보낼때 마다 자신의 <em>seq number</em> 를 하나 증가 시켜서 보냅니다</li>
+<li>메시지를 받았을때, <strong>자신의 벡터 내에 있는 값 + 1</strong> 일 경우에만 벡터 값을 +1 한뒤 전달하고, 아니면 +1 인 값이 올 때까지 버퍼에 넣고 기다립니다</li>
+</ul>
+
+<p>예제를 보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/FIFO_impl_example.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/FIFO_impl_example2.png'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="totalorderingimpl">Total Ordering Impl</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/total_impl1.png'  alt="" /></p>
+
+<p><em>sequencer-based approach</em> 입니다. 먼저 하나의 프로세스가 <em>sequencer</em> 로 선출된 뒤, 어떤 프로세스가 메세지를 보낼때마다 그룹 뿐만 아니라 <em>sequencer</em> 에게 보내게 됩니다.</p>
+
+<p>이 <em>sequencer</em> 는 글로벌 시퀀스 <code>S</code> 를 유지하면서, 메시지 <code>M</code> 을 받을때마다 <code>S++</code> 해서 <code>&lt;M, S&gt;</code> 로 멀티캐스트를 보냅니다.</p>
+
+<p>각 프로세스에서는 <em>local</em> 에 글로벌 시퀀스 <code>Si</code> 를 유지합니다. 만약 프로세스가 메세지를 받는다면 <code>Si + 1 = S(M)</code> 값을 글로벌 시퀀서로부터 받을때까지 기다리고, 받은 후에야 <code>Si++</code> 하고 전달합니다.</p>
+
+<p><br/></p>
+
+<h3 id="casualorderingimpl">Casual Ordering Impl</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/casual_impl1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/casual_impl2.png'  alt="" /></p>
+
+<p>자료구조 자체는 같으나, <em>casuality</em> 를 검사하기 위해 <em>sender</em> 가 <em>vector</em> 전체를 보냅니다. <em>receiver</em> 는 메세지를 받으면 다음 두 조건을 만족하기 전까지 버퍼에 넣습니다</p>
+
+<ul>
+<li><code>M[j]</code> = <code>P_i[j] + 1</code></li>
+<li><code>M[k]</code> &lt;= <code>P_i[k]</code>, (<code>k != j</code>)</li>
+</ul>
+
+<p>두번째 조건을 해석하면, 자신의 벡터도 다음 프로세스에게 전달해야 하기 때문에 <code>M[k]</code> 이후의 벡터만 가지고 있어야 전달할 수 있다는 뜻입니다. (<code>M[j]</code> 는 제외)</p>
+
+<p>이 두 조건이 만족되야만 <code>P_i[j] = M[j]</code> 로 세팅하고 <code>M</code> 을 전달합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/casual_impl_example1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/casual_impl_example2.png'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="reliablemulticast">Reliable Multicast</h3>
+
+<p><em>reliable</em> 이란, 루즈하게 말하자면 모든 <em>receiver</em> 가 메세지를 받는다는 뜻입니다. <em>ordering</em> 과는 <em>orthogonal</em> 하기 때문에 <em>Reliable-FIFO</em>, 등등 구현이 가능합니다. 더 엄밀한 정의는</p>
+
+<ul>
+<li>need all <strong>correct</strong> (<em>non-faulty</em>) processes to receive the same set of multicasts as all other correct processes</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/reliable_multicast_impl1.png'  alt="" /></p>
+
+<p>단순히 <em>reliable unicast</em> 를 여러개 보내는것 만으로는 부족합니다. 왜냐하면 <em>sender</em> 에서 <em>failure</em> 가 일어날 수 있기 때문입니다</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/reliable_multicast_impl2.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/reliable_multicast_impl3.png'  alt="" /></p>
+
+<p>비효율적이지만, <em>reliable</em> 합니다.</p>
+
+<p><br/></p>
+
+<h3 id="virtualsynchrony">Virtual Synchrony</h3>
+
+<p><em>virtual sinchrony</em> 혹은 <em>view synchrony</em> 라 불리는데, 이것은 <em>failure</em> 에도 불구하고 <em>multicast ordering</em> 과 <em>reliability</em> 를 얻기 위해 <em>membership protocol</em> 을 <em>multicast protocol</em> 과 같이 사용합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/view.png'  alt="" /></p>
+
+<p>각 프로세스가 관리하는 <em>membership list</em> 를 <em>view</em> 라 부릅니다. <em>virtual synchrony</em> 프로토콜은 이런 <em>view change</em> 가 <em>correct process</em> 에 올바른 순서대로 전달됨을 보장합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/vsync_multicast.png'  alt="" /></p>
+
+<p><em>Virtual Synchrony</em> 프로토콜은 다음을 보장합니다.</p>
+
+<ul>
+<li>the set of multicasts delivered in a given view is the same set at all correct processes that were in that view</li>
+<li>the sender of the multicast message also belongs to that view</li>
+<li>if a process <code>P_i</code> doesn't not deliver a multicast <code>M</code> in view <code>V</code> while other processes in the view <code>V</code> delivered <code>M</code> in <code>V</code>, then <code>P_i</code> will be <strong>forcibly removed</strong> from the next view delivered after <code>V</code> at the other processes</li>
+</ul>
+
+<p>다시 말해서, <em>multicast</em> 메세지는 같이 전달된 <em>view</em> 내에 있던 다른 프로세스에서 모두 동일합니다. 그리고 <em>view</em> <code>V</code> 내에 있는 어떤 프로세스가 <code>M</code> 을 전달하지 못할 경우, 다른 프로세스의 <em>next view</em> 에서 제거됩니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example2.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example3.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example4.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example5.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example6.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example7.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/virtual_synchrony_example8.png'  alt="" /></p>
+
+<p><br/></p>
+
+<ul>
+<li>Called <strong>"virtual synchrony"</strong> since in spite of running on an asynchronous network, it gives the appearance of a synchronous network underneath that obeys the same ordering at all processes</li>
+</ul>
+
+<p>그러나 <em>consensus</em> 를 구현하는데는 쓸 수 없습니다. <em>partitioning</em> 에 취약하기 때문입니다.</p>
+
+<p>정리하자면 <em>multicast</em> 는 클라우드 시스템에서 중요한 요소입니다. 필요에 따라서 <em>ordering</em>, <em>reliability</em>, <em>virtual synchorny</em> 를 구현할 수 있습니다.</p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-multicast/</link><guid isPermaLink="false">1aa1fadb-da2f-4163-af61-a68ed5cef2ac</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[multicast]]></category><category><![CDATA[virtual synchrony]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 07 Mar 2015 17:20:18 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, Snapshots]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+
+<p>이번시간에는 <em>Distributed Snapshot</em> 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 <em>concurrent events</em> 를 다루며, 서로 상호작용합니다. 이런 환경에서 <em>global snapshot</em> 을 캡쳐할 수 있다면</p>
+
+<ul>
+<li><strong>check pointing:</strong> can restart distributed application on failure</li>
+<li><strong>garbage collection of objects:</strong> object at servers that don't have any other objects(ay any servers) with pointers to them</li>
+<li><strong>deadlock detection:</strong> useful in database transaction systems</li>
+<li><strong>termination of computation:</strong> useful in batch computing systems like Folding@Homes, SETI@Home</li>
+</ul>
+
+<p><em>global snapshot</em> 은 두 가지를 포함합니다.</p>
+
+<p>(1) Individual state of each process 
+(2) Individual state of each communication channel </p>
+
+<p><em>global snapshot</em> 을 만드는 한가지 방법은 모든 프로세스의 <em>clock</em> 을 동기화 하는 것입니다. 그래서 모든 프로세스에게 <em>time</em> <code>t</code> 에서의 자신의 상태를 기록하도록 요구할 수 있습니다. 그러나</p>
+
+<ul>
+<li>Time synchorization always has error</li>
+<li>Doesn't not record the state of meesages in the channels</li>
+</ul>
+
+<p>지난 시간에 보았듯이, <em>synchronization</em> 이 아니라 <em>casuality</em> 로도 충분합니다. 프로세스가 <strong>명령을 실행하거나</strong>, <strong>메시지를 받거나</strong>, <strong>메시지를 보낼때마다</strong> <em>global system</em> 가 변합니다. 이를 저장하기 위해서 <em>casuality</em> 를 기록하는 방법을 알아보겠습니다.</p>
+
+<p><br/></p>
+
+<h3 id="chandylamportalgorithm">Chandy-Lamport Algorithm</h3>
+
+<p>시작 전에 <em>system model</em> 을 정의하면</p>
+
+<ul>
+<li>N Processes in the system</li>
+<li>There are two uni-directional communication channels between each ordered process pair <code>P_j -&gt; P_i</code>, <code>P_i -&gt; P_j</code></li>
+<li>communication channels are <strong>FIFO</strong> ordered</li>
+<li><strong>No failure</strong></li>
+<li>All messages arribe intact, and are not duplicated</li>
+</ul>
+
+<p><em>requirements</em> 는</p>
+
+<ul>
+<li><em>snapshot</em> 때문에 <em>application</em> 의 작업에 방해가 일어나서는 안됩니다</li>
+<li>각 프로세스는 자신의 <em>state</em> 를 저장할 수 있어야 합니다</li>
+<li><em>global state</em> 는 분산회되어 저장됩니다 (collected in a distributed manner)</li>
+<li>어떤 프로세스든지, <em>snapshot</em> 작업을 시작할 수 있습니다</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport1.png'  alt="" /></p>
+
+<ul>
+<li>프로세스 <code>P_i</code> 가 <em>market</em> 메세지를 만들고, 자신을 제외한 다른 <code>N-1</code> 개의 프로세스에게 보냅니다</li>
+<li>동시에 <code>P_i</code> 는 <em>incoming channel</em> 을 레코딩하기 시작합니다</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport2.png'  alt="" /></p>
+
+<p>(1) 만약 <code>P_i</code> 가 <em>marker</em> 메시지를 처음 받는다면</p>
+
+<ul>
+<li>만약메시지를 받은 프로세스 <code>P_i</code> 에서는 자신의 <em>state</em> 를 기록하고</li>
+<li>자신을 제외한 프로세스들에게 <em>marker</em> 보내고</li>
+<li>는 <em>incoming channel</em> 을 레코딩하기 시작합니다</li>
+</ul>
+
+<p>(2) <code>P_i</code> 가 이미 <em>market</em> 메세지를 받은적이 있다면</p>
+
+<ul>
+<li>이미 해당 채널의 모든 메세지를 기록중이었으므로, 레코딩을 끝냅니다</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport3.png'  alt="" /></p>
+
+<p>이 알고리즘은 모든 프로세스가 자신의 <em>state</em> 와 모든 <em>channel</em> 을 저장하면 종료됩니다. </p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Example1.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Example2.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Example3.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Example4.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Example5.png'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Example6.png'  alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="consistentcuts">Consistent Cuts</h3>
+
+<p><em>Chandy-Lamport</em> 알고리즘은 <em>casuality</em> 를 보장합니다. 이에 대해 증명하기 전에 먼저, <em>consistent cut</em> 이란 개념을 보고 가겠습니다.</p>
+
+<ul>
+<li><p><strong>Cut:</strong> time frontier at each process and at each channel. Events at the process/channel that happen before the cut are <strong>in the cut</strong> and happening after the cut are <strong>out of the cut</strong></p></li>
+<li><p><strong>Consistent Cut:</strong> a cut that obeys casuality. A cut <code>C</code> is a consistent cut iff for each pair of event <code>e</code> <code>f</code> in the system, such that event <code>e</code> is in the cur <code>C</code> and if <code>f -&gt; e</code></p></li>
+</ul>
+
+<p>다시 말해서 <code>e</code> 가 <code>C</code> 내에 있고, <code>f -&gt; e</code> 라면 <code>f</code> 도 <code>C</code> 에 있어야만 <em>consistent cut</em> 이란 뜻입니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consistent_cut1.png'  alt="" /></p>
+
+<p><code>F</code> 가 <em>cut</em> 내에 있지만, 올바르게 캡쳐되어 메시지 큐 내에서 전송중임을 <em>snapshot</em> 에서 보장합니다. 하지만 <code>G -&gt; D</code> 같은 경우는, <code>D</code> 가 <em>cut</em> 내에 있지만 <code>G</code> 가 그렇지 않아 <em>inconsistent cut</em> 입니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consistent_cut2.png'  alt="" /></p>
+
+<p><em>Chandy-Lamport Global Snapshot</em> 알고리즘은 항상 <em>consistent cut</em> 을 만듭니다. 왜 그런가 증명을 보면</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Proof1.png'  alt="" /></p>
+
+<p><code>ei -&gt; ej</code> 를 보장한다는 말은 스냅샷 안에 두 이벤트가 있다는 뜻입니다. 따라서 <code>ej -&gt; &lt;P_j records its state&gt;</code> 일때 당연히 <code>ei -&gt; &lt;P_i records its state&gt;</code> 와 같은 말입니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/Chandy_Lamport_Proof2.png'  alt="" /></p>
+
+<p>만약 <code>ej -&gt; &lt;P_j records its state&gt;</code> 일때 <code>&lt;P_i records its state&gt; -&gt; ei</code> 라 합시다.</p>
+
+<p>그러면 <code>ei -&gt; ej</code> 로 가는 <em>regular app message</em> 경로를 생각해 봤을때, <code>P_i</code> 가 먼저 자신의 상태를 기록하기 시작했으므로 <em>marker</em> 메세지가 먼저 날라갈겁니다. (FIFO) 그러면 위에서 말한 <code>ei -&gt; ej</code> 경로를 타고 <em>marker</em> 메세지가 먼저 가게되고 <code>P_j</code> 는 자신의 상태를 먼저 기록하게 됩니다. 따라서 <code>P_j</code> 에서 <code>ej</code> 보다 자신의 상태를 기록하는 것이 먼저이므로 <code>ej</code> 는 <em>out of cut</em> 이고, 모순입니다.</p>
+
+<p><br/></p>
+
+<h3 id="safetyandliveness">Safety and Liveness</h3>
+
+<p>분산시스템의 <em>correctness</em> 와 관련해서 <em>safety</em> 와 <em>liveness</em> 란 개념이 있습니다. 이 둘은 주로 혼동되어 사용되는데, 둘을 구별하는 것은 매우 중요합니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/liveness.png'  alt="" /></p>
+
+<ul>
+<li>distributed computation will terminate eventually </li>
+<li>every failure is eventually deteced by some non-faulty process</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/safety.png'  alt="" /></p>
+
+<ul>
+<li>there is no deadlock in a distributed transaction system</li>
+<li>no object is orphaned</li>
+<li><strong>accuracy</strong> in failure detector</li>
+<li>no two processes decide on different values</li>
+</ul>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/liveness_and_safety.png'  alt="" /></p>
+
+<p><em>failure detector</em> 나 <em>concensus</em> 의 경우에서 볼 수 있듯이 <em>completeness</em> 와 <em>accuracy</em> 두 가지를 모두 충족하긴 힘듭니다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/language_of_global_state.png'  alt="" /></p>
+
+<p><em>global snapshot</em> 은 한 상태 <code>S</code> 이고, 여기서 다른 스냅샷으로의 이동은 <em>casual step</em> 을 따라 이동하는 것입니다. 따라서 <em>liveness</em> 와, <em>safety</em> 와 관련해 다음과 같은 특징이 있습니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/using_global_snapshot.png'  alt="" /></p>
+
+<p><em>Chandy-Lamport</em> 알고리즘은 <em>stable</em> 한지를 검사하기 위해 사용할 수도 있습니다. 여기서 <em>stable</em> 하다는 것은, 한번 참이면 그 이후에는 계속 참인 것을 말합니다. 이는 알고리즘이 <em>casual correctness</em> 를 가지기 때문입니다.</p>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/cloud-computing-snapshot/</link><guid isPermaLink="false">7d51c274-e6e6-41dd-a37e-b548da6e711c</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[snapshot]]></category><category><![CDATA[Chandy-Lamport]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 07 Mar 2015 13:57:56 GMT</pubDate></item><item><title><![CDATA[Coding The Matrix 2, Vector Space]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
 
 <h3 id="linearcombinations">Linear Combinations</h3>
 
@@ -3066,865 +3563,4 @@ duration * rate
 (3) <a href='http://ko.wikipedia.org/wiki/%EC%82%AC%EC%9B%90%EC%88%98' >Wiki: 4원수</a> <br />
 (4) <a href='http://wiki.mathnt.net/index.php?title=%ED%95%B4%EB%B0%80%ED%84%B4%EC%9D%98_%EC%82%AC%EC%9B%90%EC%88%98' (quarternions)">Math Wiki: 4원수</a> <br />
 (5) <a href='http://en.wikipedia.org/wiki/Linear_combination' >Wiki: line combination</a> <br />
-(6) <a href='http://mrw0119.tistory.com/12' >프로그래밍에 미치다 - 외적, 내적 분해</a>  </p>]]></description><link>http://1ambda.github.io/coding-the-matrix-1/</link><guid isPermaLink="false">46c525c5-23be-4306-9722-8ec9f3f90112</guid><category><![CDATA[coursera]]></category><category><![CDATA[linear algebra]]></category><category><![CDATA[vector]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 12 Feb 2015 11:00:01 GMT</pubDate></item><item><title><![CDATA[Pattern Discovery 1]]></title><description><![CDATA[<p><img src='https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png'  alt="" /></p>
-
-<p><strong>Patterns represent intrinsic and important properties of datasets</strong>. Pattern discovery is uncovering patterns (inherent regularities) from massive data sets </p>
-
-<ul>
-<li>What products were often purchased together?</li>
-<li>What are the subsequent purchases after buying an iPad?</li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="supportconfidence">Support, Confidence</h3>
-
-<pre><code>;; item bought
-
-Beer, Nut, Diaper  
-Beer, Coffee, Diaper  
-Beer, Diaper, Eggs  
-Nuts, Eggs, Milk  
-Nuts, Coffee, Diaper, Eggs, Milk  
-</code></pre>
-
-<p><em>support</em> <code>s</code> 는 전체 구매 중에서, 해당 아이템이 구매되었을 확률이다. <em>min support</em> 를 50% 로 한다면, </p>
-
-<ul>
-<li><em>freq 1-itemset:</em> Beer(60%), Nuts(60%), Diaper(80%), Eggs(60%)</li>
-<li><em>freq 2-itemset:</em> {Beer, Diaper} (60%)</li>
-</ul>
-
-<p><em>confidence</em> <code>c</code> 는 <code>X</code> 가 포함되어있을때 <code>Y</code> 까지 구매되었을 조건부 확률이다. <code>c = sup(X ∪ Y) / sup(X)</code></p>
-
-<p><em>association rule</em> 은, <em>min support</em> 와 <em>min confidence</em> 를 정해놓고, 그 이상이 되는 <em>rule</em> <code>X -&gt; Y</code> 를 찾는 것이다.</p>
-
-<ul>
-<li><code>Beer -&gt; Diaper</code> (s:60%, c:100%)</li>
-<li><code>Diaper -&gt; Beer</code> (s:60%, c:75%)</li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="closedpatterns">Closed Patterns</h3>
-
-<p>이렇게 패턴을 구하면, 다수개의 물품이 있는 <em>transaction</em> 에서는 너무 많은 패턴이 생긴다.</p>
-
-<pre><code>;; TDB1 
-
-T1: {a1, ..., a50}  
-T2: {a1, ..., a100}  
-</code></pre>
-
-<p><em>min supoort</em> 를 <code>1</code> 이라 하면 <em>1-itemset</em>, <em>2-itemset</em>, .. <em>100-itemset</em> 처럼 <code>2^100 - 1</code> 개의 <em>sub pattern</em> 이 생긴다.</p>
-
-<p>이 문제를 해결하기 위해 <em>lossless compression</em> 인 <em>closed pattern</em> 이란 개념을 도입해 보자.</p>
-
-<blockquote>
-  <p><strong>closed pattern:</strong> A pattern(itemset) <code>X</code> is <strong>closed</strong> if <code>X</code> is frequent, and there exists no super pattern <code>Y ⊃ X</code>, with the same support as <code>X</code></p>
-</blockquote>
-
-<p>위와 똑같은 <code>TDB</code> 에 대해 <em>closed pattern</em> 을 구하면</p>
-
-<p><code>P1: "{a1, ..., a50}: 2" , P2: "{a1, ..., a100}: 1"</code></p>
-
-<p><br/></p>
-
-<p><em>closed pattern</em> 대신 <em>max pattern</em> 을 이용할 수 있다.</p>
-
-<blockquote>
-  <p><strong>max pattern:</strong> A pattern <code>X</code> is a <strong>max-pattern</strong> if <code>X</code> is frequent and there exists no frequent super-pattern <code>Y ⊃ X</code></p>
-</blockquote>
-
-<p>정의를 보면 <em>support</em> 값을 신경쓰지 않는다. 위와 같은 <code>TDB</code> 에 대해 <em>max-pattern</em> 을 찾으면</p>
-
-<p><code>P: "{a1, ..., a100}: 1</code></p>
-
-<p>당연히 <em>lossy compression</em> 이다. </p>
-
-<p><br/></p>
-
-<h3 id="downardclosureproperty">Downard Closure Property</h3>
-
-<p><em>Apriori property</em> 라 부르기도 하는데, 핵심은 이렇다.</p>
-
-<p><code>{beer, diaper, nuts}</code> 가 <em>frequent</em> 하면 <em>subitem</em> 인 <code>{beer diaper}</code> 는 적어도 그 만큼은 <em>frequent</em> 해야한다는 것이다.</p>
-
-<blockquote>
-  <p><em>Apriori:</em> Any subset of a frequent itemset must be frequent</p>
-</blockquote>
-
-<p>따라서 <code>S</code> 의 어떤 <em>subset</em> 도 <em>infrequent</em> 하면 <code>S</code> 가 <em>frequent</em> 할 일이 없으므로, 가지치기 할 수 있다는 것이다.</p>
-
-<blockquote>
-  <p><em>Apriori pruning principle:</em> if there is any itemset which is infreqent, its superset should not even be generated</p>
-</blockquote>
-
-<p><br/></p>
-
-<h3 id="theapriorialgorithm">The Apriori Algorithm</h3>
-
-<p><em>level-wise</em>, <em>candidate generation and test</em></p>
-
-<pre><code>initially, scan DB once to get frequent 1-itemset
-
-repeat  
-  generate length-(k+1) candidate itemsets from length-k frequent itemsets
-  test the candidates against DB to find frequent (k+1) itemset
-  Set k := k + 1
-
-until no frequent or candidate set can be generated  
-</code></pre>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/apriori_algorithm.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/apriori_example.jpg'  alt="" /></p>
-
-<p><em>apirori</em> 알고리즘이 나온 이래로, 성능을 개선하기 위한 많은 기법들이 발표됬다.</p>
-
-<p>(1) Reduce passes of transaction database scans <br />
-- partitioning
-- dynamic itemset counting</p>
-
-<p>(2) Shrink the number of candidates <br />
-- Hashing
-- Pruning by support lower bounding
-- Sampling</p>
-
-<p>(3) Exploring special data structures <br />
-- Tree projection
-- H-miner
-- Hypercube decomposition</p>
-
-<p><br/></p>
-
-<h3 id="partitioning">Partitioning</h3>
-
-<blockquote>
-  <p><em>Theorem:</em> Any itemset that is potentially frequent in TDB must be frequent in at least one of the partitions of TDB</p>
-</blockquote>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/partitioning.jpg'  alt="" /></p>
-
-<p>어느 <em>local TDB</em> 에서도 <em>frequent</em> 하지 않으면 <em>global TDB</em> 에서도 <em>frequent</em> 하지 않기 때문에, <em>global</em> 에서 <em>frequent</em> 하려면  적어도 <em>partitioning</em> 된 <em>local TDB</em> 중 하나에서는 <em>frequent</em> 해야 한다.</p>
-
-<p>따라서 <em>scan 1</em> 에서 <em>partitining</em> 하고 <em>local pattern</em> 을 찾고, <em>scan 2</em> 에서 <em>global frequent pattern</em> 을 구하면 된다. 딱 2번만 <em>TDB</em> 에 접근한다.</p>
-
-<p><br/></p>
-
-<h3 id="directhashingandpruning">Direct Hashing and Pruning</h3>
-
-<p><em>DHP</em> 는 <em>candidates</em> 의 수를 줄이기 위해 사용하는 기법이다.</p>
-
-<blockquote>
-  <p><em>observation:</em> A <code>k</code>-itemset whose corresponding hashing bucket count is below the threshold cannot be frequent</p>
-</blockquote>
-
-<p>기본적인 아이디어는 <em>item</em> 이 <em>frequent</em> 하다면, <em>hashing bucket</em> 에 들어갔을때 그 <em>count</em> 값이 <em>threshold</em> 보다 높아야 한다는 것이다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/DHP.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<h3 id="verticaldataformat">Vertical Data Format</h3>
-
-<blockquote>
-  <p><em>ECLAT</em> (Equivalence Class Transformation) is a depth first search algorithm using set intersection    </p>
-</blockquote>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/ECLAT.jpg'  alt="" /></p>
-
-<p><em>ECLAT</em> 은 <em>item</em> 기준으로 접근하는 방법이다. <code>t(X) = t(Y)</code> 이면 <code>X</code> 와 <code>Y</code> 가 언제나 같이 일어나고, <code>t(X) ⊂ t(Y)</code> 이면 <code>X</code> 가 있을땐 언제나 <code>Y</code> 가 있다.</p>
-
-<p><em>diffset</em> 연산을 이용하면 공간을 많이 아낄 수 있다. <em>intersection</em> 은 교집합이므로, 공통부분과 그렇지 않은 부분이 생기는데, 다른 부분만 보관하는 것이다.</p>
-
-<p><br/></p>
-
-<h3 id="fpgrowth">FP Growth</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/FPGrowth.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/FPGrowth_example.jpg'  alt="" /></p>
-
-<p><em>FP-tree</em> 를 만들고, 이를 이용해 <em>conditinal pattern bases</em> 를 구한다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/conditional_pattern_bases.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/conditional_pattern_bases2.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/scaling_FPGrowth.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<h3 id="miningclosedpattern">Mining Closed Pattern</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week1/mining_closed_pattern.jpg'  alt="" /></p>
-
-<p><em>closed pattern</em> 에 대해 쓸 수 있는 다양한 기법이 있다. <em>itemset merging</em> 도 그중 하나인데, </p>
-
-<p><em>d-proj. db</em> 인 <code>{acef, acf}</code> 를
-<em>acfd-proj. db</em> 인 <code>{e}</code> 로 바꾸어, <code>{acfd:2}</code> 를 얻을 수 있다.</p>
-
-<p>이외에도 위 그림에 나온 많은 테크닉들이 있다.</p>
-
-<p><br/></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <a href='https://www.behance.net/gallery/625042/Icon-and-pattern-with-a-marketing-theme' >Title image</a> <br />
-(2) <em>Pattern Discovery</em>, Coursera  </p>]]></description><link>http://1ambda.github.io/pattern-discovery-1/</link><guid isPermaLink="false">ad3d19ae-0fcc-41f5-bba3-829c06518bf2</guid><category><![CDATA[coursera]]></category><category><![CDATA[pattern discovery]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 12 Feb 2015 07:57:41 GMT</pubDate></item><item><title><![CDATA[AI Planning 4, STN, HTN]]></title><description><![CDATA[<p><img src='http://uxmag.com/sites/default/files/legacy/articleimage_15.jpg'  alt="" /></p>
-
-<p>지금까지 <em>State-Space Planning</em>, <em>Plan-Space Planning</em> 기법을 배웠는데, 이 두 가지는 같은 문제를 푸는 방법이었다. 이제 문제를 조금 변형해, 인간의 사고와 비슷하게 <em>Task</em> 중심으로 분할해서 해결하는 법을 배워보자. </p>
-
-<h3 id="stn">STN</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning.jpg'  alt="" /></p>
-
-<p><em>terms</em> 는 <em>constant</em>, <em>variable</em>, <em>object</em> 따위의 것들이고 <em>literals</em> 는 참이거나 거짓이 될 수 있는 <em>proposition</em> 이다. </p>
-
-<p><em>task network</em> 에서 새롭게 도입되는 것은</p>
-
-<ul>
-<li><strong>task:</strong> to be performed</li>
-<li><strong>method:</strong> describing ways in which tasks can be performed</li>
-<li><strong>organized collections of tasks:</strong> called task networks</li>
-</ul>
-
-<p><em>DWR</em> 예제로 보면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/DWR_STN_example.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<h3 id="task">Task</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/tasks_def.jpg'  alt="" /></p>
-
-<p><em>task</em> 는 <code>T_S</code> 처럼 <em>non-primitive</em> 일 수도, <code>t1, ..., tn</code> 처럼 <em>subsete</em> 에 속하는 <em>primitive task</em> 일 수 있다. </p>
-
-<p><em>task</em> 를 <code>t_i(r1, ..., rk)</code> 라 표기하는데, <code>r</code> 은 <em>task</em> 에 의해 조작되는 <em>object</em> 등의 <em>term</em> 이다. </p>
-
-<p>그리고 슬라이드에 나와 있듯이 <em>ground task</em> 는 <em>variable</em> 이 아니라 <em>action</em> 처럼 <em>constant</em> 를 가져야 하고, <em>action</em> 은 <em>ground primitive task</em> 만 <em>accomplish</em> 할 수 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/simple_task_network_def.jpg'  alt="" /></p>
-
-<p><em>STN</em> 은 <em>acyclic directed graph</em> <code>(U, E)</code> 다. 각 <em>node</em> 는 <em>task</em> 고, <em>edge</em> 는 <em>task</em> 의 <em>partial ordering</em> 을 정의한다. <code>t_i &lt; t_j</code> 처럼</p>
-
-<p>그리고 <em>task network</em> 는 모든 <em>node</em> 가 <em>ground/primitive</em> 일때만 <em>ground/primitive</em> 고, 하나라도 아니라면 <em>unground/non-primitive</em> 다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/total_ordered_STN.jpg'  alt="" /></p>
-
-<p><em>STN</em> <code>w</code> 는 위상 정렬처럼, 모든 <em>edge</em> 가 <em>node</em> 에 대해 순서를 정의할 수 있으면 <em>totally ordered</em> 하다고 말한다. 그러면 <code>w</code> 는 <em>task</em> 의 시퀀스로 나타낼 수 있다. <code>w = &lt;t1, ..., tn&gt;</code></p>
-
-<p>그리고 <code>w</code> 가 <em>totally ordered</em>, <em>ground</em>, <em>primitive</em> 이면 <code>w</code> 를 위한 <em>plan</em> <code>ㅠ</code> 는</p>
-
-<p><code>ㅠ(w) = &lt;a1, ..., an&gt;</code> where <code>ai = ti</code>, <code>1 &lt;= i &lt;= n</code></p>
-
-<p><br/></p>
-
-<p>DWR 예제로 STN 의 표기법을 알아보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STNs_DWR_ex.jpg'  alt="" /></p>
-
-<p><code>take</code> <em>task</em> 는 똑같은 <em>operator</em> 이름이 있으므로 <em>primitive</em> 고, 변수가 없으므로 <em>ground</em> 다. </p>
-
-<p><code>move-stack</code> 은 <em>DWR domain</em> 에 정의한 같은 이름의 <em>operator</em> 가 없으므로 <em>non-primitive</em> 이고, 변수가 있으므로 <em>unground</em> 다.</p>
-
-<p>이 3개의 <em>task</em> 를 기반으로 <em>task network</em> 를 구성할 수 있다.</p>
-
-<p><code>w1</code> 은 <code>(t1, t2), (t1, t3)</code> 고, <code>t2, t3</code> 에 대한 <em>ordering</em> 이 없으므로 <em>partially ordered network</em> 다.</p>
-
-<p><br/></p>
-
-<h3 id="methodsrefinements">Methods (Refinements)</h3>
-
-<blockquote>
-  <p><strong>method:</strong> describing ways in which tasks can be performed</p>
-</blockquote>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_def.jpg'  alt="" /></p>
-
-<p>메소드는 <em>name</em>, <em>task</em>, <em>precond</em> <em>network</em> 로 구성되어 있다.</p>
-
-<ul>
-<li><em>name(m)</em>: <code>n(x1, ..., xk)</code> 의 형태로 <em>unique</em> 한 심볼 <code>n</code> 과 다뤄지는 <em>variable</em> 인 <code>x</code> 를 포함한다</li>
-<li><em>task(m)</em>: <em>non-primitive task</em></li>
-<li><em>precond(m)</em>: set of literals</li>
-<li><em>network(m)</em>: task network <code>(U, E)</code> containing the set of subtasks <code>U</code> of <code>m</code></li>
-</ul>
-
-<p>잘 보면 <em>effect</em> 가 없는데, 여기선 <em>goal</em> 을 달성하는 것이 아니라 <em>task</em> 를 수행해야 하기 때문에 <em>effect</em> 는 없고 <em>precond</em> 만 신경쓴다.</p>
-
-<p>그리고 <em>task</em> 는 무엇을 달성해야 하는지를 나타내기 때문에, <em>task</em> 가 같으면 같은 <em>method</em> 가 아니냐고 질문할 수 있으나, <em>network</em> 때문에 다르다. <em>network</em> 는 <em>subtask</em> 를 <em>ordering</em> 한 것으로 <strong>어떻게</strong> <em>task</em> 를 수행할지를 나타내기 때문이다.</p>
-
-<p>만약 <em>method</em> 의 <em>network</em> 가 <em>partially ordered</em> 이면 <em>method</em> 도 <em>partially ordered metohd</em> 라 부른다.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex2.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex3.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/app_relev.jpg'  alt="" /></p>
-
-<p><em>appicability</em> 는 <em>action</em> 과 비슷하다. </p>
-
-<p>만약 <em>substitution</em> <code>σ</code> 에 대해, <code>σ(t) = task(m)</code> 이면 메소드 인스턴스 <code>m</code> 이 태스크 <code>t</code> 와 <em>relevant</em> 하다고 말한다. <del>왜죠?</del></p>
-
-<p>무슨 뜻인가 하면, 우리가 달성하려고 하는 <code>t</code> 에 대해 <code>σ(t)</code> 가 메소드의 태스크인 <code>task(m)</code> 과 동일하면, 해당 <code>t</code> 를 위해 메소드 <code>m</code> 을 사용할 수 있다는 뜻이다.</p>
-
-<p>그리고 태스크 <code>t</code> 와 <em>relevant</em> 인 <em>method</em> <code>m</code> 에 대해 </p>
-
-<ul>
-<li><code>δ(t, m, σ) = σ(network(m))</code> 또는</li>
-<li><code>δ(t, m, σ) = σ(&lt;subtasks(m)&gt;)</code> if <code>m</code> is <strong>totally ordered</strong></li>
-</ul>
-
-<p>로 <em>decomposition</em> 할 수 있다. 그냥 분해인데, 표기법을 저렇게 사용한다고 보면 된다. 당연히 <em>decomposition</em> 되면 <em>subtask</em> 가 되는데, <em>totally ordered</em> 면 <em>subtask</em> 만 돌려주면 되고, 아니라면 <em>network</em> 를 돌려주면 된다는 이야기. DWR 예제로 보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex2.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/method_app_relev_DWR_ex.jpg'  alt="" /></p>
-
-<p><em>substitution</em> 을 적용했을때<em>task</em> 이름이 같으므로 <em>relevant</em> 하고 <em>precond</em> 를 검사해보면 <em>applicable</em> 하다는 것을 알 수 있다.</p>
-
-<p><br/></p>
-
-<h3 id="decomposition">Decomposition</h3>
-
-<p><em>method decomposition</em> 을 자세히 살펴보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/method_decomp_DWR_ex.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/decomposition_def.jpg'  alt="" /></p>
-
-<p><code>w</code> 를 <em>STN</em> 이라고 하면, <code>U</code> 에 속하는 <em>task</em> <code>t</code> (<em>predecessors</em> 가 없는) 에 대해 <em>relevant</em> 메소드 <code>m</code> 이 있고, <em>substitution</em> <code>σ</code> 와, <code>m</code> 의 <em>network</em> <code>(U_m, E_m)</code> 이 있다. 이 때 <em>decomposition</em> <code>δ(w, t, m, σ)</code> 은</p>
-
-<ul>
-<li><code>t</code> is replaced in <code>U</code> by <code>σ(U_m)</code></li>
-<li>edges in <code>E</code> involving <code>t</code> are replaced by edges to appropriate nodes in <code>σ(U_m)</code></li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="domainsproblemsandsolution">Domains, Problems and Solution</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_domain.jpg'  alt="" /></p>
-
-<p><em>STN planning domain</em> <code>D = (O, M)</code> 이다. <code>O</code> 는 <em>STRIPS planning operators</em>, <code>M</code> 은 <em>STN methods</em> 다. 만약 모든 메소드가 <em>totally ordered</em> 이면 <code>D</code> 도 <em>total-order STN planning domain</em> 이다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_problem.jpg'  alt="" /></p>
-
-<p><em>STN planning problem</em> <code>P</code> 는 <code>P = (s_i, w_i, O, M)</code> 으로 구성된다. 잘보면 <em>goal</em> 대신 <em>initial state network</em> 인 <code>w_i</code> 가 있다. <code>w_i</code> 와 <code>D = (O, M)</code> 이 <em>totally ordered</em> 면 <code>P</code> 를 <em>total order STN planning problem</em> 이라 부른다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_solution.jpg'  alt="" /></p>
-
-<p>(1) <code>w_i</code> 와 <em>plan</em> <code>ㅠ</code> 가 <em>empty</em> 여서 태스크가 없거나  </p>
-
-<p>(2) <em>predecessors</em> 가 없는 <em>primitive task</em> <code>t</code> 에 대해, <code>a1 = t</code> 가 <code>s_i</code> 에 <em>applicable</em> 하고, <code>ㅠ = &lt;a2, ..., an&gt;</code> 이 <code>P' = (γ(s_i, a1), w_i - {t}, O, M)</code> 의 솔루션이거나  </p>
-
-<p>(3) <em>predecessors</em> 가 없는 <em>non-primitive task</em> <code>t</code> 에 대해 <em>relevant</em> 메소드 <em>m</em> 이 <code>s_i</code> 에 대해 <em>applicable</em> 하고, <code>ㅠ</code> 가 <code>P' = (s_i, δ(w, t, m, σ), O, M)</code> 면 된다.</p>
-
-<p>즉 <em>primitive task</em> 일때는 <em>action</em> 으로 시작하고, 아닐때는 <em>decomposition</em> 한 네트워크에 대해 <code>ㅠ</code> 를 찾으면 된다.</p>
-
-<p></br></p>
-
-<h3 id="stnplanning">STN Planning</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/state_vs_plan_planner.jpg'  alt="" /></p>
-
-<p>여기서 <em>TFD</em> 는 <em>Total-order Forward Decomposition</em> 의 약자다.</p>
-
-<pre><code>function Ground-TFD(s, &lt;t, ..., tk&gt;, O, M)  
-  // empty plan, no task
-  if k = 0 return &lt;&gt;
-
-  if t1.isPrimitive() thne
-    actions = {(a, σ), a = σ(t1) and a applicable in s}
-
-    if actions.isEmpty() then return failure
-    (a, σ) = actions.chooseOne()
-    plan &lt;- Ground-TFD(γ(s, a), σ(&lt;t2, ..., tk&gt;), O, M)
-
-    if plan = failure then return failure
-    else return &lt;a&gt; * plan // add plan 
-
-  else 
-    methods = {(m, σ) | m is relevant for σ(t1) and m is appicable in s}
-
-    if methods.isEmpty then return failure
-
-    (m, σ) = methods.chooseOne()
-    // prepend subtasks
-    plan &lt;- subtasks(m) * σ(&lt;t2, ..., tk&gt;)
-
-    return Ground-TFD(s, plan, O, M)
-</code></pre>
-
-<p><em>DWR</em> 예제를 보면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/DWR_decompos_tree_ex.jpg'  alt="" /></p>
-
-<p><code>move-stack</code> 은 <em>non-primitive</em> 이므로 <em>decomposition</em> 하고, 이 과정을 반복하면서 <em>ground, primitive task</em> 를 얻어 <em>action</em> 으로 해결한다.</p>
-
-<p><br/></p>
-
-<h3 id="tfdvsfowardbackwardsearch">TFD vs Foward/Backward Search</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/TFD_vs_fwd_backwd.jpg'  alt="" /></p>
-
-<ul>
-<li>TFD consider only applicable actions like forward search</li>
-<li>TFD consider only relevant actions like backward search</li>
-<li>TFD generate actions execution order. current world state always known</li>
-<li>Ground-TFD can be generalized to Lifted-TFD resulting in same advantages as lifted backward search</li>
-</ul>
-
-<p><em>TFD</em> 의 경우 <em>action execution order</em> 를 생성하기 때문에, 현재 어디에 위치해 있는지를 알 수 있다. 이 때문에 <em>goal</em> 까지 더 빠르게 가기 위한 <em>good heuristics</em> 를 적용할 수 있다.</p>
-
-<p><em>Lifted-TFD</em> 는 <em>variable</em> 을 최대한 유지해, 불필요한 <em>binding</em> 을 막는다.</p>
-
-<p><br/></p>
-
-<p><em>Partial-order FD</em> 코드도 살펴보자.</p>
-
-<pre><code>function Ground-PFD(s, w, O, M)  
-  if w.U = {} return &lt;&gt;
-
-  task &lt;- { t ∈ U | t has no predecessors in w.E}.chooseOne()
-
-  if task.isPrimitive() then
-    actions = {(a, σ) | a = σ(t1) and a applicable in s}
-
-    if actions.isEmpty() then return failure
-
-    (a, σ) = actions.chooseOne()
-    plan &lt;- Ground-PFD(γ(s, a), σ(w-{task}), O, M)
-
-    if plan = failure then return failure
-    else return &lt;a&gt; * plan
-
-  else
-    methods = {(m, σ) | m is relevant for σ(t1) and m is applicable in s}
-
-    if methods.isEmpty then return failure
-
-    (m, σ) = methods.chooseOne()
-
-    return Gound-PFD(s, δ(w, task, m, σ), O, M)    
-</code></pre>
-
-<p><em>TFD</em> 와 별 차이가 없다. 초기에 <em>TFD</em> 가 아니므로 인자로 <em>network</em> 인 <code>w</code> 를 받아, <code>task</code> 를 직접 구하는거 이외에는.</p>
-
-<p><br/></p>
-
-<h3 id="htnplanning">HTN Planning</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/precond_STN_planning.jpg'  alt="" /></p>
-
-<p><em>STN planning</em> 에서는 <em>ordering constaints</em> 를 유지해야 하고, <em>applicability</em> 를 테스트하기 위해서 <em>precondition</em> 을 이용했다. 또한 <em>effect</em> 없이 <em>precond</em> 만 이용하므로 반드시 <em>forward search</em> 를 해야 했다.</p>
-
-<p><em>HTN planning</em> 에서는 <em>ordering constaints</em> 나 <em>precondition</em> 이외에 추가적으로 <em>general constraints</em> 를 유지하여 다른 종류의 <em>constraints</em> 를 조합하는 등 더 유연하게 플래닝할 수 있다. </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_methods_def.jpg'  alt="" /></p>
-
-<p>예를 들어 <em>HTN methods</em> 는 <code>constr(m)</code> 을 포함한다. <em>DWR</em> 예제를 보자.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_method_DWR_ex.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_method_DWR_ex2.jpg'  alt="" /></p>
-
-<p><code>move-one</code> 같은 경우 <code>no-move</code> 대신 이용하는데, 이는 <em>HTN planning</em> 에서는 <em>task</em> 가 없으면 <em>constraints</em> 를 추가할 수 없기 때문이다. </p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_vs_STRIPS.jpg'  alt="" /></p>
-
-<p><em>HTN</em> 은 <em>STN</em> 의 더 유연한 버전이고, <em>STN</em> 은 <em>undecidable</em> 한 문제를 풀 수 있지만, <em>STRIPS</em> 에서는 불가능하다. <em>STRIPS</em> 에서는 유한한 오브젝트, 아톰 등으로 구성된 유한한 상태 공간을 탐색하기 때문이다. 반대로 <em>STN</em> 이 <em>background</em> 를 더 필요로 하지만, 더 <em>expressie</em> 함을 알 수 있다.</p>
-
-<p>그렇다고 <em>STRIPS</em> 가 후지다는 것이 아니라, 서로 다른 종류의 문제를 풀 수 있는 두개의 방법이라 보면 된다.</p>
-
-<p>참고로 <em>non-recursive STN</em> 은 <em>STRIPS</em> 로 번역될 수 있다고 한다. 그리고 <em>regular STN</em> 은 <em>STRIPS</em> 와 동일하다고 하는데, <em>regular</em> 란 뜻은 <em>recursive call</em> 이 그리 많지 않은 것을 의미한다.</p>
-
-<h3 id="sipe2htnplanner">SIPE-2 HTN Planner</h3>
-
-<p><a href='https://www.youtube.com/watch?v=gE0wPgT2qrw' >Youtube: SIPE-2 HTN Planner by David Wilkins</a></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
-(2) <a href='http://uxmag.com/articles/psychological-usability-heuristics' >brain image</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-4/</link><guid isPermaLink="false">6235b69f-6206-4ec8-af7f-780a8f1d76cb</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[STN]]></category><category><![CDATA[HTN]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 01 Feb 2015 02:42:11 GMT</pubDate></item><item><title><![CDATA[AI Planning 3, PSP, PoP]]></title><description><![CDATA[<p><img src='http://www.dailygalaxy.com/.a/6a00d8341bf7f753ef019affc63311970d-800wi'  alt="" /></p>
-
-<h3 id="partialplan">Partial Plan</h3>
-
-<p>이 전까지는 <em>plan</em> 을 <em>goal state</em> 를 달성하기 위한 <em>action</em> 의 나열로서 봤다. <em>plan</em> 자체를 하나의 솔루션으로 본 것이다. <em>partial plan</em> 은 이와 달리, 탐색 공간이 <em>state</em> 가 아니라 <em>plan</em> 으로 구성되어있다는 생각에서 시작한다.</p>
-
-<ul>
-<li><strong>state-space search:</strong> search through graph of nodes rpresenting world states</li>
-<li><strong>plan-space search:</strong> search through graph of plans.</li>
-</ul>
-
-<p>(1) <strong>nodes</strong> are partially specified plans. <br />
-(2) <strong>arcs</strong> are plan refinement opreations. <br />
-(3) <strong>solutions</strong> are partial-order plans.</p>
-
-<p><em>partial plan</em> 이란</p>
-
-<ul>
-<li>subset of the actions</li>
-<li>subset of the organizational structure including temporal ordering of actions and rationale (<em>what the action achieves in the plan</em>)</li>
-<li>subset of varaible bindings</li>
-</ul>
-
-<p>좀 더 <em>formal</em> 한 정의는</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/partial_plan_def.jpg'  alt="" /></p>
-
-<ul>
-<li><code>A</code> 는 <em>partially instantiated</em> 된 <em>operators</em> 다.</li>
-<li><code>&lt;</code> 는 <em>ordering constraint</em></li>
-<li><code>B</code> 는 <em>variable binding</em></li>
-<li><code>L</code> 은 <em>casual links</em> 로 <em>action</em> 간 <em>ordering</em> 과 여기에 필요한 <em>proposition</em> (<em>effect</em>, <em>precond</em>), <em>binding constraint</em> 를 포
-함한다. <code>a_i</code> 를 <em>producer</em> <code>a_j</code> 를 <em>consumer</em> 라 부르기도 한다. </li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="planrefinemeents">Plan Refinemeents</h3>
-
-<p><em>partial plan</em> 의 구성요소는</p>
-
-<ul>
-<li>initial state</li>
-<li>goal conditions</li>
-<li>set of operators with different varaibles</li>
-</ul>
-
-<h4 id="addingactions">Adding Actions</h4>
-
-<p><em>unsatisfied pre-cond</em>, <em>unsatisfied goal condition</em> 을 위해서 <em>partial plan</em> 에 <em>action</em> 을 추가해야 한다. <em>forward search</em> 나 <em>backward search</em> 에서는 앞이나 뒤에만 <em>action</em> 을 추가할 수 있었지만 <em>partial plan</em> 에선 그런 제약이 없다. </p>
-
-<p>예제를 보면 <em>initial state</em> 와 <em>goal</em> 로만 구성된 <em>empty plan</em> 에서 시작해서 <em>partial plan</em> 을 점점 키워간다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_action_ex.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<h4 id="addingcasuallinks">Adding Casual Links</h4>
-
-<p>위에서 언급했듯이 <em>partial plan</em> 은 <em>action</em> 간 <em>casual links</em> 를 포함하고 있다. <em>action</em> 간 <em>invalid pre-cond, effect</em> 를 방지하기 위해서 필요하다. </p>
-
-<p>두 종류의 <em>provider</em> 가 있을 수 있다.</p>
-
-<p>(1) <em>action</em> 의 <em>effect</em> <br />
-(2) <em>initial state</em> 를 담고있는 <em>atom</em> </p>
-
-<p>마찬가지로 <em>consumer</em> 도</p>
-
-<p>(1) <em>action</em> 의 <em>pre-condition</em> 거나 
-(2) <em>goal condition</em> 일 수 있다. </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_casual_links_ex.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<h4 id="addingvariablebindng">Adding Variable Bindng</h4>
-
-<ul>
-<li>new operators introduce new (copies of) variables into the plan</li>
-<li>solution plan must contain actions</li>
-<li>varaible binding constraints keep track of possible values for varaibles and co-designation</li>
-</ul>
-
-<p>새로운 <em>operator</em> 가 사용될때 마다, 새로운 <em>varaible</em> 이 <em>plan</em> 에 추가된다. 그런데 솔루션에는 <em>action</em> 이 있어야 하므로 <em>possible value</em> 를 테이블로 유지해야 한다. <em>casual links</em> 를 추가하면서 <em>effect</em> 와 <em>pre-cond</em> 를 연결했지만, <em>variable</em> 까지 고려하면 <em>invalid</em> 한 경우가 생길수도 있으므로 이를 막기 위해 <em>varaible binding</em> 이 필요하다. 예제를 보면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_variable_ex.jpg'  alt="" /></p>
-
-<h4 id="addingorderingconstraints">Adding Ordering Constraints</h4>
-
-<p><em>partial plan</em> 은 <em>ordering constraint</em> 를 포함하고 있다. </p>
-
-<ul>
-<li>binary relation specifying the temporal order between actions in the plan</li>
-</ul>
-
-<p><em>ordering constraints</em> 를 추가해야 하는 이유는</p>
-
-<ul>
-<li>all actions must come after initial state</li>
-<li>all actions must come before goal</li>
-<li>casual link implies ordering constaint</li>
-<li>to avoid possible interference between actions</li>
-</ul>
-
-<p>예제를 보자. 그림에서 <em>variable binding</em> 이 표시되어 있진 않지만, 있다고 보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/adding_ordering_const.jpg'  alt="" /></p>
-
-<h3 id="planspacesearch">Plan-Space Search</h3>
-
-<p>지금까지 <em>partial plan</em> 을 구성하는 방법에 대해 배웠고, 이제 <em>partial plan</em> 을 노드로 삼는 <em>plan-space search</em> 에 대해 알아보자.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/initial_search_state.jpg'  alt="" /></p>
-
-<p>최초에는 두개의 더미 <em>action</em> 인 <em>init</em>, <em>goal</em> 을 가지고 <code>init &lt; goal</code> 의 <em>ordering constaint</em> 를 가진다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/initial_search_state_ex.jpg'  alt="" /></p>
-
-<p>이제 <em>plan refinement operators</em> 를 적용해서 하나 이상의 <em>successor</em> 를 찾기 위한 <em>successor function</em> 을 정의해 보자.</p>
-
-<ul>
-<li>adding an action to <code>A</code></li>
-<li>adding an ordering constaint to <code>&lt;</code></li>
-<li>adding a binding constaint to <code>B</code></li>
-<li>adding a casual link to <code>L</code></li>
-</ul>
-
-<p>보면 알겠지만 <em>plan-space search</em> 는 두 가지 문제를 <em>decoupling</em> 한다.</p>
-
-<p>(1) <em>which actions to execute as part of our plan</em> <br />
-(2) <em>how to organize these actions?</em>, <em>what is the organizational structure that underlies our plan?</em></p>
-
-<p><em>plan-space search</em> 를 다른관점에서 볼 수도 있다. <em>possible plan</em> 을 <em>partial plan</em> 으로 줄여가는 것이다.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/total_vs_partial_order.jpg'  alt="" /></p>
-
-<p><em>planning problem</em> <code>P</code> 는 <em>state transition system</em>, <em>initial state</em>, <em>goal</em> 로 구성된다. 이때 <em>plan</em> <code>ㅠ</code> 에 대해 <code>r(s_i, ㅠ)</code> 가 <code>g</code> 를 만족시키면, <code>ㅠ</code> 는 솔루션이다.</p>
-
-<p><code>r(s_i, ㅠ)</code> 는 <em>ground action</em> 의 시퀀스로만 정의되는데</p>
-
-<ul>
-<li>partial order corresponds to total order in which all partial order constaints are respected</li>
-<li>partial instantiation corresponds to grounding in which variables are assigned values consistent with binding constraints</li>
-</ul>
-
-<p>생각해보면 <em>partially instantiated varaibles</em> 을 <em>fully ground plan</em> 으로 바꿀 수 있는 경우의 수가 많기 때문에 어떤 것을 사용할지 결정해야 한다. 이를 위해 <em>partial order solution</em> 을 정의하면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/partial_order_solution.jpg'  alt="" /></p>
-
-<p>위 슬라이드에서 볼 수 있듯이 두 가지 조건이 갖추어지면 <em>plan</em> <code>ㅠ</code> 가 <em>(partial order) solution</em> 이 될 수 있다.</p>
-
-<ul>
-<li>its ordering constaints <code>&lt;</code> and binding constraints <code>B</code> are consistent and</li>
-<li>for every total order seq <code>&lt;a1, ... , ak&gt;</code> of all the actions in <code>A - {init, goal}</code> that is </li>
-</ul>
-
-<p>(1) totally ordered and grounded and respects <code>&lt;</code> and <code>B</code> <br />
-(2) <code>r(s_i, &lt;a1, ..., ak&gt;)</code> must satisfy <code>g</code></p>
-
-<p>흥미로운점은 <em>casual links</em> 가 아무런 역할도 하지 않는다는 것이다. 두번째는 위 과정을 <em>goal test</em> 로 쓰기 위해 <em>computational procedure</em> 로 바꾸면, 퍼포먼스가 별로라는 사실도 알 수 있다.</p>
-
-<p>만약 우리가 모든 <em>total order seq</em> 를 테스트 해야하고, 수 많은 <em>seq</em> 가 있다면 <em>goal</em> 을 검증하기 위해 수 많은 작업을 해야한다.</p>
-
-<p>물론 <em>plan</em> 을 만드는 과정에서 <em>action</em> 의 <em>pre-cond</em> 가 <em>casual links</em> 에 의해 지정되기 때문에, 우리가 만들고 있는 <em>plan</em> 이 <em>goal</em> 을 만족하는지, 아닌지 알 수 있다. 문제는 <em>pre-cond</em> 만으로는 <em>goal</em> 을 만족하는지 아닌지 충분하지 않다는 점이다.</p>
-
-<h3 id="threatsandflaws">Threats and Flaws</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/threat_example.jpg'  alt="" /></p>
-
-<p>위 그림에서 <em>action</em> <code>3</code> 과 <code>1</code> 은 <code>at(robot, loc1)</code> 을 서로 추가하고, 삭제한다. 따라서 병렬로 실행되면 <em>dummy action</em> 인 <em>goal</em> 이 실행되지 않을 수 있다. 이 경우를 <em>threat</em> 라고 부르며, 간단한 해결 방법으로 <em>action</em> <code>2</code> 에서 <code>1</code> 로 <em>ordering</em> 을 추가할 수 있다. 정의를 보면</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/threat_def.jpg'  alt="" /></p>
-
-<p><em>casual link</em> <code>a_i -&gt; [p] -&gt; a_j</code> 에 에 대해 <em>threat</em> <code>a_k</code> 는 <code>p</code> 와 <em>unifiable effect</em> <code>~ q</code> 를 가지고 있고, <em>ordering constraint</em> <code>a_i &lt; a_k</code>, <code>a_k  &lt; a_j</code> 가 있다. 다시 말해 <code>a_i</code> 의 <em>effect</em> 를 상쇄할 수 있다는 말이다.</p>
-
-<p><em>unsatisfied sub-goal</em> 과 <em>threat</em> 같은 것들을 <em>flaw</em> 라 부른다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flaws_def.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flawless_plan.jpg'  alt="" /></p>
-
-<p>만약 <em>partial plan</em> <code>ㅠ = (A, &lt;, B, L)</code> 가 </p>
-
-<p>(1) <code>ㅠ</code> has no flaws <br />
-(2) the ordering constaints <code>&lt;</code> are not circular <br />
-(3) the variable bindings <code>B</code> are consistent  </p>
-
-<p>이면 <em>partial plan</em> <code>ㅠ</code> 는 <em>planning problem</em> <code>P</code> 의 솔루션이다.</p>
-
-<p><br/></p>
-
-<h3 id="pspalgorithm">PSP algorithm</h3>
-
-<p><em>plan-space planning</em> 을 잠깐 복습해보면,</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/psp_as_search_prb.jpg'  alt="" /></p>
-
-<p><em>operator</em>, <em>initial state</em> <em>goal</em> 로 구성된 <em>planning problem</em> 이 주어졌을때, <em>search problem</em> 은 위 슬라이드처럼 정의할 수 있다.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PSP_basic_ops.jpg'  alt="" /></p>
-
-<p><em>PSP, Plan-Space Planner</em> 의 기본적인 아이디어는 <em>partial plan</em> <code>ㅠ</code> 가 <em>flaw</em> 가 없을때 까지 <code>&lt;</code>, <code>B</code> 를 <em>valid</em> 하게 유지하면서 <em>refine</em> 하는 것이다. 따라서 <em>flaw</em> 를 찾고, 이걸 해결할 수 있는 <em>resolvers</em> 를 구한 뒤 적절히 선택해 나아가면 된다. 알고리즘은 </p>
-
-<pre><code>function PSP(plan)  
-  allFlaws &lt;- plan.openGoals() + plan.threats()
-
-  if allFlaws.empty() then return plan
-
-  flaw &lt;- allFlaws.selectOne()
-  allResolvers &lt;- flaw.getResolvers(plan)
-
-  if allResolver.empty() then return failure
-
-  resolver &lt;- allResolvers.chooseOne()
-  newPlan &lt;- plan.refine(resolver)
-
-  return PSP(newPlan)
-</code></pre>
-
-<p>여기서 <code>chooseOne()</code> 과 <code>selectOne()</code> 이라는 두개의 선택 함수를 볼 수 있는데</p>
-
-<ul>
-<li><code>chooseOne()</code> is non-deterministic choice</li>
-<li><code>selectOne()</code> is deterministic selection</li>
-</ul>
-
-<p><code>chooseOne()</code> 의 경우 <em>non-deterministic</em> 이기 때문에 실패할 경우 <em>backtracking</em> 할 수 있도록 해야 한다.</p>
-
-<p>반면 <code>selectOne()</code> 은 <em>deterministic</em> 이기 때문에 <em>backtracking</em> 이 필요 없다. 대신 고려해야 할 것은</p>
-
-<p>(1) <em>order</em> 가 <em>effcientcy</em> 에 영향을 미치기 때문에 어떤걸 선택하느냐가 중요하다. (<em>order</em> 는 <em>completeness</em> 와는 관련 없다) <br />
-(2) 모든 <em>flaw</em> 는 <em>plan</em> 이 <em>solution</em> 이 되기 전에 <em>resolved</em> 되야 한다.  </p>
-
-<p><br/></p>
-
-<h3 id="pspimplementation">PSP Implementation</h3>
-
-<pre><code>function PSP(plan)  
-  allFlaws &lt;- plan.openGoals() + plan.threats()
-
-  if allFlaws.empty() then return plan
-
-  flaw &lt;- allFlaws.selectOne()
-  allResolvers &lt;- flaw.getResolvers(plan)
-
-  if allResolver.empty() then return failure
-
-  resolver &lt;- allResolvers.chooseOne()
-  newPlan &lt;- plan.refine(resolver)
-
-  return PSP(newPlan)
-</code></pre>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/plan_openGoals.jpg'  alt="" /></p>
-
-<p><em>unachieved sub-goal</em> 의 리스트는 <em>action</em> 을 추가하면서 <em>precondition</em> 때문에 늘어나고, <em>casual link</em> 을 추가할때는 <em>protected proposition</em> 때문에 감소한다. </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/plan_threats.jpg'  alt="" /></p>
-
-<p><em>threat</em> 의 경우에는 새로운 액션 <code>a_new</code> 에 대해 기존의 링크 <code>L</code> 내에 있는 모든 <code>a_i -&gt; [p] -&gt; a_j</code> 에 대해 <code>a_new &lt; a_i</code>, <code>a_j &lt; a_new</code> 인지 검사하고, 참이면 패스한다. 참이 아닐경우 <code>p</code> 와 <code>~q</code> 의 <em>effect</em> 가 상쇄되는지 검사하여 <em>threat</em> 인지 검사한다.</p>
-
-<p><em>casual link</em> <code>a_i -&gt; [p] -&gt; a_j</code> 를 추가할때는 기존의 <em>action</em> <code>a_old</code> 에 대해 <em>threat</em> 가 될 수 있는지 위처럼 검사한다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flaw_getResolvers.jpg'  alt="" /></p>
-
-<p>먼저 <em>unachieved precondition</em> 을 제거하는 <em>resolver</em> 를 구하는 방법을 알아보자. 기존의 <em>valid action</em> 의 <em>effect</em> <code>q</code> 에 대해 <em>unachieved precondition</em> <code>p</code> 를 해겨할 수 있으면 <em>resolver</em> 를 추가한다. <em>operator</em> 로 부터 직접 <em>action</em> 을 만들어 <em>casual link</em> 까지 추가할 수도 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/flaw_getResolvers2.jpg'  alt="" /></p>
-
-<p><em>threat</em> 를 제거하는 <em>resolver</em> 는 위처럼 구할 수 있다. <code>a_i -&gt; [p] -&gt; a_j</code> 에 대한 <em>threat</em> <code>a_t</code> 에 대해 <code>a_t &lt; a_i</code>, <code>a_j &lt; a_t</code> 를 추가하거나, <em>variable binding</em> 을 추가하는 방법이 있다. <code>v</code> 의 <em>substitution</em> 이 <code>v</code> 와 다르면서, 동시에 <code>B</code> 와 <em>consistent</em> 해야만 <em>resolver</em> 다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/plan_refine.jpg'  alt="" /></p>
-
-<p><em>ordering</em> 이나 <em>binding constraints</em>, <em>casual links</em>, <em>new action</em> 을 추가하면서 <em>refinement</em> 를 할 수 있다. 이 때 <em>resolver</em> 를 찾기 위한 <em>unachieved precondition</em>, <em>threat</em> 를 업데이트 해야 한다.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/maintain_ordering_consts.jpg'  alt="" /></p>
-
-<p><em>ordering constaints</em> 는 질의하거나, 새로운 <em>ordering</em> 을 추가하기 위해 유지해야 한다. 이를 위한 표현 방법으로 위 슬라이드처럼 3가지 방법중 하나를 사용할 수 있다.</p>
-
-<p><em>transitive closure</em> 를 유지하는 방법의 경우, <em>query (질의)</em> 는 빠르나 새로운 연산의 추가가 느릴 수 있다. 그러나 <em>planner</em> 의 경우 <em>query</em> 가 더 자주사용되는 연산이므로 좋은 표현 방법이다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/maintain_vcs.jpg'  alt="" /></p>
-
-<p><em>unary constriants</em> 와 <em>equality</em> 는 <em>linear time</em> 으로 구할 수 있다. <em>inequality</em> 의 경우에는 <em>exponential time</em> 이 필요하고, 일반적으로 <em>NP-complete</em> 문제라고 알려져 있다.</p>
-
-<p><em>inequality</em> 를 도입하는 것은 <em>threat</em> 를 풀 수 있는 <em>resolver</em> 이기 때문에 꼭 필요한데, 퍼포먼스가 문제가 될 수 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PSP_sound_comp.jpg'  alt="" /></p>
-
-<p><em>sound</em> 는, <em>planner</em> 가 리턴하는 것이 <em>solution</em> 이란 뜻이고 <em>complete</em> 하다는 것은 <em>solution</em> 이 있으면 <em>planner</em> 가 반드시 찾아낸다는 뜻이다. </p>
-
-<p><br/></p>
-
-<h3 id="thepopplanner">The PoP Planner</h3>
-
-<p><em>Partial Order Planning</em></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PSP_data_flow.jpg'  alt="" /></p>
-
-<p><em>PoP</em> 플래너는 모든 <em>threat</em> 를 위 슬라이드에 표시된 초록색 부분에서 루프로 다룬다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/PoP_impl.jpg'  alt="" /></p>
-
-<p><em>action</em>, <em>precondition</em> 을 하나의 <em>set</em> 으로 하여 <em>agenda</em> 라는 <em>input</em> 으로 취급한다. 그리고 <em>flaw type</em> 에 의해서 <em>search control</em> 이 진행된다. 코드로 보면</p>
-
-<pre><code>funciton PoP(plan, agenda)  
-  if agenda.empty then return plan
-
-  (a_g, p_g) &lt;- agenda.selectOne()
-  agenda &lt;- agenda - (a_g, p_g)
-  relevant &lt;- plan.getProviders(p_g)
-
-  if relevant.empty() then return failure
-
-  // non-deterministic, use backtracking
-  (a_p, p_p, σ) &lt;- relevant.chooseOne() 
-  plan.L &lt;- plan.L ∪ &lt;a_p -&gt; [σ(p_g)] -&gt; a_g&gt;
-  plan.B &lt;- plan.B ∪ σ
-
-  if a_p is not in plan.A then
-    plan.add(a_p)
-    agenda &lt;- agenda + a_p.preconditions
-
-  newPlan &lt;- plan
-
-  for each threat on &lt;a_p -&gt; [p] -&gt; a_g&gt; or due to a_p do
-    allResolvers &lt;- threat.getResolvers(newPlan)
-
-    // backtracking
-    if allResolvers.empty() then return failure
-
-    resolver &lt;- allResolvers.chooseOne()
-    newPlan &lt;- newPlan.refine(resolver)
-
-  return PoP(newPlan, agenda)
-</code></pre>
-
-<p><em>back-propagation</em> 과 비슷하게 <em>goal</em> 부터 시작한다. <em>plan</em> 의 <em>casual links</em>, <em>binding</em> 을 추가해 가면서 진행한다.</p>
-
-<h4 id="statespacevsplanspace">State-Space vs Plan-Space</h4>
-
-<p><em>state-space</em> 플래너와 <em>plan-space</em> 플래너를 비교하면, </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/state_vs_plan_planner.jpg'  alt="" /></p>
-
-<p>(1) <em>state-space</em> 는 유한한 탐색 공간을 가진다. 매 스탭마다 유한한 수의 오브젝트와 릴레이션을 다루기 때문이다. 반면 <em>plan-space</em> 에선 탐색공간이 무한할 수 있다. 그러나 무한한 공간을 모두 다 탐색하는 것은 아니고, 솔루션을 찾기 위해 그 일부만 탐색한다.</p>
-
-<p>(2) <em>state-space</em> 는 보통 <em>graph</em> 로 표현되고, 실제로는 <em>tree</em> 를 탐색한다.  반면 <em>plan-space</em> 에서는 어떤 <em>intermediate representation</em> 을 사용하는지 명확하지 않다. 이건 상당히 중요한데, 대부분의 모던 휴리스틱 기법들이 <em>explicit representation of intermediate states</em> 에 의존하기 때문이다.</p>
-
-<p>(3) <em>state-space</em> 기법에선 <em>action ordering</em> 이 어떻게 탐색할지를 결정하는 반면 <em>plan-space</em> 에서 <em>action</em> 의 선택과 <em>organization</em> 은 독립적이다. 더 유연하다.</p>
-
-<p>(4) <em>state-space</em> 에선 <em>casual structure</em> 가 <em>implicit</em> 한 반면 <em>plan-space</em> 에선 <em>casual links</em> 라는 <em>explicit representation</em> 으로 보여진다. 왜 이 <em>action</em> 을 사용하는지에 대한 명확한 기준이 있기 때문에 <em>current plan</em> 이 잘못되었을 때 수정하기 더 쉽다.</p>
-
-<p>(5) <em>state-space</em> 에서는 <em>search-node</em> 가 더 간단하다. <em>set of ground atoms</em> 기 때문에 <em>successor</em> 를 계산하기도 더 쉽다. 반면 <em>plan-space</em> 에서는 <em>constraint network</em> 를 유지해야 하기 때문에 복잡하고, <em>successor</em> 를 계산하기도 쉽지 않다.</p>
-
-<p>요즘에는 효율적인 휴리스틱 때문에 <em>state-space</em> 가 좀 더 많이 이용되는 편이라고 한다.</p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate <br />
-(2) <a href='http://www.dailygalaxy.com/my_weblog/2013/10/artificial-intelligence-will-it-end-the-human-epoch.html' >brain image</a>  </p>]]></description><link>http://1ambda.github.io/ai-planning-3/</link><guid isPermaLink="false">6a780098-7f04-4775-882d-bfcb570c396b</guid><category><![CDATA[coursera]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[PSP]]></category><category><![CDATA[PoP]]></category><category><![CDATA[state-space]]></category><category><![CDATA[plan-space]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sun, 25 Jan 2015 04:59:52 GMT</pubDate></item></channel></rss>
+(6) <a href='http://mrw0119.tistory.com/12' >프로그래밍에 미치다 - 외적, 내적 분해</a>  </p>]]></description><link>http://1ambda.github.io/coding-the-matrix-1/</link><guid isPermaLink="false">46c525c5-23be-4306-9722-8ec9f3f90112</guid><category><![CDATA[coursera]]></category><category><![CDATA[linear algebra]]></category><category><![CDATA[vector]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 12 Feb 2015 11:00:01 GMT</pubDate></item></channel></rss>

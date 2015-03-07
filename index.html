@@ -61,7 +61,7 @@
 </head>
 <body>
 
-  <script src="public/jquery.js?v=5e102a0e1b"></script>
+  <script src="public/jquery.js?v=674d3cdf7e"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
@@ -76,6 +76,57 @@
 </header>
 
 <main class="site_width" role="main">
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="cloud-computing-paxos">Cloud Computing, Paxos</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-08">Sunday, March 08, 2015</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/cloud-computing-paxos/" data-disqus-identifier="116">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
+      <p> 대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure Detection Leader Election Agreement (harder than consensus) 일반적으로 서버가 많으면&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="cloud-computing-paxos">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="cloud-computing-multicast">Cloud Computing, Multicast</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-08">Sunday, March 08, 2015</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/cloud-computing-multicast/" data-disqus-identifier="118">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
+      <p> multicast 는 클라우드 시스템에서 많이 사용됩니다. Cassandra 같은 분산 스토리지에서는 write/read 메세지를 replica gorup 으로 보내기도 하고, membership 을 관리하기 위해서 사용하기도 합니다 그런데, 이 multicast 는 ordering 에 따라서 correctness 에 영향을 줄 수 있기 때문에 매우 중요합니다. 자주 쓰이는 기법으로 FIFO, Casual, Total 이 있는데 하나씩 살펴보겠습니다&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="cloud-computing-multicast">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class"margin_bottom_medium"><a href="cloud-computing-snapshot">Cloud Computing, Snapshots</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-07">Saturday, March 07, 2015</time>
+      <br/><br/>
+      <a href="http://1ambda.github.io/cloud-computing-snapshot/" data-disqus-identifier="115">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
+      <p> 이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on failure garbage collection of objects: object at servers that don't&hellip;</p>
+      <h5><a class="text book small uppercase color c_blue" href="cloud-computing-snapshot">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
 
   <article class="margin_bottom_big">
     <header class="text center margin_bottom_medium">
@@ -111,59 +162,8 @@
   </article>
 
 
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="articles">Articles</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-01">Sunday, March 01, 2015</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/articles/" data-disqus-identifier="111">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><h3 id="scala"></h3></i>
-      <p>Scala Functional Programming in Scala by Martin Odersky Chapter 1  Chapter 2  Chapter 3  Chapter 4  Chapter 5  Chapter 6  Chapter 7   Reactive Programming by Martin Odersky Chapter 1 - Monads, Random Generators  Chapter 2 - Stateful Object  Chapter 3 - Try, Future, Promise  Chapter 4 - Observable, Rx, Scheduler&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="articles">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="cloud-computing-p2p-systems">Cloud Computing, P2P Systems</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-01">Sunday, March 01, 2015</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/cloud-computing-p2p-systems/" data-disqus-identifier="108">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p></i>
-      <p> P2P 시스템의 기술들은 cloud computing 의 많은 분야에서 활용됩니다. 뒤에서 배울 Chord P2P hashing 같은 경우는 Cassandra, Voldmort 등의 key-value store 에서 쓰이고 있습니다.  Napster 최초에 peer 는 서버에게 메세지를 보내 P2P 시스템에 가입했다는 사실을 알립니다. Napster 에서는 중앙에 서버를 두어, 파일이 저장된 peer 를 기록합니다. 각 peer 는 파일이&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="cloud-computing-p2p-systems">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class"margin_bottom_medium"><a href="java-interview-questions-collection-framework">Java Interview Questions, Collection Framework</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-23">Monday, February 23, 2015</time>
-      <br/><br/>
-      <a href="http://1ambda.github.io/java-interview-questions-collection-framework/" data-disqus-identifier="109">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p><p><img src="http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png" alt="" /></p></i>
-      <p> General (1) Explain Collections Hierarchy? (http://www.java-redefined.com) 크게 보면 Collection 과 Map 인터페이스로 구분되어 있습니다.  Map 은 key-value pair 컨테이너이기 때문에 단일 원소에 대한 컨테이너인 Collection 과 호환되지 않습니다. Set 은 중복된 원소를 허용하지 않습니다. Set 과 Map 에 정렬 기능이 필요하면 SortedSet,  SortedMap 인터페이스 구현체인 TreeMap, TreeSet&hellip;</p>
-      <h5><a class="text book small uppercase color c_blue" href="java-interview-questions-collection-framework">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
   <nav class="pagination" role="navigation">
-    <span class="page-number">Page 1 of 18</span>
+    <span class="page-number">Page 1 of 19</span>
         <a class="older-posts" href="page/2">Older Posts &rarr;</a>
 </nav>
 
