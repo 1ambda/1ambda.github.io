@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Blog">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Angular, Providers</title>
+  <meta name="description" content="" />
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Angular, Providers">
+  <meta name="twitter:description" content=" 자그마한 프로젝트를 엇그제 시작했습니다. 오늘 해야 할 일은 Linkedin, Github API 를 붙이는 일인데, 그 전에 Angular 를 좀 보고 넘어가겠습니다. 아래는 angular-fullstack 으로 만들면 생성되는 템플릿 코드인데, 어디서 부터 시작해야할지 감이 안잡히네요! angular.module('app', [     'ngCookies',   'ngResource',   'ngSanitize',   'ui.router',   'ui.bootstrap' ])   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {     $urlRouterProvider">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/angular-providers/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
+  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+  <script src="../assets/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <meta name="generator" content="Ghost 0.5" />
+<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
+<link rel="canonical" href="http://1ambda.github.io/angular-providers/" />
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-52181619-1', '1ambda.github.io');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body>
+
+  <script src="../public/jquery.js?v=a9961bb5a5"></script>
+
+  
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Functional Programming</h4>
+  <div class="social border solid top_small bottom_small padding_medium">
+    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+  </div>
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-angular tag-trend-factory tag-factory tag-service tag-provider tag-injector">
+
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/angular">Angular</a>, <a href="../tag/trend-factory">Trend Factory</a>, <a href="../tag/factory">factory</a>, <a href="../tag/service">service</a>, <a href="../tag/provider">provider</a>, <a href="../tag/injector">injector</a></h5>
+      <h1 class="margin_bottom_medium">Angular, Providers</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-15">Sunday, March 15, 2015</time>
+      <br/><br/>
+       <a href="http://1ambda.github.io/angular-providers/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><img src="https://ga-core.s3.amazonaws.com/production/uploads/program/default_image/1444/Angularjs-Bootcamp-LONDON.jpg" alt="" /></p>
+
+<p>자그마한 프로젝트를 엇그제 시작했습니다. 오늘 해야 할 일은 Linkedin, Github API 를 붙이는 일인데, 그 전에 Angular 를 좀 보고 넘어가겠습니다. 아래는 <a href="https://github.com/DaftMonk/generator-angular-fullstack">angular-fullstack</a> 으로 만들면 생성되는 템플릿 코드인데, 어디서 부터 시작해야할지 감이 안잡히네요!</p>
+
+<pre><code class="javascript">angular.module('app', [  
+  'ngCookies',
+  'ngResource',
+  'ngSanitize',
+  'ui.router',
+  'ui.bootstrap'
+])
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+    $urlRouterProvider
+      .otherwise('/');
+
+    $locationProvider.html5Mode(true);
+    $httpProvider.interceptors.push('authInterceptor');
+  })
+
+  .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
+    return {
+      // Add authorization token to headers
+      request: function (config) {
+        config.headers = config.headers || {};
+        if ($cookieStore.get('token')) {
+          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+        }
+        return config;
+      },
+
+      // Intercept 401s and redirect you to login
+      responseError: function(response) {
+        if(response.status === 401) {
+          $location.path('/login');
+          // remove any stale tokens
+          $cookieStore.remove('token');
+          return $q.reject(response);
+        }
+        else {
+          return $q.reject(response);
+        }
+      }
+    };
+  })
+
+  .run(function ($rootScope, $location, Auth) {
+    // Redirect to login if route requires auth and you're not logged in
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      Auth.isLoggedInAsync(function(loggedIn) {
+        if (next.authenticate &amp;&amp; !loggedIn) {
+          $location.path('/login');
+        }
+      });
+    });
+  });
+</code></pre>
+
+<h3 id="configrun">config, run</h3>
+
+<p>원문은 <a href="https://docs.angularjs.org/guide/module#module-loading-dependencies">Angular Document: Module Loading &amp; Dependencies</a></p>
+
+<p><em>configuration</em> 과 <em>run block</em> 은 <em>bootstrap</em> 과정에서 실행되는데</p>
+
+<ul>
+<li><em>configuration block</em> 에서는 <strong>provider</strong>, <strong>constant</strong> 만 <em>injected</em> 될 수 있고</li>
+<li><em>run block</em> 은 <em>injector</em> 가 생성되고, 어플리케이션을 구동하기 위해 사용된 후에 실행됩니다. <strong>instance</strong> 와 <strong>constant</strong> 만 <em>injected</em> 될 수 있습니다.</li>
+</ul>
+
+<pre><code class="javascript">angular.module('myModule', []).
+
+  config(function(injectable) { // provider-injector
+    // you can only inject Providers (not instances)
+    // into config block
+  }).
+
+  run(function(injectable) {    // instance-injector
+    // you can only inject instances (not Providers)
+    // into run blocks
+  });
+</code></pre>
+
+<p>아래는 동일한 코드를 다른 메소드를 이용해 작성한 애플리케이션 초기화 코드입니다.</p>
+
+<pre><code class="javascript">angular.module('myModule', []).  
+  value('a', 123).
+  factory('a', function() { return 123; }).
+  directive('directiveName', ...).
+  filter('filterName', ...);
+
+// is same as
+
+angular.module('myModule', []).  
+  config(function($provide, $compileProvider, $filterProvider) {
+    $provide.value('a', 123);
+    $provide.factory('a', function() { retrun 123; });
+    $compileProvider.directive('directiveName', ...);
+    $filterProvider.register('filterName', ...);
+  });  
+</code></pre>
+
+<p>배운것보다 모르는게 더 많이 생겼습니다. <code>Provider</code>, <code>$provide</code>, <em>injectable</em>  이 뭘까요?</p>
+
+<p><br/></p>
+
+<h3 id="providers">Providers</h3>
+
+<p>원문은 <a href="https://docs.angularjs.org/guide/providers">Angular Document: Providers</a></p>
+
+<p><em>angular app</em> 에서 쓰이는 오브젝트들은 <a href="https://docs.angularjs.org/api/auto/service/$injector"><em>intector service</em></a> 에 의해서 인스턴스화(<em>instantiated</em>) 됩니다. <em>injector</em> 는 두 타입의 오브젝트를 만드는데, </p>
+
+<p>(1) <strong>Services:</strong> are objects whose API is defined by the developer writing the service <br />
+(2) <strong>Specialized objects:</strong> conform to a specific angular framework API. These objects are one of controllers, directives, filters or animations</p>
+
+<p><em>injector</em> 가 이러한 서비스를 만들기 위해서는 <em>recipe</em> 를 알려줘야 하는데, 크게 5가지 <em>recipe</em> 가 있습니다. </p>
+
+<p>가장 유명한건 <strong>Provider</strong> 입니다. 그 외에 <em>Provider</em> 를 이용해 만든 <strong>Value</strong>, <strong>Factory</strong>, <strong>Service</strong>, <strong>Constant</strong> 가 있습니다. </p>
+
+<p><em>angular module</em> 은 하나 이상의 <em>Provider</em> 를 포함할 수 있습니다. 애플리케이션이 시작될때 <em>Angular</em> 는 <em>injector</em> 의 새로운 인스턴스를 만들고, <code>ng</code> 모듈, 애플리케이션 모듈, 그리고 그 <em>dependencies</em> 에 있는 모든 <em>recipe</em> 를 하나의 레지스트리에 등록합니다. 그리고 이후에 필요할때마다 <em>injector</em> 는 이 레지스트리에 새로운 인스턴스를 만들어야 할지, 아니면 존재하는 것을 사용할지 질의합니다.</p>
+
+<p><em>Value recipe</em> 를 이용한 간단한 <a href="https://docs.angularjs.org/guide/providers#value-recipe">예제</a> 를 보겠습니다.</p>
+
+<pre><code class="javascript">var myApp = angular.module('myApp', []).  
+              value('clientId', 'a12345654321x');
+
+myApp.controller('myController', ['clientId',  
+                                  function(clientId) {
+  this.clientId = clientId;
+}]);                              
+</code></pre>
+
+<p><code>myApp</code> 모듈에 정의되어 있는 <code>clientId</code> <em>Value recipe</em> 를 등록하고 컨트롤러에서 사용했습니다.</p>
+
+<p><br/></p>
+
+<h3 id="factory">Factory</h3>
+
+<pre><code class="javascript">myApp.factory('apiToken', ['clientId', function apiTokenFactory(clientId) {
+
+  var encrypt = function(data1, data2) {
+  // encryption algorithm:
+    return (data + ':' + data2).toUpperCase();
+  };
+
+  var secret = window.localStorage.getItem('myApp.secret');
+  var apiToken = encrypt(clientId, secret);
+
+  return apiToken;
+}]);
+</code></pre>
+
+<p><em>Factory recipe</em> 를 이용해서 <code>apiToken</code> 서비스를 정의했습니다. 이 서비스는 <em>Value recipe</em> 를 이용해 만든 <code>clientId</code> 서비스에 의존합니다.</p>
+
+<p><br/></p>
+
+<h3 id="service">Service</h3>
+
+<p><code>apiToken</code> 서비스를 이용하는 다른 서비스를 <em>Service recipe</em> 를 이용해서 만들어 볼텐데, 동시에 <em>Service recipe</em> 가 어떤 역할을 하는지 비교하기 위해 <em>Factory recipe</em> 로도 만들어 보겠습니다.</p>
+
+<pre><code class="javascript">function UnicornLauncher(apiToken) {
+
+  this.launchedCount = 0;
+  this.launch = function() {
+    // Make a request to the remote API and include the apiToken
+    ...
+    this.launchedCount++;
+  }
+}
+
+myApp.factory('unicornLauncher', ["apiToken", function(apiToken) {  
+  return new UnicornLauncher(apiToken);
+}]);
+
+// is same as
+myApp.service('unicornLauncher', ["apiToken", UnicornLauncher]);  
+</code></pre>
+
+<p><em>Factory recipe</em> 로도 만들 수 있지만, 일반적으로 <em>Service recipe</em> 는 <code>new</code> 와 함께 호출되는 서비스를 정의하기 위해 사용합니다. <a href="http://stackoverflow.com/questions/14324451/angular-service-vs-angular-factory">Stackoverflow: Factory vs Service</a> 에서도 그 답변을 찾을 수 있습니다.</p>
+
+<p>예를 들어서 위에서 우리가 정의한 <code>unicornLauncher</code> 서비스는, <code>UnicornLauncher</code> 생성자를 <code>new</code> 로 호출됩니다.</p>
+
+<p><br/></p>
+
+<p>아래는 대략적인 두 함수의 구성입니다.</p>
+
+<pre><code class="javascript">function factory(name, factoryFn) {  
+    return provider(name, { $get: factoryFn }); 
+}
+
+function service(name, constructor) {  
+    return factory(name, ['$injector', function($injector) {
+      return $injector.instantiate(constructor);
+    }]);
+}
+</code></pre>
+
+<p><code>$injector</code> 는 <em>provider</em> 에 의해 정의된 인스턴스를 <em>angular app</em> 내에서 조회하고, 생성할 수 있습니다. 이외에도 메소드를 호출하거나, 모듈을 로드할 수 있습니다.</p>
+
+<p><br/></p>
+
+<h3 id="provider">Provider</h3>
+
+<p><em>Provider recipe</em> 는 <em>Service</em> 나 <em>Factory</em> 등 다른 <em>recipe</em> 를 구성하는 코어 컴포넌트입니다. 문법적으로는 <code>$get</code> 을 구현한 커스텀 타입입니다. 이 <code>$get</code> 메소드는 <em>Factory recipe</em> 에서 사용했던 것과 같은 <em>factory function</em> 입니다. </p>
+
+<p>다시 말해서, <em>Factory recipe</em> 만들때 하는 일은 <em>empty Provider</em> 에 <code>$get</code> 을 이용해 정의된 <em>factory function</em> 을 가져오는 일입니다.</p>
+
+<p><em>Provider recipe</em>  는 반드시 애플리케이션이 시작 되기 전에 생성되야 하는 <em>application-wide configuration</em> 을 위한 <em>API</em> 를 정의할때만 사용해야 합니다.</p>
+
+<pre><code class="javascript">myApp.provider('unicornLauncher', funtion UnicornLauncherProvider() {  
+  var useTinfoilShielding = false;
+
+  this.useTinfoilShielding = function(vaue) {
+    useTinfoilShielding = !!value;
+  };
+
+  this.$get = ["apiToken", function unicornLauncherFactory(apiToken) {
+    return new UnicornLauncher(apiToken, useTinfoilShielding);
+  }];
+});
+
+myApp.config(["unicornLauncherProvider", function(unicornLauncherProvider) {  
+  unicornLauncherProvider.useTinfoilShielding(true);
+}]);
+</code></pre>
+
+<p>처음에 <em>configuration block</em> <code>config</code> 를 언급하면서 <strong>provider</strong>, <strong>constant</strong> 만 <em>injected</em> 될 수 있다고 말했었는데, 이런 이유에서입니다.</p>
+
+<p><em>regular instance injector</em> 와는 달리 <em>provider injector</em> 에 의해 실행되는 이런 <em>injection</em> 을 통해 모든 <em>provider</em> 가 인스턴스화 (<em>instantiated</em>) 됩니다.</p>
+
+<p><em>angular</em> 애플리케이션이 부트스트랩되는 동안, <em>provider</em> 가 구성되고, 생성되는 동안에는 <em>service</em> 에 접근할 수 없습니다. 이는 <em>service</em> 가 아직 생성되지 않았기 때문입니다.</p>
+
+<p><em>configuration phase</em> 가 지난 후에야 <em>services</em> 가 생성되고, 이 단계를 <em>run phase</em> 라 부릅니다. 이 때문에 <em>run block</em> 에서 <strong>instance</strong> 와 <strong>constant</strong> 만 <em>injected</em> 될 수 있다고 위에서 언급한 것입니다.</p>
+
+<p><br/></p>
+
+<h3 id="specialpurposeobjects">Special Purpose Objects</h3>
+
+<p>앞서 <em>Angular</em> 에서 쓰이는 모든 오브젝트는 <em>intector service</em> <code>$injector</code>  에 의해서 초기화 된다고 했었습니다. 일반적인 서비스 오브젝트와, 특별한 목적을 가진 오브젝트들이 있다고 언급하기도 했지요.</p>
+
+<p>이런 특별한 오브젝트들은 프레임워크를 확장하는 플러그인으로서 <em>Angular</em> 에서 정의한 <em>interface</em> 를 구현해야 하는데, 이 인터페이스는 <code>Controller</code>, <code>Directive</code>, <code>Filter</code>, <code>Animation</code> 입니다. </p>
+
+<p><code>Controller</code> 오브젝트를 제외하고는 이러한 <em>special object</em> 를 생성하기 위해 <em>injector</em> 는 <em>Factory recipe</em> 를 이용합니다. 따라서 인자로 넣어준 팩토리 함수가 디렉티브를 만들기 위해 호출됩니다.</p>
+
+<pre><code class="javascript">myApp.directive('myPlanet', ['planetName', function myPlanetDirectiveFactory(planetName) {  
+  // directive definition object
+  return {
+    restrict: 'E',
+    scope: {},
+    link: function($scope, $element) { $element.text('Planet: ' + planetName); }
+  }
+}]);
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="controller">Controller</h3>
+
+<pre><code class="javascript">myApp.controller('DemoController', ['clientId', function DemoController(clientId) {  
+  this.clientId = clientId;
+}]);
+</code></pre>
+
+<p><code>Controller</code> 는 조금 다르게, <em>Factory recipe</em> 를 이용하지 않습니다. 인자로 정의한 <em>constructor function</em> 함수가 <strong>모듈과 함께 등록</strong>됩니다. </p>
+
+<p>애플리케이션이 <code>DemoController</code> 가 필요할때마다 매번 <em>constructor</em> 를 통해서 인스턴스화(<em>instantiated</em>) 합니다. 일반적인 <em>service</em> 와는 다르게, <strong>컨트롤러는 싱글턴이 아닙니다</strong>. </p>
+
+<p>지금까지 배운 내용을 정리하면</p>
+
+<ul>
+<li>The injector uses recipes to create two type of objects: <strong>services</strong> and <strong>special purpose objects</strong></li>
+<li>There are five recipe types that define how to create objects: <strong>Value</strong>, <strong>Factory</strong>, <strong>Service</strong>, <strong>Provide</strong>, and <strong>Constant</strong></li>
+<li>Factory and Service are the most commonly used recipes. The only differences between them is that the <em>Service recipe</em> works better <strong>for objects of a custom type</strong>, while the <em>Factory</em> can produce <strong>primitives and functions</strong></li>
+<li>The <em>Provider recipe</em> is the core recipe type and all the other ones are just syntactic sugar on it</li>
+<li><em>Provider</em> is the most complex recipe type. You don't need it unless you are building a reusable piece of code that needs global configuration</li>
+<li>All special purpose objects except for the <strong>Controller</strong> are defined via <em>Factory recipes</em></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="dependencyinjection">Dependency Injection</h3>
+
+<p><img src="https://docs.angularjs.org/img/guide/concepts-module-injector.png" alt="" /></p>
+
+<p><em>service</em> 는 <code>$injector</code> 에 의해서 싱글턴 인스턴스가 만들어지고, <code>$injector.get()</code> 을 통해 얻을 수 있습니다. 만약 캐시된 인스턴스가 있다면 가져오고 없으면 새로 만듭니다. 아래는 외부에서 <code>injector</code> 를 통해 내부 서비스를 접근하는 방법입니다.</p>
+
+<pre><code class="javascript">var injector = angular.injector(['myModule', 'ng']);  
+var greeter = injector.get('greeter');  
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) [http://galleryhip.com/angular-js-icon.html) <br />
+(2) <a href="https://docs.angularjs.org/guide/providers#value-recipe">Angular Document</a> <br />
+(3) <a href="http://www.webdeveasy.com/javascript-promises-and-angularjs-q-service/">Webdeveasy: AngularJS Q</a> <br />
+(4) <a href="http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/">Webdeveasy: AngularJS Interceptor</a>  </p>
+    </section>
+
+    <footer>
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
+        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+      </section>
+    </footer>
+
+
+    <div id="disqus_thread" class="margin_top_big"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+      var disqus_identifier = '120';
+      var disqus_url = 'http://1ambda.github.io/angular-providers/';
+    
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    </article>
+</main>
+
+
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+  <script>
+  $(document).ready(function(){
+    // Target your .container, .wrapper, .post, etc.
+    $("section").fitVids();
+  });
+  </script>
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function () {
+   var s = document.createElement('script'); s.async = true;
+   s.type = 'text/javascript';
+   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+   }());
+  </script>
+
+
+  </body>
+  </html>

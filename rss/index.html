@@ -1,5 +1,421 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 07 Mar 2015 19:45:51 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Cloud Computing, Paxos]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 14 Mar 2015 16:53:44 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Angular, Providers]]></title><description><![CDATA[<p><img src='https://ga-core.s3.amazonaws.com/production/uploads/program/default_image/1444/Angularjs-Bootcamp-LONDON.jpg'  alt="" /></p>
+
+<p>자그마한 프로젝트를 엇그제 시작했습니다. 오늘 해야 할 일은 Linkedin, Github API 를 붙이는 일인데, 그 전에 Angular 를 좀 보고 넘어가겠습니다. 아래는 <a href='https://github.com/DaftMonk/generator-angular-fullstack' >angular-fullstack</a> 으로 만들면 생성되는 템플릿 코드인데, 어디서 부터 시작해야할지 감이 안잡히네요!</p>
+
+<pre><code class="javascript">angular.module('app', [  
+  'ngCookies',
+  'ngResource',
+  'ngSanitize',
+  'ui.router',
+  'ui.bootstrap'
+])
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+    $urlRouterProvider
+      .otherwise('/');
+
+    $locationProvider.html5Mode(true);
+    $httpProvider.interceptors.push('authInterceptor');
+  })
+
+  .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
+    return {
+      // Add authorization token to headers
+      request: function (config) {
+        config.headers = config.headers || {};
+        if ($cookieStore.get('token')) {
+          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+        }
+        return config;
+      },
+
+      // Intercept 401s and redirect you to login
+      responseError: function(response) {
+        if(response.status === 401) {
+          $location.path('/login');
+          // remove any stale tokens
+          $cookieStore.remove('token');
+          return $q.reject(response);
+        }
+        else {
+          return $q.reject(response);
+        }
+      }
+    };
+  })
+
+  .run(function ($rootScope, $location, Auth) {
+    // Redirect to login if route requires auth and you're not logged in
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      Auth.isLoggedInAsync(function(loggedIn) {
+        if (next.authenticate &amp;&amp; !loggedIn) {
+          $location.path('/login');
+        }
+      });
+    });
+  });
+</code></pre>
+
+<h3 id="configrun">config, run</h3>
+
+<p>원문은 <a href='https://docs.angularjs.org/guide/module' #module-loading-dependencies">Angular Document: Module Loading &amp; Dependencies</a></p>
+
+<p><em>configuration</em> 과 <em>run block</em> 은 <em>bootstrap</em> 과정에서 실행되는데</p>
+
+<ul>
+<li><em>configuration block</em> 에서는 <strong>provider</strong>, <strong>constant</strong> 만 <em>injected</em> 될 수 있고</li>
+<li><em>run block</em> 은 <em>injector</em> 가 생성되고, 어플리케이션을 구동하기 위해 사용된 후에 실행됩니다. <strong>instance</strong> 와 <strong>constant</strong> 만 <em>injected</em> 될 수 있습니다.</li>
+</ul>
+
+<pre><code class="javascript">angular.module('myModule', []).
+
+  config(function(injectable) { // provider-injector
+    // you can only inject Providers (not instances)
+    // into config block
+  }).
+
+  run(function(injectable) {    // instance-injector
+    // you can only inject instances (not Providers)
+    // into run blocks
+  });
+</code></pre>
+
+<p>아래는 동일한 코드를 다른 메소드를 이용해 작성한 애플리케이션 초기화 코드입니다.</p>
+
+<pre><code class="javascript">angular.module('myModule', []).  
+  value('a', 123).
+  factory('a', function() { return 123; }).
+  directive('directiveName', ...).
+  filter('filterName', ...);
+
+// is same as
+
+angular.module('myModule', []).  
+  config(function($provide, $compileProvider, $filterProvider) {
+    $provide.value('a', 123);
+    $provide.factory('a', function() { retrun 123; });
+    $compileProvider.directive('directiveName', ...);
+    $filterProvider.register('filterName', ...);
+  });  
+</code></pre>
+
+<p>배운것보다 모르는게 더 많이 생겼습니다. <code>Provider</code>, <code>$provide</code>, <em>injectable</em>  이 뭘까요?</p>
+
+<p><br/></p>
+
+<h3 id="providers">Providers</h3>
+
+<p>원문은 <a href='https://docs.angularjs.org/guide/providers' >Angular Document: Providers</a></p>
+
+<p><em>angular app</em> 에서 쓰이는 오브젝트들은 <a href='https://docs.angularjs.org/api/auto/service/$injector' ><em>intector service</em></a> 에 의해서 인스턴스화(<em>instantiated</em>) 됩니다. <em>injector</em> 는 두 타입의 오브젝트를 만드는데, </p>
+
+<p>(1) <strong>Services:</strong> are objects whose API is defined by the developer writing the service <br />
+(2) <strong>Specialized objects:</strong> conform to a specific angular framework API. These objects are one of controllers, directives, filters or animations</p>
+
+<p><em>injector</em> 가 이러한 서비스를 만들기 위해서는 <em>recipe</em> 를 알려줘야 하는데, 크게 5가지 <em>recipe</em> 가 있습니다. </p>
+
+<p>가장 유명한건 <strong>Provider</strong> 입니다. 그 외에 <em>Provider</em> 를 이용해 만든 <strong>Value</strong>, <strong>Factory</strong>, <strong>Service</strong>, <strong>Constant</strong> 가 있습니다. </p>
+
+<p><em>angular module</em> 은 하나 이상의 <em>Provider</em> 를 포함할 수 있습니다. 애플리케이션이 시작될때 <em>Angular</em> 는 <em>injector</em> 의 새로운 인스턴스를 만들고, <code>ng</code> 모듈, 애플리케이션 모듈, 그리고 그 <em>dependencies</em> 에 있는 모든 <em>recipe</em> 를 하나의 레지스트리에 등록합니다. 그리고 이후에 필요할때마다 <em>injector</em> 는 이 레지스트리에 새로운 인스턴스를 만들어야 할지, 아니면 존재하는 것을 사용할지 질의합니다.</p>
+
+<p><em>Value recipe</em> 를 이용한 간단한 <a href='https://docs.angularjs.org/guide/providers' #value-recipe">예제</a> 를 보겠습니다.</p>
+
+<pre><code class="javascript">var myApp = angular.module('myApp', []).  
+              value('clientId', 'a12345654321x');
+
+myApp.controller('myController', ['clientId',  
+                                  function(clientId) {
+  this.clientId = clientId;
+}]);                              
+</code></pre>
+
+<p><code>myApp</code> 모듈에 정의되어 있는 <code>clientId</code> <em>Value recipe</em> 를 등록하고 컨트롤러에서 사용했습니다.</p>
+
+<p><br/></p>
+
+<h3 id="factory">Factory</h3>
+
+<pre><code class="javascript">myApp.factory('apiToken', ['clientId', function apiTokenFactory(clientId) {
+
+  var encrypt = function(data1, data2) {
+  // encryption algorithm:
+    return (data + ':' + data2).toUpperCase();
+  };
+
+  var secret = window.localStorage.getItem('myApp.secret');
+  var apiToken = encrypt(clientId, secret);
+
+  return apiToken;
+}]);
+</code></pre>
+
+<p><em>Factory recipe</em> 를 이용해서 <code>apiToken</code> 서비스를 정의했습니다. 이 서비스는 <em>Value recipe</em> 를 이용해 만든 <code>clientId</code> 서비스에 의존합니다.</p>
+
+<p><br/></p>
+
+<h3 id="service">Service</h3>
+
+<p><code>apiToken</code> 서비스를 이용하는 다른 서비스를 <em>Service recipe</em> 를 이용해서 만들어 볼텐데, 동시에 <em>Service recipe</em> 가 어떤 역할을 하는지 비교하기 위해 <em>Factory recipe</em> 로도 만들어 보겠습니다.</p>
+
+<pre><code class="javascript">function UnicornLauncher(apiToken) {
+
+  this.launchedCount = 0;
+  this.launch = function() {
+    // Make a request to the remote API and include the apiToken
+    ...
+    this.launchedCount++;
+  }
+}
+
+myApp.factory('unicornLauncher', ["apiToken", function(apiToken) {  
+  return new UnicornLauncher(apiToken);
+}]);
+
+// is same as
+myApp.service('unicornLauncher', ["apiToken", UnicornLauncher]);  
+</code></pre>
+
+<p><em>Factory recipe</em> 로도 만들 수 있지만, 일반적으로 <em>Service recipe</em> 는 <code>new</code> 와 함께 호출되는 서비스를 정의하기 위해 사용합니다. <a href='http://stackoverflow.com/questions/14324451/angular-service-vs-angular-factory' >Stackoverflow: Factory vs Service</a> 에서도 그 답변을 찾을 수 있습니다.</p>
+
+<p>예를 들어서 위에서 우리가 정의한 <code>unicornLauncher</code> 서비스는, <code>UnicornLauncher</code> 생성자를 <code>new</code> 로 호출됩니다.</p>
+
+<p><br/></p>
+
+<p>아래는 대략적인 두 함수의 구성입니다.</p>
+
+<pre><code class="javascript">function factory(name, factoryFn) {  
+    return provider(name, { $get: factoryFn }); 
+}
+
+function service(name, constructor) {  
+    return factory(name, ['$injector', function($injector) {
+      return $injector.instantiate(constructor);
+    }]);
+}
+</code></pre>
+
+<p><code>$injector</code> 는 <em>provider</em> 에 의해 정의된 인스턴스를 <em>angular app</em> 내에서 조회하고, 생성할 수 있습니다. 이외에도 메소드를 호출하거나, 모듈을 로드할 수 있습니다.</p>
+
+<p><br/></p>
+
+<h3 id="provider">Provider</h3>
+
+<p><em>Provider recipe</em> 는 <em>Service</em> 나 <em>Factory</em> 등 다른 <em>recipe</em> 를 구성하는 코어 컴포넌트입니다. 문법적으로는 <code>$get</code> 을 구현한 커스텀 타입입니다. 이 <code>$get</code> 메소드는 <em>Factory recipe</em> 에서 사용했던 것과 같은 <em>factory function</em> 입니다. </p>
+
+<p>다시 말해서, <em>Factory recipe</em> 만들때 하는 일은 <em>empty Provider</em> 에 <code>$get</code> 을 이용해 정의된 <em>factory function</em> 을 가져오는 일입니다.</p>
+
+<p><em>Provider recipe</em>  는 반드시 애플리케이션이 시작 되기 전에 생성되야 하는 <em>application-wide configuration</em> 을 위한 <em>API</em> 를 정의할때만 사용해야 합니다.</p>
+
+<pre><code class="javascript">myApp.provider('unicornLauncher', funtion UnicornLauncherProvider() {  
+  var useTinfoilShielding = false;
+
+  this.useTinfoilShielding = function(vaue) {
+    useTinfoilShielding = !!value;
+  };
+
+  this.$get = ["apiToken", function unicornLauncherFactory(apiToken) {
+    return new UnicornLauncher(apiToken, useTinfoilShielding);
+  }];
+});
+
+myApp.config(["unicornLauncherProvider", function(unicornLauncherProvider) {  
+  unicornLauncherProvider.useTinfoilShielding(true);
+}]);
+</code></pre>
+
+<p>처음에 <em>configuration block</em> <code>config</code> 를 언급하면서 <strong>provider</strong>, <strong>constant</strong> 만 <em>injected</em> 될 수 있다고 말했었는데, 이런 이유에서입니다.</p>
+
+<p><em>regular instance injector</em> 와는 달리 <em>provider injector</em> 에 의해 실행되는 이런 <em>injection</em> 을 통해 모든 <em>provider</em> 가 인스턴스화 (<em>instantiated</em>) 됩니다.</p>
+
+<p><em>angular</em> 애플리케이션이 부트스트랩되는 동안, <em>provider</em> 가 구성되고, 생성되는 동안에는 <em>service</em> 에 접근할 수 없습니다. 이는 <em>service</em> 가 아직 생성되지 않았기 때문입니다.</p>
+
+<p><em>configuration phase</em> 가 지난 후에야 <em>services</em> 가 생성되고, 이 단계를 <em>run phase</em> 라 부릅니다. 이 때문에 <em>run block</em> 에서 <strong>instance</strong> 와 <strong>constant</strong> 만 <em>injected</em> 될 수 있다고 위에서 언급한 것입니다.</p>
+
+<p><br/></p>
+
+<h3 id="specialpurposeobjects">Special Purpose Objects</h3>
+
+<p>앞서 <em>Angular</em> 에서 쓰이는 모든 오브젝트는 <em>intector service</em> <code>$injector</code>  에 의해서 초기화 된다고 했었습니다. 일반적인 서비스 오브젝트와, 특별한 목적을 가진 오브젝트들이 있다고 언급하기도 했지요.</p>
+
+<p>이런 특별한 오브젝트들은 프레임워크를 확장하는 플러그인으로서 <em>Angular</em> 에서 정의한 <em>interface</em> 를 구현해야 하는데, 이 인터페이스는 <code>Controller</code>, <code>Directive</code>, <code>Filter</code>, <code>Animation</code> 입니다. </p>
+
+<p><code>Controller</code> 오브젝트를 제외하고는 이러한 <em>special object</em> 를 생성하기 위해 <em>injector</em> 는 <em>Factory recipe</em> 를 이용합니다. 따라서 인자로 넣어준 팩토리 함수가 디렉티브를 만들기 위해 호출됩니다.</p>
+
+<pre><code class="javascript">myApp.directive('myPlanet', ['planetName', function myPlanetDirectiveFactory(planetName) {  
+  // directive definition object
+  return {
+    restrict: 'E',
+    scope: {},
+    link: function($scope, $element) { $element.text('Planet: ' + planetName); }
+  }
+}]);
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="controller">Controller</h3>
+
+<pre><code class="javascript">myApp.controller('DemoController', ['clientId', function DemoController(clientId) {  
+  this.clientId = clientId;
+}]);
+</code></pre>
+
+<p><code>Controller</code> 는 조금 다르게, <em>Factory recipe</em> 를 이용하지 않습니다. 인자로 정의한 <em>constructor function</em> 함수가 <strong>모듈과 함께 등록</strong>됩니다. </p>
+
+<p>애플리케이션이 <code>DemoController</code> 가 필요할때마다 매번 <em>constructor</em> 를 통해서 인스턴스화(<em>instantiated</em>) 합니다. 일반적인 <em>service</em> 와는 다르게, <strong>컨트롤러는 싱글턴이 아닙니다</strong>. </p>
+
+<p>지금까지 배운 내용을 정리하면</p>
+
+<ul>
+<li>The injector uses recipes to create two type of objects: <strong>services</strong> and <strong>special purpose objects</strong></li>
+<li>There are five recipe types that define how to create objects: <strong>Value</strong>, <strong>Factory</strong>, <strong>Service</strong>, <strong>Provide</strong>, and <strong>Constant</strong></li>
+<li>Factory and Service are the most commonly used recipes. The only differences between them is that the <em>Service recipe</em> works better <strong>for objects of a custom type</strong>, while the <em>Factory</em> can produce <strong>primitives and functions</strong></li>
+<li>The <em>Provider recipe</em> is the core recipe type and all the other ones are just syntactic sugar on it</li>
+<li><em>Provider</em> is the most complex recipe type. You don't need it unless you are building a reusable piece of code that needs global configuration</li>
+<li>All special purpose objects except for the <strong>Controller</strong> are defined via <em>Factory recipes</em></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="dependencyinjection">Dependency Injection</h3>
+
+<p><img src='https://docs.angularjs.org/img/guide/concepts-module-injector.png'  alt="" /></p>
+
+<p><em>service</em> 는 <code>$injector</code> 에 의해서 싱글턴 인스턴스가 만들어지고, <code>$injector.get()</code> 을 통해 얻을 수 있습니다. 만약 캐시된 인스턴스가 있다면 가져오고 없으면 새로 만듭니다. 아래는 외부에서 <code>injector</code> 를 통해 내부 서비스를 접근하는 방법입니다.</p>
+
+<pre><code class="javascript">var injector = angular.injector(['myModule', 'ng']);  
+var greeter = injector.get('greeter');  
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) [http://galleryhip.com/angular-js-icon.html) <br />
+(2) <a href='https://docs.angularjs.org/guide/providers' #value-recipe">Angular Document</a> <br />
+(3) <a href='http://www.webdeveasy.com/javascript-promises-and-angularjs-q-service/' >Webdeveasy: AngularJS Q</a> <br />
+(4) <a href='http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/' >Webdeveasy: AngularJS Interceptor</a>  </p>]]></description><link>http://1ambda.github.io/angular-providers/</link><guid isPermaLink="false">fac918aa-4bc5-464c-ba73-2d2fad7e6a9d</guid><category><![CDATA[Angular]]></category><category><![CDATA[Trend Factory]]></category><category><![CDATA[factory]]></category><category><![CDATA[service]]></category><category><![CDATA[provider]]></category><category><![CDATA[injector]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 14 Mar 2015 16:42:33 GMT</pubDate></item><item><title><![CDATA[Coding The Matrix 3]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/column_row_space.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/matrix_as_vector.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/matrix_impl.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/null_space_of_matrix.jpg'  alt="" /></p>
+
+<p>Null space of a matrix is a vector space</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/vector_space.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/solutions.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/solutions_proof.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/use_standard_generator.jpg'  alt="" /></p>
+
+<p><em>standard geneartor</em> 를 이용해서 <code>f(x) = M * x</code> 에서의 <code>M</code> 의 컬럼을 알아낼 수 있다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/linear_function_def.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/linear_def_2.jpg'  alt="" /></p>
+
+<p>어떤 함수 <code>f</code> 가 <code>M * x</code> 형태로 정의되면, <code>f</code> 는 <em>linear function</em> 이다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/def_kernel.jpg'  alt="" /></p>
+
+<p>어떤 함수 <code>f</code> 의 <em>kernel</em> 은 <em>image</em> 를 <code>0</code> 으로 하는 집합이다. 다시 말해서 <code>f(x) = M * x</code> 에 대해 <em>null matrix</em> <code>x</code> 이 <em>kernel</em></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/kernel_one_to_one1.jpg'  alt="" /></p>
+
+<p><em>linear function</em> <code>f</code> is <strong>one-to-one</strong> iff its kernel is a <em>trivial vector space</em></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/kernel_one_to_one2.jpg'  alt="" /></p>
+
+<p>위에 나온 속성은 상당히 중요하다. 왜냐하면 <em>trivial kernel</em> 이면, 다시 말해서 <em>null matrix</em> 가 <em>trivial</em> 이면, <code>f</code> 의 <em>image</em> <code>b</code> 는 아무리 많아봐야 하나이기 때문이다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/def_onto.jpg'  alt="" /></p>
+
+<p><em>image</em> 가 <em>entire co-domain</em> 과 같으면 <strong>onto</strong> 다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/inner_product.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/outer_product.jpg'  alt="" /></p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/function_composition.jpg'  alt="" /></p>
+
+<p>두 <em>matrix-vector function</em> 의 <em>composition</em> 은 위처럼 쉽게 증명 가능하다. <code>AB * x</code> 로</p>
+
+<p>이걸 이용하면 <em>matrix-matrix multiplication</em> 의 <em>associativity</em> 도 쉽게 증명 가능하다. <code>(AB)C = A(BC)</code></p>
+
+<p><br/></p>
+
+<h3 id="invertible">Invertible</h3>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible2.jpg'  alt="" /></p>
+
+<p>두 함수가 <em>inverse</em> 관계면 두 매트릭스도 <em>inverse</em> 관계다. 그리고 한 매트릭스의 <em>inverse matrix</em> 가 존재하면 <em>invertible</em> 또는 <em>singular</em> 라 부르며, 아무리 많아봐야 하나의 <em>inverse</em> 만 가진다.</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible_way1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible_way2.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible_way3.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible_way4.jpg'  alt="" /></p>
+
+<p><em>invertible matrix</em> 가 중요한 이유는, <em>invertible matrix</em> 가 존재하면 <code>f</code> 도 <em>invertible</em> 이고, 그 말은 <code>f</code> 가 <strong>one-to-one, onto</strong> 라는 소리다. 따라서 <code>f(u) = b</code> 에 대해 적어도 하나의 솔루션이 존재하고 (<em>onto</em>), 아무리 많아봐야 하나의 솔루션이 존재한다는 뜻이다 (<em>one-to-one</em>)</p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible_product_matrix1.jpg'  alt="" /></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/invertible_product_matrix2.jpg'  alt="" /></p>
+
+<p>함수처럼 매트릭스도 <code>A</code>, <code>B</code> 가 <em>invertible</em> 일때만 <code>AB</code> 도 그러하다. </p>
+
+<p><br/></p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/identity_invertible1.jpg'  alt="" /></p>
+
+<p><code>AB</code> 에 대해 <code>A</code>, <code>B</code> 가 서로의 <em>inverse</em> 면 <code>AB</code> 는 <em>identity matrix</em> 지만 그 역은 성립하지 않는다.</p>
+
+<p>위 그림의 <code>A</code> 에서 볼 수 있듯이 <em>null space</em> 가 <em>trivial</em> 하지 않기 때문에 <em>one to one</em> 이 아니어서 <code>A</code> 는 <em>invertible</em> 이 아니다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/identity_invertible2.jpg'  alt="" /></p>
+
+<p><code>AB</code>, <code>BA</code> 가 모두 <em>identity matrix</em> 여야 <code>A</code>, <code>B</code> 가 서로 <em>inverse</em> 다.</p>
+
+<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/3-matrix/identity_invertible3.jpg'  alt="" /></p>
+
+<p>매트릭스 <code>M</code> 이 <em>one-to-one</em> 인지는 <em>trivial kernel</em> 인지를 판별하면 된다. <code>f(x) = M * x</code> 는 <em>linear function</em> 이기 때문에 <em>trivial kernel</em> 이면 <code>M</code> 도 <em>one-to-one</em> 이다.</p>
+
+<p><em>onto</em> 인지는 어떻게 알 수 있을까?</p>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<p>지금 까지의 내용을 정리하면</p>
+
+<ol>
+<li><code>u1</code> 이 <code>a * x = b</code> 의 솔루션일때, <code>V</code> 를 <code>a * x = 0</code> 의 솔루션 셋이라 하면, <code>u1 + V</code> 는 <code>a * x = b</code> 의 솔루션 셋이다. 다시 말해서 <code>V</code> 는 <em>null matrix</em>  </li>
+<li><code>f(x)</code> 가 <code>M * x</code> 형태로 나타낼 수 있으면 <em>linear function</em> 이다.  </li>
+<li><em>trivial kernel</em> 이면 <em>linear function</em> <code>f</code> 는 <em>one-to-one</em> 이고, <em>linear function</em> <code>f</code> 가 <em>one-to-one</em> 이면 <em>trivial kernel</em> 을 가진다.  </li>
+</ol>
+
+<p><br/></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <a href='http://colorsark.deviantart.com/art/3D-Cube-342632998' >Title image</a> <br />
+(2) <strong>Coding the Matrix</strong> by <em>Philip Klein</em>  </p>]]></description><link>http://1ambda.github.io/coding-the-matrix-3/</link><guid isPermaLink="false">715b3e8b-1821-4204-98cf-48f2a029e11b</guid><category><![CDATA[coursera]]></category><category><![CDATA[linear algebra]]></category><category><![CDATA[matrix]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 14 Mar 2015 16:41:34 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, Paxos]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
 
 <p>대부분의 분산 서버 벤더들은 <code>99.99999%</code> 의 <em>reliability</em> 를 보장하지만, <code>100%</code>는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 <em>consensus</em> 문제 때문입니다.</p>
 
@@ -1077,7 +1493,10 @@ Constrain-Based Sequential Pattern Mining</li>
 <p>(1) <a href='http://1ambda.github.io/cloud-computing-1-1/' >MapReduce</a> <br />
 (2) <a href='http://1ambda.github.io/cloud-computing-gossip-protocol/' >Gossip Protocol</a> <br />
 (3) <a href='http://1ambda.github.io/cloud-computing-membership-protocol/' >Membership Protocol</a> <br />
-(4) <a href='http://1ambda.github.io/cloud-computing-p2p-systems/' >P2P Systems</a>  </p>
+(4) <a href='http://1ambda.github.io/cloud-computing-p2p-systems/' >P2P Systems</a> <br />
+(4) <a href='http://1ambda.github.io/cloud-computing-snapshot/' >Global Snapshot</a> <br />
+(4) <a href='http://1ambda.github.io/cloud-computing-multicast/' >Multicast</a> <br />
+(4) <a href='http://1ambda.github.io/cloud-computing-paxos/' >Paxos</a>  </p>
 
 <h3 id="dataanalysis">Data Analysis</h3>
 
@@ -1095,7 +1514,9 @@ Constrain-Based Sequential Pattern Mining</li>
 
 <p><strong>Coding The Matrix</strong> by <em>Philip Klein</em>, Coursera</p>
 
-<p><a href='http://1ambda.github.io/coding-the-matrix-1/' >Chapter 1</a> - Function, Field, Vector</p>
+<p><a href='http://1ambda.github.io/coding-the-matrix-1/' >Chapter 1</a> - Function, Field, Vector <br />
+<a href='http://1ambda.github.io/coding-the-matrix-w/' >Chapter 2</a> - Vector Space <br />
+<a href='http://1ambda.github.io/coding-the-matrix-e/' >Chapter 3</a> - Matrix  </p>
 
 <h3 id="processmining">Process Mining</h3>
 
@@ -1111,7 +1532,12 @@ Constrain-Based Sequential Pattern Mining</li>
 
 <p><strong>Articles</strong></p>
 
-<p><a href='http://1ambda.github.io/java-interview-questions-collection-framework/' >Java Interview Questions - Collection Framework</a>  </p>]]></description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, P2P Systems]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
+<p><a href='http://1ambda.github.io/java-interview-questions-collection-framework/' >Java Interview Questions - Collection Framework</a>  </p>
+
+<h3 id="javascript">Javascript</h3>
+
+<p><a href='http://1ambda.github.io/javascript-object-inheritance/' >Javascript Inheritance Details</a> <br />
+<a href='http://1ambda.github.io/angular-providers/' >Angular, Providers</a>  </p>]]></description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category><![CDATA[1ambda]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, P2P Systems]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
 
 <p>P2P 시스템의 기술들은 <em>cloud computing</em> 의 많은 분야에서 활용됩니다. 뒤에서 배울 <em>Chord P2P hashing</em> 같은 경우는 <em>Cassandra</em>, <em>Voldmort</em> 등의 <em>key-value store</em> 에서 쓰이고 있습니다. </p>
 
@@ -2955,612 +3381,4 @@ Collections.sort(listOfCountries,new Comparator&lt;Country&gt;() {
 <h3 id="refs">Refs</h3>
 
 <p>(1) <strong>Artificial Integelligence (CS 188)</strong> by <em>Dan Klein, Pieter Abbeel</em> <br />
-(2) <a href='http://www.land-of-web.com/inspiration/photography/meet-the-danbo-cute-little-cardboard-robot-photos.html' >Title Image</a>  </p>]]></description><link>http://1ambda.github.io/artificial-intelligence-1/</link><guid isPermaLink="false">a5116bfa-3786-420b-860a-a78024e945aa</guid><category><![CDATA[edx]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[CS188]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 19 Feb 2015 04:51:28 GMT</pubDate></item><item><title><![CDATA[Cloud Computing, MapReduce]]></title><description><![CDATA[<p><img src='http://ook.co/wp-content/uploads/cloudcomputing.png'  alt="" /></p>
-
-<h3 id="intro">Intro</h3>
-
-<p><em>map</em> 과 <em>reduce</em> 라는 단어는 <em>functional language</em> 에서 왔다.</p>
-
-<ul>
-<li><em>map:</em> processes each record sequentially and independently</li>
-<li><em>reduce:</em> processes set of all records in batches</li>
-</ul>
-
-<pre><code class="lisp">(map square '(1 2 3 4))
-;; (1 4 9 16)
-
-(reduce + '(1 4 9 16))
-;; (+16 (+9 (+4 1)))
-;; 30
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="mapreduce">MapReduce</h3>
-
-<p><img src='http://webmapreduce.sourceforge.net/docs/User_Guide/images/map-reduce.png'  alt="" /></p>
-
-<p align="center">(<a href='http://webmapreduce.sourceforge.net/' >http://webmapreduce.sourceforge.net/</a>)</p>
-
-<blockquote>
-  <p><em>Map:</em> <strong>Parallelly</strong> process <strong>a large number</strong> of individual records to generate intermediate key/value pairs
-  <br/> <br />
-  <em>Reduce:</em> processes and merges all intermediate values associated per key</p>
-</blockquote>
-
-<p>각 키는 하나의 <em>reducer</em> 에 할당되고, <em>partitioning keys</em> 에 의해 <em>reduce</em> 가 진행된다. 자주 쓰이는 기법으로 <em>hash partitioning</em> 이 있다. <code>hash(key) % # of reduce servers</code></p>
-
-<pre><code class="java">public static class MapClass extends MapReduceBase  
-            implements Mapper&lt;LongWriteable, Text, Text, IntWritable&gt; {
-
-  private final static IntWritable one = new IntWritable(1);
-  private Text word = new Text();
-
-  public void map(LongWritable key, Text value, 
-                  OutputCollector&lt;Text, IntWritable&gt; output,
-                  Reporter reporter) throws IOException {
-
-    String line = value.toString();
-    StringTokenizer itr = new StringTokenizer(line);
-
-    while (itr.hasMoreTokens()) {
-      word.set(itr.nextToken());
-      output.collect(word, one);
-    }
-  }
-}
-
-public static class ReduceClass extends MapReduceBase  
-            implements Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
-
-  public void reduce(Text key, Iterator&lt;IntWritable&gt; values,
-                     OutputCollector&lt;Text, IntWritable&gt; output,
-                     Reporter reporter) throw IOException {
-
-    int sum = 0;
-    while (values.hasNext()) {
-      sum += values.next().get();
-    }
-
-    output.collect(key, new IntWritable(sum));
-  }                     
-}
-
-public void run(String inputPath, String outputPath) throw Exception {
-
-  // The job
-  JobConf conf = new JobConf(WordCount.class);
-  conf.setJobName("mywordcount");
-
-  // The keys are words
-  (srings) conf.setOutputKeyClass(Text.class);
-
-  // The values are counts (ints)
-  conf.setOutputValueClass(IntWritable.class);
-  conf.setMapperClass(MapClass.class);
-  conf.setReducerClass(ReduceClass.class);
-
-  FileInputFormat.addInputPat(conf, new Path(inputPath);
-  FileOutputFormat.setOutputPath(conf, new Path(outputPath));
-
-  JobClient.runJob(conf);
-}
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="mapreduceapplication">MapReduce Application</h3>
-
-<p>(1) <strong>Distributed Grep</strong> </p>
-
-<ul>
-<li><em>input:</em> large set of files</li>
-<li><em>output:</em> lines that match pattern</li>
-<li><em>map:</em> emits a line if it matches the supplied pattern</li>
-<li><em>reduce:</em> copies the intermediate data to output</li>
-</ul>
-
-<p>(2) <strong>Reverse Web-Link Graph</strong></p>
-
-<ul>
-<li><em>input:</em> web graph(tuple <code>(a,b)</code> where page <code>a</code> -> page <code>b</code>)</li>
-<li><em>output:</em> for each page, list of pages that link to it</li>
-<li><em>map:</em> process we log and for each input <code>&lt;source, target&gt;</code>, it outputs <code>&lt;target, source&gt;</code></li>
-<li><em>reduce:</em> emits <code>&lt;target, list(source)&gt;</code></li>
-</ul>
-
-<p>(3) <strong>Count of URL Access Frequency</strong></p>
-
-<ul>
-<li><em>input:</em> log of accessed URLs</li>
-<li><p><em>output:</em> for each URL, the number of total accesses for that URL</p></li>
-<li><p><em>map:</em> process web log and outputs <code>&lt;URL, 1&gt;</code></p></li>
-<li><em>multiple reducers:</em> emits `<URL, URL_count></li>
-<li><strong>chain another MapReduce job to calculate</strong> <code>overall_count</code></li>
-</ul>
-
-<p>(4) <em>Sort</em></p>
-
-<ul>
-<li><em>map</em> task's output is sorted (e.g., <em>quicksort</em>)</li>
-<li><em>reduce</em> task's input is osrted (e.g., <em>mergesort</em>)</li>
-</ul>
-
-<p>따라서 정렬을 하기 위해</p>
-
-<ul>
-<li><em>map:</em> <code>&lt;key, value&gt;</code> -> <code>&lt;value, _&gt;</code> (identity)</li>
-<li><em>reduce:</em> <code>&lt;key, value&gt;</code> -> <code>&lt;key, value&gt;</code> (identity)</li>
-</ul>
-
-<p>이 때 <em>parttition key</em> 로 <em>range</em> 를 사용하는 것이 가능하다. 다만, 특정 구간에 <em>data</em> 가 몰려있을 수 있으므로 <em>dstiribution</em> 을 고려해 <em>reducer</em> 에게 할당해주면 된다.</p>
-
-<p><br/></p>
-
-<h3 id="scheduling">Scheduling</h3>
-
-<p>일반 <em>user</em> 는</p>
-
-<ul>
-<li>Write a Map program, write a Reduce program</li>
-<li>Submit job; wait for result</li>
-<li>Need to know nothing about parallel/distributed programming</li>
-</ul>
-
-<p>그러나 내부적으로는</p>
-
-<ul>
-<li>Parallelize Map</li>
-<li>Transfer data from Map to Reduce</li>
-<li>Parallelize Reduce</li>
-<li>Implement Stroage for Map input, Map output, Reduce input, Reduce output</li>
-</ul>
-
-<p>그리고 <em>reduce</em> 가 시작되기 전에 반드시 <em>map</em> 이 끝나야 한다. 다시 말해서 <em>map phase</em> 와 <em>reduce phase</em> 사이에는 <em>barrier</em> 가 있어야 한다. 그렇지 않으면 결과가 부정확할 수 있다.</p>
-
-<p>이제 하나하나씩 살펴보자.</p>
-
-<p>(1) <em>Parallelize Map:</em> Easy. Each map task is independent of the other</p>
-
-<p>(2) <em>Transfer data from Map to Reduce:</em> All map output records with same key assigned to same Reduce task. Use <strong>Partitionning Function</strong></p>
-
-<p>(3) <em>Parallelize Reduce:</em> Easy. Each reduce task is independent of the other</p>
-
-<p>(4) <em>Implement Storage for Map input, Map output, Reduce input and Reduce output:</em></p>
-
-<ul>
-<li>Map input: from <strong>distributed file system</strong></li>
-<li>Map output: to local disk at Map node; Use <strong>local file systems</strong></li>
-<li>Reduce input: from (multiple) remote disks; Uses local file systems</li>
-<li>Reduce output: to <strong>distributed file system</strong></li>
-</ul>
-
-<p>DFS 의 예로 <em>Google File System</em>, <em>HDFS</em> 등이 있다.</p>
-
-<p><br/></p>
-
-<p>하둡은 스케쥴러로 <em>YARN, Yet Another Resouce Negotiator</em>를 사용한다. <em>YARN</em> 은 각 서버를 <em>a collection of containers</em> 로 취급한다. 여기서 <em>container = some CPU + some Memory</em> 다.</p>
-
-<p><em>YARN</em> 은 크게 3파트로 나눌 수 있는데</p>
-
-<ul>
-<li><em>Global Resource Manager(RM):</em> scheduling</li>
-<li><em>Per-server Node Manager(NM):</em> Daemon and server-specific functions</li>
-<li><em>Per-application(job) Application Master(AM):</em> Container negotiation with RM and NMs, Detecting task failures of that job</li>
-</ul>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week1/YARN.jpg'  alt="" /></p>
-
-<p><em>container</em> 가 필요하면 <em>AM1</em> 이 <em>RM</em> 에게 알리고, <em>Node B</em> 의 <em>NM2</em> 에서 <em>Task</em> 가 끝나면, <em>RM</em> 이 <em>Node A</em> 의 <em>AM1</em> 에게 사용 가능한 컨테이너가 있다는 사실을 알려 <em>AM1</em> 이 <em>NM2</em> 에게 컨테이너를 사용하겠다는 요청을 보내는 식이다.</p>
-
-<p><br/></p>
-
-<h3 id="faulttolerance">Fault-Tolerance</h3>
-
-<p>(1) Server Failure</p>
-
-<ul>
-<li><em>NM</em> hearbeats to <em>RM</em>. If server fails <em>RM</em> lets all affected <em>AMs</em> know, and <em>AMs</em> take action</li>
-<li><em>NM</em> keeps track of each task running at its server. If task fails while in-progress, mark the task as idle and restart it</li>
-<li><em>AM</em> heartbeats to <em>RM</em>. On failure, <em>RM</em> restarts <em>AM</em>, which then syncs up with its running tasks</li>
-</ul>
-
-<p>(2) RM Failure</p>
-
-<ul>
-<li>Use old checkpoints and bring up secondary <em>RM</em></li>
-<li>Heartbeats also used to piggyback container requests. Avoids extra mesages</li>
-</ul>
-
-<p>요약하자면, <em>NM</em>, <em>AM</em> 은 <em>RM</em> 에게 <em>heartbeat</em> 를 보낸다. <em>NM</em> 에서 오류가 나면 <em>RM</em> 이 영향을 받는 <em>AM</em> 에게 알리고, 해당 <em>AM</em> 이 적절히 처리한다. 또한 <em>NM</em> 은 <em>task</em> 를 유지하면서, <em>task</em> 에러가 발생하면 재시작한다. <em>AM</em> 에서 오류가 나면 <em>RM</em> 이 재시작하고, 해당 <em>AM</em> 의 태스크와 싱크를 맞춘다. <em>RM</em> 에서 오류가 날 경우엔 <em>secondary RM</em> 을 이용한다.</p>
-
-<h3 id="stragglers">Stragglers</h3>
-
-<p><em>slow nodes</em> 를 부르는 다른말이다. <em>speculative execution</em> 으로 해결할 수 있다. 보통 느린 이유는 <em>disk</em>, <em>network bandwidth</em>, <em>CPU</em>, <em>memory</em> 등 때문인데 <em>task</em> 를 복제해서 다른 <em>node</em> 에서 돌린 뒤 먼저 완료되는 노드의 결과를 이용하는 방식이다.</p>
-
-<blockquote>
-  <p>Perform backup (replicated) execution of straggler task: task considered done when first replica completed</p>
-</blockquote>
-
-<h3 id="locality">Locality</h3>
-
-<p><em>cloud</em> 의 <em>hierarchical topology</em> 때문에 <em>GFS</em>, <em>HDFS</em> 등은 각 <em>chunk</em> 를 3군데에 복제한다. 이때 같은 <em>rack</em> 에 위치할수도 아닐수도 있다.</p>
-
-<p><em>MapReduce</em> 연산에서는 <em>map task</em> 를 스케쥴링할때 가능하면 다음의 순서로 배치한다.</p>
-
-<p>(1) <em>chunk</em> 가 있는 머신에 or failing that <br />
-(2) 아니면 같은 <em>rack</em> 에 or failing that <br />
-(3) Anywhere  </p>
-
-<p><br/></p>
-
-<h3 id="summary">Summary</h3>
-
-<p>(1) MapReduce uses parallelization + aggregation to schedule applications across clusters.</p>
-
-<p>(2) Need to deal with failure</p>
-
-<p>(3) Plenty of ongoing research work in scheduling and fault-tolerance for Mapreduce and Hadoop</p>
-
-<p><br/></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <a href='http://ook.co/solutions/cloud-computing/' >Title Image</a> <br />
-(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera <br />
-(3) <a href='http://webmapreduce.sourceforge.net/docs/User_Guide/sect-User_Guide-Introduction-What_is_Map_Reduce.html' >MapReduce Image</a>  </p>]]></description><link>http://1ambda.github.io/cloud-computing-1-1/</link><guid isPermaLink="false">663ff3ef-8d2f-4c15-8897-90acbda32548</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[MapReduce]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 13 Feb 2015 12:34:11 GMT</pubDate></item><item><title><![CDATA[Coding The Matrix 1, Function, Field and Vector]]></title><description><![CDATA[<p><img src='http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg'  alt="" /></p>
-
-<h3 id="thefunction">The Function</h3>
-
-<blockquote>
-  <p><strong>Function Invertibility Theorem:</strong> A function <code>f</code> is invertible if and only if it is <strong>one-to-one</strong> and <strong>onto</strong></p>
-</blockquote>
-
-<p><br/></p>
-
-<h3 id="thefield">The Field</h3>
-
-<pre><code class="pyhon">In [6]: 1+3j + (10+20j)  
-Out[6]: (11+23j)
-
-In [7]: x = 1+3j
-
-In [8]: (x-1)**2  
-Out[8]: (-9+0j)
-
-In [9]: x.real  
-Out[9]: 1.0
-
-In [10]: x.imag  
-Out[10]: 3.0
-
-In [11]: type(1+2j)  
-Out[11]: complex  
-</code></pre>
-
-<blockquote>
-  <p>Such a collection of "numbers" with <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> is called a <strong>field</strong>. Different fields are like different classes obeying the same interface</p>
-</blockquote>
-
-<p><em>field</em> <code>C</code> 는 <em>complex numbers</em> 다. 이걸 공부해야 하는 이유는</p>
-
-<ul>
-<li><code>C</code> is similar enough to <code>R</code> to be familiar but different enough to illustrate the idea of a filed</li>
-<li>Complex numbers are intellectual ancestors of vectors</li>
-<li>In more advanced parts of linear algebra, complex numbers play an important role</li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="playingwithc">Playing with C</h3>
-
-<p><em>complex numbers</em> <code>C</code> 상에서는 한 축이 <em>real number</em>, 다른 축이 <em>imagenary number</em> (<em>python</em> 에선 <code>j</code> 로 표시) 다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/c_function_composition.jpg'  alt="" /></p>
-
-<p>이 때 <em>translation</em> <code>f = z + z0</code> 를 <em>arrow</em> 처럼 볼 수 있다. <code>z0</code> 에서 시작해서 <code>z + z0</code> 를 향하는 화살표로</p>
-
-<p>따라서 <code>f1(z) = z + z1</code>, <code>f2(z) = z + z2</code> 가 있을때 <em>function composition</em> <code>(f1 * f2)(z)</code> 는, <em>adding arrow</em> 처럼 생각할 수 있다.</p>
-
-<p><a href='http://resources.codingthematrix.com/' >http://resources.codingthematrix.com/</a> 여기서 준비물을 구하고 아래 코드를 실행해 보자.</p>
-
-<pre><code>In [1]: from plotting import plot
-
-In [2]: L = [2+2j, 3+2j, 1.75+1j, 2+1j, 2.25+1j, 2.5+1j, 2.75+1j, 3+1j, 3.25+1j]
-
-In [3]: plot(L)
-
-In [4]: plot({z/2 for z in L})  
-</code></pre>
-
-<p>벡터와 비슷하게 스케일링은 양수를 곱하면 된다. <em>arrow</em> 를 뒤집고 싶으면 <code>-1</code> 을 곱하면 되고, </p>
-
-<p>반시계방향으로 90도 <em>rotation</em> 을 원하면 <code>f(z) = iz</code> <em>translation</em> 을 사용하면 된다. <code>x+yi</code> 가 <code>-y+xi</code> 가 된다.</p>
-
-<p><em>complex number</em> 에서는 <code>z</code> 와 <code>1 + 0i</code> 의 각도를 <em>argument</em> 라 부르는데, 이를 구하기 위한 공식을 오일러가 만들어 두었다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/argument_def.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/euler_argument.jpg'  alt="" /></p>
-
-<p>어느 <em>real number</em> <code>θ</code> 에 대해서, <code>e^(θi)</code> 가 단위 원 위의 <em>argument</em> <code>θ</code> 를 가진 점 <code>z</code> 가 된다.</p>
-
-<p>따라서 <code>θ = π</code> 일때, <code>e^(πi) = -1</code> 이다.</p>
-
-<pre><code class="python">In [1]: from plotting import plot  
-In [2]: from math import e, pi  
-In [3]: plot([e**(t*2*pi*1j/20) for t in range(20)])  
-</code></pre>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/rotation.jpg'  alt="" /></p>
-
-<p>따라서 기존 <code>z</code> 값에 원하는 라디안 값 <code>k</code> 만큼 <code>e^(ki)</code> 를 곱해주면 <em>exponentiation law</em> 에 의해서, 그만큼 회전한다.</p>
-
-<pre><code class="python">In [11]: plot([e**(pi*1j/4) * z for z in L])  
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="playingwithgf2">Playing with GF(2)</h3>
-
-<p><em>Galois Field 2</em> has just two elements <code>0</code> and <code>1</code></p>
-
-<p><em>GF(2)</em> 에서는 특이하게도 <em>addition</em> 이 <em>XOR</em> 과 같다. <em>multiplication</em> 나 <em>usual algebraic laws</em> (e.g multiplication distribution) 는 기존과 동일하다.</p>
-
-<pre><code class="python">In [1]: from GF2 import one
-
-In [2]: def encrypt(p, k): return p+k
-
-In [3]: k = one
-
-In [4]: p = one
-
-In [5]: c = en  
-%env       encrypt    enumerate
-
-In [5]: c = encrypt(p, k)
-
-In [6]: c  
-Out[6]: 0  
-</code></pre>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/encryption.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/encryption2.jpg'  alt="" /></p>
-
-<p>더 자세히는, <code>p</code> 를 어떻게 선택하는지는 <code>c</code> 의 <em>probability distribution</em> 에 영향을 주지 않기때문에 <em>Eve</em> 가 <code>c</code> 를 관찰한다 할지라도 <code>p</code> 에 대해 정보를 얻을 수 없다.</p>
-
-<p>왜 이 <em>cryptosystem</em> 이 <em>perfect secrecy</em> 를 만드는걸까? </p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/perfect_secrecy1.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/perfect_secrecy2.jpg'  alt="" /></p>
-
-<p><code>p = 0</code> 에 대해 <code>k</code> 를 받아 <code>c</code> 를 돌려주는 함수를 <code>f0</code> 이라 하면, <code>f0</code> 은 <em>one-to-one,  onto function</em> 이다. 따라서 <code>k</code> 를 선택하는 확률이 균일하다면 <code>c</code> 의 확률도 <em>uniformly distribution</em> 이다. <code>f1</code> 도 마찬가지다.</p>
-
-<p>이 아이디어가 <em>one-time pad</em> 라는 <em>cryptosystem</em> 의 근간이다.</p>
-
-<blockquote>
-  <p>If each bit is encrypted with its own one-bit key, the cryptosystem is <strong>unbreakable</strong></p>
-</blockquote>
-
-<p><br/></p>
-
-<p><em>GF(2)</em> 를 <em>network coding</em> 에도 사용할 수 있다. 커스터머 <code>c</code>, <code>d</code> 에게 동시에 <em>video streaming</em> 을 하면 중간지점에서 병목이 발생할 수 있는데 <code>b1 + b2</code> 를 더해 나중에 <code>c</code> 와 <code>d</code> 에서 <em>substraction</em> 을 이용해 원래 비트를 구하면 된다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/network_coding.jpg'  alt="" /></p>
-
-<p><br/></p>
-
-<h3 id="vector">Vector</h3>
-
-<p><em>quaternions</em> (4원수) 에 관한 이야기부터 시작한다.</p>
-
-<blockquote>
-  <p>해밀턴은 복소수가 2차원 평면상의 점으로 표현될 수 있다는 사실로부터, 3차원 공간에서 점을 표현하는 같은 방법을 찾으려 하였다. 3차원 공간에서의 정점은 3개의 수로 이루어지며, 해밀턴은 그 3개의 수들을 어떻게 더하고 곱할 수 있는지에 관해 생각해왔다. 그러나 그는 두개의 정점간의 나누기를 어떻게 정의할지 알지 못했고, 난관에 부딪히고 말았다.</p>
-  
-  <p>1843년 10월 16일, 해밀턴은 그의 아내와 더블린의 로열 운하(영어: Royal Canal, 아일랜드어: An Chanáil Ríoga)을 걷고 있었다. 브로엄 다리(Brougham Bridge, 현재는 브룸 다리 Broom Bridge)를 걷고 있을 때, 나누기에 관한 해답이 그의 뇌리를 스쳤다. 그는 3개의 요소(Triples)를 나누지는 못하지만, 4개의 요소(quadruples)를 나눌 수 있다는 걸 생각했다. 4개의 요소 중, 3요소를 이용해 3차원 공간의 정점을 표현 할 수 있다. 해밀턴은 3차원 공간상의 정점에 대한 그의 새로운 수체계를 표현할 수 있었다. 그는 이 수체계의 기본 규칙을 다리에 새겨놓았다.</p>
-  
-  <p><code>i^2 = j^2 = k^2 = ijk = -1</code></p>
-  
-  <p>해밀턴은 위의 기본적인 규칙을 적용한 4개의 요소를 "사원수"라고 명명했다. 그 후 그는 사원수를 연구하고 알리는데 그의 남은 여생을 바쳤다. 그는 "사원수론자"(Quaternionists)라는 학파를 창시하고, 몇권의 책을 출판하여 사원수를 전파시켰다. 그의 마지막 책 《사원수 원론》(Elements of Quaternions)는 800여 쪽으로 구성되어 있고, 해밀턴 사망 직후에 출판되었다.</p>
-  
-  <p>해밀턴의 죽음 이후, 그의 제자인 피터 거스리 테이트는 사원수의 연구를 계속하였다. 당시 더블린에서는 사원수가 의무적인 시험의 하나였다. 현재는 공간 운동학, 맥스월 방정식 등의 벡터를 이용하여 설명하는 물리와 기하학의 논제들은 그 당시에는 모두 사원수를 이용하여 설명되었다. 또한 사원수에 관한 전문적인 연구학회인 사원수 학회(영어: The Quaternion Society)도 존재하였다.</p>
-  
-  <p>1880년대 중반부터 조사이어 윌러드 기브스와 올리버 헤비사이드가 제안한 벡터 해석학이 사원수 표현을 대신하기 시작했다. 벡터는 사원수와 같은 현상을 설명하였기 때문에, 고전 사원수 연구에서 많은 아이디어와 용어 등을 빌려왔다. 그러나 벡터 해석이 보다 간결한 개념과 표기법을 가지고 있었기에 사원수는 수학과 물리에서 비주류가 되었다. 이는 해밀턴의 사원수가 이해하기 난해하고, 표기가 친숙하지 않았으며, 그의 저작물에 길고 불분명한 표현이 많았기 때문이다.</p>
-  
-  <p>그러나 사원수는 20세기 말에 공간상에서의 회전에 관한 사원수의 유용성에 의해서 다시 주목받기 시작했다. 사원수를 이용한 회전의 표현은 행렬을 사용하는 표현에 비해 더욱 간결했고 계산이 빨랐다. 이런 이유로, 사원수는 컴퓨터 그래픽, 제어이론, 신호처리, 자세제어(attitue control), 물리학, 생물정보학, 분자동역학, 컴퓨터 시뮬레이션, 궤도역학(orbital mechanics)등에 사용되고 있다. </p>
-</blockquote>
-
-<p></br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/vectors_are_functions.jpg'  alt="" /></p>
-
-<p><em>vector</em> 를 정의역(<em>domain</em>) 에서 치역(<em>image</em>) 로 대응되는 일종의 <em>function</em> 이라 볼 수 있다. <em>python</em> 에서는 <em>dictionary</em> 로 쉽게 나타낼 수 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/sparsity.jpg'  alt="" /></p>
-
-<p><em>vector</em> 에서 <code>0</code> 이 많으면 <em>sparse vector</em> 라 부르고, <code>k</code> 개 만큼만 <code>0</code> 이 아닌 원소가 있으면 <em>k-sparse</em> 라 부른다. <em>vector</em> 의 몇번째 원소가 <code>0</code>이 아닌지를 나타내야되기 때문에 <em>k-sparse vector</em> 는 <em>k proportional space</em>  가 필요하다. </p>
-
-<p><em>physical sensors</em> 로 얻어지는 <em>signal</em> 은 대부분 <em>sparse vector</em> 가 아니기 때문에 공간을 아끼기 위해, <em>signal</em> 을 <em>lossy compression</em> 으로 압축해서 보내는 법을 강의 후반부에서 배울 것이다.</p>
-
-<p><br/></p>
-
-<h3 id="additionmultiplication">Addition, Multiplication</h3>
-
-<pre><code class="python">In [1]: from plotting import plot  
-In [2]: v = [3, 2]  
-In [3]: def scalar_vector_mult(alpha, v): return [alpha * x for x in v]  
-In [4]: plot([scalar_vector_mult(i/10, v) for i in range(11)])  
-</code></pre>
-
-<p><img src='http://latex.codecogs.com/gif.latex?%5Calpha%5B3%2C%202%5D%20&plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%28%5B3.5%2C%203%5D%20-%20%5B0.5%2C%201%5D%29%20&plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%5Calpha%5B0.5%2C%201%5D%20&plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%281%20-%20%5Calpha%29%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%5Cbeta%5B0.5%2C%201%5D%20%5C%5C%20%5C%5C%20%28where%5C%20%5Calpha%2C%20%5Cbeta%20%3E%200%2C%20%5C%20%5Calpha%20&plus;%20%5Cbeta%20%3D%201%29'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/convex_comb.jpg'  alt="" /></p>
-
-<p><em>arbitrary line segment</em> 를 <em>addition</em>, <em>multiplication</em> 을 이용해 <code>a[3, 2] + [0.5, 1]</code> 처럼 표현할 수 있는데, 여기서 식을 좀 더 변형해 <em>convex combination</em> 을 만들 수 있다. 이걸 이용하면 <code>u, v</code> 의 비중이 얼마냐에 따라 <em>output</em> 이 어떻게 달라지는지를 쉽게 표현할 수 있다.</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/convex_comb_ex.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/affine_comb.jpg'  alt="" /></p>
-
-<p><code>[0.5, 1]</code> 부터 <code>[3.5, 3]</code> 까지 <em>infinite line</em> 을 표현하기 위해 <em>affine combination</em> 을 이용할 수 있다. 더 자세한 내용은 <a href='http://en.wikipedia.org/wiki/Linear_combination' >Wiki: line combination</a> 을 참고하자</p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/line_comb.jpg'  alt="" /></p>
-
-<p></br></p>
-
-<h3 id="dictionarybasedrepresentation">Dictionary-based Representation</h3>
-
-<p>앞서 언급했듯이 <em>vector</em> 는 <em>domain</em> <code>D</code> 로 부터 어떤 <em>field</em> 로 <em>mapping</em> 하는 <em>function</em> 이다. 파이썬에서는 이런 <em>function</em> 을 <em>dictionary</em> 로 표현할 수 있다.</p>
-
-<pre><code class="python">class Vec:  
-    def __init__(self, domain, function):
-        self.D = domain
-        self.f = function
-
-
-def zero_vec(D):  
-    return Vec(D, {d: 0 for d in D})
-
-
-def setItem(v, d, val):  
-    v.f[d] = val
-
-
-def getItem(v, d):  
-    return v.f[d] if d in v.f else 0
-
-
-def list2vec(L):  
-    return Vec(set(range(len(L))), {k:v for k, v in enumerate(L)})
-
-# vec test
-v = Vec({'A', 'B', 'C'}, {'A': 1})  
-for d in v.D:  
-    if d in v.f:
-        print(v.F[d])
-
-# zero_vec test
-D = {'A', 'B', 'C'}  
-v = zero_vec(D)  
-for d in v.D:  
-    print v.f[d]
-
-# list2vec test
-L = [1, 2, 3, 4]  
-V = list2vec(L)
-
-for d in V.D:  
-    print(d)
-    print(V.f[d])
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="vectorsovergf2">Vectors over GF(2)</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/GF2_perfect_secrecy.jpg'  alt="" /></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/all_or_nothing_secret.jpg'  alt="" /></p>
-
-<p>두명에게 나누어 <code>v</code> 를 전송하기 위해 <em>uniform distribution</em> 으로 <code>vA</code> 를 얻어 <code>vB = v - vA</code> 를 만든 뒤 각 한명씩에게 <code>vA</code>, <code>vB</code> 를 전송하는 것이다.</p>
-
-<p><code>vA</code> 는 랜덤 <em>n-vector</em> 고 <code>vB</code> 는 <code>f(x) = v - x</code> 의 <em>output</em> 인데, 이 함수의 <em>input</em> 이 랜덤하게 골라졌으므로 이것만으로는 어떤것도 얻을 수 없다.</p>
-
-<p><img src='http://cdn.phys.org/newman/gfx/news/2012/jhygjfvjgv.jpg'  alt="" /></p>
-
-<p><em>RSA</em> 가 이 테크닉을 사용한다고 한다.</p>
-
-<ul>
-<li>Split each password into two parts</li>
-<li>Store the two parts on two separate servers</li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="dotproduct">Dot-Product</h3>
-
-<p><em>inner product</em> (내적) 이라 부른다. <em>scalar</em> 값을 돌려주고 두 벡터가 이루는 각을 알 수 있다. 외적과 내적에 관한 자세한 내용은 <a href='http://mrw0119.tistory.com/12' >프로그래밍에 미치다 - 외적, 내적 분해</a> 를 참고하자.</p>
-
-<p>내적은 <em>linear equation</em> 에 사용할 수 있다.</p>
-
-<pre><code class="python">D = {"radio", "sensor", "CPU", "memory"}  
-duration = {"radio": 0.1, "sensor": 0.5, "CPU": 1, "memory": 0.5} # second  
-rate = {"radio": 500, "sensor": 20, "CPU": 1000, "memory": 200} # mA
-
-duration * rate  
-</code></pre>
-
-<p><em>linear equation</em> 과 관련해서 중요한 질문들을 던져보자.</p>
-
-<ul>
-<li>Is there an algorithm for solving a system of linear equations?</li>
-<li>How can we know whether there is only one solution</li>
-<li>What if our data are slightly inaccurate</li>
-</ul>
-
-<p>이후의 강의들에서 위에서 던진 질문들을 해결할 것이다.</p>
-
-<p><br/></p>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/dot_product_measuring_similarity.jpg'  alt="" /></p>
-
-<p>두 음성이 비슷한지 <em>dot-product</em> 로 비교할 수 있다. 매 부분마다 음성이 비슷한지 비교해야 하므로 연산이 느릴 수 있지만 <em>Fast Fourier Transform</em> 을 이용하면 계산을 빠르게 수행할 수 있다.</p>
-
-<p><br/></p>
-
-<h3 id="dotproductovergf2">Dot-Product over GF(2)</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/dot_product_auth.jpg'  alt="" /></p>
-
-<p>몇번의 질문을 컴퓨터가 던지는것과 비슷하게 <em>n-vector password</em> <code>x</code> 에 대해 컴퓨터가 <em>random n-vector</em> <code>a</code> 를 보내고, 사람이 <em>dot-product</em> 값 <code>a * x = b</code>  를 보낸다.</p>
-
-<p><em>eavesdropper</em> 가 <code>a1, ..., an</code> <code>b1, ..., bn</code> 값을 도청한다면 패스워드를 알기 위해선 다음의 질문을 반드시 해결해야 한다</p>
-
-<ul>
-<li><strong>How many solutions for that linear equation?</strong></li>
-<li><strong>How to compute them?</strong></li>
-</ul>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/attacking_simple_auth.jpg'  alt="" /></p>
-
-<p>만약 <em>Eve</em> 가 <code>01011</code> 과 <code>11110</code> 을 관찰했다면 <code>01011 + 11110</code> 에 대해서는   그림에서 보듯이 해킹이 가능하다. 따라서 추가적으로 던져야 할 질문은</p>
-
-<ul>
-<li><strong>If a vector satisfies the equations, then what other equations does the vector satisfy?</strong></li>
-</ul>
-
-<p><br/></p>
-
-<h3 id="triangularsystem">Triangular System</h3>
-
-<p><img src='https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/triangular_system.jpg'  alt="" /></p>
-
-<ul>
-<li>If <code>rowlist[i][i]</code> is zero procedure will raise <code>ZeroDivisionError</code></li>
-<li>If this never happens, solution found is the only solution to the system</li>
-</ul>
-
-<p>위의 코드는 <code>D = {0, 1, ..., n-1}</code> <em>domain</em> 에 대해서만 작동하기 때문에 다른 도메인에서 돌아갈 수 있도록 코드를 수정하면</p>
-
-<pre><code class="python">def trianuglar_solve(rowlist, domain, b):  
-    x = zero_vec(set(label_list))
-
-    for r in reversed(range(len(rowlist))):
-        c = label_list[r]
-        x[c] = (b[r] - x * rowlist[r]) / rowlist[r][c]
-
-    return x
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <a href='http://colorsark.deviantart.com/art/3D-Cube-342632998' >Title image</a> <br />
-(2) <strong>Coding the Matrix</strong> by <em>Philip Klein</em> <br />
-(3) <a href='http://ko.wikipedia.org/wiki/%EC%82%AC%EC%9B%90%EC%88%98' >Wiki: 4원수</a> <br />
-(4) <a href='http://wiki.mathnt.net/index.php?title=%ED%95%B4%EB%B0%80%ED%84%B4%EC%9D%98_%EC%82%AC%EC%9B%90%EC%88%98' (quarternions)">Math Wiki: 4원수</a> <br />
-(5) <a href='http://en.wikipedia.org/wiki/Linear_combination' >Wiki: line combination</a> <br />
-(6) <a href='http://mrw0119.tistory.com/12' >프로그래밍에 미치다 - 외적, 내적 분해</a>  </p>]]></description><link>http://1ambda.github.io/coding-the-matrix-1/</link><guid isPermaLink="false">46c525c5-23be-4306-9722-8ec9f3f90112</guid><category><![CDATA[coursera]]></category><category><![CDATA[linear algebra]]></category><category><![CDATA[vector]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 12 Feb 2015 11:00:01 GMT</pubDate></item></channel></rss>
+(2) <a href='http://www.land-of-web.com/inspiration/photography/meet-the-danbo-cute-little-cardboard-robot-photos.html' >Title Image</a>  </p>]]></description><link>http://1ambda.github.io/artificial-intelligence-1/</link><guid isPermaLink="false">a5116bfa-3786-420b-860a-a78024e945aa</guid><category><![CDATA[edx]]></category><category><![CDATA[artificial intelligence]]></category><category><![CDATA[CS188]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 19 Feb 2015 04:51:28 GMT</pubDate></item></channel></rss>
