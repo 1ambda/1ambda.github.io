@@ -1,1 +1,3644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+ 
 
+<url>
+  <loc>http://1ambda.github.io/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/robots.txt</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/rss</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/rss/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/articles</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/articles/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-paxos</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-paxos/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-paxos/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-multicast</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-multicast/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-multicast/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-snapshot</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-snapshot/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-snapshot/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/index.html</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/articles/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/articles/index.html</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/1ambda</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/1ambda/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-7/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/new-to-play-framework-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/partial-functions-scala/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro5</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro6</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro7</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro7/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro8</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro8/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro9</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro9/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/a-poor-mans-concurrency-monad</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/a-poor-mans-concurrency-monad/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-7/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-8/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-9/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-10/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/divide-and-conquer/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/randomized-selection/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graphs-the-contraction-algorithm/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graph-search-and-connectivity/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/dijkstra-heap-balanced-tree/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/union-find-algorithms-week-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/analysis-of-algorithms/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graph-challenges-minimum-spanning-trees</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graph-challenges-minimum-spanning-trees/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/radix-sort-suffix-sort</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/radix-sort-suffix-sort/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/r-way-ternary-search-tries/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/substring-search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/maximum-flow/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-data-compression/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/artificial-intelligence-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/artificial-intelligence-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/artificial-intelligence-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/artificial-intelligence-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-1-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-gossip-protocol/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-membership-protocol/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-p2p-systems/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-w/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-e/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/java-interview-questions-collection-framework/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/javascript-object-inheritance/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/angular-providers/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cloud-computing</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cloud-computing/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/paxos</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/paxos/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/consensus</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/consensus/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/multicast</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/multicast/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/virtual-synchrony</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/virtual-synchrony/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/snapshot</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/snapshot/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/chandy-lamport</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/chandy-lamport/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/linear-algebra</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/linear-algebra/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/vector-space</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/vector-space/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/span</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/span/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pattern-discovery</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pattern-discovery/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gspan</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gspan/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/closegraph</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/closegraph/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-p2p-systems</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-p2p-systems/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/java-interview-questions-collection-framework</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/java-interview-questions-collection-framework/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/angular-providers</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/angular-providers/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/1ambda/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/about-me</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/variant/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/functional-programming</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/functional-programming/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/collection</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/collection/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lazy-evaluation</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lazy-evaluation/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/variance/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/monad/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/reactive-programming/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/generator/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala-check/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/referential-transparency/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/operational-equivalence/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/futures/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/promises/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/awaitable/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/try/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/observable/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/rx/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scheduler/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/subscription/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/subject/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/actor/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/play-framework/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/partial-function/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/programming-language/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/haskell</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/haskell/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/recursion/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/church-numerals/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/functional-parser/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/monad</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/monad/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/type/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/constructor/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/class/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro7/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro8/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/haskell/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lazy-evaluation/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/call-by-value/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/call-by-name/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/strict/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/haskell-intro9/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/induction/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/functor/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/monoid/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/foldable/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/a-poor-mans-concurrency-monad/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/continuation/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/machine-lerning</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/machine-lerning/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gradient-descent/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/normal-equation/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/regularization/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/classification</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/classification/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/classification/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/neural-network/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/machine-lerning/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/precision/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bias/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/learning-curves/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/recall/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/variance</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/variance/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/svm/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/k-means-clustering</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/k-means-clustering/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/unsupervised-learning/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pca/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/machine-learning/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/anomaly-detection/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/recommender-system/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/stochastic-gradient-descent/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mini-batch-gradient-descent/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/online-learning/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/divide-and-conquer/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/master-method/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/merge-sort/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/quick-sort/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/decomposition-principle/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/selection/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/randomization/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/graph</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/graph/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/contraction/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bfs/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/dfs/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/heap/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/dijkstra/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/red-black-tree/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/universal-hashing/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bloom-filter/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/open-addressing/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graph-challenges-minimum-spanning-trees/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/minimum-spanning-tree/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/shortest-path/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/radix-sort-suffix-sort/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/radix-sort/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/string/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/3-way-radix/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/msd/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lsd/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/r-way-trie/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/ternary-trie/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/substring-search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/boyer-moore/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/rabin-karp/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/knuth-morris-pratt/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/maximum-flow/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/ford-fulkerson/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/compression/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/run-length/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/huffman/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-data-compression/ko.thetimenow.com/pst/pacific_standard_time</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/artificial-intelligence-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/artificial-intelligence</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/artificial-intelligence/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cs188</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cs188/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/artificial-intelligence-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/search</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/planning/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/strips/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/heuristic/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/forward-search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/backward-search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/psp</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/psp/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pop</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pop/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/state-space</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/state-space/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/plan-space</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/plan-space/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/ai-planning-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/stn</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/stn/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/htn</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/htn/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mapreduce</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mapreduce/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gossip</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gossip/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/membership</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/membership/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/swim</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/swim/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/p2p</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/p2p/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/napster</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/napster/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gnutella</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gnutella/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bittorrent</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bittorrent/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/fasttrack</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/fasttrack/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/chord</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/chord/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pastry</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pastry/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/kelips</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/kelips/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/data-mining</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/data-mining/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lift</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lift/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pattern-fusion</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pattern-fusion/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/python</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/python/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/histograms/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/simulation/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/decision-tree/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/knapsack-problem/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/memoization/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/python/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/graph/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/hierarchical-clustering/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/vector</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/vector/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/process-mining</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/process-mining/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/association-rule/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/k-means-clustering/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week1/www.processmining.org</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/alpha-algorithm/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week2/www.processmining.org</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bpmn/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/dependency-graph/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/c-nets/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week3/www.processmining.org</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/conformance-checking/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/token-based/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/footprint-based/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/alignment-based/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/dotted-chart/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week4/www.processmining.org</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/process-mining/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week5/www.processmining.org</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/java</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/java/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/interview</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/interview/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/javascript/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/angular</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/angular/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/trend-factory</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/trend-factory/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/factory</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/factory/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/service</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/service/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/provider</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/provider/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/injector</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/injector/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cloud-computing/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-membership-protocol</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-membership-protocol/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cloud-computing/page/2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cloud-computing/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/paxos/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/consensus/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/multicast/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/virtual-synchrony/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/snapshot/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/chandy-lamport/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/linear-algebra/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/coding-the-matrix-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/vector-space/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/span/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pattern-discovery/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/pattern-discovery-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gspan/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/closegraph/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-gossip-protocol</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-gossip-protocol/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/matrix</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/matrix/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/functional-programming/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-6</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/collection/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-5</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/reactive-programming-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/new-to-play-framework-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/new-to-play-framework-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/partial-functions-scala</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/partial-functions-scala/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/programming-language-week1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx/page/2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/haskell/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-7</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-7/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-5</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-8</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-8/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-6</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/machine-lerning/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-7</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-7/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-10</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-10/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-9</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/machine-learning-week-9/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/divide-and-conquer</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/divide-and-conquer/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/randomized-selection</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/randomized-selection/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graphs-the-contraction-algorithm</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graphs-the-contraction-algorithm/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graph-search-and-connectivity</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/graph-search-and-connectivity/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/dijkstra-heap-balanced-tree</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/dijkstra-heap-balanced-tree/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/hash-table-universal-hashing-bloom-filters</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/r-way-ternary-search-tries</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/r-way-ternary-search-tries/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/substring-search</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/substring-search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/maximum-flow</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/maximum-flow/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/intractability</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/intractability/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/intractability/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-linear-programming</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-linear-programming/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-linear-programming/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-reduction</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-reduction/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-reduction/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-data-compression</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/algorithm-data-compression/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/regex-nfa</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/regex-nfa/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/regex-nfa/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/artificial-intelligence/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/artificial-intelligence/page/2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/artificial-intelligence/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cs188/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/search/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/psp/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pop/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/state-space/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/plan-space/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/stn/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/htn/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/mapreduce/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-1-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/cloud-computing-1-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gossip/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/membership/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/swim/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/p2p/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/napster/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/gnutella/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/bittorrent/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/fasttrack/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/chord/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pastry/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/kelips/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/data-mining/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/lift/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/pattern-fusion/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/edx-600-2x-3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/vector/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week1</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week1/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week2</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week5</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/process-mining-week5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/java/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/interview/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/javascript-object-inheritance</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/javascript-object-inheritance/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/angular/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/trend-factory/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/factory/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/service/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/provider/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/injector/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/3</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/cloud-computing/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/5</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/matrix/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-5</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/functional-programming-in-scala-chapter-5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/scala/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/programming-language</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/programming-language/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/ml/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/emacs/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/edx/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/intractability/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/p-vs-np/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/np-completeness/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/search-problem/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/linear-programming/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/reduction/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/convex-hull/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/nfa/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/regex/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/algorithm/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/artificial-intelligence/page/2/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/3/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/4</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/tag/coursera/page/4/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/5/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/6</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+<url>
+  <loc>http://1ambda.github.io/page/6/</loc>
+  <lastmod>2015-03-15T 1:53:59+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+  </url>
+
+</urlset>
