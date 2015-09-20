@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Reactive Programming 1, Monads</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
@@ -21,15 +20,15 @@
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -50,38 +49,82 @@
 
 
   <link rel="stylesheet" href="../assets/highlight/styles/github.css">
-  <script src="../assets/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
-<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/reactive-programming-1/" />
+  <link rel="canonical" href="http://1ambda.github.io/reactive-programming-1/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Reactive Programming 1, Monads">
+    <meta property="og:description" content="What is Reactive Programming? reactive 란 뜻은 React to events (event-driven) React to load (scalable) React to failures (resilient) React to users (responsive) Event-driven event-driven 을 통해 scalable, resilient 해질 수 있고, 이 3가지를 통해 responsive 한 서비스를 만들 수...">
+    <meta property="og:url" content="http://1ambda.github.io/reactive-programming-1/">
+    <meta property="article:published_time" content="2014-12-17T07:30:37.591Z">
+    <meta property="article:modified_time" content="2014-12-17T14:50:10.609Z">
+    <meta property="article:tag" content="scala">
+    <meta property="article:tag" content="coursera">
+    <meta property="article:tag" content="variance">
+    <meta property="article:tag" content="monad">
+    <meta property="article:tag" content="reactive programming">
+    <meta property="article:tag" content="generator">
+    <meta property="article:tag" content="scala check">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Reactive Programming 1, Monads">
+    <meta name="twitter:description" content="What is Reactive Programming? reactive 란 뜻은 React to events (event-driven) React to load (scalable) React to failures (resilient) React to users (responsive) Event-driven event-driven 을 통해 scalable, resilient 해질 수 있고, 이 3가지를 통해 responsive 한 서비스를 만들 수...">
+    <meta name="twitter:url" content="http://1ambda.github.io/reactive-programming-1/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Reactive Programming 1, Monads",
+    "url": "http://1ambda.github.io/reactive-programming-1/",
+    "datePublished": "2014-12-17T07:30:37.591Z",
+    "dateModified": "2014-12-17T14:50:10.609Z",
+    "keywords": "scala, coursera, variance, monad, reactive programming, generator, scala check",
+    "description": "What is Reactive Programming? reactive 란 뜻은 React to events (event-driven) React to load (scalable) React to failures (resilient) React to users (responsive) Event-driven event-driven 을 통해 scalable, resilient 해질 수 있고, 이 3가지를 통해 responsive 한 서비스를 만들 수..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-52181619-1', '1ambda.github.io');
-    ga('send', 'pageview');
-  </script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
   
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=5e102a0e1b"></script>
+  <script src="../public/jquery.js?v=1e25303174"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Functional Programming</h4>
+  <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
-  </div>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles.1"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
 </header>
 
 <main class="site_width" role="main">
@@ -89,10 +132,10 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala">scala</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/variance/">variance</a>, <a href="/tag/monad/">monad</a>, <a href="/tag/reactive-programming/">reactive programming</a>, <a href="/tag/generator/">generator</a>, <a href="/tag/scala-check/">scala check</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala/">scala</a>, <a href="../tag/coursera/">coursera</a>, <a href="../tag/variance/">variance</a>, <a href="../tag/monad/">monad</a>, <a href="../tag/reactive-programming/">reactive programming</a>, <a href="../tag/generator/">generator</a>, <a href="../tag/scala-check/">scala check</a></h5>
       <h1 class="margin_bottom_medium">Reactive Programming 1, Monads</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-17">Wednesday, December 17, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/reactive-programming-1/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -182,8 +225,8 @@
 
 <p>여기서 볼 수 있는 문제는 </p>
 
-<p>(1) <em>shared mutable state</em> 가 필요하다 <br />
-(2) <em>composing</em> 하기 힘들다 <br />
+<p>(1) <em>shared mutable state</em> 가 필요하다 <br>
+(2) <em>composing</em> 하기 힘들다 <br>
 (3) 시스템이 커지면 <em>callback hell</em> 이 될 수 있다</p>
 
 <h4 id="composableeventabstraction">Composable Event Abstraction</h4>
@@ -305,13 +348,13 @@ val f: JBinding =&gt; String = { case (key, value) =&gt; ...  }
 
 <p>컬렉션도 잠깐 복습해 보자.</p>
 
-<p><img src="http://librairie.immateriel.fr/baw/9780596155957/httpatomoreillycomsourceoreillyimages322250.png" alt="" /></p>
+<p><img src="http://librairie.immateriel.fr/baw/9780596155957/httpatomoreillycomsourceoreillyimages322250.png" alt=""></p>
 
-<p align="center">(<a href='http://librairie.immateriel.fr'>http://librairie.immateriel.fr</a>)</p>
+<p align="center">(<a href="http://librairie.immateriel.fr">http://librairie.immateriel.fr</a>)</p>
 
-<p><img src="http://i.stack.imgur.com/2fjoA.png" alt="" /></p>
+<p><img src="http://i.stack.imgur.com/2fjoA.png" alt=""></p>
 
-<p align="center">(<a href='http://stackoverflow.com'>http://stackoverflow.com</a>)</p>
+<p align="center">(<a href="http://stackoverflow.com">http://stackoverflow.com</a>)</p>
 
 <p><em>filter, map</em> 과 같은 메소드들은 다양한 컬렉션을 지원하지만, <em>list</em> 에서는 <em>tail recursive</em> 하게 정의되어 있다고 한다.</p>
 
@@ -844,7 +887,7 @@ this match {
 
 <h3 id="references">References</h3>
 
-<p>(1) <a href="http://stackoverflow.com/questions/1722137/scala-2-8-collections-design-tutoria$l">Scala 2.8 Collection</a> <br />
+<p>(1) <a href="http://stackoverflow.com/questions/1722137/scala-2-8-collections-design-tutoria%24l">Scala 2.8 Collection</a> <br>
 (2) <a href="http://en.wikibooks.org/wiki/Haskell/Understanding_monads#Monad_Laws">Haskell Wiki: Monad</a>  </p>
     </section>
 
@@ -852,58 +895,58 @@ this match {
       <section class="author_info margin_top_big">
         <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
         <p class="margin_left_medium text small">Author</p>
-        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
-        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
       </section>
     </footer>
 
 
     <div id="disqus_thread" class="margin_top_big"></div>
-    <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-      var disqus_identifier = '84';
-      var disqus_url = 'http://1ambda.github.io/reactive-programming-1/';
-    
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '84';
+  var disqus_url = 'http://1ambda.github.io/reactive-programming-1/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
     </article>
 </main>
 
 
   <script src="../assets/fitvids/jquery.fitvids.js"></script>
-  <script>
-  $(document).ready(function(){
-    // Target your .container, .wrapper, .post, etc.
-    $("section").fitVids();
-  });
-  </script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
   </footer>
 
   <script type="text/javascript">
-  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-  
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function () {
-   var s = document.createElement('script'); s.async = true;
-   s.type = 'text/javascript';
-   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-   }());
-  </script>
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
 
 
   </body>
-  </html>
+  

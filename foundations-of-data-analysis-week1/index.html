@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Foundations of Data Analysis, Week1</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/foundations-of-data-analysis-week1/" />
+<link rel="canonical" href="http://1ambda.github.io/foundations-of-data-analysis-week1/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/edx">edx</a>, <a href="/tag/statistics/">statistics</a>, <a href="/tag/r/">R</a></h5>
       <h1 class="margin_bottom_medium">Foundations of Data Analysis, Week1</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-12">Wednesday, November 12, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/foundations-of-data-analysis-week1/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -166,22 +165,22 @@
 
 <p>몇 가지 예제를 좀 더 살펴보자면</p>
 
-<p>(1) 학생들의 <em>gender, race, political opinions</em> 등은 모두 <em>nominal measurement</em> 다. <br />
-(2) 학생들의 학년(7, 8, 9) 를 수집한다면 <em>ordinal measurement</em> 다. <br />
-(3) SAT 수학 점수를 모은다면, 그건 <em>interval measurement</em> 다. (아마 상대평가인가 봄) <br />
+<p>(1) 학생들의 <em>gender, race, political opinions</em> 등은 모두 <em>nominal measurement</em> 다. <br>
+(2) 학생들의 학년(7, 8, 9) 를 수집한다면 <em>ordinal measurement</em> 다. <br>
+(3) SAT 수학 점수를 모은다면, 그건 <em>interval measurement</em> 다. (아마 상대평가인가 봄) <br>
 (4) 나이, 키, 몸무게, 점수(0-100) 등을 수집한다면 <em>ratio measurement</em> 다.</p>
 
 <p><em>nominal</em> 에서 <em>ratio</em> 로 갈수록 값들이 점점 복잡해진다. </p>
 
-<p><img src="https://dr282zn36sxxg.cloudfront.net/datastreams/f-d%3A92ba1471fd7e4ab92e330423cc7653fc15f9e1808cbbd03f8cdad61a%2BIMAGE%2BIMAGE.1" alt="" /></p>
+<p><img src="https://dr282zn36sxxg.cloudfront.net/datastreams/f-d%3A92ba1471fd7e4ab92e330423cc7653fc15f9e1808cbbd03f8cdad61a%2BIMAGE%2BIMAGE.1" alt=""></p>
 
-<p align="center">(<a href='http://www.ck12.org/statistics'>http://www.ck12.org/statistics</a></p>
+<p align="center">(<a href="http://www.ck12.org/statistics">http://www.ck12.org/statistics</a></p>
 
 <p>이렇게 데이터를 구분하는 이유는, 각각 에 쓸 수 있는 <em>Tool</em> 이 다르기 때문이다. 어떤 툴은 <em>categorical variable</em> 에 유용할 수도 있고, 그렇지 않은 툴도 있기 마련이다.</p>
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>UT.7.01x Foundations of Data Analysis</em> <br />
+<p>(1) <em>UT.7.01x Foundations of Data Analysis</em> <br>
 (2) <a href="http://www.ck12.org/statistics/Levels-of-Measurement/lesson/Levels-of-Measurement/">http://www.ck12.org/statistics</a></p>
     </section>
 
@@ -229,7 +228,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -252,4 +251,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

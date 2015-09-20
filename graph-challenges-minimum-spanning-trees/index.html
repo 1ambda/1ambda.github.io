@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Graph Challenges, Minimum Spanning Trees, Shortest Paths</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/graph-challenges-minimum-spanning-trees/" />
+<link rel="canonical" href="http://1ambda.github.io/graph-challenges-minimum-spanning-trees/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="../tag/graph">graph</a>, <a href="/tag/minimum-spanning-tree/">minimum spanning tree</a>, <a href="/tag/shortest-path/">shortest-path</a></h5>
       <h1 class="margin_bottom_medium">Graph Challenges, Minimum Spanning Trees, Shortest Paths</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-03">Wednesday, December 03, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/graph-challenges-minimum-spanning-trees/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -115,11 +114,11 @@
 
 <p>그래프가 <em>bipartite</em> 인가 하는 문제는, 그래프의 노드를 이렇게 두 그룹으로 나눌 수 있느냐 하는 문제다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Simple-bipartite-graph.svg/330px-Simple-bipartite-graph.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Simple-bipartite-graph.svg/330px-Simple-bipartite-graph.svg.png" alt=""></p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Biclique_K_3_5.svg/330px-Biclique_K_3_5.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Biclique_K_3_5.svg/330px-Biclique_K_3_5.svg.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org'>http://en.wikipedia.org</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p>
 
 <p>알고리즘이 얼마나 어려운가는 이렇게 나눠볼 수 있겠는데</p>
 
@@ -144,7 +143,7 @@
 
 <p><a href="http://ko.wikipedia.org/wiki/%EC%98%A4%EC%9D%BC%EB%9F%AC_%EA%B2%BD%EB%A1%9C">여기</a>에 의하면 그래프에 오일러 회로가 존재하려면 </p>
 
-<p>(1) 연결된 그래프여야 하고 <br />
+<p>(1) 연결된 그래프여야 하고 <br>
 (2) 모든 꼭지점의 차수가 짝수여야 한다.</p>
 
 <p>반면 오일러 경로라면, 연결그래프에서 정확히 두 개의 꼭지점만 홀수 차수여야 한다.</p>
@@ -161,9 +160,9 @@
 
 <p>그래프의 형태가 같은지 묻는 문제다. 예를 들어 다음의 두 그래프는 같은 형태다.</p>
 
-<p><img src="http://www.biodatamining.org/content/figures/1756-0381-4-10-3-l.jpg" alt="" /></p>
+<p><img src="http://www.biodatamining.org/content/figures/1756-0381-4-10-3-l.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.biodatamining.org/'>http://www.biodatamining.org/</a>)</p>
+<p align="center">(<a href="http://www.biodatamining.org/">http://www.biodatamining.org/</a>)</p>
 
 <p>두 그래프의 노드를 <code>n!</code> 으로 배열해 가면서 같은지 비교하는 단순한 방법은 그래프가 커지면 기하 급수적으로 성능이 느려진다. 더 나은 알고리즘이 있는지 연구자들이 노력하고 있지만, 아직 모른다. 난이도는 <em>(5) No one knows</em></p>
 
@@ -181,7 +180,7 @@
 
 <p><em>undirected, positive edge weights</em> 그래프에서 </p>
 
-<p>(1) <em>connected, acyclic</em> <strong>(tree)</strong> <br />
+<p>(1) <em>connected, acyclic</em> <strong>(tree)</strong> <br>
 (2) <em>includes all of the vertices</em> <strong>(spanning)</strong>   </p>
 
 <p>인 서브 그래프를 <strong><em>spanning tree</em></strong> 라 부른다.</p>
@@ -219,7 +218,7 @@
 
 <p>증명은 <em>min-weight crossing edge</em> <code>e</code> 가 <em>MST</em> 내에 없다고 하자. <em>MST</em> 는 연결되야 하므로 다른 <em>crossing edge</em> <code>f</code> 가 대신 사용될 것이다. </p>
 
-<p>(1) 다른 <em>crossing edge</em> <code>f</code> 가 없으면 <em>connected</em> 가 아니므로 <em>MST</em> 가 아니다. <br />
+<p>(1) 다른 <em>crossing edge</em> <code>f</code> 가 없으면 <em>connected</em> 가 아니므로 <em>MST</em> 가 아니다. <br>
 (2) 만약 <code>f</code> 가 있어서 <code>f</code> 를 대신 사용하는 <em>MST</em> 에 <code>e</code> 를 추가하면 사이클이 생긴다. 이 때 <code>f</code> 를 제거하면 <em>weight</em> 가 더 짧다. 따라서 <code>f</code> 가 포함되면 <em>MST</em> 가 아니다.</p>
 
 <p>따라서 <em>min-weight crossing edge</em> 가 <em>MST</em> 내에 존재한다. 이 사실을 이용하면 <em>MST</em> 를 찾는 <em>greedy algorithm</em> 을 만들 수 있다.</p>
@@ -234,8 +233,8 @@
 
 <h4 id="correcteness">Correcteness</h4>
 
-<p>(1) Any edge colored black is in the MST (vis cut property) <br />
-(2) Fewer than <code>V - 1</code> black edges => cut with no black crossing edges</p>
+<p>(1) Any edge colored black is in the MST (vis cut property) <br>
+(2) Fewer than <code>V - 1</code> black edges =&gt; cut with no black crossing edges</p>
 
 <p>모든 <em>MST</em> 는 <code>V - 1</code> 개의 <em>edge</em> 로 구성된다. 따라서 <code>V - 1</code> 개의 <em>black edge</em>, 즉 <em>MST</em> 의 원소를 찾아내면 된다. </p>
 
@@ -360,7 +359,7 @@ while (!pq.isEmpty() &amp;&amp; mst.size() &lt; V - 1) {
 
 <p><em>queue</em> 에 있는 <em>edge</em> <code>e = (v, w)</code> 를 꺼낸 뒤</p>
 
-<p>(1) <code>v, w</code> 둘 다 이미 방문했으면 패스하고, <br />
+<p>(1) <code>v, w</code> 둘 다 이미 방문했으면 패스하고, <br>
 (2) <code>v</code> 혹은 <code>w</code> 둘 중 하나만 방문했을 경우에만 <code>w or v</code> 의 <em>edge</em> 를 추가하고, <code>w or w</code> 를 방문 처리 한다. </p>
 
 <pre><code class="java">// lazy Prim MST
@@ -400,8 +399,8 @@ void visit(int v) {
 
 <p><code>v</code> 에서 갈 수 있는 모든 <em>edge</em> <code>e = (v, x)</code> 을 생각해 보면, </p>
 
-<p>(1) <code>x</code> 가 이미 방문한 <em>vertex</em> 면 패스 <br />
-(2) <em>queue</em> 에 <code>(k, x)</code> 가 없으면 추가 (<code>k</code> 는 이미 방문한 <em>vertex</em>) <br />
+<p>(1) <code>x</code> 가 이미 방문한 <em>vertex</em> 면 패스 <br>
+(2) <em>queue</em> 에 <code>(k, x)</code> 가 없으면 추가 (<code>k</code> 는 이미 방문한 <em>vertex</em>) <br>
 (3) <code>x</code> 까지의 거리가, <code>e = (v, x)</code> 가 더 짧으면 업데이트 (<em>decreaseKey operation</em>)</p>
 
 <p>여기서 <code>decreaseKey</code> 연산을 빠르게 구현하기 위해 <em>indexed priority queue</em> 를 이용할 수 있다.</p>
@@ -495,11 +494,11 @@ public Iterable&lt;DirectedEdge&gt; pathTo(int v) {
 
 <p>여기서 만약 <code>e = v -&gt; w</code> 가 <code>w</code> 로의 더 짧은 거리라면, <code>distTo[w]</code> 와 <code>edgeTo[w]</code> 를 업데이트하면 된다.</p>
 
-<p><img src="http://www.csupomona.edu/~ftang/courses/CS241/notes/images/graph/relax1.jpg" alt="" title="" />  </p>
+<p><img src="http://www.csupomona.edu/~ftang/courses/CS241/notes/images/graph/relax1.jpg" alt="" title="">  </p>
 
-<p><img src="http://faculty.ycp.edu/~dbabcock/PastCourses/cs360/lectures/images/lecture21/relaxation.png" alt="" /></p>
+<p><img src="http://faculty.ycp.edu/~dbabcock/PastCourses/cs360/lectures/images/lecture21/relaxation.png" alt=""></p>
 
-<p align="center">(<a href='http://www.csupomona.edu/~ftang'>http://www.csupomona.edu/~ftang</a>)</p>
+<p align="center">(<a href="http://www.csupomona.edu/~ftang">http://www.csupomona.edu/~ftang</a>)</p>
 
 <pre><code class="java">void relax(DirectedEdge e) {  
   int v = e.from();
@@ -561,8 +560,8 @@ Repeat until optimality conditions are satisfied,
 
 <p>어떤 <em>edge</em> 를 고를까 하는 문제로 발전할 수 있다.</p>
 
-<p>(1) <em>Dijkstra's algorithm</em>: <strong>non-negative weights</strong> <br />
-(2) <em>Topological sort</em>: <strong>no directed cycles</strong> <br />
+<p>(1) <em>Dijkstra's algorithm</em>: <strong>non-negative weights</strong> <br>
+(2) <em>Topological sort</em>: <strong>no directed cycles</strong> <br>
 (3) <em>Bllman-Ford algorithm</em>: <strong>no negative cycles</strong></p>
 
 <h3 id="dijkstrasalgorithm">Dijkstra's Algorithm</h3>
@@ -652,7 +651,7 @@ void relax(DirectedEdge e) {
 
 <p>다익스트라와 마찬가지로 모든 <em>edge <code>e = v -&gt; w</code></em> 는 단 한번만 <em>relaxed</em> 되고, 이 과정에서 <code>distTo[w] &lt;= distTo[v] + e.weight()</code> 다.</p>
 
-<p>(1) <code>distTo[w]</code> 는 줄어들기만 하고, <br />
+<p>(1) <code>distTo[w]</code> 는 줄어들기만 하고, <br>
 (2) <em>topological order</em> 이기 때문에 한번 방문된 <code>v</code> 에 대해 이후의 <em>vertex</em> 에서 <code>v</code> 로 갈 수 없다. 있다면 <em>cycle</em> 이고 그럼 <em>toplogical order</em> 가 안된다. 따라서 <code>distTo[v]</code> 는 변하지 않는다. 따라서 <em>weight</em> 가 음수든 양수든 상관이 없다.</p>
 
 <pre><code class="java">DirectedEdge[] edgeTo;  
@@ -681,9 +680,9 @@ public AcyclicSP(EdgeWeightedDigraph G, int s) {
 
 <p>응용으로 <em>seam carving</em> 이 있다. 수직이나 수평으로 <em>shortest path</em> 를 찾아서 제거하면 된다.</p>
 
-<p><img src="http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation_files/image002.jpg" alt="" /></p>
+<p><img src="http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation_files/image002.jpg" alt=""></p>
 
-<p align="center">(<a href='http://rahuldotgarg.appspot.com'>http://rahuldotgarg.appspot.com</a>)</p>
+<p align="center">(<a href="http://rahuldotgarg.appspot.com">http://rahuldotgarg.appspot.com</a>)</p>
 
 <p><em>longest path</em> 를 찾는법은 모든 <em>weight</em> 를 <em>negate</em> 하고, 찾고, 다시 결과의 <em>weight</em> 에 마이너스를 붙이면 된다. 이게 가능한 이유는 <em>no cycle</em> 이기 때문에 <em>weight</em> 가 음수든, 양수든 상관이 없기 때문이다.</p>
 
@@ -691,9 +690,9 @@ public AcyclicSP(EdgeWeightedDigraph G, int s) {
 
 <p>작업간 의존관계가 있으므로 이를 이용해서 <em>DAG</em> 를 그리면 된다. 각 <em>job</em> 당 <em>start vertex, finish vertex</em> 가 되며, 그 <em>weight</em> 는 <em>duration</em> 으로 하고 한 작업과 다음 작업의 <em>weight</em> 는 <code>0</code> 으로 했을때의 <em>longest path</em> 를 찾으면 된다. </p>
 
-<p><img src="http://algs4.cs.princeton.edu/44sp/images/scheduling-critical-path.png" alt="" /></p>
+<p><img src="http://algs4.cs.princeton.edu/44sp/images/scheduling-critical-path.png" alt=""></p>
 
-<p align="center">(<a href='http://algs4.cs.princeton.edu/44sp/'>http://algs4.cs.princeton.edu/44sp/</a>)</p>
+<p align="center">(<a href="http://algs4.cs.princeton.edu/44sp/">http://algs4.cs.princeton.edu/44sp/</a>)</p>
 
 <h3 id="negativeweights">Negative Weights</h3>
 
@@ -789,13 +788,13 @@ for all other vertice</li>
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href="http://en.wikipedia.org/wiki/Bipartite_graph">Wikipedia: Bipartite Graph</a> <br />
-(3) <a href="http://www.biodatamining.org/content/4/1/10/figure/F3?highres=y">http://www.biodatamining.org/</a> <br />
-(4) <a href="http://ko.wikipedia.org/wiki/%ED%8F%89%EB%A9%B4_%EA%B7%B8%EB%9E%98%ED%94%84">Wikipedia: 평면그래프</a> <br />
-(5) <a href="http://www.csupomona.edu/~ftang">CS241 Lecture Notes: Graph Algorithms</a> <br />
-(6) <a href="http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation.htm">Seam Carving for Content-Aware Image Resizing</a> <br />
-(7) <a href="http://algs4.cs.princeton.edu/44sp/">Algorithms: Shortest Path</a> <br />
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br>
+(2) <a href="http://en.wikipedia.org/wiki/Bipartite_graph">Wikipedia: Bipartite Graph</a> <br>
+(3) <a href="http://www.biodatamining.org/content/4/1/10/figure/F3?highres=y">http://www.biodatamining.org/</a> <br>
+(4) <a href="http://ko.wikipedia.org/wiki/%ED%8F%89%EB%A9%B4_%EA%B7%B8%EB%9E%98%ED%94%84">Wikipedia: 평면그래프</a> <br>
+(5) <a href="http://www.csupomona.edu/~ftang">CS241 Lecture Notes: Graph Algorithms</a> <br>
+(6) <a href="http://rahuldotgarg.appspot.com/data/SeamCarvingWeb/evaluation.htm">Seam Carving for Content-Aware Image Resizing</a> <br>
+(7) <a href="http://algs4.cs.princeton.edu/44sp/">Algorithms: Shortest Path</a> <br>
 (8) <a href="http://stackoverflow.com/questions/19760077/what-does-bellman-ford-algorithm-detects-negative-weight-or-negative-cycle">What does bellman ford algorithm</a></p>
     </section>
 
@@ -843,7 +842,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -866,4 +865,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

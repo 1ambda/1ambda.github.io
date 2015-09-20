@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Data Compression</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
@@ -21,15 +20,15 @@
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -53,9 +52,9 @@
   <script src="../assets/highlight/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/algorithm-data-compression/" />
+<link rel="canonical" href="http://1ambda.github.io/algorithm-data-compression/">
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,13 +91,13 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="/tag/algorithm/">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/compression/">compression</a>, <a href="/tag/run-length/">run-length</a>, <a href="/tag/huffman/">huffman</a></h5>
       <h1 class="margin_bottom_medium">Data Compression</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-29">Monday, December 29, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/algorithm-data-compression/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="http://www.lawfareblog.com/wp-content/uploads/2013/09/Encryption-in-the-Real-World.jpg" alt="" /></p>
+      <p><img src="http://www.lawfareblog.com/wp-content/uploads/2013/09/Encryption-in-the-Real-World.jpg" alt=""></p>
 
 <h3 id="datacompression">Data Compression</h3>
 
@@ -126,11 +125,11 @@
 
 <p><em>GIF</em>, <em>MP3</em>, <em>V.42 bis model</em>(?) 등 다양한 곳에 압축을 활용한다고 한다.</p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2paRE5qTnpZMEVXTjNNVEw0Z1RONDBDTjFFMk10RWpad0VUTGtWRE41SWpNMGt6THlnVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2paRE5qTnpZMEVXTjNNVEw0Z1RONDBDTjFFMk10RWpad0VUTGtWRE41SWpNMGt6THlnVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p>강의에서 사용하는 용어를 좀 정리하고 가자. 바이너리 <code>B</code> 에 대해 <em>compression, 압축</em> <code>C(B)</code> 를 하고 <em>expansion, 복원(?)</em> 를 해서 <code>B</code> 를 얻는다. 중요한점은 <em>loseless</em> 여야 한다는 것.</p>
 
@@ -164,8 +163,8 @@ public class BinaryStdOut {
 
 <p><code>12/31/1999</code> 를 표시하는 법을 생각해 보자.</p>
 
-<p>(1) <code>char</code> 면 <em>8 bit</em>  10개니까 <em>80 bit</em> <br />
-(2) <code>int</code>  면 <em>32 bit</em>  3개니까 <em>96 bit</em> <br />
+<p>(1) <code>char</code> 면 <em>8 bit</em>  10개니까 <em>80 bit</em> <br>
+(2) <code>int</code>  면 <em>32 bit</em>  3개니까 <em>96 bit</em> <br>
 (3) <code>bit</code> 단위를 지정할 수 있다면 <em>4 + 5 + 12 + 3(align) = 24 bit</em> </p>
 
 <pre><code class="java">month = 12  
@@ -264,11 +263,11 @@ public class RunLength {
 
 <p><del>테스틀 어찌해야하는가</del></p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="http://help.adobe.com/en_US/Director/11.0/images/vector_bitmap_image.png" alt="" /></p>
+<p><img src="http://help.adobe.com/en_US/Director/11.0/images/vector_bitmap_image.png" alt=""></p>
 
-<p align="center">(<a href='http://help.adobe.com'>http://help.adobe.com</a>)</p>
+<p align="center">(<a href="http://help.adobe.com">http://help.adobe.com</a>)</p>
 
 <p><em>bitmap</em> 을 압축하는데 <em>run-length</em> 를 사용하면 효과적이다. 글자에서 대부분의 비트가 <code>0</code> (흰색) 이기 때문이다.</p>
 
@@ -290,9 +289,9 @@ public class RunLength {
 
 <p>이 중에서 <em>prefix-free</em> 인 코드를 만드는법을 살펴보자. <em>binary trie</em> 를 만들어 <em>leaf</em> 에 문자를 놓고, 그 문자까지 도달하는 경로가 인코딩 값이다. </p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTjJRVE9tTnpZemdETjVVVEw0UTJZaTF5WXdVek10WWpNNUlXTDJRek5oZFRPaWR6THlrVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTjJRVE9tTnpZemdETjVVVEw0UTJZaTF5WXdVek10WWpNNUlXTDJRek5oZFRPaWR6THlrVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p><em>compression</em> 을 위해 심볼테이블을 만들거나, 아니면 <em>leaf</em> 부터 따라 올라가고, 그 <em>path</em> 를 뒤집어 출력할 수 있다.</p>
 
@@ -415,9 +414,9 @@ public class RunLength {
 <li>반복한다</li>
 </ul>
 
-<p><img src="http://lcm.csa.iisc.ernet.in/dsa/img161.gif" alt="" /></p>
+<p><img src="http://lcm.csa.iisc.ernet.in/dsa/img161.gif" alt=""></p>
 
-<p align="center">(<a href='http://lcm.csa.iisc.ernet.in/dsa'>http://lcm.csa.iisc.ernet.in/dsa</a>)</p>
+<p align="center">(<a href="http://lcm.csa.iisc.ernet.in/dsa">http://lcm.csa.iisc.ernet.in/dsa</a>)</p>
 
 <p>이 과정에서 가장 낮은 <em>frequency</em> 를 갖는 문자가 아래로 가는 것을 보장하기 때문에 최적의 <em>prefix-free code</em> 를 찾는다 말할 수 있다. (좀 더 자세한 증명은 책을 보라고 함)</p>
 
@@ -541,7 +540,7 @@ private static void buildCode(String[] st, Node x, String s) {
 
 <p>텍스트를 읽다가 <em>codeword table</em> 에 이미 존재하면, 문자를 더 읽어 테이블에 없을 경우에만 추가한다. 그림으로 보면</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmlSR00yUW1OeVF6WWpaVEw0UTJNNDBTTjFVMk10a3pZM01XTHlFV05obGpZNU0yTHhBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmlSR00yUW1OeVF6WWpaVEw0UTJNNDBTTjFVMk10a3pZM01XTHlFV05obGpZNU0yTHhBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <ul>
 <li>Create ST associating <code>W</code>-bit codewords with string keys</li>
@@ -553,9 +552,9 @@ private static void buildCode(String[] st, Node x, String s) {
 
 <p><em>LZW compression</em> 에선 <em>longest string matching</em> 이 필요하므로 <em>trie</em> 를 이용할 수 있다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmtsek5pRldPbVJtTmpSVEw1RVRZNTBDT3pFek10UVRZMElXTG1GVFk1TVdPbVZ6THpBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmtsek5pRldPbVJtTmpSVEw1RVRZNTBDT3pFek10UVRZMElXTG1GVFk1TVdPbVZ6THpBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <h4 id="lzwimplementation">LZW Implementation</h4>
 
@@ -596,7 +595,7 @@ public static void compress() {
 
 <p><em>tricky case</em> 가 있는데</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTTBNbVp3WVdaaloyWTRJVEwxY1RZaDF5TnlJMk10VUROaGRUTHdVVE4zWTJZM2t6TDFBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTTBNbVp3WVdaaloyWTRJVEwxY1RZaDF5TnlJMk10VUROaGRUTHdVVE4zWTJZM2t6TDFBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p><em>compression</em> 은 같은데 <em>expansion</em> 이 좀 복잡하다. <code>41 42 81 83 80</code> 에서 <code>83</code> 을 해석할때, 테이블에 있어야 해석을 하는데 없으므로 막혀버린다. </p>
 
@@ -656,14 +655,14 @@ public static void compress() {
 
 <p>그리고 압축의 이론적 한계는 <em>shanon entropy</em> 에 의해</p>
 
-<p><img src="http://crackingthenutshell.com/wp-content/uploads/file/shannons-formula-small.jpg" alt="" /></p>
+<p><img src="http://crackingthenutshell.com/wp-content/uploads/file/shannons-formula-small.jpg" alt=""></p>
 
 <h3 id="reference">Reference</h3>
 
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br />
-(3) <a href="http://www.lawfareblog.com/2013/09/the-nsa-and-encryption/">The NSA and Encryption</a> <br />
-(4) <a href="http://www.programering.com/a/MTO4YzNwATE.html">Data Compression Lecture Note</a> <br />
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br>
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br>
+(3) <a href="http://www.lawfareblog.com/2013/09/the-nsa-and-encryption/">The NSA and Encryption</a> <br>
+(4) <a href="http://www.programering.com/a/MTO4YzNwATE.html">Data Compression Lecture Note</a> <br>
 (5) <a href="http://lcm.csa.iisc.ernet.in/dsa/node88.html">Huffman Algorithm</a>  </p>
     </section>
 
@@ -704,7 +703,7 @@ public static void compress() {
   </script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -725,4 +724,4 @@ public static void compress() {
 
 
   </body>
-  </html>
+  

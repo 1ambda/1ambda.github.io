@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>하스켈로 배우는 함수형 언어 3</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/haskell-intro3/" />
+<link rel="canonical" href="http://1ambda.github.io/haskell-intro3/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/edx">edx</a>, <a href="../tag/haskell">haskell</a>, <a href="/tag/recursion/">recursion</a>, <a href="/tag/church-numerals/">church numerals</a></h5>
       <h1 class="margin_bottom_medium">하스켈로 배우는 함수형 언어 3</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-12">Wednesday, November 12, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/haskell-intro3/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -180,9 +179,9 @@ dropC n (x:xs) = drop (n-1) xs
 
 <p>퀵소트 알고리즘은 간단합니다. 매 함수 호출에서, <em>pivot</em> 이라 불리는 리스트 내 원소를 고른 후 <em>pivot</em> 좌측에는 그 보다 작은 수를, 우측에는 <em>pivot</em> 보다 큰 수를 배치합니다. 그리고 <em>pivot</em> 을 제외한 좌측 과 우측에 대해 재귀 호출을 하지요.</p>
 
-<p><img src="https://sadakurapati.files.wordpress.com/2013/10/qsort_2.png?w=902&amp;h=617" alt="" /></p>
+<p><img src="https://sadakurapati.files.wordpress.com/2013/10/qsort_2.png?w=902&amp;h=617" alt=""></p>
 
-<p align="center">(<a href='https://sadakurapati.wordpress.com'>https://sadakurapati.wordpress.com</a>)</p>
+<p align="center">(<a href="https://sadakurapati.wordpress.com">https://sadakurapati.wordpress.com</a>)</p>
 
 <p>지난 강의에서 배운 <em>list comprehension</em> 을 이용하면 매우 간단하게 <em>quick sort</em> 를 만들 수 있습니다.</p>
 
@@ -196,7 +195,7 @@ qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
 
 <p>위 코드에서는 매 재귀마다 인자로 받는 리스트의 첫번째 원소 <code>x</code> 를  <em>pivot</em> 으로 사용했습니다.</p>
 
-<p><img src="http://media-cache-ec0.pinimg.com/736x/11/09/78/11097867a0e6c772c36285d97d94623b.jpg" alt="" /></p>
+<p><img src="http://media-cache-ec0.pinimg.com/736x/11/09/78/11097867a0e6c772c36285d97d94623b.jpg" alt=""></p>
 
 <h3 id="recursion">Recursion</h3>
 
@@ -414,9 +413,9 @@ foldr f v (x:xs) = f x (foldr f v xs)
 
 <p>보면 알겠지만, 리스트의 <em>the right-most (가장 우측)</em> 부터 연산합니다. 그래서 <em>fold right</em> 라는 이름이 붙었지요. 그림으로 보자면</p>
 
-<p><img src="http://www.pling.org.uk/cs/funimg/foldr.png" alt="" /></p>
+<p><img src="http://www.pling.org.uk/cs/funimg/foldr.png" alt=""></p>
 
-<p align="center">(<a href='http://www.pling.org.uk/cs/fun.html'>http://www.pling.org.uk/cs/fun.html</a>)</p>
+<p align="center">(<a href="http://www.pling.org.uk/cs/fun.html">http://www.pling.org.uk/cs/fun.html</a>)</p>
 
 <pre><code class="haskell">sum [1, 2, 3]  
 foldr (+) 0 [1, 2, 3]  
@@ -743,9 +742,9 @@ iterate' f = unfold (const False) id f -- const False is pred. always return Fal
 
 <h3 id="references">References</h3>
 
-<p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br />
-(2) <a href="https://sadakurapati.wordpress.com">https://sadakurapati.wordpress.com</a> <br />
-(3) <em>Programming in Haskell, Chapter 6, 7</em> <br />
+<p>(1) <strong>DelftX FP 101x</strong> in <em>edx</em> <br>
+(2) <a href="https://sadakurapati.wordpress.com">https://sadakurapati.wordpress.com</a> <br>
+(3) <em>Programming in Haskell, Chapter 6, 7</em> <br>
 (4) <a href="http://www.pling.org.uk/cs/fun.html">http://www.pling.org.uk/cs/fun.html</a>  </p>
     </section>
 
@@ -793,7 +792,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -816,4 +815,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

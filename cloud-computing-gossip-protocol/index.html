@@ -1,35 +1,34 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Cloud Computing, Gossip Protocol</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Cloud Computing, Gossip Protocol">
-  <meta name="twitter:description" content=" Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance 와 scalability 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해">
+  <meta name="twitter:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance 와 scalability 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/cloud-computing-gossip-protocol/">
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -50,38 +49,78 @@
 
 
   <link rel="stylesheet" href="../assets/highlight/styles/github.css">
-  <script src="../assets/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
-<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/cloud-computing-gossip-protocol/" />
+  <link rel="canonical" href="http://1ambda.github.io/cloud-computing-gossip-protocol/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Cloud Computing, Gossip Protocol">
+    <meta property="og:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance...">
+    <meta property="og:url" content="http://1ambda.github.io/cloud-computing-gossip-protocol/">
+    <meta property="article:published_time" content="2015-02-21T05:41:54.242Z">
+    <meta property="article:modified_time" content="2015-02-21T14:32:58.183Z">
+    <meta property="article:tag" content="coursera">
+    <meta property="article:tag" content="cloud computing">
+    <meta property="article:tag" content="gossip">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cloud Computing, Gossip Protocol">
+    <meta name="twitter:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance...">
+    <meta name="twitter:url" content="http://1ambda.github.io/cloud-computing-gossip-protocol/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Cloud Computing, Gossip Protocol",
+    "url": "http://1ambda.github.io/cloud-computing-gossip-protocol/",
+    "datePublished": "2015-02-21T05:41:54.242Z",
+    "dateModified": "2015-02-21T14:32:58.183Z",
+    "keywords": "coursera, cloud computing, gossip",
+    "description": "Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-52181619-1', '1ambda.github.io');
-    ga('send', 'pageview');
-  </script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
   
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=a9961bb5a5"></script>
+  <script src="../public/jquery.js?v=1e25303174"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Functional Programming</h4>
+  <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
-  </div>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles.1"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
 </header>
 
 <main class="site_width" role="main">
@@ -89,16 +128,16 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/cloud-computing">cloud computing</a>, <a href="../tag/gossip">gossip</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/cloud-computing/">cloud computing</a>, <a href="../tag/gossip/">gossip</a></h5>
       <h1 class="margin_bottom_medium">Cloud Computing, Gossip Protocol</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-21">Saturday, February 21, 2015</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/cloud-computing-gossip-protocol/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p>
+      <p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt=""></p>
 
 <h3 id="multicast">Multicast</h3>
 
@@ -118,7 +157,7 @@
 
 <p>(2) <strong>Tree-Based:</strong> 전달 받은 노드에서, 다시 패킷을 전달하여 경로가 <em>tree</em> 형태로 구성됩니다. <em>balanced tree</em> 라면 어떤 그룹에 패킷이 전달되는데 <code>O(logN)</code> 의 시간이 걸립니다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/tree_based_multicast.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/tree_based_multicast.jpg" alt=""></p>
 
 <p>이 방법의 단점은 </p>
 
@@ -129,13 +168,13 @@
 
 <p>일반적으로 <em>tree-based multicast</em> 프로토콜에서는 <em>spanning tree</em> 를 구성해서 최단비용으로 패킷을 전달합니다. 그리고 메시지가 올바르게 전달되었는지 <em>ACK</em> 또는 <em>NAK</em> 를 이용하는데 <em>SRM</em> 이던 <em>RMTP</em> 던 여전히 <code>O(N)</code> 만큼의 <em>ACK/NAK</em> 오버헤드가 발생합니다.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="gossip">Gossip</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example1.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example1.jpg" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example2.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example2.jpg" alt=""></p>
 
 <p>가십 프로토콜은 위 그림처럼 작동합니다.</p>
 
@@ -152,7 +191,7 @@
 <li><strong>Pull gossip:</strong> Periodically poll a few random selected processes for new multicast meesages that you haven't received</li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="gossipanalysis">Gossip Analysis</h3>
 
@@ -175,21 +214,21 @@
 
 <p>항상 <code>x + y = n + 1</code> 이고, 시작상태에서는 <code>x_0 = n, y_0 = 1</code> 입니다. 그리고 시간이 지날때마다 <em>uninfected</em> <code>y</code> 는 다음처럼 감소합니다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cfrac%7B%5Cmathrm%7Bd%7D%20x%7D%7B%5Cmathrm%7Bd%7D%20t%7D%20%3D%20-%5Cbeta%20xy" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cfrac%7B%5Cmathrm%7Bd%7D%20x%7D%7B%5Cmathrm%7Bd%7D%20t%7D%20%3D%20-%5Cbeta%20xy" alt=""></p>
 
 <p>그러면 이 수식으로부터 다음을 이끌어 낼 수 있습니다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?x%20%3D%20%7B%20n%28n&plus;1%29%20%5Cover%20%7Bn%20&plus;%20e%5E%7B%5Cbeta%28n&plus;1%29t%7D%7D%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?x%20%3D%20%7B%20n%28n&amp;plus;1%29%20%5Cover%20%7Bn%20&amp;plus;%20e%5E%7B%5Cbeta%28n&amp;plus;1%29t%7D%7D%7D" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?y%20%3D%20%7B%20%28n&plus;1%29%20%5Cover%20%7B1%20&plus;%20ne%5E%7B-%5Cbeta%28n&plus;1%29t%7D%7D%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?y%20%3D%20%7B%20%28n&amp;plus;1%29%20%5Cover%20%7B1%20&amp;plus;%20ne%5E%7B-%5Cbeta%28n&amp;plus;1%29t%7D%7D%7D" alt=""></p>
 
 <p>그리고 <em>infected node</em> 가 랜덤하게 <code>b</code> 개의 노드를 고른다 하면 <code>β</code> 는 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cbeta%20%3D%20%7Bb%20%5Cover%20b%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cbeta%20%3D%20%7Bb%20%5Cover%20b%7D" alt=""></p>
 
 <p>그리고 시간 <code>t</code> 를 가십이 진행되는 <em>round</em> 라 보고 <code>t = clog(n)</code> 이라 치환하겠습니다. 다음을 이끌어낼 수 있습니다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?y%20%5Capprox%20%28n&plus;1%29%20-%20%7B1%20%5Cover%20n%5E%7Bcb-2%7D%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?y%20%5Capprox%20%28n&amp;plus;1%29%20-%20%7B1%20%5Cover%20n%5E%7Bcb-2%7D%7D" alt=""></p>
 
 <p>이 식으로부터 <em>gossip protocol</em> 이 <em>low latency</em>, <em>reliability</em>, <em>lightweight</em> 하다는 것을 알 수 있습니다.</p>
 
@@ -205,7 +244,7 @@
 
 <p>각 노드는 <code>cb log(n)</code> 만큼의 <em>gossip message</em> 만 전파합니다. 이론적으로는 <code>log(N)</code> 은 상수가 아니지만, 실제로는 아주 천천히 증가하는 숫자기에 작은 숫자처럼 생각할 수 있습니다.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="faulttolerance">Fault-Tolerance</h3>
 
@@ -215,35 +254,35 @@
 
 <p><em>failure</em> 와 관련해서 한 가지 생각해 볼 문제가 있습니다. 모든 노드가 죽는것이 가능할까요? 물론 가능합니다 초기에 모든 노드가 죽으면요. 그러나 <em>improbable</em> 입니다. 일단 몇개의 노드가 <em>infected</em> 되면, 이후에는 퍼지는 속도가 훨씬 더 빠르기 때문입니다. 루머나 바이러스가 퍼질 수 있는 이유를 생각하면 이해하기 쉽습니다.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="pullgossip">Pull Gossip</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/pull_gossip_analysis.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/pull_gossip_analysis.jpg" alt=""></p>
 
 <p>그림에서 볼 수 있듯이, 어떤 형태의 가십 프로토콜이던 <code>2/N</code> 까지 전달할때는 <code>O(logN)</code> 만큼의 시간이 걸립니다. 그 이후에는 <em>pull gossip</em> 이 훨씬 빠르죠.</p>
 
 <p><code>i</code> <em>round</em> 후에 남아있는 <em>uninfected node</em> 의 수를 <code>p_i</code> 라 합시다. <em>pull gossip</em> 을 이용할때 다음 단계에서도 <em>uninfected</em> 일 확률은 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?p_%7Bi&plus;1%7D%20%3D%20p_i%5E%7Bk&plus;1%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?p_%7Bi&amp;plus;1%7D%20%3D%20p_i%5E%7Bk&amp;plus;1%7D" alt=""></p>
 
 <p>이는 <code>p_i</code> 자체가 <em>uninfected</em> 여야 하고, 이 노드가 선택하는 <code>k = b</code> 만큼의 노드도 <em>uninfected</em> 여야 하는데, 이 확률은 극히 낮습니다. 슬라이드에서 보듯이 <em>super-exponential</em> 하고, 그렇기 때문에 <em>second half</em> 부터는 <em>pull gossip</em> 이 <code>O(log(logN))</code> 입니다.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="topologyawaregossip">Topology-Aware Gossip</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/topology_aware_gossip.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/topology_aware_gossip.jpg" alt=""></p>
 
 <p>만약 <em>uninfected node</em> 를 <em>uniformly random</em> 하게 고른다면 위 그림에서 라우터의 오버헤드는 <code>O(N)</code> 이 됩니다. 더 정확하게는 <em>round</em> 마다 <code>b * (2/n)</code> 이 될겁니다. </p>
 
 <p>이를 해결하기 위해, 서브넷에 <code>n_i</code> 개의 노드가 있을때 자신이 속한 서브넷에 있는 <em>uninfected node</em> 를 더 자주 고르게, 확률을 <code>1 - (1/n_i)</code> 가 되도록 합니다. 그러면, 현재 서브넷에 있는 노드를 선택할 확률이 1 에 가까우므로 <code>O(logN)</code> 시간 내에 전파되고, 라우터의 오버헤드는 <code>(n_i) / (n_i)</code> 가 되어, <code>O(1)</code> 이 됩니다. </p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="refs">Refs</h3>
 
-<p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br />
+<p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br>
 (2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>
     </section>
 
@@ -251,58 +290,58 @@
       <section class="author_info margin_top_big">
         <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
         <p class="margin_left_medium text small">Author</p>
-        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
-        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
       </section>
     </footer>
 
 
     <div id="disqus_thread" class="margin_top_big"></div>
-    <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-      var disqus_identifier = '106';
-      var disqus_url = 'http://1ambda.github.io/cloud-computing-gossip-protocol/';
-    
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '106';
+  var disqus_url = 'http://1ambda.github.io/cloud-computing-gossip-protocol/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
     </article>
 </main>
 
 
   <script src="../assets/fitvids/jquery.fitvids.js"></script>
-  <script>
-  $(document).ready(function(){
-    // Target your .container, .wrapper, .post, etc.
-    $("section").fitVids();
-  });
-  </script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
   </footer>
 
   <script type="text/javascript">
-  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-  
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function () {
-   var s = document.createElement('script'); s.async = true;
-   s.type = 'text/javascript';
-   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-   }());
-  </script>
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
 
 
   </body>
-  </html>
+  

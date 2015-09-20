@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Randomized Selection</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/randomized-selection/" />
+<link rel="canonical" href="http://1ambda.github.io/randomized-selection/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="/tag/quick-sort/">quick sort</a>, <a href="/tag/selection/">selection</a>, <a href="/tag/randomization/">randomization</a></h5>
       <h1 class="margin_bottom_medium">Randomized Selection</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-07">Friday, November 07, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/randomized-selection/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -121,7 +120,7 @@
 
 <p><em>worst case</em> 는 당연히 매 재귀호출마다 문제 수가 1씩 줄어드는 경우이므로 <code>O(n^2)</code> 일테다. 만약에, <em>bast case</em> 로 문제가 절반씩 줄어든다면? <em>master method</em> 를 이용하면 <code>a = 1, b = 2, d = 1</code> 에서 <code>T(n) = O(n^1)</code> 이다.</p>
 
-<p><img src="https://acrocontext.files.wordpress.com/2014/01/master-method.png?w=300&amp;h=160" alt="" /></p>
+<p><img src="https://acrocontext.files.wordpress.com/2014/01/master-method.png?w=300&amp;h=160" alt=""></p>
 
 <p>그럼 이제 문제는 어떻게 사이즈를 <code>1/2</code> 로, 더 정확히는 <em>median</em> 을 <em>pivot</em> 으로 삼느냐다.</p>
 
@@ -133,7 +132,7 @@
 
 <p>그리고 <code>Xj</code> 를 <code>phase j</code> 에 있는 <code>rSelect</code> 호출의 수라 정의하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20%5Csum_%7Bphase%20j%7D%20X_j%20*%20c%20*%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20n" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20%5Csum_%7Bphase%20j%7D%20X_j%20*%20c%20*%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20n" alt=""></p>
 
 <p>이렇게 정의해 놓으면 재밌는 조건을 하나 쓸 수 있다. 바로 <em>pivot</em> 이 <code>25%-75%</code> 사이로 분할만 해주면, 다시 말해서 반으로 갈린 문제 중 작은 한쪽이 적어도 <code>25%</code> 가 넘으면 현재 <em>phase</em> 가 끝난다. 그럼 이제 전체 알고리즘의 기대값을 구하기 위해 <em>linearity of expectation</em> 을 이용해서 <code>E(Xj)</code> 를 구하면 된다. </p>
 
@@ -141,25 +140,25 @@
 
 <p>기대값은 이 모든 각각 확률변수값과 그 확률의 곱이므로 계산하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%7B1%20%5Cover%202%7D%20&plus;%20%7B1%20%5Cover%202%5E2%7D%20&plus;%20%7B1%20%5Cover%202%5E3%7D%20&plus;%20%5Ccdots%20%5Cleq%202" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%7B1%20%5Cover%202%7D%20&amp;plus;%20%7B1%20%5Cover%202%5E2%7D%20&amp;plus;%20%7B1%20%5Cover%202%5E3%7D%20&amp;plus;%20%5Ccdots%20%5Cleq%202" alt=""></p>
 
 <p>이것 말고 더 재밌는 계산법도 있다. 자세한 건 강의 내용을 참조 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?E%28X_j%29%20%3D%201%20&plus;%20%7B1%20%5Cover%202%7D%20*%20E%28X_j%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?E%28X_j%29%20%3D%201%20&amp;plus;%20%7B1%20%5Cover%202%7D%20*%20E%28X_j%29" alt=""></p>
 
 <p>이제 <em>average running</em> 타임을 구하기 위해 <code>T(n)</code> 의 평균을 구하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20E%5Bc%20*%20n%20*%20%5Csum_%7Bphase%20j%7D%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20X_j%5D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20E%5Bc%20*%20n%20*%20%5Csum_%7Bphase%20j%7D%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20X_j%5D" alt=""></p>
 
 <p>여기서 <em>linearity of expectation (기대값의 선형성)</em> 을 이용하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20*%20n%20*%20%5Csum_%7Bphase%20j%7D%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20E%28X_j%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20*%20n%20*%20%5Csum_%7Bphase%20j%7D%20%28%7B3%20%5Cover%204%7D%29%5Ej%20*%20E%28X_j%29" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20*%20n%20*%20%5Csum_%7Bphase%20j%7D%202%20*%20%28%7B3%20%5Cover%204%7D%29%5Ej" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20*%20n%20*%20%5Csum_%7Bphase%20j%7D%202%20*%20%28%7B3%20%5Cover%204%7D%29%5Ej" alt=""></p>
 
 <p>무한급수 공식을 적용하면,</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20*%20n%20*%204" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20c%20*%20n%20*%204" alt=""></p>
 
 <p><del>얼마나 멋진가?</del></p>
 
@@ -172,12 +171,12 @@
 <pre><code>dSelect(array A, length n, order statistic i)  
 </code></pre>
 
-<p>(1) Break <code>A</code> into groups of 5, sort each group <br />
-(2) C = the <code>n/5</code> "middle elements" <br />
-(3) p = <code>dSelect(C, n/5, n/10)</code>, recursivly computes median of C <br />
-(4) Partition <code>A</code> around <code>p</code> <br />
-(5) if <code>j = i</code> return <code>p</code> <br />
-(6) if <code>j &lt; i</code> return <code>dSelect(1st part of A, j-1, i)</code> <br />
+<p>(1) Break <code>A</code> into groups of 5, sort each group <br>
+(2) C = the <code>n/5</code> "middle elements" <br>
+(3) p = <code>dSelect(C, n/5, n/10)</code>, recursivly computes median of C <br>
+(4) Partition <code>A</code> around <code>p</code> <br>
+(5) if <code>j = i</code> return <code>p</code> <br>
+(6) if <code>j &lt; i</code> return <code>dSelect(1st part of A, j-1, i)</code> <br>
 (7) if <code>j &gt; i</code> return <code>dSelect(2nd part of A, j-j, i-j)</code>  </p>
 
 <p><code>4-7</code> 스텝은 <em>randomized selection</em> 과 똑같다. 더 복잡해진 부분은 앞의 <code>1-3</code> 스텝에서 피벗을 고르는 일이다.</p>
@@ -196,20 +195,20 @@
 
 <p>먼저 <code>n = 120</code> 이라 하자. 정렬에 <em>merge sort</em> 를 사용하면 <em>merge sort</em> 연산 수 공식은</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?6n%20*%20log_2%28n&plus;1%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?6n%20*%20log_2%28n&amp;plus;1%29" alt=""></p>
 
 <p>따라서 잘려진 5개짜리를 정렬하는데 걸리는 시간은 <code>30 * log_2(6)</code> 에서, 이 값은 적어도 120 보다는 작음을 알 수 있다. 따라서 전체 그룹의개수 <code>n/5</code> 를 곱하면, <code>24n</code> 으로 <code>O(n)</code> 임을 알 수 있다. 비록 상수가 좀 크긴 하지만</p>
 
-<p>(2) C = the <code>n/5</code> "middle elements" <br />
-(3) p = <code>dSelect(C, n/5, n/10)</code>, recursivly computes median of C <br />
-(4) Partition <code>A</code> around <code>p</code> <br />
-(5) if <code>j = i</code> return <code>p</code> <br />
-(6) if <code>j &lt; i</code> return <code>dSelect(1st part of A, j-1, i)</code> <br />
+<p>(2) C = the <code>n/5</code> "middle elements" <br>
+(3) p = <code>dSelect(C, n/5, n/10)</code>, recursivly computes median of C <br>
+(4) Partition <code>A</code> around <code>p</code> <br>
+(5) if <code>j = i</code> return <code>p</code> <br>
+(6) if <code>j &lt; i</code> return <code>dSelect(1st part of A, j-1, i)</code> <br>
 (7) if <code>j &gt; i</code> return <code>dSelect(2nd part of A, j-j, i-j)</code>  </p>
 
 <p>(2), (4) 는 <code>O(n)</code> 임을 알 수 있고, (3) 은 <code>T(n/5)</code> 다. 문제는 (6), (7) 이다. 둘 중에 하나만 호출되긴 하지만 선택되는 <em>pivot</em> <code>p</code> 에 따라서 문제의 사이즈가 달라진다. 모르니까 <code>T(?)</code> 라 두자 그러면 <em>determinitic selection</em> 의 <em>running time</em> 은</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%28%3F%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&amp;plus;%20T%28n/5%29%20&amp;plus;%20T%28%3F%29" alt=""></p>
 
 <p>간단한 가설을 세워보자. </p>
 
@@ -219,33 +218,33 @@
 
 <p>그러면 수식을 이렇게 바꿀 수 있다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%287n/10%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&amp;plus;%20T%28n/5%29%20&amp;plus;%20T%287n/10%29" alt=""></p>
 
 <p>(2) 에서 <em>medians</em> 를 찾고, 이걸 (3)에서 재귀에 한번 더 넘기면 <em>median of medians</em> 을 찾게된다. 이게 어떤 효과가 있냐면, 모든 원소를 5개씩 짤라 아래에서 위로 정렬, <em>medians</em> 는 좌에서 우로 정렬하면 다음과 같은 행렬이 나오는데</p>
 
-<p><img src="http://i.imgur.com/gaOxb1A.jpg?1" alt="" title="" /><p align="center">(<a href='http://functionspace.org/articles/19'>http://functionspace.org/articles/19</a>)</p></p>
+<p><img src="http://i.imgur.com/gaOxb1A.jpg?1" alt="" title=""></p><p align="center">(<a href="http://functionspace.org/articles/19">http://functionspace.org/articles/19</a>)</p>
 
 <p>모든 원소 중 좌측 하단에 있는 <code>30%</code> 는 <em>median of medians</em> 보다 분명히 작다. 그리고 우측 상단 <code>30%</code> 는 <em>medians of medians</em> 보다 분명히 크다. 따라서 나머지 40% 값이 어쨌던건 간에 적어도 <code>30-70%</code> 분할은 해주므로 문제의 사이즈가 (6) 스텝에서 <code>7n/10</code> 보다 작거나 같다는 것을 분명히 보장해준다. 따라서 아래 식은 참이다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%287n/10%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&amp;plus;%20T%28n/5%29%20&amp;plus;%20T%287n/10%29" alt=""></p>
 
 <p>쉽게 <em>master method</em> 를 이용하고 싶은데 문제가 서로 다른 사이즈로 분할되니까 사용할 수 없다. <em>induction</em> 을 이용하자. 아래가 참임을 보이면 된다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20an" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20an" alt=""></p>
 
 <p>우선 <em>base case</em> 는 <code>T(1) = 1</code> 이므로 <code>T(1) &lt;= a (where a &gt;= 1)</code> 에서 참이다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20T%28n/5%29%20&plus;%20T%287n/10%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&amp;plus;%20T%28n/5%29%20&amp;plus;%20T%287n/10%29" alt=""></p>
 
 <p>이제 위 식에서 <em>induction hypothesis</em> 를 이용하고, 정리하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&plus;%20a%28n/5%29%20&plus;%20a%287n/10%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20cn%20&amp;plus;%20a%28n/5%29%20&amp;plus;%20a%287n/10%29" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20n%20*%20%289a/10%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20n%20*%20%289a/10%29" alt=""></p>
 
 <p>이 때 <code>c</code> 는 상수이므로 <code>c = a / 10</code> 이라 하면 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20an" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?T%28n%29%20%5Cleq%20an" alt=""></p>
 
 <p>따라서 <em>deterministic selection</em> 의 성능은 <code>O(n)</code> 이다.</p>
 
@@ -253,7 +252,7 @@
 
 <p><em>comparison-based sorting</em> 의 <em>lower bound</em> 는 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%0A%5COmega%20(n*log%20n)" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%0A%5COmega%20(n*log%20n)" alt=""></p>
 
 <p>여기 해당되는 정렬들은 <em>merge sort, quick sort, heap sort</em> 등이 있다. 이런 정렬들은 데이터가 어떠할 것이라는 가정 없이 정렬을 해낸다. </p>
 
@@ -273,21 +272,21 @@
 
 <p>따라서 <code>2^k &gt;= n!</code> 이다. 이때 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?n%21%20%5Cgeq%20n%20*%20%28n-1%29%20*%20%28n-2%29%20%5Ccdots%20%28n/2%29%20%5Cgeq%20%28n/2%29%5E%7B%28n/2%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?n%21%20%5Cgeq%20n%20*%20%28n-1%29%20*%20%28n-2%29%20%5Ccdots%20%28n/2%29%20%5Cgeq%20%28n/2%29%5E%7B%28n/2%29%7D" alt=""></p>
 
 <p>이므로 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?2%5Ek%20%5Cgeq%20%28n/2%29%5E%7Bn/2%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?2%5Ek%20%5Cgeq%20%28n/2%29%5E%7Bn/2%7D" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?k%20%5Cgeq%20%28n/2%29*%20log_2%28n/2%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?k%20%5Cgeq%20%28n/2%29*%20log_2%28n/2%29" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?k%20%5Cgeq%20%5COmega%28n*logn%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?k%20%5Cgeq%20%5COmega%28n*logn%29" alt=""></p>
 
 <p><code>k</code> 가 연산 수 이므로 <em>comparison-based sorting</em> 의 <em>lower bound</em> 는 <code>Omega(n logn)</code> 이다.</p>
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br>
 (2) <a href="http://functionspace.org/articles/19">http://functionspace.org/articles/19</a></p>
     </section>
 
@@ -335,7 +334,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -358,4 +357,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

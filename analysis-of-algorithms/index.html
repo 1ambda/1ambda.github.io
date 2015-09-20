@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Analysis of Algorithms</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/analysis-of-algorithms/" />
+<link rel="canonical" href="http://1ambda.github.io/analysis-of-algorithms/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/coursera">coursera</a></h5>
       <h1 class="margin_bottom_medium">Analysis of Algorithms</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-11">Saturday, October 11, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/analysis-of-algorithms/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -113,9 +112,9 @@
 
 <p>알고리즘을 분석해야 하는 이유는 </p>
 
-<p>(1) Predict performance <br />
-(2) Compare algorithms <br />
-(3) Provide guarantees <br />
+<p>(1) Predict performance <br>
+(2) Compare algorithms <br>
+(3) Provide guarantees <br>
 (4) Understand theoretical basis  </p>
 
 <p>그 중에서도 <em>performance bug</em> 를 피하는 것이 무엇보다 중요하다. 이를 통해 내 알고리즘이 <em>practical large input</em> 에 적용할 수 있을까? 고민하는 것이, 알고리즘 분석의 주된 동기다.</p>
@@ -167,11 +166,11 @@ for (int i = 0; i &lt; N; i++)
 </code></pre>
 
 <blockquote>
-  <p>variable declaration = 2 <br />
-  assignment = 2 <br />
-  less then compare = N + 1 <br />
-  equal to compare = N <br />
-  array access = N <br />
+  <p>variable declaration = 2 <br>
+  assignment = 2 <br>
+  less then compare = N + 1 <br>
+  equal to compare = N <br>
+  array access = N <br>
   increment = N to 2N</p>
 </blockquote>
 
@@ -187,15 +186,15 @@ for (int i = 0; i &lt; N; i++)
 <blockquote>
   <p>variable declaration = 2 + N 
   assignment = 2 + N
-  less then compare = 1/2 * (N + 1) * (N + 2) <br />
-  equal to compare = 1/2 * N * (N - 1) <br />
-  array access = N * (N - 1) <br />
+  less then compare = 1/2 * (N + 1) * (N + 2) <br>
+  equal to compare = 1/2 * N * (N - 1) <br>
+  array access = N * (N - 1) <br>
   increment = 1/2 * N * (N - 1) to N * (N - 1)</p>
 </blockquote>
 
 <p>세 보면 알겠지만 정말 귀찮다. 세야할 연산의 종류도 많고. 그렇기 때문에, <em>running-time</em> 을 간단히 추정하기 위해</p>
 
-<p>(1) Use some basic operation as a proxy for running time <br />
+<p>(1) Use some basic operation as a proxy for running time <br>
 (2) tilde notation: ignore lower order terms  </p>
 
 <p>따라서 <em>2-Sum</em> 의 경우 유효한 연산을 배열 접근으로 잡으면, 연산 회수는 <code>~N^2</code> 이고 <em>3-Sum</em> 은 <code>~ 1/6 * N^3</code> 이다.</p>
@@ -218,15 +217,15 @@ for (int i = 0; i &lt; N; i++)
 <p><code>1</code> &lt; <code>lg N</code> &lt; <code>N</code> &lt; <code>N lg N</code> &lt; <code>N^2</code> &lt; <code>N^3</code> &lt; <code>2^N</code> 우측으로 갈 수록 알고리즘의 성능이 나쁘다. 일반적으로는 <code>N lg N</code> 이 쓸 수 있는 알고리즘이다. 좀 더 알아보자면, </p>
 
 <blockquote>
-  <p><strong>log N:</strong> N 이 절반으로 나누어지는 <em>binary search</em> 등 <br />
-  <strong>N log N:</strong>, <em>divide and conquer: merge sort</em> 등 <br />
+  <p><strong>log N:</strong> N 이 절반으로 나누어지는 <em>binary search</em> 등 <br>
+  <strong>N log N:</strong>, <em>divide and conquer: merge sort</em> 등 <br>
   <strong>2^N:</strong> 서브트리를 모두 검사하는 <em>exhaustive search</em> 등  </p>
 </blockquote>
 
 <p>알고리즘의 성능을 비교하기 위해 <code>T(2N) / T(N)</code> 을 구할 수 있는데, </p>
 
-<p>(1) <code>N</code> 은 <code>2</code> (따라서 lg 2 = 1 이므로, <code>N^1</code> 이다.) <br />
-(2) <code>N^2</code> 은 <code>4</code> <br />
+<p>(1) <code>N</code> 은 <code>2</code> (따라서 lg 2 = 1 이므로, <code>N^1</code> 이다.) <br>
+(2) <code>N^2</code> 은 <code>4</code> <br>
 (3) <code>N^3</code> 같은 경우 <code>8</code> 이다. 
 (4) <code>2^N</code> 은 <code>T(N)</code> 이다.</p>
 
@@ -255,7 +254,7 @@ for (int i = 0; i &lt; N; i++)
 
 <p><em>binary search</em> 가 <code>1 + lg N</code> 이라는 사실을 이용하면 <em>3-Sum</em> 을 <code>N^2 lg N</code> 으로 개선할 수 있다.</p>
 
-<p>(1) sorting: <code>N^2</code> <br />
+<p>(1) sorting: <code>N^2</code> <br>
 (2) binary search for <code>-(arr[i] + arr[j])</code>  : <code>N^2 log N</code>  </p>
 
 <p>두번째 스탭에서 <code>i</code>, <code>j</code> 에 대해 이진탐색을 시도하므로 <code>N^2 * log N</code> 이다.</p>
@@ -292,31 +291,31 @@ for (int i = 0; i &lt; N; i++)
 
 <p>따라서 알고리즘을 디자인하는 접근 방법은,</p>
 
-<p>(1) Develop an algorithm <br />
+<p>(1) Develop an algorithm <br>
 (2) Prove a lower bound</p>
 
 <p>그리하여, <em>lower bound</em> 와 <em>upper bound</em> 사이의 갭이 있다면 <em>lower bound</em> 를 증가시키는 새로운 알고리즘이 여지가 있다. 그걸 찾아내면서 <em>lower bound</em> 를 올려가면 <em>optimal algorithm</em> 을 찾을 수 있다. </p>
 
 <p>1970년대에는 <em>upper bound</em> 를 줄여왔지만, </p>
 
-<p>(1) 너무 <em>worst case</em> 에만 집중헀고 <br />
+<p>(1) 너무 <em>worst case</em> 에만 집중헀고 <br>
 (2) 이제 더 정확한 성능 측정을 위해서 <em>to within a constant factor</em> 보다 더 좋은 무언가가 필요하다.</p>
 
 <p>그리고 많은 사람들이 <em>Big o</em> 를 <em>approximate model of running time</em> 으로 번역하는 실수를 저질렀는데, 이 수업에서는 <em>Big o</em> 대신 <em>tilde(~)</em> 를 사용하겠다.</p>
 
-<p><img src="http://qlx.is.quoracdn.net/main-ce94d194dc6a85d3.png" align="center" /></p>
+<p><img src="http://qlx.is.quoracdn.net/main-ce94d194dc6a85d3.png" align="center"></p>
 
 <p align="center">If</p>
 
-<p><img src="http://qlx.is.quoracdn.net/main-30ac99d6624fcf8c.png" align="center" /></p>
+<p><img src="http://qlx.is.quoracdn.net/main-30ac99d6624fcf8c.png" align="center"></p>
 
 <h3 id="memory">Memory</h3>
 
 <p>자바에서는 다음과 같은 오버헤드가 있다.</p>
 
-<p>(1) <code>N</code> 개의 1차원 배열을 만들때는 <em>Type * N + 24 Bytes</em> <br />
-(2) <em>Object</em> 는 <em>16 Bytes</em> <br />
-(3) <em>Reference</em> 는 <em>8 Bytes</em> <br />
+<p>(1) <code>N</code> 개의 1차원 배열을 만들때는 <em>Type * N + 24 Bytes</em> <br>
+(2) <em>Object</em> 는 <em>16 Bytes</em> <br>
+(3) <em>Reference</em> 는 <em>8 Bytes</em> <br>
 (4) 각 오브젝트는 <em>8 Bytes</em> 단위로 패딩된다.</p>
 
 <p><strong>String</strong> 은 조금 더 복잡한데,</p>
@@ -336,9 +335,9 @@ for (int i = 0; i &lt; N; i++)
 
 <p>위 클래스를 인스턴스로 가지고 있을 경우엔 <code>N</code> 에 대해서</p>
 
-<p>(1) 16 bytes <em>object overhead</em> <br />
-(2) 8 + (4N + 24) for each <em>int[] array</em> <br />
-(3) 4 bytes for <code>count</code> <br />
+<p>(1) 16 bytes <em>object overhead</em> <br>
+(2) 8 + (4N + 24) for each <em>int[] array</em> <br>
+(3) 4 bytes for <code>count</code> <br>
 (4) 4 bytes padding</p>
 
 <p>따라서 <code>8N + 88</code> 이므로 <code>~8 N</code> 이다.</p>
@@ -398,7 +397,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -421,4 +420,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

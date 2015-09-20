@@ -1,35 +1,34 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Coding The Matrix 1, Function, Field and Vector</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Coding The Matrix 1, Function, Field and Vector">
-  <meta name="twitter:description" content=" The Function   Function Invertibility Theorem: A function f is invertible if and only if it is one-to-one and onto The Field In [6]: 1+3j + (10+20j)   Out[6]: (11+23j) In [7]: x = 1+3j In [8]: (x-1)**2   Out[8]: (-9+0j) In [9]: x.real   Out[9">
+  <meta name="twitter:description" content="The Function   Function Invertibility Theorem: A function f is invertible if and only if it is one-to-one and onto The Field In [6]: 1+3j + (10+20j)   Out[6]: (11+23j) In [7]: x = 1+3j In [8]: (x-1)**2   Out[8]: (-9+0j) In [9]: x.real   Out[9]">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/coding-the-matrix-1/">
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -50,38 +49,78 @@
 
 
   <link rel="stylesheet" href="../assets/highlight/styles/github.css">
-  <script src="../assets/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
-<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/coding-the-matrix-1/" />
+  <link rel="canonical" href="http://1ambda.github.io/coding-the-matrix-1/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Coding The Matrix 1, Function, Field and Vector">
+    <meta property="og:description" content="The Function   Function Invertibility Theorem: A function f is invertible if and only if it is one-to-one and onto The Field In [6]: 1+3j + (10+20j)   Out[6]: (11+23j) In [7]: x = 1+3j In [8]: (x-1)**2...">
+    <meta property="og:url" content="http://1ambda.github.io/coding-the-matrix-1/">
+    <meta property="article:published_time" content="2015-02-12T11:00:01.819Z">
+    <meta property="article:modified_time" content="2015-02-13T11:56:38.294Z">
+    <meta property="article:tag" content="coursera">
+    <meta property="article:tag" content="linear algebra">
+    <meta property="article:tag" content="vector">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Coding The Matrix 1, Function, Field and Vector">
+    <meta name="twitter:description" content="The Function   Function Invertibility Theorem: A function f is invertible if and only if it is one-to-one and onto The Field In [6]: 1+3j + (10+20j)   Out[6]: (11+23j) In [7]: x = 1+3j In [8]: (x-1)**2...">
+    <meta name="twitter:url" content="http://1ambda.github.io/coding-the-matrix-1/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Coding The Matrix 1, Function, Field and Vector",
+    "url": "http://1ambda.github.io/coding-the-matrix-1/",
+    "datePublished": "2015-02-12T11:00:01.819Z",
+    "dateModified": "2015-02-13T11:56:38.294Z",
+    "keywords": "coursera, linear algebra, vector",
+    "description": "The Function   Function Invertibility Theorem: A function f is invertible if and only if it is one-to-one and onto The Field In [6]: 1+3j + (10+20j)   Out[6]: (11+23j) In [7]: x = 1+3j In [8]: (x-1)**2..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-52181619-1', '1ambda.github.io');
-    ga('send', 'pageview');
-  </script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
   
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=a9961bb5a5"></script>
+  <script src="../public/jquery.js?v=1e25303174"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Functional Programming</h4>
+  <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
-  </div>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles.1"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
 </header>
 
 <main class="site_width" role="main">
@@ -89,16 +128,16 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/linear-algebra">linear algebra</a>, <a href="../tag/vector">vector</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/linear-algebra/">linear algebra</a>, <a href="../tag/vector/">vector</a></h5>
       <h1 class="margin_bottom_medium">Coding The Matrix 1, Function, Field and Vector</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-12">Thursday, February 12, 2015</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/coding-the-matrix-1/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg" alt="" /></p>
+      <p><img src="http://th06.deviantart.net/fs71/PRE/i/2012/348/f/a/3d_cube_by_colorsark-d5nztba.jpg" alt=""></p>
 
 <h3 id="thefunction">The Function</h3>
 
@@ -106,7 +145,7 @@
   <p><strong>Function Invertibility Theorem:</strong> A function <code>f</code> is invertible if and only if it is <strong>one-to-one</strong> and <strong>onto</strong></p>
 </blockquote>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="thefield">The Field</h3>
 
@@ -140,13 +179,13 @@ Out[11]: complex
 <li>In more advanced parts of linear algebra, complex numbers play an important role</li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="playingwithc">Playing with C</h3>
 
 <p><em>complex numbers</em> <code>C</code> 상에서는 한 축이 <em>real number</em>, 다른 축이 <em>imagenary number</em> (<em>python</em> 에선 <code>j</code> 로 표시) 다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/c_function_composition.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/c_function_composition.jpg" alt=""></p>
 
 <p>이 때 <em>translation</em> <code>f = z + z0</code> 를 <em>arrow</em> 처럼 볼 수 있다. <code>z0</code> 에서 시작해서 <code>z + z0</code> 를 향하는 화살표로</p>
 
@@ -169,9 +208,9 @@ In [4]: plot({z/2 for z in L})
 
 <p><em>complex number</em> 에서는 <code>z</code> 와 <code>1 + 0i</code> 의 각도를 <em>argument</em> 라 부르는데, 이를 구하기 위한 공식을 오일러가 만들어 두었다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/argument_def.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/argument_def.jpg" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/euler_argument.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/euler_argument.jpg" alt=""></p>
 
 <p>어느 <em>real number</em> <code>θ</code> 에 대해서, <code>e^(θi)</code> 가 단위 원 위의 <em>argument</em> <code>θ</code> 를 가진 점 <code>z</code> 가 된다.</p>
 
@@ -182,14 +221,14 @@ In [2]: from math import e, pi
 In [3]: plot([e**(t*2*pi*1j/20) for t in range(20)])  
 </code></pre>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/rotation.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/rotation.jpg" alt=""></p>
 
 <p>따라서 기존 <code>z</code> 값에 원하는 라디안 값 <code>k</code> 만큼 <code>e^(ki)</code> 를 곱해주면 <em>exponentiation law</em> 에 의해서, 그만큼 회전한다.</p>
 
 <pre><code class="python">In [11]: plot([e**(pi*1j/4) * z for z in L])  
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="playingwithgf2">Playing with GF(2)</h3>
 
@@ -214,17 +253,17 @@ In [6]: c
 Out[6]: 0  
 </code></pre>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/encryption.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/encryption.jpg" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/encryption2.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/encryption2.jpg" alt=""></p>
 
 <p>더 자세히는, <code>p</code> 를 어떻게 선택하는지는 <code>c</code> 의 <em>probability distribution</em> 에 영향을 주지 않기때문에 <em>Eve</em> 가 <code>c</code> 를 관찰한다 할지라도 <code>p</code> 에 대해 정보를 얻을 수 없다.</p>
 
 <p>왜 이 <em>cryptosystem</em> 이 <em>perfect secrecy</em> 를 만드는걸까? </p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/perfect_secrecy1.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/perfect_secrecy1.jpg" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/perfect_secrecy2.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/perfect_secrecy2.jpg" alt=""></p>
 
 <p><code>p = 0</code> 에 대해 <code>k</code> 를 받아 <code>c</code> 를 돌려주는 함수를 <code>f0</code> 이라 하면, <code>f0</code> 은 <em>one-to-one,  onto function</em> 이다. 따라서 <code>k</code> 를 선택하는 확률이 균일하다면 <code>c</code> 의 확률도 <em>uniformly distribution</em> 이다. <code>f1</code> 도 마찬가지다.</p>
 
@@ -234,13 +273,13 @@ Out[6]: 0
   <p>If each bit is encrypted with its own one-bit key, the cryptosystem is <strong>unbreakable</strong></p>
 </blockquote>
 
-<p><br/></p>
+<p><br></p>
 
 <p><em>GF(2)</em> 를 <em>network coding</em> 에도 사용할 수 있다. 커스터머 <code>c</code>, <code>d</code> 에게 동시에 <em>video streaming</em> 을 하면 중간지점에서 병목이 발생할 수 있는데 <code>b1 + b2</code> 를 더해 나중에 <code>c</code> 와 <code>d</code> 에서 <em>substraction</em> 을 이용해 원래 비트를 구하면 된다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/network_coding.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/network_coding.jpg" alt=""></p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="vector">Vector</h3>
 
@@ -262,19 +301,19 @@ Out[6]: 0
   <p>그러나 사원수는 20세기 말에 공간상에서의 회전에 관한 사원수의 유용성에 의해서 다시 주목받기 시작했다. 사원수를 이용한 회전의 표현은 행렬을 사용하는 표현에 비해 더욱 간결했고 계산이 빨랐다. 이런 이유로, 사원수는 컴퓨터 그래픽, 제어이론, 신호처리, 자세제어(attitue control), 물리학, 생물정보학, 분자동역학, 컴퓨터 시뮬레이션, 궤도역학(orbital mechanics)등에 사용되고 있다. </p>
 </blockquote>
 
-<p></br/></p>
+<p></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/vectors_are_functions.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/vectors_are_functions.jpg" alt=""></p>
 
 <p><em>vector</em> 를 정의역(<em>domain</em>) 에서 치역(<em>image</em>) 로 대응되는 일종의 <em>function</em> 이라 볼 수 있다. <em>python</em> 에서는 <em>dictionary</em> 로 쉽게 나타낼 수 있다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/sparsity.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/sparsity.jpg" alt=""></p>
 
 <p><em>vector</em> 에서 <code>0</code> 이 많으면 <em>sparse vector</em> 라 부르고, <code>k</code> 개 만큼만 <code>0</code> 이 아닌 원소가 있으면 <em>k-sparse</em> 라 부른다. <em>vector</em> 의 몇번째 원소가 <code>0</code>이 아닌지를 나타내야되기 때문에 <em>k-sparse vector</em> 는 <em>k proportional space</em>  가 필요하다. </p>
 
 <p><em>physical sensors</em> 로 얻어지는 <em>signal</em> 은 대부분 <em>sparse vector</em> 가 아니기 때문에 공간을 아끼기 위해, <em>signal</em> 을 <em>lossy compression</em> 으로 압축해서 보내는 법을 강의 후반부에서 배울 것이다.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="additionmultiplication">Addition, Multiplication</h3>
 
@@ -284,21 +323,21 @@ In [3]: def scalar_vector_mult(alpha, v): return [alpha * x for x in v]
 In [4]: plot([scalar_vector_mult(i/10, v) for i in range(11)])  
 </code></pre>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Calpha%5B3%2C%202%5D%20&plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%28%5B3.5%2C%203%5D%20-%20%5B0.5%2C%201%5D%29%20&plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%5Calpha%5B0.5%2C%201%5D%20&plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%281%20-%20%5Calpha%29%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%5Cbeta%5B0.5%2C%201%5D%20%5C%5C%20%5C%5C%20%28where%5C%20%5Calpha%2C%20%5Cbeta%20%3E%200%2C%20%5C%20%5Calpha%20&plus;%20%5Cbeta%20%3D%201%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Calpha%5B3%2C%202%5D%20&amp;plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%28%5B3.5%2C%203%5D%20-%20%5B0.5%2C%201%5D%29%20&amp;plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%5Calpha%5B0.5%2C%201%5D%20&amp;plus;%20%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%281%20-%20%5Calpha%29%5B0.5%2C%201%5D%20%5C%5C%20%3D%20%5Calpha%5B3.5%2C%203%5D%20-%20%5Cbeta%5B0.5%2C%201%5D%20%5C%5C%20%5C%5C%20%28where%5C%20%5Calpha%2C%20%5Cbeta%20%3E%200%2C%20%5C%20%5Calpha%20&amp;plus;%20%5Cbeta%20%3D%201%29" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/convex_comb.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/convex_comb.jpg" alt=""></p>
 
 <p><em>arbitrary line segment</em> 를 <em>addition</em>, <em>multiplication</em> 을 이용해 <code>a[3, 2] + [0.5, 1]</code> 처럼 표현할 수 있는데, 여기서 식을 좀 더 변형해 <em>convex combination</em> 을 만들 수 있다. 이걸 이용하면 <code>u, v</code> 의 비중이 얼마냐에 따라 <em>output</em> 이 어떻게 달라지는지를 쉽게 표현할 수 있다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/convex_comb_ex.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/convex_comb_ex.jpg" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/affine_comb.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/affine_comb.jpg" alt=""></p>
 
 <p><code>[0.5, 1]</code> 부터 <code>[3.5, 3]</code> 까지 <em>infinite line</em> 을 표현하기 위해 <em>affine combination</em> 을 이용할 수 있다. 더 자세한 내용은 <a href="http://en.wikipedia.org/wiki/Linear_combination">Wiki: line combination</a> 을 참고하자</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/line_comb.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/line_comb.jpg" alt=""></p>
 
-<p></br></p>
+<p></p>
 
 <h3 id="dictionarybasedrepresentation">Dictionary-based Representation</h3>
 
@@ -346,19 +385,19 @@ for d in V.D:
     print(V.f[d])
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="vectorsovergf2">Vectors over GF(2)</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/GF2_perfect_secrecy.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/GF2_perfect_secrecy.jpg" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/all_or_nothing_secret.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/all_or_nothing_secret.jpg" alt=""></p>
 
 <p>두명에게 나누어 <code>v</code> 를 전송하기 위해 <em>uniform distribution</em> 으로 <code>vA</code> 를 얻어 <code>vB = v - vA</code> 를 만든 뒤 각 한명씩에게 <code>vA</code>, <code>vB</code> 를 전송하는 것이다.</p>
 
 <p><code>vA</code> 는 랜덤 <em>n-vector</em> 고 <code>vB</code> 는 <code>f(x) = v - x</code> 의 <em>output</em> 인데, 이 함수의 <em>input</em> 이 랜덤하게 골라졌으므로 이것만으로는 어떤것도 얻을 수 없다.</p>
 
-<p><img src="http://cdn.phys.org/newman/gfx/news/2012/jhygjfvjgv.jpg" alt="" /></p>
+<p><img src="http://cdn.phys.org/newman/gfx/news/2012/jhygjfvjgv.jpg" alt=""></p>
 
 <p><em>RSA</em> 가 이 테크닉을 사용한다고 한다.</p>
 
@@ -367,7 +406,7 @@ for d in V.D:
 <li>Store the two parts on two separate servers</li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="dotproduct">Dot-Product</h3>
 
@@ -392,17 +431,17 @@ duration * rate
 
 <p>이후의 강의들에서 위에서 던진 질문들을 해결할 것이다.</p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/dot_product_measuring_similarity.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/dot_product_measuring_similarity.jpg" alt=""></p>
 
 <p>두 음성이 비슷한지 <em>dot-product</em> 로 비교할 수 있다. 매 부분마다 음성이 비슷한지 비교해야 하므로 연산이 느릴 수 있지만 <em>Fast Fourier Transform</em> 을 이용하면 계산을 빠르게 수행할 수 있다.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="dotproductovergf2">Dot-Product over GF(2)</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/dot_product_auth.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/dot_product_auth.jpg" alt=""></p>
 
 <p>몇번의 질문을 컴퓨터가 던지는것과 비슷하게 <em>n-vector password</em> <code>x</code> 에 대해 컴퓨터가 <em>random n-vector</em> <code>a</code> 를 보내고, 사람이 <em>dot-product</em> 값 <code>a * x = b</code>  를 보낸다.</p>
 
@@ -413,7 +452,7 @@ duration * rate
 <li><strong>How to compute them?</strong></li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/attacking_simple_auth.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/attacking_simple_auth.jpg" alt=""></p>
 
 <p>만약 <em>Eve</em> 가 <code>01011</code> 과 <code>11110</code> 을 관찰했다면 <code>01011 + 11110</code> 에 대해서는   그림에서 보듯이 해킹이 가능하다. 따라서 추가적으로 던져야 할 질문은</p>
 
@@ -421,11 +460,11 @@ duration * rate
 <li><strong>If a vector satisfies the equations, then what other equations does the vector satisfy?</strong></li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="triangularsystem">Triangular System</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/triangular_system.jpg" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/coding-the-matrix/1-vector/triangular_system.jpg" alt=""></p>
 
 <ul>
 <li>If <code>rowlist[i][i]</code> is zero procedure will raise <code>ZeroDivisionError</code></li>
@@ -444,15 +483,15 @@ duration * rate
     return x
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="refs">Refs</h3>
 
-<p>(1) <a href="http://colorsark.deviantart.com/art/3D-Cube-342632998">Title image</a> <br />
-(2) <strong>Coding the Matrix</strong> by <em>Philip Klein</em> <br />
-(3) <a href="http://ko.wikipedia.org/wiki/%EC%82%AC%EC%9B%90%EC%88%98">Wiki: 4원수</a> <br />
-(4) <a href="http://wiki.mathnt.net/index.php?title=%ED%95%B4%EB%B0%80%ED%84%B4%EC%9D%98_%EC%82%AC%EC%9B%90%EC%88%98(quarternions)">Math Wiki: 4원수</a> <br />
-(5) <a href="http://en.wikipedia.org/wiki/Linear_combination">Wiki: line combination</a> <br />
+<p>(1) <a href="http://colorsark.deviantart.com/art/3D-Cube-342632998">Title image</a> <br>
+(2) <strong>Coding the Matrix</strong> by <em>Philip Klein</em> <br>
+(3) <a href="http://ko.wikipedia.org/wiki/%EC%82%AC%EC%9B%90%EC%88%98">Wiki: 4원수</a> <br>
+(4) <a href="http://wiki.mathnt.net/index.php?title=%ED%95%B4%EB%B0%80%ED%84%B4%EC%9D%98_%EC%82%AC%EC%9B%90%EC%88%98(quarternions)">Math Wiki: 4원수</a> <br>
+(5) <a href="http://en.wikipedia.org/wiki/Linear_combination">Wiki: line combination</a> <br>
 (6) <a href="http://mrw0119.tistory.com/12">프로그래밍에 미치다 - 외적, 내적 분해</a>  </p>
     </section>
 
@@ -460,58 +499,58 @@ duration * rate
       <section class="author_info margin_top_big">
         <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
         <p class="margin_left_medium text small">Author</p>
-        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
-        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
       </section>
     </footer>
 
 
     <div id="disqus_thread" class="margin_top_big"></div>
-    <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-      var disqus_identifier = '101';
-      var disqus_url = 'http://1ambda.github.io/coding-the-matrix-1/';
-    
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '101';
+  var disqus_url = 'http://1ambda.github.io/coding-the-matrix-1/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
     </article>
 </main>
 
 
   <script src="../assets/fitvids/jquery.fitvids.js"></script>
-  <script>
-  $(document).ready(function(){
-    // Target your .container, .wrapper, .post, etc.
-    $("section").fitVids();
-  });
-  </script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
   </footer>
 
   <script type="text/javascript">
-  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-  
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function () {
-   var s = document.createElement('script'); s.async = true;
-   s.type = 'text/javascript';
-   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-   }());
-  </script>
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
 
 
   </body>
-  </html>
+  

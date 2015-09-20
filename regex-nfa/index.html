@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Regular Expression, NFA</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
@@ -21,15 +20,15 @@
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -53,9 +52,9 @@
   <script src="../assets/highlight/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/regex-nfa/" />
+<link rel="canonical" href="http://1ambda.github.io/regex-nfa/">
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,13 +91,13 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="/tag/algorithm/">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/nfa/">NFA</a>, <a href="/tag/regex/">regex</a></h5>
       <h1 class="margin_bottom_medium">Regular Expression, NFA</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-29">Monday, December 29, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/regex-nfa/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="http://4.bp.blogspot.com/-esm-BsLlh_U/UzlC63ecqEI/AAAAAAAAADs/lgZ2I71OGgs/s1600/2013-02-10-regular-expression-problems.png" alt="" /></p>
+      <p><img src="http://4.bp.blogspot.com/-esm-BsLlh_U/UzlC63ecqEI/AAAAAAAAADs/lgZ2I71OGgs/s1600/2013-02-10-regular-expression-problems.png" alt=""></p>
 
 <h3 id="regularexpression">Regular Expression</h3>
 
@@ -124,9 +123,9 @@
 
 <p>사용 가능한 연산으로</p>
 
-<p><img src="http://homepages.ius.edu/RWISMAN/C431/html/ch2-15.gif" alt="" /></p>
+<p><img src="http://homepages.ius.edu/RWISMAN/C431/html/ch2-15.gif" alt=""></p>
 
-<p align="center">(<a href='http://homepages.ius.edu/RWISMAN'>http://homepages.ius.edu/RWISMAN</a>)</p>
+<p align="center">(<a href="http://homepages.ius.edu/RWISMAN">http://homepages.ius.edu/RWISMAN</a>)</p>
 
 <ul>
 <li><em>concat</em> (3)</li>
@@ -406,28 +405,28 @@ java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac 161.6 seconds
 <p>지금까지 공부한 알고리즘은 <em>machine code</em> 를 돌려주는 일종의 컴파일러라 볼 수 있다.</p>
 
 <ul>
-<li><strong>KMP:</strong> string -> DFA</li>
+<li><strong>KMP:</strong> string -&gt; DFA</li>
 </ul>
 
 <p>파서는 필요없고, <em>DFA simulator</em> 를 이용해 실행</p>
 
 <ul>
-<li><strong>Grep:</strong> regex -> NFA</li>
+<li><strong>Grep:</strong> regex -&gt; NFA</li>
 </ul>
 
 <p><em>legal</em> 인지 확인할 파서가 필요하며 <em>NFA simulator</em> 를 이용</p>
 
 <ul>
-<li><strong>Javac:</strong> java langugage -> java byte code</li>
+<li><strong>Javac:</strong> java langugage -&gt; java byte code</li>
 </ul>
 
 <p>마찬가지로 파서가 필요하며 <em>JVM</em> 을 이용해 실행</p>
 
 <h3 id="reference">Reference</h3>
 
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br />
-(3) <a href="http://homepages.ius.edu/RWISMAN/C431/html/Chapter2.htm">http://homepages.ius.edu/RWISMAN</a> <br />
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br>
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br>
+(3) <a href="http://homepages.ius.edu/RWISMAN/C431/html/Chapter2.htm">http://homepages.ius.edu/RWISMAN</a> <br>
 (4) <a href="http://math.stackexchange.com/questions/563829/difference-between-nfa-and-dfa">Difference between NFA and DFA</a>  </p>
     </section>
 
@@ -468,7 +467,7 @@ java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac 161.6 seconds
   </script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -489,4 +488,4 @@ java Validate "(a|aa)*b" aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac 161.6 seconds
 
 
   </body>
-  </html>
+  

@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Maximum Flow</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
@@ -21,15 +20,15 @@
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -53,9 +52,9 @@
   <script src="../assets/highlight/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/maximum-flow/" />
+<link rel="canonical" href="http://1ambda.github.io/maximum-flow/">
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,21 +91,21 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/maximum-flow/">maximum flow</a>, <a href="/tag/ford-fulkerson/">ford-fulkerson</a></h5>
       <h1 class="margin_bottom_medium">Maximum Flow</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-28">Sunday, December 28, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/maximum-flow/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png" alt="" /></p>
+      <p><img src="https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png" alt=""></p>
 
 <h3 id="mincut">Min Cut</h3>
 
 <p><em>edge weighted</em> 그래프에서 <code>st</code>-<em>cut</em> 이란 <em>vertices</em> 를 두개의 <em>disjont sets</em> 으로 나누는 것이다. 이때 <code>s</code>, <code>t</code> 는 각각 다른 집합 <code>A</code>, <code>B</code> 에 속해있다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Min-cut.svg/220px-Min-cut.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Min-cut.svg/220px-Min-cut.svg.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org'>http://en.wikipedia.org</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p>
 
 <p><strong>capacity</strong> 란 컷으로 나뉘어진 두 집합 <code>A</code>, <code>B</code> 를 기준으로 <code>A</code> 에서 <code>B</code> 로 가기 위한 모든 <em>edge</em> 의 <em>weight</em> 를 모두 합친 것이다. <code>B</code> 에서 <code>A</code> 로의 <em>edge</em> 는 세지 않는 다는 것에 주의하자.</p>
 
@@ -119,9 +118,9 @@
 
 <h3 id="maxflow">Max Flow</h3>
 
-<p><img src="http://kunuk.files.wordpress.com/2010/11/fordfulkerson1.gif?w=700" alt="" /></p>
+<p><img src="http://kunuk.files.wordpress.com/2010/11/fordfulkerson1.gif?w=700" alt=""></p>
 
-<p align="center">(<a href='http://kunuk.wordpress.com'>http://kunuk.wordpress.com</a>)</p>
+<p align="center">(<a href="http://kunuk.wordpress.com">http://kunuk.wordpress.com</a>)</p>
 
 <p><em>edge</em> 에 <em>weight</em> 이외에도 <em>flow</em> 를 할당할 수 있다. 이 플로우는 몇 가지 성질을 만족하는데</p>
 
@@ -166,13 +165,13 @@
 
 <p><em>backward edge</em> 의 아이디어는 <em>local equilibrium</em> 이다. 진행할 수 없는 상황에서 <em>backward edge</em> 를 만들고, 거기서 <em>flow</em> 의 평형을 맞추는 값만큼 뺀 후 다시 진행한다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWXljek0wSTJNaWRqWTNZVEx6RWpaaDF5TTVZMk10TWpabVZUTDVNR1ppbHpZaUJ6TDNNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWXljek0wSTJNaWRqWTNZVEx6RWpaaDF5TTVZMk10TWpabVZUTDVNR1ppbHpZaUJ6TDNNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p>더이상 <em>augmenting path</em> 를 찾을 수 없을 때 알고리즘이 종료된다. 이건 <em>full forward edge</em> 가 존재하거나 <em>empty backword edge</em> 가 만들어졌기 때문이다.</p>
 
-<p><img src="http://www.cs.princeton.edu/courses/archive/spr13/cos226/lectures/summaries/maxFlowCheckpoint.png" alt="" /></p>
+<p><img src="http://www.cs.princeton.edu/courses/archive/spr13/cos226/lectures/summaries/maxFlowCheckpoint.png" alt=""></p>
 
-<p align="center">(<a href='http://www.cs.princeton.edu/'>http://www.cs.princeton.edu/</a>)</p>
+<p align="center">(<a href="http://www.cs.princeton.edu/">http://www.cs.princeton.edu/</a>)</p>
 
 <p>알고리즘을 서술하면</p>
 
@@ -197,7 +196,7 @@ While there exists an augmenting path
 
 <p><em>net flow accros cut</em> <code>(A, B)</code> 는 <code>A-&gt;B</code> 로의 <em>flow</em> 를 모두 합한 것에서 <code>B-&gt;A</code> 로의 <em>flow</em> 를 모두 뺀 것이다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWhKV1lsRkRaeVFtTTVZV0xtVkRPaTF5TTFjek10TXpZbGxUTGxCRE1pWkRaaFZ6TDVNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWhKV1lsRkRaeVFtTTVZV0xtVkRPaTF5TTFjek10TXpZbGxUTGxCRE1pWkRaaFZ6TDVNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <blockquote>
   <p><em>flow-value lemma:</em> Let <code>f</code> be any flow and let <code>(A, B)</code> be any cut. Then the net flow accros <code>(A, B)</code> equals the value of <code>f</code></p>
@@ -223,8 +222,8 @@ While there exists an augmenting path
 <p>는 다음의 <em>outflow</em> 와 동일하다.</p>
 
 <ul>
-<li><code>k</code> -> <code>A</code></li>
-<li><code>k</code> -> <code>B</code></li>
+<li><code>k</code> -&gt; <code>A</code></li>
+<li><code>k</code> -&gt; <code>B</code></li>
 </ul>
 
 <p>그런데 <code>k</code> 를 <code>B</code> 로 옮기게 되면 <em>net flow accros</em> 에 미치는 영향이 <em>inflow</em>, <em>outflow</em> 간 반대가 되지만 어쨌든 <em>local equilibrium</em> 에 의해 값은 같으므로 어차피 <em>value</em> 와 같다.</p>
@@ -250,8 +249,8 @@ While there exists an augmenting path
 
 <p>즉 이 말은 <del>동어 반복의 향연</del></p>
 
-<p>(1) 플로우 <code>f</code> 의 <em>value</em> 와 동일한 값의 <em>capacity</em> 를 가지는 어떤 컷이 있다. <br />
-(2) <code>f</code> 는 <em>max flow</em> 다 <br />
+<p>(1) 플로우 <code>f</code> 의 <em>value</em> 와 동일한 값의 <em>capacity</em> 를 가지는 어떤 컷이 있다. <br>
+(2) <code>f</code> 는 <em>max flow</em> 다 <br>
 (3) <code>f</code> 에 대해 <em>augmenting path</em> 가 없다.</p>
 
 <p>정리해 보면 <em>max flow</em> 로 부터 <em>min cut</em> 을 계산할 수 있다는 소리가 된다. 잘 보면 <em>max flow</em> <code>f</code> 에서는 <em>augmenting path</em> 가 없다.</p>
@@ -266,15 +265,15 @@ While there exists an augmenting path
 
 <p>이 컷은 <em>net flow accros cut</em> 고 첫번째 집단은 <code>A</code>, 두번째 집단은 <code>B</code> 가 된다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjVZR05sSlRPaE4yTm1KVEw1TVdZNTBDTzJnek10VW1ZaUZXTG1CRFpoRkRaaU56THpRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjVZR05sSlRPaE4yTm1KVEw1TVdZNTBDTzJnek10VW1ZaUZXTG1CRFpoRkRaaU56THpRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p>따라서 러닝타임은 <em>max flow</em> <code>f</code> 가 주어진다면 모든 <em>vertex</em>, <em>edge</em> 를 한번씩 보며 <code>A</code> 를 찾는 시간이므로 <code>V + E</code> 다.</p>
 
 <h3 id="runningtimeanalysis">Running Time Analysis</h3>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WTBJRE40a3pNMklXWW1KVEx5SVRaNTB5WWpaek10QVROaGhUTGlSV1lqUkdPM1V6TDNRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WTBJRE40a3pNMklXWW1KVEx5SVRaNTB5WWpaek10QVROaGhUTGlSV1lqUkdPM1V6TDNRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p>아까 했던 질문들에 답해보면</p>
 
@@ -311,9 +310,9 @@ While there exists an augmenting path
 
 <h4 id="badcaseforff">Bad case for FF</h4>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTW1Oek15RW1Zd0FqTWlWVExpbHpZNTBDWmhSMk10VURad01UTDJZek1oTldNeEl6THhVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTW1Oek15RW1Zd0FqTWlWVExpbHpZNTBDWmhSMk10VURad01UTDJZek1oTldNeEl6THhVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p><em>integer value max flow</em> 에선 운이 나쁠 경우 <em>max flow value</em> 만큼 <em>augmentation</em> 이 일어난다. 위 슬라이드에서 볼 수 있듯이 그래프 사이즈에 비해 어마어마한 <em>augmentation</em> 이 일어날 수 있다.</p>
 
@@ -324,9 +323,9 @@ While there exists an augmenting path
 <li><em>fattest path:</em> augmenting path with <strong>maximum bottleneck capacity</strong></li>
 </ul>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWtWMk4yTUdNbFZUWmpWVEx6UVdZaTFDTWtOMk10UVdNaUJUTGlaR1owTVRNbVoyTDFVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWtWMk4yTUdNbFZUWmpWVEx6UVdZaTFDTWtOMk10UVdNaUJUTGlaR1owTVRNbVoyTDFVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p>따라서 <em>FF</em> 알고리즘의 성능은 어떤 <em>augmenting path</em> 를 선택하느냐에 따라 달라질 수 있다.</p>
 
@@ -341,9 +340,9 @@ While there exists an augmenting path
 
 <p>따라서 <em>flow</em>, <em>capacity</em> 보다는 <em>residual capacity</em> 를 <em>edge</em> 의 가중치로 표시하는 <em>residual network</em> 를 이용하는편이 더 직관적이다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2lSMk1rRkdNNGN6WTVVVExsRjJZNTB5WWlsek10RVRPeVFXTDRjak41TVRObVp6TDNVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2lSMk1rRkdNNGN6WTVVVExsRjJZNTB5WWlsek10RVRPeVFXTDRjak41TVRObVp6TDNVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p>실제 클래스 구현은</p>
 
@@ -475,9 +474,9 @@ While there exists an augmenting path
 }
 </code></pre>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Max-flow_min-cut_example.svg/288px-Max-flow_min-cut_example.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Max-flow_min-cut_example.svg/288px-Max-flow_min-cut_example.svg.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org'>http://en.wikipedia.org</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p>
 
 <p>테스트 코드도 좀 돌려보자. 예제는 위와 같고, 코드는 아래에 있다.</p>
 
@@ -526,9 +525,9 @@ While there exists an augmenting path
 
 <h4 id="bipartitemachingproblem">Bipartite maching problem</h4>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTTRNalowTVdPNE1UTTBVV0x6TVRONDBDTzFVMk10WUROakZUTDJVMk0wVUROa056THhZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTTRNalowTVdPNE1UTTBVV0x6TVRONDBDTzFVMk10WUROakZUTDJVMk0wVUROa056THhZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p><code>N</code> 명의 <em>student</em> 가 <code>N</code> 개의 <em>company</em> 로부터 각각 몇개씩의 주문을 받았을 때, <code>1:1</code> 로 대응하는 그래프를 그릴 수 있느냐의 문제다. </p>
 
@@ -545,21 +544,21 @@ While there exists an augmenting path
 
 <p>완벽히 매칭이 이루어지는지, 아닌지를 <em>min cut</em> 을 이용해 알 수 있다. 그림을 보자.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTm1OV08xSUdOd1VtWTJNVExsQnpNaDFTWjJRek10WXpNaUZUTGlWMk4wZ1ROa0p6THpZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTm1OV08xSUdOd1VtWTJNVExsQnpNaDFTWjJRek10WXpNaUZUTGlWMk4wZ1ROa0p6THpZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <ul>
 <li>Let <code>S</code> = students on <code>s</code> side of cut.</li>
 <li>Let <code>T</code> = companies on <code>s</code> side of cut.</li>
-<li><code>|S|</code> > <code>|T|</code>; students in <code>S</code> can be matched only to companies in <code>T</code>.</li>
+<li><code>|S|</code> &gt; <code>|T|</code>; students in <code>S</code> can be matched only to companies in <code>T</code>.</li>
 </ul>
 
 <h4 id="baseballelimination">Baseball elimination</h4>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TWhWVE9oZERNeGNET2paVEx6a0RPaDFDTm1WMk10UXpNMllUTGhKVFppSlRZME16TDFZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TWhWVE9oZERNeGNET2paVEx6a0RPaDFDTm1WMk10UXpNMllUTGhKVFppSlRZME16TDFZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <blockquote>
   <p>Which teams have a chance of finishing the season with the most wins?</p>
@@ -567,9 +566,9 @@ While there exists an augmenting path
 
 <p>이건 게임이 얼마나 남았느냐 뿐만 아니라, 누구와 상대하냐도 문제가 되기 때문에 이렇게 그래프를 그려 풀 수 있다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTTm1SR08yVTJZMlFqTTRnVEwxTURNaTFTWmpoek10TVRZaVJXTDJFMk5sSkdPakp6TDNZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTTm1SR08yVTJZMlFqTTRnVEwxTURNaTFTWmpoek10TVRZaVJXTDJFMk5sSkdPakp6TDNZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p>여기서 디트로이트 (<code>4</code>) 는 수학적으로 봤을때 우승이 불가능하므로 미리 제거했다. 그리고, <code>s</code> 에서 출발하는 <em>edge</em> 를 각 팀간 남은 경기로, 그리고 <code>t</code> 로 들어가는 <em>edge</em> 를 디트로이트의 남은경기, 이긴경기에서 해당 팀의 이긴경기를 빼서 <em>upper bound</em> 를 설정한다.</p>
 
@@ -583,12 +582,12 @@ While there exists an augmenting path
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Ro$bert Sedgewick</strong> <br />
-(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br />
-(3) <a href="https://graph-tool.skewed.de/static/doc/flow.html">https://graph-tool.skewed.de/</a> <br />
-(4) <a href="http://en.wikipedia.org/wiki/Cut_(graph_theory)">Wikipedia: Cut</a> <br />
-(5) <a href="http://kunuk.wordpress.com/2010/11/09/graph-flow-ford-fulkerson-algorithm-example-with-c/">http://kunuk.wordpress.com - Flow</a> <br />
-(6) <a href="http://www.programering.com/a/MDN0gDNwATY.html">http://www.programering.com</a> <br />
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Ro$bert Sedgewick</strong> <br>
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br>
+(3) <a href="https://graph-tool.skewed.de/static/doc/flow.html">https://graph-tool.skewed.de/</a> <br>
+(4) <a href="http://en.wikipedia.org/wiki/Cut_(graph_theory)">Wikipedia: Cut</a> <br>
+(5) <a href="http://kunuk.wordpress.com/2010/11/09/graph-flow-ford-fulkerson-algorithm-example-with-c/">http://kunuk.wordpress.com - Flow</a> <br>
+(6) <a href="http://www.programering.com/a/MDN0gDNwATY.html">http://www.programering.com</a> <br>
 (7) <a href="http://en.wikipedia.org/wiki/Max-flow_min-cut_theorem#Example">Wikipeda - Max Flow</a></p>
     </section>
 
@@ -629,7 +628,7 @@ While there exists an augmenting path
   </script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -650,4 +649,4 @@ While there exists an augmenting path
 
 
   </body>
-  </html>
+  

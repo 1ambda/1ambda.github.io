@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Intro to Computational Thinking and Data Science 2</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
@@ -21,15 +20,15 @@
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -53,9 +52,9 @@
   <script src="../assets/highlight/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/edx-600-2x-2/" />
+<link rel="canonical" href="http://1ambda.github.io/edx-600-2x-2/">
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,7 +91,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/edx">edx</a>, <a href="../tag/python">python</a>, <a href="/tag/simulation/">simulation</a></h5>
       <h1 class="margin_bottom_medium">Intro to Computational Thinking and Data Science 2</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-22">Saturday, November 22, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/edx-600-2x-2/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -211,8 +210,8 @@ PI est = 3.14155671875 sd = 0.002101 needles = 512000
 
 <p>우리가 구한 값이 실제 <code>PI</code> 와 근사하다고 믿기 전에 3가지를 먼저 확인해야한다.</p>
 
-<p>(1) <strong>conceptual model</strong> (이 경우 <code>PI</code> 를 위한 계산) <br />
-(2) <strong>implementation</strong> <br />
+<p>(1) <strong>conceptual model</strong> (이 경우 <code>PI</code> 를 위한 계산) <br>
+(2) <strong>implementation</strong> <br>
 (3) <strong>enough samples</strong>  </p>
 
 <p>만약에 <code>4 * (inCircle / float(num)</code> 대신에 <code>2 * (inCircle / float(num)</code> 를 사용해 잘못된 <em>conceptual model</em> 을 가진다면 (버그라 볼 수도 있겠다.)</p>
@@ -243,11 +242,11 @@ PI est = 1.57079484375 sd = 0.002017 needles = 128000
 
 <p>보통 두 가지 작업이 있는데,</p>
 
-<p>(1) develop a hypothesis <br />
-(2) design an experiment, take measurements <br />
-(3) use computation to <br />
-- evaluate hypothesis, <br />
-- determin values of unknowns, <br />
+<p>(1) develop a hypothesis <br>
+(2) design an experiment, take measurements <br>
+(3) use computation to <br>
+- evaluate hypothesis, <br>
+- determin values of unknowns, <br>
 - predict consequences</p>
 
 <p>두가지는 <code>1 -&gt; 2</code> 순서일 수 있고, 때때로 뒤 바뀔 수도 있다. 예를 한번 살펴보면</p>
@@ -319,7 +318,7 @@ pylab.show()
 
 <p><em>normal distribution</em> 의 식은 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%20-%20%5Cmu%29%5E2%20%5Cover%20%5Csigma%5E2%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%20-%20%5Cmu%29%5E2%20%5Cover%20%5Csigma%5E2%7D" alt=""></p>
 
 <p><code>mu = 0, sigma = 1</code> 인 경우에 <em>standard normal</em> 혹은 <em>unit normal</em> 이라 부른다.</p>
 
@@ -327,44 +326,44 @@ pylab.show()
   <p>So when observation errors are due to the accumlation of many small random perturbations</p>
 </blockquote>
 
-<p><img src="http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%29%5E2%20%5Cover%20%5Csigma%5E2%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20e%5E%7B-%28x%29%5E2%20%5Cover%20%5Csigma%5E2%7D" alt=""></p>
 
 <p>다시 말해 작은 랜덤의 누적으로 발생한 관측 오차의 경우에는 <code>mu = 0</code> 이다. 그리고 식이 말해주는 바는, 큰 에러의 경우에는 확률이 <em>expnentially less likely</em> 하다는 것이다.</p>
 
 <p>이제 각 에러가 일어날 확률 곱을 다음과 같이 구할 수 있다. </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29" alt=""></p>
 
 <p>이때 이 값을 최대화한다는 것은 각 에러가 나올 확률이 가장 높아야 한다. 다시 말해서 가장 평균적인 에러만 나와야 한다는 뜻이다. 이 값의 최대를 구하는 것은 뒤집은 식의 최소값을 찾는 것과 같으므로</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min%20%5C%20%7B1%20%5Cover%20%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min%20%5C%20%7B1%20%5Cover%20%5Cprod_%7Bi%20%3D%200%7D%5E%7Blen%28obj%29%20-%201%7D%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D" alt=""></p>
 
 <p>여기에 자연 로그를 씌우면 확률 변수의 곱이 덧셈으로 변한다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?ln%20%28%7B1%20%5Cover%20%5Cprod%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D%29%20%5C%5C%20%5C%5C%20%5C%5C%20%3D%20-%20%5Csum%20ln%20%28L_%7Berr%7D%28obs_i%20-%20pred_i%29%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?ln%20%28%7B1%20%5Cover%20%5Cprod%20%5C%20L_%7Berr%7D%20%28obs_i%20-%20pred_i%29%7D%29%20%5C%5C%20%5C%5C%20%5C%5C%20%3D%20-%20%5Csum%20ln%20%28L_%7Berr%7D%28obs_i%20-%20pred_i%29%29" alt=""></p>
 
 <p>이 값을 최소화 하면 된다. 여기서 <em>pdf</em> 식을 적용하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min%20-%20%5Csum%20ln%20%28%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20e%5E%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min%20-%20%5Csum%20ln%20%28%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20e%5E%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%29" alt=""></p>
 
 <p>로그를 씌우면 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Csum%20%5Bln%20%7B%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20&plus;%20ln%20%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%5D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Csum%20%5Bln%20%7B%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20&amp;plus;%20ln%20%7B%28obs_i%20-%20pred_i%29%5E2%20%5Cover%20%5Csigma%5E2%7D%5D" alt=""></p>
 
 <p>이 때 다른 상수를 제외하고 실제 최소화 해야 할 부분만 고려하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min%20%5Csum%20%28obs_i%20-%20pred_i%29%5E2" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min%20%5Csum%20%28obs_i%20-%20pred_i%29%5E2" alt=""></p>
 
 <p>따라서 이 값을 최소화 하면 <em>most likely observations</em> 가 된다. 이런 이유에서 오차 제곱의 합의 최소가 되는 파라미터가 바로 가장 신뢰할만한 파라미터가 된다.</p>
 
-<p><br/> <br />
+<p><br> <br>
 처음부터 정리하자면, 중심 극한 정리에 따라 에러의 분포가 어떠하든 간에 에러가 확률변수라면 이것의 평균은 정규분포다. 따라서 <em>pdf</em> 식을 적용할 수 있고 이때 <code>mean = 0</code> 이다.</p>
 
 <p>에러가 나올 확률의 곱이 최대이면, 모든 에러에 대해 보편적인 에러를 얻었다는 뜻이므로 이에 대해 식을 정리하면,</p>
 
 <p><em>sum of squared of erros (SSE, least square)</em> 를 최소화 하는 파라미터를 선택하면 가장 신뢰할 만한 관측 결과를 얻어낼 수 있다는 결론을 얻게된다.</p>
 
-<p><br/> <br />
+<p><br> <br>
 파이선에서는 <code>pylab.plotfit</code> 을 이용해 값을 최소화 하는 파라미터를 뽑아낼 수 있다. 예를 들어서 <code>y = ax + b</code> 의 합을 최소화 하는 <code>a, b</code> 를 찾으려면 </p>
 
 <pre><code class="python">a, b = pylab.ployfir(xvals, yvals, 1)  
@@ -440,7 +439,7 @@ def tryFits(fName):
 
 <p><em>variability of errors</em> 는 SEE, 즉 관측 데이터와 예측값 간 차이의 제곱의 합으로 구할 수 있다. 그리고 <em>variability of data</em> 는 관측값과 관측값의 평균의 차이의 제곱의 합으로 구할 수 있다. 그리고 이 두 변수간 비율로 모델이 얼마나 잘 맞는지를 판단할 수 있다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%7B%5Csigma_%7Berr%7D%5E2%20%5Cover%20%5Csigma_%7Bdata%7D%5E2%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%7B%5Csigma_%7Berr%7D%5E2%20%5Cover%20%5Csigma_%7Bdata%7D%5E2%7D" alt=""></p>
 
 <p>이 값을 <code>R^2</code> 또는 <em>coefficient of determination</em> 이라 부른다. 이 값이 <code>1</code> 에 근접하면 모델이 데이터와 잘 맞고, <code>0</code> 에 가까우면 거의 안맞는다는 뜻이다.</p>
 
@@ -459,10 +458,10 @@ def tryFits(fName):
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br />
-(2) <a href="http://ko.wikipedia.org/wiki/%EC%A4%91%EC%8B%AC%EA%B7%B9%ED%95%9C%EC%A0%95%EB%A6%AC">http://ko.wikipedia.org</a> <br />
-(3) <a href="http://www.financedoctor.co.kr/finance/view.php?f_idx=14587&amp;b_code=8&amp;m_code=0&amp;s_code=0">http://www.financedoctor.co.kr</a> <br />
-(4) <a href="http://www.researchgate.net/post/What_is_the_difference_among_Deterministic_model_Stochastic_model_and_Hybrid_model">www.researchgate.net/</a> <br />
+<p>(1) <em>MIT 6.00.2 2x</em> in <strong>edx</strong> <br>
+(2) <a href="http://ko.wikipedia.org/wiki/%EC%A4%91%EC%8B%AC%EA%B7%B9%ED%95%9C%EC%A0%95%EB%A6%AC">http://ko.wikipedia.org</a> <br>
+(3) <a href="http://www.financedoctor.co.kr/finance/view.php?f_idx=14587&amp;b_code=8&amp;m_code=0&amp;s_code=0">http://www.financedoctor.co.kr</a> <br>
+(4) <a href="http://www.researchgate.net/post/What_is_the_difference_among_Deterministic_model_Stochastic_model_and_Hybrid_model">www.researchgate.net/</a> <br>
 (5) <a href="http://www4.stat.ncsu.edu/~gross/BIO560%20webpage/slides/Jan102013.pdf">www4.stat.ncsu.edu</a></p>
     </section>
 
@@ -503,7 +502,7 @@ def tryFits(fName):
   </script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -524,4 +523,4 @@ def tryFits(fName):
 
 
   </body>
-  </html>
+  

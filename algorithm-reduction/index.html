@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Problem Reduction</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
@@ -21,15 +20,15 @@
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -53,9 +52,9 @@
   <script src="../assets/highlight/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/algorithm-reduction/" />
+<link rel="canonical" href="http://1ambda.github.io/algorithm-reduction/">
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,13 +91,13 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="/tag/algorithm/">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/reduction/">reduction</a>, <a href="/tag/convex-hull/">convex hull</a></h5>
       <h1 class="margin_bottom_medium">Problem Reduction</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-30">Tuesday, December 30, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/algorithm-reduction/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png" alt="" /></p>
+      <p><img src="https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png" alt=""></p>
 
 <p>앞으로 남은 3챕터에서 배울 내용은</p>
 
@@ -139,19 +138,19 @@
 <p>이외에도 다양한 <em>reduction</em> 예제가 있다.</p>
 
 <ul>
-<li>3-collinear -> sorting</li>
-<li>CPM -> topological sorting</li>
-<li>arbitrage -> shortest path (벨만포드)</li>
-<li>Burrows-Wheeler transform -> suffix sort</li>
+<li>3-collinear -&gt; sorting</li>
+<li>CPM -&gt; topological sorting</li>
+<li>arbitrage -&gt; shortest path (벨만포드)</li>
+<li>Burrows-Wheeler transform -&gt; suffix sort</li>
 </ul>
 
 <p>따라서 <code>Y</code> 문제를 풀 수 있을때, <code>X</code> 에 적용 가능한지가 문제가 된다.</p>
 
 <h3 id="convexhull">Convex hull</h3>
 
-<p><img src="http://cgm.cs.mcgill.ca/~orm/images/mergech.gif" alt="" /></p>
+<p><img src="http://cgm.cs.mcgill.ca/~orm/images/mergech.gif" alt=""></p>
 
-<p align="center">(<a href='http://cgm.cs.mcgill.ca/~orm'>http://cgm.cs.mcgill.ca/~orm</a>)</p>
+<p align="center">(<a href="http://cgm.cs.mcgill.ca/~orm">http://cgm.cs.mcgill.ca/~orm</a>)</p>
 
 <p><em>convex hull</em> 은 <em>sorting</em> 으로 바꿀 수 있다.</p>
 
@@ -167,14 +166,14 @@
 
 <p>먼저 <em>cross product (외적)</em> 에 대해 잠깐 보고가자. 내적은 스칼라지만, 외적은 또 다른 벡터를 돌려준다. 두 벡터에 대해 수직인 벡터를 돌려주고, 그 크기는 두 벡터로 만들어지는 평행사변형의 넓이다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Cross_product_parallelogram.svg/220px-Cross_product_parallelogram.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Cross_product_parallelogram.svg/220px-Cross_product_parallelogram.svg.png" alt=""></p>
 
 <p>외적은 벡터를 돌려주고, 그 방향이 <code>sin</code> 에 기반하기 때문에 두 벡터 <code>a, b</code> 의 외적 <code>a x b</code> 의 값에 따라 <code>a</code> 를 기준으로 <code>b</code> 가 좌측에 있는지, 우측에 있는지 알 수 있다. 위 그림에서 <code>b</code> 가 아래쪽을 향할때 <code>a x b</code> 의 방향이 어디가 될지 생각해 보자.</p>
 
-<p><img src="https://lh3.googleusercontent.com/MIO3c8kg5MTNkze8w5Y6AGfDNWF9Vx4EVvlui8S5grVNWbgXBcpIch7E4R2DRr4B4HSlbLOHSBy39UMHLhTOqLkbnjQMCqtN-VBYkcEfeOEDjAyoCFzMllfpUHUicltzfw" alt="" />
-<img src="https://lh6.googleusercontent.com/aaQEU_goK5dBbB_sct7YxtFafk5968K4yDH5nssYy2RSrieKv0yl-FSQbwgxKgc6sRyxum057PTPW9CfJ83Hr3B3aR4yXWTkaQj3mQEPu35-mhB3epOF1IrFCqsBVKiK3g" alt="" /></p>
+<p><img src="https://lh3.googleusercontent.com/MIO3c8kg5MTNkze8w5Y6AGfDNWF9Vx4EVvlui8S5grVNWbgXBcpIch7E4R2DRr4B4HSlbLOHSBy39UMHLhTOqLkbnjQMCqtN-VBYkcEfeOEDjAyoCFzMllfpUHUicltzfw" alt="">
+<img src="https://lh6.googleusercontent.com/aaQEU_goK5dBbB_sct7YxtFafk5968K4yDH5nssYy2RSrieKv0yl-FSQbwgxKgc6sRyxum057PTPW9CfJ83Hr3B3aR4yXWTkaQj3mQEPu35-mhB3epOF1IrFCqsBVKiK3g" alt=""></p>
 
-<p align="center">(<a href='http://blog.secmem.org/554'>http://blog.secmem.org/554</a>)</p>
+<p align="center">(<a href="http://blog.secmem.org/554">http://blog.secmem.org/554</a>)</p>
 
 <p>이제 <em>graham scan</em> 알고리즘을 보면</p>
 
@@ -186,9 +185,9 @@
 
 <p><em>polar angle</em> 은</p>
 
-<p><img src="http://cf.ydcdn.net/1.0.1.26/images/main/polar%20coordinate.jpg" alt="" /></p>
+<p><img src="http://cf.ydcdn.net/1.0.1.26/images/main/polar%20coordinate.jpg" alt=""></p>
 
-<p align="center">(<a href='http://www.yourdictionary.com'>http://www.yourdictionary.com</a>)</p>
+<p align="center">(<a href="http://www.yourdictionary.com">http://www.yourdictionary.com</a>)</p>
 
 <p>그리고 <em>clockwise turn(시계방향)</em> 인지 아닌지 외적으로 구할 수 있다. 외적값이 음수면 시계방향이다. </p>
 
@@ -206,7 +205,7 @@
 
 <h4 id="lineartimereductions">Linear-time reductions</h4>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/1.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/1.png" alt=""></p>
 
 <h3 id="establishinglowerbounds">Establishing Lower Bounds</h3>
 
@@ -216,7 +215,7 @@
 
 <h4 id="lineartimereductions">Linear-time reductions</h4>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/3.png" alt="" title="" /> </p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/3.png" alt="" title=""> </p>
 
 <blockquote>
   <p>Problem <code>X</code> <strong>linear-time reduces</strong> to problem <code>Y</code> if <code>X</code> can be solved with</p>
@@ -239,7 +238,7 @@
   <p><strong>Proposition:</strong> sorting linear-time reduces to convex hull. So if I can solve convex hull efficiently, I can sort efficiently</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/2.png" alt="" title="" /> 
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/2.png" alt="" title=""> 
 이미지를 잘 보면 <em>convex hull</em> 이 <code>y = x^2</code> 선 위에 있다. 그리고 이 위에 있는 모든 점들이 정렬된 순서인걸 볼 수 있다. 그리고 정렬 대상이 2차원 좌표긴 하지만 <em>quadratic decision tree model</em> 내에 있으므로 정렬 문제로 <em>linear-time reduction</em> 이 가능하다.</p>
 
 <blockquote>
@@ -270,7 +269,7 @@
 
 <p>그리고 서로 <em>reduction</em> 이 가능하므로 한 문제에 대해 빠른 알고리즘을 개발해서, 다른 곳으로 적용이 가능하다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/4.jpg" alt="" title="" /> </p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/algorithm-reduction/4.jpg" alt="" title=""> </p>
 
 <ul>
 <li>use exact algorithm for tractable problems</li>
@@ -279,13 +278,13 @@
 
 <h3 id="reference">Reference</h3>
 
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br />
-(3) <a href="https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png">xkcd image</a> <br />
-(4) <a href="http://cgm.cs.mcgill.ca/~orm/mergech.html">Convex hull image</a> <br />
-(5) <a href="http://ghebook.blogspot.kr/2010/07/vector.html">전파거북이 - 좌표계 기반 벡터</a> <br />
-(6) <a href="http://blog.secmem.org/554">소프트웨멤버십 - Convex hull</a> <br />
-(7) <a href="http://www.yourdictionary.com/polar-coordinate">Polar angle image</a> <br />
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br>
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br>
+(3) <a href="https://www.palantir.com/wp-assets/wp-content/static/techblog/2011/09/travelling_salesman_problem.png">xkcd image</a> <br>
+(4) <a href="http://cgm.cs.mcgill.ca/~orm/mergech.html">Convex hull image</a> <br>
+(5) <a href="http://ghebook.blogspot.kr/2010/07/vector.html">전파거북이 - 좌표계 기반 벡터</a> <br>
+(6) <a href="http://blog.secmem.org/554">소프트웨멤버십 - Convex hull</a> <br>
+(7) <a href="http://www.yourdictionary.com/polar-coordinate">Polar angle image</a> <br>
 (8) <a href="http://web.cs.dal.ca/~mhe/csci3110/handouts/lecture9.htm">sorting - convex hull image</a>  </p>
     </section>
 
@@ -326,7 +325,7 @@
   </script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -347,4 +346,4 @@
 
 
   </body>
-  </html>
+  

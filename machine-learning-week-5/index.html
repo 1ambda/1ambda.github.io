@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Machine Learning, Week 5</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/machine-learning-week-5/" />
+<link rel="canonical" href="http://1ambda.github.io/machine-learning-week-5/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/machine-lerning">machine lerning</a>, <a href="/tag/neural-network/">neural network</a></h5>
       <h1 class="margin_bottom_medium">Machine Learning, Week 5</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-06">Thursday, November 06, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/machine-learning-week-5/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -121,11 +120,11 @@
 
 <p>이제 <em>neural network</em> 에 대한 <em>cost function</em> 을 볼건데 먼저 <em>binary classification</em> 의 <em>regularized cost function</em> 식을 다시 보자.</p>
 
-<p><img src="http://3.bp.blogspot.com/-qNym-oCdMIg/Trd03YeslWI/AAAAAAAAApQ/GUfXiJ3vpUE/s400/Screen+shot+2011-11-07+at+3.03.55+AM.png" alt="http://aimotion.blogspot.kr/" /></p>
+<p><img src="http://3.bp.blogspot.com/-qNym-oCdMIg/Trd03YeslWI/AAAAAAAAApQ/GUfXiJ3vpUE/s400/Screen+shot+2011-11-07+at+3.03.55+AM.png" alt="http://aimotion.blogspot.kr/"></p>
 
 <p>지난 시간에 언급했듯이 신경망에서 각 단계는 <em>logistic regression</em> 과 같이 때문에 <code>L</code> 의 신경망은 <code>L-1</code> 의 <em>logistic regression</em> 의 식으로 변환할 수 있다.</p>
 
-<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[3].png" align="center" /></p>
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20%5B3%5D.png" align="center"></p>
 
 <p><del>이 식의 가장 큰 문제점은 이 식을 보면 당황스럽다는 것이다.</del></p>
 
@@ -141,17 +140,17 @@
 
 <p><em>gradient computation</em> 을 위해서는 <em>cost function</em> 과 각 <code>l</code> 의 <code>i</code>, <code>j</code> 위치의 <code>theta</code> 에 대해서 <em>cost function</em> 의 <em>partial derivative</em> 를 구해야 한다. <del>네?</del></p>
 
-<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[7].png" align="center" />  </p>
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20%5B7%5D.png" align="center">  </p>
 
-<p align="center">(<a href='http://www.holehouse.org/'>http://www.holehouse.org/</a>)</p>
+<p align="center">(<a href="http://www.holehouse.org/">http://www.holehouse.org/</a>)</p>
 
-<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[8].png" alt="http://www.holehouse.org/mlclass/09<em>Neural</em>Networks<em>Learning</em>files/Image%20[8].png" title="" /></p>
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20%5B8%5D.png" alt="http://www.holehouse.org/mlclass/09&lt;em&gt;Neural&lt;/em&gt;Networks&lt;em&gt;Learning&lt;/em&gt;files/Image%20[8].png" title=""></p>
 
 <p>다음과 같은 신경망이 있다고 하자, 그리고 <em>training set</em> 이 <code>(x, y)</code> 만 있다고 한다면 <em>cost function</em> 을 얻기 위해 다음의 <em>forward propagation</em> 을 진행하면 된다.</p>
 
-<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[9].png" alt="http://www.holehouse.org/mlclass/09<em>Neural</em>Networks<em>Learning</em>files/Image%20[9].png" title="" /></p>
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20%5B9%5D.png" alt="http://www.holehouse.org/mlclass/09&lt;em&gt;Neural&lt;/em&gt;Networks&lt;em&gt;Learning&lt;/em&gt;files/Image%20[9].png" title=""></p>
 
-<p align="center">(<a href='http://www.holehouse.org/'>http://www.holehouse.org/</a>)</p>
+<p align="center">(<a href="http://www.holehouse.org/">http://www.holehouse.org/</a>)</p>
 
 <p>그럼 <code>i, j, l</code> 에 대한 <em>cost function</em> 의 <em>partial derivative</em> 는 어떻게 구할까?</p>
 
@@ -159,9 +158,9 @@
 
 <p><em>forward propagation</em> 과 다르게 뒤에서 앞쪽으로 <em>error</em> 가 전파되기 때문에 <em>back propagation, BP</em> 라 부른다. BP 로 찾은 <code>d</code> 값을 이용하면 <em>partial derivative</em> 를 쉽게 구할 수 있다. <code>d3, d2</code> 를 구하는 방법은 아래와 같다. </p>
 
-<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[10].png" alt="http://www.holehouse.org/mlclass/09<em>Neural</em>Networks<em>Learning</em>files/Image%20[10].png" title="" /></p>
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20%5B10%5D.png" alt="http://www.holehouse.org/mlclass/09&lt;em&gt;Neural&lt;/em&gt;Networks&lt;em&gt;Learning&lt;/em&gt;files/Image%20[10].png" title=""></p>
 
-<p align="center">(<a href='http://www.holehouse.org/'>http://www.holehouse.org/</a>)</p>
+<p align="center">(<a href="http://www.holehouse.org/">http://www.holehouse.org/</a>)</p>
 
 <p>식에 대한 <em>intuition</em> 은 이전 레이어의 유닛의 <code>d</code> 를 얻기 위해서 다음 레이어의 모든 <code>d</code> 와 <code>theta</code> 의 곱을 이용한다는 사실이다. 이건 <em>FP</em> 에서 다음 단계의 유닛 <code>a</code> 를 얻기 위해 이전 단계의 모든 유닛과 <code>theta</code> 를 이용한다는 사실을 거꾸로 생각해보면 이해할 수 있다.</p>
 
@@ -171,9 +170,9 @@
 
 <p>알고리즘을 좀 자세히 살펴보면 </p>
 
-<p><img src="http://my.csdn.net/uploads/201207/18/1342599882_9006.jpg" alt="" /></p>
+<p><img src="http://my.csdn.net/uploads/201207/18/1342599882_9006.jpg" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer'>http://blog.csdn.net/abcjennifer</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p>
 
 <p>지금까지의 설명과 같이 먼저 <em>FP</em> 를 진행해서 각 레이어의 유닛 <code>a</code> 을 구하고, <em>BP</em> 를 진행한다.</p>
 
@@ -181,9 +180,9 @@
 
 <p>이렇게 모든 <code>DELTA</code> 를 구하고 나서 이제 <code>D</code> 에 <em>regularization term</em> 을 추가한다.</p>
 
-<p><img src="http://my.csdn.net/uploads/201207/19/1342669084_1797.jpg" alt="" /></p>
+<p><img src="http://my.csdn.net/uploads/201207/19/1342669084_1797.jpg" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer'>http://blog.csdn.net/abcjennifer</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p>
 
 <p>이제 <em>regularization term</em> 까지 더한 <code>D</code> 가 바로 <em>partial derivative</em> 다. <del>너무 난해하다</del></p>
 
@@ -193,28 +192,28 @@
 
 <p>처음으로 다시 돌아가면 <em>cost function</em> 에서 <em>training set</em> 이 1개라면 다시 말해 <code>m=1</code> 이고, <code>lambda=0</code> 이라면 <em>cost function</em> 은 <code>h(x), y</code> 에 의해 좌우된다. 결국 <em>squared error</em> 와 다를바 없다는 소리다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360304035_3064.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360304035_3064.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <p>결국 <code>dj^(l)</code> 은 <code>aj^(l)</code> 의 <em>error of cost</em> 다. 더 엄밀히 수학적으로 말하자면 <code>dj^(l)</code> 은 <code>cost(i)</code> 에 대한 <code>zj^(l)</code> 의 <em>partial derivative</em> 다. <code>zj^(l)</code> 이 변할때 <code>i</code> 에 대한 <em>cost</em> 가 얼마나 변하는지가 바로 <code>d</code> 란 이야기다. </p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360304589_4715.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360304589_4715.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <p><code>d</code> 에 대한 더 엄밀한 수학적 증명은 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?\delta_k%20=%20\frac{\partial%20J(\Theta)}{\partial%20z_k}%20=%20\frac{\partial%20J(\Theta)}{\partial%20a_k}\frac{\partial%20a_k}{\partial%20z_k}%20=%20\Theta_{k}\delta_{k+1}\cdot%20g%27(z_k)%20\\%20\Delta%20w_{ij}%20=%20\Delta%20w_{ij}%20+%20\frac{\partial%20J(\Theta)}{\partial%20w_{ij}}%20=%20\Delta%20w_{ij}%20+%20a_j^l%20\cdot%20\delta_k^(l+1)\\%20\frac{\partial%20J(\Theta)}{\partial%20w_{ij}}%20=%20\frac{\partial%20J(\Theta)}{\partial%20z_k}%20\cdot%20\frac{\partial%20z_k}{\partial%20w_{ij}}" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cdelta_k%20=%20%5Cfrac%7B%5Cpartial%20J(%5CTheta)%7D%7B%5Cpartial%20z_k%7D%20=%20%5Cfrac%7B%5Cpartial%20J(%5CTheta)%7D%7B%5Cpartial%20a_k%7D%5Cfrac%7B%5Cpartial%20a_k%7D%7B%5Cpartial%20z_k%7D%20=%20%5CTheta_%7Bk%7D%5Cdelta_%7Bk+1%7D%5Ccdot%20g%27(z_k)%20%5C%5C%20%5CDelta%20w_%7Bij%7D%20=%20%5CDelta%20w_%7Bij%7D%20+%20%5Cfrac%7B%5Cpartial%20J(%5CTheta)%7D%7B%5Cpartial%20w_%7Bij%7D%7D%20=%20%5CDelta%20w_%7Bij%7D%20+%20a_j%5El%20%5Ccdot%20%5Cdelta_k%5E(l+1)%5C%5C%20%5Cfrac%7B%5Cpartial%20J(%5CTheta)%7D%7B%5Cpartial%20w_%7Bij%7D%7D%20=%20%5Cfrac%7B%5Cpartial%20J(%5CTheta)%7D%7B%5Cpartial%20z_k%7D%20%5Ccdot%20%5Cfrac%7B%5Cpartial%20z_k%7D%7B%5Cpartial%20w_%7Bij%7D%7D" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/abcjennifer'>http://blog.csdn.net/abcjennifer</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p>
 
 <h3 id="unrollingparameters">Unrolling Parameters</h3>
 
 <p><em>octave</em> 에서 <code>reshape</code> 함수를 이용해서 벡터를 매트릭스로 변환하는 방법을 알려준다. </p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360306972_1270.png" alt="" />
-<img src="http://img.my.csdn.net/uploads/201302/08/1360307271_1026.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360306972_1270.png" alt="">
+<img src="http://img.my.csdn.net/uploads/201302/08/1360307271_1026.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <h3 id="gradientchecking">Gradient Checking</h3>
 
@@ -222,20 +221,20 @@
 
 <p><em>gradient checking</em> 이란 방법을 이용하면 <em>FP, BP</em> 의 구현이 완벽함을 보일 수 있다. 배워보자.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360308451_8919.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360308451_8919.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <p>말 그대로 기울기에 대한 근사치를 구해서 비교하여 검증하는 방법이다. <code>e</code>(엡실론) 이 매우 작다 하고, <code>0-e</code> 와 <code>0+e</code> 두 점 사이의 기울기를 구해 <em>gradient</em> 와 근사한 값을 구한다.</p>
 
 <p>우리는 <code>0</code> 가 하나가 아니기 때문에, 각각의 <code>0</code>(<code>theta</code>) 에 대해 모두 <em>gradient</em> 의 근사치를 구해야 한다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360308632_9597.png" alt="" />
-<img src="http://img.my.csdn.net/uploads/201302/08/1360308843_4503.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360308632_9597.png" alt="">
+<img src="http://img.my.csdn.net/uploads/201302/08/1360308843_4503.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <p>마지막에서 <em>gradient checking</em> 을 이용해 구한 <code>gradApprox</code> 와 실제 <em>BP 를 이용해 구한 *graident</em> 인 <code>Dvec</code> 과 비슷한지 검사한다.</p>
 
 <p>그러나, 한가지 알아야할 사실이 있다. <em>gradient checking</em> 은 굉장히 비싸기 때문에 <code>Dvec</code> 과 비슷한 값을 구했는지 검사한 후에는 <em>gradient checking</em> 를 꺼야한다. </p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360310625_8308.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360310625_8308.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <h3 id="randominitialization">Random Initialization</h3>
 
@@ -243,11 +242,11 @@
 
 <p>결국 내가 가진 모든 히든 유닛이 같은 계산을 해 내고 있으므로, 하나의 <em>feature</em> 에 대한 극도로 중복된 연산을 볼 수 있다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/08/1360312970_4725.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360312970_4725.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <p><code>theta</code> 가 대칭이기 때문에 발생하는 문제인데 <em>symmetry breaking</em> 을 위해 <code>[-e, e]</code> 사이의 <code>theta</code> 를 랜덤으로 골라보자. 물론 이 <code>e</code> 는 <em>gradient checking</em> 에서의 <code>e</code> 와 관련이 없다.</p>
 
-<p><img src="http://my.csdn.net/uploads/201207/20/1342765672_2379.jpg" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/abcjennifer'>http://blog.csdn.net/abcjennifer</a>)</p></p>
+<p><img src="http://my.csdn.net/uploads/201207/20/1342765672_2379.jpg" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p>
 
 <h3 id="puttingittoghther">Putting It Toghther</h3>
 
@@ -257,29 +256,29 @@
 
 <p>기본적으로는 1개의 히든 레이어를 사용하거나, 1개 이상을 사용한다면 같은 수의 히든 유닛을 모든 히든 레이어에서 사용하는것이 대부분 계산 비용 면에서 낫다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/09/1360373142_6515.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/09/1360373142_6515.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
-<p>(2) <em>weights</em> 를 랜덤하게 초기화 한다. <br />
-(3) <em>forward propagation</em> <br />
-(4) <em>cost function</em> 을 구한다. <br />
+<p>(2) <em>weights</em> 를 랜덤하게 초기화 한다. <br>
+(3) <em>forward propagation</em> <br>
+(4) <em>cost function</em> 을 구한다. <br>
 (5)  <em>partial derivatives</em> 구하기 위해 <em>back propagation</em>  </p>
 
 <p><em>BP</em> 를 할때는 <em>traning set</em> 의 수 <code>m</code> 번 만큼 루프를 돌면서 각 <code>(xi, yi)</code> 를 이용해 <em>FP</em>, <em>BP</em> 를 한다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/09/1360373729_4414.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/09/1360373729_4414.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
-<p>(6) <em>gradient checking</em> 을 이용해 얻은 근사치와 <em>partial derivatives</em> 를 비교한다. 값이 적당히 비슷하면 <em>gradient checking</em> 코드를 제거한다. <br />
+<p>(6) <em>gradient checking</em> 을 이용해 얻은 근사치와 <em>partial derivatives</em> 를 비교한다. 값이 적당히 비슷하면 <em>gradient checking</em> 코드를 제거한다. <br>
 (7) <em>cost function</em> 을 최소화 하기 위해 <em>gradient descent</em> 나 <em>advanced optimization method</em> 를 사용한다.</p>
 
 <p>한 가지 알아야 할 사실은 <em>neural network</em> 의 <em>cost function</em> 은 <em>non-convex</em> 이기 때문에 <em>local optimum</em> 에서 멈출 수 있다. </p>
 
 <p>그런덷 문제가 굉장히 크다면 <em>gradient descent</em> 로 찾은 <em>local optimum</em> 도 충분히 좋은 값이라고 한다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/09/1360374039_7863.png" alt="" title="" /><p align="center">(<a href='http://blog.csdn.net/linuxcumt'>http://blog.csdn.net/linuxcumt</a>)</p></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/09/1360374039_7863.png" alt="" title=""></p><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p>
 
 <p>처음에 1장에서 봤던 언덕 그림이다.</p>
 
-<p><img src="http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5" alt="" title="" /><p align="center">(<a href='http://mapository.tistory.com/59'>http://mapository.tistory.com/59</a>)</p></p>
+<p><img src="http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5" alt="" title=""></p><p align="center">(<a href="http://mapository.tistory.com/59">http://mapository.tistory.com/59</a>)</p>
 
 <p>여기서 <em>gradient descent</em> 가 하는 일은 언덕을 내려가는거고, <em>back propagation</em> 이 하는 일은 방향을 잡아주는 일이다.(<code>z</code> 가 변했을 때 <em>cost function</em> 값이 변하는 양인 오차 <code>d</code> 의 값이 적어지도록 방향을 잡아줌)</p>
 
@@ -291,9 +290,9 @@
 
 <h3 id="references">References</h3>
 
-<p>(1) <a href="http://aimotion.blogspot.kr/">http://aimotion.blogspot.kr/</a> <br />
-(2) <a href="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning.html">http://www.holehouse.org/mlclass/</a> <br />
-(3) <a href="http://blog.csdn.net/abcjennifer/article/details/7758797">http://blog.csdn.net/abcjennifer/</a> <br />
+<p>(1) <a href="http://aimotion.blogspot.kr/">http://aimotion.blogspot.kr/</a> <br>
+(2) <a href="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning.html">http://www.holehouse.org/mlclass/</a> <br>
+(3) <a href="http://blog.csdn.net/abcjennifer/article/details/7758797">http://blog.csdn.net/abcjennifer/</a> <br>
 (4) <a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>  </p>
     </section>
 
@@ -341,7 +340,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -364,4 +363,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

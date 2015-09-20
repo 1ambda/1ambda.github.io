@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Dijkstra, Heap, Red-Black Tree</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/dijkstra-heap-balanced-tree/" />
+<link rel="canonical" href="http://1ambda.github.io/dijkstra-heap-balanced-tree/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/heap/">heap</a>, <a href="/tag/dijkstra/">dijkstra</a>, <a href="/tag/red-black-tree/">red-black tree</a></h5>
       <h1 class="margin_bottom_medium">Dijkstra, Heap, Red-Black Tree</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-23">Sunday, November 23, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/dijkstra-heap-balanced-tree/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -168,14 +167,14 @@ while X != V
 <p>그래프 내에 있는 <code>s -&gt; w*</code> 의 모든 경로 <code>p</code> 는 다음 형태를 가진다.</p>
 
 <p><code>s -&gt; y | -&gt; z -&gt; w*</code>
-<br/></p>
+<br></p>
 
 <p>여기서 <code>s, y</code> 는 방문한 점이고 <code>z, w*</code> 는 방문하지 않은 점이다. </p>
 
 <p><code>s -&gt; y | -&gt; z -&gt; w*</code> 에 대해 <code>p</code> 의 길이는 다음 3개를 더한 것이다.</p>
 
-<p>(1) <code>l_sy &gt;= A[y] = L[y]</code> (<em>by induction hypothesis</em>) <br />
-(2) <code>l_yz</code> <br />
+<p>(1) <code>l_sy &gt;= A[y] = L[y]</code> (<em>by induction hypothesis</em>) <br>
+(2) <code>l_yz</code> <br>
 (3) <code>l_zw &gt;= 0</code> </p>
 
 <p>즉, 모든 경로 <code>p</code> 의 길이 <code>l_sy + l_yz + l_zw*</code> 는 <code>L[y] + l_yz</code> 보다 크다. </p>
@@ -192,7 +191,7 @@ while X != V
 
 <p>힙의 구조나 특성은 뒤에서 알아보기로 하고, 여기선 다익스트라 알고리즘에 어떻게 적용할지를 논의하자.</p>
 
-<p>(1) <em>heap</em> 내부 원소들은 방문하지 않은 원소들의 집합 <code>V - X</code> 라 하자. <code>X</code> 는 방문한 원소들의 집합. <br />
+<p>(1) <em>heap</em> 내부 원소들은 방문하지 않은 원소들의 집합 <code>V - X</code> 라 하자. <code>X</code> 는 방문한 원소들의 집합. <br>
 (2) <code>V - X</code> 내의 원소 <code>v</code> 에 대해서 <code>key[v]</code> 는 <em>edge</em> <code>(u, v)</code> 에 대한 다익스트라 알고리즘의 스코어다. (<code>u</code> 는 방문한 점)</p>
 
 <p>따라서 <code>v</code> 의 키 값은 <code>X</code> 와 <code>V - X</code> 의 <em>crossing edge</em> <code>u -&gt; v</code> 중에서 가장 작은 <em>edge</em> 길이다.</p>
@@ -209,8 +208,8 @@ for each edge (v, w)
 
 <p><em>running time</em> 은 <em>heap operation</em> 의 수로 결정되는데 각 연산 <code>O(log n)</code> 을</p>
 
-<p>(1) <code>n - 1</code> <em>extract min</em> -> <code>n</code> <br />
-(2) 그리고 <em>edge</em> 중심으로 보면, <code>(v, w)</code> 이 <em>edge</em> 가 재 계산될때는 <code>v</code> 가 <code>X</code> 에 추가될때다. 그 이후에는 <code>(v, w)</code> 는 <em>crossing edge</em> 가 되므로 <em>delete, insertion</em> 연산과 관련이 없어진다. 다시 말해 한 <em>edge</em> 당 <em>at most one insertion and deletion</em> 이 있다. -> <code>m</code>  </p>
+<p>(1) <code>n - 1</code> <em>extract min</em> -&gt; <code>n</code> <br>
+(2) 그리고 <em>edge</em> 중심으로 보면, <code>(v, w)</code> 이 <em>edge</em> 가 재 계산될때는 <code>v</code> 가 <code>X</code> 에 추가될때다. 그 이후에는 <code>(v, w)</code> 는 <em>crossing edge</em> 가 되므로 <em>delete, insertion</em> 연산과 관련이 없어진다. 다시 말해 한 <em>edge</em> 당 <em>at most one insertion and deletion</em> 이 있다. -&gt; <code>m</code>  </p>
 
 <p>따라서 <em>heap operation</em> 수는 <code>O(n + m)</code> 이다. 그런데, <em>path</em> 자체는 <em>weakly connected undirected graph</em> 이므로 <code>m ~= n</code> 이고 <code>O(m + n) = O(m)</code> 이라 볼 수 있다.</p>
 
@@ -240,9 +239,9 @@ for each edge (v, w)
 
 <p><code>n</code> 개의 <em>batch insertion</em> 에 대해 <em>heapify</em> 는 <code>O(n)</code>, 임의의 원소를 제거하는 <em>delete</em> 는 <code>O(log n)</code> 이다. 정리하면</p>
 
-<p>(1) <strong>insertion:</strong> <code>O(log n)</code> <br />
-(2) <strong>extract-min (or max):</strong> <code>O(log n)</code> <br />
-(3) <strong>heapify (batch):</strong> <code>O(n)</code> <br />
+<p>(1) <strong>insertion:</strong> <code>O(log n)</code> <br>
+(2) <strong>extract-min (or max):</strong> <code>O(log n)</code> <br>
+(3) <strong>heapify (batch):</strong> <code>O(n)</code> <br>
 (4) <strong>remove (arbitrary):</strong> <code>O(n)</code>  </p>
 
 <h4 id="application">Application</h4>
@@ -265,9 +264,9 @@ for each edge (v, w)
 
 <p>힙을 배열 또는 트리로 보는 관점이 있는데, 여기선 쉬운 이해를 위해 트리로 설명한다. <em>rooted, binary, as complete as possible tree</em> 로 보면 된다. </p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/6/69/Min-heap.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/6/69/Min-heap.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Binary_heap'>http://en.wikipedia.org/wiki/Binary_heap</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org/wiki/Binary_heap">http://en.wikipedia.org/wiki/Binary_heap</a>)</p>
 
 <p><em>min heap</em> 을 예로 들면, 부모는 항상 자식보다 작거나 같다. 따라서 루트는 모든 원소중 가장 작은 값을 가진다.</p>
 
@@ -278,13 +277,13 @@ for each edge (v, w)
 <p>이렇게 완전 이진트리를 만드는 위치에 새로운 값을 삽입하고, 부모와 값을 비교해 가면서 값의 위치를 올려간다. 이 방법을 <em>bubble-up</em> 이라 부른다. 
 정리하면,</p>
 
-<p>(1) stick <code>k</code> at end of last level <br />
+<p>(1) stick <code>k</code> at end of last level <br>
 (2) <strong>bubble-up</strong> <code>k</code> until heap property is restored  </p>
 
 <p><em>extract-min</em> 연산은 루트에 있는 수를 뽑아낸다. 이 위치에 마지막 노드를 넣고, <em>bubble-down</em> 함으로써 구현할 수 있다. 새롭게 루트가 된 노드를 내려가는 과정에서 왼쪽 자식, 오른쪽 자식과 모두 비교하여 가장 작은 수를 새로운 부모로 만들면 된다. 정리하면</p>
 
-<p>(1) delete <code>root</code> <br />
-(2) move last leaf to be new root <br />
+<p>(1) delete <code>root</code> <br>
+(2) move last leaf to be new root <br>
 (3) iterlatively <strong>bubble-down</strong> until heap property has been restored  </p>
 
 <p>이 두 연산은 이진트리의 <code>n</code> 번째 깊이까지 내려갈 수 있으므로 퍼포먼스는 <code>O(log_2 n)</code> 이다.</p>
@@ -293,24 +292,24 @@ for each edge (v, w)
 
 <p><strong>sorted array</strong> 에 대한 연산을 먼저 생각해 보자. 이로부터 <em>balanced search tree</em> 로 이끌어 낼 수 있는 연산들이 있을테다. 참고로 <strong>sorted array</strong> 는 <em>static</em> 이기 때문에 <em>insertion, deletion</em> 이 없다.</p>
 
-<p>(1) <strong>Search:</strong> <code>O(logn)</code> <br />
-(2) <strong>Select:</strong> <code>O(1)</code> (given order statistic <code>i</code>) <br />
-(3) <strong>Min / Max:</strong> <code>O(1)</code> <br />
-(4) <strong>Predecessor / Successor:</strong> <code>O(1)</code> <br />
-(5) <strong>Rank:</strong> <code>O(logn)</code> <br />
+<p>(1) <strong>Search:</strong> <code>O(logn)</code> <br>
+(2) <strong>Select:</strong> <code>O(1)</code> (given order statistic <code>i</code>) <br>
+(3) <strong>Min / Max:</strong> <code>O(1)</code> <br>
+(4) <strong>Predecessor / Successor:</strong> <code>O(1)</code> <br>
+(5) <strong>Rank:</strong> <code>O(logn)</code> <br>
 (6) <strong>Output in sorted order:</strong> <code>O(n)</code></p>
 
 <p>여기서 주어진 데이터가 몇 번째 데이터인지를 찾는 <em>rank</em> 는 <em>search</em> 와 똑같은 문제다. <em>binary search</em> 처럼 찾아가면서, 인덱스를 찾아내면 되기 때문이다.</p>
 
 <p>이제 <strong>balanced search tree</strong> 를 생각해보자. </p>
 
-<p>(1) <strong>Search:</strong> <code>O(logn)</code> <br />
-(2*) <strong>Select:</strong> <code>O(logn)</code> <br />
-(3*) <strong>Min / Max:</strong> <code>O(logn)</code> <br />
-(4*) <strong>Predecessor / Successor:</strong> <code>O(logn)</code> <br />
-(5) <strong>Rank:</strong> <code>O(logn)</code> <br />
-(6) <strong>Output in sorted order:</strong> <code>O(n)</code> <br />
-(7+) <strong>Insert:</strong> <code>O(logn)</code> <br />
+<p>(1) <strong>Search:</strong> <code>O(logn)</code> <br>
+(2*) <strong>Select:</strong> <code>O(logn)</code> <br>
+(3*) <strong>Min / Max:</strong> <code>O(logn)</code> <br>
+(4*) <strong>Predecessor / Successor:</strong> <code>O(logn)</code> <br>
+(5) <strong>Rank:</strong> <code>O(logn)</code> <br>
+(6) <strong>Output in sorted order:</strong> <code>O(n)</code> <br>
+(7+) <strong>Insert:</strong> <code>O(logn)</code> <br>
 (8+) <strong>Delete:</strong> <code>O(logn)</code>  </p>
 
 <p><strong>sorted array</strong> 에 비해 <em>select, min or max, pred or succ</em> 연산이 <code>O(logn)</code> 이 되었고 <em>insert, delete</em> 연산이 새롭게 추가됐다. 쉽게 기억하려면 <em>sorted array</em> + <em>logarithmic insert, delete</em> 라 생각하면 된다.</p>
@@ -323,15 +322,15 @@ for each edge (v, w)
 
 <p>힙이 <em>vertically sorted</em> 라면 BST 는 <em>horizontally sorted</em> 다. 즉 왼쪽자식은 부모보다 항상 작고, 우측 자식은 부모보다 항상 크다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Binary_search_tree.svg/300px-Binary_search_tree.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Binary_search_tree.svg/300px-Binary_search_tree.svg.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org/'>http://en.wikipedia.org/</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org/">http://en.wikipedia.org/</a>)</p>
 
 <p>이런 구조적 특성때문에 <em>search (탐색)</em> 을 <code>O(logn)</code> 으로 빠른 시간 내에 해낼 수 있다. 근데, 최악의 경우 노드가 일렬로 주-욱 이어져 있다면 <code>O(n)</code> 의 퍼포먼스를 보여준다.</p>
 
-<p><img src="http://epaperpress.com/sortsearch/images/fig33.gif" alt="" /></p>
+<p><img src="http://epaperpress.com/sortsearch/images/fig33.gif" alt=""></p>
 
-<p align="center">(<a href='http://epaperpress.com'>http://epaperpress.com</a>)</p>
+<p align="center">(<a href="http://epaperpress.com">http://epaperpress.com</a>)</p>
 
 <h4 id="implementation">Implementation</h4>
 
@@ -364,15 +363,15 @@ recurse right sub-tree
 
 <p>앞의 두 가지 경우는 어렵지 않은데, 양쪽 자식이 다 있을 경우는 조금 까다롭다. 이 경우는 지우려는 노드의 <em>successor</em> 나 <em>predecessor</em> 을 <code>l</code> 이라 하자. 지우려는 노드와 <code>l</code> 을 뒤 바꾸면, 이전 <code>l</code> 자리에 있던 노드는 <em>left</em> 또는 <em>right</em> 자식이 없으므로 하나의 자식만 있는 알고리즘을 이용해 제거하면 된다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Binary_search_tree_delete_3.svg/620px-Binary_search_tree_delete_3.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Binary_search_tree_delete_3.svg/620px-Binary_search_tree_delete_3.svg.png" alt=""></p>
 
-<p align="center">(<a href='http://commons.wikimedia.org/'>http://commons.wikimedia.org/</a>)</p>
+<p align="center">(<a href="http://commons.wikimedia.org/">http://commons.wikimedia.org/</a>)</p>
 
 <p>(6) <em>select, rank</em> 연산은 트리에 추가적인 정보를 기록함으로써 쉽게 구할 수 있다.  각 트리마다 자기를 포함한 자식들의 노드 수를 저장하면 된다.</p>
 
-<p><img src="http://www.tcs.auckland.ac.nz/~georgy/teaching/1998/98-231FC/231-hand/btr-rank.gif" alt="http://www.tcs.auckland.ac.nz/~georgy/" /></p>
+<p><img src="http://www.tcs.auckland.ac.nz/~georgy/teaching/1998/98-231FC/231-hand/btr-rank.gif" alt="http://www.tcs.auckland.ac.nz/~georgy/"></p>
 
-<p align="center">(<a href='http://www.tcs.auckland.ac.nz/~georgy/'>http://www.tcs.auckland.ac.nz/~georgy/</a>)</p>
+<p align="center">(<a href="http://www.tcs.auckland.ac.nz/~georgy/">http://www.tcs.auckland.ac.nz/~georgy/</a>)</p>
 
 <p>매 삭제와 삽입 연산마다 각 트리의 사이즈를 변경해야 하는데 어렵지 않다. 삽입이나 삭제시 마지막 노드 혹은 <em>predecessor, successor</em> 를 찾아가면서 매번 노드를 방문해야 하므로 이 때 마다 새롭게 값을 변경하면 된다.</p>
 
@@ -400,16 +399,16 @@ if a &lt; i, recurse z, (i - a - 1)'th statistic
 
 <p><em>red-black tree</em> 는 다음의 제약 조건을 제외하면 이진트리와 동일하다.</p>
 
-<p>(1) each node is red or <code>black</code> <br />
-(2) root is <code>black</code> <br />
-(3) no 2 <code>reds</code> in a row  -> <code>red</code> node has only <code>black</code> children <br />
+<p>(1) each node is red or <code>black</code> <br>
+(2) root is <code>black</code> <br>
+(3) no 2 <code>reds</code> in a row  -&gt; <code>red</code> node has only <code>black</code> children <br>
 (4) every <code>root - NULL</code> path  has same number of black nodes  </p>
 
 <p>여기서 <code>(4)</code> 는 <em>unsuccessful search</em> 를 생각하면 쉽다. 검색이 제대로 되지 않았을 경우 <code>NULL</code> 에서 중단하는데, 그때 까지의 모든 블랙 노드의 수가 다른 <em>unsuccessful search</em> 가 방문한 블랙 노드 수와 동일하다는 것이다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Red-black_tree_example.svg/750px-Red-black_tree_example.svg.png" alt="http://en.wikipedia.org" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Red-black_tree_example.svg/750px-Red-black_tree_example.svg.png" alt="http://en.wikipedia.org"></p>
 
-<p align="center">(<a href='http://en.wikipedia.org'>http://en.wikipedia.org</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p>
 
 <p>예제를 통해 좀 살펴보자. <code>1 -&gt; 2 -&gt; 3</code> 의 이진트리가 있을 때, <code>2</code> 가 레드 노드라 하자. 그러면 규칙 <code>(4)</code> 를 위반한다. <em>unsuccessful search</em> 의 경우인 <code>0</code> 과 <code>4</code> 를 찾을때 블랙 노드의 개수가 다르다.</p>
 
@@ -430,7 +429,7 @@ if a &lt; i, recurse z, (i - a - 1)'th statistic
 <p>아까 <code>k</code> 는 <code>root-null</code> 경로의 노드의 수 라고 했었다. 그리고 레드블랙트리의 (3), (4) 조건을 다시 생각해보면</p>
 
 <blockquote>
-  <p>(3) no 2 <code>reds</code> in a row  -> <code>red</code> node has only <code>black</code> children <br />
+  <p>(3) no 2 <code>reds</code> in a row  -&gt; <code>red</code> node has only <code>black</code> children <br>
   (4) every <code>root - NULL</code> path  has same number of black nodes  </p>
 </blockquote>
 
@@ -452,9 +451,9 @@ if a &lt; i, recurse z, (i - a - 1)'th statistic
 
 <p>먼저 <em>left roation</em> 만 생각하자. 다음 그림에서 우측에 있는 트리를 좌측처럼 변경하는 것이다. <code>P</code> 가 <code>Q</code> 의 자식이 되도록 하는것이다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png" alt="http://en.wikipedia.org/wiki/Tree_rotation" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png" alt="http://en.wikipedia.org/wiki/Tree_rotation"></p>
 
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Tree_rotation'>http://en.wikipedia.org/wiki/Tree_rotation</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org/wiki/Tree_rotation">http://en.wikipedia.org/wiki/Tree_rotation</a>)</p>
 
 <p>여기서 <code>B</code> 의 원소는 <code>P</code> 보단 크고 <code>Q</code> 보다 작다. 따라서 <code>Q</code> 와 <code>P</code> 의 위치를 변경하면 <code>B</code> 는 <code>P</code> 의 오른쪽에 와야 한다. 이것이 <em>left rotation</em> 이다. 경로를 따라 왼쪽으로 한칸씩 밀려갔다고 생각하면 기억하기 쉽다.</p>
 
@@ -466,8 +465,8 @@ if a &lt; i, recurse z, (i - a - 1)'th statistic
 
 <p>이제 <em>rotation</em> 을 이용해 <em>red-black tree</em> 에서 삽입 연산을 구현해 보자. 삽입과 삭제의 기본적인 아이디어는</p>
 
-<p>(1) 이진트리에서의 <em>insert</em> / <em>remove</em> 연산을 수행 한다. <br />
-(2) 레드, 블랙을 다시 색칠한다. <br />
+<p>(1) 이진트리에서의 <em>insert</em> / <em>remove</em> 연산을 수행 한다. <br>
+(2) 레드, 블랙을 다시 색칠한다. <br>
 (3) <em>rotation</em> 을 수행한다.</p>
 
 <p>여기 (2) 단계에서 레드블랙트리의 구조가 망가질 수 있다. 새로운 노드를 레드로 만들면, 한 로우 내에 2개의 레드가 있을 수 없다는 규칙을 위반할 수 있고, 블랙으로 칠하면 <code>root-null</code> 경로의 블랙 노드의 수가 같아야 한다는 제약조건에 위배될 수 있다.</p>
@@ -492,29 +491,29 @@ if a &lt; i, recurse z, (i - a - 1)'th statistic
 
 <p>따라서 연산비용은 <code>O(log n)</code> 이다.</p>
 
-<p><img src="http://cs.lmu.edu/~ray/images/rbtrecoloring.png" alt="" /></p>
+<p><img src="http://cs.lmu.edu/~ray/images/rbtrecoloring.png" alt=""></p>
 
-<p align="center">(<a href='http://cs.lmu.edu/~ray/notes/redblacktrees/'>http://cs.lmu.edu/~ray/notes/redblacktrees/</a>)</p>
+<p align="center">(<a href="http://cs.lmu.edu/~ray/notes/redblacktrees/">http://cs.lmu.edu/~ray/notes/redblacktrees/</a>)</p>
 
 <p>그런데, 반복해서 이 방법을 사용하다가 <code>C</code> 가 다른 자식 <code>D</code> 를 가지고 있지 않거나, <code>D</code> 가 블랙일 수 있다. 그럴땐 다음 경우로 넘어가야 한다.</p>
 
 <p>(2) <code>C</code> 가 <code>B</code> 말고 다른 자식이 없거나 블랙인 자식을 가지면 <code>A</code> 가 좌측이냐 우측이냐에 따라 <code>right rotation</code>, <code>left-right rotation</code> 으로 해결할 수 있다. 마찬가지로 (3) 또는 (4) 를 위반하지 않는다.</p>
 
-<p><img src="http://cs.lmu.edu/~ray/images/rbrestructuring.png" alt="" /></p>
+<p><img src="http://cs.lmu.edu/~ray/images/rbrestructuring.png" alt=""></p>
 
-<p align="center">(<a href='http://cs.lmu.edu/~ray/notes/redblacktrees/'>http://cs.lmu.edu/~ray/notes/redblacktrees/</a>)</p>
+<p align="center">(<a href="http://cs.lmu.edu/~ray/notes/redblacktrees/">http://cs.lmu.edu/~ray/notes/redblacktrees/</a>)</p>
 
 <p>이 경우는 몇번의 로테이션으로 해결할 수 있으므로 <code>O(1)</code> 이다.</p>
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
-(2) <a href="http://en.wikipedia.org/wiki/Binary_heap">Wiki - Binary heap</a> <br />
-(3) <a href="http://en.wikipedia.org/wiki/Binary_search_tree">Wiki - Binary search tree</a> <br />
-(4) <a href="http://epaperpress.com/sortsearch/bin.html">http://epaperpress.com</a> <br />
-(5) <a href="http://commons.wikimedia.org/wiki/File:Binary_search_tree_delete_3.svg">http://commons.wikimedia.org/</a> <br />
-(6) <a href="http://www.tcs.auckland.ac.nz/~georgy/teaching/1998/98-231FC/231-hand/test231.html">http://www.tcs.auckland.ac.nz/~georgy/</a> <br />
-(7) <a href="http://en.wikipedia.org/wiki/Red%E2%80%93black_tree">Wiki - Red-black tree</a> <br />
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br>
+(2) <a href="http://en.wikipedia.org/wiki/Binary_heap">Wiki - Binary heap</a> <br>
+(3) <a href="http://en.wikipedia.org/wiki/Binary_search_tree">Wiki - Binary search tree</a> <br>
+(4) <a href="http://epaperpress.com/sortsearch/bin.html">http://epaperpress.com</a> <br>
+(5) <a href="http://commons.wikimedia.org/wiki/File:Binary_search_tree_delete_3.svg">http://commons.wikimedia.org/</a> <br>
+(6) <a href="http://www.tcs.auckland.ac.nz/~georgy/teaching/1998/98-231FC/231-hand/test231.html">http://www.tcs.auckland.ac.nz/~georgy/</a> <br>
+(7) <a href="http://en.wikipedia.org/wiki/Red%E2%80%93black_tree">Wiki - Red-black tree</a> <br>
 (8) <a href="http://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">Wiki - Tree rotation</a></p>
     </section>
 
@@ -562,7 +561,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -585,4 +584,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

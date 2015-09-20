@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Machine Learning, Week 9</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/machine-learning-week-9/" />
+<link rel="canonical" href="http://1ambda.github.io/machine-learning-week-9/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="/tag/machine-learning/">machine learning</a>, <a href="/tag/anomaly-detection/">anomaly detection</a>, <a href="/tag/recommender-system/">recommender system</a></h5>
       <h1 class="margin_bottom_medium">Machine Learning, Week 9</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-08">Monday, December 08, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/machine-learning-week-9/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -113,11 +112,11 @@
 
 <h3 id="anomalydectection">Anomaly Dectection</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236753_7590.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236753_7590.png" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236757_2205.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236757_2205.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>anomaly</em> 는 정상집단에서 떨어진 데이터라 보면 된다. 공장에서 품질이 떨어지는 제품을 골라낼때 사용할 수 있는데, 위 그림은 비행기 엔진 공장을 예로 들어 설명한다.</p>
 
@@ -125,9 +124,9 @@
 
 <p>참고로, <em>anomaly</em> 가 너무 많으면, <em>false positive</em> 가 높은 것인데 이 때는  <em>threshold</em> 를 줄이면 된다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236761_2830.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236761_2830.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>anomaly detection</em> 은 <em>fraud detection</em> 에 많이 사용된다. 데이터로부터 모델 <code>p(x)</code> 를 만들고 <em>unusual user</em> 를 검사하기 위해 <code>p(x) &lt; e</code> 인지 검사하면 된다.</p>
 
@@ -135,67 +134,67 @@
 
 <h3 id="gaussiandistribution">Gaussian Distribution</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236829_8964.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>gaussian density</em> 공식은</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?P%28x%3B%20%5Cmu%2C%20%5Csigma%5E2%29%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20%5Cexp%28-%20%7B%28x%20-%20%5Cmu%29%5E2%20%5Cover%202%5Csigma%5E2%7D%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?P%28x%3B%20%5Cmu%2C%20%5Csigma%5E2%29%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma%5E2%7D%7D%20%5C%20%5Cexp%28-%20%7B%28x%20-%20%5Cmu%29%5E2%20%5Cover%202%5Csigma%5E2%7D%29" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236839_1788.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236839_1788.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>평균과 분산은</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5C%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5C%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Csigma%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Csigma%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29" alt=""></p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="anomalydetectionalgorithm">Anomaly Detection Algorithm</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236899_7015.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236899_7015.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>각 <em>feature</em> 가 가우시안 분포를 따른다고 하면, </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20p%28x_1%3B%20%5Cmu_1%2C%20%5Csigma_1%5E2%29%5C%20p%28x_2%3B%20%5Cmu_2%2C%20%5Csigma_1%5E2%29%20%5Ccdots%5C%20p%28x_n%3B%20%5Cmu_n%2C%20%5Csigma_1%5En%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%20%3D%201%7D%5En%20p%28x_j%3B%20%5Cmu_j%2C%20%5Csigma_j%5E2%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20p%28x_1%3B%20%5Cmu_1%2C%20%5Csigma_1%5E2%29%5C%20p%28x_2%3B%20%5Cmu_2%2C%20%5Csigma_1%5E2%29%20%5Ccdots%5C%20p%28x_n%3B%20%5Cmu_n%2C%20%5Csigma_1%5En%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%20%3D%201%7D%5En%20p%28x_j%3B%20%5Cmu_j%2C%20%5Csigma_j%5E2%29" alt=""></p>
 
 <p>이렇게 가정하려면, 각 <em>feature</em> 가 독립적이어야 하지만 실제로는 독립적이지 않더라도 어느정도 동작한다. 이 때 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cmu_j%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x_j%5E%7B%28i%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cmu_j%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x_j%5E%7B%28i%29%7D" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Csigma_j%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%7B%28x_j%5E%7B%28i%29%7D%20-%20%5Cmu_j%29%5E2%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Csigma_j%5E2%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%7B%28x_j%5E%7B%28i%29%7D%20-%20%5Cmu_j%29%5E2%7D" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236904_6921.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236904_6921.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>따라서 <code>p(x)</code> 는 아래 식이 된다. <code>p(x)</code> 는 <em>feature</em> 가 나올 확률로 이해하면 된다. 이 때 <code>p(x)</code> 가 상당히 작으면, 평균에 가깝지 않은 <em>feature</em> 가 많이 나왔다는 뜻이므로 <em>anomaly</em> 라 볼 수 있다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%3D1%7D%5En%20%5C%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma_j%5E2%7D%7D%20%5C%20%5Cexp%28-%7B%28x_j%20-%20%5Cmu_j%29%5E2%20%5Cover%202%5Csigma_j%5E2%7D%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?p%28x%29%20%5C%5C%20%5C%5C%20%3D%20%5Cprod_%7Bj%3D1%7D%5En%20%5C%20%7B1%20%5Cover%20%5Csqrt%7B2%5Cpi%5Csigma_j%5E2%7D%7D%20%5C%20%5Cexp%28-%7B%28x_j%20-%20%5Cmu_j%29%5E2%20%5Cover%202%5Csigma_j%5E2%7D%29" alt=""></p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236907_7102.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236907_7102.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>두 <em>feature</em> <code>x1, x2</code> 의 가우시안 분포를 3차원으로 조합하면 <code>p(x)</code> 가 좌측 하단 3차원 원뿔의 높이가 된다.</p>
 
 <h3 id="evaluatinganomalydetection">Evaluating Anomaly Detection</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236992_3664.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236992_3664.png" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236996_4034.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236996_4034.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>anomaly</em> 를 잘 나타낼거 같은 <em>feature</em> 를 골라내고, 이를 이용해 모델을 만든다. </p>
 
@@ -203,9 +202,9 @@
 
 <p>즉 <em>good example</em> 로 모델을 만들고, <em>anomaly</em> 가 섞여있는 <em>cv, test set</em> 으로 평가한다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361237001_5250.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361237001_5250.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>이 때 <em>skewed classess</em> 이기 때문에 (<code>y = 0</code> 이 대다수, <code>y = 1</code> 은 희박) 단순히 정확도로 평가하긴 좀 무리가 있다. <em>precision, recall, f1 score</em> 등을 이용해 평가해야 한다.</p>
 
@@ -215,9 +214,9 @@
 
 <p><code>y</code> 값이 있는 데이터라면, 왜 <em>supervised learning</em> 을 이용하지 않을까? </p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361242897_8389.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361242897_8389.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <h4 id="anomalydetection">Anomaly Detection</h4>
 
@@ -245,39 +244,39 @@
 
 <p><em>SPAM filtering</em> 에서는 다양한 타입의 <em>positive example</em> 이 있어도, 우리가 충분한 양의 <em>positive example</em> 이 있기 때문에 커버할 수 있어 <em>supervised learning</em> 을 사용한다.</p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361243087_2169.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361243087_2169.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="choosingwhatfeaturestouse">Choosing What Features to Use</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361244210_3429.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361244210_3429.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>feature</em> 의 분포가 가우시안이면 고맙지만, 아닐경우 변환이 필요하다. 왼쪽 아래 분포에 로그를 씌우면, 가우시안 분포 비슷하게 보인다.</p>
 
 <p>다른 방법으로는 <code>log(x_2 + c)</code>, <code>sqrt(x_3)</code> 등등이 있다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361245473_5316.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361245473_5316.png" alt=""></p>
 
 <p>흔한 에러는 <code>p(x)</code> 가 <em>normal, anomalous</em> 에 대해서 모두 높은 경우인데, 슬라이드의 아래쪽에서 볼 수 있듯이 <code>x2</code> 라는 <em>feature</em> 를 만들어서 <em>anomaly</em> 를 발견하는 알고리즘을 만들 수 있다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361246077_9679.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361246077_9679.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>anomaly</em> 를 위한 <em>feature</em> 를 고를 때 특이하게 높거나, 낮을 수 있는 것을 고르면 된다. 데이터 센터 예제에서는 <em>CPU load / network traffic</em> 등이 있을 수 있다. 네트워크 트래픽이 낮은데 <em>CPU load</em> 가 높다면 확실히 <em>anomaly</em> 기 때문이다.</p>
 
 <h3 id="multivariategaussiandistribution">Multivariate Gaussian Distribution</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361257865_7961.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361257865_7961.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>feature</em> 를 <em>CPU laod, memory use</em> 로 했을 때 낮은 CPU 부하에도 메모리 사용량이 높으면 <em>anomaly</em> 라 볼 수 있다.</p>
 
@@ -285,13 +284,13 @@
 
 <p>실제 <em>normal example</em> 이 타원형이기 때문에, 원으로 <em>anomaly</em> 를 찾기는 어렵다. </p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361258533_5107.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361258533_5107.png" alt=""></p>
 
 <p>따라서 <code>p(x_1)p(x_2)...</code> 을 이용한 모델 말고 다른 방법으로 모델을 만들어야 한다. </p>
 
 <p><code>u</code> 를 <code>n</code> 벡터라 하고, <code>Sigma</code> 를 <code>u</code> 의 <em>convariance matrix</em> 라 하자. 그러면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?p%28x%3B%20%5Cmu%2C%20%5CSigma%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%282%5Cpi%29%5E%7Bn/2%7D%20%5C%20%7C%5CSigma%7C%5E%7B1/2%7D%7D%20%5C%20%5Cexp%28-%7B1%5Cover%202%7D%28x%20-%20%5Cmu%29%5ET%20%5C%20%5CSigma%5E%7B-1%7D%28x%20-%20%5Cmu%29%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?p%28x%3B%20%5Cmu%2C%20%5CSigma%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%20%282%5Cpi%29%5E%7Bn/2%7D%20%5C%20%7C%5CSigma%7C%5E%7B1/2%7D%7D%20%5C%20%5Cexp%28-%7B1%5Cover%202%7D%28x%20-%20%5Cmu%29%5ET%20%5C%20%5CSigma%5E%7B-1%7D%28x%20-%20%5Cmu%29%29" alt=""></p>
 
 <p>여기서 <code>|Sigma|</code> 는 <code>Sigma</code> 의 행렬식인데, 여기를 참고하자.</p>
 
@@ -304,35 +303,35 @@
 
 <p>이제 위 식을 이용해서 나온 <code>p(x)</code> 를 3차원, 2차원으로 보면</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259228_7695.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259228_7695.png" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259243_2967.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259243_2967.png" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259236_1052.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259236_1052.png" alt=""></p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259583_5151.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259583_5151.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%20%3D%201%7D%5Em%20x%5E%7B%28i%29%7D" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5CSigma%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%20%5C%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%5ET" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5CSigma%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%20%5C%20%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%28x%5E%7B%28i%29%7D%20-%20%5Cmu%29%5ET" alt=""></p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259728_6035.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361259728_6035.png" alt=""></p>
 
 <p><code>u, Sigma</code> 를 찾아 <code>p(x)</code> 를 만들고, 테스트 데이터에 대해 <code>p(x) &lt; e</code> 인지 비교한다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361260300_1768.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361260300_1768.png" alt=""></p>
 
 <p><em>original model</em> 은 <em>multivariate model</em> 에서 각 <em>feature</em> 간 상관 관계가 없는 (독립), 즉 <em>covariance matrix</em> 가 <em>diagonal matrix</em> 인 경우다. (</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/19/1361260755_3407.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361260755_3407.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <ul>
 <li><strong>Original model</strong></li>
@@ -354,63 +353,63 @@
 
 <h3 id="recommendersystem">Recommender System</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361324993_7588.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361324993_7588.png" alt=""></p>
 
 <h3 id="contentbasedrecommendations">Content Based Recommendations</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361325560_4034.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361325560_4034.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>위 슬라이드는 유저 <code>j</code> 로 부터 <code>theta^(j)</code> 를 얻어, <em>feature</em> <code>x</code> 와 곱함으로써 <em>linear regression</em> 문제로 변경했다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361326084_2070.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361326084_2070.png" alt=""></p>
 
 <p><code>theta^(j)</code> 는 어떻게 훈련시킬까?</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202m%5E%7B%28j%29%7D%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202m%5E%7B%28j%29%7D%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202m%5E%7B%28j%29%7D%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&amp;plus;%20%7B%5Clambda%20%5Cover%202m%5E%7B%28j%29%7D%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt=""></p>
 
 <p>여기서 <code>m^(j)</code> 는 유저 <code>j</code> 에 의해 점수를 받은 영화의 수인데, 어차피 상수이므로 제거하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%7D%20%5C%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%7B1%20%5Cover%202%7D%5C%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&amp;plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361326247_4648.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361326247_4648.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>이 때 각 유저마다의 <code>theta(j)</code> 를 합 해 최소화 시키는 방식으로 전체 <code>theta</code> 를 훈련시킬 수 있다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min_%7B%5Ctheta%5E%7B%28j%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%20%5Csum_%7Bi%3A%20%5C%20%28ri%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&amp;plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361326573_9477.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361326573_9477.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>gradient descent</em> 는</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20%5C%20%28for%5C%20k%20%3D%200%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20%5C%20%28for%5C%20k%20%3D%200%29" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20&plus;%20%5Clambda%5Ctheta_k%5E%7B%28j%29%7D%5C%20%28for%5C%20k%20%5Cneq%200%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28j%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28j%29%7D%20-%20%5Calpha%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%20%28%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%29x_k%5E%7B%28i%29%7D%20&amp;plus;%20%5Clambda%5Ctheta_k%5E%7B%28j%29%7D%5C%20%28for%5C%20k%20%5Cneq%200%29" alt=""></p>
 
 <h3 id="collaborativefiltering">Collaborative Filtering</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361327928_4438.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361327928_4438.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>content-based recommendation</em> 에서 <em>feature</em> 를 구하긴 사실 어려운 일이다. 누가 이 영화가 얼마만큼 로맨스고, 아닌지를 판별해줄까? </p>
 
 <p>문제를 좀 변경해서, 만약에 유저로부터 <code>theta(j)</code> 를 얻어낼 수 있다면 그 정보로 부터 <em>feature</em> <code>x(i)</code> 를 추출할 수 있다. 왜냐하면 <code>(\theta^(j))^T * x^(i) ~ y^(i, j)</code> 이기 때문이다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361328443_4320.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361328443_4320.png" alt=""></p>
 
 <p><code>x^(i)</code> 를 얻기 위해, </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?min_%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%20%5Csum_%7Bi%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?min_%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%20%5Csum_%7Bi%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&amp;plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/20/1361330430_7394.png" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/20/1361330430_7394.png" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <ul>
 <li><code>theta</code> 가 주어지면 <code>x</code> 를 훈련할 수 있고</li>
@@ -419,17 +418,17 @@
 
 <p>따라서 최초의 랜덤 <code>theta</code> 에 대해 <code>x</code> 를 훈련하고, 다시 <code>theta</code> 를 훈련하고, 반복하면 된다. </p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361495687_3476.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361495687_3476.jpg" alt=""></p>
 
 <p><code>theta</code> 와 <code>x</code> 를 반복해서 훈련시키는 것보다, 동시에 훈련시키는 것이 좀 더 효율적이다. 따라서</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?J%28%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%2C%20%5Ctheta%5E%7B%28i%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7B%28i%2C%20j%29%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2%20&plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?J%28%7Bx%5E%7B%28j%29%7D%2C%20%5Ccdots%20x%5E%7B%28n_m%29%7D%2C%20%5Ctheta%5E%7B%28i%29%7D%2C%20%5Ccdots%20%5Ctheta%5E%7B%28n_u%29%7D%7D%29%20%5C%5C%20%5C%5C%20%3D%20%7B1%20%5Cover%202%7D%5Csum_%7B%28i%2C%20j%29%3A%20%5C%20r%28i%2C%20j%29%20%3D%201%20%7D%20%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5E2%20%5C%20&amp;plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bi%3D1%7D%5E%7Bn_m%7D%5Csum_%7Bk%3D1%7D%5En%28x_k%5E%7B%28i%29%7D%29%5E2%20&amp;plus;%20%7B%5Clambda%20%5Cover%202%7D%5Csum_%7Bj%3D1%7D%5E%7Bn_u%7D%5Csum_%7Bk%3D1%7D%5En%28%5Ctheta_k%5E%7B%28j%29%7D%29%5E2" alt=""></p>
 
 <p>를 최소화 시키면 된다. 참고로 <code>x_0</code> 은 <em>collaborative filtering</em> 에서 필요가 없다. 알고리즘 자체가 <em>feature</em> 를 직접 찾아내니 <em>hard coded</em> 된 <em>feature</em> 는 사용하지 않는다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361495692_7530.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361495692_7530.jpg" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p>(1) <code>x</code>, <code>theta</code> 를 작은 값으로 초기화 한다.</p>
 
@@ -437,50 +436,50 @@
 
 <p>(2) <em>cost function</em> <code>J</code> 를 <em>gradient descent</em> 등으로 최소화 시킨다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?x_k%5E%7B%28i%29%7D%20%3A%3D%20x_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bj%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Ctheta_k%5E%7B%28j%29%7D%20&plus;%20%5Clambda%20x_k%5E%7B%28i%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?x_k%5E%7B%28i%29%7D%20%3A%3D%20x_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bj%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Ctheta_k%5E%7B%28j%29%7D%20&amp;plus;%20%5Clambda%20x_k%5E%7B%28i%29%7D" alt=""></p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28i%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Cx_k%5E%7B%28i%29%7D%20&plus;%20%5Clambda%20%5Ctheta_k%5E%7B%28j%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%5Ctheta_k%5E%7B%28i%29%7D%20%3A%3D%20%5Ctheta_k%5E%7B%28i%29%7D%20-%20%5Calpha%20%5Csum_%7Bi%3A%5C%20r%28i%2C%20j%29%20%3D%201%7D%5B%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20-%20y%5E%7B%28i%2C%20j%29%7D%5D%5Cx_k%5E%7B%28i%29%7D%20&amp;plus;%20%5Clambda%20%5Ctheta_k%5E%7B%28j%29%7D" alt=""></p>
 
 <p>(3) 유저의 <em>parameter</em> <code>theta</code> 와 영화의 <em>feature</em> <code>x</code> 에 대해 <code>theta^T * x</code> 를 이용해 예측하면 된다.</p>
 
 <h3 id="vectorizationlowrankmatrixfactorization">Vectorization: Low Rank Matrix Factorization</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361496844_8727.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361496844_8727.jpg" alt=""></p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361496849_5252.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361496849_5252.jpg" alt=""></p>
 
 <p><em>collaborative filtering</em> 은 <em>low rank matrix factoriazation</em> 이라 부르기도 한다. 위 슬라이드처럼 <code>X, THETA</code> 를 구성하고 <code>X * THETA^T</code> 를 구하면 된다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361496854_2443.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361496854_2443.jpg" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>low rank matrix factorization</em> 을 이용해서 <em>feature</em> 를 찾으면, 두 영화 <code>i, j</code> 가 얼마나 유사한지 <code>||x^(i) - x^(j)||</code> 으로 판단할 수 있다.</p>
 
 <h3 id="implementationdetailmeannormalization">Implementation Detail: Mean Normalization</h3>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361497832_3797.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361497832_3797.jpg" alt=""></p>
 
 <p>만약 위 슬라이드의 <code>Eve</code> 처럼 아무 영화도 평가 안한 사람에게는, <code>theta</code> 가 <code>0</code> 으로 나온다. (첫번째 <em>term</em> 이 <code>0</code> 이고, <em>regularization term</em> 은 <code>theta</code> 를 최소화한다.)</p>
 
 <p>그렇게 되면, 어떤 영화도 높은 <em>rating</em> 을 받을 수 없으므로 (<code>theta^T * x</code>). 추천할 거리가 없다. 이건 별로 좋은 상황이 아닌데, <em>mean normalization</em> 을 이용하면 이 문제를 해결할 수 있다.</p>
 
-<p><img src="http://img.my.csdn.net/uploads/201302/22/1361497813_3878.jpg" alt="" /></p>
+<p><img src="http://img.my.csdn.net/uploads/201302/22/1361497813_3878.jpg" alt=""></p>
 
-<p align="center">(<a href='http://blog.csdn.net/linuxcumt1'>http://blog.csdn.net/linuxcumt1</a>)</p>
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt1">http://blog.csdn.net/linuxcumt1</a>)</p>
 
 <p><em>mean normalized</em> 데이터를 이용하면, 추천 안한 사람이 <code>theta = 0</code> 을 갖더라도, 남들이 추천한 선호도 <code>u</code> 에 따라서 영화를 추천받을 수 있다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20&plus;%20%5Cmu_i" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%28%5Ctheta%5E%7B%28j%29%7D%29%5ET%28x%5E%7B%28i%29%7D%29%20&amp;plus;%20%5Cmu_i" alt=""></p>
 
 <p>잘보면 <em>feature scaling</em> 과는 다르게 특정 <em>range</em> 로 나누질 않는데, 이건 이미 <em>rating</em> 자체가 일정 범위 <code>1-5</code> 를 갖기 때문이다.</p>
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br />
-(2) <a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a> <br />
-(3) <a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a> <br />
-(4) <a href="http://ghebook.blogspot.com/2011/06/matrix.html">http://ghebook.blogspot.com</a> <br />
+<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong> <br>
+(2) <a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a> <br>
+(3) <a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a> <br>
+(4) <a href="http://ghebook.blogspot.com/2011/06/matrix.html">http://ghebook.blogspot.com</a> <br>
 (5) <a href="http://darkpgmr.tistory.com/104">http://darkpgmr.tistory.com</a>  </p>
     </section>
 
@@ -528,7 +527,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -551,4 +550,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>CLOS, Common Lisp Object System</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/clos-common-lisp-object-system/" />
+<link rel="canonical" href="http://1ambda.github.io/clos-common-lisp-object-system/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/lisp">Lisp</a></h5>
       <h1 class="margin_bottom_medium">CLOS, Common Lisp Object System</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-07-23">Wednesday, July 23, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/clos-common-lisp-object-system/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -112,10 +111,10 @@
       <p>CLOS Brief Guide based on</p>
 
 <ol>
-<li><a href='http://www.aiai.ed.ac.uk/~jeff/clos-guide.html'>http://www.aiai.ed.ac.uk/~jeff/clos-guide.html</a>  </li>
-<li><a href='http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php'>http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php</a>  </li>
-<li><a href='http://cl-cookbook.sourceforge.net/clos-tutorial/'>http://cl-cookbook.sourceforge.net/clos-tutorial/</a>  </li>
-<li><a href='http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html'>http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html</a></li>
+<li><a href="http://www.aiai.ed.ac.uk/~jeff/clos-guide.html">http://www.aiai.ed.ac.uk/~jeff/clos-guide.html</a>  </li>
+<li><a href="http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php">http://www.cs.northwestern.edu/academics/courses/325/readings/clos.php</a>  </li>
+<li><a href="http://cl-cookbook.sourceforge.net/clos-tutorial/">http://cl-cookbook.sourceforge.net/clos-tutorial/</a>  </li>
+<li><a href="http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html">http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html</a></li>
 </ol>
 
 <p>Full source code : <a href="https://github.com/1ambda/CLOS/blob/master/concept.lisp">Here</a></p>
@@ -133,7 +132,7 @@
 <li>and so on</li>
 </ul>
 
-<p><br/>  </p>
+<p><br>  </p>
 
 <h3 id="2defstruct">2. defstruct</h3>
 
@@ -148,7 +147,7 @@
 (cat-name c1) ;; BLUE
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <p>What defined by <code>defstruct</code> is <code>STRUCTURE-CLASS</code></p>
 
@@ -157,7 +156,7 @@
 ;; #&lt;STRUCTURE-CLASS CAT)
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="3defclass">3. defclass</h3>
 
@@ -179,7 +178,7 @@
 (setf p1 (make-instance 'person :name 'bob :age 26))
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <p>What defined by <code>defclass</code> is <code>STANDARD-CLASS</code> which subclasses <code>STANDARD-OBJECT</code></p>
 
@@ -189,7 +188,7 @@
 ;; #&lt;STANDARD-CLASS PERSON&gt;
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="4slot">4. Slot</h3>
 
@@ -201,7 +200,7 @@
 ;; BOB
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <p><code>describe</code> function can be used to show instance or classes information</p>
 
@@ -232,7 +231,7 @@
 ;;       Writers: (SETF PERSON-AGE)
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="5slotoptioninheritance">5. Slot Option Inheritance</h3>
 
@@ -274,7 +273,7 @@
 ;;   SUBJECT  = "Mathmatics"
 </code></pre>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="6multipleinheritance">6. Multiple Inheritance</h3>
 
@@ -298,10 +297,10 @@
 <pre><code class="lisp">(defclass a (b c) ...)
 </code></pre>
 
-<p><br/> <br />
+<p><br> <br>
 <code>initform</code> or <code>method</code> are can be from both class <code>b</code> and class <code>c</code>. But class 'b' precedes class 'c', class 'c''s <code>method' or</code>initform` will be selected.</p>
 
-<p><br/>  </p>
+<p><br>  </p>
 
 <h3 id="7genericfunction">7. Generic function</h3>
 
@@ -337,7 +336,7 @@
 ;; JOHN is teaching math
 </code></pre>
 
-<p><br/> <br />
+<p><br> <br>
 Calling method like this is somewhat different from other languages. In Java, methods are binded in a class. So we can call methods <code>Class.method(args)</code>. This is <strong>Single dispatch</strong>. According to <a href="http://en.wikipedia.org/wiki/Dynamic_dispatch#Single_and_multiple_dispatch">wikipedia</a></p>
 
 <blockquote>
@@ -350,7 +349,7 @@ Calling method like this is somewhat different from other languages. In Java, me
   <p>In some languages such as Common Lisp and Dylan, methods or functions can also be dynamically dispatched based on the run-time type of arguments. Expressed in pseudocode, the code manager.handle(y) could call different implementations depending on the types of both objects manager and y. This is known as multiple dispatch.</p>
 </blockquote>
 
-<p><br/>  </p>
+<p><br>  </p>
 
 <h3 id="8methodcombination">8. Method Combination</h3>
 
@@ -387,7 +386,7 @@ Calling method like this is somewhat different from other languages. In Java, me
 ;; JOHN is teaching math
 </code></pre>
 
-<p><br/> <br />
+<p><br> <br>
 If <code>around</code>, <code>before</code>, <code>after</code> keyword is not specified, the generic method is <strong>Primary</strong> method which is responsible for providing primary implementation. Above <code>work</code> methods are primary. <code>call-next-method</code> indicates that control should be passaed from this method to the method specialized on superclass as arguments.</p>
 
 <pre><code class="lisp">(setf t1 (make-instance 'teacher :name 'bob :age 25))
@@ -438,7 +437,7 @@ If <code>around</code>, <code>before</code>, <code>after</code> keyword is not s
 ;; NIL
 </code></pre>
 
-<p><br/> <br />
+<p><br> <br>
 These <code>:before</code>, <code>:after</code>, <code>:around</code> are auxiliary methods. Superclass's auxiliary methods are automatically called when you invoke subclass's a primary method. Of course, we can define subclass's auxiliary methods.</p>
 
 <pre><code class="lisp">(defmethod work :before ((t1 math-teacher))
@@ -514,7 +513,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -537,4 +536,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

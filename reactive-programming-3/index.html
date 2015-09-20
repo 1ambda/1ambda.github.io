@@ -1,37 +1,34 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Reactive Programming 3, Futures, Promises</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Reactive Programming 3, Futures, Promises">
-  <meta name="twitter:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자. trait Adventure {     def collectCoins(): List">
+  <meta name="twitter:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자. trait Adventure {     def collectCoins(): List[">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/reactive-programming-3/">
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
-  
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -51,17 +48,58 @@
   </script>
 
 
-  
   <link rel="stylesheet" href="../assets/highlight/styles/github.css">
 <script src="../assets/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
+  <link rel="canonical" href="http://1ambda.github.io/reactive-programming-3/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Reactive Programming 3, Futures, Promises">
+    <meta property="og:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터...">
+    <meta property="og:url" content="http://1ambda.github.io/reactive-programming-3/">
+    <meta property="article:published_time" content="2014-12-21T11:09:38.762Z">
+    <meta property="article:modified_time" content="2014-12-24T01:27:48.919Z">
+    <meta property="article:tag" content="coursera">
+    <meta property="article:tag" content="reactive programming">
+    <meta property="article:tag" content="scala">
+    <meta property="article:tag" content="futures">
+    <meta property="article:tag" content="promises">
+    <meta property="article:tag" content="awaitable">
+    <meta property="article:tag" content="try">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Reactive Programming 3, Futures, Promises">
+    <meta name="twitter:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터...">
+    <meta name="twitter:url" content="http://1ambda.github.io/reactive-programming-3/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Reactive Programming 3, Futures, Promises",
+    "url": "http://1ambda.github.io/reactive-programming-3/",
+    "datePublished": "2014-12-21T11:09:38.762Z",
+    "dateModified": "2014-12-24T01:27:48.919Z",
+    "keywords": "coursera, reactive programming,  scala, futures, promises, awaitable, try",
+    "description": "이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터..."
+}
+    </script>
 
-  <meta name="generator" content="Ghost 0.5" />
-<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/reactive-programming-3/" />
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
-  
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -71,39 +109,33 @@
   ga('create', 'UA-52181619-1', '1ambda.github.io');
   ga('send', 'pageview');
 </script>
-
   
 </head>
 <body>
 
-  
-  <script src="../public/jquery.js?v=98eb847283"></script>
+  <script src="../public/jquery.js?v=1e25303174"></script>
 
   
-
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Functional Programming</h4>
-  
+  <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles.1"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
   <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
   <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
 </div>
-
 </header>
 
 <main class="site_width" role="main">
   <article class="post tag-coursera tag-reactive-programming tag-scala-2 tag-futures tag-promises tag-awaitable tag-try">
 
-    
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="/tag/reactive-programming/">reactive programming</a>, <a href="/tag/scala-2/"> scala</a>, <a href="/tag/futures/">futures</a>, <a href="/tag/promises/">promises</a>, <a href="/tag/awaitable/">awaitable</a>, <a href="/tag/try/">try</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/reactive-programming/">reactive programming</a>, <a href="http://127.0.0.1:2368/tag/scala-2/"> scala</a>, <a href="http://127.0.0.1:2368/tag/futures/">futures</a>, <a href="http://127.0.0.1:2368/tag/promises/">promises</a>, <a href="http://127.0.0.1:2368/tag/awaitable/">awaitable</a>, <a href="http://127.0.0.1:2368/tag/try/">try</a></h5>
       <h1 class="margin_bottom_medium">Reactive Programming 3, Futures, Promises</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-21">Sunday, December 21, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/reactive-programming-3/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -873,19 +905,15 @@ Asynchronous    Future[T]    Observable[T]
     </section>
 
     <footer>
-      
       <section class="author_info margin_top_big">
         <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
         <p class="margin_left_medium text small">Author</p>
-        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
-        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
       </section>
-      
     </footer>
 
-    
 
-    
     <div id="disqus_thread" class="margin_top_big"></div>
 <script type="text/javascript">
   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
@@ -900,12 +928,10 @@ Asynchronous    Future[T]    Observable[T]
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
   })();
 </script>
-
     </article>
 </main>
 
 
-  
   <script src="../assets/fitvids/jquery.fitvids.js"></script>
 <script>
 $(document).ready(function(){
@@ -914,15 +940,13 @@ $(document).ready(function(){
 });
 </script>
 
-
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
   </footer>
 
-  
   <script type="text/javascript">
 /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
@@ -937,6 +961,5 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 </script>
 
 
-
   </body>
-  </html>
+  

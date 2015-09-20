@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Algorithm I, Chapter 1</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/union-find-algorithms-week-1/" />
+<link rel="canonical" href="http://1ambda.github.io/union-find-algorithms-week-1/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a></h5>
       <h1 class="margin_bottom_medium">Algorithm I, Chapter 1</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-09-22">Monday, September 22, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/union-find-algorithms-week-1/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -281,7 +280,7 @@ public class QuickFindTest {
 
 <p><strong>Quick-union</strong> 은 알고리즘 디자인적으로 <strong>lazy approach</strong> 라 볼 수 있다. <strong>Quick-find</strong> 와 같은 자료 구조(배열)을 사용하나 자료 구조에 대한 interpretation 이 다르다. </p>
 
-<p align=""><br/><img src="http://www.timgittos.com/images/pa1/quick-union-overview.png" />(<a href='http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/'>http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/</a>)<br/></p>
+<p align=""><br><img src="http://www.timgittos.com/images/pa1/quick-union-overview.png">(<a href="http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/">http://www.timgittos.com/learning/princeton-algorithms-part-1/week-1/</a>)<br></p>
 
 <p>이 경우 연산은 각각 아래와 같이 생각할 수 있다.</p>
 
@@ -442,11 +441,11 @@ public class QuickUnionTest {
 </ul>
 
 <p><strong>Quick-find</strong> 의 defect 는 
-- <code>union</code> is too expensive <br />
+- <code>union</code> is too expensive <br>
 - Trees are flat but too expensive keep them flat.</p>
 
 <p><strong>Quick-union</strong> 의 defect 는 
-- Trees can get tall <br />
+- Trees can get tall <br>
 - <code>find(connected)</code> is too expensive (could be N array accesses)</p>
 
 <h3 id="quickunionimprovement">Quick-union Improvement</h3>
@@ -455,7 +454,7 @@ public class QuickUnionTest {
 
 <p>기본 아이디어는 간단하다. <code>union</code> 연산을 수행할때 낮은 트리가 높은 트리에 속하게 함으로써 <strong>Worst case</strong> 를 방지하는 것이다. (마치 Balanced Tree 처럼)</p>
 
-<p align=""><br/><img src="http://my.csdn.net/uploads/201206/12/1339479587_5986.png" />(<a href='http://my.csdn.net/uploads/201206/12/1339479587_5986.png'>http://my.csdn.net/uploads/201206/12/1339479587_5986.png</a>)<br/></p>
+<p align=""><br><img src="http://my.csdn.net/uploads/201206/12/1339479587_5986.png">(<a href="http://my.csdn.net/uploads/201206/12/1339479587_5986.png">http://my.csdn.net/uploads/201206/12/1339479587_5986.png</a>)<br></p>
 
 <p>다른것은 모두 같지만, 트리의 크기를 비교해야 하기 때문에 트리의 크기를 저장할 배열이 필요하며, 이런 트리 크기를 비교하고 변경할 로직이 <code>union</code> 메소드에 추가되어야 한다.</p>
 
@@ -605,18 +604,18 @@ public class WeightedQuickUnionTest {
 
 <h4 id="percolation">Percolation</h4>
 
-<p align=""><br/><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolates.png" />(<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html'>http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
+<p align=""><br><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolates.png">(<a href="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html">http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br></p>
 
 <p><strong>Percolation</strong> 이란, <em>N</em>-by-<em>N</em> 의 Grid 에서 각 opened-site 는 확률 <em>p</em> blocked-site 는 <em>1-p</em> 의 확률을 가진다. 이 모델은 주로 물리 시스템을 모델링하기위해 사용된다.</p>
 
 <p>이론상 <em>N</em> 이 충분히 크면 </p>
 
 <ul>
-<li><em>p</em> > <em>p*</em> 인 지점에서는 almost certainly percolates 하고  </li>
+<li><em>p</em> &gt; <em>p*</em> 인 지점에서는 almost certainly percolates 하고  </li>
 <li><em>p</em> &lt; <em>p*</em> 인 지점에서는 alomost certainly does not percolate 하다.</li>
 </ul>
 
-<p align=""><br/><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation-threshold20.png" /> (<a href='http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html'>http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br/></p>
+<p align=""><br><img src="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation-threshold20.png"> (<a href="http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html">http://www.cs.princeton.edu/courses/archive/fall14/cos226/assignments/percolation.html</a>)<br></p>
 
 <p>문제는 그런 <em>p*</em> 값이 무엇이냐 하는건데, 수학적으로는 찾을 길이 없고, 컴퓨터 시뮬레이션으로는 <strong>Union-find algorithm</strong> 을 이용하면 구할 수 있다. 유명한 방법으로 <strong>Monte Carlo simulation</strong> 이 있는데, <em>N</em>-by-<em>N</em> Grid 를 blocked site 로 채우고, 랜덤하게 open site 를 만들면서 top 과 bottom 이 percolate 되는지 매번 확인한다. 연결되면, vacancy percentage 가 <em>p*</em> 에 대한 추정값이다.</p>
 
@@ -667,7 +666,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -690,4 +689,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

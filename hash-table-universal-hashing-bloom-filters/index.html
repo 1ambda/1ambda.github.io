@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Hash Table, Universal Hashing, Bloom filters</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/" />
+<link rel="canonical" href="http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/universal-hashing/">universal hashing</a>, <a href="/tag/bloom-filter/">bloom filter</a>, <a href="/tag/open-addressing/">open addressing</a></h5>
       <h1 class="margin_bottom_medium">Hash Table, Universal Hashing, Bloom filters</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-01">Monday, December 01, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -113,8 +112,8 @@
 
 <p>해시 테이블의 연산은 <em>key</em> 를 이용해 이런 작업들을 한다.</p>
 
-<p>(1) <strong>insert:</strong> add new record <br />
-(2) <strong>delete:</strong> delete existing record <br />
+<p>(1) <strong>insert:</strong> add new record <br>
+(2) <strong>delete:</strong> delete existing record <br>
 (2) <strong>lookup:</strong> check for a particular record</p>
 
 <p>가끔 사람들이 <em>dictionary</em> 라 부르기도 하는데, 해시테이블은 알파벳 순서같은 특정 <em>order</em> 로 데이터를 저장하진 않는다.</p>
@@ -159,8 +158,8 @@
 
 <p>더 나은 방법은 없을까?</p>
 
-<p>(1) <em>bucket size</em> 인 <code>n ~ |s|</code> 인 <code>n</code> 을 고른다. 이 때 <code>|s|</code> 는 그렇게 많이 안 변한다고 가정하자. <br />
-(2) 그 후 <em>hash function</em> <code>h: u -&gt; {0, 1, ..., n-1}</code> 인 <code>h</code> 를 고르면 된다. <br />
+<p>(1) <em>bucket size</em> 인 <code>n ~ |s|</code> 인 <code>n</code> 을 고른다. 이 때 <code>|s|</code> 는 그렇게 많이 안 변한다고 가정하자. <br>
+(2) 그 후 <em>hash function</em> <code>h: u -&gt; {0, 1, ..., n-1}</code> 인 <code>h</code> 를 고르면 된다. <br>
 (3) 길이 <code>n</code> 의 배열 <code>A</code> 에, <code>A[h(x)]</code> 위치에 <code>x</code> 를 저장하면 된다.</p>
 
 <p>이제 충돌 문제를 고민해 보자. 한 방에 <code>23</code> 명만 있어도, 생일이 같은 2명이 존재할 확률이 <code>50%</code> 가 넘으므로, </p>
@@ -187,7 +186,7 @@
   <p>hash function now specifies probe sequence <code>h_1(x), h_2(x), ...</code> keep trying til find open slot.</p>
 </blockquote>
 
-<p><br/></p>
+<p><br></p>
 
 <p><em>open addressing</em> 에서는 <em>probing, 탐사</em> 방식을 통해 비어있는 <em>bucket</em> 을 찾는다. 몇 가지 방법이 있는데</p>
 
@@ -217,7 +216,7 @@
   <p><em>load factor</em> 가 높아져도 성능 저하가 선형적이다. 아래 그림에서 볼 수 있듯이, <em>open-addressing</em> 방법처럼 급격히 <em>lookup time</em> 이 늘지 않는다. 따라서 테이블 확장을 상당히 늦출 수 있다.</p>
 </blockquote>
 
-<p><img src="http://pds5.egloos.com/pds/200702/14/32/d0014632_11023351.jpg" alt="" /></p>
+<p><img src="http://pds5.egloos.com/pds/200702/14/32/d0014632_11023351.jpg" alt=""></p>
 
 <blockquote>
   <p>데이터의 크기가 <em>5 words and more</em> 이면, <em>open addressing</em> 보다 메모리 사용량이 적다. </p>
@@ -254,7 +253,7 @@
 
 <blockquote>
   <ol>
-  <li>Should lead to good performance => <em>"spread data out"</em> <br />
+  <li>Should lead to good performance =&gt; <em>"spread data out"</em> <br>
   (gold standard: completely random hashing)</li>
   <li>Should be easy to store / very fast to evaluate  </li>
   </ol>
@@ -285,7 +284,7 @@
 
 <p><em>open addressing</em> 의 경우에는 <em>load factor</em> 가 1보다 클 수 없지만 <em>chaining</em> 은 가능하다.</p>
 
-<p>(1) <em>load factor</em> <code>a = O(1)</code> 이어야 연산이 <em>constant time</em> 이다. <br />
+<p>(1) <em>load factor</em> <code>a = O(1)</code> 이어야 연산이 <em>constant time</em> 이다. <br>
 (2) <em>open addressing</em> 이라면 <code>x &lt;&lt; 1</code> 이어야 한다.</p>
 
 <p>따라서 해시 테이블의 성능을 위해서는 <em>load factor</em> 를 조절해야 한다.</p>
@@ -342,11 +341,11 @@
 
 <p>만약 <code>x4 != y4</code> 라면, 충돌이 일어날 확률은 얼마일까? 충돌에 대한 식을 좀 정리하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?collision%5C%20means%20%5C%5C%20%5C%5C%20%28a_1x_1%20&plus;%20a_2x_2%20&plus;%20a_3x_3%20&plus;%20a_4x_4%29%20%5Cmod%20n%20%3D%20%28a_1y_1%20&plus;%20a_2y_2%20&plus;%20a_3y_3%20&plus;%20a_4y_4%29%20%5Cmod%20n%20%5C%5C%20%5C%5C%20so%2C%20%5C%5C%20%5C%5C%20a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?collision%5C%20means%20%5C%5C%20%5C%5C%20%28a_1x_1%20&amp;plus;%20a_2x_2%20&amp;plus;%20a_3x_3%20&amp;plus;%20a_4x_4%29%20%5Cmod%20n%20%3D%20%28a_1y_1%20&amp;plus;%20a_2y_2%20&amp;plus;%20a_3y_3%20&amp;plus;%20a_4y_4%29%20%5Cmod%20n%20%5C%5C%20%5C%5C%20so%2C%20%5C%5C%20%5C%5C%20a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n" alt=""></p>
 
 <p>이 때 <code>a1, a2, a3</code> 를 고정하면 얼마나 많은 <code>a4</code> 에 대해 아래 식이 성립할까? </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?a_4%28x_4-y_4%29%20%5Cmod%20n%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E3%20a_i%28y_i%20-%20x_i%29%20%5Cmod%20n" alt=""></p>
 
 <p><code>xi, yi, a1, a2, a3</code> 가 <em>fixed</em> 기 때문에 우변은 <code>{0, ..., n-1}</code> 사이의 숫자고 <code>a4</code> 만 랜덤이다.</p>
 
@@ -364,7 +363,7 @@
 
 <p>따라서 좌변이 특정 숫자인 우변과 같을 확률은 <code>1/n</code> 이다.</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?P%5Bh_a%28x%29%20%3D%20h_a%28y%29%5D%20%3D%20%7B1%20%5Cover%20n%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?P%5Bh_a%28x%29%20%3D%20h_a%28y%29%5D%20%3D%20%7B1%20%5Cover%20n%7D" alt=""></p>
 
 <h3 id="analysisofchaining">Analysis of Chaining</h3>
 
@@ -395,15 +394,15 @@
 
 <p><code>x != y</code> 인 <code>y in S</code> 에 대해 <code>z_y</code> 를 충돌이 날경우 <code>1</code> 로, 아닐 경우를 <code>0</code> 으로 하면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?z_y%3D%20%5Cbegin%7Bcases%7D%201%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%3D%20h%28y%29%20%5C%5C%200%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%5Cneq%20h%28y%29%20%5Cend%7Bcases%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?z_y%3D%20%5Cbegin%7Bcases%7D%201%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%3D%20h%28y%29%20%5C%5C%200%2C%20%26%20%5Cmbox%7Bif%20%7Dh%28x%29%20%5Cneq%20h%28y%29%20%5Cend%7Bcases%7D" alt=""></p>
 
 <p>이 때 해시함수가 무엇이든, 충돌이 날 경우에만 같은 버킷으로 들어가므로 버킷의 길이는 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?L%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?L%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y" alt=""></p>
 
 <p>따라서</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?E%28L%29%20%5C%5C%20%5C%5C%20%3D%20E%5B%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y%5D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20E%28z_y%29%20%5C%20%5C%20%5Cmbox%7B%28apply%20linearity%20of%20expectation%29%7D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%20%5C%20S%7D%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%5Cleq%20%7CS%7C%20*%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%20O%281%29" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?E%28L%29%20%5C%5C%20%5C%5C%20%3D%20E%5B%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20z_y%5D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%5C%20S%7D%20E%28z_y%29%20%5C%20%5C%20%5Cmbox%7B%28apply%20linearity%20of%20expectation%29%7D%20%5C%5C%20%5C%5C%20%3D%20%5Csum_%7By%5C%20%5Cin%20%5C%20S%7D%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%5Cleq%20%7CS%7C%20*%20%7B1%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%20O%281%29" alt=""></p>
 
 <p>중간에 <code>H</code> 가 <em>universal</em> 이므로 <code>P[h(y) = h(x)] &lt;= 1/n</code> 이다.</p>
 
@@ -431,11 +430,11 @@
 
 <p><em>head</em> 를 얻기 위해 동전을 뒤집는 수 <code>N</code> 에 대해 기대값 <code>E[N]</code> 은</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%201%20&plus;%20%5Calpha%20%5C%20E%5BN%5D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%201%20&amp;plus;%20%5Calpha%20%5C%20E%5BN%5D" alt=""></p>
 
 <p>식을 풀면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%20%7B1%20%5Cover%201-%20%5Calpha%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?E%5BN%5D%20%3D%20%7B1%20%5Cover%201-%20%5Calpha%7D" alt=""></p>
 
 <h4 id="linearprobing">Linear Probing</h4>
 
@@ -455,8 +454,8 @@
 
 <p>블룸 필터는 해시테이블과 비슷하게 빠른 삽입, 탐색을 지원한다. 해시테이블과 비교했을때 메모리가 덜 든다. 반면 단점은</p>
 
-<p>(1) Can't store an associated object <br />
-(2) No deletions <br />
+<p>(1) Can't store an associated object <br>
+(2) No deletions <br>
 (3) small <strong>false positive</strong> pobability (but no false negative)</p>
 
 <p>블룸 필터는 다양한 곳에 사용한다. </p>
@@ -471,7 +470,7 @@
 
 <p>블룸 필터의 구성요소를 보자.</p>
 
-<p>(1) 자료구조는 <code>n</code> 비트의 배열이다. <br />
+<p>(1) 자료구조는 <code>n</code> 비트의 배열이다. <br>
 (2) <code>k</code> 개의 해시 함수가 필요하다. (<code>k</code> 는 <em>small constant</em>)</p>
 
 <p><em>insertion</em> 은 <code>i = 1, ..., k</code> 에 대해 <code>A[h_i(x)] = 1</code> 로 세팅하면 된다. 이미 <code>1</code> 이어도 덮어쓴다. 참고로 덮어쓰기때문에 <em>false positive</em> 는 있어도 <em>false negative</em> 는 없다. 자그마한 종양만 보여도 무조건 암이라 주장하는 소심한 의사라 보면 이해가 쉽다.</p>
@@ -482,13 +481,13 @@
 
 <p>블룸필터를 이미지로 보면</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Bloom_filter.svg/720px-Bloom_filter.svg.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Bloom_filter.svg/720px-Bloom_filter.svg.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org'>http://en.wikipedia.org</a>)</p>
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p>
 
 <p>블룸필터를 쓰는 것이 합리적인 선택이 되려면</p>
 
-<p>(1) <code>n / |S|</code> 즉, 오브젝트당 비트 수가 충분히 작아야 한다. <br />
+<p>(1) <code>n / |S|</code> 즉, 오브젝트당 비트 수가 충분히 작아야 한다. <br>
 (2) <em>false positive</em>, 즉 에러 확률이 작아야한다.</p>
 
 <p>동시에 두 조건을 작은 값으로, 모두 만족시키지 못한다면 그냥 해시 테이블을 쓰는 것이 더 낫다. </p>
@@ -505,23 +504,23 @@
 
 <p><code>k</code> 개의 해시함수를 가지는 <code>n</code> 비트 블룸 필터에 데이터셋 <code>S</code> 를 먼저 넣어놓자. 이제 블룸필터 <code>A</code> 의 각 비트가 1일 확률은,</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D" alt=""></p>
 
 <p>인데 이것은 한 비트가 <code>0</code> 일 확률을 <code>1</code> 에서 뺀 것이다. <code>0</code> 일 확률은 <code>k</code> 개의 해쉬 함수를 <code>|S|</code> 개의 모든 원소를 다 집어 넣은 후에도 <code>0</code> 인 확률이므로 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D" alt=""></p>
 
 <p>이 때 <code>e^x</code> 가 <code>1 + x</code> 의 <em>upper bound</em> 임을 이용하면, 각 비트가 1일 확률은</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%20%5Cmbox%7B%5C%20%5C%20%281/n%20%5Csim%200%29%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%20%5Cmbox%7B%5C%20%5C%20%281/n%20%5Csim%200%29%7D" alt=""></p>
 
 <p>이 때 <code>n / |S| = b</code>, <code>b</code> 는 오브젝트당 비트 수 이므로</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%201%20-%20e%5E%7B-k%20/%20b%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%281%20-%7B1%20%5Cover%20n%7D%29%5E%7Bk%7CS%7C%7D%20%5C%5C%20%5C%5C%20%5Cleq%201%20-%20e%5E%7B-k%7CS%7C%20%5Cover%20n%7D%20%5C%5C%20%5C%5C%20%3D%201%20-%20e%5E%7B-k%20/%20b%7D" alt=""></p>
 
 <p>이제 블룸필터에 한번도 입력되지 않은 데이터에 대해 <em>false positive</em> 확률 <code>P[FP]</code> 를 계산하면,</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5C%5C%20%5C%5C%20%5Cleq%20%281%20-%20e%5E%7B-k%20/%20b%7D%29%5Ek%20%5C%5C%20%5C%5C" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5C%5C%20%5C%5C%20%5Cleq%20%281%20-%20e%5E%7B-k%20/%20b%7D%29%5Ek%20%5C%5C%20%5C%5C" alt=""></p>
 
 <p>이 때 고정된 수 <code>b</code> 에 대해 에러일 확률 <code>P[FP]</code> 를 최소화 하는 <code>k</code> 를 찾으면</p>
 
@@ -529,13 +528,13 @@
 
 <p>따라서 </p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5Csim%20%28%7B1%20%5Cover%202%7D%29%5E%7B%28ln2%29b%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?P%5BFP%5D%20%5Csim%20%28%7B1%20%5Cover%202%7D%29%5E%7B%28ln2%29b%7D" alt=""></p>
 
 <p>이므로 오브젝트당 비트수 <code>b</code> 에 따라서 <em>false positive</em>, 즉 에러 확률이 <em>exponentially</em> 작아진다.</p>
 
 <p>식을 거꾸로 풀면</p>
 
-<p><img src="http://latex.codecogs.com/gif.latex?b%20%5Csim%201.44%20*%20log_2%7B1%20%5Cover%20P%5BFP%5D%7D" alt="" /></p>
+<p><img src="http://latex.codecogs.com/gif.latex?b%20%5Csim%201.44%20*%20log_2%7B1%20%5Cover%20P%5BFP%5D%7D" alt=""></p>
 
 <p>이 두 식은 오브젝트당 비트수 <code>b</code> 와 <em>false positive</em> 의 <em>trade off</em> 를 보여준다.</p>
 
@@ -543,12 +542,12 @@
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
-(2) <a href="http://sweeper.egloos.com/viewer/925740">Hash Table</a> <br />
-(3) <a href="http://www.slideshare.net/tanmaytan21/application-of-hashing-in-better-alg-design-tanmay">http://www.slideshare.net/tanmaytan21</a> <br />
-(4) <a href="http://en.wikipedia.org/wiki/Hash_table">Wikipedia: Hash Table</a> <br />
-(5) <a href="http://www.slideshare.net/sajidmarwatt/advance-algorithm-hashing-lec-ii">http://www.slideshare.net/sajidmarwatt</a> <br />
-(6) <a href="http://en.wikipedia.org/wiki/Primary_clustering">Wikipedia: Primary Clustering</a> <br />
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br>
+(2) <a href="http://sweeper.egloos.com/viewer/925740">Hash Table</a> <br>
+(3) <a href="http://www.slideshare.net/tanmaytan21/application-of-hashing-in-better-alg-design-tanmay">http://www.slideshare.net/tanmaytan21</a> <br>
+(4) <a href="http://en.wikipedia.org/wiki/Hash_table">Wikipedia: Hash Table</a> <br>
+(5) <a href="http://www.slideshare.net/sajidmarwatt/advance-algorithm-hashing-lec-ii">http://www.slideshare.net/sajidmarwatt</a> <br>
+(6) <a href="http://en.wikipedia.org/wiki/Primary_clustering">Wikipedia: Primary Clustering</a> <br>
 (7) <a href="http://en.wikipedia.org/wiki/Bloom_filter">Wikipedia: Bloom Filter</a>    </p>
     </section>
 
@@ -596,7 +595,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -619,4 +618,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

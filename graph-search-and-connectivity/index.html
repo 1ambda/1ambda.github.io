@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Graph Search and Connectivity￼</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/graph-search-and-connectivity/" />
+<link rel="canonical" href="http://1ambda.github.io/graph-search-and-connectivity/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/algorithm">Algorithm</a>, <a href="../tag/graph">graph</a>, <a href="/tag/bfs/">BFS</a>, <a href="/tag/dfs/">DFS</a></h5>
       <h1 class="margin_bottom_medium">Graph Search and Connectivity￼</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-11-15">Saturday, November 15, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/graph-search-and-connectivity/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -117,9 +116,9 @@
 
 <p>그래프 탐색은 다양하게 활용할 수 있다.</p>
 
-<p>(1) check if a network is connected <br />
-(2) driving directoin (shortest path) <br />
-(3) formulate a plan (e.g how to fill in a sudoku puzzle) <br />
+<p>(1) check if a network is connected <br>
+(2) driving directoin (shortest path) <br>
+(3) formulate a plan (e.g how to fill in a sudoku puzzle) <br>
 (4) compute the <em>"pieces"</em> of a graph (e.g clustering)</p>
 
 <p>그래프를 탐색하는데는 <em>"재 방문하지 않는다"</em> 등 여러 조건이 붙으면서 다양한 방법이 있을 수 있겠지만 여기서는 단순히 모든 <em>vertex</em> 를 방문하는 일반적인 그래프 탐색 알고리즘 (<em>generic algorithm</em>) 에 대해 먼저 이야기 해 보자.</p>
@@ -156,14 +155,14 @@ while possible:
 
 <p><em>BFS</em> 는 기본적으로 <em>queue</em> 를 사용하면 <code>O(m + n)</code> 이다. 그리고</p>
 
-<p>(1) explore nodes in <em>"layers"</em> <br />
-(2) can compute <em>"shortest path"</em> <br />
+<p>(1) explore nodes in <em>"layers"</em> <br>
+(2) can compute <em>"shortest path"</em> <br>
 (3) can compute connected components of an undirected graph  </p>
 
 <p><em>DFS</em> 는 <em>stack</em> 을 이용하면 <code>O(m + n)</code> 이다. 그리고</p>
 
-<p>(1) explore aggressively like a maze, backtrack only when necessary <br />
-(2) compute topological ordering of directed acyclic graph <br />
+<p>(1) explore aggressively like a maze, backtrack only when necessary <br>
+(2) compute topological ordering of directed acyclic graph <br>
 (3) compute connected components in directed graphs</p>
 
 <h3 id="breadthfirstsearch">Breadth-First Search</h3>
@@ -172,10 +171,10 @@ while possible:
 
 <p>함수를 <code>BFS(graph G, start-vertex s)</code> 라 하면 시작단계에서는 모든 그래프 노드가 <em>unexplored</em> 다.</p>
 
-<p>(1) mark <code>s</code> as explored <br />
-(2) Let <code>Q</code> - queue data structure <strong>(FIFO)</strong>, initialied with <code>s</code> <br />
-(3) while <code>Q</code> is not empty: <br />
-- remove the first node of <code>Q</code>, call it <code>v</code> <br />
+<p>(1) mark <code>s</code> as explored <br>
+(2) Let <code>Q</code> - queue data structure <strong>(FIFO)</strong>, initialied with <code>s</code> <br>
+(3) while <code>Q</code> is not empty: <br>
+- remove the first node of <code>Q</code>, call it <code>v</code> <br>
 - for each edge <code>(v, w)</code>, if <code>w</code> unexplored mark <code>w</code> as explored and add <code>w</code> to Q</p>
 
 <p>시작 점 <code>s</code> 를 <em>layer 0</em> 이라 부르면 <em>layer 1</em> 은 <em>layer 0</em> 에서 갈 수 있는 지점이다. 모두 저장하고, 큐에서 하나 꺼내 <em>layer 2</em> 를 계산해서 다시 집어넣고, 이 과정을 반복한다. 알고리즘 중에 이미 방문했는지를 검사하기 때문에 같은 노드를 두번 이상 방문하지 않는다.</p>
@@ -211,14 +210,14 @@ while possible:
 <p><em>undirected connectivity</em> 는 그래프에서 서로 연결된 부분 집합을 찾는 문제다. 용어부터 정의하고 가자면</p>
 
 <blockquote>
-  <p>equivalence classes of the relation <code>u ~ v</code> &lt;=> <code>E(u, v)</code> path in <code>G</code></p>
+  <p>equivalence classes of the relation <code>u ~ v</code> &lt;=&gt; <code>E(u, v)</code> path in <code>G</code></p>
 </blockquote>
 
 <p><em>equivalence class</em> 는 처음봤는데 위키에 보니 다음의 3 가지 속성을 만족한다고 한다.</p>
 
 <blockquote>
-  <p>For every element <code>a</code> in X, <code>a ~ a</code> <strong>(reflexivity)</strong> <br />
-  For every two elements <code>a</code> and <code>b</code> in X, if <code>a ~ b</code>, then <code>b ~ a</code> <strong>(symmetry)</strong> <br />
+  <p>For every element <code>a</code> in X, <code>a ~ a</code> <strong>(reflexivity)</strong> <br>
+  For every two elements <code>a</code> and <code>b</code> in X, if <code>a ~ b</code>, then <code>b ~ a</code> <strong>(symmetry)</strong> <br>
   For every three elements <code>a</code>, <code>b</code>, and <code>c</code> in X, if <code>a ~ b</code> and <code>b ~ c</code>, then <code>a ~ c</code> <strong>(transitivity)</strong></p>
 </blockquote>
 
@@ -251,7 +250,7 @@ for i = 1 to n
 
 <p><em>BFS</em> 로도 <code>O(m +n)</code> 시간 내에 탐색하고 <em>shortest path</em>, <em>connected component</em> 를 찾는데 왜 <em>DFS</em> 가 필요할까?</p>
 
-<p>(1) can computes a topological ordering of a directed acyclic graph <br />
+<p>(1) can computes a topological ordering of a directed acyclic graph <br>
 (2) strongly conncected components of directed graphs</p>
 
 <p><em>BFS</em> 는 못하는 이 두 가지 문제를 <code>O(m + n)</code> 으로 해결할 수 있다.</p>
@@ -276,16 +275,16 @@ for every edge (s, v):
 <p>정의부터 보면</p>
 
 <blockquote>
-  <p>A <strong>toplogical ordering</strong> of a <em>directed graph</em> <code>G</code> is a labelling <code>f</code> of <code>G</code>'s nodes such that <br />
-  1. the <code>f(v)</code>'s are the set <code>{1, 2, 3, ..., n}</code> <br />
-  2. <code>(u, v)</code> in <code>G</code> => <code>f(u)</code> &lt; <code>f(v)</code></p>
+  <p>A <strong>toplogical ordering</strong> of a <em>directed graph</em> <code>G</code> is a labelling <code>f</code> of <code>G</code>'s nodes such that <br>
+  1. the <code>f(v)</code>'s are the set <code>{1, 2, 3, ..., n}</code> <br>
+  2. <code>(u, v)</code> in <code>G</code> =&gt; <code>f(u)</code> &lt; <code>f(v)</code></p>
 </blockquote>
 
 <p>이미지로 보면 더 이해하기 쉽다.</p>
 
-<p><img src="http://www.stoimen.com/blog/wp-content/uploads/2012/12/3.-Topological-Sort-Order.png" alt="" /></p>
+<p><img src="http://www.stoimen.com/blog/wp-content/uploads/2012/12/3.-Topological-Sort-Order.png" alt=""></p>
 
-<p align="center">(<a href='http://www.stoimen.com'>http://www.stoimen.com</a>)</p>
+<p align="center">(<a href="http://www.stoimen.com">http://www.stoimen.com</a>)</p>
 
 <p>왜 <em>topological sort</em> 가 필요할까? <em>precedence constraints</em> 가 있는 <em>sequence</em> 에서 나올 수 있는 모든 경우의 수를 파악하기에 좋다. 예를 들어 선수과목이 있을때 이수 가능한 스케쥴이라던가, 일정이라던가.</p>
 
@@ -348,9 +347,9 @@ DFS-Loop(graph G)
 
 <p><em>directed graph</em> 는 방향성이 있기 때문에 단순히 <em>component</em> 를 구한다고 해서 <em>equivalence classes</em> 가 되지 않는다. 서로 순환이 될 수 있는, cyclic  인 <em>component</em> 를 찾아야 한다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/5/5c/Scc.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/5/5c/Scc.png" alt=""></p>
 
-<p align="center">(<a href='http://commons.wikimedia.org'>http://commons.wikimedia.org</a>)</p>
+<p align="center">(<a href="http://commons.wikimedia.org">http://commons.wikimedia.org</a>)</p>
 
 <p><em>SCC</em> 는 <em>cycle</em> 이기 때문에 <em>DFS</em> 만 돌려도 나올 <strong>수</strong> 있다. 그런데, 만약 전체로 갈 수 있는 노드에서 <em>DFS</em> 를 돌려버리면 모든 <em>SCC</em> 가 합쳐진 형태가 나온다. 다시 말해서 단순 DFS 를 모든 노드에 대해 돌리는 것으로는 <em>SCC</em> 를 얻을 수도, 못 얻을 수도 있다는 소리다. <em>Kosaraju's Two-Pass Algorithm</em> 으로 해결할 수 있다.</p>
 
@@ -451,31 +450,31 @@ set f(i) := t
 
 <p>그럼 이게 어떻게 생겼을까? <em>one big scc</em> 일거라 보는 관점이 있다. 한쪽에선 오래된 웹페이지들이 있고, 더 뻗어나가지 않는다. 이쪽을 <em>out</em> 이라 보면 반대편에서는 새로운 웹페이지들이 생겨 기존의 웹페이지에 <em>edge</em> 를 붙여 나가는 <em>in</em> 부분이 있다고 할 수 있다. 몇몇 부분에는 전혀 연결이 되지 않은 부분이 있을 수 있다.</p>
 
-<p><img src="http://bparsia.files.wordpress.com/2009/11/bowtieweb.png?w=600&amp;h=364" alt="" /></p>
+<p><img src="http://bparsia.files.wordpress.com/2009/11/bowtieweb.png?w=600&amp;h=364" alt=""></p>
 
-<p align="center">(<a href='http://bparsia.wordpress.com'>http://bparsia.wordpress.com</a>)</p>
+<p align="center">(<a href="http://bparsia.wordpress.com">http://bparsia.wordpress.com</a>)</p>
 
 <p>웹의 <em>core</em> 부분은 <em>well connected</em> 되어 있는데 <em>small world property</em> 를 가지고 있다. 무슨말이냐면 모든 노드가 각각 서로 연결되어 있진 않지만 연결을 많이 가지고 있는 특정 몇몇 노드에 의해 모든 노드가 연결된다는 뜻이다. 결국 서로 연결되는데 몇 <em>hop</em> 안걸린다 볼 수 있다.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Small-world-network-example.png/330px-Small-world-network-example.png" alt="" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Small-world-network-example.png/330px-Small-world-network-example.png" alt=""></p>
 
-<p align="center">(<a href='http://en.wikipedia.org/wiki/Small-world_network'>http://en.wikipedia.org/wiki/Small-world_network</a>)</p>  
+<p align="center">(<a href="http://en.wikipedia.org/wiki/Small-world_network">http://en.wikipedia.org/wiki/Small-world_network</a>)</p>  
 
-<p><img src="http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2_files/image002.jpg" alt="" /></p>
+<p><img src="http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2_files/image002.jpg" alt=""></p>
 
-<p align="center">(<a href='http://web.mit.edu'>http://web.mit.edu</a>  
+<p align="center">(<a href="http://web.mit.edu">http://web.mit.edu</a>  
 )</p>
 
 <p>요즘의 연구들은 웹 그래프가 어떤식으로 진화하는지, 정보들이 어떤식으로 전파되는지 등을 중점으로 하고 있다.</p>
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br />
-(2) <a href="http://en.wikipedia.org/wiki/Equivalence_class">Equivalence class</a> <br />
-(3) <a href="http://www.stoimen.com/blog/2012/12/10/computer-algorithms-topological-sort-revisited/">http://www.stoimen.com</a> <br />
-(4) <a href="http://commons.wikimedia.org/wiki/File:Scc.png">http://commons.wikimedia.org/wiki/File:Scc.png</a> <br />
-(5) <a href="http://bparsia.wordpress.com/2009/11/24/does-rest-explain-the-bowtie-gross-structure-of-the-web/">http://bparsia.wordpress.com</a> <br />
-(6) <a href="http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2.htm">http://web.mit.edu</a> <br />
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong> <br>
+(2) <a href="http://en.wikipedia.org/wiki/Equivalence_class">Equivalence class</a> <br>
+(3) <a href="http://www.stoimen.com/blog/2012/12/10/computer-algorithms-topological-sort-revisited/">http://www.stoimen.com</a> <br>
+(4) <a href="http://commons.wikimedia.org/wiki/File:Scc.png">http://commons.wikimedia.org/wiki/File:Scc.png</a> <br>
+(5) <a href="http://bparsia.wordpress.com/2009/11/24/does-rest-explain-the-bowtie-gross-structure-of-the-web/">http://bparsia.wordpress.com</a> <br>
+(6) <a href="http://web.mit.edu/9.29/www/neville_jen/connectivity/MEA2.htm">http://web.mit.edu</a> <br>
 (7) <a href="http://en.wikipedia.org/wiki/Small-world_network">http://en.wikipedia.org/wiki/Small-world_network</a></p>
     </section>
 
@@ -523,7 +522,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -546,4 +545,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

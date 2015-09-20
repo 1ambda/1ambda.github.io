@@ -1,35 +1,34 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Cloud Computing, Paxos</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Cloud Computing, Paxos">
-  <meta name="twitter:description" content=" 대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure Detection Leader Election Agreement (harder than consensus) 일반적으로 서버가 많으면">
+  <meta name="twitter:description" content="대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure Detection Leader Election Agreement (harder than consensus) 일반적으로 서버가 많으면">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/cloud-computing-paxos/">
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -50,38 +49,79 @@
 
 
   <link rel="stylesheet" href="../assets/highlight/styles/github.css">
-  <script src="../assets/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
-<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/cloud-computing-paxos/" />
+  <link rel="canonical" href="http://1ambda.github.io/cloud-computing-paxos/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Cloud Computing, Paxos">
+    <meta property="og:description" content="대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure...">
+    <meta property="og:url" content="http://1ambda.github.io/cloud-computing-paxos/">
+    <meta property="article:published_time" content="2015-03-07T19:44:32.563Z">
+    <meta property="article:modified_time" content="2015-03-07T19:44:32.559Z">
+    <meta property="article:tag" content="coursera">
+    <meta property="article:tag" content="cloud computing">
+    <meta property="article:tag" content="paxos">
+    <meta property="article:tag" content="consensus">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cloud Computing, Paxos">
+    <meta name="twitter:description" content="대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure...">
+    <meta name="twitter:url" content="http://1ambda.github.io/cloud-computing-paxos/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Cloud Computing, Paxos",
+    "url": "http://1ambda.github.io/cloud-computing-paxos/",
+    "datePublished": "2015-03-07T19:44:32.563Z",
+    "dateModified": "2015-03-07T19:44:32.559Z",
+    "keywords": "coursera, cloud computing, paxos, consensus",
+    "description": "대부분의 분산 서버 벤더들은 99.99999% 의 reliability 를 보장하지만, 100%는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 consensus 문제 때문입니다.   The fault lies in the impossibility of consensus Consensus 문제가 중요한 이유는, 많은 분산 시스템이 consensus 문제이기 때문입니다.  Perfect Failure..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-52181619-1', '1ambda.github.io');
-    ga('send', 'pageview');
-  </script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
   
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=a9961bb5a5"></script>
+  <script src="../public/jquery.js?v=1e25303174"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Functional Programming</h4>
+  <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
-  </div>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles.1"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
 </header>
 
 <main class="site_width" role="main">
@@ -89,16 +129,16 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/cloud-computing">cloud computing</a>, <a href="../tag/paxos">paxos</a>, <a href="../tag/consensus">consensus</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/cloud-computing/">cloud computing</a>, <a href="../tag/paxos/">paxos</a>, <a href="../tag/consensus/">consensus</a></h5>
       <h1 class="margin_bottom_medium">Cloud Computing, Paxos</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-03-08">Sunday, March 08, 2015</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/cloud-computing-paxos/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt="" /></p>
+      <p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt=""></p>
 
 <p>대부분의 분산 서버 벤더들은 <code>99.99999%</code> 의 <em>reliability</em> 를 보장하지만, <code>100%</code>는 아닙니다. 왜그럴까요? 그들이 못해서가 아니라 <em>consensus</em> 문제 때문입니다.</p>
 
@@ -114,7 +154,7 @@
 <li>Agreement (harder than consensus)</li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <p>일반적으로 서버가 많으면 다음의 일들을 해야합니다.</p>
 
@@ -134,13 +174,13 @@
 <li>Who has access to the critical resource</li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="consensusproblem">Consensus Problem</h3>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_problem.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_problem.png" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_problem2.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_problem2.png" alt=""></p>
 
 <p>모든 프로세스(노드, 서버)가 같은 <em>value</em> 를 만들도록 해야 하는데, 몇 가지 제약조건이 있습니다.</p>
 
@@ -152,7 +192,7 @@
 
 <p><em>non-triviality</em> 는 쉽게 말해서, 모두 <code>0</code> 이거나 모두 <code>1</code> 일 수 있는 상태가 있어야 한다는 뜻입니다. 왜냐하면 항상 <code>0</code> 이거나 <code>1</code> 만 나오면 <em>trivial</em> 하기 때문입니다. 별 의미가 없죠.</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="models">Models</h3>
 
@@ -186,7 +226,7 @@
 <li>Subsequently, safe and <strong>probabilistic</strong> solution have become popular (e.g Paxos)</li>
 </ul>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="paxosinsyncronoussystems">Paxos in Syncronous Systems</h3>
 
@@ -199,7 +239,7 @@
 <li>processes can fail by stopping</li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_in_sync_system.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_in_sync_system.png" alt=""></p>
 
 <ul>
 <li>아무리 많아야 <code>f</code> 개의 프로세서에서 <em>crash</em> 가 나고</li>
@@ -209,25 +249,25 @@
 
 <p><em>value_i^r</em> 을 <em>round</em> <code>r</code> 의 시작에 <code>P_i</code> 에게 알려진 <em>value</em> 의 집합이라 라 하겠습니다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos1.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos1.png" alt=""></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos2.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos2.png" alt=""></p>
 
 <p><code>f+1</code> 라운드 후에 모든 <em>correct</em> 프로세스는 같은 값의 집합을 가지게 되는데, 귀류법으로 쉽게 증명할 수 있습니다.</p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_in_async.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/consensus_in_async.png" alt=""></p>
 
 <p>비동기 환경에서는, 아주아주아주아주아주 느린 프로세서와 <em>failed</em> 프로세서를 구분할 수 없기 때문에, 나머지 프로세서들이 이것을 결정하기 위해 영원히 기다려야 할지도 모릅니다. 이것이 기본적인 <em>FLP Proof</em> 의 아이디어입니다. 그렇다면, <em>consensus</em> 문제를 정말 풀기는 불가능한걸까요?</p>
 
 <p>풀 수 있습니다. 널리 알려진 <em>consensus-solving</em> 알고리즘이 있습니다. 실제로는 불가능한 <em>consensus</em> 문제를 풀려는 것이 아니라, <em>safety</em> 와 <em>eventual liveness</em> 를 제공합니다. 야후의 <em>zookeeper</em> 나 구글의 <em>chubby</em> 등이 이 알고리즘을 이용합니다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/yes_we_can_with_paxos.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/yes_we_can_with_paxos.png" alt=""></p>
 
 <p><em>safety</em> 는 서로 다른 두개의 프로세서가 다른 값을 제출하지 않는것을 보장하고, (<em>No two non-faulty processes decide different values</em>) <em>eventual liveness</em> 는 운이 좋다면 언젠가는 합의에 도달한다는 것을 말합니다. 근데 실제로는 꽤 빨리 <em>consensus</em> 문제를 풀 수 있습니다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_simple.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_simple.png" alt=""></p>
 
 <p>본래는 최적화때문에 더 복잡한데, 위 슬라이드에서는 간략화된 <em>paxos</em> 가 나와있습니다. <em>paxos</em> 의 <em>round</em> 마다 고유한 <em>ballot id</em> 가 할당되고, 각 <em>round</em> 는 크게 3개의 비동기적인 <em>phase</em> 로 분류할 수 있습니다.</p>
 
@@ -237,7 +277,7 @@
 <li><strong>law:</strong> leader multicasts final value</li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/election.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/election.png" alt=""></p>
 
 <p>먼저 <em>potential leader</em> 가 <em>unique ballot id</em> 를 고르고, 다른 프로세서들에게 보냅니다. 다른 프로세스들의 반응에 의해서 선출될 수도 있고, 선출되지 않으면 새로운 라운드를 시작합니다. </p>
 
@@ -245,33 +285,33 @@
 <li>Because becoming a leader requires a majority of votes, and any two majorities intersect in at least one process, and each process can only vote once.</li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/bill.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/bill.png" alt=""></p>
 
 <p>리더가 다른 프로세스들에게 <code>v</code> 를 제안하고, 프로세스들은 지난 라운드에 <code>v'</code> 를 결정했었으면 <code>v=v'</code> 를 이용해 값을 결정합니다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/decision.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/decision.png" alt=""></p>
 
 <p>만약 리더가 <em>majority</em> 의 긍정적인 반응을 얻으면 모두에게 그 결정을 알리고 각 프로세서는 합의된 내용을 전달받고, 로그에 기록하게 됩니다. </p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_no_return.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_no_return.png" alt=""></p>
 
 <p>사실 이 과정은 응답을 리더가 받는 단계에서 결정되는 것이 아니라, 프로세서들이 <em>proposed value</em> 를 듣는순간 결정됩니다. 따라서 리더에서 <em>failure</em> 가 일어나도, 이전에 결정되었던 <code>v'</code> 을 이용할 수 있습니다.</p>
 
-<p><br/></p>
+<p><br></p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_safety.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxos_safety.png" alt=""></p>
 
 <p>이전에도 언급했듯이 <em>safety</em> 는 두개의 서로 다른 프로세서의 의해서 다른 값이 선택되지 않음을 보장합니다. 이는 잠재적 리더가 있다 하더라도 현재 리더와, 잠재적 리더에게 응답하는 <em>majority</em> (반수 이상) 을 교차하면 적어도 하나는 <code>v'</code> 를 응답하기 때문에 <em>bill phase</em> 에서 정의한대로 이전 결과인 <code>v'</code> 가 사용됩니다.</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxsos_liveness.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week5/paxsos_liveness.png" alt=""></p>
 
 <p>그림에서 볼 수 있듯이 영원히 끝나지 않을수도 있지만, 실제로는 꽤 빠른시간 내에 합의에 도달합니다. (eventualy-live in async systems)</p>
 
-<p><br/></p>
+<p><br></p>
 
 <h3 id="refs">Refs</h3>
 
-<p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br />
+<p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br>
 (2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>
     </section>
 
@@ -279,58 +319,58 @@
       <section class="author_info margin_top_big">
         <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
         <p class="margin_left_medium text small">Author</p>
-        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
-        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
       </section>
     </footer>
 
 
     <div id="disqus_thread" class="margin_top_big"></div>
-    <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-      var disqus_identifier = '116';
-      var disqus_url = 'http://1ambda.github.io/cloud-computing-paxos/';
-    
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '116';
+  var disqus_url = 'http://1ambda.github.io/cloud-computing-paxos/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
     </article>
 </main>
 
 
   <script src="../assets/fitvids/jquery.fitvids.js"></script>
-  <script>
-  $(document).ready(function(){
-    // Target your .container, .wrapper, .post, etc.
-    $("section").fitVids();
-  });
-  </script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
   </footer>
 
   <script type="text/javascript">
-  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-  
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function () {
-   var s = document.createElement('script'); s.async = true;
-   s.type = 'text/javascript';
-   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-   }());
-  </script>
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
 
 
   </body>
-  </html>
+  

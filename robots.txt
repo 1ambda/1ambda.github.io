@@ -1,2 +1,3 @@
 User-agent: *
-Disallow: /ghost/Sitemap: http://1ambda.github.io/sitemap.xml
+Sitemap: http://1ambda.github.io/sitemap.xml
+Disallow: /ghost/

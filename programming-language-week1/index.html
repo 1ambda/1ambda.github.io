@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Programming Language, Week1</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
 
@@ -23,15 +22,15 @@
 
   
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -57,9 +56,9 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-  <meta name="generator" content="Ghost 0.5" />
+  <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/programming-language-week1/" />
+<link rel="canonical" href="http://1ambda.github.io/programming-language-week1/">
 
   
   <script>
@@ -103,7 +102,7 @@
       <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera">coursera</a>, <a href="../tag/programming-language">programming language</a>, <a href="/tag/ml/">ml</a>, <a href="/tag/emacs/">emacs</a></h5>
       <h1 class="margin_bottom_medium">Programming Language, Week1</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-10-10">Friday, October 10, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/programming-language-week1/#disqus_thread">Comment</a>
       </h5>
     </header>
@@ -142,10 +141,10 @@ val z = (x + y) + (y + 2);
 <p>여기서 잠깐 <em>Syntax</em> 와 <em>Semantics</em> 를 정리하자면</p>
 
 <blockquote>
-  <p><strong>Syntax</strong> is just how you write something<br/></p>
+  <p><strong>Syntax</strong> is just how you write something<br></p>
   
-  <p><strong>Semantics</strong> is what that something means<br/>
-  - <em>Type-checking</em> (before program runs)<br/>
+  <p><strong>Semantics</strong> is what that something means<br>
+  - <em>Type-checking</em> (before program runs)<br>
   - <em>Evaluation</em> (as program runs)  </p>
 </blockquote>
 
@@ -155,8 +154,8 @@ val z = (x + y) + (y + 2);
 
 <p><em>expression</em> 은 <em>sub-expression</em> 을 가질 수 있기 때문에, <em>expression</em> 을 해석 하는데 있어서 3가지가 꼭 필요하다.</p>
 
-<p>(1) <strong>Syntax</strong> <br />
-(2) <strong>Type-checking rules:</strong> produces a type of fails <br />
+<p>(1) <strong>Syntax</strong> <br>
+(2) <strong>Type-checking rules:</strong> produces a type of fails <br>
 (2) <strong>Evaluation rules:</strong> produces a value</p>
 
 <p>다시 말하면 <em>Syntax</em> 와 <em>Semantics</em> 가 필요하단 이야기다.</p>
@@ -301,8 +300,8 @@ val y = pow x
 
 <p><em>Evaluation</em> 스텝은 다음과 같다.</p>
 
-<p>(1) evaluate <code>e0</code> to <code>fun x0(x1: t1, ... , x: tn) = e</code> <br />
-(2) evaluate arguments <code>e1</code>, ... , <code>en</code> to <code>v1</code>, ..., <code>vn</code> <br />
+<p>(1) evaluate <code>e0</code> to <code>fun x0(x1: t1, ... , x: tn) = e</code> <br>
+(2) evaluate arguments <code>e1</code>, ... , <code>en</code> to <code>v1</code>, ..., <code>vn</code> <br>
 (3) extend <em>dynamic env</em> mapping <code>x1</code> to <code>v1</code> , ... , <code>xn</code> to <code>vn</code></p>
 
 <p>두 번째 스텝에서는 <em>eager evaluation</em> 이 사용되는데 <code>pow(2, 2+2)</code> 같은 경우 인자가 <code>2, 4</code> 가 된다. </p>
@@ -595,9 +594,9 @@ val z = #1 y
 <p>이제 <code>z</code> 의 값은 무엇일까? <code>sort_pair</code> 구현에 따라 다르다. <code>then</code> 에서 <code>pr</code> 을 돌려줬다면, <code>5</code> 일거고, <code>(#1 pr, #2 pr)</code> 을 돌려줬다면 <code>3</code> 일거다. 그러나 <em>ML</em> 에선 문제가 안된다. <em>immutable</em> 하니까. <del>오오 immutable 오오</del></p>
 
 <blockquote>
-  <p>But <strong>without mutation</strong>, we can implement either way <br/><br/>
-  - No code can ever distinguishe aliasing vs identical copies <br />
-  - No need to think about aliasing: focus on other things <br />
+  <p>But <strong>without mutation</strong>, we can implement either way <br><br>
+  - No code can ever distinguishe aliasing vs identical copies <br>
+  - No need to think about aliasing: focus on other things <br>
   - Can use aliasing, which saves space, without danger</p>
 </blockquote>
 
@@ -624,10 +623,10 @@ p.useTheResource();
 
 <p>언어를 배울때는 다음의 다섯가지를 고려해야한다.</p>
 
-<p>(1) <strong>Syntax:</strong> How do you write language constructs? <br />
-(2) <strong>Semantics:</strong> What do programs mean? (Evaluation rules) <br />
-(3) <strong>Idioms:</strong> What are typical patterns for using language features to express your computation <br />
-(4) <strong>Libraries:</strong> What facilities does the language provide <strong>standard</strong>? <br />
+<p>(1) <strong>Syntax:</strong> How do you write language constructs? <br>
+(2) <strong>Semantics:</strong> What do programs mean? (Evaluation rules) <br>
+(3) <strong>Idioms:</strong> What are typical patterns for using language features to express your computation <br>
+(4) <strong>Libraries:</strong> What facilities does the language provide <strong>standard</strong>? <br>
 (5) <strong>Tools:</strong> What do language implementations provide to make your job easier? (REPL debugger..)  </p>
 
 <p>다시 말하면 다섯가지를 모두 배워야 한다. 언어의 코어부터 그 확장인 라이브러리와 툴까지. 그러나 이 코스에서는 <em>Semantics</em> 와 <em>Idioms</em> 에 집중한다. <em>ML</em> 을 고른것도 그 이유고, 이걸 잘 이해하게 되면 <em>Libraries</em> 가 어떻게 구성되었는지 더 잘 이해할 수 있다.</p>
@@ -685,7 +684,7 @@ $(document).ready(function(){
 
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2014 <a href="..">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
@@ -708,4 +707,4 @@ var disqus_shortname = '1ambda'; // required: replace example with your forum sh
 
 
   </body>
-  </html>
+  

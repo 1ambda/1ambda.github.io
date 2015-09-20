@@ -1,35 +1,34 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/Blog">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>Linear Programming</title>
-  <meta name="description" content="" />
+  <meta name="description" content="">
 
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Linear Programming">
-  <meta name="twitter:description" content=" linear programming: problem-solving model for optimal allocation of scarce resources, among a number of competing activities that encompasses maxflow, MST, shortest paths, assigment, Ax = b, 2-person zero-sum games 등이 있다. 다시 말해서, constraints 를 지키면서 특정 값을 maximize 하는 문제다. 따라서 주어진 문제를 아래의 형태로 reduction 해야 한다. (http://www">
+  <meta name="twitter:description" content="linear programming: problem-solving model for optimal allocation of scarce resources, among a number of competing activities that encompasses maxflow, MST, shortest paths, assigment, Ax = b, 2-person zero-sum games 등이 있다. 다시 말해서, constraints 를 지키면서 특정 값을 maximize 하는 문제다. 따라서 주어진 문제를 아래의 형태로 reduction 해야 한다. (http://www.">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/algorithm-linear-programming/">
   <meta name="twitter:domain" content="http://1ambda.github.io">
 
 
-  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author" />
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
 
   <link rel="shortcut icon" href="../favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif" />
-  <link rel='stylesheet' type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:600,300" />
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css" />
-  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css" />
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
   <script type="text/javascript" src="../assets/1ambda/modernizr.js">
   </script>
   <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
@@ -50,38 +49,78 @@
 
 
   <link rel="stylesheet" href="../assets/highlight/styles/github.css">
-  <script src="../assets/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
-  <meta name="generator" content="Ghost 0.5" />
-<link rel="alternate" type="application/rss+xml" title="Old Lisper" href="../rss">
-<link rel="canonical" href="http://1ambda.github.io/algorithm-linear-programming/" />
+  <link rel="canonical" href="http://1ambda.github.io/algorithm-linear-programming/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Linear Programming">
+    <meta property="og:description" content="linear programming: problem-solving model for optimal allocation of scarce resources, among a number of competing activities that encompasses maxflow, MST, shortest paths, assigment, Ax = b, 2-person zero-sum games 등이 있다. 다시 말해서, constraints 를 지키면서 특정 값을 maximize 하는 문제다....">
+    <meta property="og:url" content="http://1ambda.github.io/algorithm-linear-programming/">
+    <meta property="article:published_time" content="2014-12-31T08:28:26.384Z">
+    <meta property="article:modified_time" content="2014-12-31T18:45:14.143Z">
+    <meta property="article:tag" content="Algorithm">
+    <meta property="article:tag" content="coursera">
+    <meta property="article:tag" content="linear programming">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Linear Programming">
+    <meta name="twitter:description" content="linear programming: problem-solving model for optimal allocation of scarce resources, among a number of competing activities that encompasses maxflow, MST, shortest paths, assigment, Ax = b, 2-person zero-sum games 등이 있다. 다시 말해서, constraints 를 지키면서 특정 값을 maximize 하는 문제다....">
+    <meta name="twitter:url" content="http://1ambda.github.io/algorithm-linear-programming/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Linear Programming",
+    "url": "http://1ambda.github.io/algorithm-linear-programming/",
+    "datePublished": "2014-12-31T08:28:26.384Z",
+    "dateModified": "2014-12-31T18:45:14.143Z",
+    "keywords": "Algorithm, coursera, linear programming",
+    "description": "linear programming: problem-solving model for optimal allocation of scarce resources, among a number of competing activities that encompasses maxflow, MST, shortest paths, assigment, Ax = b, 2-person zero-sum games 등이 있다. 다시 말해서, constraints 를 지키면서 특정 값을 maximize 하는 문제다...."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-52181619-1', '1ambda.github.io');
-    ga('send', 'pageview');
-  </script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
   
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=a9961bb5a5"></script>
+  <script src="../public/jquery.js?v=1e25303174"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
   
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
-  <h4 class="text book">Functional Programming</h4>
+  <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
-    <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
-  </div>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="../articles.1"><i class="fa fa-columns"></i> <span class="margin_left_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
 </header>
 
 <main class="site_width" role="main">
@@ -89,16 +128,16 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="/tag/algorithm/">Algorithm</a>, <a href="../tag/coursera">coursera</a>, <a href="/tag/linear-programming/">linear programming</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="http://127.0.0.1:2368/tag/algorithm/">Algorithm</a>, <a href="../tag/coursera/">coursera</a>, <a href="http://127.0.0.1:2368/tag/linear-programming/">linear programming</a></h5>
       <h1 class="margin_bottom_medium">Linear Programming</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-31">Wednesday, December 31, 2014</time>
-      <br/><br/>
+      <br><br>
        <a href="http://1ambda.github.io/algorithm-linear-programming/#disqus_thread">Comment</a>
       </h5>
     </header>
 
     <section>
-      <p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*WBYODRJUgH8h_QEPnaWS-w.png" alt="" /></p>
+      <p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*WBYODRJUgH8h_QEPnaWS-w.png" alt=""></p>
 
 <ul>
 <li><strong>linear programming:</strong> problem-solving model for optimal allocation of scarce resources, among a number of competing activities that <strong>encompasses</strong></li>
@@ -108,9 +147,9 @@
 
 <p>다시 말해서, <em>constraints</em> 를 지키면서 특정 값을 <em>maximize</em> 하는 문제다. 따라서 주어진 문제를 아래의 형태로 <em>reduction</em> 해야 한다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p algin="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p algin="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <ul>
 <li>fast commercial colvers available</li>
@@ -122,16 +161,16 @@
 
 <h3 id="brewersproblem">Brewer's Problem</h3>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTWhKRE1pRldPM0lHTmlOV0x6a1RZaDFTTXpJMk10RVdZM1FXTDNJMk00SVROMkUyTDRFak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTWhKRE1pRldPM0lHTmlOV0x6a1RZaDFTTXpJMk10RVdZM1FXTDNJMk00SVROMkUyTDRFak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p>양조장에서 맥주 <code>ale</code>, <code>beer</code> 를 생산하는데, 재료인 <code>corn</code>, <code>hops</code> <code>malt</code> 에 의해 생산량이 정해진다. 그리고 두 맥주는 들어가는 재료의 비율이 <del>당연히</del> 다르다.</p>
 
 <p>이 때, 이익을 최대로 하는 각 맥주의 생산량을 구하는 문제다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWnpNbVl5SXpOa0JUWnhnVEwya0ROaTFTWTBZek10VWpNNFFXTDRFbVkxUXpZeWt6THdJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
-<img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWTRjRE1tSjJZaWhqWTFRVEx6WUdaNDBTTWhsek10UXpNakpXTHpFR08zVUdaM0V6THpJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWnpNbVl5SXpOa0JUWnhnVEwya0ROaTFTWTBZek10VWpNNFFXTDRFbVkxUXpZeWt6THdJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="">
+<img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWTRjRE1tSjJZaWhqWTFRVEx6WUdaNDBTTWhsek10UXpNakpXTHpFR08zVUdaM0V6THpJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p algin="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p algin="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p>위 그림처럼 <em>contraints</em> 를 그래프 문제로 변환할 수 있다. 이 때 이익을 최대로 하는 <em>optimal solution</em> 은 <em>extreme point</em> 에 위치하는데 이 점들은 <em>2d</em> 에선 2개의 <em>constraints</em> (선분) 이 교차하는 지점에 위치한다.</p>
 
@@ -141,7 +180,7 @@
   <p><strong>Goal</strong> maximize linear objective function of <code>n</code> nonnegative variables, subjet to <code>m</code> linear equations</p>
 </blockquote>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TnhFV015UUdOaFpETjVJVExoWnpNaDFDTzNjek10TUdOemdUTDRNMk16STJNaEZ6TDFJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TnhFV015UUdOaFpETjVJVExoWnpNaDFDTzNjek10TUdOemdUTDRNMk16STJNaEZ6TDFJak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p>문제를 <em>standard form</em> 으로 표시하면</p>
 
@@ -150,7 +189,7 @@
 <li>add <em>slack</em> variable to convert each inequality to an equality</li>
 </ul>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT3lZak4xUWpNM2NEWmhkVEw1a2pZaDFDT3dNek10RTJONFVXTGtGV1ozVXpNeE0yTDFNak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <h4 id="geometry">Geometry</h4>
 
@@ -160,9 +199,9 @@
 <li>An <strong>extreme point</strong> of a set is a point in the set that can't be written as <code>1/2(a+b)</code>, where <code>a</code> and <code>b</code> are two distinct points in the set.</li>
 </ul>
 
-<p><img src="http://mathworld.wolfram.com/images/eps-gif/ConvexConcave_1000.gif" alt="" /></p>
+<p><img src="http://mathworld.wolfram.com/images/eps-gif/ConvexConcave_1000.gif" alt=""></p>
 
-<p align="center">(<a href='http://mathworld.wolfram.com/Convex.html'>http://mathworld.wolfram.com/Convex.html</a>)</p>
+<p align="center">(<a href="http://mathworld.wolfram.com/Convex.html">http://mathworld.wolfram.com/Convex.html</a>)</p>
 
 <p>즉 두 점이 있을때 그 가운데 위치하는 점도 집합 안에 있으면 그 집합은 <em>convex</em> 라 부른다. <em>extreme point</em> 는 도형의 가장 바깥쪽 부분으로 그것보다 외부의 점이 없기 때문에 <code>1/2(a+b)</code> 로 바꿀 수 없다.</p>
 
@@ -172,8 +211,8 @@
 
 <p>If there exists an optimal solution to <code>P</code> (plane), then there exists one that is an extreme point</p>
 
-<p>(1) Number of extreme points to consider is <strong>finite</strong> <br />
-(2) But number of extreme points can be <strong>exponential</strong> <br />
+<p>(1) Number of extreme points to consider is <strong>finite</strong> <br>
+(2) But number of extreme points can be <strong>exponential</strong> <br>
 (3) Extreme point optimal iff no better adjacent extreme point (<em>greedy property</em>)</p>
 
 <p>특히 3번은 중요한데, <em>global optimum</em> 인지 알기 위해 인접부분만 검사하면 된다. 이는 <em>objective function</em> 이 선형이고, <em>feasible region</em> 이 <em>convex</em> 이기 때문이다.</p>
@@ -199,15 +238,15 @@
 <ul>
 <li>set <code>n-m</code> nonbasic variables to <code>0</code>, solve for remaining <code>m</code> variables</li>
 <li>solve <code>m</code> equations in <code>m</code> unknowns</li>
-<li>if unique and feasible => BFS</li>
-<li>BFS &lt;=> extream point</li>
+<li>if unique and feasible =&gt; BFS</li>
+<li>BFS &lt;=&gt; extream point</li>
 </ul>
 
 <p>뭔소린가 한참을 쳐다봤는데, 그림으로 이해하는게 더 쉽다. <code>n</code> 개의 변수중 <code>m</code> 개를 제외한 것을 다 <code>0</code> 으로 하고, 방정식을 풀면 된다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT21WMlloUm1aM2dUTmxKV0xsSm1ONTBDT3pVek10STJZM0lUTGtoVE9rTldaeWN6TDFRak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT21WMlloUm1aM2dUTmxKV0xsSm1ONTBDT3pVek10STJZM0lUTGtoVE9rTldaeWN6TDFRak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p algin="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p algin="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p><em>slack variables</em> 로 구성된 <em>basis</em> 부터 시작해서 <em>pivot</em> 연산을 해 나아가면 된다. </p>
 
@@ -229,18 +268,18 @@
 
 <p>처음상태 <code>basis = {SC, SH, SM}</code> 에서 <em>constraint</em> <code>B</code> 를 <code>B = (1/15)(450 - 5A - SC)</code> 로 치환하면 <code>B</code> 가 <code>SC</code> 를 대신에 <em>basis</em> 에 들어간다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWjJFRE5qUkdNeElqTjNRV0wzVTJOaDFpTTNVMk10VVRPMGNUTDVZelkwWUdaMUl6THdVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
-<img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWhWVE5rbERabFJtTTRFV0xqRlRONTBpWmpWek10a1ROMFlXTGtOVFl5QWpNNUV6THlVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWjJFRE5qUkdNeElqTjNRV0wzVTJOaDFpTTNVMk10VVRPMGNUTDVZelkwWUdaMUl6THdVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="">
+<img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWhWVE5rbERabFJtTTRFV0xqRlRONTBpWmpWek10a1ROMFlXTGtOVFl5QWpNNUV6THlVak4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p algin="center">(<a href='http://www.programering.com'>http://www.programering.com</a>)</p>
+<p algin="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p>
 
 <p><code>A</code> 까지 치환하면 <em>objective function</em> 에 양수 계수를 가지는 변수가 없으므로  <code>Z</code> 가 더 증가할 여지가 없다. </p>
 
 <h3 id="implementation">Implementation</h3>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTmtGRE1pZHpObEoyWXdrVEwwVVRZNDBTWjBNek10UWpaMVVUTHlJRE1pRkRNMEUyTDBNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTmtGRE1pZHpObEoyWXdrVEwwVVRZNDBTWjBNek10UWpaMVVUTHlJRE1pRkRNMEUyTDBNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWpkVFpqUkRad0FETjFFV0w1VW1aNTBpWTJVMk10Z0RONU1UTG1GV1kwQUROelEyTDNNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTWpkVFpqUkRad0FETjFFV0w1VW1aNTBpWTJVMk10Z0RONU1UTG1GV1kwQUROelEyTDNNek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <pre><code class="java">public class Simplex  
 {
@@ -313,8 +352,8 @@
 
 <p>메인 로직 자체는 간단하다.</p>
 
-<p>(1) <code>bland()</code> 로 <em>positive coefficient</em> 인 변수를 찾고 <br />
-(2) <code>minRatioRule()</code> 로 어떤 <em>row</em> 택할지 결정한다 <br />
+<p>(1) <code>bland()</code> 로 <em>positive coefficient</em> 인 변수를 찾고 <br>
+(2) <code>minRatioRule()</code> 로 어떤 <em>row</em> 택할지 결정한다 <br>
 (3) <code>pivot</code> </p>
 
 <p>변수의 수를 <code>N</code>, 제약조건(= <em>inequalities</em>)의 수를 <code>M</code> 이라 했을때 <code>M &gt;= N</code> 이면 러닝타임은 <code>M^2</code> 이다. 이는 <code>pivot</code> 연산이 대부분의 시간을 잡아먹기 때문.</p>
@@ -359,23 +398,23 @@ private int bland() {
 
 <p><em>unrestricted variable</em> <code>B</code> 가 있는 <em>minimization</em> 문제를 <em>standard form</em> 으로 <em>reduction</em> 하려면</p>
 
-<p>(1) <code>min(13A + 15B)</code> 를 <code>max(-13A - 15B)</code> 로 변경 <br />
-(2) <code>4A + 4B &gt; 160</code> <em>constraint</em> 를 <code>4A + 4B - S = 160</code> (<code>S &gt;= 0)</code> <br />
+<p>(1) <code>min(13A + 15B)</code> 를 <code>max(-13A - 15B)</code> 로 변경 <br>
+(2) <code>4A + 4B &gt; 160</code> <em>constraint</em> 를 <code>4A + 4B - S = 160</code> (<code>S &gt;= 0)</code> <br>
 (3) <code>B = B0 - B1</code> (<code>B0 &gt;= 0</code>, <code>B1 =&gt; 0</code>)</p>
 
 <h4 id="maxflow">Max Flow</h4>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTm1Cak4xRURNemNUTXpFVEx3UURNNTBpTjNNek10VWpZalZUTDNNVFoxWURPaUZ6TDVRek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTm1Cak4xRURNemNUTXpFVEx3UURNNTBpTjNNek10VWpZalZUTDNNVFoxWURPaUZ6TDVRek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p><em>capacity</em>, <em>flow</em> 를 <em>constraint</em> 로 쉽게 바꿀 수 있다. 앞에서 본 <em>max flow</em> 알고리즘과 비교했을때의 장점은 문제가 더 복잡해지더라도 <em>constraint</em> 만 추가하면 간단하다는 점이다. (성능은 더 느릴수 있다고 함)</p>
 
 <h4 id="bipartitematching">Bipartite Matching</h4>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjJJelloQnpOeFVtWjJJVEx5RWpNNTBTWjNVek10a1RZbWxUTGlKR04zWVdabUp6THpVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjJJelloQnpOeFVtWjJJVEx5RWpNNTBTWjNVek10a1RZbWxUTGlKR04zWVdabUp6THpVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <p>여기서 <code>X_ij</code> 는 사람 <code>i</code> 에게 작업 <code>j</code> 가 할당되었는지의 여부다.</p>
 
-<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT2pCRE1oaFRPd2dET2hCVExpUm1OaTFpTndJMk10Y3pNbU5XTDNZbVp6SVRNalp6THhVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDT2pCRE1oaFRPd2dET2hCVExpUm1OaTFpTndJMk10Y3pNbU5XTDNZbVp6SVRNalp6THhVek4xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt=""></p>
 
 <h3 id="summary">Summary</h3>
 
@@ -385,10 +424,10 @@ private int bland() {
 
 <h3 id="references">References</h3>
 
-<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br />
-(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br />
-(3) <a href="http://www.explainxkcd.com/wiki/index.php/287:_NP-Complete">getRandomNumber image</a> <br />
-(4) <a href="http://www.programering.com/a/MzM2IDNwATM.html">Lecture note</a> <br />
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong> <br>
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a> <br>
+(3) <a href="http://www.explainxkcd.com/wiki/index.php/287:_NP-Complete">getRandomNumber image</a> <br>
+(4) <a href="http://www.programering.com/a/MzM2IDNwATM.html">Lecture note</a> <br>
 (5) <a href="http://mathworld.wolfram.com/Convex.html">Mathword convex</a>  </p>
     </section>
 
@@ -396,58 +435,58 @@ private int bland() {
       <section class="author_info margin_top_big">
         <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
         <p class="margin_left_medium text small">Author</p>
-        <p class="margin_left_medium text bold"><a href="http://language.is">1ambda</a></p>
-        <p class="margin_left_medium text small">Lisp, Emacs, FP</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
       </section>
     </footer>
 
 
     <div id="disqus_thread" class="margin_top_big"></div>
-    <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-      var disqus_identifier = '94';
-      var disqus_url = 'http://1ambda.github.io/algorithm-linear-programming/';
-    
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '94';
+  var disqus_url = 'http://1ambda.github.io/algorithm-linear-programming/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
     </article>
 </main>
 
 
   <script src="../assets/fitvids/jquery.fitvids.js"></script>
-  <script>
-  $(document).ready(function(){
-    // Target your .container, .wrapper, .post, etc.
-    $("section").fitVids();
-  });
-  </script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">&copy; 2015 <a href="..">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 
   </footer>
 
   <script type="text/javascript">
-  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
-  
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function () {
-   var s = document.createElement('script'); s.async = true;
-   s.type = 'text/javascript';
-   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-   }());
-  </script>
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
 
 
   </body>
-  </html>
+  
