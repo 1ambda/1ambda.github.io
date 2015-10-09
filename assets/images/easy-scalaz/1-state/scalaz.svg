@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="8 119 1510 809" width="1510pt" height="809pt">
+  <metadata>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <rdf:Description about=""
+        dc:title="Scalaz 7 typeclass hierarchy"
+        dc:author="Rob Norris"
+        dc:date="2013-09-01 06:34Z"
+        dc:format="image/svg+xml"
+       />
+      <!-- Produced by OmniGraffle Professional 4.2.3 -->
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <font-face font-family="Helvetica" font-size="12" units-per-em="1000" underline-position="-75.683594" underline-thickness="49.316406" slope="0" x-height="522.94922" cap-height="717.28516" ascent="770.01953" descent="-229.98047" font-weight="500">
+      <!--NSCTFontDescriptor &lt;0x6f2aa0&gt; = {
+    NSFontNameAttribute = Helvetica;
+    NSFontSizeAttribute = 12;
+}-->
+      <font-face-src>
+        <font-face-name name="Helvetica"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="StickArrow_Marker" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M 8 0 L 0 0 M 0 -3 L 8 0 L 0 3" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="StickArrow_Marker_2" viewBox="-9 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M -8 0 L 0 0 M 0 3 L -8 0 L 0 -3" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <title>Scalaz 7 typeclass hierarchy</title>
+    <g>
+      <rect x="623.3971" y="475.29926" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="623.3971" y="475.29926" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(628.3971 483.518)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Applicative"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="8.785156" y="11" textLength="58">Applicative</tspan></a></text>
+      <rect x="700.28058" y="281.8742" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="700.28058" y="281.8742" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(705.28058 290.09296)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Apply"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="22.791992" y="11" textLength="30">Apply</tspan></a></text>
+      <rect x="979.66974" y="129.573456" width="85.6015" height="30.4375" fill="white"/>
+      <rect x="979.66974" y="129.573456" width="85.6015" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(984.66974 137.792206)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Functor"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="17.459961" y="11" textLength="41">Functor</tspan></a></text>
+      <line x1="771.43854" y1="281.63489" x2="985.42096" y2="164.98868" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="672.43176" y1="474.83463" x2="733.19067" y2="321.9762" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="98.707275" y="711.45856" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="98.707275" y="711.45856" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(103.70728 719.6773)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Arrow"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="22.132812" y="11" textLength="31">Arrow</tspan></a></text>
+      <rect x="220.1919" y="475.29926" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="220.1919" y="475.29926" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(225.1919 483.518)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Category"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="13.455078" y="11" textLength="49">Category</tspan></a></text>
+      <rect x="220.1919" y="281.8742" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="220.1919" y="281.8742" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(225.1919 290.09296)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Compose"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="12.12207" y="11" textLength="51">Compose</tspan></a></text>
+      <line x1="262.99268" y1="474.79926" x2="262.99268" y2="322.7117" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="150.58971" y1="711.02606" x2="203.84445" y2="619.24744" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="764.1582" y="475.29926" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="764.1582" y="475.29926" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(769.1582 483.518)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Bind"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="25.791992" y="11" textLength="24">Bind</tspan></a></text>
+      <line x1="801.7763" y1="474.82446" x2="751.3686" y2="322.18713" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="1421.1317" y="322.7694" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1421.1317" y="322.7694" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1426.1317 330.98816)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Bitraverse"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="10.791992" y="11" textLength="54">Bitraverse</tspan></a></text>
+      <rect x="1421.1317" y="129.573456" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1421.1317" y="129.573456" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1426.1317 137.792206)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Bifunctor"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="14.123047" y="11" textLength="47">Bifunctor</tspan></a></text>
+      <rect x="1335.84985" y="184.29507" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1335.84985" y="184.29507" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1340.84985 192.51382)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Bifoldable"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="11.448242" y="11" textLength="53">Bifoldable</tspan></a></text>
+      <line x1="1463.9325" y1="322.2694" x2="1463.9325" y2="170.41093" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="1454.2976" y1="322.34366" x2="1393.47705" y2="223.5879" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="277.09714" y="579.81458" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="277.09714" y="579.81458" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(282.09714 588.03333)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Choice"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="19.124023" y="11" textLength="37">Choice</tspan></a></text>
+      <line x1="311.37268" y1="579.37543" x2="276.25192" y2="514.87067" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="882.1764" y="378.58673" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="882.1764" y="378.58673" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(887.1764 386.80548)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Cobind"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="18.787109" y="11" textLength="38">Cobind</tspan></a></text>
+      <line x1="931.1179" y1="378.12115" x2="1012.7205" y2="169.69519" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="1080.01294" y="378.58673" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1080.01294" y="378.58673" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1085.01294 386.80548)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Cojoin"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="20.791016" y="11" textLength="34">Cojoin</tspan></a></text>
+      <line x1="1116.49426" y1="378.12296" x2="1032.49023" y2="169.65723" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="977.7589" y="541.00525" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="977.7589" y="541.00525" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(982.7589 549.224)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Comonad"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="11.785156" y="11" textLength="52">Comonad</tspan></a></text>
+      <line x1="1011.3499" y1="540.57434" x2="939.20807" y2="417.9873" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="1030.40735" y1="540.5821" x2="1107.6915" y2="417.82529" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="963.4452" y="678.61304" width="114.22864" height="30.4375" fill="white"/>
+      <rect x="963.4452" y="678.61304" width="114.22864" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(968.4452 686.8318)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.ComonadStore"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="11.757889" y="11" textLength="81">ComonadStore</tspan></a></text>
+      <line x1="1020.5595" y1="678.11298" x2="1020.5597" y2="581.84277" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="979.66974" y="322.7694" width="85.6015" height="30.4375" fill="white"/>
+      <rect x="979.66974" y="322.7694" width="85.6015" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(984.66974 330.98816)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Distributive"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="8.1259766" y="11" textLength="59">Distributive</tspan></a></text>
+      <line x1="1022.4705" y1="322.2694" x2="1022.4705" y2="170.41093" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="1311.63306" y="736.662" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1311.63306" y="736.662" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1316.63306 744.88074)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Enum"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="22.126953" y="11" textLength="31">Enum</tspan></a></text>
+      <rect x="1311.63306" y="665.21844" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1311.63306" y="665.21844" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1316.63306 673.4372)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Order"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="22.463867" y="11" textLength="31">Order</tspan></a></text>
+      <line x1="1354.4338" y1="736.162" x2="1354.4338" y2="706.05597" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="1311.63306" y="593.7749" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1311.63306" y="593.7749" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1316.63306 601.99365)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Equal"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="22.455078" y="11" textLength="31">Equal</tspan></a></text>
+      <rect x="461.2645" y="475.29926" width="85.601593" height="30.4375" fill="white"/>
+      <rect x="461.2645" y="475.29926" width="85.601593" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(466.2645 483.518)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Monoid"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="18.12207" y="11" textLength="39">Monoid</tspan></a></text>
+      <rect x="700.28058" y="678.61304" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="700.28058" y="678.61304" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(705.28058 686.8318)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Monad"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="19.455078" y="11" textLength="37">Monad</tspan></a></text>
+      <line x1="737.14948" y1="678.1454" x2="675.63147" y2="515.46448" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="748.0127" y1="678.13605" x2="799.06024" y2="515.65857" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="329.72263" y="678.61304" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="329.72263" y="678.61304" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(334.72263 686.8318)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.ApplicativePlus"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="8.118847" y="11" textLength="81">ApplicativePlus</tspan></a></text>
+      <path d="M 437.83533 693.8318 L 595.57898 693.8318 L 657.49945 515.56097" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="325.9917" y="407.22528" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="325.9917" y="407.22528" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(330.9917 415.44403)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.PlusEmpty"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="20.130566" y="11" textLength="57">PlusEmpty</tspan></a></text>
+      <line x1="383.31287" y1="678.1131" x2="380.1502" y2="448.06177" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="325.9917" y="352.7185" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="325.9917" y="352.7185" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(330.9917 360.93726)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Plus"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="37.134472" y="11" textLength="23">Plus</tspan></a></text>
+      <line x1="379.79803" y1="406.72528" x2="379.79803" y2="393.556" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="540.39587" y="816.2207" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="540.39587" y="816.2207" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(545.39587 824.43945)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.MonadPlus"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="7.783203" y="11" textLength="60">MonadPlus</tspan></a></text>
+      <line x1="560.70264" y1="815.93695" x2="414.1745" y2="714.95215" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="601.2581" y1="815.89453" x2="717.51636" y2="715.83478" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="566.4574" y="886.13367" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="566.4574" y="886.13367" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(571.4574 894.3524)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.MonadReader"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="10.781933" y="11" textLength="76">MonadReader</tspan></a></text>
+      <line x1="629.52533" y1="885.70337" x2="728.77753" y2="718.00055" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="812.09265" y="886.13367" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="812.09265" y="886.13367" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(817.09265 894.3524)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.MonadState"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="16.450878" y="11" textLength="65">MonadState</tspan></a></text>
+      <line x1="856.6374" y1="885.70337" x2="757.3852" y2="718.00055" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="461.2645" y="281.8742" width="85.601593" height="30.4375" fill="white"/>
+      <rect x="461.2645" y="281.8742" width="85.601593" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(466.2645 290.09296)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Semigroup"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="8.785156" y="11" textLength="58">Semigroup</tspan></a></text>
+      <line x1="504.06528" y1="474.79926" x2="504.06528" y2="322.7117" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="1354.4338" y1="664.71844" x2="1354.4338" y2="634.61243" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="175.09396" y="579.81458" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="175.09396" y="579.81458" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(180.09396 588.03333)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Split"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="26.128906" y="11" textLength="23">Split</tspan></a></text>
+      <line x1="224.65967" y1="579.35547" x2="252.30551" y2="515.2857" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="1125.2357" y="322.7694" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1125.2357" y="322.7694" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1130.2357 330.98816)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Traverse"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="14.348633" y="11" textLength="47">Traverse</tspan></a></text>
+      <line x1="1156.2688" y1="322.37009" x2="1040.1957" y2="168.31714" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="1202.8418" y="184.29507" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1202.8418" y="184.29507" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1207.8418 192.51382)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Foldable"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="14.785156" y="11" textLength="46">Foldable</tspan></a></text>
+      <line x1="1176.8102" y1="322.33325" x2="1232.0288" y2="223.80496" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="468.33536" y1="317.46246" x2="406.92743" y2="352.47089" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="689.88055" y1="297.09296" x2="547.3661" y2="297.09296" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="316.19342" y1="297.09296" x2="450.86447" y2="297.09296" marker-end="url(#StickArrow_Marker)" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="316.19342" y1="490.518" x2="450.86447" y2="490.518" marker-end="url(#StickArrow_Marker)" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="612.997" y1="490.518" x2="547.3661" y2="490.518" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="288.51227" y1="312.57101" x2="345.81366" y2="347.3252" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="344.6994" y1="442.89944" x2="289.53784" y2="475.04752" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="467.16278" y1="470.30267" x2="408.01797" y2="437.90302" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <rect x="834.1037" y="281.8742" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="834.1037" y="281.8742" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(839.1037 290.09296)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Zip"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="29.46582" y="11" textLength="17">Zip</tspan></a></text>
+      <line x1="823.70367" y1="297.09296" x2="786.38214" y2="297.09296" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <rect x="98.707275" y="129.573456" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="98.707275" y="129.573456" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(103.70727 137.792206)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Profunctor"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="10.121094" y="11" textLength="55">Profunctor</tspan></a></text>
+      <line x1="141.50806" y1="710.9585" x2="141.50806" y2="170.41095" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path d="M 666.19788 516.13678 L 666.19794 725.5147 L 184.80881 726.58136" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <rect x="19.281181" y="579.81458" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="19.281181" y="579.81458" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(24.281181 588.03333)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Contravariant"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="1.7832031" y="11" textLength="72">Contravariant</tspan></a></text>
+      <line x1="76.63665" y1="619.15686" x2="132.06769" y2="711.03046" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="1221.2373" y1="337.98816" x2="1420.6317" y2="337.98816" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="1075.67126" y1="144.79221" x2="1420.6317" y2="144.79221" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="1298.8434" y1="199.51382" x2="1335.34985" y2="199.51382" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <line x1="978.1779" y1="393.80548" x2="1069.6129" y2="393.80548" marker-end="url(#StickArrow_Marker)" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <rect x="1244.7622" y="263.1329" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1244.7622" y="263.1329" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1249.7622 271.35165)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Foldable1"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="11.448242" y="11" textLength="53">Foldable1</tspan></a></text>
+      <line x1="1279.236" y1="262.69144" x2="1258.61755" y2="223.91516" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="403.22174" y="579.81458" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="403.22174" y="579.81458" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(408.22177 588.03333)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.IsEmpty"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="16.129868" y="11" textLength="43">IsEmpty</tspan></a></text>
+      <line x1="440.00381" y1="579.34784" x2="389.36334" y2="447.37253" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="689.27502" y="886.13367" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="689.27502" y="886.13367" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(694.27502 894.3524)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.MonadListen"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="14.449902" y="11" textLength="69">MonadListen</tspan></a></text>
+      <rect x="689.27502" y="816.2207" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="689.27502" y="816.2207" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(694.27502 824.43945)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.MonadTell"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="21.457714" y="11" textLength="56">MonadTell</tspan></a></text>
+      <line x1="743.08136" y1="815.72064" x2="743.08136" y2="719.45056" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="743.08136" y1="885.63367" x2="743.08136" y2="857.05817" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="860.1653" y="816.2207" width="107.61267" height="30.4375" fill="white"/>
+      <rect x="860.1653" y="816.2207" width="107.61267" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(865.1653 824.43945)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Nondeterminism"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="5.1247063" y="11" textLength="87">Nondeterminism</tspan></a></text>
+      <line x1="894.68243" y1="815.90704" x2="770.0813" y2="715.57324" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="969.2697" y1="144.79221" x2="184.8089" y2="144.79221" marker-start="url(#StickArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" stroke-dasharray="1,3"/>
+      <rect x="1202.8418" y="448.12048" width="85.60156" height="30.4375" fill="white"/>
+      <rect x="1202.8418" y="448.12048" width="85.60156" height="30.4375" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(1207.8418 456.33923)" fill="black"><a xl:href="http://docs.typelevel.org/api/scalaz/stable/7.0.3/doc/#scalaz.Traverse1"><tspan font-family="Helvetica" font-size="12" font-weight="500" x="11.011719" y="11" textLength="54">Traverse1</tspan></a></text>
+      <line x1="1235.9573" y1="447.69537" x2="1182.9331" y2="362.0494" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
+</svg>
