@@ -1,4 +1,458 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 09 Oct 2015 04:07:30 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Reactive Message Patterns w/ Actor Model, Chapter 1</title><description>&lt;p&gt;&lt;img src="http://berb.github.io/diploma-thesis/original/resources/actors.svg" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 09 Oct 2015 07:05:45 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Scala Lens Library, Monocle</title><description>&lt;p&gt;&lt;img src="https://camo.githubusercontent.com/cff2e63f7bcccc33b96a73f50c7556a765417a7f/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f6c6f676f2e706e67" alt=""&gt;&lt;/p&gt;
+
+&lt;h3 id="opticslibrary"&gt;Optics Library&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt; 은 &lt;em&gt;Optics&lt;/em&gt; 라이브러리입니다. 그게 무엇인고 하니,&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of &lt;code&gt;Lens&lt;/code&gt;, &lt;code&gt;Traversal&lt;/code&gt;, &lt;code&gt;Optional&lt;/code&gt;, &lt;code&gt;Prism&lt;/code&gt; and &lt;code&gt;Iso&lt;/code&gt;. Monocle is strongly inspired by Haskell Lens.&lt;/p&gt;
+  
+  &lt;p&gt;Optics are a set of purely functional abstractions to manipulate (get,&lt;/p&gt;&lt;/blockquote&gt;</description><link>http://1ambda.github.io/scala-monocle-tutorial/</link><guid isPermaLink="false">128249ea-6ec5-4006-bd23-63fda44d3379</guid><category>scala</category><category>monocle</category><dc:creator>1ambda</dc:creator><pubDate>Fri, 09 Oct 2015 07:03:11 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="https://camo.githubusercontent.com/cff2e63f7bcccc33b96a73f50c7556a765417a7f/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f6c6f676f2e706e67" alt=""&gt;&lt;/p&gt;
+
+&lt;h3 id="opticslibrary"&gt;Optics Library&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt; 은 &lt;em&gt;Optics&lt;/em&gt; 라이브러리입니다. 그게 무엇인고 하니,&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of &lt;code&gt;Lens&lt;/code&gt;, &lt;code&gt;Traversal&lt;/code&gt;, &lt;code&gt;Optional&lt;/code&gt;, &lt;code&gt;Prism&lt;/code&gt; and &lt;code&gt;Iso&lt;/code&gt;. Monocle is strongly inspired by Haskell Lens.&lt;/p&gt;
+  
+  &lt;p&gt;Optics are a set of purely functional abstractions to manipulate (get, set, modify) immutable objects. Optics compose between each other and particularly shine with nested objects.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;길고 복잡한데, 한 문장으로 요약하면 &lt;em&gt;composable immutable getter, setter&lt;/em&gt; 입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="theproblem"&gt;The Problem&lt;/h3&gt;
+
+&lt;p&gt;일반적으로 스칼라에서 &lt;em&gt;case class&lt;/em&gt; 를 복사할 때는 &lt;code&gt;copy&lt;/code&gt; 메소드를 사용합니다. 그런데, &lt;em&gt;case class&lt;/em&gt; 가 깊게 중첩되면 문제가 발생하기 시작합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;// https://github.com/julien-truffaut/Monocle
+
+case class Street(name: String, ...)     // ... means it contains other fields  
+case class Address(street: Street, ...)  
+case class Company(address: Address, ...)  
+case class Employee(company: Company, ...)
+
+val employee: Employee = ...
+
+employee.copy(  
+  company = employee.company.copy(
+    address = employee.company.address.copy(
+      street = employee.company.address.street.copy(
+        name = employee.company.address.street.name.capitalize // luckily capitalize exists
+      }
+    )
+  )
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이런상황에서 &lt;em&gt;Monocle&lt;/em&gt; 을 활용할 수 있습니다. &lt;/p&gt;
+
+&lt;h3 id="monocletypeclasshierarchy"&gt;Monocle Typeclass Hierarchy&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src="https://camo.githubusercontent.com/0e7ccc1c6f603384b4051eda1b9e1169ee305c31/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f636c6173732d6469616772616d2e706e67" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Monocle&lt;/em&gt; 은 다음과 같은 타입클래스를 제공하는데요, 위쪽은 나중에 살펴보고 기본적인 타입클래스인 &lt;code&gt;Iso&lt;/code&gt;, &lt;code&gt;Lens&lt;/code&gt;, &lt;code&gt;Optional&lt;/code&gt;, &lt;code&gt;Prism&lt;/code&gt; 부터 살펴보겠습니다. &lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="iso"&gt;Iso&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Iso&lt;/code&gt; 는 &lt;em&gt;isomorphism&lt;/em&gt; 을 나타냅니다. 저는 수학자도 아니요, 수학을 전공한것도 아니기 때문에 인용하고 간단히 넘어가겠습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;An &lt;em&gt;isomorphism&lt;/em&gt; &lt;code&gt;u:: a -&amp;gt; b&lt;/code&gt; is function that has an inverse. i.e, another function &lt;code&gt;v:: b -&amp;gt; a&lt;/code&gt; such that the relationships &lt;code&gt;u . v = id&lt;/code&gt;, &lt;code&gt;v . u = id&lt;/code&gt; &lt;a href="http://stackoverflow.com/questions/11245183/importance-of-isomorphic-functions"&gt;(Isomorphism)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;즉 하나의 함수에 대해 그 역함수가 존재한다는 것인데 스칼라로 표기하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;case class Iso[S, A](get: S =&amp;gt; A)(reverseGet: A =&amp;gt; S)
+
+// For all s: S, reverseGet(get(s)) == s
+// For all a: A, get(reverseGet(a)) == a
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;아까 서두에서 &lt;strong&gt;composable&lt;/strong&gt; &lt;em&gt;immutable setter, getter&lt;/em&gt; 라고 언급했던 것 기억 나시나요? &lt;code&gt;Iso&lt;/code&gt; 에서 제공되는 몇몇 함수를 이용해 여러 &lt;code&gt;Iso&lt;/code&gt; 를 조합할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;case class Iso[S, A](get: S =&amp;gt; A)(reverseGet: A =&amp;gt; S) {  
+  def modify(m: A =&amp;gt; A): S =&amp;gt; S
+  def reverse: Iso[A, S]
+  def composeIso[B](other: Iso[A, B]): Iso[S, B]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그런고로 &lt;code&gt;Iso[S, A] composeIso Iso[A, B]&lt;/code&gt; 는 &lt;code&gt;Iso[S, B]&lt;/code&gt; 입니다.&lt;/p&gt;
+
+&lt;h4 id="isoexample"&gt;Iso Example&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;Iso&lt;/code&gt; 를 생성하는 법은 여러가지가(&lt;strong&gt;macro&lt;/strong&gt;, &lt;strong&gt;annotation&lt;/strong&gt;) 있지만, &lt;em&gt;case class&lt;/em&gt; 생성자를 이용하는것부터 시작해보지요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;sealed trait Volume  
+case class Bytes(size: Long) extends Volume  
+case class KiloBytes(size: Long) extends Volume  
+case class Megabytes(size: Long) extends Volume  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;간단한 모델을 만들었습니다. 바이트와 킬로바이트, 메가바이트는 서로서로 변환 가능한 타입이므로 (&lt;em&gt;isomorphic&lt;/em&gt;) &lt;code&gt;Iso&lt;/code&gt; 만들어 보면,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;def byteToKilo =  
+    Iso[Bytes, KiloBytes](b =&amp;gt; KiloBytes(b.size / 1024))(k =&amp;gt; Bytes(k.size * 1024))
+
+def kiloToMega =  
+    Iso[KiloBytes, Megabytes](k =&amp;gt; Megabytes(k.size / 1024))(m =&amp;gt; KiloBytes(m.size * 1024))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;버려지는 값을 허용할 수 있다 가정하면 &lt;code&gt;kiloToByte&lt;/code&gt;, &lt;code&gt;megaToByte&lt;/code&gt; 는 쉽게 만들 수 있습니다. 뒤집으면 되니까요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;def kiloToByte: Iso[KiloBytes, Bytes] = byteToKilo.reverse  
+def megaToByte: Iso[Megabytes, Bytes] = kiloToMega.reverse composeIso kiloToByte  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Lens&lt;/code&gt; 와 섞으면 이렇게도 쓸 수 있습니다. (&lt;code&gt;Lens&lt;/code&gt; 부분을 읽은 후에 다시 보시면 이해가 더 쉽습니다.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;// ref - https://github.com/julien-truffaut/Monocle/blob/master/example/src/test/scala/monocle/IsoExample.scala
+case class Point(_x: Int, _y: Int)  
+val pointToPair = Iso{l: Point =&amp;gt; (l._x, l._y) }((Point.apply _).tupled)
+
+test("Iso get transforms a S into an A") {  
+  (Point(3, 5) applyIso pointToPair get) shouldEqual ((3, 5))
+}
+
+test("Iso reverse reverses the transformation") {  
+  ((3, 5) applyIso pointToPair.reverse get) shouldEqual Point(3, 5)
+}
+
+test("Iso composition can limit the need of ad-hoc Lens") {  
+  // here we use tuple Lens on Pair via pointToPair Iso
+  (Point(3, 5) applyIso pointToPair composeLens first get)   shouldEqual 3
+  (Point(3, 5) applyIso pointToPair composeLens first set 4) shouldEqual Point(4, 5)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="productsumcoproduct"&gt;Product, Sum(Coproduct)&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Lens&lt;/code&gt; 와 &lt;code&gt;Prism&lt;/code&gt; 을 설명하기 전에 &lt;code&gt;Product&lt;/code&gt; 와 &lt;code&gt;Sum (=Coproduct)&lt;/code&gt; 에 대해서 먼저 간단히 설명을 하면,&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Product&lt;/code&gt; 는 &lt;strong&gt;복합&lt;/strong&gt; 데이터 타입입니다. &lt;em&gt;Tuple&lt;/em&gt; 이 &lt;code&gt;Product&lt;/code&gt; 의 한 예 인데, &lt;code&gt;P: (A, B)&lt;/code&gt; 에 대해서 &lt;code&gt;P&lt;/code&gt; 의 경우의 수는 &lt;code&gt;A x B&lt;/code&gt; 만큼 됩니다. &lt;code&gt;case class&lt;/code&gt;, &lt;code&gt;Map&lt;/code&gt;, &lt;code&gt;HList&lt;/code&gt; (in &lt;em&gt;Shapeless&lt;/em&gt;) 모두 &lt;code&gt;Product&lt;/code&gt; 입니다.&lt;/li&gt;
+&lt;li&gt;반면 &lt;code&gt;Sum&lt;/code&gt; 은 &lt;strong&gt;선택&lt;/strong&gt; 가능한 타입입니다. &lt;code&gt;sealed trait&lt;/code&gt;, &lt;code&gt;Enum&lt;/code&gt; 등이 모두 그 예입니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이걸 설명하는 이유는 &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Lens&lt;/code&gt; 가 &lt;code&gt;Product&lt;/code&gt; 에 대한 &lt;em&gt;composable setter, getter&lt;/em&gt; 이고&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Prism&lt;/code&gt; 이 &lt;code&gt;Coproduct&lt;/code&gt; 에 대한 &lt;em&gt;composable setter, getter&lt;/em&gt; 이기 때문이지요.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="lens"&gt;Lens&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="http://julien-truffaut.github.io/Monocle//tut/lens.html"&gt;Monocle - Lens&lt;/a&gt; &lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A &lt;code&gt;Lens&lt;/code&gt; is an Optic used to zoom inside a &lt;code&gt;Product&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;스칼라 타입으로 나타내면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;case class Lens[S, A](get: S =&amp;gt; A)(set: A =&amp;gt; S =&amp;gt; S)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;요약하면 &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;get&lt;/code&gt; 은 복합타입 &lt;code&gt;S&lt;/code&gt; 에 대해 &lt;code&gt;A&lt;/code&gt; 를 돌려주고&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;set&lt;/code&gt; 은 &lt;code&gt;A&lt;/code&gt; 를 받아 복합타입 &lt;code&gt;S&lt;/code&gt; 에 그 값을 세팅하고 돌려줍니다. &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;간단히 모델을 만들어 보지요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;case class Address(streetNumber: Int, streetName: String)  
+case class Person(name: String, age: Int, address: Address)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;code&gt;Lens&lt;/code&gt; 를 만들어 보면 아래와 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;val _streetNumLens = Lens[Address, Int](_.streetNumber)(num =&amp;gt; a =&amp;gt; a.copy(streetNumber = num))  
+val _streetNameLens = Lens[Address, String](_.streetName)(name =&amp;gt; a =&amp;gt; a.copy(streetName = name))  
+val _addressLens = Lens[Person, Address](_.address)(a =&amp;gt; p =&amp;gt; p.copy(address = a))  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;아까 위에서 언급했던 &lt;em&gt;nested case class&lt;/em&gt; 문제를 풀기 위해 &lt;code&gt;Lens&lt;/code&gt; 를 다음처럼 조합할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;val _personStreetNum  = (_addressLens composeLens _streetNumLens)  
+val _personStreetName = (_addressLens composeLens _streetNameLens)
+
+val a1 = Address(10, "High Street")  
+val p1 = Person("John", 20, a1)
+
+val p2 = _personStreetName.modify(_ + " 2")(p1)
+
+p2 shouldBe p1.copy(address = p1.address.copy(streetName = p1.address.streetName + " 2"))  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;매크로를 이용하면 더욱 쉽게 생성할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;import monocle.macros.GenLens
+
+val _ageLens1 = GenLens[Person](_.age)  
+val _ageLens2 = Lens[Person, Int](_.age)(a =&amp;gt; p =&amp;gt; p.copy(age = a))
+
+val p2 = _ageLens1.modify(_ + 1)(p1)  
+val p3 = _ageLens2.modify(_ + 1)(p1)
+
+p2 shouldBe p3  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;어노테이션도 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;// ref - http://julien-truffaut.github.io/Monocle//tut/lens.html
+
+@Lenses case class Point(x: Int, y: Int)
+
+val p = Point(5, 3)  
+Point.x.get(p) shouldBe 5  
+Point.y.set(0)(p) shouldBe Point(5, 0)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이따 보실테지만 &lt;code&gt;Iso&lt;/code&gt; 와 &lt;code&gt;Lens&lt;/code&gt; 의 &lt;code&gt;get&lt;/code&gt; 은 같고 &lt;code&gt;set&lt;/code&gt; 은 비슷하므로 다음처럼 조합할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;def isoToLens[S, A](iso: Iso[S, A]): Lens[S, A] =  
+  Lens(iso.get)(a =&amp;gt; _ =&amp;gt; iso.reverseGet(a)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="prism"&gt;Prism&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="http://julien-truffaut.github.io/Monocle//tut/prism.html"&gt;Monocle - Prism&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A &lt;code&gt;Prism&lt;/code&gt; is an Optic used to select part of a &lt;code&gt;Sum&lt;/code&gt; type (also know as &lt;code&gt;Coproduct&lt;/code&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code&gt;Prism&lt;/code&gt; 을 스칼라로 표현하면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;case class Prism[S, A](getOption: S =&amp;gt; Option[A])(reverseGet: A =&amp;gt; S)
+
+// For all s: S, getOption(s) map reverseGet == Some(s) || None
+// For all a: A, getOption(revereGet(a)) == Some(a)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;즉 &lt;code&gt;Iso&lt;/code&gt; 와는 달리 &lt;em&gt;getter&lt;/em&gt; 가 &lt;code&gt;Option&lt;/code&gt; 을 돌려줄 수 있는데요, 이것은 이전에 언급했듯이 &lt;code&gt;Prism&lt;/code&gt; 이 &lt;strong&gt;선택 가능한 타입&lt;/strong&gt; 을 나타내는 &lt;code&gt;Sum&lt;/code&gt; 에 대한 &lt;em&gt;getter, setter&lt;/em&gt; 이기 때문입니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;// ref - http://julien-truffaut.github.io/Monocle//tut/prism.html
+
+sealed trait Day  
+case object Monday    extends Day  
+case object Tuesday   extends Day  
+case object Wednesday extends Day  
+case object Thursday  extends Day  
+case object Friday    extends Day  
+case object Saturday  extends Day  
+case object Sunday    extends Day
+
+"Prism Basics" in {   
+  /* Since `Tuesday is a singleton, it is isomorphic to `Unit` */
+  val _tuesday = Prism[Day, Unit] {
+    case Tuesday =&amp;gt; Some(())
+    case _       =&amp;gt; None
+  }(_ =&amp;gt; Tuesday)
+
+  _tuesday.reverseGet(()) shouldBe Tuesday
+  _tuesday.getOption(Monday) shouldBe None
+  _tuesday.getOption(Tuesday) shouldBe Some(())
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;원래는 매크로를 이용하면 더 쉽게 생성할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;val tuesday = GenPrism[Day, Tuesday.type] composeIso GenIso.unit[Tuesday.type]
+
+tuesday.reverseGet(()) shouldBe Tuesday  
+tuesday.getOption(Monday) shouldBe None  
+tuesday.getOption(Tuesday) shouldBe Some(())  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt; 에 포함되어 있는 &lt;code&gt;Lens&lt;/code&gt;, &lt;code&gt;Prism&lt;/code&gt; 과 이렇게 섞어 쓸 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;// ref - http://julien-truffaut.github.io/Monocle//tut/prism.html
+sealed trait LinkedList[A]  
+case class Nil[A]() extends LinkedList[A]  
+case class Cons[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
+
+def _nil[A] = Prism[LinkedList[A], Unit]{  
+  case Nil()      =&amp;gt; Some(())
+  case Cons(_, _) =&amp;gt; None
+}(_ =&amp;gt; Nil())
+
+def _cons[A] = Prism[LinkedList[A], (A, LinkedList[A])]{  
+  case Nil()      =&amp;gt; None
+  case Cons(h, t) =&amp;gt; Some((h, t)) 
+}{ case (h, t) =&amp;gt; Cons(h, t)}
+
+import monocle.function.Fields._ /* first, second */  
+import monocle.std.tuple2._      /* tuple2 instance */
+
+(_cons[Int] composeLens first).set(5)(l1) shouldBe
+  Cons(5,Cons(2,Cons(3,Nil())))
+
+(_cons[Int] composeLens first).set(5)(l2) shouldBe
+  Nil()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="optional"&gt;Optional&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;Iso     [S, A] (S =&amp;gt; A)          (A =&amp;gt; S)  
+Prism   [S, A] (S =&amp;gt; Option[A])  (A =&amp;gt; S)  
+Lens    [S, A] (S =&amp;gt; A)          ((A, S) =&amp;gt; S)  
+Optional[S, A] (S = Optional[A]) ((A, S) =&amp;gt; S)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Optional&lt;/code&gt; 은 스칼라로 나타내면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;case class Optional[S, A](getOption: S =&amp;gt; Option[A])(set: (A, S) =&amp;gt; S)
+
+// getOption(s) map set(_, s) == Some(s)
+// getOption(set(a, s)) == Some(a) | None  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;슬슬 감이 오시죠?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;def cons[A]: Prism[List[A], (A, List[A])]  
+def first[A, B]: Lens[(A, B), A]  
+def head[A]: Optional[List[A], A] = cons compose first  
+def void[S, A]: Optional[S, A] = (s =&amp;gt; None)((a, s) =&amp;gt; s)  
+def index[A](i: Int): Optional[List[A], A] =  
+  if (i &amp;lt; 0) void
+  else if (i == 0) head
+  else cons compose second compose index(i - 1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이렇게 정의하면, 아래처럼 쓸 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;Optional.void.getOption("Hello") shouldBe None  
+Optional.void.set(1)("Hello") shouldBe "Hello"  
+Optional.void.setOption(1)("Hello") shouldBe None
+
+val l = List(1, 2, 3)  
+(l applyOptional index(-1) getOption) shouldBe None
+(l applyOptional index(1) getOption) shouldBe Some(2)
+(l applyOptional index(5) getOption) shouldBe None
+
+(l applyOptional index(1) set(10)) shouldBe List(10, 2, 3)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="httprequestexample"&gt;HttpRequest Example&lt;/h3&gt;
+
+&lt;p&gt;이제 조금 더 긴 예제를 살펴볼까요?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-scala"&gt;/* ref - http://www.slideshare.net/JulienTruffaut/beyond-scala-lens */
+/* https://github.com/1ambda/Monocle/commit/234097ce1f8601eab8ab47e6610d56aea59acce4 */
+class HttpRequestSpec extends WordSpec with Matchers {  
+  import HttpRequestSpec._
+
+  val r1 = HttpRequest(
+    GET,
+    URI("localhost", 8080, "/ping", Map("hop" -&amp;gt; "5")),
+    Map("socket_timeout" -&amp;gt; "20", "connection_timeout" -&amp;gt; "10"),
+    "")
+
+  val r2 = HttpRequest(
+    POST,
+    URI("gooogle.com", 443, "/search", Map("keyword" -&amp;gt; "monocle")),
+    Map.empty,
+    "")
+
+  val method = GenLens[HttpRequest](_.method)
+  val uri = GenLens[HttpRequest](_.uri)
+  val headers = GenLens[HttpRequest](_.headers)
+  val body = GenLens[HttpRequest](_.body)
+
+  val host = GenLens[URI](_.host)
+  val query = GenLens[URI](_.query)
+
+  val get: Prism[HttpMethod, Unit] = GenPrism[HttpMethod, GET.type] composeIso GenIso.unit[GET.type]
+  val post = GenPrism[HttpMethod, POST.type] composeIso GenIso.unit[POST.type]
+
+  "get and post" in {
+    (method composePrism get).isMatching(r1) shouldBe true
+    (method composePrism post).isMatching(r1) shouldBe false
+    (method composePrism post).getOption(r2) shouldBe Some(())
+  }
+
+  "host" in {
+    (uri composeLens host).set("google.com")(r2) shouldBe
+      r2.copy(uri = r2.uri.copy(host = "google.com"))
+  }
+
+  "query using index" in {
+    val r = (uri
+      composeLens query
+      composeOptional index("hop")
+      composePrism stringToInt).modify(_ + 10)(r1)
+
+    r.uri.query.get("hop") shouldBe Some("15")
+  }
+
+  "query using at" in {
+
+    /**
+     *  `at` returns Lens[S, Option[A]] while `index` returns Optional[S, A]
+     *  So that we need the `some: Prism[Option[A], A]` for further investigation
+     */
+    val r = (uri
+      composeLens query
+      composeLens at("hop")
+      composePrism some
+      composePrism stringToInt).modify(_ + 10)(r1)
+
+    r.uri.query.get("hop") shouldBe Some("15")
+  }
+
+  "headers" in {
+    val r = (headers composeLens at("Content-Type")).set(Some("text/plain; utf-8"))(r2)
+    r.headers.get("Content-Type") shouldBe Some("text/plain; utf-8")
+  }
+
+  "headers with filterIndex" in {
+    val r = (headers
+      composeTraversal filterIndex { h: String =&amp;gt; h.contains("timeout") }
+      composePrism stringToInt).modify(_ * 2)(r1)
+
+    println(r)
+    r.headers.get("socket_timeout") shouldBe Some("40")
+    r.headers.get("connection_timeout") shouldBe Some("20")
+  }
+}
+
+object HttpRequestSpec {  
+  sealed trait HttpMethod
+  case object GET   extends HttpMethod
+  case object POST  extends HttpMethod
+
+  case class URI(host: String, port: Int, path: String, query: Map[String, String])
+  case class HttpRequest(method: HttpMethod, uri: URI, headers: Map[String, String], body: String)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="references"&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://julien-truffaut.github.io/Monocle/"&gt;Monocle&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/julien-truffaut/Monocle"&gt;Github: Monocle&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.slideshare.net/JulienTruffaut/beyond-scala-lens"&gt;Slideshare: Beyond Scala Lens&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/11245183/importance-of-isomorphic-functions"&gt;Stackoverflow - Isomorphism&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.wikiwand.com/en/Product_type"&gt;Wikipedia - Product&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.wikiwand.com/en/Tagged_union"&gt;Wikipedia - Sum&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title>Reactive Message Patterns w/ Actor Model, Chapter 1</title><description>&lt;p&gt;&lt;img src="http://berb.github.io/diploma-thesis/original/resources/actors.svg" alt=""&gt;&lt;/p&gt;
 
 &lt;h2 id="whyenterprisesoftwaredevelopmentishard"&gt;Why Enterprise Software Development Is Hard&lt;/h2&gt;
 
@@ -3242,346 +3696,4 @@ Collections.sort(listOfCountries,new Comparator&amp;lt;Country&amp;gt;() {
 &lt;h3 id="refs"&gt;Refs&lt;/h3&gt;
 
 &lt;p&gt;(1) &lt;a href="https://www.behance.net/gallery/625042/Icon-and-pattern-with-a-marketing-theme"&gt;Title image&lt;/a&gt; &lt;br&gt;
-(2) &lt;strong&gt;Pattern Discovery&lt;/strong&gt; by &lt;em&gt;Jiawei Han&lt;/em&gt; &lt;/p&gt;</content:encoded></item><item><title>Artificial Intelligence 2, Search</title><description>&lt;p&gt;&lt;img src="http://picm.yourswallpaper.com/other/box-robot_18407.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="agents"&gt;Agents&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;agent&lt;/em&gt; 가 &lt;em&gt;good decision&lt;/em&gt; 을 내릴려면 &lt;em&gt;planning&lt;/em&gt; 을 해야합니다. 그러기 위해선 어떤 &lt;em&gt;action&lt;/em&gt; 이 좋을지 &lt;em&gt;search (탐색)&lt;/em&gt; 해 보아야 하고 결국 풀어야 할 문제는 &lt;em&gt;search problem&lt;/em&gt; 이 됩니다.&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;strong&gt;reflex agent&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Choose action based on current percept (and maybe memory)&lt;/li&gt;
-&lt;li&gt;May have memory or a model of the world's&lt;/li&gt;&lt;/ul&gt;</description><link>http://1ambda.github.io/artificial-intelligence-2/</link><guid isPermaLink="false">82a14f90-2790-4df3-bef8-a080f0141d64</guid><category>edx</category><category>artificial intelligence</category><category>CS188</category><category>search</category><dc:creator>1ambda</dc:creator><pubDate>Thu, 19 Feb 2015 06:59:46 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="http://picm.yourswallpaper.com/other/box-robot_18407.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="agents"&gt;Agents&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;agent&lt;/em&gt; 가 &lt;em&gt;good decision&lt;/em&gt; 을 내릴려면 &lt;em&gt;planning&lt;/em&gt; 을 해야합니다. 그러기 위해선 어떤 &lt;em&gt;action&lt;/em&gt; 이 좋을지 &lt;em&gt;search (탐색)&lt;/em&gt; 해 보아야 하고 결국 풀어야 할 문제는 &lt;em&gt;search problem&lt;/em&gt; 이 됩니다.&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;strong&gt;reflex agent&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Choose action based on current percept (and maybe memory)&lt;/li&gt;
-&lt;li&gt;May have memory or a model of the world's current state&lt;/li&gt;
-&lt;li&gt;Do not consider the future consequences of their action&lt;/li&gt;
-&lt;li&gt;Consider how the world &lt;strong&gt;IS&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;자신이 인지하는 &lt;em&gt;environment&lt;/em&gt; 에 기반하여 어떤 &lt;em&gt;action&lt;/em&gt; 을 취할지 결정하나, &lt;em&gt;action&lt;/em&gt; 의 결과를 고려하지 않고 결정을 내리기에 문제가 생길 수 있습니다. &lt;em&gt;reflext agent&lt;/em&gt; 가 &lt;em&gt;rational&lt;/em&gt; 할 수 있을까요?&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Of course. Rationality is a function of the actions you take, not the computation. So if you had a big enough, good enough lookup table, and you're taking the right actions. &lt;strong&gt;Rationality doesn't care what process led to them.&lt;/strong&gt; Reflex is a comment on the thought process&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;(2) &lt;strong&gt;planning agents&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;planning agent&lt;/em&gt; 는 &lt;em&gt;reflex agent&lt;/em&gt; 와는 다르게 &lt;strong&gt;what if&lt;/strong&gt; 를 질문합니다. 따라서&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Decisions based on (hypothesized) consequences of actions&lt;/li&gt;
-&lt;li&gt;Must have a model of how the world evolves in response to actinos&lt;/li&gt;
-&lt;li&gt;Must formulate a goal(test)&lt;/li&gt;
-&lt;li&gt;Consider how the world &lt;strong&gt;WOULD BE&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;planning agent&lt;/em&gt; 는 &lt;em&gt;action&lt;/em&gt; 을 선택할때 &lt;em&gt;real world&lt;/em&gt; 에서 실제로 실행해보진 않습니다. 대신 &lt;em&gt;model&lt;/em&gt; 을 이용해 &lt;em&gt;simulation&lt;/em&gt; 을 해봅니다. 따라서 &lt;em&gt;planning agent&lt;/em&gt; 에서는 &lt;em&gt;real world&lt;/em&gt; 를 반드시 모델링 해야 합니다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;In order to have a planning agent, you must have &lt;strong&gt;a model of the world&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;그렇기 때문에 모델상에서 &lt;em&gt;goal&lt;/em&gt; 인지 테스트 할 수 있는 방법도 필요합니다. &lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;planning&lt;/em&gt; 과 관련해서 &lt;em&gt;complete planning&lt;/em&gt; 과 &lt;em&gt;optimal planning&lt;/em&gt; 이 있습니다. &lt;em&gt;complete planning&lt;/em&gt; 은 &lt;em&gt;solution&lt;/em&gt; 을 찾아내고, &lt;em&gt;optimal planning&lt;/em&gt; 은 &lt;em&gt;best solution&lt;/em&gt; 을 찾아냅니다.&lt;/p&gt;
-
-&lt;p&gt;또한 &lt;em&gt;planning agent&lt;/em&gt; 는 한번에 &lt;em&gt;plan&lt;/em&gt; 을 세워 실행할 수도 있지만, 매 실행 후 다시 &lt;em&gt;re-planning&lt;/em&gt; 할 수도 있습니다. &lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="searchproblem"&gt;Search Problem&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;search problem&lt;/em&gt; 은 다음처럼 구성됩니다.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;A state space:&lt;/strong&gt; models how the world is&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;A successor function (with actions, costs):&lt;/strong&gt; models how it evolves in response to your actions&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;A start state&lt;/strong&gt; and &lt;strong&gt;a goal test&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;그리고 &lt;em&gt;solution&lt;/em&gt; 은 &lt;em&gt;start state&lt;/em&gt; 를 &lt;em&gt;goal state&lt;/em&gt; 로 변환하는 &lt;em&gt;a sequence of actions (a plan)&lt;/em&gt; 입니다.&lt;/p&gt;
-
-&lt;p&gt;다시 정리하자면, &lt;em&gt;state&lt;/em&gt; 는 &lt;em&gt;world&lt;/em&gt; 를 어떻게 모델링 하는지를 나타내고, &lt;em&gt;successor function&lt;/em&gt; 은 &lt;em&gt;action&lt;/em&gt; 에 &lt;em&gt;world&lt;/em&gt; 가 어떻게 반응할지를 나타냅니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/artificial-intelligence/search/searchprbs_are_models.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Search problems are just models&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;실제로 현실세계를 그대로 시뮬레이션하기엔 복잡하기때문에, 이를 계산하기 위해 &lt;em&gt;rough&lt;/em&gt; 한 모델이 필요합니다. 이 &lt;em&gt;model&lt;/em&gt; 적절하다면 &lt;em&gt;search problem&lt;/em&gt; 의 결과도 정확합니다.&lt;/p&gt;
-
-&lt;p&gt;모델을 너무 추상화 해서 만들면 (&lt;em&gt;abstract too much&lt;/em&gt;) 문제를 풀 수 없고, 그 반대라면 현실세계의 복잡함을 모두 다뤄야 하기 때문에 계산이 어려울 수 있습니다. 따라서 적절한 정도의 &lt;em&gt;abstraction&lt;/em&gt; 이 필요합니다.&lt;/p&gt;
-
-&lt;p&gt;예를 들어 모든 &lt;em&gt;dot&lt;/em&gt; 을 먹는 팩맨 에이전트를 만든다고 할때, &lt;em&gt;state&lt;/em&gt; 에 문제를 풀기에 필요 이상의 정보를 넣으면 &lt;em&gt;search space&lt;/em&gt; 가 너무 커져 계산이 어렵고, 너무 추상화해서 문제를 풀기에 필요한 정보가 부족하면 &lt;em&gt;solution&lt;/em&gt; 을 찾는다 해도 올바른 &lt;em&gt;solution&lt;/em&gt; 이 아닐 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="searchstategraph"&gt;Search State Graph&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;state space graph&lt;/em&gt; 는 &lt;em&gt;search problem&lt;/em&gt; 의 &lt;em&gt;mathematical representation&lt;/em&gt; 입니다.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Nodes are (abstracted) world configurations&lt;/li&gt;
-&lt;li&gt;Arcs represent successors (action results)&lt;/li&gt;
-&lt;li&gt;The goal test is a set of goal nodes (maybe only one)&lt;/li&gt;
-&lt;li&gt;In a search graph, each state occurs only once&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id="searchstatetree"&gt;Search State Tree&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;search tree&lt;/em&gt; 는 &lt;em&gt;plan&lt;/em&gt; 이 어떠할지를 나타내는 일종의 &lt;em&gt;what if tree&lt;/em&gt; 입니다. &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The start state is the root node&lt;/li&gt;
-&lt;li&gt;Children correspond to successors&lt;/li&gt;
-&lt;li&gt;Nodes show states, but correspond to &lt;strong&gt;PLANS&lt;/strong&gt; that achieve those states&lt;/li&gt;
-&lt;li&gt;For most problems, we can never actually build the whole tree&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;general tree search&lt;/em&gt; 알고리즘은&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;function TREE-SEARCH(problem, strategy) returns a solution, or failure
-
-  initialize the search tree using the initial state of problem
-
-  loop do
-    if there are no candidates for expansion 
-      then return failure
-
-    choose a leaf node for expansion according to strategy
-
-    if the node contains a goal state
-      then return the corresponding solution
-      else expand the node and 
-           add the resulting nodes to the search tree
-
-  end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;여기서 중요한 요소는 &lt;em&gt;fringe (현재 고려중인 nodes)&lt;/em&gt;, &lt;em&gt;expansion&lt;/em&gt;, &lt;em&gt;exploration strategy&lt;/em&gt; 다. 특히 어떤 &lt;em&gt;fringe nodes&lt;/em&gt; 를 선택할 것인가가 중요한 질문이 됩니다.&lt;/p&gt;
-
-&lt;p&gt;널리 알려진 방법으로 &lt;em&gt;Depth-First Serach&lt;/em&gt;, &lt;em&gt;Breadth-First Search&lt;/em&gt; 등이 있습니다. 이들 &lt;em&gt;search algorithm&lt;/em&gt; 의 성능을 평가하기 위해 다음 요소를 고려할 수 있습니다. &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;complete:&lt;/strong&gt; guaranteed to find a solution if one exists&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;optimal:&lt;/strong&gt; guaranteed to find the least cost path&lt;/li&gt;
-&lt;li&gt;time complexity&lt;/li&gt;
-&lt;li&gt;space complexity&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;그리고 &lt;em&gt;DFS&lt;/em&gt; 은 &lt;em&gt;branching factor&lt;/em&gt; &lt;code&gt;b&lt;/code&gt;, &lt;em&gt;depth&lt;/em&gt; &lt;code&gt;m&lt;/code&gt; 이라 했을때 &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;At any given time during the search, the number of nodes on the fringe can be no larger than &lt;code&gt;b*m&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;The number of nodes expanded throughout the entire search can be as large as &lt;code&gt;b^m&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;BFS&lt;/em&gt; 알고리즘에서 &lt;em&gt;branching factor&lt;/em&gt; &lt;code&gt;b&lt;/code&gt;, &lt;em&gt;depth&lt;/em&gt; &lt;code&gt;s&lt;/code&gt; 라 했을때 &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;At any given time during the search, the number of nodes on the fringe can be large as &lt;code&gt;b^s&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;The number of nodes expanded throughout the entire search can be as large as &lt;code&gt;b^s&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;두 방법을 섞은 &lt;em&gt;iterative deepening&lt;/em&gt; 이란 알고리즘도 있습니다. &lt;em&gt;limit 1&lt;/em&gt; 까지는 &lt;em&gt;DFS&lt;/em&gt; 를 돌려보고, 실패하면 &lt;em&gt;limit2&lt;/em&gt; 까지 &lt;em&gt;DFS&lt;/em&gt; 를 돌려보는 방식입니다. &lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Uniform Cost Search (UCS)&lt;/em&gt; 란 것도 있는데 &lt;em&gt;priority queue&lt;/em&gt; 를 이용해서 더 낮은 &lt;em&gt;cost&lt;/em&gt; 부터 탐색하는 방식입니다. &lt;em&gt;UCS&lt;/em&gt; 는 &lt;em&gt;complete&lt;/em&gt;, &lt;em&gt;optimal search&lt;/em&gt; 입니다. 단점으로는 &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Explores options in every direction&lt;/li&gt;
-&lt;li&gt;No information about goal location&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;p&gt;지금까지 배운 &lt;em&gt;search algorithm&lt;/em&gt; 은 모두 &lt;em&gt;uninformed search&lt;/em&gt; 입니다. 간단히 정리하면&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;search operates &lt;strong&gt;over models of the world&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;the agent doesn't actually try all the plans out in the real world&lt;/li&gt;
-&lt;li&gt;planning in all &lt;strong&gt;"in simulation"&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;your search is only as good as your models&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;위에서 본 &lt;em&gt;search algorithm&lt;/em&gt; 은 &lt;em&gt;fringe strategies&lt;/em&gt; 만 다르고 모두 동일합니다. 개념상으로는 모든 &lt;em&gt;fringes&lt;/em&gt; 는 &lt;em&gt;priority queue&lt;/em&gt;  입니다. &lt;em&gt;DFS&lt;/em&gt; 와 &lt;em&gt;BFS&lt;/em&gt; 의 경우에는 각각 &lt;em&gt;stack&lt;/em&gt;, &lt;em&gt;queue&lt;/em&gt; 를 이용해서 &lt;em&gt;priority queue&lt;/em&gt; 의 &lt;em&gt;log(n)&lt;/em&gt; 오버헤드를 피할 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="informedsearch"&gt;Informed Search&lt;/h3&gt;
-
-&lt;p&gt;이번시간에는 &lt;em&gt;state&lt;/em&gt; 의 정보를 이용하는 &lt;em&gt;informed search&lt;/em&gt; 와 &lt;em&gt;graph search&lt;/em&gt; 를 배웁니다. &lt;em&gt;informed search&lt;/em&gt; 의 기본적인 아이디어는 &lt;em&gt;direction&lt;/em&gt; 을 결정할때, &lt;em&gt;goal&lt;/em&gt; 에 가까운 방향인지를 알 수 있는 정보를 이용하는 것입니다.&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;strong&gt;informed search&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;heuristics&lt;/li&gt;
-&lt;li&gt;greedy search&lt;/li&gt;
-&lt;li&gt;A* search&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;(2) &lt;strong&gt;Graph Search&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="searchheuristics"&gt;Search Heuristics&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;A heuristic is:&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;A function that &lt;strong&gt;estimatees&lt;/strong&gt; how close a state is to a goal&lt;/li&gt;
-&lt;li&gt;Designed for a particular search problem&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;문제에 따라 &lt;em&gt;heuristics&lt;/em&gt; 는 다릅니다. 루마니아 투어 문제의 경우 &lt;em&gt;직선거리&lt;/em&gt; 가 될 수 있고, 팬케잌 문제(하노이탑) 의 경우 잘못 올려진 팬케잌의 수가 &lt;em&gt;heuristic function&lt;/em&gt; 이 될 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;이런 &lt;em&gt;heuristics&lt;/em&gt; 을 어떻게 알고리즘에 적용할까요? 하나는 &lt;em&gt;DFS&lt;/em&gt; 처럼 같은 &lt;em&gt;sibling&lt;/em&gt; 사이에서 더 낮은 &lt;em&gt;heuristics&lt;/em&gt; 값을 가지는 &lt;em&gt;fringe&lt;/em&gt; 를 선택하는 방법이 있습니다. 이걸 &lt;em&gt;greedy search&lt;/em&gt; 라 부릅니다.&lt;/p&gt;
-
-&lt;p&gt;반면 &lt;em&gt;BFS&lt;/em&gt; 처럼 같은 &lt;em&gt;heuristics&lt;/em&gt; 값을 가지는 모든 &lt;em&gt;fringe&lt;/em&gt; 를 탐색할 수도 있습니다. 이걸 &lt;em&gt;A* search&lt;/em&gt; 라 부릅니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="greedysearch"&gt;Greedy Search&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;greedy search&lt;/em&gt; 는 &lt;em&gt;heuristic&lt;/em&gt; &lt;em&gt;(estimate of distance to nearest goal for each state)&lt;/em&gt; 을 이용해서 &lt;em&gt;fringe&lt;/em&gt; 를 선택하지만, &lt;em&gt;DFS&lt;/em&gt; 처럼 &lt;em&gt;badly-guided&lt;/em&gt; 될 수 있습니다. 항상 &lt;em&gt;optimal&lt;/em&gt; 한 솔루션을 찾아주진 않는다는 이야기입니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="asearch"&gt;A* Search&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/artificial-intelligence/search/ucs_plus_greedy.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;A* Search&lt;/em&gt; 는 &lt;code&gt;f(n) = g(n) + h(n)&lt;/code&gt; 을 이용합니다. 즉, 지금까지 온 거리 &lt;code&gt;g(n)&lt;/code&gt; 과 앞으로 남은 (예측) 거리 &lt;code&gt;h(n)&lt;/code&gt; 을 더한 값을 이용해서 어떤 &lt;em&gt;fringe&lt;/em&gt; 를 선택할지 결정합니다. &lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;A*&lt;/em&gt; 와 관련해서 생각해 볼 한가지는 &lt;em&gt;goal fringe&lt;/em&gt; 를 &lt;em&gt;enqueue&lt;/em&gt; 할 때가 아니라 &lt;em&gt;dequeue&lt;/em&gt; 할때 &lt;em&gt;stop&lt;/em&gt; 해야한다는 것 입니다. 이는 현재 &lt;em&gt;queue&lt;/em&gt; 에 있는 것중 &lt;em&gt;goal&lt;/em&gt; 까지 더 작은 &lt;code&gt;g(n)&lt;/code&gt; 을 가진 &lt;em&gt;fringe&lt;/em&gt; 가 존재할 수 있기 때문이죠.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;A* search&lt;/em&gt; 는 &lt;em&gt;admissible&lt;/em&gt; 하면 &lt;em&gt;optimal&lt;/em&gt; 입니다. 여기서 &lt;em&gt;admissible (optimistic)&lt;/em&gt; 하다는 뜻은 &lt;em&gt;heuristics&lt;/em&gt; 값 &lt;code&gt;h(n)&lt;/code&gt;이 절대로 실제 &lt;em&gt;cost&lt;/em&gt; &lt;code&gt;h*(n)&lt;/code&gt; 보다 높지 않다는 뜻입니다. (always underestimate)&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;0 &amp;lt;= h(n) &amp;lt;= h*(n)&lt;/code&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Inadmissible (pessimistic)&lt;/strong&gt; heuristics &lt;strong&gt;break&lt;/strong&gt; optimality by trapping good plans on the fringe&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Admissible (optimistic)&lt;/strong&gt; heuristics slow down bad plans but never outweigh true costs&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;uniform-cost search&lt;/em&gt; 와 &lt;em&gt;A* search&lt;/em&gt; 를 기하학적으로 비교해보면, &lt;em&gt;UCS&lt;/em&gt; 는 정원의 등고선을 그리며 &lt;em&gt;goal&lt;/em&gt; 을 탐색하지만 &lt;em&gt;A*&lt;/em&gt; 는 &lt;em&gt;goal&lt;/em&gt; 쪽으로 기운 타원형태의 등고선이 만들어집니다.&lt;/p&gt;
-
-&lt;p&gt;정리하자면&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;DFS, BFS:&lt;/strong&gt; uninformed search, don't consider cost&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;UCS:&lt;/strong&gt; uninformed search, only consider cost&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Greedy search:&lt;/strong&gt; informed search, only consider heuristic&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;A* search:&lt;/strong&gt; informed search which uses both cost and heuristic&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="admissibleheuristics"&gt;Admissible Heuristics&lt;/h3&gt;
-
-&lt;p&gt;어려운 &lt;em&gt;search problem&lt;/em&gt; 을 최적으로 풀어내려면 &lt;em&gt;admissible heuristics&lt;/em&gt; 를 만들어야 하는데, 이 &lt;em&gt;admissible heuristics&lt;/em&gt; 은  본래 문제에서 &lt;em&gt;constaints&lt;/em&gt; 가 조금 줄어들어 새로운 &lt;em&gt;action&lt;/em&gt; 을 사용할 수 있는 &lt;em&gt;relaxed problem&lt;/em&gt; 의 솔루션이 될 수 있습니다. &lt;/p&gt;
-
-&lt;p&gt;그리고 &lt;em&gt;inadmissible heuristic&lt;/em&gt; 도 때로는 유용할 수 있습니다. &lt;em&gt;optimal solution&lt;/em&gt; 이 꼭 필요하지 않다면요. &lt;/p&gt;
-
-&lt;p&gt;그러나 이번에는 &lt;em&gt;admissible heuristics&lt;/em&gt; 을 만드는 연습을 해보겠습니다. &lt;em&gt;8 puzzle&lt;/em&gt; 을 &lt;em&gt;search problem&lt;/em&gt; 으로 해서요. 먼저 해야 할 질문은&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;What are the states?&lt;/li&gt;
-&lt;li&gt;How many states?&lt;/li&gt;
-&lt;li&gt;What are actions?&lt;/li&gt;
-&lt;li&gt;How many successor from the start state?&lt;/li&gt;
-&lt;li&gt;What should the costs be?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;(1) 만약 &lt;em&gt;heuristic&lt;/em&gt; 을 &lt;em&gt;number of tiles misplaced&lt;/em&gt; 로 한다면, 이건 &lt;em&gt;admissible&lt;/em&gt; 일까요? &lt;/p&gt;
-
-&lt;p&gt;당연히 &lt;em&gt;admissible heuristic&lt;/em&gt; 입니다. 왜냐하면 어느 &lt;em&gt;action&lt;/em&gt; 도 한번에 &lt;code&gt;1&lt;/code&gt; 개 이상의 타일을 옮길 수 없으니까요. 그런데 이건 &lt;em&gt;relaxed problem heuristic&lt;/em&gt; 입니다. 최대 &lt;code&gt;8&lt;/code&gt; 번만에 문제를 풀려면 타일을 직접 정확한 위치에 붙여야 합니다. 부직포 붙이듯이요.&lt;/p&gt;
-
-&lt;p&gt;(2) 만약 타일을 직접 목적지로 한번에 움직이진 않지만, 다른 타일을 무시하고 움직일 수 있다면 어떨까요? 아까보단 &lt;em&gt;less relaxed&lt;/em&gt; 하다고 생각해봅시다. 이 경우 &lt;em&gt;manhattan distance&lt;/em&gt; 를 이용할 수 있습니다.   이것도 마찬가지로 &lt;em&gt;relaxed heuristic&lt;/em&gt; 이지만 아까보단 좀 덜 루즈합니다. &lt;/p&gt;
-
-&lt;p&gt;아까보다는 &lt;em&gt;heuristic&lt;/em&gt; &lt;code&gt;h&lt;/code&gt; 값이 더 커졌으니까, 가장 정확한 &lt;em&gt;heuristic&lt;/em&gt; (actual cost) 값은 이것보다는 적어도 크다고 생각할 수 있습니다. 일종의 &lt;em&gt;lower bound&lt;/em&gt; 라고 보면 쉽습니다. &lt;/p&gt;
-
-&lt;p&gt;그리고 &lt;em&gt;heuristic&lt;/em&gt; 이 더 정확해졌기 때문에, &lt;em&gt;expanded nodes&lt;/em&gt; 수도 이전보다 훨씬 줄어들게 됩니다.&lt;/p&gt;
-
-&lt;p&gt;(3) &lt;em&gt;actual cost&lt;/em&gt; 를 &lt;em&gt;heuristic&lt;/em&gt; 으로 사용하면 어떨까요? 이 값은 당연히 &lt;em&gt;admissible&lt;/em&gt; 합니다. &lt;code&gt;h(n) = h*(n)&lt;/code&gt; 이니까요. 게다가 &lt;em&gt;expanded nodes&lt;/em&gt; 수도 가장 적습니다. &lt;/p&gt;
-
-&lt;p&gt;다만 문제는, 가장 정확한 &lt;em&gt;heuristic&lt;/em&gt; 이기 때문에 매 턴마다 이 값을 계산하기 위한 연산 비용이 비쌉니다. 이것이 &lt;em&gt;A*&lt;/em&gt; 알고리즘이 가진 &lt;em&gt;trade-off&lt;/em&gt; 입니다. &lt;em&gt;quality of estimate&lt;/em&gt; 와 &lt;em&gt;work per node&lt;/em&gt;  를 적절히 조절해서 &lt;em&gt;heuristic&lt;/em&gt; 을 만들어야 합니다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;As heuristics get closer to the true cost, you will expand fewer nodes but usually do more work per node to compute the heuristic itself&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;나침반을 보고 길을 찾을때, &lt;em&gt;loose heuristic&lt;/em&gt; 은 좀 더 넓은 범위에서 맞다고 알려주어 이용하기 쉽다면, &lt;em&gt;actual cost&lt;/em&gt; 의 경우에는 나침반이 제시하는 올바른 방향이 너무나 작기때문에 자세히 보고, 여러번봐야 하는것과 비슷합니다.&lt;/p&gt;
-
-&lt;p&gt;정리하자면 &lt;em&gt;heuristic&lt;/em&gt; 이 &lt;em&gt;actual cost&lt;/em&gt; 에 가깝다고 해서 반드시 좋은건 아닙니다. 연산시간을 고려하면 적정 수준의 &lt;em&gt;loose heuristic&lt;/em&gt; 을 사용할 필요가 있습니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/artificial-intelligence/search/heuristic_dominance.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;모든 &lt;em&gt;heuristic&lt;/em&gt; 값이 더 크면 &lt;em&gt;dominance&lt;/em&gt; 라고 말합니다. 다시 말해 더 정확한, &lt;em&gt;actual cost&lt;/em&gt; 에 가깝다는 뜻입니다. 그리고 &lt;em&gt;admissible&lt;/em&gt; 한 두 &lt;em&gt;heuristics&lt;/em&gt; 에 대해 그 &lt;em&gt;max&lt;/em&gt; 값도 당연히 &lt;em&gt;admissible&lt;/em&gt; 합니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;bottom lattice&lt;/em&gt; 를 &lt;em&gt;zero heuristic&lt;/em&gt;, &lt;em&gt;top&lt;/em&gt; 을 &lt;em&gt;exact&lt;/em&gt; 라 부릅니다. 만약 &lt;em&gt;zero heuristic&lt;/em&gt; 을 이용하면 &lt;em&gt;uniform-cost search&lt;/em&gt; 와 동일합니다.&lt;/p&gt;
-
-&lt;h3 id="graphsearch"&gt;Graph Search&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;tree search&lt;/em&gt; 는 중복되는 부분에 대해 다시 탐색하므로 비효율적입니다. 이 부분을 개선하기 위해 &lt;strong&gt;모든 state 를 단 한번만&lt;/strong&gt; &lt;em&gt;expand&lt;/em&gt; 할 수 있습니다. &lt;em&gt;set of expanded states&lt;/em&gt; 를 유지하고, &lt;em&gt;state&lt;/em&gt; 를 탐색하기 전에 이미 &lt;em&gt;expanded&lt;/em&gt; 되었는지 검사하면 됩니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;graph search&lt;/em&gt; 는 &lt;em&gt;completeness&lt;/em&gt; 엔 문제가 없으나 &lt;em&gt;not-optimal&lt;/em&gt; 일 수 있습니다. 아래 예제를 보면 &lt;em&gt;sub-optimal solution&lt;/em&gt; 을 리턴합니다. &lt;em&gt;admissible heuristic&lt;/em&gt; 임에도 불구하고요.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/artificial-intelligence/search/a_star_graph_suboptimal.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/artificial-intelligence/search/consistency.jpg" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;이건 &lt;em&gt;consistency&lt;/em&gt; 속성이 만족되지 않아서 그렇습니다. &lt;em&gt;goal&lt;/em&gt; 까지의 &lt;em&gt;admissibility&lt;/em&gt; 뿐만 아니라, 각 &lt;em&gt;arc&lt;/em&gt; 마다도 &lt;code&gt;h &amp;lt;= actual cost&lt;/code&gt; 를 만족하면 &lt;em&gt;consistent&lt;/em&gt; 하다고 말합니다. 만약 &lt;em&gt;heuristic&lt;/em&gt; 이 &lt;em&gt;consistent&lt;/em&gt; 하면 &lt;em&gt;f value&lt;/em&gt; 가 절대로 줄지 않기 때문에 결과적으로 &lt;em&gt;graph search&lt;/em&gt; 를 통한 결과도 &lt;em&gt;optimal&lt;/em&gt; 이 됩니다.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;Fact 1:&lt;/em&gt; In tree search, A* expands nodes in increasing total &lt;em&gt;f value&lt;/em&gt; (&lt;strong&gt;f-contours&lt;/strong&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Fact 2:&lt;/em&gt; For every state &lt;code&gt;s&lt;/code&gt;, nodes that reach &lt;code&gt;s&lt;/code&gt; optimally are expanded before nodes that reach &lt;code&gt;s&lt;/code&gt; suboptimally&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="optimality"&gt;Optimality&lt;/h3&gt;
-
-&lt;p&gt;(1) Tree Search&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;만약 &lt;em&gt;heuristic&lt;/em&gt; 이 &lt;em&gt;admissible&lt;/em&gt; 이면 A* 는 &lt;em&gt;optimal&lt;/em&gt; 입니다&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;UCS&lt;/em&gt; 는 &lt;code&gt;h = 0&lt;/code&gt; 인 &lt;em&gt;special case&lt;/em&gt; 입니다&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;(2) Graph Search&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;만약 &lt;em&gt;heuristic&lt;/em&gt; 이 &lt;em&gt;consistent&lt;/em&gt; 이면, A* 는 &lt;em&gt;optimal&lt;/em&gt; 입니다.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;UCS&lt;/em&gt; 도 &lt;code&gt;h = 0&lt;/code&gt; 이어서 &lt;em&gt;consistent heuristic&lt;/em&gt; 이므로 &lt;em&gt;optimal&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Consistency implies admissibility&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;일반적으로 대부분의 &lt;em&gt;natural admissible heuristic&lt;/em&gt; 는 &lt;em&gt;consistent&lt;/em&gt; 합니다. 특히 &lt;em&gt;relaxed problems&lt;/em&gt; 에서 나왔다면 더더욱요&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id="refs"&gt;Refs&lt;/h3&gt;
-
-&lt;p&gt;(1) &lt;strong&gt;Artificial Integelligence (CS 188)&lt;/strong&gt; by &lt;em&gt;Dan Klein, Pieter Abbeel&lt;/em&gt; &lt;br&gt;
-(2) &lt;a href="http://imgkid.com/cute-box-robot-tumblr.shtml"&gt;Title Image&lt;/a&gt;  &lt;/p&gt;</content:encoded></item></channel></rss>
+(2) &lt;strong&gt;Pattern Discovery&lt;/strong&gt; by &lt;em&gt;Jiawei Han&lt;/em&gt; &lt;/p&gt;</content:encoded></item></channel></rss>

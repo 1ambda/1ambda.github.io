@@ -1,0 +1,645 @@
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Scala Lens Library, Monocle</title>
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Scala Lens Library, Monocle">
+  <meta name="twitter:description" content="Optics Library Monocle 은 Optics 라이브러리입니다. 그게 무엇인고 하니,   Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of Lens, Traversal, Optional, Prism and Iso. Monocle is strongly inspired by Haskell Lens.      Optics are a set of purely functional abstractions to manipulate (get,">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/scala-monocle-tutorial/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+  <link rel="canonical" href="http://1ambda.github.io/scala-monocle-tutorial/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Scala Lens Library, Monocle">
+    <meta property="og:description" content="Optics Library Monocle 은 Optics 라이브러리입니다. 그게 무엇인고 하니,   Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of Lens, Traversal, Optional, Prism and Iso. Monocle is strongly inspired by Haskell Lens.      Optics...">
+    <meta property="og:url" content="http://1ambda.github.io/scala-monocle-tutorial/">
+    <meta property="article:published_time" content="2015-10-09T07:03:11.928Z">
+    <meta property="article:modified_time" content="2015-10-09T07:03:13.695Z">
+    <meta property="article:tag" content="scala">
+    <meta property="article:tag" content="monocle">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Scala Lens Library, Monocle">
+    <meta name="twitter:description" content="Optics Library Monocle 은 Optics 라이브러리입니다. 그게 무엇인고 하니,   Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of Lens, Traversal, Optional, Prism and Iso. Monocle is strongly inspired by Haskell Lens.      Optics...">
+    <meta name="twitter:url" content="http://1ambda.github.io/scala-monocle-tutorial/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "Scala Lens Library, Monocle",
+    "url": "http://1ambda.github.io/scala-monocle-tutorial/",
+    "datePublished": "2015-10-09T07:03:11.928Z",
+    "dateModified": "2015-10-09T07:03:13.695Z",
+    "keywords": "scala, monocle",
+    "description": "Optics Library Monocle 은 Optics 라이브러리입니다. 그게 무엇인고 하니,   Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of Lens, Traversal, Optional, Prism and Iso. Monocle is strongly inspired by Haskell Lens.      Optics..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+  
+</head>
+<body>
+
+  <script src="../public/jquery.js?v=b4b91595dc"></script>
+
+  
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Functional Programming World</h4>
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://1ambda.github.io/articles/"><i class="fa fa-columns"></i> <span class="margin_lefarticlest_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala tag-monocle">
+
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala/">scala</a>, <a href="../tag/monocle/">monocle</a></h5>
+      <h1 class="margin_bottom_medium">Scala Lens Library, Monocle</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-10-09">Friday, October 09, 2015</time>
+      <br><br>
+       <a href="http://1ambda.github.io/scala-monocle-tutorial/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><img src="https://camo.githubusercontent.com/cff2e63f7bcccc33b96a73f50c7556a765417a7f/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f6c6f676f2e706e67" alt=""></p>
+
+<h3 id="opticslibrary">Optics Library</h3>
+
+<p><strong>Monocle</strong> 은 <em>Optics</em> 라이브러리입니다. 그게 무엇인고 하니,</p>
+
+<blockquote>
+  <p>Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of <code>Lens</code>, <code>Traversal</code>, <code>Optional</code>, <code>Prism</code> and <code>Iso</code>. Monocle is strongly inspired by Haskell Lens.</p>
+  
+  <p>Optics are a set of purely functional abstractions to manipulate (get, set, modify) immutable objects. Optics compose between each other and particularly shine with nested objects.</p>
+</blockquote>
+
+<p><br></p>
+
+<p>길고 복잡한데, 한 문장으로 요약하면 <em>composable immutable getter, setter</em> 입니다.</p>
+
+<p><br></p>
+
+<h3 id="theproblem">The Problem</h3>
+
+<p>일반적으로 스칼라에서 <em>case class</em> 를 복사할 때는 <code>copy</code> 메소드를 사용합니다. 그런데, <em>case class</em> 가 깊게 중첩되면 문제가 발생하기 시작합니다.</p>
+
+<pre><code class="language-scala">// https://github.com/julien-truffaut/Monocle
+
+case class Street(name: String, ...)     // ... means it contains other fields  
+case class Address(street: Street, ...)  
+case class Company(address: Address, ...)  
+case class Employee(company: Company, ...)
+
+val employee: Employee = ...
+
+employee.copy(  
+  company = employee.company.copy(
+    address = employee.company.address.copy(
+      street = employee.company.address.street.copy(
+        name = employee.company.address.street.name.capitalize // luckily capitalize exists
+      }
+    )
+  )
+)
+</code></pre>
+
+<p>이런상황에서 <em>Monocle</em> 을 활용할 수 있습니다. </p>
+
+<h3 id="monocletypeclasshierarchy">Monocle Typeclass Hierarchy</h3>
+
+<p><img src="https://camo.githubusercontent.com/0e7ccc1c6f603384b4051eda1b9e1169ee305c31/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f636c6173732d6469616772616d2e706e67" alt=""></p>
+
+<p><em>Monocle</em> 은 다음과 같은 타입클래스를 제공하는데요, 위쪽은 나중에 살펴보고 기본적인 타입클래스인 <code>Iso</code>, <code>Lens</code>, <code>Optional</code>, <code>Prism</code> 부터 살펴보겠습니다. </p>
+
+<p><br></p>
+
+<h3 id="iso">Iso</h3>
+
+<p><code>Iso</code> 는 <em>isomorphism</em> 을 나타냅니다. 저는 수학자도 아니요, 수학을 전공한것도 아니기 때문에 인용하고 간단히 넘어가겠습니다.</p>
+
+<blockquote>
+  <p>An <em>isomorphism</em> <code>u:: a -&gt; b</code> is function that has an inverse. i.e, another function <code>v:: b -&gt; a</code> such that the relationships <code>u . v = id</code>, <code>v . u = id</code> <a href="http://stackoverflow.com/questions/11245183/importance-of-isomorphic-functions">(Isomorphism)</a></p>
+</blockquote>
+
+<p>즉 하나의 함수에 대해 그 역함수가 존재한다는 것인데 스칼라로 표기하면 다음과 같습니다.</p>
+
+<pre><code class="language-scala">case class Iso[S, A](get: S =&gt; A)(reverseGet: A =&gt; S)
+
+// For all s: S, reverseGet(get(s)) == s
+// For all a: A, get(reverseGet(a)) == a
+</code></pre>
+
+<p>아까 서두에서 <strong>composable</strong> <em>immutable setter, getter</em> 라고 언급했던 것 기억 나시나요? <code>Iso</code> 에서 제공되는 몇몇 함수를 이용해 여러 <code>Iso</code> 를 조합할 수 있습니다.</p>
+
+<pre><code class="language-scala">case class Iso[S, A](get: S =&gt; A)(reverseGet: A =&gt; S) {  
+  def modify(m: A =&gt; A): S =&gt; S
+  def reverse: Iso[A, S]
+  def composeIso[B](other: Iso[A, B]): Iso[S, B]
+}
+</code></pre>
+
+<p>그런고로 <code>Iso[S, A] composeIso Iso[A, B]</code> 는 <code>Iso[S, B]</code> 입니다.</p>
+
+<h4 id="isoexample">Iso Example</h4>
+
+<p><code>Iso</code> 를 생성하는 법은 여러가지가(<strong>macro</strong>, <strong>annotation</strong>) 있지만, <em>case class</em> 생성자를 이용하는것부터 시작해보지요.</p>
+
+<pre><code class="language-scala">sealed trait Volume  
+case class Bytes(size: Long) extends Volume  
+case class KiloBytes(size: Long) extends Volume  
+case class Megabytes(size: Long) extends Volume  
+</code></pre>
+
+<p>간단한 모델을 만들었습니다. 바이트와 킬로바이트, 메가바이트는 서로서로 변환 가능한 타입이므로 (<em>isomorphic</em>) <code>Iso</code> 만들어 보면,</p>
+
+<pre><code class="language-scala">def byteToKilo =  
+    Iso[Bytes, KiloBytes](b =&gt; KiloBytes(b.size / 1024))(k =&gt; Bytes(k.size * 1024))
+
+def kiloToMega =  
+    Iso[KiloBytes, Megabytes](k =&gt; Megabytes(k.size / 1024))(m =&gt; KiloBytes(m.size * 1024))
+</code></pre>
+
+<p>버려지는 값을 허용할 수 있다 가정하면 <code>kiloToByte</code>, <code>megaToByte</code> 는 쉽게 만들 수 있습니다. 뒤집으면 되니까요.</p>
+
+<pre><code class="language-scala">def kiloToByte: Iso[KiloBytes, Bytes] = byteToKilo.reverse  
+def megaToByte: Iso[Megabytes, Bytes] = kiloToMega.reverse composeIso kiloToByte  
+</code></pre>
+
+<p><code>Lens</code> 와 섞으면 이렇게도 쓸 수 있습니다. (<code>Lens</code> 부분을 읽은 후에 다시 보시면 이해가 더 쉽습니다.)</p>
+
+<pre><code class="language-scala">// ref - https://github.com/julien-truffaut/Monocle/blob/master/example/src/test/scala/monocle/IsoExample.scala
+case class Point(_x: Int, _y: Int)  
+val pointToPair = Iso{l: Point =&gt; (l._x, l._y) }((Point.apply _).tupled)
+
+test("Iso get transforms a S into an A") {  
+  (Point(3, 5) applyIso pointToPair get) shouldEqual ((3, 5))
+}
+
+test("Iso reverse reverses the transformation") {  
+  ((3, 5) applyIso pointToPair.reverse get) shouldEqual Point(3, 5)
+}
+
+test("Iso composition can limit the need of ad-hoc Lens") {  
+  // here we use tuple Lens on Pair via pointToPair Iso
+  (Point(3, 5) applyIso pointToPair composeLens first get)   shouldEqual 3
+  (Point(3, 5) applyIso pointToPair composeLens first set 4) shouldEqual Point(4, 5)
+}
+</code></pre>
+
+<p><br></p>
+
+<h3 id="productsumcoproduct">Product, Sum(Coproduct)</h3>
+
+<p><code>Lens</code> 와 <code>Prism</code> 을 설명하기 전에 <code>Product</code> 와 <code>Sum (=Coproduct)</code> 에 대해서 먼저 간단히 설명을 하면,</p>
+
+<ul>
+<li><code>Product</code> 는 <strong>복합</strong> 데이터 타입입니다. <em>Tuple</em> 이 <code>Product</code> 의 한 예 인데, <code>P: (A, B)</code> 에 대해서 <code>P</code> 의 경우의 수는 <code>A x B</code> 만큼 됩니다. <code>case class</code>, <code>Map</code>, <code>HList</code> (in <em>Shapeless</em>) 모두 <code>Product</code> 입니다.</li>
+<li>반면 <code>Sum</code> 은 <strong>선택</strong> 가능한 타입입니다. <code>sealed trait</code>, <code>Enum</code> 등이 모두 그 예입니다.</li>
+</ul>
+
+<p>이걸 설명하는 이유는 </p>
+
+<ul>
+<li><code>Lens</code> 가 <code>Product</code> 에 대한 <em>composable setter, getter</em> 이고</li>
+<li><code>Prism</code> 이 <code>Coproduct</code> 에 대한 <em>composable setter, getter</em> 이기 때문이지요.</li>
+</ul>
+
+<h3 id="lens">Lens</h3>
+
+<p><a href="http://julien-truffaut.github.io/Monocle//tut/lens.html">Monocle - Lens</a> </p>
+
+<blockquote>
+  <p>A <code>Lens</code> is an Optic used to zoom inside a <code>Product</code></p>
+</blockquote>
+
+<p>스칼라 타입으로 나타내면 다음과 같습니다.</p>
+
+<pre><code class="language-scala">case class Lens[S, A](get: S =&gt; A)(set: A =&gt; S =&gt; S)  
+</code></pre>
+
+<p>요약하면 </p>
+
+<ul>
+<li><code>get</code> 은 복합타입 <code>S</code> 에 대해 <code>A</code> 를 돌려주고</li>
+<li><code>set</code> 은 <code>A</code> 를 받아 복합타입 <code>S</code> 에 그 값을 세팅하고 돌려줍니다. </li>
+</ul>
+
+<p>간단히 모델을 만들어 보지요.</p>
+
+<pre><code class="language-scala">case class Address(streetNumber: Int, streetName: String)  
+case class Person(name: String, age: Int, address: Address)  
+</code></pre>
+
+<p>이제 <code>Lens</code> 를 만들어 보면 아래와 같습니다.</p>
+
+<pre><code class="language-scala">val _streetNumLens = Lens[Address, Int](_.streetNumber)(num =&gt; a =&gt; a.copy(streetNumber = num))  
+val _streetNameLens = Lens[Address, String](_.streetName)(name =&gt; a =&gt; a.copy(streetName = name))  
+val _addressLens = Lens[Person, Address](_.address)(a =&gt; p =&gt; p.copy(address = a))  
+</code></pre>
+
+<p>아까 위에서 언급했던 <em>nested case class</em> 문제를 풀기 위해 <code>Lens</code> 를 다음처럼 조합할 수 있습니다.</p>
+
+<pre><code class="language-scala">val _personStreetNum  = (_addressLens composeLens _streetNumLens)  
+val _personStreetName = (_addressLens composeLens _streetNameLens)
+
+val a1 = Address(10, "High Street")  
+val p1 = Person("John", 20, a1)
+
+val p2 = _personStreetName.modify(_ + " 2")(p1)
+
+p2 shouldBe p1.copy(address = p1.address.copy(streetName = p1.address.streetName + " 2"))  
+</code></pre>
+
+<p>매크로를 이용하면 더욱 쉽게 생성할 수 있습니다.</p>
+
+<pre><code class="language-scala">import monocle.macros.GenLens
+
+val _ageLens1 = GenLens[Person](_.age)  
+val _ageLens2 = Lens[Person, Int](_.age)(a =&gt; p =&gt; p.copy(age = a))
+
+val p2 = _ageLens1.modify(_ + 1)(p1)  
+val p3 = _ageLens2.modify(_ + 1)(p1)
+
+p2 shouldBe p3  
+</code></pre>
+
+<p>어노테이션도 사용할 수 있습니다.</p>
+
+<pre><code class="language-scala">// ref - http://julien-truffaut.github.io/Monocle//tut/lens.html
+
+@Lenses case class Point(x: Int, y: Int)
+
+val p = Point(5, 3)  
+Point.x.get(p) shouldBe 5  
+Point.y.set(0)(p) shouldBe Point(5, 0)  
+</code></pre>
+
+<p>이따 보실테지만 <code>Iso</code> 와 <code>Lens</code> 의 <code>get</code> 은 같고 <code>set</code> 은 비슷하므로 다음처럼 조합할 수 있습니다.</p>
+
+<pre><code class="language-scala">def isoToLens[S, A](iso: Iso[S, A]): Lens[S, A] =  
+  Lens(iso.get)(a =&gt; _ =&gt; iso.reverseGet(a)))
+</code></pre>
+
+<h3 id="prism">Prism</h3>
+
+<p><a href="http://julien-truffaut.github.io/Monocle//tut/prism.html">Monocle - Prism</a></p>
+
+<blockquote>
+  <p>A <code>Prism</code> is an Optic used to select part of a <code>Sum</code> type (also know as <code>Coproduct</code>)</p>
+</blockquote>
+
+<p><code>Prism</code> 을 스칼라로 표현하면 다음과 같습니다.</p>
+
+<pre><code class="language-scala">case class Prism[S, A](getOption: S =&gt; Option[A])(reverseGet: A =&gt; S)
+
+// For all s: S, getOption(s) map reverseGet == Some(s) || None
+// For all a: A, getOption(revereGet(a)) == Some(a)
+</code></pre>
+
+<p>즉 <code>Iso</code> 와는 달리 <em>getter</em> 가 <code>Option</code> 을 돌려줄 수 있는데요, 이것은 이전에 언급했듯이 <code>Prism</code> 이 <strong>선택 가능한 타입</strong> 을 나타내는 <code>Sum</code> 에 대한 <em>getter, setter</em> 이기 때문입니다. </p>
+
+<pre><code class="language-scala">// ref - http://julien-truffaut.github.io/Monocle//tut/prism.html
+
+sealed trait Day  
+case object Monday    extends Day  
+case object Tuesday   extends Day  
+case object Wednesday extends Day  
+case object Thursday  extends Day  
+case object Friday    extends Day  
+case object Saturday  extends Day  
+case object Sunday    extends Day
+
+"Prism Basics" in {   
+  /* Since `Tuesday is a singleton, it is isomorphic to `Unit` */
+  val _tuesday = Prism[Day, Unit] {
+    case Tuesday =&gt; Some(())
+    case _       =&gt; None
+  }(_ =&gt; Tuesday)
+
+  _tuesday.reverseGet(()) shouldBe Tuesday
+  _tuesday.getOption(Monday) shouldBe None
+  _tuesday.getOption(Tuesday) shouldBe Some(())
+}
+</code></pre>
+
+<p>원래는 매크로를 이용하면 더 쉽게 생성할 수 있습니다.</p>
+
+<pre><code class="language-scala">val tuesday = GenPrism[Day, Tuesday.type] composeIso GenIso.unit[Tuesday.type]
+
+tuesday.reverseGet(()) shouldBe Tuesday  
+tuesday.getOption(Monday) shouldBe None  
+tuesday.getOption(Tuesday) shouldBe Some(())  
+</code></pre>
+
+<p><strong>Monocle</strong> 에 포함되어 있는 <code>Lens</code>, <code>Prism</code> 과 이렇게 섞어 쓸 수 있습니다.</p>
+
+<pre><code class="language-scala">// ref - http://julien-truffaut.github.io/Monocle//tut/prism.html
+sealed trait LinkedList[A]  
+case class Nil[A]() extends LinkedList[A]  
+case class Cons[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
+
+def _nil[A] = Prism[LinkedList[A], Unit]{  
+  case Nil()      =&gt; Some(())
+  case Cons(_, _) =&gt; None
+}(_ =&gt; Nil())
+
+def _cons[A] = Prism[LinkedList[A], (A, LinkedList[A])]{  
+  case Nil()      =&gt; None
+  case Cons(h, t) =&gt; Some((h, t)) 
+}{ case (h, t) =&gt; Cons(h, t)}
+
+import monocle.function.Fields._ /* first, second */  
+import monocle.std.tuple2._      /* tuple2 instance */
+
+(_cons[Int] composeLens first).set(5)(l1) shouldBe
+  Cons(5,Cons(2,Cons(3,Nil())))
+
+(_cons[Int] composeLens first).set(5)(l2) shouldBe
+  Nil()
+</code></pre>
+
+<h3 id="optional">Optional</h3>
+
+<pre><code class="language-scala">Iso     [S, A] (S =&gt; A)          (A =&gt; S)  
+Prism   [S, A] (S =&gt; Option[A])  (A =&gt; S)  
+Lens    [S, A] (S =&gt; A)          ((A, S) =&gt; S)  
+Optional[S, A] (S = Optional[A]) ((A, S) =&gt; S)  
+</code></pre>
+
+<p><code>Optional</code> 은 스칼라로 나타내면 다음과 같습니다.</p>
+
+<pre><code class="language-scala">case class Optional[S, A](getOption: S =&gt; Option[A])(set: (A, S) =&gt; S)
+
+// getOption(s) map set(_, s) == Some(s)
+// getOption(set(a, s)) == Some(a) | None  
+</code></pre>
+
+<p>슬슬 감이 오시죠?</p>
+
+<pre><code class="language-scala">def cons[A]: Prism[List[A], (A, List[A])]  
+def first[A, B]: Lens[(A, B), A]  
+def head[A]: Optional[List[A], A] = cons compose first  
+def void[S, A]: Optional[S, A] = (s =&gt; None)((a, s) =&gt; s)  
+def index[A](i: Int): Optional[List[A], A] =  
+  if (i &lt; 0) void
+  else if (i == 0) head
+  else cons compose second compose index(i - 1)
+</code></pre>
+
+<p>이렇게 정의하면, 아래처럼 쓸 수 있습니다.</p>
+
+<pre><code class="language-scala">Optional.void.getOption("Hello") shouldBe None  
+Optional.void.set(1)("Hello") shouldBe "Hello"  
+Optional.void.setOption(1)("Hello") shouldBe None
+
+val l = List(1, 2, 3)  
+(l applyOptional index(-1) getOption) shouldBe None
+(l applyOptional index(1) getOption) shouldBe Some(2)
+(l applyOptional index(5) getOption) shouldBe None
+
+(l applyOptional index(1) set(10)) shouldBe List(10, 2, 3)
+</code></pre>
+
+<p><br></p>
+
+<h3 id="httprequestexample">HttpRequest Example</h3>
+
+<p>이제 조금 더 긴 예제를 살펴볼까요?</p>
+
+<pre><code class="language-scala">/* ref - http://www.slideshare.net/JulienTruffaut/beyond-scala-lens */
+/* https://github.com/1ambda/Monocle/commit/234097ce1f8601eab8ab47e6610d56aea59acce4 */
+class HttpRequestSpec extends WordSpec with Matchers {  
+  import HttpRequestSpec._
+
+  val r1 = HttpRequest(
+    GET,
+    URI("localhost", 8080, "/ping", Map("hop" -&gt; "5")),
+    Map("socket_timeout" -&gt; "20", "connection_timeout" -&gt; "10"),
+    "")
+
+  val r2 = HttpRequest(
+    POST,
+    URI("gooogle.com", 443, "/search", Map("keyword" -&gt; "monocle")),
+    Map.empty,
+    "")
+
+  val method = GenLens[HttpRequest](_.method)
+  val uri = GenLens[HttpRequest](_.uri)
+  val headers = GenLens[HttpRequest](_.headers)
+  val body = GenLens[HttpRequest](_.body)
+
+  val host = GenLens[URI](_.host)
+  val query = GenLens[URI](_.query)
+
+  val get: Prism[HttpMethod, Unit] = GenPrism[HttpMethod, GET.type] composeIso GenIso.unit[GET.type]
+  val post = GenPrism[HttpMethod, POST.type] composeIso GenIso.unit[POST.type]
+
+  "get and post" in {
+    (method composePrism get).isMatching(r1) shouldBe true
+    (method composePrism post).isMatching(r1) shouldBe false
+    (method composePrism post).getOption(r2) shouldBe Some(())
+  }
+
+  "host" in {
+    (uri composeLens host).set("google.com")(r2) shouldBe
+      r2.copy(uri = r2.uri.copy(host = "google.com"))
+  }
+
+  "query using index" in {
+    val r = (uri
+      composeLens query
+      composeOptional index("hop")
+      composePrism stringToInt).modify(_ + 10)(r1)
+
+    r.uri.query.get("hop") shouldBe Some("15")
+  }
+
+  "query using at" in {
+
+    /**
+     *  `at` returns Lens[S, Option[A]] while `index` returns Optional[S, A]
+     *  So that we need the `some: Prism[Option[A], A]` for further investigation
+     */
+    val r = (uri
+      composeLens query
+      composeLens at("hop")
+      composePrism some
+      composePrism stringToInt).modify(_ + 10)(r1)
+
+    r.uri.query.get("hop") shouldBe Some("15")
+  }
+
+  "headers" in {
+    val r = (headers composeLens at("Content-Type")).set(Some("text/plain; utf-8"))(r2)
+    r.headers.get("Content-Type") shouldBe Some("text/plain; utf-8")
+  }
+
+  "headers with filterIndex" in {
+    val r = (headers
+      composeTraversal filterIndex { h: String =&gt; h.contains("timeout") }
+      composePrism stringToInt).modify(_ * 2)(r1)
+
+    println(r)
+    r.headers.get("socket_timeout") shouldBe Some("40")
+    r.headers.get("connection_timeout") shouldBe Some("20")
+  }
+}
+
+object HttpRequestSpec {  
+  sealed trait HttpMethod
+  case object GET   extends HttpMethod
+  case object POST  extends HttpMethod
+
+  case class URI(host: String, port: Int, path: String, query: Map[String, String])
+  case class HttpRequest(method: HttpMethod, uri: URI, headers: Map[String, String], body: String)
+}
+</code></pre>
+
+<p><br></p>
+
+<h3 id="references">References</h3>
+
+<ul>
+<li><a href="http://julien-truffaut.github.io/Monocle/">Monocle</a></li>
+<li><a href="https://github.com/julien-truffaut/Monocle">Github: Monocle</a></li>
+<li><a href="http://www.slideshare.net/JulienTruffaut/beyond-scala-lens">Slideshare: Beyond Scala Lens</a></li>
+<li><a href="http://stackoverflow.com/questions/11245183/importance-of-isomorphic-functions">Stackoverflow - Isomorphism</a></li>
+<li><a href="https://www.wikiwand.com/en/Product_type">Wikipedia - Product</a></li>
+<li><a href="https://www.wikiwand.com/en/Tagged_union">Wikipedia - Sum</a></li>
+</ul>
+    </section>
+
+    <footer>
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
+      </section>
+    </footer>
+
+
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '131';
+  var disqus_url = 'http://1ambda.github.io/scala-monocle-tutorial/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+    </article>
+</main>
+
+
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+  </body>
+  
