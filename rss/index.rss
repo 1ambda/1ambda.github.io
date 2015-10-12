@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Mon, 12 Oct 2015 14:22:47 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 1, State</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Mon, 12 Oct 2015 14:46:24 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 1, State</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h3 id="state"&gt;State&lt;/h3&gt;
 
@@ -13,7 +13,7 @@
 
 &lt;p&gt;즉 &lt;code&gt;S&lt;/code&gt; 를 받아 &lt;code&gt;(S, A)&lt;/code&gt; 를 돌려주는 함수를, 타입클래스 &lt;code&gt;State[S, A]&lt;/code&gt; 로 표현합니다. &lt;/p&gt;
 
-&lt;p&gt;더 엄밀히는, (&lt;em&gt;scalaz&lt;/em&gt;  구현에서는) &lt;code&gt;type State[S, A] = StateT[Id, S, A]&lt;/code&gt;&lt;/p&gt;</description><link>http://1ambda.github.io/easy-scalaz-1-state-and-state/</link><guid isPermaLink="false">f9bd7b24-522b-412b-8c4f-cd741c93bc28</guid><category>scala</category><category>state monad</category><category>scalaz</category><dc:creator>1ambda</dc:creator><pubDate>Mon, 12 Oct 2015 14:14:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;더 엄밀히는, (&lt;em&gt;scalaz&lt;/em&gt;  구현에서는) &lt;code&gt;type State[S, A] = StateT[Id, S, A]&lt;/code&gt;&lt;/p&gt;</description><link>http://1ambda.github.io/easy-scalaz-1-state/</link><guid isPermaLink="false">f9bd7b24-522b-412b-8c4f-cd741c93bc28</guid><category>scala</category><category>state monad</category><category>scalaz</category><dc:creator>1ambda</dc:creator><pubDate>Mon, 12 Oct 2015 14:14:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h3 id="state"&gt;State&lt;/h3&gt;
 
@@ -2015,22 +2015,44 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 &lt;p&gt;(1) &lt;a href="https://www.behance.net/gallery/625042/Icon-and-pattern-with-a-marketing-theme"&gt;Title image&lt;/a&gt; &lt;br&gt;
 (2) &lt;strong&gt;Pattern Discovery&lt;/strong&gt; by &lt;em&gt;Jiawei Han&lt;/em&gt; &lt;/p&gt;</content:encoded></item><item><title>Articles</title><description>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
 
+&lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state-and-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 2, Monad Transformer]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 3, IO]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 4, Validation]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 5, Free]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 6, Trampoline]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 7, Task] &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://1ambda.github.io/scala-monocle-tutorial/"&gt;Scala Lens Library, Monocle&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;&lt;strong&gt;Functional Programming in Scala&lt;/strong&gt; by &lt;em&gt;Martin Odersky&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-1/"&gt;Chapter 1&lt;/a&gt; &lt;br&gt;
 &lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-2/"&gt;Chapter 2&lt;/a&gt; &lt;br&gt;
 &lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/"&gt;Chapter 3&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-4/"&gt;Chapter 4&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-5/"&gt;Chapter 5&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-6/"&gt;Chapter 6&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-7/"&gt;Chapter 7&lt;/a&gt;  &lt;/p&gt;
+&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-4/"&gt;Chapter&lt;/a&gt;&lt;/p&gt;</description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category>1ambda</category><dc:creator>1ambda</dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
 
-&lt;p&gt;&lt;strong&gt;Reactive Programming&lt;/strong&gt; by &lt;em&gt;Martin Odersky&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="http://1ambda.github.io/reactive-programming-1/"&gt;Chapter 1&lt;/a&gt; - Monads, Random Generators &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-2/"&gt;Chapter 2&lt;/a&gt; - Stateful Object &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-3/"&gt;Chapter 3&lt;/a&gt; - Try, Future, Promise &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-4/"&gt;Chapter 4&lt;/a&gt; - Observable, Rx, Scheduler&lt;/p&gt;</description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category>1ambda</category><dc:creator>1ambda</dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state-and-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 2, Monad Transformer]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 3, IO]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 4, Validation]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 5, Free]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 6, Trampoline]&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 7, Task] &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://1ambda.github.io/scala-monocle-tutorial/"&gt;Scala Lens Library, Monocle&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Functional Programming in Scala&lt;/strong&gt; by &lt;em&gt;Martin Odersky&lt;/em&gt;&lt;/p&gt;
 
