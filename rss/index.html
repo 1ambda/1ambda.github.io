@@ -1,458 +1,389 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 09 Oct 2015 07:05:45 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Scala Lens Library, Monocle]]></title><description><![CDATA[<p><img src="https://camo.githubusercontent.com/cff2e63f7bcccc33b96a73f50c7556a765417a7f/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f6c6f676f2e706e67" alt=""></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Mon, 12 Oct 2015 14:14:05 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Easy Scalaz 1, State]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
 
-<h3 id="opticslibrary">Optics Library</h3>
+<h3 id="state">State</h3>
 
-<p><strong>Monocle</strong> 은 <em>Optics</em> 라이브러리입니다. 그게 무엇인고 하니,</p>
+<p><code>State</code> 를 설명하는 수많은 문구들이 있지만, 타입만큼 간단한건 없습니다.</p>
 
-<blockquote>
-  <p>Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of <code>Lens</code>, <code>Traversal</code>, <code>Optional</code>, <code>Prism</code> and <code>Iso</code>. Monocle is strongly inspired by Haskell Lens.</p>
-  
-  <p>Optics are a set of purely functional abstractions to manipulate (get,</p></blockquote>]]></description><link>http://1ambda.github.io/scala-monocle-tutorial/</link><guid isPermaLink="false">128249ea-6ec5-4006-bd23-63fda44d3379</guid><category><![CDATA[scala]]></category><category><![CDATA[monocle]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 09 Oct 2015 07:03:11 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://camo.githubusercontent.com/cff2e63f7bcccc33b96a73f50c7556a765417a7f/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f6c6f676f2e706e67" alt=""></p>
-
-<h3 id="opticslibrary">Optics Library</h3>
-
-<p><strong>Monocle</strong> 은 <em>Optics</em> 라이브러리입니다. 그게 무엇인고 하니,</p>
+<pre><code class="language-scala">State[S, A] :: S =&gt; (S, A)  
+</code></pre>
 
 <blockquote>
-  <p>Monocle is a Lens library, or more generally an Optics library where Optics gather the concepts of <code>Lens</code>, <code>Traversal</code>, <code>Optional</code>, <code>Prism</code> and <code>Iso</code>. Monocle is strongly inspired by Haskell Lens.</p>
-  
-  <p>Optics are a set of purely functional abstractions to manipulate (get, set, modify) immutable objects. Optics compose between each other and particularly shine with nested objects.</p>
+  <p>A state transition, representing a <strong>function</strong> </p>
 </blockquote>
 
+<p>즉 <code>S</code> 를 받아 <code>(S, A)</code> 를 돌려주는 함수를, 타입클래스 <code>State[S, A]</code> 로 표현합니다. </p>
+
+<p>더 엄밀히는, (<em>scalaz</em>  구현에서는) <code>type State[S, A] = StateT[Id, S, A]</code></p>]]></description><link>http://1ambda.github.io/easy-scalaz-1-state-and-statet/</link><guid isPermaLink="false">f9bd7b24-522b-412b-8c4f-cd741c93bc28</guid><category><![CDATA[scala]]></category><category><![CDATA[state monad]]></category><category><![CDATA[scalaz]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Mon, 12 Oct 2015 14:14:00 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+
+<h3 id="state">State</h3>
+
+<p><code>State</code> 를 설명하는 수많은 문구들이 있지만, 타입만큼 간단한건 없습니다.</p>
+
+<pre><code class="language-scala">State[S, A] :: S =&gt; (S, A)  
+</code></pre>
+
+<blockquote>
+  <p>A state transition, representing a <strong>function</strong> </p>
+</blockquote>
+
+<p>즉 <code>S</code> 를 받아 <code>(S, A)</code> 를 돌려주는 함수를, 타입클래스 <code>State[S, A]</code> 로 표현합니다. </p>
+
+<p>더 엄밀히는, (<em>scalaz</em>  구현에서는) <code>type State[S, A] = StateT[Id, S, A] where Id[+X] = X</code> 인데 이것은 나중에 <code>StateT</code> 에서 다시 보겠습니다.</p>
+
+<p>우선 기억해둘 것은 <code>State</code> 가 <strong>함수</strong> 를 나타낸다는 사실입니다. 상태 <code>S</code> 를 변경하면서 <code>A</code> 를 만들어내는 함수를 말이지요. 즉, <code>State</code> 는 더도 말고 덜도 말고, 상태를 조작하는 <strong>함수</strong> 입니다. 여기에 모나드라고 하니, <code>flatMap</code> 같은 몇몇 함수가 추가된 것 뿐이지요.</p>
+
+<h3 id="statebasics">State Basics</h3>
+
+<p><code>State</code> 코드를 들춰보면, 아래와 같이 생겼습니다. </p>
+
+<pre><code class="language-scala">object State extends StateFunctions {  
+  def apply[S, A](f: S =&gt; (S, A)): State[S, A] = new StateT[Id, S, A] {
+    def apply(s: S) = f(s)
+  }
+}
+
+trait StateFunctions extends IndexedStateFunctions {  
+  def constantState[S, A](a: A, s: =&gt; S): State[S, A] = State((_: S) =&gt; (s, a))
+  def state[S, A](a: A): State[S, A] = State((_ : S, a))
+  def init[S]: State[S, S] = State(s =&gt; (s, s))
+  def get[S]: State[S, S] = init
+  def gets[S, T](f: S =&gt; T): State[S, T] = State(s =&gt; (s, f(s)))
+  def put[S](s: S): State[S, Unit] = State(_ =&gt; (s, ()))
+  def modify[S](f: S =&gt; S): State[S, Unit] = State(s =&gt; {
+    val r = f(s);
+    (r, ())
+  })
+}
+</code></pre>
+
+<ul>
+<li><code>State.apply</code> 에 상태 <code>S</code> 를 조작하는 함수 <code>f</code> 를 먹이면 <code>StateT</code> 가 나오고</li>
+<li><code>StateT.apply</code> 에 초기 상태 <code>S</code> 를 먹이면 최종 결과물인 <code>(S, A)</code> 가 나옵니다</li>
+</ul>
+
+<p>그리고 코드를 조금 만 더 따라가다 보면 <code>apply</code> 의 <em>alias</em> 로 <code>run</code> 이라는 함수가 제공되는걸 알 수 있습니다. <a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/StateT.scala#L10">(Scalaz StateT.scala #L10)</a></p>
+
+<p><code>flatMap</code> 으로 상태 조작함수 <code>f</code> 여러개를 엮다가 하다가 마지막에 <code>run</code> 으로 실행시킬것 같다는 느낌이 들죠? </p>
+
 <p><br></p>
 
-<p>길고 복잡한데, 한 문장으로 요약하면 <em>composable immutable getter, setter</em> 입니다.</p>
+<p>이제 <code>StateFunctions</code> <em>trait</em> 로 제공되는 함수를 사용해 볼까요? 그냥 써보면 재미 없으니, Github 에서 각 Repository 마다 존재하는 <em>star</em> 를 가져오는 것을 간단히 모델링 해보겠습니다. 매번 네트워크 요청을 통해 가져오면 느리니까, <code>Map[String, Int]</code> 타입의 캐시도 포함시켜서요.</p>
 
-<p><br></p>
+<pre><code class="language-scala">import scalaz._, Scalaz._ /* import all */
 
-<h3 id="theproblem">The Problem</h3>
+type Cache = Map[String, Int]
 
-<p>일반적으로 스칼라에서 <em>case class</em> 를 복사할 때는 <code>copy</code> 메소드를 사용합니다. 그런데, <em>case class</em> 가 깊게 중첩되면 문제가 발생하기 시작합니다.</p>
+"create, run State" in {
+  val s: State[Cache, Int] = State { c =&gt; (c, c.getOrElse("1ambda/scala", 0))}
+  val c: Cache = Map("1ambda/scala" -&gt; 1)
 
-<pre><code class="language-scala">// https://github.com/julien-truffaut/Monocle
+  // def run(s: S): (S, A)
+  val (c1, star1) = s.run(c)
+  val (c2, star2) = s.run(Map.empty)
 
-case class Street(name: String, ...)     // ... means it contains other fields  
-case class Address(street: Street, ...)  
-case class Company(address: Address, ...)  
-case class Employee(company: Company, ...)
+  (c1, star1) shouldBe (Map("1ambda/scala" -&gt; 1), 1)
+  (c2, star2) shouldBe (Map(), 0)
+}
+</code></pre>
 
-val employee: Employee = ...
+<p>이 작은 코드에서 우리가 다루는 상태는 <code>Cache</code> 입니다. 아직은 <code>State { c =&gt; ... }</code> 에서 받은 <code>c: Cache</code> 를 수정하지 않기 때문에 <code>run</code> 에서 돌려주는 상태 (<em>State</em>) 는 <code>run</code> 에 넘긴 것과 동일합니다. 그런고로 <code>c == c1 == c2</code> 입니다. </p>
 
-employee.copy(  
-  company = employee.company.copy(
-    address = employee.company.address.copy(
-      street = employee.company.address.street.copy(
-        name = employee.company.address.street.name.capitalize // luckily capitalize exists
+<p>이번엔 상태를 변경하는 함수를 만들어 보겠습니다. 캐시에서 데이터를 가져오면, 캐시를 그대로 돌려주고 미스가 발생하면 캐시에 레포지토리 URL 을 추가하겠습니다.</p>
+
+<pre><code class="language-scala">def getStargazer(url: String): State[Cache, Int] = State { c =&gt;  
+  c.get(url) match {
+    case Some(count) =&gt; (c, count)
+    case None        =&gt; (c.updated(url, 0), 0)
+  }
+}
+
+"getStargazer" in {
+  val c: Cache = Map("1ambda/scala" -&gt; 1)
+
+  val s1 = getStargazer("1ambda/haskell")
+  val (c1, star) = s1.run(c)
+
+  (c1, star) shouldBe (c.updated("1ambda/haskell", 0), 0)
+}
+</code></pre>
+
+<p><code>State</code> 는 모나드기 때문에, <code>for</code> 내에서 이용할 수 있습니다. 아래에서 더 자세히 살펴보겠습니다.</p>
+
+<h3 id="statemonadapplicativeandfunctor">State Monad, Applicative and Functor</h3>
+
+<p>모나드는 <code>return</code> 과 <code>bind</code> 를 가지고 특정한 규칙을 만족하는 타입 클래스를 말하는데요, <em>scala</em> 에서는 <code>bind</code> 는 <code>flatMap</code> 이란 이름으로 제공되는 것 아시죠? </p>
+
+<pre><code class="language-scala">trait Monad[A] {  
+  // sometimes called `unit`
+  def return(a: A): M[A]
+  def flatMap[B](f: A =&gt; M[B]): M[B]
+}
+</code></pre>
+
+<p><em>scalaz</em> 에선 <code>Monad</code> 는 아래의 두 타입클래스를 상속받아 구현됩니다. </p>
+
+<ul>
+<li><code>Applicative.point</code> (= <code>return</code>)</li>
+<li><code>Bind.bind</code> (= <code>bind</code>) </li>
+</ul>
+
+<pre><code class="language-scala">trait Bind[F[_]] extends Apply[F] { self =&gt;  
+  ...
+  def bind[A, B](fa: F[A])(f: A =&gt; F[B]): F[B]
+  ...
+}
+
+trait Applicative[F[_]] extends Apply[F] { self =&gt;  
+  ...
+  def point[A](a: =&gt; A): F[A]
+  ...
+}
+</code></pre>
+
+<p>게다가 <code>Apply</code> 가 <code>Functor</code> 를 상속받으므로 </p>
+
+<pre><code class="language-scala">trait Apply[F[_]] extends Functor[F] { self =&gt;  
+  def ap[A,B](fa: =&gt; F[A])(f: =&gt; F[A =&gt; B]): F[B]
+  ...
+</code></pre>
+
+<p><em>scalaz</em> 에서 <code>State</code> 는 <code>Functor</code> 이면서, <code>Applicative</code> 이고, <code>Monad</code> 입니다.</p>
+
+<p>아래는 <a href="https://github.com/tpolecat/doobie">doobie</a> 를 만든 <a href="https://github.com/tpolecat">@tpolecat</a> 의 블로그에서 가져온 <em>scalaz</em> 타입 클래스 계층인데, 이 그림을 보면 왜 그런지 알 수 있습니다. (<a href="http://tpolecat.github.io/assets/scalaz.svg">http://tpolecat.github.io/assets/scalaz.svg</a>)</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/scalaz.png" alt=""></p>
+
+<p>이제 <code>State</code> 가 모나드라는 사실을 알았으니, 위에서 작성했던 <code>getStargazer</code> 함수를 다시 작성해보겠습니다. <em>for comprehension</em> 을 사용할건데요, </p>
+
+<ul>
+<li>먼저 <code>State[Cache, Int]</code> 의 상태인 <code>Cache</code> 를 얻어와야 하므로 <code>get</code> 을 이용하고</li>
+<li>상태를 변경해야 하므로 <code>modify</code> 를 호출하겠습니다. </li>
+</ul>
+
+<pre><code class="language-scala">// State helper functions defined in `StateFunctions` trait
+def state[S, A](a: A): State[S, A] = State((_ : S, a))  
+def init[S]: State[S, S] = State(s =&gt; (s, s)) /* 상태 S 를 아웃풋 A 위치로 꺼냄 */  
+def get[S]: State[S, S] = init  
+def gets[S, T](f: S =&gt; T): State[S, T] = State(s =&gt; (s, f(s)))  
+def put[S](s: S): State[S, Unit] = State(_ =&gt; (s, ()))  
+def modify[S](f: S =&gt; S): State[S, Unit] = State(s =&gt; {  
+  /* 상태 S 를 변경하는 함수를 받아, 적용하고 A 위치에 `()` 를 돌려줌 */
+  val r = f(s);
+  (r, ())
+})
+
+def getStargazer(url: String): State[Cache, Int] = State { c =&gt;  
+  c.get(url) match {
+    case Some(count) =&gt; (c, count)
+    case None        =&gt; (c.updated(url, 0), 0)
+  }
+}
+
+def getStargazerWithFor(url: String): State[Cache, Int] =  
+  for {
+    c &lt;- State.get[Cache]
+    optCount = c.get(url)
+    _ &lt;- modify { c: Cache =&gt;
+      // same as `if (optCount.isDefined) c else c.updated(url, 0)`
+      optCount match {
+        case Some(count) =&gt; c
+        case None        =&gt; c.updated(url, 0)
       }
-    )
-  )
-)
+    }
+  } yield optCount.getOrElse(0)
 </code></pre>
 
-<p>이런상황에서 <em>Monocle</em> 을 활용할 수 있습니다. </p>
+<h3 id="whentousestate">When to use State</h3>
 
-<h3 id="monocletypeclasshierarchy">Monocle Typeclass Hierarchy</h3>
-
-<p><img src="https://camo.githubusercontent.com/0e7ccc1c6f603384b4051eda1b9e1169ee305c31/68747470733a2f2f7261772e6769746875622e636f6d2f6a756c69656e2d74727566666175742f4d6f6e6f636c652f6d61737465722f696d6167652f636c6173732d6469616772616d2e706e67" alt=""></p>
-
-<p><em>Monocle</em> 은 다음과 같은 타입클래스를 제공하는데요, 위쪽은 나중에 살펴보고 기본적인 타입클래스인 <code>Iso</code>, <code>Lens</code>, <code>Optional</code>, <code>Prism</code> 부터 살펴보겠습니다. </p>
-
-<p><br></p>
-
-<h3 id="iso">Iso</h3>
-
-<p><code>Iso</code> 는 <em>isomorphism</em> 을 나타냅니다. 저는 수학자도 아니요, 수학을 전공한것도 아니기 때문에 인용하고 간단히 넘어가겠습니다.</p>
+<p>그러면, 언제 <code>State</code> 가 필요할까요? 하나의 <strong>상태</strong> (<em>State</em>) 를 지속적으로 변경, 공유하면서 연산을 실행할 때 사용할 수 있습니다.</p>
 
 <blockquote>
-  <p>An <em>isomorphism</em> <code>u:: a -&gt; b</code> is function that has an inverse. i.e, another function <code>v:: b -&gt; a</code> such that the relationships <code>u . v = id</code>, <code>v . u = id</code> <a href="http://stackoverflow.com/questions/11245183/importance-of-isomorphic-functions">(Isomorphism)</a></p>
+  <p>Building computations from sequences of operations that require a shared state.</p>
 </blockquote>
 
-<p>즉 하나의 함수에 대해 그 역함수가 존재한다는 것인데 스칼라로 표기하면 다음과 같습니다.</p>
+<p>예를 들어 HTTP 요청과 응답, 트랜잭션 등을 <code>State</code> 로 다루면서 연산을 조합해서 사용할 수 있습니다.</p>
 
-<pre><code class="language-scala">case class Iso[S, A](get: S =&gt; A)(reverseGet: A =&gt; S)
+<ul>
+<li>HttpRequest, HttpResponse, HttpSession</li>
+<li>Database Transaction</li>
+<li>Random Number Generator</li>
+</ul>
 
-// For all s: S, reverseGet(get(s)) == s
-// For all a: A, get(reverseGet(a)) == a
-</code></pre>
+<h3 id="githubserviceexample">Github Service Example</h3>
 
-<p>아까 서두에서 <strong>composable</strong> <em>immutable setter, getter</em> 라고 언급했던 것 기억 나시나요? <code>Iso</code> 에서 제공되는 몇몇 함수를 이용해 여러 <code>Iso</code> 를 조합할 수 있습니다.</p>
+<p>그러면 위에서 보았던 <code>Cache</code> 에 약간의 기능을 추가해 볼까요? 캐시 히트, 미스도 저장하고 캐시 히트는 최대 5분까지만 인정하기로 하지요. 오래된 캐시를 삭제하는 기능을 빼고 만들어 보면,</p>
 
-<pre><code class="language-scala">case class Iso[S, A](get: S =&gt; A)(reverseGet: A =&gt; S) {  
-  def modify(m: A =&gt; A): S =&gt; S
-  def reverse: Iso[A, S]
-  def composeIso[B](other: Iso[A, B]): Iso[S, B]
+<pre><code class="language-scala">type URL = String  
+type StarCount = Int
+
+case class Timestamped(count: StarCount, time: DateTime)
+
+case class Cache(hits: Int, misses: Int, map: Map[URL, Timestamped]) {  
+  def get(url: URL): Option[Timestamped] = map.get(url)
+  def update(url: URL, timestamp: Timestamped): Cache = {
+    val m = map + (url -&gt; timestamp)
+    this.copy(map = m)
+  }
+}
+
+object Cache {  
+  def empty = Cache(0, 0, Map())
 }
 </code></pre>
 
-<p>그런고로 <code>Iso[S, A] composeIso Iso[A, B]</code> 는 <code>Iso[S, B]</code> 입니다.</p>
+<p>만약 <code>State</code> 가 없다면, 우리가 다루는 상태인 <code>Cache</code> 를 명시적으로 넘겨주고, 리턴받기 위해 이렇게 코드를 작성해야 할테지요. 여기서 <code>c1</code> 대신 <code>c</code> 를 쓰는 오타라도 발생한다면..</p>
 
-<h4 id="isoexample">Iso Example</h4>
+<pre><code class="language-scala">def stargazerCount(url: URL, c: Cache): (Cache, StarCount) = {  
+  val (c1, optCount) = checkCache(url, c)
 
-<p><code>Iso</code> 를 생성하는 법은 여러가지가(<strong>macro</strong>, <strong>annotation</strong>) 있지만, <em>case class</em> 생성자를 이용하는것부터 시작해보지요.</p>
-
-<pre><code class="language-scala">sealed trait Volume  
-case class Bytes(size: Long) extends Volume  
-case class KiloBytes(size: Long) extends Volume  
-case class Megabytes(size: Long) extends Volume  
-</code></pre>
-
-<p>간단한 모델을 만들었습니다. 바이트와 킬로바이트, 메가바이트는 서로서로 변환 가능한 타입이므로 (<em>isomorphic</em>) <code>Iso</code> 만들어 보면,</p>
-
-<pre><code class="language-scala">def byteToKilo =  
-    Iso[Bytes, KiloBytes](b =&gt; KiloBytes(b.size / 1024))(k =&gt; Bytes(k.size * 1024))
-
-def kiloToMega =  
-    Iso[KiloBytes, Megabytes](k =&gt; Megabytes(k.size / 1024))(m =&gt; KiloBytes(m.size * 1024))
-</code></pre>
-
-<p>버려지는 값을 허용할 수 있다 가정하면 <code>kiloToByte</code>, <code>megaToByte</code> 는 쉽게 만들 수 있습니다. 뒤집으면 되니까요.</p>
-
-<pre><code class="language-scala">def kiloToByte: Iso[KiloBytes, Bytes] = byteToKilo.reverse  
-def megaToByte: Iso[Megabytes, Bytes] = kiloToMega.reverse composeIso kiloToByte  
-</code></pre>
-
-<p><code>Lens</code> 와 섞으면 이렇게도 쓸 수 있습니다. (<code>Lens</code> 부분을 읽은 후에 다시 보시면 이해가 더 쉽습니다.)</p>
-
-<pre><code class="language-scala">// ref - https://github.com/julien-truffaut/Monocle/blob/master/example/src/test/scala/monocle/IsoExample.scala
-case class Point(_x: Int, _y: Int)  
-val pointToPair = Iso{l: Point =&gt; (l._x, l._y) }((Point.apply _).tupled)
-
-test("Iso get transforms a S into an A") {  
-  (Point(3, 5) applyIso pointToPair get) shouldEqual ((3, 5))
+  optCount match {
+    case Some(count) =&gt; (c1, count)
+    case None =&gt; retrieve(url, c1)
+  }
 }
 
-test("Iso reverse reverses the transformation") {  
-  ((3, 5) applyIso pointToPair.reverse get) shouldEqual Point(3, 5)
+def checkCache(url: URL, c: Cache): (Cache, Option[StarCount]) =  
+  c.get(url) match {
+    case Some(Timestamped(count, time)) if !stale(time) =&gt;
+      (c.copy(hits = c.hits + 1), Some(count))
+    case _ =&gt;
+      (c.copy(misses = c.misses + 1), None)
+  }
+
+def retrieve(url: URL, c: Cache): (Cache, StarCount) = {  
+  val count = getStarCountFromWebService(url)
+  val timestamp = Timestamped(count, DateTime.now)
+  (c.update(url, timestamp), count)
 }
 
-test("Iso composition can limit the need of ad-hoc Lens") {  
-  // here we use tuple Lens on Pair via pointToPair Iso
-  (Point(3, 5) applyIso pointToPair composeLens first get)   shouldEqual 3
-  (Point(3, 5) applyIso pointToPair composeLens first set 4) shouldEqual Point(4, 5)
-}
+def stale(then: DateTime): Boolean = DateTime.now &gt; then + 5.minutes  
+def getStarCountFromWebService(url: URL): StarCount = ...  
 </code></pre>
 
 <p><br></p>
 
-<h3 id="productsumcoproduct">Product, Sum(Coproduct)</h3>
+<p>여기에 <code>State</code> 를 하나씩 적용해 보겠습니다.</p>
 
-<p><code>Lens</code> 와 <code>Prism</code> 을 설명하기 전에 <code>Product</code> 와 <code>Sum (=Coproduct)</code> 에 대해서 먼저 간단히 설명을 하면,</p>
+<pre><code class="language-scala">def stargazerCount(url: URL, c: Cache): (Cache, StarCount) = {  
+  val (c1, optCount) = checkCache(url, c)
 
-<ul>
-<li><code>Product</code> 는 <strong>복합</strong> 데이터 타입입니다. <em>Tuple</em> 이 <code>Product</code> 의 한 예 인데, <code>P: (A, B)</code> 에 대해서 <code>P</code> 의 경우의 수는 <code>A x B</code> 만큼 됩니다. <code>case class</code>, <code>Map</code>, <code>HList</code> (in <em>Shapeless</em>) 모두 <code>Product</code> 입니다.</li>
-<li>반면 <code>Sum</code> 은 <strong>선택</strong> 가능한 타입입니다. <code>sealed trait</code>, <code>Enum</code> 등이 모두 그 예입니다.</li>
-</ul>
-
-<p>이걸 설명하는 이유는 </p>
-
-<ul>
-<li><code>Lens</code> 가 <code>Product</code> 에 대한 <em>composable setter, getter</em> 이고</li>
-<li><code>Prism</code> 이 <code>Coproduct</code> 에 대한 <em>composable setter, getter</em> 이기 때문이지요.</li>
-</ul>
-
-<h3 id="lens">Lens</h3>
-
-<p><a href="http://julien-truffaut.github.io/Monocle//tut/lens.html">Monocle - Lens</a> </p>
-
-<blockquote>
-  <p>A <code>Lens</code> is an Optic used to zoom inside a <code>Product</code></p>
-</blockquote>
-
-<p>스칼라 타입으로 나타내면 다음과 같습니다.</p>
-
-<pre><code class="language-scala">case class Lens[S, A](get: S =&gt; A)(set: A =&gt; S =&gt; S)  
-</code></pre>
-
-<p>요약하면 </p>
-
-<ul>
-<li><code>get</code> 은 복합타입 <code>S</code> 에 대해 <code>A</code> 를 돌려주고</li>
-<li><code>set</code> 은 <code>A</code> 를 받아 복합타입 <code>S</code> 에 그 값을 세팅하고 돌려줍니다. </li>
-</ul>
-
-<p>간단히 모델을 만들어 보지요.</p>
-
-<pre><code class="language-scala">case class Address(streetNumber: Int, streetName: String)  
-case class Person(name: String, age: Int, address: Address)  
-</code></pre>
-
-<p>이제 <code>Lens</code> 를 만들어 보면 아래와 같습니다.</p>
-
-<pre><code class="language-scala">val _streetNumLens = Lens[Address, Int](_.streetNumber)(num =&gt; a =&gt; a.copy(streetNumber = num))  
-val _streetNameLens = Lens[Address, String](_.streetName)(name =&gt; a =&gt; a.copy(streetName = name))  
-val _addressLens = Lens[Person, Address](_.address)(a =&gt; p =&gt; p.copy(address = a))  
-</code></pre>
-
-<p>아까 위에서 언급했던 <em>nested case class</em> 문제를 풀기 위해 <code>Lens</code> 를 다음처럼 조합할 수 있습니다.</p>
-
-<pre><code class="language-scala">val _personStreetNum  = (_addressLens composeLens _streetNumLens)  
-val _personStreetName = (_addressLens composeLens _streetNameLens)
-
-val a1 = Address(10, "High Street")  
-val p1 = Person("John", 20, a1)
-
-val p2 = _personStreetName.modify(_ + " 2")(p1)
-
-p2 shouldBe p1.copy(address = p1.address.copy(streetName = p1.address.streetName + " 2"))  
-</code></pre>
-
-<p>매크로를 이용하면 더욱 쉽게 생성할 수 있습니다.</p>
-
-<pre><code class="language-scala">import monocle.macros.GenLens
-
-val _ageLens1 = GenLens[Person](_.age)  
-val _ageLens2 = Lens[Person, Int](_.age)(a =&gt; p =&gt; p.copy(age = a))
-
-val p2 = _ageLens1.modify(_ + 1)(p1)  
-val p3 = _ageLens2.modify(_ + 1)(p1)
-
-p2 shouldBe p3  
-</code></pre>
-
-<p>어노테이션도 사용할 수 있습니다.</p>
-
-<pre><code class="language-scala">// ref - http://julien-truffaut.github.io/Monocle//tut/lens.html
-
-@Lenses case class Point(x: Int, y: Int)
-
-val p = Point(5, 3)  
-Point.x.get(p) shouldBe 5  
-Point.y.set(0)(p) shouldBe Point(5, 0)  
-</code></pre>
-
-<p>이따 보실테지만 <code>Iso</code> 와 <code>Lens</code> 의 <code>get</code> 은 같고 <code>set</code> 은 비슷하므로 다음처럼 조합할 수 있습니다.</p>
-
-<pre><code class="language-scala">def isoToLens[S, A](iso: Iso[S, A]): Lens[S, A] =  
-  Lens(iso.get)(a =&gt; _ =&gt; iso.reverseGet(a)))
-</code></pre>
-
-<h3 id="prism">Prism</h3>
-
-<p><a href="http://julien-truffaut.github.io/Monocle//tut/prism.html">Monocle - Prism</a></p>
-
-<blockquote>
-  <p>A <code>Prism</code> is an Optic used to select part of a <code>Sum</code> type (also know as <code>Coproduct</code>)</p>
-</blockquote>
-
-<p><code>Prism</code> 을 스칼라로 표현하면 다음과 같습니다.</p>
-
-<pre><code class="language-scala">case class Prism[S, A](getOption: S =&gt; Option[A])(reverseGet: A =&gt; S)
-
-// For all s: S, getOption(s) map reverseGet == Some(s) || None
-// For all a: A, getOption(revereGet(a)) == Some(a)
-</code></pre>
-
-<p>즉 <code>Iso</code> 와는 달리 <em>getter</em> 가 <code>Option</code> 을 돌려줄 수 있는데요, 이것은 이전에 언급했듯이 <code>Prism</code> 이 <strong>선택 가능한 타입</strong> 을 나타내는 <code>Sum</code> 에 대한 <em>getter, setter</em> 이기 때문입니다. </p>
-
-<pre><code class="language-scala">// ref - http://julien-truffaut.github.io/Monocle//tut/prism.html
-
-sealed trait Day  
-case object Monday    extends Day  
-case object Tuesday   extends Day  
-case object Wednesday extends Day  
-case object Thursday  extends Day  
-case object Friday    extends Day  
-case object Saturday  extends Day  
-case object Sunday    extends Day
-
-"Prism Basics" in {   
-  /* Since `Tuesday is a singleton, it is isomorphic to `Unit` */
-  val _tuesday = Prism[Day, Unit] {
-    case Tuesday =&gt; Some(())
-    case _       =&gt; None
-  }(_ =&gt; Tuesday)
-
-  _tuesday.reverseGet(()) shouldBe Tuesday
-  _tuesday.getOption(Monday) shouldBe None
-  _tuesday.getOption(Tuesday) shouldBe Some(())
+  optCount match {
+    case Some(count) =&gt; (c1, count)
+    case None =&gt; retrieve(url, c1)
+  }
 }
 </code></pre>
 
-<p>원래는 매크로를 이용하면 더 쉽게 생성할 수 있습니다.</p>
+<p>먼저 <code>State</code> 타입을 적용하고, 그 후에 <code>for</code> 문을 적용한 뒤에, <code>State.state</code> 를 이용해서 조금 더 깔끔하게 바꾸면</p>
 
-<pre><code class="language-scala">val tuesday = GenPrism[Day, Tuesday.type] composeIso GenIso.unit[Tuesday.type]
-
-tuesday.reverseGet(()) shouldBe Tuesday  
-tuesday.getOption(Monday) shouldBe None  
-tuesday.getOption(Tuesday) shouldBe Some(())  
-</code></pre>
-
-<p><strong>Monocle</strong> 에 포함되어 있는 <code>Lens</code>, <code>Prism</code> 과 이렇게 섞어 쓸 수 있습니다.</p>
-
-<pre><code class="language-scala">// ref - http://julien-truffaut.github.io/Monocle//tut/prism.html
-sealed trait LinkedList[A]  
-case class Nil[A]() extends LinkedList[A]  
-case class Cons[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-
-def _nil[A] = Prism[LinkedList[A], Unit]{  
-  case Nil()      =&gt; Some(())
-  case Cons(_, _) =&gt; None
-}(_ =&gt; Nil())
-
-def _cons[A] = Prism[LinkedList[A], (A, LinkedList[A])]{  
-  case Nil()      =&gt; None
-  case Cons(h, t) =&gt; Some((h, t)) 
-}{ case (h, t) =&gt; Cons(h, t)}
-
-import monocle.function.Fields._ /* first, second */  
-import monocle.std.tuple2._      /* tuple2 instance */
-
-(_cons[Int] composeLens first).set(5)(l1) shouldBe
-  Cons(5,Cons(2,Cons(3,Nil())))
-
-(_cons[Int] composeLens first).set(5)(l2) shouldBe
-  Nil()
-</code></pre>
-
-<h3 id="optional">Optional</h3>
-
-<pre><code class="language-scala">Iso     [S, A] (S =&gt; A)          (A =&gt; S)  
-Prism   [S, A] (S =&gt; Option[A])  (A =&gt; S)  
-Lens    [S, A] (S =&gt; A)          ((A, S) =&gt; S)  
-Optional[S, A] (S = Optional[A]) ((A, S) =&gt; S)  
-</code></pre>
-
-<p><code>Optional</code> 은 스칼라로 나타내면 다음과 같습니다.</p>
-
-<pre><code class="language-scala">case class Optional[S, A](getOption: S =&gt; Option[A])(set: (A, S) =&gt; S)
-
-// getOption(s) map set(_, s) == Some(s)
-// getOption(set(a, s)) == Some(a) | None  
-</code></pre>
-
-<p>슬슬 감이 오시죠?</p>
-
-<pre><code class="language-scala">def cons[A]: Prism[List[A], (A, List[A])]  
-def first[A, B]: Lens[(A, B), A]  
-def head[A]: Optional[List[A], A] = cons compose first  
-def void[S, A]: Optional[S, A] = (s =&gt; None)((a, s) =&gt; s)  
-def index[A](i: Int): Optional[List[A], A] =  
-  if (i &lt; 0) void
-  else if (i == 0) head
-  else cons compose second compose index(i - 1)
-</code></pre>
-
-<p>이렇게 정의하면, 아래처럼 쓸 수 있습니다.</p>
-
-<pre><code class="language-scala">Optional.void.getOption("Hello") shouldBe None  
-Optional.void.set(1)("Hello") shouldBe "Hello"  
-Optional.void.setOption(1)("Hello") shouldBe None
-
-val l = List(1, 2, 3)  
-(l applyOptional index(-1) getOption) shouldBe None
-(l applyOptional index(1) getOption) shouldBe Some(2)
-(l applyOptional index(5) getOption) shouldBe None
-
-(l applyOptional index(1) set(10)) shouldBe List(10, 2, 3)
-</code></pre>
-
-<p><br></p>
-
-<h3 id="httprequestexample">HttpRequest Example</h3>
-
-<p>이제 조금 더 긴 예제를 살펴볼까요?</p>
-
-<pre><code class="language-scala">/* ref - http://www.slideshare.net/JulienTruffaut/beyond-scala-lens */
-/* https://github.com/1ambda/Monocle/commit/234097ce1f8601eab8ab47e6610d56aea59acce4 */
-class HttpRequestSpec extends WordSpec with Matchers {  
-  import HttpRequestSpec._
-
-  val r1 = HttpRequest(
-    GET,
-    URI("localhost", 8080, "/ping", Map("hop" -&gt; "5")),
-    Map("socket_timeout" -&gt; "20", "connection_timeout" -&gt; "10"),
-    "")
-
-  val r2 = HttpRequest(
-    POST,
-    URI("gooogle.com", 443, "/search", Map("keyword" -&gt; "monocle")),
-    Map.empty,
-    "")
-
-  val method = GenLens[HttpRequest](_.method)
-  val uri = GenLens[HttpRequest](_.uri)
-  val headers = GenLens[HttpRequest](_.headers)
-  val body = GenLens[HttpRequest](_.body)
-
-  val host = GenLens[URI](_.host)
-  val query = GenLens[URI](_.query)
-
-  val get: Prism[HttpMethod, Unit] = GenPrism[HttpMethod, GET.type] composeIso GenIso.unit[GET.type]
-  val post = GenPrism[HttpMethod, POST.type] composeIso GenIso.unit[POST.type]
-
-  "get and post" in {
-    (method composePrism get).isMatching(r1) shouldBe true
-    (method composePrism post).isMatching(r1) shouldBe false
-    (method composePrism post).getOption(r2) shouldBe Some(())
+<pre><code class="language-scala">// applying State 
+def stargazerCount(url: URL): State[Cache, StarCount] =  
+  checkCache(url) flatMap { optCount =&gt;
+    optCount match {
+      case Some(count) =&gt; State { c =&gt; (c, count) }
+      case None        =&gt; retrieve(url)
+    }
   }
 
-  "host" in {
-    (uri composeLens host).set("google.com")(r2) shouldBe
-      r2.copy(uri = r2.uri.copy(host = "google.com"))
+// use for-comprehension
+def stargazerCount2(url: URL): State[Cache, StarCount] = for {  
+  optCount &lt;- checkCache(url)
+  count &lt;- optCount match {
+    case Some(count) =&gt; State[Cache, StarCount] { c =&gt; (c, count) }
+    case None        =&gt; retrieve(url)
+  }
+} yield count
+
+// State.state
+def stargazerCount(url: URL): State[Cache, StarCount] = for {  
+  optCount &lt;- checkCache(url)
+  count &lt;- optCount
+    .map(State.state[Cache, StarCount])
+    .getOrElse(retrieve(url))
+} yield count
+</code></pre>
+
+<p><code>checkCache</code> 함수에도 적용해 보겠습니다.</p>
+
+<pre><code class="language-scala">def checkCacheOrigin(url: URL, c: Cache): (Cache, Option[StarCount]) =  
+  c.get(url) match {
+    case Some(Timestamped(count, time)) if !stale(time) =&gt;
+      (c.copy(hits = c.hits + 1), Some(count))
+    case _ =&gt;
+      (c.copy(misses = c.misses + 1), None)
   }
 
-  "query using index" in {
-    val r = (uri
-      composeLens query
-      composeOptional index("hop")
-      composePrism stringToInt).modify(_ + 10)(r1)
-
-    r.uri.query.get("hop") shouldBe Some("15")
-  }
-
-  "query using at" in {
-
-    /**
-     *  `at` returns Lens[S, Option[A]] while `index` returns Optional[S, A]
-     *  So that we need the `some: Prism[Option[A], A]` for further investigation
-     */
-    val r = (uri
-      composeLens query
-      composeLens at("hop")
-      composePrism some
-      composePrism stringToInt).modify(_ + 10)(r1)
-
-    r.uri.query.get("hop") shouldBe Some("15")
-  }
-
-  "headers" in {
-    val r = (headers composeLens at("Content-Type")).set(Some("text/plain; utf-8"))(r2)
-    r.headers.get("Content-Type") shouldBe Some("text/plain; utf-8")
-  }
-
-  "headers with filterIndex" in {
-    val r = (headers
-      composeTraversal filterIndex { h: String =&gt; h.contains("timeout") }
-      composePrism stringToInt).modify(_ * 2)(r1)
-
-    println(r)
-    r.headers.get("socket_timeout") shouldBe Some("40")
-    r.headers.get("connection_timeout") shouldBe Some("20")
+def checkCache1(url: URL): State[Cache, Option[StarCount]] = State { c =&gt;  
+  c.get(url) match {
+    case Some(Timestamped(count, time)) if !stale(time) =&gt;
+      (c.copy(hits = c.hits + 1), Some(count))
+    case _ =&gt;
+      (c.copy(misses = c.misses + 1), None)
   }
 }
 
-object HttpRequestSpec {  
-  sealed trait HttpMethod
-  case object GET   extends HttpMethod
-  case object POST  extends HttpMethod
+/**
+ *  Has potential bug.
+ *  Always use `State.gets` and `State.modify`.
+ */
+def checkCache2(url: URL): State[Cache, Option[StarCount]] = for {  
+  c &lt;- State.get[Cache]
+  optCount &lt;- State.state {
+    c.get(url) collect { case Timestamped(count, time) if !stale(time) =&gt; count }
+  }
+  _ &lt;- State.put(optCount ? c.copy(hits = c.hits + 1) | c.copy(misses = c.misses + 1))
+} yield optCount
 
-  case class URI(host: String, port: Int, path: String, query: Map[String, String])
-  case class HttpRequest(method: HttpMethod, uri: URI, headers: Map[String, String], body: String)
-}
+def checkCache(url: URL): State[Cache, Option[StarCount]] = for {  
+  optCount &lt;- State.gets { c: Cache =&gt;
+    c.get(url) collect { case Timestamped(count, time) if !stale(time) =&gt; count }
+  }
+  _ &lt;- State.modify { c: Cache =&gt;
+    optCount ? c.copy(hits = c.hits + 1) | c.copy(misses = c.misses + 1)
+  }
+} yield optCount
 </code></pre>
 
-<p><br></p>
+<p><code>checkCache2</code> 는 <code>State.get</code> <code>State.put</code> 때문에 버그가 발생할 수 있습니다. <code>get</code> 으로 꺼낸 뒤에 <code>put</code> 으로 넣으면, 이전에 어떤 상태가 있었든지, 덮어 씌우기 때문에 주의가 필요합니다. 일반적으로는 <code>put</code> 대신 <code>modify</code> 를 이용합니다.</p>
+
+<pre><code class="language-scala">def init[S]: State[S, S] = State(s =&gt; (s, s))  
+def get[S]: State[S, S] = init  
+def put[S](s: S): State[S, Unit] = State(_ =&gt; (s, ()))
+
+def gets[S, T](f: S =&gt; T): State[S, T] = State(s =&gt; (s, f(s)))  
+def modify[S](f: S =&gt; S): State[S, Unit] = State(s =&gt; {  
+</code></pre>
+
+<p>마지막으로 <code>retrieve</code> 함수도 수정해볼까요</p>
+
+<pre><code class="language-scala">def retrieveOrigin(url: URL, c: Cache): (Cache, StarCount) = {  
+  val count = getStarCountFromWebService(url)
+  val timestamp = Timestamped(count, DateTime.now)
+  (c.update(url, timestamp), count)
+}
+
+def retrieve1(url: URL): State[Cache, StarCount] = State { c =&gt;  
+  val count = getStarCountFromWebService(url)
+  val timestamp = Timestamped(count, DateTime.now)
+  (c.update(url, timestamp), count)
+}
+
+def retrieve(url: URL): State[Cache, StarCount] = for {  
+  count &lt;- State.state { getStarCountFromWebService(url) }
+  timestamp = Timestamped(count, DateTime.now)
+  _ &lt;- State.modify[Cache] { _.update(url, timestamp) }
+} yield count
+</code></pre>
 
 <h3 id="references">References</h3>
 
 <ul>
-<li><a href="http://julien-truffaut.github.io/Monocle/">Monocle</a></li>
-<li><a href="https://github.com/julien-truffaut/Monocle">Github: Monocle</a></li>
-<li><a href="http://www.slideshare.net/JulienTruffaut/beyond-scala-lens">Slideshare: Beyond Scala Lens</a></li>
-<li><a href="http://stackoverflow.com/questions/11245183/importance-of-isomorphic-functions">Stackoverflow - Isomorphism</a></li>
-<li><a href="https://www.wikiwand.com/en/Product_type">Wikipedia - Product</a></li>
-<li><a href="https://www.wikiwand.com/en/Tagged_union">Wikipedia - Sum</a></li>
+<li><a href="https://speakerdeck.com/mpilquist/scalaz-state-monad">State Monad in Scalaz</a></li>
+<li><a href="http://tpolecat.github.io/assets/scalaz.svg">Scalaz Typeclass Hierarchy</a></li>
+<li><a href="http://cs.lth.se/edan40">Haskell Image</a></li>
+<li><a href="https://github.com/fpinscala/fpinscala/wiki/Chapter-11:-Monads">fpinscala - Monad</a></li>
+<li><a href="https://wiki.haskell.org/All_About_Monads#The_IO_monad">Haskell Monad</a></li>
 </ul>]]></content:encoded></item><item><title><![CDATA[Reactive Message Patterns w/ Actor Model, Chapter 1]]></title><description><![CDATA[<p><img src="http://berb.github.io/diploma-thesis/original/resources/actors.svg" alt=""></p>
 
 <h2 id="whyenterprisesoftwaredevelopmentishard">Why Enterprise Software Development Is Hard</h2>
