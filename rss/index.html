@@ -1,5 +1,633 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 16 Oct 2015 14:45:38 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Easy Scalaz 1, State]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 16 Oct 2015 14:46:52 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Easy Scalaz 2, Monad Transformer]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+
+<p>지난 시간엔 <em>State Monad</em> 를 다루었습니다. 그러나 <em>State</em> 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 <em>Option</em>, <em>Future</em> 등 다양한 <em>side-effect</em> 가 필요하기 때문인데요, </p>
+
+<p>서로 다른 <code>Monad</code> 를 조합할 수 있다면 좋겠지만, 아쉽게도  <code>Functor</code>, <code>Applicative</code> 와 달리 모나드는 <em>composing</em> 이 불가능합니다. <a href="http://tonymorris.github.io/blog/posts/monads-do-not-compose">Monad Do Not Compose</a></p>
+
+<p>여러 모나드를 조합해서</p>]]></description><link>http://1ambda.github.io/easy-scalaz-2-monad-transformer/</link><guid isPermaLink="false">20ace812-f624-48ad-bfe9-9d1b707ed231</guid><category><![CDATA[scala]]></category><category><![CDATA[scalaz]]></category><category><![CDATA[monad transformer]]></category><category><![CDATA[EitherT]]></category><category><![CDATA[OptionT]]></category><category><![CDATA[StateT]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 16 Oct 2015 14:46:45 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+
+<p>지난 시간엔 <em>State Monad</em> 를 다루었습니다. 그러나 <em>State</em> 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 <em>Option</em>, <em>Future</em> 등 다양한 <em>side-effect</em> 가 필요하기 때문인데요, </p>
+
+<p>서로 다른 <code>Monad</code> 를 조합할 수 있다면 좋겠지만, 아쉽게도  <code>Functor</code>, <code>Applicative</code> 와 달리 모나드는 <em>composing</em> 이 불가능합니다. <a href="http://tonymorris.github.io/blog/posts/monads-do-not-compose">Monad Do Not Compose</a></p>
+
+<p>여러 모나드를 조합해서 사용하려면 <em>Monad Transformer</em> 가 필요합니다.</p>
+
+<blockquote>
+  <p>Monad transformers are useful for enabling interaction between different types of monads by "nesting" them into a higher-level monadic abstraction.</p>
+</blockquote>
+
+<p><em>Monad Transformer</em> 란 여러 모나드의 <em>effect</em> 를 엮어 새로운 모나드를 만들때 쓸 수 있습니다. 예를 들어</p>
+
+<ul>
+<li>어떤 임의의 모나드 M 을 사용하면서 <code>State</code> 효과를 주고 싶을 때 <code>StateT</code> 를 이용할 수 있습니다</li>
+<li><code>State</code> 를 다루면서, <code>for</code> 내에서 <code>Option</code> 처럼 로직을 다루고 싶다면, <code>OptionT[State, A]</code> 를 이용할 수 있습니다</li>
+</ul>
+
+<p>대략 감이 오시죠? (<code>State</code> 에 대한 자세한 설명은 <a href="http://1ambda.github.io/easy-scalaz-1-state/">Easy Scalaz 1 - State</a> 을 참조)</p>
+
+<p><em>scalaz</em> 에는 기본적으로 여러 모나드 트랜스포머가 정의되어 있습니다. (<a href="https://github.com/scalaz/scalaz/tree/de0516dffadb4ccd2066fe2b132a6d2ba6e38bc0/core/src/main/scala/scalaz">scalaz.core.*</a>) <code>ListT</code>, <code>MaybeT</code> 등등. 이번 글에서는 아래 3개의 모나드 트랜스포머만 다룰 예정입니다. </p>
+
+<ul>
+<li><a href="https://github.com/scalaz/scalaz/blob/de0516dffadb4ccd2066fe2b132a6d2ba6e38bc0/core/src/main/scala/scalaz/OptionT.scala">Scalaz - OptionT.scala</a></li>
+<li><a href="https://github.com/scalaz/scalaz/blob/de0516dffadb4ccd2066fe2b132a6d2ba6e38bc0/core/src/main/scala/scalaz/EitherT.scala">Scalaz - EitherT.scala</a></li>
+<li><a href="https://github.com/scalaz/scalaz/blob/de0516dffadb4ccd2066fe2b132a6d2ba6e38bc0/core/src/main/scala/scalaz/StateT.scala">Scalaz - StateT.scala</a></li>
+</ul>
+
+<h2 id="theproblem">The Problem</h2>
+
+<p>모나드 트랜스포머를 설명하기 위해, 사용자의 Github Repository 에 어느 언어가 쓰였는지를 알려주는 <code>findLanguage</code> 함수를 작성해보겠습니다.</p>
+
+<pre><code class="language-scala">// ref - https://softwarecorner.wordpress.com/2013/12/06/scalaz-optiont-monad-transformer/
+
+import scalaz._, Scalaz._
+
+case class User(name: String, repositories: List[Repository])  
+case class Repository(name: String, languages: List[Language])  
+case class Language(name: String, line: Long)
+
+object GithubService {  
+  def findLanguage(users: List[User],
+                    userName: String,
+                    repoName: String, 
+                    langName: String): Option[Language] =
+    for {
+      u &lt;- users          find { _.name === userName }
+      r &lt;- u.repositories find { _.name === repoName }
+      l &lt;- r.languages    find { _.name === langName }
+    } yield l
+}
+</code></pre>
+
+<p><code>List[User]</code> 를 받아 해당 유저의 레포지토리에서 특정 언어가 있는지, 없는지를 검사하는 간단한 함수입니다.</p>
+
+<pre><code class="language-scala">val u1 = User(  
+  "1ambda", List(
+    Repository("akka", List(
+      Language("scala", 4990),
+      Language("java",  12801)
+    )),
+
+    Repository("scalaz", List(
+      Language("scala", 1451),
+      Language("java",  291)
+    ))
+  )
+)
+
+val u2 = User(  
+  "2ambda", List()
+)
+
+val users = List(u1, u2)
+
+// spec
+"findLanguage" in {
+  val l1 = findLanguage(users, "1ambda", "akka", "scala")
+  val l2 = findLanguage(users, "1ambda", "akka", "haskell")
+  val l3 = findLanguage(users, "1ambda", "rx-scala", "scala")
+  val l4 = findLanguage(users, "adbma1", "rx-scala", "scala")
+
+  l1.isDefined shouldBe true
+  l2.isDefined shouldBe false
+  l3.isDefined shouldBe false
+  l4.isDefined shouldBe false
+  }
+</code></pre>
+
+<p>그런데, 요구사항이 갑자기 변경되어 많이 쓰이는 언어도 찾아내야 합니다. <strong>검사한 것 중 1000 줄이 넘는 언어리스트를 상태로 다루면</strong>,</p>
+
+<pre><code class="language-scala">type LangState = State[List[Language], Option[Language]]  
+</code></pre>
+
+<p>이제 <code>findLanguage</code> 를 다시 작성하면,</p>
+
+<pre><code class="language-scala">def findLanguage2(users: List[User],  
+                  userName: String,
+                  repoName: String,
+                  langName: String): LangState =
+  for {
+    u &lt;- users.find(_.name === userName).point[LangState]
+    r  &lt;- u.repositories.find(_.name === repoName).point[LangState]
+    l &lt;- r.languages.find(_.name === langName).point[LangState]
+    _ &lt;- modify(langs: List[Language] =&gt; if (l.line &gt;= 1000) l :: langs else langs)
+  } yield song
+</code></pre>
+
+<p>당연히 컴파일이 되지 않습니다. 이는 <code>u</code>, <code>r</code>, <code>l</code> 이 각각 <code>User</code>, <code>Repository</code>, <code>Language</code> 가 아니라 <code>Option[User]</code>, <code>Option[Repository]</code>, <code>Option[Language]</code> 이기 때문입니다. 패턴 매칭을 적용하면 아래와 같은 코드가 만들어집니다.</p>
+
+<pre><code class="language-scala">def findLanguage(users: List[User],  
+                  userName: String,
+                  repoName: String,
+                  langName: String): LangState[Option[Language]] =
+  for {
+    optUser &lt;- (users.find { _.name === userName }).point[LangState]
+    optRepository &lt;- (
+      optUser match {
+        case Some(u) =&gt; u.repositories.find(_.name === repoName)
+        case None =&gt; none[Repository] // same as Option.empty[Repository]
+      }).point[LangState]
+    optLanguage &lt;- (optRepository match {
+      case Some(r) =&gt; r.languages.find(_.name === langName)
+      case None    =&gt; none[Language]
+    }).point[LangState]
+    _ &lt;- modify { langs: List[Language] =&gt; optLanguage match {
+      case Some(l) if l.line =&gt; 1000 =&gt; l :: langs
+      case _                         =&gt; langs
+    }}
+  } yield optLanguage
+</code></pre>
+
+<p>위 코드에서 중복되는 부분을 발견할 수 있는데요, 바로 <code>State[S, Option[A]]</code> 에 대해 매번 패턴 매칭을 수행하는 부분이 중복입니다. 이를 제거하기 위해 새로운 모나드 <code>LangStateOption</code> 을 만들면</p>
+
+<pre><code class="language-sacla">case class LangStateOption[A](run: LangState[Option[A]])  
+</code></pre>
+
+<p>이제 모나드를 구현하면</p>
+
+<pre><code class="language-scala">implicit val LangStateOptionMonad = new Monad[LangStateOption] {  
+  override def point[A](a: =&gt; A): LangStateOption[A] =
+    LangStateOption(a.point[Option].point[LangState])
+
+  override def bind[A, B](fa: LangStateOption[A])(f: (A) =&gt; LangStateOption[B]): LangStateOption[B] =
+    LangStateOption(fa.run.flatMap { (o: Option[A]) =&gt; o match {
+      case Some(a) =&gt; f(a).run
+      case None    =&gt; (none[B]).point[LangState] /* same as `(None: Option[B]).point[LangState]` */
+    }})
+}
+
+// findLanguage impl
+def findLanguage3(users: List[User],  
+                  userName: String,
+                  repoName: String,
+                  langName: String): LangStateOption[Language] =
+  for {
+    u &lt;- LangStateOption((users.find { _.name === userName }).point[LangState])
+    r &lt;- LangStateOption((u.repositories.find { _.name === repoName }).point[LangState])
+    l &lt;- LangStateOption((r.languages.find { _.name === langName }).point[LangState])
+    _ &lt;- LangStateOption((modify { langs: List[Language] =&gt;
+      if (l.line &gt;= 1000) l :: langs else langs
+    }) map (_ =&gt; none[Language]))
+  } yield l
+</code></pre>
+
+<p>여기서 잘 보셔야 할 두 가지 부분이 있습니다</p>
+
+<p>A. 우리가 임의의 모나드와 <code>Option</code> 을 엮은 새로운 모나드를 생성한다면, <code>LangStateOption</code> 타입만 다르고 모두 동일한 형태의 코드를 가지게 됩니다.</p>
+
+<p>그런고로 <em>scalaz</em> 에서는 <code>Option</code> 과 임의의 모나드 <code>M</code> 을 조합한 타입을 <code>OptionT[M[_], A]</code> 로 제공합니다. </p>
+
+<p>B. <code>State</code> 와 <code>Option</code> 을 엮어서 <code>State[S, Option[A]]</code> 를 엮을 경우 <code>State</code> 가 먼저 실행되고, 그 후에야 <code>Option</code> 이 효과를 발휘합니다. (<code>fa.run.flatMap { o =&gt; ...</code>}</p>
+
+<p>따라서 어떤 모나드 트랜스포머와, 모나드를 엮냐에 따라서 의미가 달라집니다. 예를 들어 <em>scalaz</em> 에서 제공해주는 모나드 트랜스포머 <code>OptionT</code> 와 <code>StateT</code> 에 대해 </p>
+
+<ul>
+<li><code>OptionT[LangState, A]</code> 는 <code>run: LangState[Option[A]]</code> 이기 때문에 <em>optional value</em> 를 돌려주는 <em>state action</em> 을 의미하고</li>
+<li>반면 <code>StateT[Option, List[Language], A]]</code> 는 <code>run: Option[State[List[Language], A]]</code> 기 때문에 존재하지 않을 수 있는 (<code>None</code>) 일 수 있는 <em>state action</em> 을 의미합니다</li>
+</ul>
+
+<h2 id="monadtrans">MonadTrans</h2>
+
+<p>지금까지 우리가 했던 일을 살펴보면,</p>
+
+<blockquote>
+  <p><code>M[A]</code> -> <code>M[N[A]]</code> -> <code>NT[M[N[_]], A]</code></p>
+</blockquote>
+
+<p>즉 하나의 모나드 <code>M</code> 이 있을때 <code>A</code> 를 <code>N[A]</code> 로 <em>lifting</em> 하는 <code>N</code> 을 위한 모나드 트랜스포머를 <code>NT</code> 를 정의했습니다. <em>scalaz</em> 에서 사용된 모나드 트랜스포머 구현인 <code>MonadTrans</code>, <code>OptionT</code> 을 보면 다음과 같습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/MonadTrans.scala
+trait MonadTrans[F[_[_], _]] {  
+  def liftM[G[_]: Monad, A](g: G[A]): F[G, A]
+
+  ...
+}
+
+// OptionT `liftM` implementation (F == Option)
+// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/OptionT.scala#L213
+
+def liftM[G[_], A](a: G[A])(implicit G: Monad[G]): OptionT[G, A]) =  
+  OptionT[G, A](G.map[A, Option[A]](a) { (a: A) =&gt; 
+    a.point[Option]
+  }
+</code></pre>
+
+<p><strong>Monad Transformer</strong> 또한 <strong>Monad</strong> 기 때문에 또 다른 <strong>Monad Transformer</strong> 와 중첩이 가능합니다. 예를 들어</p>
+
+<pre><code class="language-scala">// ref - http://www.slideshare.net/StackMob/monad-transformers-in-the-wild
+type VIO[A] = ValidationT[IO, Throwable, A]  
+def doIO: VIO[Option[String]  
+val r = OptionT[VIO, String] = optionT[VIO](doIO)
+
+// OptionT[ValidationT[IO, Throwable, A]
+// == IO[Validation[Throwable, Option[A]]
+</code></pre>
+
+<h2 id="optiont">OptionT</h2>
+
+<p>이제 모나드 트랜스포머가 무엇인지 알았으니, <code>OptionT</code> 를 사용해 볼까요?</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/OptionT.scala
+
+final case class OptionT[F[_], A](run: F[Option[A]]) {  
+  self =&gt;
+
+  private def mapO[B](f: Option[A] =&gt; B)(implicit F: Functor[F]) = F.map(run)(f)
+
+  def map[B](f: A =&gt; B)(implicit F: Functor[F]): OptionT[F, B] = new OptionT[F, B](mapO(_ map f))
+
+  def flatMap[B](f: A =&gt; OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] = new OptionT[F, B](
+    F.bind(self.run) {
+      case None    =&gt; F.point(None: Option[B])
+      case Some(z) =&gt; f(z).run
+    }
+  )
+
+  def flatMapF[B](f: A =&gt; F[B])(implicit F: Monad[F]): OptionT[F, B] = new OptionT[F, B](
+    F.bind(self.run) {
+      case None    =&gt; F.point(none[B])
+      case Some(z) =&gt; F.map(f(z))(b =&gt; some(b))
+    }
+  )
+</code></pre>
+
+<p><code>OptionT</code> 는 두 가지 방법으로 생성할 수 있습니다.</p>
+
+<ul>
+<li><code>val ma: M[A]</code> 가 있을 때 <code>ma.liftM[OptionT]</code></li>
+<li><code>val oa: Option[A]</code> 가 있을 때 <code>OptionT(oa.point[M])</code></li>
+</ul>
+
+<pre><code class="language-scala">// type LangState[A] = State[List[Language], A]
+val l = Language("lisp", 309)  
+val os1: OptionT[LangState, Language] = l.point[LangState].liftM[OptionT]  
+val os2: OptionT[LangState, Language] = OptionT(l.some.point[LangState])
+
+os1 === os2  
+os1.run === os2.run  
+os1.run.runZero[List[Language]] === os2.run.runZero[List[Language]]  
+</code></pre>
+
+<p>이제 <code>findLanguage</code> 함수를 <code>OptionT</code> 로 작성할 수 있습니다. </p>
+
+<pre><code class="language-scala">def findLanguage(users: List[User],  
+                  userName: String,
+                  repoName: String,
+                  langName: String): OptionT[LangState, Language] =
+  for {
+    u &lt;- OptionT((users.find { _.name === userName }).point[LangState])
+    r &lt;- OptionT((u.repositories.find { _.name === repoName }).point[LangState])
+    l &lt;- OptionT((r.languages.find { _.name === langName }).point[LangState])
+    _ &lt;- modify { langs: List[Language] =&gt;
+      if (l.line &gt;= 1000) l :: langs else langs
+    }.liftM[OptionT]
+  } yield l
+</code></pre>
+
+<h3 id="sequencingoptiont">Sequencing OptionT</h3>
+
+<p><code>findLanguage</code> 를 이용해서, findLanguage<strong>s</strong> 를 작성하는 것이 가능할까요?</p>
+
+<pre><code class="language-scala">case class LanguageLookup(userName: String, repoName: String, langName: String)
+
+// Option[List[Language]] 를 돌려주는 All or Nothing 버전
+def findLanguages(users: List[User],  
+                     lookups: List[LanguageLookup]): OptionT[LangState, List[Language]] = ???
+
+// List[Option[Language]] 를 돌려주는 덜 엄격한 버전
+def findLanguages(users: List[User],  
+                     lookups: List[LanguageLookup]): LangState[List[Option[Language]]] = ???
+</code></pre>
+
+<p>일단 <code>OptionT[LangState, List[Language]]</code> 를 돌려주는 것 부터 작성해 보겠습니다.</p>
+
+<pre><code class="language-scala">def findLanguages1(users: List[User],  
+                   lookups: List[LanguageLookup]): OptionT[LangState, List[Language]] =
+  lookups map { lookup =&gt;
+    findLanguage(users, lookup.userName, lookup.repoName, lookup.langName)
+  }
+
+// compile error
+Error:(87, 13) type mismatch;
+
+ found   : List[scalaz.OptionT[LangState, Language]]
+ required: scalaz.OptionT[LangState,List[Language]]
+    lookups map { lookup =&gt;
+            ^
+</code></pre>
+
+<p>우리는 <code>OptionT[LangState, List[Language]]</code> 를 돌려줘야 하는데, 단순히 <code>map</code> 만 적용해서는 <code>List[OptionT[LangState, Language]]</code> 밖에 못 얻습니다. 따라서 <code>Traversable.traverseU</code> 를 이용하면</p>
+
+<pre><code class="language-scala">def findLanguages1(users: List[User],  
+                   lookups: List[LanguageLookup]): OptionT[LangState, List[Language]] =
+  lookups.traverseU { lookup =&gt;
+    findLanguage(users, lookup.userName, lookup.repoName, lookup.langName)
+  }
+</code></pre>
+
+<p>여기서 <code>traverseU(f)</code> 가 하는 일은 </p>
+
+<ul>
+<li><code>map(f)</code>: 함수 <code>f</code> 를 적용합니다.</li>
+<li><code>List[OptionT[LangState, Language]]</code> 를 <code>OptionT[LangState, List[Language]]</code> 를 변환합니다. <strong>Option 모나드의 효과를 적용하면서요</strong> (<strong>sequence</strong>)</li>
+</ul>
+
+<p>일반적으로 <code>F[G[B]]</code> 를 <code>G[F[B]]</code> 로 변경하는 함수를 <code>sequence</code> 라 부릅니다. (<code>F</code> 는 <em>Monad</em>, <code>G</code> 는 <em>applicative</em>)</p>
+
+<pre><code class="language-scala">final def sequence[G[_], B](implicit ev: A === G[B], G: Applicative[G]): G[F[B]] = {  
+  ...
+}
+</code></pre>
+
+<p><code>map</code> 후 <code>sequence</code> 를 호출하는 함수가 바로 위에서 보았던 <code>traverse</code> 입니다. 그런데, 더 높은 추상에서 보면 방금 말했던 것과는 반대로, <code>sequence</code> 가 <em>identity</em> 함수를 <code>map</code> 한 <code>traverse</code> 입니다. <strong>scalaz</strong> 에도 실제로 이렇게 구현되어 있습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/syntax/TraverseSyntax.scala#L25
+
+  final def traverse[G[_], B](f: A =&gt; G[B])(implicit G: Applicative[G]): G[F[B]] =
+    G.traverse(self)(f)
+
+  /** Traverse with the identity function */
+  final def sequence[G[_], B](implicit ev: A === G[B], G: Applicative[G]): G[F[B]] = {
+    val fgb: F[G[B]] = ev.subst[F](self)
+    F.sequence(fgb)
+  }
+</code></pre>
+
+<p>위에서 <code>traverse</code> 가 아니라 <code>traverseU</code> 를 호출한 이유는 <code>OptionT</code> 에 대한 타입추론을 이용하기 위해서 입니다.</p>
+
+<p><br></p>
+
+<p>이제 덜 엄격한 <code>findLanguages</code> 함수를 작성해보겠습니다.</p>
+
+<pre><code class="language-scala">def findLanguages2(users: List[User],  
+                   lookups: List[LanguageLookup]): LangState[List[Option[Language]]] =
+  lookups.traverseS { lookup =&gt;
+    findLanguage(users, lookup.userName, lookup.repoName, lookup.langName).run
+  }
+</code></pre>
+
+<p><code>traverseS</code> 는 <em>state</em> 버전의 <code>traverse</code> 입니다. <code>map</code> 을 적용한 <code>List[OptionT[LangState, Language]]</code> 에 대해 <code>LangState[List[Option[Language]]</code> 를 돌려줍니다.</p>
+
+<pre><code class="language-scala">/** A version of `traverse` specialized for `State` */
+final def traverseS[S, B](f: A =&gt; State[S, B]): State[S, F[B]] = F.traverseS[S, A, B](self)(f)  
+</code></pre>
+
+<p><code>State[S, A]</code> 에 대해서 </p>
+
+<ul>
+<li><code>State[S, Option[List[A]]</code> 를 얻고 싶다면 (<strong>all or nothing</strong>) <code>traverseU</code> 를</li>
+<li><code>State[S, List[Option[A]]</code> 를 얻고 싶다면 <code>B = Option[A]</code> 를 <code>List</code> 로 감싸야 하므로 <code>State[S, F[B]]</code> 를 돌려주는 위해 <code>traverseS</code> 를 사용하면 됩니다.</li>
+</ul>
+
+<h3 id="eithert">EitherT</h3>
+
+<p><code>EitherT</code> 는 <em>scalaz</em> 의 <code>Either</code> 에 대한 모나드 트랜스포머입니다. 참고로, <code>scalaz.Either</code> 은 <code>scala.Either</code> 과 달리 <em>right-biased</em> 입니다. <code>Option</code> 처럼요.</p>
+
+<blockquote>
+  <p><code>A \/ B</code> is isomorphic to <code>scala.Either[A, B]</code>, but <code>\/</code> is right-biased, so methods such as <code>map</code> and <code>flatMap</code> apply only in the context of the "right" case.</p>
+</blockquote>
+
+<p><code>scalaz.Either</code> 에 대한 기본적인 설명은 <a href="http://eed3si9n.com/learning-scalaz/Either.html">Learning Scalaz - Either</a> 에서 보실 수 있습니다.</p>
+
+<p><br></p>
+
+<p><code>EitherT</code> 를 위한 간단한 모델을 만들어 보겠습니다. </p>
+
+<ul>
+<li>쿼리를 파싱하고, 실행하는 과정에서 <em>상태</em> 인 <code>QueryState</code> 를 이용하고</li>
+<li>쿼리 파싱에 실패하면 수행하지 않고 종료하기 위해 <code>scalaz.Either</code> 를 사용합니다 </li>
+</ul>
+
+<pre><code class="language-scala">// ref - https://speakerdeck.com/mpilquist/scalaz-state-monad
+
+import scalaz._, Scalaz._
+
+trait Model  
+trait Query  
+trait QueryResult
+
+object QueryService {  
+  def runQuery(s: String, model: Model): String \/ QueryResult = for {
+    query &lt;- parseQuery(s)
+    result &lt;- performQuery(query, model)
+  } yield result
+
+  def parseQuery(s: String): String \/ Query = "TODO".left
+  def performQuery(q: Query, m: Model): String \/ QueryResult = "TODO".left
+}
+</code></pre>
+
+<p>위 코드에 <em>State</em> 와 <code>EitherT</code> 를 추가하면 </p>
+
+<pre><code class="language-scala">trait Model  
+trait Query  
+trait QueryResult  
+trait Transaction 
+
+object QueryService {  
+  type TransactionState[A] = State[Transaction, A]
+  type Transactional[A] = EitherT[TransactionState, String, A]
+
+  def runQuery(s: String, model: Model): Transactional[QueryResult] = for {
+    query &lt;- EitherT(parseQuery(s).point[TransactionState])
+    result &lt;- EitherT(performQuery(query, model).point[TransactionState])
+  } yield result
+
+  def parseQuery(s: String): String \/ Query = ???
+  def performQuery(q: Query, m: Model): String \/ QueryResult = ???
+}
+</code></pre>
+
+<p>여기에 약간의 헬퍼 함수를 더하면,</p>
+
+<pre><code class="language-scala">def runQuery(s: String, model: Model): Transactional[QueryResult] = for {  
+  query &lt;- Transactional(parseQuery(s))
+  result &lt;- Transactional(performQuery(query, model))
+} yield result
+
+object Transactional {  
+  import QueryService._
+  def apply[A](e: String \/ A): Transactional[A] = liftE(e)
+  def liftE[A](e: String \/ A): Transactional[A] = 
+    EitherT(e.point[TransactionState])
+}
+</code></pre>
+
+<p>이제 <code>Transactional</code> 이 이름 그대로의 역할을 할 수 있게 간단한 커넥션도 모델링 해 보겠습니다.</p>
+
+<pre><code class="language-scala">trait Transaction {  
+  def closeConnection: Unit
+  def commit: Unit = closeConnection
+  def rollback: Unit = closeConnection
+}
+
+object QueryService {  
+  type TransactionState[A] = State[Transaction, A]
+  type EitherStringT[F[_], A] = EitherT[F, String, A]
+  type Transactional[A] = EitherStringT[TransactionState, A]
+
+  def parseQuery(s: String): String \/ Query =
+    if (s.startsWith("SELECT")) s"Invalid Query: $s".left[Query]
+    else (new Query {}).right[String]
+
+  def performQuery(q: Query, m: Model): String \/ QueryResult =
+    new QueryResult {}.right
+
+  def runQuery(s: String, model: Model): Transactional[QueryResult] = for {
+    query &lt;- Transactional(parseQuery(s))
+    result &lt;- Transactional(performQuery(query, model))
+    _ &lt;- (modify { t: Transaction =&gt; t.commit; t }).liftM[EitherStringT]
+  } yield result
+}
+</code></pre>
+
+<p>여기서 <code>EitherStringT</code> 타입을 새로 만든건, <code>liftM</code> 을 사용하기 위해서입니다. 만약 <code>liftM[EitherT]</code> 를 이용해 리프팅을 하면, 다음과 같은 예외가 발생합니다.</p>
+
+<pre><code class="language-scala">Error:(37, 59) scalaz.EitherT takes three type parameters, expected: two  
+    _ &lt;- (modify { t: Transaction =&gt; t.commit; t }).liftM[EitherT]
+                                                          ^
+</code></pre>
+
+<p>이제 <code>parseQuery</code> 와 <code>performQuery</code> 실패시 <code>rollback</code> 을 호출하는것을 구현하고, <code>commit</code> 을 헬퍼 함수로 변경하겠습니다.</p>
+
+<pre><code class="language-scala">def runQuery(s: String, model: Model): Transactional[QueryResult] = for {  
+  query &lt;- Transactional(parseQuery(s))
+  result &lt;- Transactional(performQuery(query, model))
+  _ &lt;- commit
+} yield result
+
+def commit: Transactional[Unit] =  
+  (modify { t: Transaction =&gt; t.commit; t }).liftM[EitherStringT]
+
+object Transactional {  
+  import QueryService._
+  def apply[A](e: String \/ A): Transactional[A] = e match {
+    case -\/(error) =&gt;
+      /* logging error and... */
+      liftTS(State[Transaction, String \/ A] { t =&gt; t.rollback; (t, e) })
+    case \/-(a) =&gt; liftE(e)
+  }
+
+  def liftE[A](e: String \/ A): Transactional[A] =
+    EitherT(e.point[TransactionState])
+
+  def liftTS[A](tse: TransactionState[String \/ A]): Transactional[A] =
+    EitherT(tse)
+}
+</code></pre>
+
+<p>이제 다음처럼 실패시 롤백이 호출되고 <code>for</code> 자동으로 스탑되는것을 확인할 수 있습니다.</p>
+
+<pre><code class="language-scala">val t = new Transaction {}  
+val model = new Model {}  
+val result1 = runQuery("qqq", model).run.eval(t)  
+println(result)
+
+// output
+parseQuery  
+rollback  
+-\/(Invalid Query: qqq)
+
+val result2 = runQuery("SELECT", model).run.eval(t)  
+println(result2)
+
+// output
+parseQuery  
+performQuery  
+\/-(QueryService$$anon$2@36804139)
+</code></pre>
+
+<p>만약 <code>Transaction</code> 에 <code>committed</code>, <code>rollbacked</code> 등의 값을 추가하면 <code>eval</code> 대신 <code>exec</code> (<code>run</code> 도 가능) 으로 최종 상태인 <code>Transaction</code> 을 얻어 확인할 수 있습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/StateT.scala#L17
+
+  /** An alias for `apply` */
+  def run(initial: S1): F[(S2, A)] = apply(initial)
+
+  /** Calls `run` using `Monoid[S].zero` as the initial state */
+  def runZero[S &lt;: S1](implicit S: Monoid[S]): F[(S2, A)] =
+    run(S.zero)
+
+  /** Run, discard the final state, and return the final value in the context of `F` */
+  def eval(initial: S1)(implicit F: Functor[F]): F[A] =
+    F.map(apply(initial))(_._2)
+
+  /** Calls `eval` using `Monoid[S].zero` as the initial state */
+  def evalZero[S &lt;: S1](implicit F: Functor[F], S: Monoid[S]): F[A] =
+    eval(S.zero)
+
+  /** Run, discard the final value, and return the final state in the context of `F` */
+  def exec(initial: S1)(implicit F: Functor[F]): F[S2] =
+    F.map(apply(initial))(_._1)
+
+  /** Calls `exec` using `Monoid[S].zero` as the initial state */
+  def execZero[S &lt;: S1](implicit F: Functor[F], S: Monoid[S]): F[S2] =
+    exec(S.zero)
+</code></pre>
+
+<h3 id="statet">StateT</h3>
+
+<p><a href="http://1ambda.github.io/easy-scalaz-1-state/">Easy Scalaz 1 - State</a> 에서 언급했던 것 처럼</p>
+
+<pre><code class="language-scala">type State[S, A] = StateT[Id, S, A]  
+type Id[+X] = X
+
+// 더 엄밀히는,
+
+type StateT[F[_], S, A] = IndexedStateT[F, S, S, A]  
+type IndexedState[-S1, S2, A] = IndexedStateT[Id, S1, S2, A]  
+</code></pre>
+
+<p><code>StateT</code> 에다가 혼합할 모나드 <code>F</code> 에 <code>Id</code> 를 준것이 <code>State</code> 입니다.</p>
+
+<p>여기에 함수 <code>replicateM</code> 을 적용하면,</p>
+
+<pre><code class="language-scala">// https://speakerdeck.com/mpilquist/scalaz-state-monad
+  "replicateM(10)" in {
+
+    // def replicateM(n: Int): F[List[A]]
+    val getAndIncrement: State[Int, Int] = State { s =&gt; (s + 1, s) }
+    getAndIncrement.replicateM(10).run(0) shouldBe (10, (0 until 10).toList)
+  }
+</code></pre>
+
+<p>따라서 <code>State</code> 를 <code>F[_]</code> 라 보면 이걸 <code>F[List[_]]</code> 로 만들어 주므로 여러개의 <code>flatMap</code> 이 중첩된 형태가 됩니다.</p>
+
+<p>따라서 <code>replicateM(100000)</code> 등의 코드는 <em>Stackoverflow</em> 가 발생합니다.</p>
+
+<p>이 문제를 해결하기 위해 <code>Trampoline</code> 을 이용할 수 있습니다.</p>
+
+<blockquote>
+  <p>Scalaz provides the <code>Free</code> data type, which when used with Function0, trade heap for stack</p>
+</blockquote>
+
+<p>이럴때 <code>Trampoline</code> 을 사용하면, <em>stackoverflow</em> 를 피할 수 있습니다. (그만큼의 힙을 사용해서)</p>
+
+<pre><code class="language-scala">// type Trampoline[+A] = Free[Function0, A]
+
+"replicateM(1000)" in {
+
+  import scalaz.Free._
+
+  val getAndIncrement: State[Int, Int] = State { s =&gt; (s + 1, s) }
+  getAndIncrement.lift[Trampoline].replicateM(1000).run(0).run shouldBe (1000, (0 until 1000).toList)
+}
+</code></pre>
+
+<p><code>Trampoline</code> 은 후에 <code>Free</code> 를 살펴보면서 다시 보겠습니다.</p>
+
+<h3 id="references">References</h3>
+
+<ul>
+<li><a href="http://tonymorris.github.io/blog/posts/monads-do-not-compose">Tony Morris - Monad Do Not Compose</a></li>
+<li><a href="https://softwarecorner.wordpress.com/2013/12/06/scalaz-optiont-monad-transformer/">Scalaz OptionT Monad Transformer</a></li>
+<li><a href="https://speakerdeck.com/mpilquist/scalaz-state-monad">State Monad in Scalaz</a></li>
+<li><a href="https://github.com/earldouglas/scala-scratchpad/tree/master/category-theory/monad-transformers">scala-scratchpad: Monad Transformer in Scala</a></li>
+<li><a href="http://tpolecat.github.io/assets/scalaz.svg">Scalaz Typeclass Hierarchy</a></li>
+<li><a href="http://stackoverflow.com/questions/26602611/how-to-understand-traverse-traverseu-and-traversem">Stackoverflow - traverseU, traverseM</a></li>
+<li><a href="http://cs.lth.se/edan40">Haskell Image</a></li>
+<li><a href="https://wiki.haskell.org/All_About_Monads#The_IO_monad">Haskell Wiki - All About Monads</a></li>
+</ul>]]></content:encoded></item><item><title><![CDATA[Easy Scalaz 1, State]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
 
 <h3 id="state">State</h3>
 
@@ -3153,501 +3781,4 @@ Collections.sort(listOfCountries,new Comparator&lt;Country&gt;() {
 <h3 id="refs">Refs</h3>
 
 <p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br>
-(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></content:encoded></item><item><title><![CDATA[Pattern Discovery 2]]></title><description><![CDATA[<p><img src="https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png" alt=""></p>
-
-<p>패턴 마이닝을 통해 만들어지는 수많은 <em>pattern</em>, <em>rule</em> 이 모두 유용한 것은 아닙니다. 따라서 <em>interestingness measure</em> 을 위해 객관적이거나, 주관적인 평가방법을 이용할 수 있습니다.</p>
-
-<p>(1) <strong>Objective interestingness measures</strong></p>
-
-<ul>
-<li>support, confidence, correlation</li>
-</ul>
-
-<p>(2) <strong>Subjective interestingness measures</strong></p>
-
-<ul>
-<li><em>Query-based:</em> relevant to a user's particular request</li>
-<li><em>Against one's knowledge-base:</em> unexpected, freshness, timeliness</li>
-<li><em>Visualization tools:</em> Multi-dimensional,</li></ul>]]></description><link>http://1ambda.github.io/pattern-discovery-2/</link><guid isPermaLink="false">eae33e61-9556-4292-99f1-9b45d93ceb62</guid><category><![CDATA[coursera]]></category><category><![CDATA[pattern discovery]]></category><category><![CDATA[data mining]]></category><category><![CDATA[lift]]></category><category><![CDATA[pattern-fusion]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 20 Feb 2015 02:49:15 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://m1.behance.net/rendition/modules/7116731/disp/d18c13cd5b49bf40b41e6ef0610b26d3.png" alt=""></p>
-
-<p>패턴 마이닝을 통해 만들어지는 수많은 <em>pattern</em>, <em>rule</em> 이 모두 유용한 것은 아닙니다. 따라서 <em>interestingness measure</em> 을 위해 객관적이거나, 주관적인 평가방법을 이용할 수 있습니다.</p>
-
-<p>(1) <strong>Objective interestingness measures</strong></p>
-
-<ul>
-<li>support, confidence, correlation</li>
-</ul>
-
-<p>(2) <strong>Subjective interestingness measures</strong></p>
-
-<ul>
-<li><em>Query-based:</em> relevant to a user's particular request</li>
-<li><em>Against one's knowledge-base:</em> unexpected, freshness, timeliness</li>
-<li><em>Visualization tools:</em> Multi-dimensional, interactive examination</li>
-</ul>
-
-<p>이 방법중, 먼저 객관적인 방법에 대해 좀 더 알아보겠습니다.</p>
-
-<p><br></p>
-
-<h3 id="liftchisquared">Lift, χ²(Chi-squared)</h3>
-
-<p><em>confidence</em> 는 두 변수가 관련있는지 말해주지만, <em>positive</em> 혹은 <em>negative</em> 관계인지 말해주지 않습니다. 이를 판별하기 위해 <em>lift</em> 를 이용할 수 있죠</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?lift%28B%2C%20C%29%20%5C%5C%20%5C%5C%20%3D%20%7Bc%28B%20-%3E%20C%29%20%5Cover%20s%28C%29%7D%20%5C%5C%20%5C%5C%20%5C%5C%20%3D%20%7Bs%28B%20%5Ccup%20C%29%20%5Cover%20%7Bs%28B%29%20%5Ctimes%20s%28C%29%7D%7D" alt=""></p>
-
-<p><code>Lift(B, C)</code> 는 <code>B</code> 와 <code>C</code> 가 얼마나 관련있는지를 말해줍니다. 수식을 보면 알겠지만</p>
-
-<ul>
-<li><code>Lift(B, C) = 1</code> 이면 <code>B</code> 와 <code>C</code> 는 <em>independent</em></li>
-<li><code>&gt; 1</code> 이면 <em>positive correlated</em></li>
-<li><code>&lt; 1</code> 이면 <em>negative correlated</em></li>
-</ul>
-
-<p><br></p>
-
-<p><em>correlated events</em> 를 판별하는 다른 방법은 <code>χ²</code> 를 이용하는 것입니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cchi%5E2%20%3D%20%5Csum%20%7B%28observed%20-%20expected%29%5E2%20%5Cover%20expected%7D" alt=""></p>
-
-<ul>
-<li><code>χ² = 0</code> 이면 <em>independent</em></li>
-<li><code>χ² &gt; 1</code> 이면 <em>correlated</em> 이며 <em>positive</em> 인지 <em>negative</em> 인지는 <em>expected</em> 값과 비교하면 알 수 있습니다.</li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/null_transaction.jpg" alt=""></p>
-
-<p>그러나 <em>lift</em> 와 <em>chi-squared</em> 가 항상 좋은 평가지표는 아닙니다. 위 테이블을 보면 <code>Lift(B, C) = 8.44</code> 입니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?lift%28B%2C%20C%29%20%5C%5C%20%5C%5C%20%3D%20%7B%28100/102100%29%20%5Cover%20%7B%281100/102100%29%20*%20%281100/102100%29%7D%7D%20%5C%5C%20%5C%5C%20%3D%208.4380" alt=""></p>
-
-<p>이는 <code>~B and ~C</code> 부분의 숫자가 <code>B, C</code> 보다 월등히 높아서 그런데, 이런 영역을 <em>null transaction</em> 이라 부릅니다. </p>
-
-<p><code>B, C</code> 는 같이 일어날 확률이 상당히 낮지만, <em>null transaction</em> 때문에 높은것처럼 보입니다.</p>
-
-<p><br></p>
-
-<h3 id="nullinvariantmeasures">Null Invariant Measures</h3>
-
-<p><em>lift</em> 와 <em>chi-squared</em> 는 많은 수의 <em>null transaction</em> 이 있을 때 좋은 평가 지표가 될 수 없습니다. </p>
-
-<p>이를 해결하기 위해 <em>null transaction</em> 에 영향을 받지 않는 <em>null-invaraint measures</em> 를 사람들이 만들어 두었습니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/null_invariant_measures.jpg" alt=""></p>
-
-<p><em>null invariance</em> 는 <em>massive transaction data</em> 를 마이닝할때 아주 중요합니다. <em>null transaction</em> 이 아주 많을 수 있기 때문이죠. </p>
-
-<p>그러면 이 많은 <em>measures</em> 중 어떤것이 가장 나을까요? 예제 데이터로 한번 비교해 봅시다. <code>m</code> 은 <em>milk</em>, <code>c</code> 는 <em>coffee</em> 입니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/comparison_of_measures.jpg" alt=""></p>
-
-<blockquote>
-  <p>Kulc holds firm and is in balance of both directional implications</p>
-</blockquote>
-
-<p>여기에 <em>imbalance ratio</em> 라는 개념을 도입할 수 있습니다.</p>
-
-<ul>
-<li><strong>imbalance ratio:</strong> measure the imbalance of two itemsets <code>A</code> and <code>B</code> in rule implications</li>
-</ul>
-
-<p><img src="http://latex.codecogs.com/gif.latex?IR%28A%2C%20B%29%20%5C%5C%20%5C%5C%20%3D%20%7B%7B%7Cs%28A%29%20-%20s%28B%29%7D%20%5Cover%20s%28A%29%20&plus;%20s%28B%29%20-%20s%28A%5Ccup%20B%29%7D" alt=""></p>
-
-<p><em>Kulc</em> 와 <em>IR</em> 을 이용하면 조금 더 데이터를 자세히 살펴볼 수 있죠.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/IR.jpg" alt=""></p>
-
-<ul>
-<li>D4 is <em>neutral</em>, <em>balanced</em></li>
-<li>D5 is <em>neutral</em>, but <em>imbalanced</em></li>
-<li>D6 is <em>neutral</em>, but very <em>imbalanced</em></li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/DBLP_example.jpg" alt=""></p>
-
-<p><code>ID 5</code> 를 보면, <em>Kulc</em> 는 아이템 <code>A, B</code> 가 상당한 연관성이 있지만, <em>imbalance</em> 하므로 <code>0.562</code> 의 값을 돌려주는 것을 볼 수 있습니다.</p>
-
-<p><br></p>
-
-<h2 id="5miningdiversepatterns">5. Mining Diverse Patterns</h2>
-
-<p>이번 시간에 배울 주제들은 다음과 같습니다.</p>
-
-<ul>
-<li>Mining Multiple-Level Associations</li>
-<li>Mining Multi-Dimensional Associations</li>
-<li>Mining Quantitative Associations</li>
-<li>Mining Negative Correlations</li>
-<li>Mining Compressed and Redundancy-Aware Patterns</li>
-<li>Mining Long/Colossal Patterns</li>
-</ul>
-
-<p><br></p>
-
-<h3 id="multilevelassociations">Multi-Level Associations</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/multi_level_items.jpg" alt=""></p>
-
-<p><em>item</em> 은 하위 계층으로 다시 분류될 수 있습니다. 이럴때는 단순히 <em>uniform min support</em> 를 이용하는 것보다, 아래 계층으로 내려갈수록 <em>reduced min support</em> 를 이용하는 편이 더 낫습니다.</p>
-
-<p>그리고 한번의 여러 단계(<em>multi-level</em>) 을 마이닝하기 위해 <em>shared multi-level mining</em> 이란 기법을 이용할 수 있습니다.  이건 뒷부분에서 더 살펴보겠습니다.</p>
-
-<p><em>multi-level association</em> 마이닝의 문제점은 <em>redundant rules</em> 을 만들 수 있다는 점입니다. 따라서 필터링 기법이 필요합니다. <code>level 1</code> 에서 발견된 룰을, <code>level 2</code> 에서 다시 검사하지 않는것 처럼요</p>
-
-<ul>
-<li><code>milk -&gt; wheat bread [s=8%, c=70%]</code></li>
-<li><code>2% milk -&gt; wheat breadk [s=2%, c=72%]</code></li>
-</ul>
-
-<p>아이템에 따라서 <em>customized min support</em> 가 필요한 경우도 있습니다. 우유나 빵은 그렇지 않아도 상관 없지만, <em>diamond</em>, <em>watch</em> 등은 커스터마이징이 꼭 필요합니다. 고가의 아이템이니까요. 이 경우 <em>group-based individualized min-support</em> 를 이용하면 됩니다.</p>
-
-<ul>
-<li><code>{diamon, watch}: 0.05%; {bread, milk}: 5%;, ...</code></li>
-</ul>
-
-<p><br></p>
-
-<h3 id="multidimensionalassociations">Multi-Dimensional Associations</h3>
-
-<p><em>multi-dimensional</em> 의 예는</p>
-
-<p>(1) <strong>inter-dimension association rules</strong> (no repeated pred)</p>
-
-<p><code>age(X, "18-25") ∩ occupation(X, "student") =&gt; buys(X, "coke")</code></p>
-
-<p>(2) <strong>hybrid-dimension association rules</strong> (repeated pred)</p>
-
-<p><code>age(X, "18-25") ∩ buys(X, "popcorn") =&gt; buys(X, "coke")</code></p>
-
-<p><em>attribute</em> 는 <em>categorical</em> 이거나 <em>quantitative</em> 일 수 있습니다. </p>
-
-<p><br></p>
-
-<h3 id="quantitativeassociations">Quantitative Associations</h3>
-
-<p><em>numerical attribute</em> (e.g <em>age, salary</em>) 를 마이닝 하기 위해 다양한 <em>method</em> 를 사용할 수 있습니다.</p>
-
-<p>(1) static discretization based on prefefined concept hierarchies. data cube-based aggregation</p>
-
-<p>(2) dynamic discretization based on data distribution</p>
-
-<p>(3) clustering: distance-based association. first one-dimensional clustering, then association</p>
-
-<p>(4) deviation analysis</p>
-
-<p><br></p>
-
-<h3 id="negativecorrelations">Negative Correlations</h3>
-
-<p><em>rare pattern</em> 과 <em>negative pattern</em> 은 다릅니다.</p>
-
-<p>(1) <strong>Rare patterns</strong></p>
-
-<ul>
-<li>아주 낮은 <em>support</em> 지만, 롤렉스 시계를 사는 행위처럼 중요할 수 있습니다</li>
-<li><em>individualized</em>, <em>group-based min support</em> 를 다양한 아이템 그룹에 설정해서 마이닝합니다.</li>
-</ul>
-
-<p>(2) <strong>Negative patterns</strong></p>
-
-<ul>
-<li>자동차를 동시에 2개 사는것처럼, 같이 일어나는 경우가 드뭅니다 (<em>unlikely to happen together</em>)</li>
-</ul>
-
-<p><br></p>
-
-<p><em>negative pattern</em> 은 어떻게 마이닝할까요? 한가지 방법은 <em>lift</em> 에서 사용했던 <em>support-based definition</em> 을 이용하는 것입니다.</p>
-
-<ul>
-<li><code>s(A ∪ B) &lt;&lt; s(A) X s(B)</code></li>
-</ul>
-
-<p>이 정의는 작은 <em>transaction dataset</em> 에서는 통하지만, 데이터 크기가 커지면 적용되지 않습니다.</p>
-
-<p>(1) 전체 200개의 트랜잭션에 대해</p>
-
-<ul>
-<li><code>s(A∪B) = 0.005, s(A) x s(B) = 0.25, s(A∪B) &lt;&lt; s(A) X s(B)</code></li>
-</ul>
-
-<p>(2) 전체 10^5 개의 트랜잭션에 대해</p>
-
-<ul>
-<li><code>s(A∪B) = 1/10^5, s(A) x s(B) = 1/10^3 X 1/10^3, s(A∪B) &gt;&gt; s(A) X s(B)</code></li>
-</ul>
-
-<p>이전에 봤었던 <em>null transaction</em> 때문입니다. <em>support-based definition</em> 은 <em>not null-invariant</em> 입니다.</p>
-
-<p>이를 해결하기 위해 <em>Kulczynski measure-based definition</em> 을 이용하면</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?%28P%28A%7CB%29%20&plus;%20P%28B%7CA%29%29%20/%202%20%3C%20%5Cepsilon" alt=""></p>
-
-<p>여기서 <code>ɛ</code> 는 <em>negative pattern threshold</em> 를 의미합니다. 만약 위 수식이 <code>ɛ</code> 보다 작으면 <em>negatively correlated</em> 란 뜻이지요. </p>
-
-<p><br></p>
-
-<h3 id="compressedpatterns">Compressed Patterns</h3>
-
-<p>때로는 너무 많아 의미가 없는 <em>scattered pattern</em> 때문에 <em>compressed pattern</em> 을 마이닝 할 필요가 있습니다. </p>
-
-<p><em>compressed pattern</em> 인 <em>closed pattern</em> 과 <em>max pattern</em> 의 정의를 복습해보면</p>
-
-<ul>
-<li><strong>closed pattern:</strong> A pattern <code>x</code> is <strong>closed</strong> if <code>x</code> is frequent, and there exists no super pattern <code>Y ⊃ X</code> with the same support as <code>X</code></li>
-<li><strong>max pattern:</strong> A pattern <code>X</code> is a <strong>max pattern</strong>. if <code>X</code> is frequent and there exists no frequent super-pattern <code>Y ⊃ X</code></li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/compressed_pattern.jpg" alt=""></p>
-
-<p>예를 들어 위 그림에서 <code>P1, 2, 3, 4, 5</code>는 모두 <em>closed</em> 고, <code>P3</code> 는 <em>max pattern</em> 입니다. <em>P3</em> 만 남기자니 <em>information loss</em> 가 너무 많고, 다 남기자니 엣지가 없습니다. <code>P2, P3, P4</code> 정도면 적당할 것 같습니다.</p>
-
-<p>이 적당한 정도를 결정하기 위해 <em>pattern distance measure</em> 을 사용할 수 있습니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?Dist%28P_1%2C%20P_2%29%20%3D%201%20-%20%7B%7CT%28P_1%29%20%5Ccap%20T%28P_2%29%7C%20%5Cover%20%7CT%28P_1%29%20%5Ccup%20T%28P_2%29%7C%7D" alt=""></p>
-
-<p>그리고 이 <em>distance</em> 값을 이용해 <em>δ-cluserting</em> 을 합니다. </p>
-
-<ul>
-<li><strong>δ-clustering:</strong> For each pattern <code>P</code>, find all patterns which can be expressed by <code>P</code> and whose distance to within <code>δ</code> (<em>δ-cover</em>)</li>
-</ul>
-
-<p><br></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/redundancy_aware_top_k.jpg" alt=""></p>
-
-<p><em>Redundancy-Aware Top-k pattern</em> 이란 기법도 있습니다.</p>
-
-<p><code>(a)</code> 가 본래 패턴이고, <em>traditional top-k</em> 기법으로는 가장 컴팩트한(진한) 3개의 패턴만 남깁니다. 따라서 우측 클러스터는 버려지죠.</p>
-
-<p>이를 막기 위해 클러스터별로 하나씩 남기는 <code>(d)</code> <em>summarization</em> 을 이용할 수도 있으나, 이건 중요한 것만을 돌려주지 않습니다. </p>
-
-<p>따라서 두 방법을 조합한 <code>(b)</code>, 중복을 허용하는 <em>redundancy-aware top-k</em> 를 이용하면 적절한 패턴을 남기고, 나머지는 버릴 수 있습니다.</p>
-
-<p>이를 위해 <em>MMS (Maximal Marginal Significance)</em> 메소드를 사용할 수 있습니다.</p>
-
-<p><br></p>
-
-<h3 id="colossalpatterns">Colossal Patterns</h3>
-
-<p><em>long pattern mining</em> 은 소셜 네트워크 분석이나, 바이오인포메틱스, 소프트웨어 엔지니어링등 다양한 분야에서 필요로 합니다. 그러나, 지금까지 우리가 본건 길이가 10 보다 적은 패턴을 마이닝하는 기법들이었습니다.</p>
-
-<p><em>long pattern</em> 을 분석하기 어려운 이유는 지난시간에 봤듯이 <em>downward closure property</em> 때문입니다. <em>frequent pattern</em> 의 <em>sub-pattern</em> 은 적어도 그만큼은 빈번하기 때문에, 패턴의 길이가 길고 <em>frequent</em> 하다면, 그 수많은 서브패턴을 분석해야 하는 것이지요.</p>
-
-<p><em>BFS (e.g Apriori)</em>, <em>DFS (e.g FPgrowth)</em> 등 무엇을 이용하든 수 많은 패턴을 검색해야 하고, <em>combinatorial explosion</em> 과 마주할 수 밖에 없습니다.</p>
-
-<p><code>40C20</code> 컴비네이션의 경우 기존에 존재하는 가장 빠른 마이닝 알고리즘들(e.g FP-Close, LCM)도 계산을 완료하지 못하는 경우가 많습니다. 그러나 놀랍게도 <em>pattern-fusion</em> 알고리즘은 1초만에 결과를 돌려줍니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/pattern_fusion1.jpg" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/pattern_fusion2.jpg" alt=""></p>
-
-<p>즉, 작은 <em>core pattern</em> 을 모아 <em>colossal pattern</em> 을 만들어 낸다는 것이지요.</p>
-
-<ul>
-<li><strong>core patterns</strong> of a colossal pattern <code>α</code>: A set of subpatterns of <code>α</code> that cluster around <code>α</code> by sharing a similar support</li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/robustness_of_colossal_pattern.jpg" alt=""></p>
-
-<p><em>core pattern</em> 에 대한 더 엄밀한 정의는 위와 같습니다.</p>
-
-<p><em>frequent pattern</em> <code>α</code> 에 대해, <em>sub-pattern</em> 인 <code>β</code> 는  다음을 만족하면 <em>τ-core pattern</em> 입니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?%7B%7CD_%5Calpha%7C%20%5Cover%20%7CD_%5Cbeta%7C%7D%20%5Cgeq%20%5Ctau%5C%20%28where%5C%20%5Ctau%5C%20is%5C%20core%5C%20ratio%29" alt=""></p>
-
-<p>그리고 패턴 <code>α</code> 에서 <code>d</code> 만큼의 아이템을 제거해도, 여전히 <em>τ-core pattern of α</em> 이면 <code>α</code> 를 <em>(d, τ)-robust</em> 라 부릅니다. 따라서 <code>d</code> 만큼의 아이템이 있거나 없어도, 코어패턴이므로 전체 숫자는 <code>2^d</code> 만큼의 코어패턴을 만들 수 있습니다.</p>
-
-<p>그러므로 <em>colossal pattern</em> 이라면, 정말 많은 수의 <em>core pattern</em> 을 만들 수 있습니다. 그리고 이런 <em>core pattern</em> 은  <em>distance</em> 가 충분히 작으므로 <em>dense ball</em> 형태로 뭉칩니다. 결과적으로 <em>random pattern space</em> 에서 패턴을 뽑으면, <em>dense ball</em> 내의 패턴일 확률이 굉장히 높습니다.</p>
-
-<p>이를 기반으로한 <em>Pattern-Fusion Algorithm</em> 은</p>
-
-<ol>
-<li><p><strong>Initialize (creating initial pool)</strong>: </p></li>
-<li><p>Use an existing algorithm to min all frequent patterns up to a small size (e.g 3)</p></li>
-<li><p><strong>Iteration (iterative pattern fusion):</strong> </p></li>
-<li><p>At each iteration, <code>K</code> seed patterns are randomly picked from the current pattern pool</p></li>
-<li>For each seed pattern thus picked, we find all the patterns within a bounding ball centered at the seed pattern</li>
-<li>All these patterns found are fused tohether to generate a set of super-patterns</li>
-<li><p>All the super-patterns thus generated form a new pool for the next iteration</p></li>
-<li><p><strong>Termination:</strong></p></li>
-<li><p>when the current poll contains no more than <code>K</code> patterns at the beginning of an iteration</p></li>
-</ol>
-
-<p><br></p>
-
-<h2 id="6constraintbasedmining">6. Constraint-Based Mining</h2>
-
-<p>이번시간에 배울 내용은 다음과 같습니다.</p>
-
-<ul>
-<li>Different Pruning Strategies</li>
-<li>Constrainted Mining with Pattern Anti-Monotonicity</li>
-<li>Constrainted Mining with Pattern Monotonicity</li>
-<li>Constrainted Mining with Data Anti-Monotonicity</li>
-<li>Constrainted Mining with Succinct Constraints</li>
-<li>Constrainted Mining with Convertible Constraints</li>
-<li>Hanlding Multiple Constraints</li>
-</ul>
-
-<p>왜 <em>Constraint-Based Mining</em> 이 필요할까요? 데이터셋에 있는 <strong>all</strong> 패턴을 <strong>autonomously</strong> 하게 찾는것은 불가능합니다. 이는 <em>compressed pattern mining</em> 에서 언급했듯이, 너무 많은 패턴이 있기 때문이지요. 특히 데이터셋이 커지면 사용자가 관심 없는 데이터가 기하급수적으로 늘어납니다.</p>
-
-<p>따라서 패턴 마이닝은 사용자가 무엇을 원하는지 <em>data mining query language</em> 나 <em>GUI</em> 를 통해서 직접 명령을 내리는 <em>interactive</em> 한 과정이 되야 합니다.</p>
-
-<p><em>constraints</em> 를 이용하면 다음과 같은 장점이 있습니다.</p>
-
-<ul>
-<li><strong>user flexibility:</strong> provides <strong>constraints</strong> on what to be mined</li>
-<li><strong>optimization:</strong> explores such constraints for efficient mining</li>
-</ul>
-
-<p><br></p>
-
-<h3 id="differentpruning">Different Pruning</h3>
-
-<p><em>constraints</em> 에 따라 <em>pruning strategy</em> 달라집니다.</p>
-
-<p>(1) <strong>pattern space pruning constraints</strong></p>
-
-<ul>
-<li><em>anti-monotonic:</em> if constraint <code>c</code> is violated, its further mining can be terminated</li>
-<li><em>monotonic:</em> if <code>c</code> is satisfied, no need to check <code>c</code> agina</li>
-<li><em>succinct:</em> <code>c</code> can be enforced by directly manipulating the data</li>
-<li><em>convertible:</em> <code>c</code> can be converted to monotonic or anti-monotonic if items can be propery ordered in processing</li>
-</ul>
-
-<p>(2) <strong>data space pruning constraints</strong></p>
-
-<ul>
-<li><em>data succinct:</em> data space can be pruned at the initial pattern mining process</li>
-<li><em>data anti-monotonic:</em> if a transaction <code>t</code> doesn't satisfy <code>c</code>, then <code>t</code> can be pruned to reduce data processing effort</li>
-</ul>
-
-<p><br></p>
-
-<h3 id="antimonotonicity">Anti-Monotonicity</h3>
-
-<p><em>constaint</em> <code>C</code> 는 다음의 경우에 <em>anti-monotone</em> 이라고 말합니다.</p>
-
-<ul>
-<li>If an itemset <code>S</code> <strong>violates</strong> constraint <code>C</code>, so does any of its superset</li>
-<li>That is, mining on itemset <code>S</code> can be terminated</li>
-</ul>
-
-<p>예를 들어서 다음의 제약조건은 <em>anti-monotone</em> 입니다</p>
-
-<ul>
-<li><code>sum(S.price) &lt;= v</code></li>
-<li><code>range(S.profit) &lt;= 15</code> </li>
-<li><code>support(S) &gt;= k</code></li>
-</ul>
-
-<p>따라서 <em>Apriori pruning</em> 은 본질적으론 <em>anti-monotonic constaint</em> 에 기반합니다.</p>
-
-<p>반대로 <code>sum(S.price) &gt;= v</code> 는 <em>not anti-monotone</em> 입니다.</p>
-
-<p><br></p>
-
-<h3 id="monotonicity">Monotonicity</h3>
-
-<p><em>itemset</em> <code>S</code> 가 <em>constaint</em> <code>c</code> 를 만족할때, <code>S</code> 의 <em>superset</em> 도 그러하다면 <code>c</code> 는 <em>monotone</em> 이라 부릅니다. 다음은 모두 <em>monotone</em> 입니다.</p>
-
-<ul>
-<li><code>sum(S.price) &gt;= v</code></li>
-<li><code>min(S.price) &lt;= v</code></li>
-<li><code>range(S.profit) &gt;= 15</code></li>
-</ul>
-
-<p><br></p>
-
-<h3 id="dataantimonotonicity">Data Anti-Monotonicity</h3>
-
-<p><em>data anti-monotone</em> 는 <em>transaction</em> 기반으로 <em>pruning</em> 을 진행해 나아갑니다. 정의는 이렇습니다.</p>
-
-<ul>
-<li>In the mining process, if a data entry <code>t</code> cannot satisfy a pattern <code>p</code> under <code>c</code>, <code>t</code> cannot satisfy <code>p</code>'s superset either</li>
-</ul>
-
-<p>다음은 모두 <em>data anti-monotone</em> 입니다.</p>
-
-<ul>
-<li><code>sum(S.price) &gt;= v</code> </li>
-<li><code>min(S.price) &lt;= v</code></li>
-<li><code>range(S.profit) &gt;= 25</code></li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/pattern-discovery/week2/data_anti_monotone.jpg" alt=""></p>
-
-<p><br></p>
-
-<h3 id="succinctconstaints">Succinct Constaints</h3>
-
-<p><em>succintness</em> 는 <em>data space</em> 와 <em>pattern space</em> 를 모두 <em>pruning</em> 합니다.</p>
-
-<blockquote>
-  <p>if the constaint <code>c</code> can be enforced by directly manipulating the data</p>
-</blockquote>
-
-<p>(1) To find those patterns without item <code>i</code></p>
-
-<p><em>pattern space pruning</em> 처럼 <code>i</code> 을 DB 에서 제거합니다.</p>
-
-<p>(2) To find those patterns containing item <code>i</code></p>
-
-<p><em>data space pruning</em> 처럼 <em>i-projected</em> DB 만 마이닝 합니다.</p>
-
-<p>(3) <code>min(S.price) &lt;= v</code> is succinct</p>
-
-<p><code>price &lt;= v</code> 에서 시작해서, <em>high-price item</em> 을 제거해 나가기 때문에 <em>pattern + data space pruning</em> 입니다.</p>
-
-<p>(4) <code>sum(S.price) &gt;= v</code> is not succinct</p>
-
-<p><em>itemset</em> <code>S</code> 의 <em>sum</em> 이 점점 크기때문에, 미리 제거할 수 없습니다.</p>
-
-<p><br></p>
-
-<h3 id="convertibleconstaints">Convertible Constaints</h3>
-
-<blockquote>
-  <p>Convert tough constaints into (anti-) monotone by proper ordering of items in transactions</p>
-</blockquote>
-
-<p><code>avg(S.profit) &gt; 20</code> 같은 경우는 <em>anti-monotone</em> 도 <em>monotone</em> 도 아닙니다. </p>
-
-<ul>
-<li>만약 현재 만족한다고 했을때, 아주 작은 <code>profit*</code> 을 가지는 아이템을 추가하면 <em>violation</em> 이고,</li>
-<li>만약 현재 위반한다고 했을때, 아주 큰 값을 추가하면 <em>satisfaction</em> 이기 때문입니다.</li>
-</ul>
-
-<p>이런 <em>constaint</em> 에 대해서도 <em>pruning advantage</em> 를 얻고자 하는것이 바로 <em>convertible constaints</em> 의 목적입니다. 가능하면 <em>anti-monotone</em> 이 더 선호되는데, 이는 <em>monotone</em> 일 경우 검사만 하지 않고, <em>anti-monotone</em> 일 경우 <em>super-pattern</em> 을 날려버릴 수 있기 때문입니다.</p>
-
-<ul>
-<li>만약 <code>c: avg(S.profit &gt; 20)</code> 에 대해서 </li>
-<li><em>itemset</em> 을 내림차순으로 <code>S: {a, g, f, b, h, d, c, e}</code> 정렬하고 </li>
-<li><code>avg(ab) = 20</code>, <code>g = 20</code> 이면</li>
-</ul>
-
-<p><em>constaint</em> <code>C</code> 는 <em>anti-monotone</em> 이라 할 수 있습니다. 왜냐하면 패턴 내부가 <code>profit</code> 을 기준으로 내림차순으로 되어서, 어떤 <em>item entry</em> 를 뽑아도 <code>c</code> 를 만족할 수 없기 때문입니다.</p>
-
-<p>아쉽게도 이 방법은 <em>level-wise candidate generation</em> 을 하는 <em>Apriori</em> 알고리즘엔 적용되지 않습니다.</p>
-
-<p><br></p>
-
-<h3 id="hanldingmultipleconstaints">Hanlding Multiple Constaints</h3>
-
-<p>다수개의 <em>constaints</em> 를 사용하는것은 좋으나, <em>item ordering</em> 에서 충돌이 생길 수 있습니다. 이럴땐 먼저 하나의 <em>constaint</em> 기준으로 정렬하고, 나머지는 <em>projected databases</em> 를 마이닝할때 하면 좋습니다.</p>
-
-<p>예를 들어 다음 두개의 <em>constaints</em> 가 있을때</p>
-
-<ul>
-<li><code>c1: avg(S.profit) &gt; 20</code></li>
-<li><code>c2: avg(S.price) &lt; 50</code></li>
-</ul>
-
-<p><code>c1</code> 이 더 강력한 <em>pruning power</em> 가 있다고 생각하고, <code>c1</code> 먼저  <em>anti-monotone</em> 으로 변경 한 후, 각 <em>projected-DB</em> 에서 트랜잭션을 오름차순으로 정렬해 <code>c2</code> 를 마이닝에 이용합니다.    </p>
-
-<p><br></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <a href="https://www.behance.net/gallery/625042/Icon-and-pattern-with-a-marketing-theme">Title image</a> <br>
-(2) <strong>Pattern Discovery</strong> by <em>Jiawei Han</em> </p>]]></content:encoded></item></channel></rss>
+(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></content:encoded></item></channel></rss>
