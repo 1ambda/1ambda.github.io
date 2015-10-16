@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 16 Oct 2015 14:58:28 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 2, Monad Transformer</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 16 Oct 2015 15:00:50 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 2, Monad Transformer</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;지난 시간엔 &lt;em&gt;State Monad&lt;/em&gt; 를 다루었습니다. 그러나 &lt;em&gt;State&lt;/em&gt; 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 &lt;em&gt;Option&lt;/em&gt;, &lt;em&gt;Future&lt;/em&gt; 등 다양한 &lt;em&gt;side-effect&lt;/em&gt; 가 필요하기 때문인데요, &lt;/p&gt;
 
@@ -2646,7 +2646,7 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 &lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state-and-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/"&gt;Easy Scalaz 2, Monad Transformer&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 3, IO]&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 4, Validation]&lt;/li&gt;
@@ -2669,7 +2669,7 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 &lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state-and-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/"&gt;Easy Scalaz 2, Monad Transformer&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 3, IO]&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 4, Validation]&lt;/li&gt;
