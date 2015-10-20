@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 16 Oct 2015 15:00:50 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Easy Scalaz 2, Monad Transformer]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Tue, 20 Oct 2015 16:44:01 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[About Type Class]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png" alt=""></p>
+
+<p>프로그래머가 하는 행위를 극도로 단순화해서 표현하면 <strong>저수준</strong> 의 데이터를 <strong>고수준</strong> 데이터로 변환하는 일입니다.</p>
+
+<p>여기서 저수준이란, <em>Stream</em>, <em>Byte</em>, <em>JSON</em>, <em>String</em> 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다. </p>
+
+<p>이로 인해</p>
+
+<ol>
+<li><p>저수준을 고수준으로 변환하는건 조건이 충족되지 않은 데이터와 연산 과정에서 일어나는 시스템 오류를 처리해야하기</p></li></ol>]]></description><link>http://1ambda.github.io/about-type-class/</link><guid isPermaLink="false">40c5a8ff-eb1f-40a3-a8b6-38f5e97ced9f</guid><category><![CDATA[scala]]></category><category><![CDATA[scalaz]]></category><category><![CDATA[type class]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Tue, 20 Oct 2015 16:43:43 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png" alt=""></p>
+
+<p>프로그래머가 하는 행위를 극도로 단순화해서 표현하면 <strong>저수준</strong> 의 데이터를 <strong>고수준</strong> 데이터로 변환하는 일입니다.</p>
+
+<p>여기서 저수준이란, <em>Stream</em>, <em>Byte</em>, <em>JSON</em>, <em>String</em> 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다. </p>
+
+<p>이로 인해</p>
+
+<ol>
+<li><p>저수준을 고수준으로 변환하는건 조건이 충족되지 않은 데이터와 연산 과정에서 일어나는 시스템 오류를 처리해야하기 때문에 힘든일입니다</p></li>
+<li><p>갖은 고생 끝에 데이터를 고수준으로 끌어올린 뒤에야, 그 데이터를 프로그래머 자신의 세상에서 마음껏 주무를 수 있습니다</p></li>
+<li><p>프로그래머가 작업을 끝낼 시점이 되면, 데이터를 저수준으로 변환해서 저장 또는 전송해야 하는데, 이미 제약조건이 충족 되었기 때문에 이는 손쉬운 일입니다</p></li>
+</ol>
+
+<p>따라서 핵심은 다음의 두가지 입니다.</p>
+
+<ul>
+<li>쉽게 고수준으로 변환할 수 있는가 (<strong>연산</strong>)</li>
+<li>변환된 고수준 데이터가 얼마나 다루기 편한가 (<strong>추상</strong>)</li>
+</ul>
+
+<p>프로그래머가 <em>적절한 연산</em> 을 선택하면 힘들이지 않고 변환을 해낼것이고, <em>적절한 추상 (혹은 모델링)</em> 을 한다면 직관적인 코드로 데이터를 주무를 수 있게 되는데, 이 것을 도와주는 것이 바로 <strong>타입 클래스</strong> 입니다.</p>
+
+<p>타입 클래스를 이용하면, </p>
+
+<ul>
+<li><code>if null</code>  을 Option 으로,</li>
+<li><code>S =&gt; (S, A)</code> 을 State[S, A] 로</li>
+<li><code>if if if</code> 를 Applicative 로</li>
+<li><em>fail-slow</em>, <em>fail-fast</em> 로직은 ValidationNel 과 Either 로</li>
+<li><code>F[G[A]]</code> 을 <code>G[F[A]]</code> 로의 변경은 Traversal 로</li>
+<li><code>setC{applyB{getA}}</code> 를 getA > applyB > setC 로(Kleisli)
+표기할 수 있습니다.</li>
+</ul>
+
+<p>이렇게 연산을 각각의 타입으로 표시하기 때문에 로직을 파악하고, 분할하기 쉽습니다. 그리고 연산을 작성하는 과정이 타입을 조합하는 과정과 동일하기 때문에 컴파일러의 도움을 받을수 있구요.</p>
+
+<p>타입클래스는 <strong>연산이 어떠해야 하는지</strong> 를 다루기 때문에 연산을 조합할 수 있는 다양한 함수들이 포함되어 있습니다. 이것을 이용하면 직관적인 방식으로 데이터를 다룰 수 있는데, 예를 들어 다음은 코드 실행과정에서 예외 발생 시에만 롤백을 수행하고, 예외를 돌려주는 코드입니다. (간략화 하였습니다.) </p>
+
+<pre><code class="language-scala">\/.fromTryCatch { 
+  val result = runQuery; 
+  commit; 
+  result 
+} leftMap(err =&gt; rollback; err};
+</code></pre>
+
+<p>만약 <code>if null</code>  보다  <code>Option</code> 을 쓰는것이 더 편하고 익숙하다면, <code>Applicative</code> 부터 천천히 시작해보는건 어떨까요?</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+<li><a href="https://wiki.haskell.org/Typeclassopedia">Typeclassopedia Image - Haskell Wiki</a></li>
+</ul>]]></content:encoded></item><item><title><![CDATA[Easy Scalaz 2, Monad Transformer]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
 
 <p>지난 시간엔 <em>State Monad</em> 를 다루었습니다. 그러나 <em>State</em> 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 <em>Option</em>, <em>Future</em> 등 다양한 <em>side-effect</em> 가 필요하기 때문인데요, </p>
 
@@ -3615,166 +3676,6 @@ Collections.sort(listOfCountries,new Comparator&lt;Country&gt;() {
 <li>ring failure detection underlies <em>IBM SP2</em> and many other similar clusters</li>
 <li>Gossip-style failure detection underlies AWS EC2/S3 (rumored)</li>
 </ul>
-
-<p><br></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br>
-(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></content:encoded></item><item><title><![CDATA[Cloud Computing, Gossip Protocol]]></title><description><![CDATA[<p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt=""></p>
-
-<h3 id="multicast">Multicast</h3>
-
-<p>이번시간에 배울 내용은 <em>Gossip Protocol</em> (혹은 <em>Epidemic Protocol</em>) 입니다.</p>
-
-<p>기존에는 특정 그룹에게 메세지를 보내기 위해 <em>multicast</em> 를 이용했지만, 클라우드 컴퓨티 환경에서는</p>
-
-<ul>
-<li>프로세스가 죽어 노드가 크래쉬를 일으킬수도</li>
-<li>네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고</li>
-<li>노드가 빠르게 증가합니다.</li>
-</ul>
-
-<p>그러나 멀티캐스트는 <em>fault-tolerance</em> 와 <em>scalability</em> 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해</p>]]></description><link>http://1ambda.github.io/cloud-computing-gossip-protocol/</link><guid isPermaLink="false">791b3276-2b13-469d-96ff-21b0b279bfd2</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[gossip]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 21 Feb 2015 05:41:54 GMT</pubDate><content:encoded><![CDATA[<p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt=""></p>
-
-<h3 id="multicast">Multicast</h3>
-
-<p>이번시간에 배울 내용은 <em>Gossip Protocol</em> (혹은 <em>Epidemic Protocol</em>) 입니다.</p>
-
-<p>기존에는 특정 그룹에게 메세지를 보내기 위해 <em>multicast</em> 를 이용했지만, 클라우드 컴퓨티 환경에서는</p>
-
-<ul>
-<li>프로세스가 죽어 노드가 크래쉬를 일으킬수도</li>
-<li>네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고</li>
-<li>노드가 빠르게 증가합니다.</li>
-</ul>
-
-<p>그러나 멀티캐스트는 <em>fault-tolerance</em> 와 <em>scalability</em> 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해 다양한 방법이 도입되었는데</p>
-
-<p>(1) <strong>Centralized:</strong> 중앙 서버에서 <em>TCP, UDP</em> 패킷을 날립니다. 간단한 구현이지만 중앙서버의 오버헤드가 높고, 수천개의 노드가 있을때 <em>latency</em> 가 생깁니다. 노드의 수를 <code>N</code> 이라 했을때, 모든 노드에 메시지가 전달되는데 <code>O(N)</code> 시간이 걸리지요.</p>
-
-<p>(2) <strong>Tree-Based:</strong> 전달 받은 노드에서, 다시 패킷을 전달하여 경로가 <em>tree</em> 형태로 구성됩니다. <em>balanced tree</em> 라면 어떤 그룹에 패킷이 전달되는데 <code>O(logN)</code> 의 시간이 걸립니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/tree_based_multicast.jpg" alt=""></p>
-
-<p>이 방법의 단점은 </p>
-
-<ul>
-<li><em>tree</em> 를 구성하고 유지하는데 필요한 오버헤드</li>
-<li><em>root</em> 에 가까운 곳에서 <em>failure</em> 가 발생했을때의 파급력</li>
-</ul>
-
-<p>일반적으로 <em>tree-based multicast</em> 프로토콜에서는 <em>spanning tree</em> 를 구성해서 최단비용으로 패킷을 전달합니다. 그리고 메시지가 올바르게 전달되었는지 <em>ACK</em> 또는 <em>NAK</em> 를 이용하는데 <em>SRM</em> 이던 <em>RMTP</em> 던 여전히 <code>O(N)</code> 만큼의 <em>ACK/NAK</em> 오버헤드가 발생합니다.</p>
-
-<p><br></p>
-
-<h3 id="gossip">Gossip</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example1.jpg" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/gossip_example2.jpg" alt=""></p>
-
-<p>가십 프로토콜은 위 그림처럼 작동합니다.</p>
-
-<ul>
-<li>주기적으로 랜덤한 타겟을 골라 <em>gossip message</em> 를 전송합니다</li>
-<li>그리고 이것을 받아 <em>infected</em> 상태가 된 노드도 똑같이 행동합니다.</li>
-</ul>
-
-<p>이걸 <em>Push gossip</em> 이라 부릅니다. <em>multiple message</em> 를 가십하기 위해 랜덤 서브셋을 선택하거나, <em>recently-received</em> 메시지를 를 선택하거나, <em>higher priority one</em> 을 고를 수 있습니다.</p>
-
-<p>어떤 가십 메시지에 대해 대부분의 노드가 <em>infected</em> 되었을때 <em>push gossip</em> 은 비효율적입니다. 이때는 <em>uninfected</em> 노드가, 새로운 가십메시지가 있는지 주변 노드에게 물어보는 <strong>pull gossip</strong> 이 오버헤드가 더 적습니다.</p>
-
-<ul>
-<li><strong>Pull gossip:</strong> Periodically poll a few random selected processes for new multicast meesages that you haven't received</li>
-</ul>
-
-<p><br></p>
-
-<h3 id="gossipanalysis">Gossip Analysis</h3>
-
-<p>가십프로토콜은 다음의 특징을 가집니다.</p>
-
-<ul>
-<li><strong>lightweight</strong> in large groups</li>
-<li>spreads a multicast quickly</li>
-<li>highly <em>fault-tolerant</em></li>
-</ul>
-
-<p>이를 위해 간단한 증명을 해보도록 하겠습니다.</p>
-
-<ul>
-<li>전체 <code>n+1</code> 의 <em>population</em> 에 대해 </li>
-<li><em>uninfected individuals</em> 의 수를 <code>x</code></li>
-<li><em>infected individuals</em> 의 수를 <code>y</code> </li>
-<li><em>individual pair</em> 간의 <em>contract rate</em> 를 <code>β</code> 라 하면</li>
-</ul>
-
-<p>항상 <code>x + y = n + 1</code> 이고, 시작상태에서는 <code>x_0 = n, y_0 = 1</code> 입니다. 그리고 시간이 지날때마다 <em>uninfected</em> <code>y</code> 는 다음처럼 감소합니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cfrac%7B%5Cmathrm%7Bd%7D%20x%7D%7B%5Cmathrm%7Bd%7D%20t%7D%20%3D%20-%5Cbeta%20xy" alt=""></p>
-
-<p>그러면 이 수식으로부터 다음을 이끌어 낼 수 있습니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?x%20%3D%20%7B%20n%28n&plus;1%29%20%5Cover%20%7Bn%20&plus;%20e%5E%7B%5Cbeta%28n&plus;1%29t%7D%7D%7D" alt=""></p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?y%20%3D%20%7B%20%28n&plus;1%29%20%5Cover%20%7B1%20&plus;%20ne%5E%7B-%5Cbeta%28n&plus;1%29t%7D%7D%7D" alt=""></p>
-
-<p>그리고 <em>infected node</em> 가 랜덤하게 <code>b</code> 개의 노드를 고른다 하면 <code>β</code> 는 </p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?%5Cbeta%20%3D%20%7Bb%20%5Cover%20b%7D" alt=""></p>
-
-<p>그리고 시간 <code>t</code> 를 가십이 진행되는 <em>round</em> 라 보고 <code>t = clog(n)</code> 이라 치환하겠습니다. 다음을 이끌어낼 수 있습니다.</p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?y%20%5Capprox%20%28n&plus;1%29%20-%20%7B1%20%5Cover%20n%5E%7Bcb-2%7D%7D" alt=""></p>
-
-<p>이 식으로부터 <em>gossip protocol</em> 이 <em>low latency</em>, <em>reliability</em>, <em>lightweight</em> 하다는 것을 알 수 있습니다.</p>
-
-<p>(1) <strong>low latency</strong></p>
-
-<p><code>c, b</code> 를 <code>n</code> 과 독립적으로 아주 작은 숫자로 세팅하면 <code>clog(n)</code> <em>round</em> 이므로 적은 시간 내에 메시지가 전파됩니다.</p>
-
-<p>(2) <strong>reliability</strong></p>
-
-<p><code>n</code> 이 매우 크면 <code>1 / n^{cb-2}</code> 가 <code>0</code> 에 가까워지므로, <code>1 / n^{cb-2}</code> 만큼의 노드를 제외한 모든 노드가 <em>infected</em> 된다는 것을 알 수 있습니다.</p>
-
-<p>(3) <strong>lightweight</strong></p>
-
-<p>각 노드는 <code>cb log(n)</code> 만큼의 <em>gossip message</em> 만 전파합니다. 이론적으로는 <code>log(N)</code> 은 상수가 아니지만, 실제로는 아주 천천히 증가하는 숫자기에 작은 숫자처럼 생각할 수 있습니다.</p>
-
-<p><br></p>
-
-<h3 id="faulttolerance">Fault-Tolerance</h3>
-
-<p><em>50% packet loss</em> 를 생각해 봅시다. <code>b</code> 를 <code>2/b</code> 로 치환하면 됩니다. 그러면 이전과 같은 <em>reliability</em> <em>0% packet loss</em> 를 위하 두배의 <em>round</em> 만큼만 더 진행하면 됩니다.</p>
-
-<p><em>node failure</em> 는 어떨까요? 50% 노드에서 <em>failure</em> 가 발생한다면 <code>n, b</code> 을 <code>2/n, 2/b</code> 으로 치환하면 됩니다. 이는 <em>contract rate</em> 에서 가십 메시지를 전달하는 <code>n</code> 중 <code>2/n</code> 의 노드만 살아있고, 선택되는 <code>b</code> 중 <code>b/2</code> 노드만 살아있기 때문입니다. 이 경우에도 상수만 곱하면 이전과 같은 <em>reliability</em> 를 얻을 수 있습니다.</p>
-
-<p><em>failure</em> 와 관련해서 한 가지 생각해 볼 문제가 있습니다. 모든 노드가 죽는것이 가능할까요? 물론 가능합니다 초기에 모든 노드가 죽으면요. 그러나 <em>improbable</em> 입니다. 일단 몇개의 노드가 <em>infected</em> 되면, 이후에는 퍼지는 속도가 훨씬 더 빠르기 때문입니다. 루머나 바이러스가 퍼질 수 있는 이유를 생각하면 이해하기 쉽습니다.</p>
-
-<p><br></p>
-
-<h3 id="pullgossip">Pull Gossip</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/pull_gossip_analysis.jpg" alt=""></p>
-
-<p>그림에서 볼 수 있듯이, 어떤 형태의 가십 프로토콜이던 <code>2/N</code> 까지 전달할때는 <code>O(logN)</code> 만큼의 시간이 걸립니다. 그 이후에는 <em>pull gossip</em> 이 훨씬 빠르죠.</p>
-
-<p><code>i</code> <em>round</em> 후에 남아있는 <em>uninfected node</em> 의 수를 <code>p_i</code> 라 합시다. <em>pull gossip</em> 을 이용할때 다음 단계에서도 <em>uninfected</em> 일 확률은 </p>
-
-<p><img src="http://latex.codecogs.com/gif.latex?p_%7Bi&plus;1%7D%20%3D%20p_i%5E%7Bk&plus;1%7D" alt=""></p>
-
-<p>이는 <code>p_i</code> 자체가 <em>uninfected</em> 여야 하고, 이 노드가 선택하는 <code>k = b</code> 만큼의 노드도 <em>uninfected</em> 여야 하는데, 이 확률은 극히 낮습니다. 슬라이드에서 보듯이 <em>super-exponential</em> 하고, 그렇기 때문에 <em>second half</em> 부터는 <em>pull gossip</em> 이 <code>O(log(logN))</code> 입니다.</p>
-
-<p><br></p>
-
-<h3 id="topologyawaregossip">Topology-Aware Gossip</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week2/topology_aware_gossip.jpg" alt=""></p>
-
-<p>만약 <em>uninfected node</em> 를 <em>uniformly random</em> 하게 고른다면 위 그림에서 라우터의 오버헤드는 <code>O(N)</code> 이 됩니다. 더 정확하게는 <em>round</em> 마다 <code>b * (2/n)</code> 이 될겁니다. </p>
-
-<p>이를 해결하기 위해, 서브넷에 <code>n_i</code> 개의 노드가 있을때 자신이 속한 서브넷에 있는 <em>uninfected node</em> 를 더 자주 고르게, 확률을 <code>1 - (1/n_i)</code> 가 되도록 합니다. 그러면, 현재 서브넷에 있는 노드를 선택할 확률이 1 에 가까우므로 <code>O(logN)</code> 시간 내에 전파되고, 라우터의 오버헤드는 <code>(n_i) / (n_i)</code> 가 되어, <code>O(1)</code> 이 됩니다. </p>
 
 <p><br></p>
 

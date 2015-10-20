@@ -1,0 +1,253 @@
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>About Type Class</title>
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="About Type Class">
+  <meta name="twitter:description" content="프로그래머가 하는 행위를 극도로 단순화해서 표현하면 저수준 의 데이터를 고수준 데이터로 변환하는 일입니다. 여기서 저수준이란, Stream, Byte, JSON, String 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다.  이로 인해 저수준을 고수준으로 변환하는건 조건이 충족되지 않은 데이터와 연산 과정에서 일어나는 시스템 오류를 처리해야하기">
+  <meta name="twitter:creator" content="@yourTwitterUsername">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="http://1ambda.github.io/about-type-class/">
+  <meta name="twitter:domain" content="http://1ambda.github.io">
+
+
+  <link rel="author" href="https://plus.google.com/101105410053351451441?rel=author">
+
+  <link rel="shortcut icon" href="../favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:600,300">
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/xpressio.css">
+  <link rel="stylesheet" type="text/css" href="../assets/1ambda/1ambda.css">
+  <script type="text/javascript" src="../assets/1ambda/modernizr.js">
+  </script>
+  <script type="text/javascript" src="../assets/1ambda/detectizr.min.js">
+  </script>
+
+  <!--load css if windows -->
+  <script type="text/javascript">
+    if (Modernizr.windows) {
+      file = location.pathname.split( "/" ).pop();
+      link = document.createElement( "link" );
+      link.href = "/assets/1ambda/1ambda_windows.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.media = "screen,print";
+      document.getElementsByTagName("head")[0].appendChild( link );
+    }
+  </script>
+
+
+  <link rel="stylesheet" href="../assets/highlight/styles/github.css">
+<script src="../assets/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+  <link rel="canonical" href="http://1ambda.github.io/about-type-class/">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Old Lisper">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="About Type Class">
+    <meta property="og:description" content="프로그래머가 하는 행위를 극도로 단순화해서 표현하면 저수준 의 데이터를 고수준 데이터로 변환하는 일입니다. 여기서 저수준이란, Stream, Byte, JSON, String 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다.  이로 인해 저수준을 고수준으로 변환하는건...">
+    <meta property="og:url" content="http://1ambda.github.io/about-type-class/">
+    <meta property="article:published_time" content="2015-10-20T16:43:43.422Z">
+    <meta property="article:modified_time" content="2015-10-20T16:43:57.042Z">
+    <meta property="article:tag" content="scala">
+    <meta property="article:tag" content="scalaz">
+    <meta property="article:tag" content="type class">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="About Type Class">
+    <meta name="twitter:description" content="프로그래머가 하는 행위를 극도로 단순화해서 표현하면 저수준 의 데이터를 고수준 데이터로 변환하는 일입니다. 여기서 저수준이란, Stream, Byte, JSON, String 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다.  이로 인해 저수준을 고수준으로 변환하는건...">
+    <meta name="twitter:url" content="http://1ambda.github.io/about-type-class/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Old Lisper",
+    "author": {
+        "@type": "Person",
+        "name": "1ambda",
+        "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
+        "url": "http://1ambda.github.io/author/1ambda",
+        "sameAs": "http://1ambda.github.io",
+        "description": "Functional, Scala, Akka, Rx and Haskell"
+    },
+    "headline": "About Type Class",
+    "url": "http://1ambda.github.io/about-type-class/",
+    "datePublished": "2015-10-20T16:43:43.422Z",
+    "dateModified": "2015-10-20T16:43:57.042Z",
+    "keywords": "scala, scalaz, type class",
+    "description": "프로그래머가 하는 행위를 극도로 단순화해서 표현하면 저수준 의 데이터를 고수준 데이터로 변환하는 일입니다. 여기서 저수준이란, Stream, Byte, JSON, String 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다.  이로 인해 저수준을 고수준으로 변환하는건..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.6">
+    <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52181619-1', '1ambda.github.io');
+  ga('send', 'pageview');
+</script>
+  
+</head>
+<body>
+
+  <script src="../public/jquery.js?v=b08d2db8b7"></script>
+
+  
+<header class="site_width text center padding_top_big margin_bottom_big">
+  
+  <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
+  <h4 class="text book">Functional Programming World</h4>
+  <div class="social border solid top_small bottom_small padding_medium">
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://1ambda.github.io/articles/"><i class="fa fa-columns"></i> <span class="margin_lefarticlest_small desktop">Article</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+</div>
+</header>
+
+<main class="site_width" role="main">
+  <article class="post tag-scala tag-scalaz tag-type-class">
+
+
+    <header class="text center margin_bottom_medium">
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/scala/">scala</a>, <a href="../tag/scalaz/">scalaz</a>, <a href="../tag/type-class/">type class</a></h5>
+      <h1 class="margin_bottom_medium">About Type Class</h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-10-21">Wednesday, October 21, 2015</time>
+      <br><br>
+       <a href="http://1ambda.github.io/about-type-class/#disqus_thread">Comment</a>
+      </h5>
+    </header>
+
+    <section>
+      <p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png" alt=""></p>
+
+<p>프로그래머가 하는 행위를 극도로 단순화해서 표현하면 <strong>저수준</strong> 의 데이터를 <strong>고수준</strong> 데이터로 변환하는 일입니다.</p>
+
+<p>여기서 저수준이란, <em>Stream</em>, <em>Byte</em>, <em>JSON</em>, <em>String</em> 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다. </p>
+
+<p>이로 인해</p>
+
+<ol>
+<li><p>저수준을 고수준으로 변환하는건 조건이 충족되지 않은 데이터와 연산 과정에서 일어나는 시스템 오류를 처리해야하기 때문에 힘든일입니다</p></li>
+<li><p>갖은 고생 끝에 데이터를 고수준으로 끌어올린 뒤에야, 그 데이터를 프로그래머 자신의 세상에서 마음껏 주무를 수 있습니다</p></li>
+<li><p>프로그래머가 작업을 끝낼 시점이 되면, 데이터를 저수준으로 변환해서 저장 또는 전송해야 하는데, 이미 제약조건이 충족 되었기 때문에 이는 손쉬운 일입니다</p></li>
+</ol>
+
+<p>따라서 핵심은 다음의 두가지 입니다.</p>
+
+<ul>
+<li>쉽게 고수준으로 변환할 수 있는가 (<strong>연산</strong>)</li>
+<li>변환된 고수준 데이터가 얼마나 다루기 편한가 (<strong>추상</strong>)</li>
+</ul>
+
+<p>프로그래머가 <em>적절한 연산</em> 을 선택하면 힘들이지 않고 변환을 해낼것이고, <em>적절한 추상 (혹은 모델링)</em> 을 한다면 직관적인 코드로 데이터를 주무를 수 있게 되는데, 이 것을 도와주는 것이 바로 <strong>타입 클래스</strong> 입니다.</p>
+
+<p>타입 클래스를 이용하면, </p>
+
+<ul>
+<li><code>if null</code>  을 Option 으로,</li>
+<li><code>S =&gt; (S, A)</code> 을 State[S, A] 로</li>
+<li><code>if if if</code> 를 Applicative 로</li>
+<li><em>fail-slow</em>, <em>fail-fast</em> 로직은 ValidationNel 과 Either 로</li>
+<li><code>F[G[A]]</code> 을 <code>G[F[A]]</code> 로의 변경은 Traversal 로</li>
+<li><code>setC{applyB{getA}}</code> 를 getA &gt; applyB &gt; setC 로(Kleisli)
+표기할 수 있습니다.</li>
+</ul>
+
+<p>이렇게 연산을 각각의 타입으로 표시하기 때문에 로직을 파악하고, 분할하기 쉽습니다. 그리고 연산을 작성하는 과정이 타입을 조합하는 과정과 동일하기 때문에 컴파일러의 도움을 받을수 있구요.</p>
+
+<p>타입클래스는 <strong>연산이 어떠해야 하는지</strong> 를 다루기 때문에 연산을 조합할 수 있는 다양한 함수들이 포함되어 있습니다. 이것을 이용하면 직관적인 방식으로 데이터를 다룰 수 있는데, 예를 들어 다음은 코드 실행과정에서 예외 발생 시에만 롤백을 수행하고, 예외를 돌려주는 코드입니다. (간략화 하였습니다.) </p>
+
+<pre><code class="language-scala">\/.fromTryCatch { 
+  val result = runQuery; 
+  commit; 
+  result 
+} leftMap(err =&gt; rollback; err};
+</code></pre>
+
+<p>만약 <code>if null</code>  보다  <code>Option</code> 을 쓰는것이 더 편하고 익숙하다면, <code>Applicative</code> 부터 천천히 시작해보는건 어떨까요?</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+<li><a href="https://wiki.haskell.org/Typeclassopedia">Typeclassopedia Image - Haskell Wiki</a></li>
+</ul>
+    </section>
+
+    <footer>
+      <section class="author_info margin_top_big">
+        <div class="alignleft border rad_circle" style="height: 87px; width: 87px; background-image: url(http://www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&amp;s=250); background-size: cover;"></div>
+        <p class="margin_left_medium text small">Author</p>
+        <p class="margin_left_medium text bold"><a href="http://1ambda.github.io">1ambda</a></p>
+        <p class="margin_left_medium text small">Functional, Scala, Akka, Rx and Haskell</p>
+      </section>
+    </footer>
+
+
+    <div id="disqus_thread" class="margin_top_big"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+  var disqus_identifier = '133';
+  var disqus_url = 'http://1ambda.github.io/about-type-class/';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+    </article>
+</main>
+
+
+  <script src="../assets/fitvids/jquery.fitvids.js"></script>
+<script>
+$(document).ready(function(){
+  // Target your .container, .wrapper, .post, etc.
+  $("section").fitVids();
+});
+</script>
+
+  <footer class="blog_info margin_top_big padding_medium text center">
+    <h5 class="text book small">© 2015 <a href="../">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
+    <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
+
+  </footer>
+
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = '1ambda'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+  </body>
+  
