@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Tue, 17 Nov 2015 11:32:58 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 3, ReaderWriterState with Kleisli</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Tue, 17 Nov 2015 11:34:11 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 3, ReaderWriterState with Kleisli</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Composition&lt;/em&gt; (합성) 은 함수형 언어에서 중요한 테마중 하나인데요, 이번 시간에는 &lt;em&gt;Kleisli&lt;/em&gt; 를 이용해 어떻게 함수를 타입으로 표현하고, 합성할 수 있는지 살펴보겠습니다. 그리고 나서, &lt;em&gt;Reader&lt;/em&gt;, &lt;em&gt;Writer&lt;/em&gt; 에 대해 알아보고, 이것들과 &lt;em&gt;State&lt;/em&gt; 를 같이 사용하는 &lt;em&gt;RWST&lt;/em&gt; 에 대해 알아보겠습니다.&lt;/p&gt;
 
@@ -744,6 +744,7 @@ object Database {
 
     // log: Operation failed due to java.lang.RuntimeException: Operation timeout: 603 millis
     people shouldBe None
+}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id="previousposts"&gt;Previous Posts&lt;/h2&gt;
