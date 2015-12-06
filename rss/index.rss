@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Sun, 06 Dec 2015 08:47:01 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 4, Yoneda and Free Monad</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Sun, 06 Dec 2015 09:02:59 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 4, Yoneda and Free Monad</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;Free[F, A]&lt;/code&gt; 를 이용하면 Functor &lt;code&gt;F&lt;/code&gt; 를 Monad 인스턴스로 만들 수 있습니다. 그런데, &lt;code&gt;Coyoneda[G, A]&lt;/code&gt; 를 이용하면 아무 타입 &lt;code&gt;G&lt;/code&gt; 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 &lt;em&gt;case class&lt;/em&gt; 조차) 모나드 인스턴스로 만들 수 있습니다.&lt;/p&gt;
 
@@ -582,14 +582,17 @@ trait FreeFunctions {
 
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Yoneda&lt;/code&gt;, &lt;code&gt;Coyoneda&lt;/code&gt; 는 &lt;code&gt;Functor&lt;/code&gt; 입니다&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Yoneda[F[_], A]&lt;/code&gt;, &lt;code&gt;Coyoneda[F[_], A]&lt;/code&gt; 는 &lt;code&gt;F[A]&lt;/code&gt; 와 &lt;em&gt;isomorphic&lt;/em&gt; 입니다. (&lt;code&gt;F&lt;/code&gt; 가 &lt;code&gt;Functor&lt;/code&gt; 일 경우)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Yoneda[F, A]&lt;/code&gt; 에서 &lt;code&gt;F[A]&lt;/code&gt; 로의 &lt;em&gt;homomorphism&lt;/em&gt; 은 &lt;code&gt;F&lt;/code&gt; 가 &lt;code&gt;Functor&lt;/code&gt; 가 아닐 경우에도 존재합니다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;F[A]&lt;/code&gt; 에서 &lt;code&gt;Coyoneda[F, A]&lt;/code&gt; 로의 &lt;em&gt;homomorphism&lt;/em&gt; 은 &lt;code&gt;F&lt;/code&gt; 가 &lt;code&gt;Functor&lt;/code&gt; 가 아닐 경우에도 존재합니다. (&lt;strong&gt;중요&lt;/strong&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Yoneda&lt;/code&gt;, &lt;code&gt;Coyoneda&lt;/code&gt; 모두 &lt;code&gt;Functor&lt;/code&gt; 가 필요한 시점을 미루고, &lt;code&gt;Functor.map&lt;/code&gt; 의 체인을, 일반 함수의 체인으로 표현합니다. 결국엔 &lt;code&gt;Functor&lt;/code&gt; 가 필요합니다. (&lt;strong&gt;중요&lt;/strong&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Yoneda[F[_], A]&lt;/code&gt;, &lt;code&gt;Coyoneda[F[_], A]&lt;/code&gt; 는 &lt;code&gt;F[A]&lt;/code&gt; 와 &lt;em&gt;isomorphic&lt;/em&gt; 입니다 (&lt;code&gt;F&lt;/code&gt; 가 &lt;code&gt;Functor&lt;/code&gt; 일 경우)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Yoneda[F, A]&lt;/code&gt; 에서 &lt;code&gt;F[A]&lt;/code&gt; 로의 &lt;em&gt;homomorphism&lt;/em&gt; 은 &lt;code&gt;F&lt;/code&gt; 가 &lt;code&gt;Functor&lt;/code&gt; 가 아닐 경우에도 존재합니다&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;F[A]&lt;/code&gt; 에서 &lt;code&gt;Coyoneda[F, A]&lt;/code&gt; 로의 &lt;em&gt;homomorphism&lt;/em&gt; 은 &lt;code&gt;F&lt;/code&gt; 가 &lt;code&gt;Functor&lt;/code&gt; 가 아닐 경우에도 존재합니다 (중요)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Yoneda&lt;/code&gt;, &lt;code&gt;Coyoneda&lt;/code&gt; 모두 &lt;code&gt;Functor&lt;/code&gt; 가 필요한 시점을 미루고, &lt;code&gt;Functor.map&lt;/code&gt; 의 체인을, 일반 함수의 체인으로 표현합니다. 결국엔 &lt;code&gt;Functor&lt;/code&gt; 가 필요합니다 (중요)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/4-yoneda-and-free/iso_vs_homo_morphism.png" alt=""&gt;
-(Image - &lt;a href="http://evolvingthoughts.net/2010/08/homology-and-analogy/"&gt;http://evolvingthoughts.net/2010/08/homology-and-analogy/&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/4-yoneda-and-free/iso_vs_homo_morphism.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;(Image - &lt;a href="http://evolvingthoughts.net/2010/08/homology-and-analogy/"&gt;http://evolvingthoughts.net/2010/08/homology-and-analogy/&lt;/a&gt;)&lt;/p&gt;
 
 &lt;p&gt;즉 &lt;code&gt;Coyoneda[F[_], A]&lt;/code&gt; 가  &lt;code&gt;F&lt;/code&gt; 와 상관없이 &lt;code&gt;Functor&lt;/code&gt; 인 이유는, &lt;code&gt;F[A] -&amp;gt; Coyoenda[F[_], A]&lt;/code&gt; 로의 변환이 &lt;code&gt;F&lt;/code&gt; &lt;code&gt;Functor&lt;/code&gt; 인 것과 상관이 없으며 &lt;code&gt;Coyoneda&lt;/code&gt; 자체가 &lt;code&gt;Functor&lt;/code&gt; 인스턴스이기 때문입니다.&lt;/p&gt;
 

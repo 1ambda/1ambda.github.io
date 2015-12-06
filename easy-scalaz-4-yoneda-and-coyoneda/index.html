@@ -61,7 +61,7 @@
     <meta property="og:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수...">
     <meta property="og:url" content="http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/">
     <meta property="article:published_time" content="2015-12-06T08:34:34.617Z">
-    <meta property="article:modified_time" content="2015-12-06T08:46:59.164Z">
+    <meta property="article:modified_time" content="2015-12-06T09:02:54.381Z">
     <meta property="article:tag" content="scala">
     <meta property="article:tag" content="monad">
     <meta property="article:tag" content="monoid">
@@ -94,7 +94,7 @@
     "headline": "Easy Scalaz 4, Yoneda and Free Monad",
     "url": "http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/",
     "datePublished": "2015-12-06T08:34:34.617Z",
-    "dateModified": "2015-12-06T08:46:59.164Z",
+    "dateModified": "2015-12-06T09:02:54.381Z",
     "keywords": "scala, monad, monoid, scalaz, free, trampoline, yoneda, coyoneda, free monoid, free monad",
     "description": "Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수..."
 }
@@ -724,14 +724,17 @@ trait FreeFunctions {
 
 <ul>
 <li><code>Yoneda</code>, <code>Coyoneda</code> 는 <code>Functor</code> 입니다</li>
-<li><code>Yoneda[F[_], A]</code>, <code>Coyoneda[F[_], A]</code> 는 <code>F[A]</code> 와 <em>isomorphic</em> 입니다. (<code>F</code> 가 <code>Functor</code> 일 경우)</li>
-<li><code>Yoneda[F, A]</code> 에서 <code>F[A]</code> 로의 <em>homomorphism</em> 은 <code>F</code> 가 <code>Functor</code> 가 아닐 경우에도 존재합니다.</li>
-<li><code>F[A]</code> 에서 <code>Coyoneda[F, A]</code> 로의 <em>homomorphism</em> 은 <code>F</code> 가 <code>Functor</code> 가 아닐 경우에도 존재합니다. (<strong>중요</strong>)</li>
-<li><code>Yoneda</code>, <code>Coyoneda</code> 모두 <code>Functor</code> 가 필요한 시점을 미루고, <code>Functor.map</code> 의 체인을, 일반 함수의 체인으로 표현합니다. 결국엔 <code>Functor</code> 가 필요합니다. (<strong>중요</strong>)</li>
+<li><code>Yoneda[F[_], A]</code>, <code>Coyoneda[F[_], A]</code> 는 <code>F[A]</code> 와 <em>isomorphic</em> 입니다 (<code>F</code> 가 <code>Functor</code> 일 경우)</li>
+<li><code>Yoneda[F, A]</code> 에서 <code>F[A]</code> 로의 <em>homomorphism</em> 은 <code>F</code> 가 <code>Functor</code> 가 아닐 경우에도 존재합니다</li>
+<li><code>F[A]</code> 에서 <code>Coyoneda[F, A]</code> 로의 <em>homomorphism</em> 은 <code>F</code> 가 <code>Functor</code> 가 아닐 경우에도 존재합니다 (중요)</li>
+<li><code>Yoneda</code>, <code>Coyoneda</code> 모두 <code>Functor</code> 가 필요한 시점을 미루고, <code>Functor.map</code> 의 체인을, 일반 함수의 체인으로 표현합니다. 결국엔 <code>Functor</code> 가 필요합니다 (중요)</li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/4-yoneda-and-free/iso_vs_homo_morphism.png" alt="">
-(Image - <a href="http://evolvingthoughts.net/2010/08/homology-and-analogy/">http://evolvingthoughts.net/2010/08/homology-and-analogy/</a>)</p>
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/4-yoneda-and-free/iso_vs_homo_morphism.png" alt=""></p>
+
+<p><br></p>
+
+<p>(Image - <a href="http://evolvingthoughts.net/2010/08/homology-and-analogy/">http://evolvingthoughts.net/2010/08/homology-and-analogy/</a>)</p>
 
 <p>즉 <code>Coyoneda[F[_], A]</code> 가  <code>F</code> 와 상관없이 <code>Functor</code> 인 이유는, <code>F[A] -&gt; Coyoenda[F[_], A]</code> 로의 변환이 <code>F</code> <code>Functor</code> 인 것과 상관이 없으며 <code>Coyoneda</code> 자체가 <code>Functor</code> 인스턴스이기 때문입니다.</p>
 
