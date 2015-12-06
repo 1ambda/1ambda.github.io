@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Sun, 06 Dec 2015 08:46:03 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 4, Yoneda and Free Monad</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Sun, 06 Dec 2015 08:47:01 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 4, Yoneda and Free Monad</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;Free[F, A]&lt;/code&gt; 를 이용하면 Functor &lt;code&gt;F&lt;/code&gt; 를 Monad 인스턴스로 만들 수 있습니다. 그런데, &lt;code&gt;Coyoneda[G, A]&lt;/code&gt; 를 이용하면 아무 타입 &lt;code&gt;G&lt;/code&gt; 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 &lt;em&gt;case class&lt;/em&gt; 조차) 모나드 인스턴스로 만들 수 있습니다.&lt;/p&gt;
 
@@ -75,10 +75,10 @@ def getAllPeople: ResultSetIO[Vector[Person]] =
 
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Free[F[_], ?]&lt;/code&gt; 는 &lt;code&gt;Functor&lt;/code&gt; &lt;code&gt;F&lt;/code&gt; 에 대해 &lt;code&gt;Monad&lt;/code&gt; 입니다&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Coyoneda[S[_], ?]&lt;/code&gt; 는 아무 타입 &lt;code&gt;G&lt;/code&gt; 에 대해 &lt;code&gt;Functor&lt;/code&gt; 입니다. &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Coyoneda[S[_], ?]&lt;/code&gt; 는 아무 타입 &lt;code&gt;S&lt;/code&gt; 에 대해 &lt;code&gt;Functor&lt;/code&gt; 입니다. &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;따라서 &lt;code&gt;Free[Coyoneda[G, A], A&lt;/code&gt; 는 아무 타입 &lt;code&gt;G&lt;/code&gt; 에 대해서 모나드입니다. &lt;/p&gt;
+&lt;p&gt;따라서 &lt;code&gt;Free[Coyoneda[S, A], A&lt;/code&gt; 는 아무 타입 &lt;code&gt;S&lt;/code&gt; 에 대해서 모나드입니다. &lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-scala"&gt;import scalaz.{Free, Coyoneda}, Free._
 
