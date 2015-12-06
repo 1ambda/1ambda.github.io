@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Sun, 06 Dec 2015 08:40:18 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 4, Yoneda and Free Monad</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Sun, 06 Dec 2015 08:41:58 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 4, Yoneda and Free Monad</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;Free[F, A]&lt;/code&gt; 를 이용하면 Functor &lt;code&gt;F&lt;/code&gt; 를 Monad 인스턴스로 만들 수 있습니다. 그런데, &lt;code&gt;Coyoneda[G, A]&lt;/code&gt; 를 이용하면 아무 타입 &lt;code&gt;F&lt;/code&gt; Functor 인스턴스로 만들 수 있으므로 아무 타입에 &lt;code&gt;G&lt;/code&gt; 대해서나 (심지어 방금 만든 &lt;em&gt;case class&lt;/em&gt; 조차) 모나드 인스턴스를 만들 수 있습니다.&lt;/p&gt;
 
@@ -4438,7 +4438,7 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/"&gt;Easy Scalaz 2, Monad Transformer&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/"&gt;Easy Scalaz 3, ReaderWriterState with Kleisli&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[Easy Scalaz 4, Free, Trampoline]&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/"&gt;Easy Scalaz 4, Yoneda, Coyonead, Free, Trampoline&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 5, ST, IO]&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 6, Stream]&lt;/li&gt;
 &lt;/ul&gt;
@@ -4451,8 +4451,7 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 
 &lt;p&gt;&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-1/"&gt;Chapter 1&lt;/a&gt; &lt;br&gt;
 &lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-2/"&gt;Chapter 2&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/"&gt;Chapter 3&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-4/"&gt;Chapter&lt;/a&gt;&lt;/p&gt;</description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category>1ambda</category><dc:creator>1ambda</dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
+&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/"&gt;Chapter&lt;/a&gt;&lt;/p&gt;</description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category>1ambda</category><dc:creator>1ambda</dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
 
 &lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
 
@@ -4460,7 +4459,7 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/"&gt;Easy Scalaz 2, Monad Transformer&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/"&gt;Easy Scalaz 3, ReaderWriterState with Kleisli&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[Easy Scalaz 4, Free, Trampoline]&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/"&gt;Easy Scalaz 4, Yoneda, Coyonead, Free, Trampoline&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 5, ST, IO]&lt;/li&gt;
 &lt;li&gt;[Easy Scalaz 6, Stream]&lt;/li&gt;
 &lt;/ul&gt;
