@@ -13,7 +13,7 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Easy Scalaz 4, Yoneda and Free Monad">
-  <meta name="twitter:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 F Functor 인스턴스로 만들 수 있으므로 아무 타입에 G 대해서나 (심지어 방금 만든 case class 조차) 모나드 인스턴스를 만들 수 있습니다. Free 를 이용하면 사용자는 자신만의 Composable DSL 을">
+  <meta name="twitter:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수 있습니다. Free 를 이용하면 사용자는 자신만의 Composable DSL 을 구성하고,">
   <meta name="twitter:creator" content="@yourTwitterUsername">
   <meta name="twitter:image" content="">
   <meta name="twitter:url" content="http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/">
@@ -58,10 +58,10 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Easy Scalaz 4, Yoneda and Free Monad">
-    <meta property="og:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 F Functor 인스턴스로 만들 수 있으므로 아무 타입에 G 대해서나 (심지어 방금 만든 case class 조차) 모나드 인스턴스를 만들...">
+    <meta property="og:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수...">
     <meta property="og:url" content="http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/">
     <meta property="article:published_time" content="2015-12-06T08:34:34.617Z">
-    <meta property="article:modified_time" content="2015-12-06T08:40:10.810Z">
+    <meta property="article:modified_time" content="2015-12-06T08:45:08.114Z">
     <meta property="article:tag" content="scala">
     <meta property="article:tag" content="monad">
     <meta property="article:tag" content="monoid">
@@ -75,7 +75,7 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Easy Scalaz 4, Yoneda and Free Monad">
-    <meta name="twitter:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 F Functor 인스턴스로 만들 수 있으므로 아무 타입에 G 대해서나 (심지어 방금 만든 case class 조차) 모나드 인스턴스를 만들...">
+    <meta name="twitter:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수...">
     <meta name="twitter:url" content="http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/">
     
     <script type="application/ld+json">
@@ -94,9 +94,9 @@
     "headline": "Easy Scalaz 4, Yoneda and Free Monad",
     "url": "http://1ambda.github.io/easy-scalaz-4-yoneda-and-coyoneda/",
     "datePublished": "2015-12-06T08:34:34.617Z",
-    "dateModified": "2015-12-06T08:40:10.810Z",
+    "dateModified": "2015-12-06T08:45:08.114Z",
     "keywords": "scala, monad, monoid, scalaz, free, trampoline, yoneda, coyoneda, free monoid, free monad",
-    "description": "Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 F Functor 인스턴스로 만들 수 있으므로 아무 타입에 G 대해서나 (심지어 방금 만든 case class 조차) 모나드 인스턴스를 만들..."
+    "description": "Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수..."
 }
     </script>
 
@@ -146,7 +146,7 @@
     <section>
       <p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
 
-<p><code>Free[F, A]</code> 를 이용하면 Functor <code>F</code> 를 Monad 인스턴스로 만들 수 있습니다. 그런데, <code>Coyoneda[G, A]</code> 를 이용하면 아무 타입 <code>F</code> Functor 인스턴스로 만들 수 있으므로 아무 타입에 <code>G</code> 대해서나 (심지어 방금 만든 <em>case class</em> 조차) 모나드 인스턴스를 만들 수 있습니다.</p>
+<p><code>Free[F, A]</code> 를 이용하면 Functor <code>F</code> 를 Monad 인스턴스로 만들 수 있습니다. 그런데, <code>Coyoneda[G, A]</code> 를 이용하면 아무 타입 <code>G</code> 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 <em>case class</em> 조차) 모나드 인스턴스로 만들 수 있습니다.</p>
 
 <p><code>Free</code> 를 이용하면 사용자는 자신만의 <em>Composable DSL</em> 을 구성하고, 구성한 모나딕 연산을 실행하는 해석기를 작성하게 됩니다. 즉, <strong>연산의 생성</strong> 과 <strong>연산의 실행</strong> 을 분리하여 다루게 됩니다. 이는 <em>side-effect</em> 를 실행 시점으로 미룰 수 있다는 뜻입니다. (실행용 해석기와 별도로 테스트용 해석기를 작성하는 것도 가능합니다)</p>
 
