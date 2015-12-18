@@ -1,5 +1,930 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 18 Dec 2015 15:36:00 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Easy Scalaz 4, Yoneda and Free Monad]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 18 Dec 2015 15:38:42 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Easy Scalaz 5, Playing with Monoids]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+
+<p>이번 글에서는 모노이드를 가지고 놀면서, 아래 나열된 라이브러리 및 언어적 특성을 살펴보겠습니다.</p>
+
+<ul>
+<li><strong>Boolean Monoid</strong> operations with <strong><a href="https://github.com/non/spire">Spire</a></strong></li>
+<li><strong>Algebraic Data Types</strong> using <strong><a href="http://docs.scala-lang.org/overviews/core/value-classes.html">Value Class</a></strong>, <strong><a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Tag.scala">Scalaz.Tag</a></strong></li>
+<li>Creating <strong>Monoid</strong> for all subclasses using <strong><a href="https://github.com/milessabin/shapeless">Shapeless</a></strong></li>
+<li><strong><a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html">Context Bound</a></strong></li>
+<li><strong><a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html">Path Dependent Type</a></strong></li>
+</ul>
+
+<h2 id="monoid">Monoid</h2>
+
+<p><a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/#monoid">Easy Scalaz 4 - Yoneda and Free Monad: Monoid</a> 부분에서 발췌하면,</p>
+
+<p>어떤</p>]]></description><link>http://1ambda.github.io/easy-scalaz-5-playing-with-monoids/</link><guid isPermaLink="false">c86052aa-a361-4372-b3f2-00fc3e58e49b</guid><category><![CDATA[scala]]></category><category><![CDATA[monoid]]></category><category><![CDATA[scalaz]]></category><category><![CDATA[shapeless]]></category><category><![CDATA[spire]]></category><category><![CDATA[Tag]]></category><category><![CDATA[path dependent type]]></category><category><![CDATA[context bound]]></category><category><![CDATA[algebraic data type]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Fri, 18 Dec 2015 15:37:58 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
+
+<p>이번 글에서는 모노이드를 가지고 놀면서, 아래 나열된 라이브러리 및 언어적 특성을 살펴보겠습니다.</p>
+
+<ul>
+<li><strong>Boolean Monoid</strong> operations with <strong><a href="https://github.com/non/spire">Spire</a></strong></li>
+<li><strong>Algebraic Data Types</strong> using <strong><a href="http://docs.scala-lang.org/overviews/core/value-classes.html">Value Class</a></strong>, <strong><a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Tag.scala">Scalaz.Tag</a></strong></li>
+<li>Creating <strong>Monoid</strong> for all subclasses using <strong><a href="https://github.com/milessabin/shapeless">Shapeless</a></strong></li>
+<li><strong><a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html">Context Bound</a></strong></li>
+<li><strong><a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html">Path Dependent Type</a></strong></li>
+</ul>
+
+<h2 id="monoid">Monoid</h2>
+
+<p><a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/#monoid">Easy Scalaz 4 - Yoneda and Free Monad: Monoid</a> 부분에서 발췌하면,</p>
+
+<p>어떤 집합 <code>S</code> 에 대한 닫힌 연산 <code>*</code>, 집합 내의 어떤 원소 <code>e</code> 가 다음을 만족할 경우 모노이드라 부릅니다.</p>
+
+<ul>
+<li><code>e * a = a = a * e</code> (<em>identity</em>)</li>
+<li><code>(a * b) * c = a * (b * c)</code> (<em>associativity</em>)</li>
+</ul>
+
+<p>일반적으로 <code>e</code> 를 항등원이라 부릅니다. <code>Option[A]</code> 도 <code>None</code> 을 항등원으로 사용하고, <em>associativity</em> 를 만족하는 <code>A</code> 의 연산을 사용하면 모노이드입니다. 따라서 <code>A</code> 가 모노이드면 <code>Option[A]</code> 도 모노이드입니다. </p>
+
+<p><em>Scalaz</em> 에서는 모노이드 연산 <code>*</code> 를, <code>|+|</code> 로 표시합니다. 우리가 알고 있는 <em>primitives</em> 대부분이 모노이드입니다. </p>
+
+<pre><code class="language-scala">&gt; load.ivy("org.scalaz" % "scalaz-core_2.11" % "7.2.0-M5")
+
+&gt; import scalaz._, Scalaz._
+import scalaz._, Scalaz._  
+&gt; implicitly[Monoid[String]]
+res4: Monoid[String] = scalaz.std.StringInstances$stringInstance$@5590d10f  
+&gt; implicitly[Monoid[Int]]
+res5: Monoid[Int] = scalaz.std.AnyValInstances$$anon$5@4b9f2522  
+&gt; implicitly[Monoid[Set[Int]]]
+res6: Monoid[Set[Int]] = scalaz.std.SetInstances$$anon$3@5b1965ea
+
+&gt; "1" |+| "2"
+res7: String = "12"  
+&gt; 1.0 |+| 2.0
+Compilation Failed  
+Main.scala:1459: value |+| is not a member of Double  
+1.0 |+| 2.0  
+    ^
+&gt; 1 |+| 2
+res8: Int = 3
+
+&gt; 1.some |+| 2.some
+res11: Option[Int] = Some(3)  
+&gt; 1.some |+| none
+res12: Option[Int] = Some(1)  
+&gt; none[Int] |+| 1.some
+res13: Option[Int] = Some(1)  
+</code></pre>
+
+<p><code>Map[A, B]</code> 는 <code>A</code> 를 <em>Key</em> 로 잡고, <code>B</code> 의 모노이드 연산과 항등원을 이용하는 모노이드입니다.</p>
+
+<pre><code class="language-scala">&gt; val m1 = Map("a" -&gt; 1, "b" -&gt; 2)
+m1: Map[String, Int] = Map("a" -&gt; 1, "b" -&gt; 2)  
+&gt; val m2 = Map("a" -&gt; 1, "c" -&gt; 2)
+m2: Map[String, Int] = Map("a" -&gt; 1, "c" -&gt; 2)  
+&gt; m1 |+| m2
+res16: Map[String, Int] = Map("a" -&gt; 2, "c" -&gt; 2, "b" -&gt; 2)  
+</code></pre>
+
+<h2 id="booleanmonoid">Boolean Monoid</h2>
+
+<p><code>Boolean</code> 의 경우에는, 두 가지 모노이드가 존재할 수 있습니다. </p>
+
+<ul>
+<li><code>&amp;&amp;</code> 를 연산으로 사용하고, <code>true</code> 를 항등원으로 사용하는 경우</li>
+<li><code>||</code> 를 연산으로 사용하고, <code>false</code> 를 항등원으로 사용하는 경우</li>
+</ul>
+
+<p>첫 번째를 <em>Conjunction</em> 이라 부르고 두 번째를 <em>Disjunction</em> 이라 부릅니다. 즉, <code>Boolean</code> 은 두 개의 모노이드가 존재할 수 있기 때문에 아래처럼 <em>scalaz</em> 의 <code>|+|</code> 를 바로 이용할 수 없습니다. <em>Disjunction</em> 인지 <em>Conjunction</em> 인지 골라야 하기 때문입니다.</p>
+
+<pre><code class="language-scala">&gt; false |+| false
+Compilation Failed  
+Main.scala:1468: value |+| is not a member of Boolean  
+false |+| false  
+      ^
+
+// import 를 하지 않으면, scalaz.Tags.Disjunction 이 아니라 scalaz.Disjunction 을 사용하므로 주의
+&gt; import scalaz.Tags._
+import scalaz.Tags._  
+&gt; import scalaz.syntax.tag._
+import scalaz.syntax.tag._  
+&gt; Disjunction(false)
+res22: Boolean @@ Disjunction = false  
+&gt; Conjunction(false)
+res23: Boolean @@ Conjunction = false
+
+&gt; implicitly[Monoid[Boolean @@ Disjunction]]
+res27: Monoid[Boolean @@ Disjunction] = scalaz.std.AnyValInstances$$anon$7@79a6c868  
+&gt; implicitly[Monoid[Boolean @@ Conjunction]]
+res28: Monoid[Boolean @@ Conjunction] = scalaz.std.AnyValInstances$$anon$8@6e49df4a
+
+&gt; Disjunction(false) |+| Disjunction(true)
+res29: Boolean @@ Disjunction = true  
+&gt; Disjunction(true) |+| Disjunction(false)
+res30: Boolean @@ Disjunction = true  
+&gt; Conjunction(true) |+| Conjunction(true)
+res31: Boolean @@ Conjunction = true  
+&gt; Conjunction(true) |+| Conjunction(false)
+res32: Boolean @@ Conjunction = false
+
+&gt; List(false, false, true, false)
+res37: List[Boolean] = List(false, false, true, false)  
+&gt; Disjunction.subst(res37).suml
+res38: Boolean @@ Disjunction = true  
+&gt; Conjunction.subst(res37).suml
+res39: Boolean @@ Conjunction = false  
+</code></pre>
+
+<p>실제로 <code>scalaz.std.AnyVal</code> 을 확인해 보면,</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/std/AnyVal.scala#L52
+
+object conjunction extends Monoid[Boolean] {  
+  def append(f1: Boolean, f2: =&gt; Boolean) = f1 &amp;&amp; f2
+  def zero: Boolean = true
+}
+
+object disjunction extends Monoid[Boolean] {  
+  def append(f1: Boolean, f2: =&gt; Boolean) = f1 || f2
+  def zero = false
+}
+</code></pre>
+
+<p>그렇다면 <code>Int</code> 의 경우에도 <code>*</code> 등 다른 모노이드가 있는데 왜 <code>+</code> 연산과 <code>0</code> 항등원만 <code>|+|</code> 에서 사용하는걸까요? 이는 <code>+</code> 가 너무 보편적이기 때문이며, <code>*</code> (곱셈) 등은 위에서 본 <code>Tag</code> 를 이용해 모노이드 연산으로 지정할 수 있습니다.</p>
+
+<h2 id="tag">Tag</h2>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/Tags.scala
+
+object Tags {
+
+  ...
+
+  /** Type tag to choose a [[scalaz.Monoid]] instance that selects the lesser of two operands, ignoring `zero`. */
+  sealed trait Min
+
+  val Min = Tag.of[Min]
+
+  /** Type tag to choose a [[scalaz.Monoid]] instance that selects the greater of two operands, ignoring `zero`. */
+  sealed trait Max
+
+  val Max = Tag.of[Max]
+
+  /** Type tag to choose a [[scalaz.Monoid]] instance for a numeric type that performs multiplication,
+   *  rather than the default monoid for these types which by convention performs addition. */
+  sealed trait Multiplication
+
+  val Multiplication = Tag.of[Multiplication]
+
+  ...
+}
+</code></pre>
+
+<p><code>Multiplication</code> 을 이용하면,</p>
+
+<pre><code class="language-scala">&gt; Multiplication(2) |+| Multiplication(6)
+res3: Int @@ Multiplication = 12
+
+&gt; implicitly[Monoid[Int @@ Multiplication]]
+res4: Monoid[Int @@ Multiplication] = scalaz.std.AnyValInstances$$anon$12@5910ca72  
+</code></pre>
+
+<p><code>AnyValInstances</code> 를 찾아보면 <code>byteMultiplicationNewType</code>, <code>intMultiplicationNewType</code> 등 <code>A @@ Multiplication</code> 을 위한 인스턴스들이 구현되어 있습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/std/AnyVal.scala#L253
+
+trait AnyValInstances {
+
+  implicit val shortMultiplicationNewType: Monoid[Short @@ Multiplication] with Enum[Short @@ Multiplication] = new Monoid[Short @@ Multiplication] with Enum[Short @@ Multiplication] {
+    ...
+  } 
+
+  implicit val intMultiplicationNewType: Monoid[Int @@ Multiplication] with Enum[Int @@ Multiplication] = new Monoid[Int @@ Multiplication] with Enum[Int @@ Multiplication] {
+    ...
+  }
+}
+</code></pre>
+
+<p><code>Tag</code> 는 이렇게 생겼습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/package.scala#L99
+
+package object scalaz {  
+  ...
+
+  private[scalaz] type Tagged[A, T] = {type Tag = T; type Self = A}
+
+  /**
+   * Tag a type `T` with `Tag`.
+   *
+   * The resulting type is used to discriminate between type class instances.
+   *
+   * @see [[scalaz.Tag]] and [[scalaz.Tags]]
+   *
+   * Credit to Miles Sabin for the idea.
+   */
+  type @@[T, Tag] = Tagged[T, Tag]
+
+  ...
+}
+</code></pre>
+
+<p><code>@@[A, T]</code> 를 생성하기 위해 <code>Tag.apply</code> 를 값을 추출하기 위해 <code>unwrap</code> 을 이용할 수 있습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/Tag.scala
+object Tag {  
+  /** `subst` specialized to `Id`.
+    *
+    * @todo According to Miles, @specialized doesn't help here. Maybe manually specialize.
+    */
+  @inline def apply[@specialized A, T](a: A): A @@ T = a.asInstanceOf[A @@ T]
+
+  /** `unsubst` specialized to `Id`. */
+  @inline def unwrap[@specialized A, T](a: A @@ T): A = unsubst[A, Id, T](a)
+
+  /** Add a tag `T` to `A`.
+    *
+    * NB: It is unsafe to `subst` or `unsubst` a tag in an `F` that is
+    * sensitive to the `A` type within.  For example, if `F` is a
+    * GADT, rather than a normal ADT, it is probably unsafe.  For
+    * "normal" types like `List` and function types, it is safe.  More
+    * broadly, if it is possible to write a ''legal''
+    * [[scalaz.InvariantFunctor]] over the parameter, `subst` of that
+    * parameter is safe.
+    * 
+    * We do not have a
+    * &lt;a href="https://ghc.haskell.org/trac/ghc/wiki/Roles"&gt;type role&lt;/a&gt;
+    * system in Scala with which to declare the exact situations under
+    * which `subst` is safe.  If we did, we would declare that `subst`
+    * is safe if and only if the parameter has "representational" or
+    * "phantom" role.
+    */
+  def subst[A, F[_], T](fa: F[A]): F[A @@ T] = fa.asInstanceOf[F[A @@ T]]
+
+  ...
+}
+</code></pre>
+
+<p><code>Tag</code> 는 <a href="http://docs.scala-lang.org/overviews/core/value-classes.html"><em>Value Class</em></a> 처럼 활용할 수도 있는데요,</p>
+
+<pre><code class="language-scala">// http://eed3si9n.com/learning-scalaz/Tagged+type.html
+
+sealed trait USD  
+sealed trait EUR  
+def USD[A](amount: A): A @@ USD = Tag[A, USD](amount)  
+def EUR[A](amount: A): A @@ EUR = Tag[A, EUR](amount)
+
+val oneUSD = USD(1)  
+</code></pre>
+
+<p>태깅된 타입을 이용하면 <em>implicit</em> 를 선택할 수 있습니다. 예를 들어 </p>
+
+<pre><code class="language-scala">implicit val anonymousUserWriter = Writer[User @@ Anonymous] { ... }  
+implicit val loggedInUserWriter  = Writer[User @@ LoggedIn]  { ... }  
+</code></pre>
+
+<p>그러나 <code>type B = A @@ T</code> 에서 <code>B</code> 는 <code>A</code> 의 서브타입으로 취급되므로 주의하여 사용해야 합니다. 예를 들어, <em>scalatest</em> 의 <code>===</code>, <code>shouldBe</code> 는 런타임값만 체크하므로 아래는 항상 참입니다.</p>
+
+<pre><code class="language-scala">def convertUSDtoEUR[A](usd: A @@ USD, rate: A)  
+                      (implicit M: Monoid[A @@ Multiplication]): A @@ EUR =
+  EUR((Multiplication(usd.unwrap) |+| Multiplication(rate)).unwrap)
+
+convertUSDtoEUR(USD(1), 2) === EUR(2) // true  
+convertUSDtoEUR(USD(1), 2) === USD(2) // true
+
+convertUSDtoEUR(USD(1), 2) shouldBe EUR(2) // true  
+convertUSDtoEUR(USD(1), 2) shouldBe USD(2) // true
+
+2 shouldBe USD(2) // true  
+2 shouldBe EUR(2) // true  
+</code></pre>
+
+<p>따라서 <code>=:=</code> 를 만들어 사용하면 <code>EUR</code> 과 <code>USD</code> 비교시 컴파일 예외를 발생시킬 수 있습니다. (더 정확히는 <em>scalaz</em> 의 <code>===</code> 또는 <code>org.scalactic.TypeCheckedTripleEquals</code> 를 사용하면 되는데, <code>org.scalactic.TripleEqualSupports</code> 를 <code>FunSuite</code>  내에서 하이딩 시킬 방법을 찾지 못해서 아래처럼 구현했습니다.)</p>
+
+<pre><code class="language-scala">// impilcit class 로 만들고 import 해서 사용해도 상관없음
+trait TestImplicits {  
+  final case class StrictEqualOps[A](val a: A) {
+    def =:=(aa: A) = assert(a == aa)
+    def =/=(aa: A) = assert(!(a == aa))
+  }
+
+  implicit def toStrictEqualOps[A](a: A) = StrictEqualOps(a)
+}
+
+// spec
+convertUSDtoEUR(USD(1), 2) =:= EUR(2)  
+convertUSDtoEUR(USD(1), 2) =:= EUR(3) // will fail  
+convertUSDtoEUR(USD(1), 2) =:= USD(3) // compile error  
+</code></pre>
+
+<p><code>Tag</code> 을 이용하면 같은 <em>primitive type</em> 이어도 별도의 <em>wrapper</em> 를 만들지 않으면서 다른 타입으로 만들 수 있습니다. 예를 들어 <code>Job</code> 을 <code>Agent</code> 가 수행한다고 하면, 다음과 같이 간단한 모델을 만들어 볼 수 있는데</p>
+
+<pre><code class="language-scala">// ref - http://www.slideshare.net/IainHull/improving-correctness-with-types
+
+case class Agent(id: String, /* agent id */  
+                 status: String, /* agent status */
+                 jobType: String)
+
+case class Job(id: String, /* job id */  
+               maybeAgentId: Option[String], /* agent id */
+               status: String, /* job status */
+               jobType: String)
+</code></pre>
+
+<p>여기서 <em>Sum</em> 을 먼저 추출하면, (<em>Algebraic Data Type</em> 관련해서는 <a href="https://gleichmann.wordpress.com/2011/02/05/functional-scala-algebraic-datatypes-sum-and-product-types/">Sum and Product</a> 참조)</p>
+
+<pre><code class="language-scala">sealed abstract class AgentStatus(val value: String)  
+case object Waiting    extends AgentStatus("WAITING")  
+case object Processing extends AgentStatus("PROCESSING")
+
+sealed abstract class JobStatus(val value: String)  
+case object Created   extends JobStatus("CREATED")  
+case object Allocated extends JobStatus("ALLOCATED")  
+case object Completed extends JobStatus("COMPLETED")
+
+sealed abstract class JobType(val value: String)  
+case object Small extends JobType("SMALL")  
+case object Large extends JobType("LARGE")  
+case object Batch extends JobType("BATCH")
+
+case class Agent(id: String, /* agent id */  
+                 status: AgentStatus,
+                 jobType: JobType)
+
+case class Job(id: String, /* job id */  
+               maybeAgentId: Option[String], /* agent id */
+               status: JobStatus,
+               jobType: JobType)
+</code></pre>
+
+<p>여기서 오류의 소지가 다분한 <code>id</code> 에 태깅을 하면 다음과 같습니다.</p>
+
+<pre><code class="language-scala">import scalaz._
+
+case class Agent(id: String @@ Agent,  
+                 status: AgentStatus,
+                 jobType: JobType)
+
+case class Job(id: String @@ Job,  
+               maybeAgentId: Option[String @@ Agent],
+               status: JobStatus,
+               jobType: JobType)
+
+Agent(Tag[String, Agent]("03"), Waiting, Small)  
+Job(Tag[String, Job]("03"), None, Created, Small)  
+</code></pre>
+
+<p>조금 더 개선할 여지는, <code>maybeAgentId</code> 에 <code>Option</code> 을 이용하는 대신, <em>agent</em> 에 할당된 <em>job</em> 과 아닌 <em>job</em> 을 서브타입으로 분리하면, <code>Job</code> 을 다루는 함수에서 <code>Option</code> 처리를 피할 수 있습니다.</p>
+
+<p>물론 이는 디자인적 결정입니다. <code>Option</code> 을 허용하되 수퍼클래스를 인자로 받을것인가, 아니면 허용하지 않을것인가의 문제죠. 개인적으로는 프로그래밍 과정에서 타입을 점점 좁혀가면 오류의 여지를 줄일 수 있기 때문에 후자를 선호합니다. 그렇지 않으면 강력한 타입시스템을 갖춘 언어를 굳이 사용할 필요가 없겠지요.</p>
+
+<p>타입을 이용한 오류방지 방법 관련해서 <a href="http://www.slideshare.net/IainHull/improving-correctness-with-types">Improving Correctness with Types</a> 를 읽어보시길 권합니다.</p>
+
+<h2 id="monoidexamplefilter">Monoid Example: Filter</h2>
+
+<p>간단한 <code>Monoid</code> 예제를 하나 만들어 보겠습니다. <code>User</code> 클래스가 있고, 필터링을 하고 싶을 때</p>
+
+<pre><code class="language-scala">// http://www.slideshare.net/oxbow_lakes/practical-scalaz
+
+case class User(name: String, city: String)  
+type Filter[A] = A =&gt; Boolean // Function1, same as Reader[A, Boolean]
+
+val london: Filter[User] = _.city endsWith(".LONDON")  
+val ny: Filter[User]     = _.city endsWith(".NY")
+
+val inLondon = users filter london  
+val inNY = users filter ny  
+</code></pre>
+
+<p>이 때 만약 <code>Filter[A]</code> 가 <code>OR (||)</code> 연산에 대한 모노이드라면, 이렇게 쓸 수 있지 않을까요?</p>
+
+<pre><code class="language-scala">users filter (london |+| ny)  
+</code></pre>
+
+<p>그런데 <code>Filter[A]</code> 는 모노이드가 아니기 때문에 그럴 수 없습니다. 우린 모노이드를 배운 사람들이니까 <del>지성인</del> 한 번 만들어 보겠습니다.</p>
+
+<pre><code class="language-scala">implicit def booleanMonoid[A] = new Monoid[Filter[A]] = {  
+  override def zero: Filter[A] = 
+    false
+  override def append(f1: Filter[A], f2: =&gt; Filter[A]): Filter[A] = 
+    a =&gt; f1(a) || f2(a)
+}
+</code></pre>
+
+<p><em>disjunction</em> 이죠? <em>Scalaz</em> 어딘가에 구현되어 있을것 같습니다.</p>
+
+<pre><code class="language-scala">impilcit def booleanMonoid[A] =  
+  function1Monoid[A, Boolean](booleanInstance.disjunction)
+</code></pre>
+
+<p><code>function1Monoid[A, R]</code> 은 결과값 <code>R</code> 에 대한 모노이드 <code>Monoid[R]</code> 를 필요로 하고 여기에 위에서 봤던 <code>Monoid[Boolean]</code> 인 <code>booleanInstance.disjunction</code> 을 넣으면, 우리가 원했던 <code>Monoid[Filter[A]</code> 가 완성됩니다.</p>
+
+<pre><code class="language-scala">implicit def function1Monoid[A, R](implicit R0: Monoid[R]): Monoid[A =&gt; R] = new Function1Monoid[A, R] {  
+  implicit def R = R0
+}
+
+private trait Function1Monoid[A, R] extends Monoid[A =&gt; R] with Function1Semigroup[A, R] {  
+  implicit def R: Monoid[R]
+  def zero = a =&gt; R.zero
+}
+
+object disjunction extends Monoid[Boolean] {  
+    def append(f1: Boolean, f2: =&gt; Boolean) = f1 || f2
+    def zero = false
+}
+</code></pre>
+
+<p>그러면 이제 요구사항을 좀 더 까다롭게 해서, <strong>런던에 사는 켈리 또는 뉴욕에 사는 켈리</strong> 만 뽑아내려면 어떻게 해야할까요?</p>
+
+<pre><code class="language-scala">// if we have `|*|` representing `Conjunction`
+
+val kelly: Filter[User] = _.name.endsWith("Kelly")  
+val myFriendKelly = (london |*| kelly) |+| (ny |*| kelly)  
+users filter myFriendKelly  
+</code></pre>
+
+<p>그런데, <em>scalaz</em> 에서 할당한 모노이드 연산자는 <code>|+|</code> 하나뿐입니다. 따라서 <em>Implicit Class</em> 를 추가하면 </p>
+
+<pre><code class="language-scala">implicit class FilterOps[A](fa: Function1[A, Boolean]) {  
+  def |*|(other: Function1[A, Boolean]): Function1[A, Boolean] =
+    function1Monoid[A, Boolean](booleanInstance.conjunction).append(fa, other)
+}
+
+val users = List(  
+  User("Kelly", ".LONDON"),
+  User("John", ".NY"),
+  User("Cark", ".SEOUL"),
+  User("Kelly", ".NY"),
+  User("Kelly", ".SEOUL")
+)
+
+val ks1 = users filter ((london |*| isKelly) |+| (ny |*| isKelly))  
+val ks1.size shouldBe 2
+
+// 더 짧게 줄이면, 
+val ks2 = users filter ((london |+| ny) |*| isKelly)  
+</code></pre>
+
+<p><code>scalaz.Monoid</code> 가 <code>|+|</code> 만을 지원하는 반면, 대수타입에 특화된 <em>Spire</em> 는 <code>Boolean</code> 에 대해 <code>*, +</code> 두 가지 연산을 모두 지원합니다. </p>
+
+<pre><code class="language-scala">import spire.algebra.Rig
+
+implicit def filterRig[A] = new Rig[Filter[A]] {  
+  def plus(x: Filter[A], y: Filter[A]): Filter[A] = v =&gt; x(v) || y(v)
+  def one: Filter[A] = Function.const(true)
+  def times(x: Filter[A], y: Filter[A]): Filter[A] = v =&gt; x(v) &amp;&amp; y(v)
+  def zero: Filter[A] = Function.const(false)
+} 
+
+import spire.syntax.rig._
+
+users filter ((london + ny) * kelly)  
+</code></pre>
+
+<h2 id="monoidwithbooleanwoptionwandendo">Monoid with BooleanW, OptionW and Endo</h2>
+
+<p><code>Boolean</code> 과 <code>Option</code> 은, 연산에 <code>if-else</code>, <code>getOrElse</code> 처럼  <strong>다른 경우</strong> 를 내포하기 때문에, <code>Monoid.zero</code> 와 엮으면 쏠쏠하게 써먹을 수 있습니다.</p>
+
+<pre><code class="language-scala">&gt; load.ivy("org.scalaz" % "scalaz-core_2.11" % "7.2.0-M5")
+
+&gt; import scalaz._, Scalaz._
+import scalaz._, Scalaz._
+
+&gt; ~ 1.some      // Some(1).getOrElse(Monoid[Int].zero)
+res5: Int = 1  
+&gt; ~ none[Int]   // None.getOrElse(Monoid[Int].zero)
+res6: Int = 0  
+&gt; none[Int] | 3 // None.getOrElse(3)
+res7: Int = 3  
+</code></pre>
+
+<p><code>Boolean</code> 연산도 살펴보면,</p>
+
+<pre><code class="language-scala">(true  ? 1 | 2) shouldBe 1
+(false ? 1 | 2) shouldBe 2
+(true  ?? 1) shouldBe 1
+(false ?? 1) shouldBe 0 /* raise into zero */
+(true  !? 1) shouldBe 0 /* reversed `??` */
+(false !? 1) shouldBe 1
+</code></pre>
+
+<p><code>??</code> 는 조건이 참일경우, <code>A</code> 를 아닐 경우 <code>Monoid[A].zero</code> 를 돌려줍니다.</p>
+
+<pre><code class="language-scala">final class BooleanOps(self: Boolean) {  
+  ...
+  final def ??[A](a: =&gt; A)(implicit z: Monoid[A]): A = b.valueOrZero(self)(a)
+  final def !?[A](a: =&gt; A)(implicit z: Monoid[A]): A = b.zeroOrValue(self)(a)
+  ...
+}
+
+trait BooleanFunctions {  
+  ...
+  final def valueOrZero[A](cond: Boolean)(value: =&gt; A)(implicit z: Monoid[A]): A = 
+    if (cond) value else z.zero
+  final def zeroOrValue[A](cond: Boolean)(value: =&gt; A)(implicit z: Monoid[A]): A = 
+    if (!cond) value else z.zero
+  ...
+}
+</code></pre>
+
+<p><a href="http://www.slideshare.net/oxbow_lakes/practical-scalaz">Practical Scalaz</a> 에서는 <code>Endo</code> 와 엮어 다음처럼 사용하는걸 보여줍니다. (<code>new Filter</code> 부분을 추출하는것이 더 나은것 같습니다만, 그냥 이렇게도 사용할 수 있다 정도로 알고만 계시면 될 것 같습니다.)</p>
+
+<pre><code class="language-xml">// http://www.slideshare.net/oxbow_lakes/practical-scalaz
+
+&lt;instruments filter="incl"&gt;  
+  &lt;symbol value="VOD.L" /&gt;
+  &lt;symbol value="MSFT.O" /&gt; 
+&lt;/instruments&gt;  
+</code></pre>
+
+<pre><code class="language-scala">// before
+for {  
+  e &lt;- xml \ "instrument"
+  f &lt;- e.attribute("filter")
+} yield
+  (if f == "incl") new Filter(instr(e)) else new Filter(instr(e)).neg)
+
+// after
+val reverseFilter = Endo[Filter](_.neg)
+
+for {  
+  e &lt;- xml \ "instrument"
+  f &lt;- e.attribute("filter")
+} yield
+  (f == "incl") !? reverseFilter apply new Filter(instr(e))
+</code></pre>
+
+<p>참고로 <code>Endo</code> 는 <code>Function1[A, A]</code> 입니다. 따라서 <code>Monoid[Endo[A]]</code> 는 <em>identity function</em> 입니다. </p>
+
+<pre><code class="language-scala">final case class Endo[A](run: A =&gt; A) {  
+  final def apply(a: A): A = run(a)
+
+  /** Do `other`, than call myself with its result. */
+  final def compose(other: Endo[A]): Endo[A] = Endo.endo(run compose other.run)
+
+  /** Call `other` with my result. */
+  final def andThen(other: Endo[A]): Endo[A] = other compose this
+}
+
+trait EndoFunctions {  
+  /** Alias for `Endo.apply`. */
+  final def endo[A](f: A =&gt; A): Endo[A] = Endo(f)
+
+  /** Alias for `Monoid[Endo[A]].zero`. */
+  final def idEndo[A]: Endo[A] = endo[A](a =&gt; a)
+
+  ...
+}
+</code></pre>
+
+<h2 id="examplecurrency">Example: Currency</h2>
+
+<p>이제까지 배워왔던 바를 적용해서, 통화를 나타내는 <code>Currency</code> 모델을 만들어 보겠습니다. 위에선 <code>Tag</code> 를 이용했었으니, 이번엔 <em><a href="http://docs.scala-lang.org/overviews/core/value-classes.html">Value Class</a></em> 로 만들어 보겠습니다.</p>
+
+<pre><code class="language-scala">object Currency {  
+  sealed trait Currency extends Any
+  final case class EUR[A](amount: A) extends AnyVal with Currency
+  final case class USD[A](amount: A) extends AnyVal with Currency
+}
+
+// spec
+USD(1) =:= USD(1)  
+USD(3) =:= EUR(2) // compile error  
+</code></pre>
+
+<p>이제 <code>1.USD</code> 등 의 문법을 위해 <em>implicit class</em> 를 추가하면,</p>
+
+<pre><code class="language-scala">Object Currency {  
+  ...
+
+  implicit class CurrencyOps[A](amount: A) {
+    def EUR = Currency3.EUR(amount)
+    def USD = Currency3.USD(amount)
+  }
+}
+
+// spec
+10.USD =:= 10.USD  
+</code></pre>
+
+<p>이제 같은 통화간 덧셈을 위해, <code>Monoid[USD[A]]</code> 등을 추가할 수 있습니다. <code>|+|</code> 는 기존의 <code>Monoid[A]</code> 를 이용하면 됩니다.</p>
+
+<pre><code class="language-scala">object Currency {  
+  import scalaz._, Scalaz._
+
+  ...
+  implicit def usdMonoid[A](implicit M: Monoid[A]) = new Monoid[USD[A]] {
+    override def zero: USD[A] =
+      USD(M.zero)
+
+    override def append(u1: USD[A], u2: =&gt; USD[A]): USD[A] =
+      USD(M.append(u1.amount, u2.amount))
+  }
+}
+
+// spec
+(10.USD |+| 10.USD) =:= 20.USD
+</code></pre>
+
+<p>이제 <code>EUR</code> 를 위한 모노이드를 만들어 보겠습니다. 재미삼아 <em><a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html">context bound</a></em> 를 이용해 보면,</p>
+
+<pre><code class="language-scala">object Currency {  
+  ...
+
+  implicit def eurMonoid[A : Monoid] = new Monoid[EUR[A]] {
+    override def zero: EUR[A] =
+      EUR(implicitly[Monoid[A]].zero)
+
+    override def append(e1: EUR[A], e2: =&gt; EUR[A]): EUR[A] =
+      EUR(implicitly[Monoid[A]].append(e1.amount, e2.amount))
+  }
+}
+</code></pre>
+
+<p>통화가 추가될때 마다 매번 반복적으로 모노이드를 추가해야된다는 것이 귀찮으므로, <code>Currency</code> 용 모노이드를 만들겠습니다. <em><a href="https://github.com/milessabin/shapeless">Shapeless</a></em> 를 이용하면, (<em>Shapeless</em> 의 <code>Generic</code>, <code>Aux</code> 는 아래에서 설명하겠습니다)</p>
+
+<pre><code class="language-scala">object Currency {  
+  import scalaz._, Scalaz._
+  import shapeless._
+
+  ...
+  implicit def currencyMonoid[A : Monoid, C[_] &lt;: Currency]
+  (implicit G: Generic.Aux[C[A], A :: HNil]) = new Monoid[C[A]] {
+    override def zero: C[A] =
+      G.from(implicitly[Monoid[A]].zero :: HNil)
+
+    override def append(c1: C[A], c2: =&gt; C[A]): C[A] = {
+      val a1: A = G.to(c1).head
+      val a2: A = G.to(c2).head
+
+      G.from(implicitly[Monoid[A]].append(a1, a2) :: HNil)
+    }
+  }
+}
+</code></pre>
+
+<p>이제 통화간 변환을 위한 함수를 추가해보도록 하겠습니다. 이런 문법은 어떨까요?</p>
+
+<pre><code class="language-scala">12.USD to EUR  
+</code></pre>
+
+<p>그런데, 현재 우리가 가진 디자인에서 <code>EUR</code> 은 <em>case class</em> 이므로 <code>EUR</code> 생성없이 타입만 지정하려면 이정도 문법으로 타협할 수 있겠네요.</p>
+
+<pre><code class="language-scala">24.USD to[EUR]  
+</code></pre>
+
+<p><code>Currency</code> 에서 <code>to</code> 구현을 하려면, <code>to[C[_] &lt;: Currency[_]]</code> 정도로 하위 클래스는 퉁친다 해도, 하위 클래스 인스턴스 생성시에 <code>A</code> 가 필요하므로 <code>Currency</code> 를 <code>Currency[A]</code> 로 변경해야 합니다.</p>
+
+<pre><code class="language-scala">object Currency {  
+  sealed trait Currency[A] extends Any {
+    def amount: A
+  }
+
+  final case class EUR[A](amount: A) extends AnyVal with Currency[A]
+  final case class USD[A](amount: A) extends AnyVal with Currency[A]
+
+  implicit class CurrencyOps[A](amount: A) {
+    def EUR = Currency3.EUR(amount)
+    def USD = Currency3.USD(amount)
+  }
+
+  implicit def currencyMonoid[A : Monoid, C[A] &lt;: Currency[A]]
+  (implicit G: Generic.Aux[C[A], A :: HNil]) = new Monoid[C[A]] {
+    override def zero: C[A] =
+      G.from(implicitly[Monoid[A]].zero :: HNil)
+
+    override def append(c1: C[A], c2: =&gt; C[A]): C[A] = {
+      val a1: A = G.to(c1).head
+      val a2: A = G.to(c2).head
+
+      G.from(implicitly[Monoid[A]].append(a1, a2) :: HNil)
+    }
+  }
+}
+</code></pre>
+
+<p>이제 <code>Currency</code> 에 <code>to</code> 를 추가하면,</p>
+
+<pre><code class="language-scala">object Currency {  
+  ...
+
+  sealed trait Currency[A] extends Any {
+    def amount: A
+    def to[C[A] &lt;: Currency[A]](implicit G: Generic.Aux[C[A], A :: HNil]): C[A] =
+      G.from(amount :: HNil)
+  }
+
+  ...
+}
+
+// spec
+(10.USD.to[EUR]) =:= 10.EUR
+</code></pre>
+
+<p><code>to</code> 에 <code>implicit</code> 로 통화간 환율을 담고있는 <code>R: Rate</code> 등을 추가하고 <code>Rate</code> 내에서 <code>Monoid[A @@ Multiplcation</code> 을 이용하면 컴파일타임에 </p>
+
+<ul>
+<li><code>USD -&gt; EUR</code> 변환이 정의되어 있는지 (<a href="https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0#heterogenous-maps">Shapeless Heterogenous Maps</a>)</li>
+<li><code>A</code> 에 대한 곱셈 연산 <code>Monoid[A @@ Multiplication]</code> 이 정의 되어있는지를 검사할 수 있습니다.</li>
+</ul>
+
+<p><del>구현은 숙제로.. 제가 귀찮아서가 절대 아닙니다</del></p>
+
+<p>디자인적인 결정이겠으나, <code>USD</code>, <code>EUR</code> 등을 <code>object</code> 로 만들고 <code>case class Money[A](amount: A, currency: Currency)</code> 로 구현할수도 있겠습니다. 관심 있으신 분은 <a href="https://github.com/lambdista/money">github.com/lambdista/money</a> 를 참조하시면 됩니다.</p>
+
+<h2 id="shapeless">Shapeless</h2>
+
+<p><em>Shapeless</em> 는 많은 기능을 가지고 있기 때문에 여기서 모든걸 설명하긴 어렵고, 위에서 사용한 <code>Generic</code>, <code>Aux</code> 에 대해 간단히 소개만 하겠습니다. (관심 있으신 분은 <a href="https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0">Shapeless - Feature 2.0.0</a> 를 참조하시면 됩니다.)</p>
+
+<pre><code class="language-scala">// https://github.com/milessabin/shapeless/blob/master/core/src/main/scala/shapeless/generic.scala
+
+&gt; load.ivy("com.chuusai" %% "shapeless" % "2.2.5")
+
+&gt; import shapeless._
+import shapeless._
+
+&gt; case class Cat(name: String, catAge: Double)
+defined class Cat  
+&gt; Generic[Cat]
+res4: Generic[Cat] {  
+  type Repr = 
+    shapeless.::[String,shapeless.::[Double,shapeless.HNil]]
+} = ...
+</code></pre>
+
+<p><code>Generic[A]</code> 는 <a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html">Path-Dependent Type</a> 으로 <code>Repr</code> 을 가지고 있습니다. 이는 <code>A</code> 에 따라 달라지는 값인데, 보통 <code>R</code> 로 표기합니다.</p>
+
+<pre><code class="language-scala">// https://github.com/milessabin/shapeless/blob/master/core/src/main/scala/shapeless/generic.scala#L103
+
+trait Generic[T] extends Serializable {  
+  /** The generic representation type for {T}, which will be composed of {Coproduct} and {HList} types  */
+  type Repr
+
+  /** Convert an instance of the concrete type to the generic value representation */
+  def to(t : T) : Repr
+
+  /** Convert an instance of the generic representation to an instance of the concrete type */
+  def from(r : Repr) : T
+}
+</code></pre>
+
+<p><code>Generic.Aux[A, R]</code> 는 <code>Generic[A]</code> 의 <code>Repr</code> 에 <code>R</code> 을 사용하는것으로, <code>Generic[A] { type Repr = R }</code> 과 동일합니다.</p>
+
+<pre><code class="language-scala">// https://github.com/milessabin/shapeless/blob/master/core/src/main/scala/shapeless/generic.scala#L148
+
+object Generic {  
+  ...
+
+  type Aux[T, Repr0] = Generic[T] { type Repr = Repr0 }
+
+  ...
+}
+</code></pre>
+
+<p><code>Generic.Aux[A, R]</code> 을 이용하면, 타입수준의 표현 <code>R</code> 과 실제 타입 <code>A</code> <em>isomorphic</em> 하게 변환할 수 있습니다. 위에서 봤던 <code>to</code> 와 <code>from</code> 기억 하시죠? </p>
+
+<p>만약 <code>R</code> 이 기본적인 타입이어서, <code>Generic.Aux[A, R]</code> 이 Shapeless 에서 자동 생성해 줄 경우 <code>Currency</code> 예제에서 보았듯이 <code>implicit</code> 로 가져오면, 바로 이용할 수 있습니다. </p>
+
+<p><em>primitive</em> 는 물론 <em>case class</em> 도 <code>Generic[Cat]</code> 처럼 자동생성되어 바로 가져다 쓸 수 있습니다. 중첩된것두 가능하구요.</p>
+
+<pre><code class="language-scala">&gt; case class EnhancedCat(catType: String, cat: Cat)
+defined class EnhancedCat
+
+&gt; Generic[EnhancedCat]
+res6: Generic[EnhancedCat] {  
+  type Repr = shapeless.::[String,shapeless.::[cmd3.Cat,shapeless.HNil]]
+} = ...
+</code></pre>
+
+<p>여기서 <code>HList</code> 는 (<em><a href="https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0#heterogenous-lists">Heterogenous List</a></em>) 여러 타입을 담을 수 있는 리스트입니다.</p>
+
+<p>이제 <code>to</code> 와 <code>from</code> 예제를 보면</p>
+
+<pre><code class="language-scala">&gt; val c1 = Cat("odie", 1.0)
+c1: Cat = Cat("odie", 1.0)
+
+&gt; Generic[Cat].to(c1)
+res9: String :: Double :: HNil = ::("odie", ::(1.0, HNil))
+
+&gt; val reconstructed = Generic[Cat].from(res9)
+reconstructed: Cat = Cat("odie", 1.0)
+
+&gt; case class Dog(name: String, dogAge: Double)
+defined class Dog
+
+&gt; val d1 = Dog("dog odie", 1.0)
+d1: Dog = Dog("dog odie", 1.0)
+
+&gt; Generic[Dog].to(d1)
+res13: String :: Double :: HNil = ::("dog odie", ::(1.0, HNil))
+
+&gt; val reconstructedFromDog = Generic[Cat].from(res13)
+reconstructedFromDog: Cat = Cat("dog odie", 1.0)  
+</code></pre>
+
+<p><a href="https://meta.plasm.us/posts/2015/11/08/type-classes-and-generic-derivation/">metaplasm.us - Type Classes and Generic Derivation</a> 에서는 <em>Shapeless</em> 를 이용해서 문자열로부터 <em>case class</em> 를 자동생성하는 파서를 만드는 법을 보여줍니다.</p>
+
+<p><code>CaseClassParser</code> 가 있을 때, 문자열 <code>"odie, 1.2"</code> 를 <code>Dog</code> 로 파싱하기 위해 <code>CaseClassParser[Dog]("odie, 1.2")</code> 처럼 쓰고싶다고 하면,</p>
+
+<pre><code class="language-scala">// ref - https://meta.plasm.us/posts/2015/11/08/type-classes-and-generic-derivation/
+
+object CaseClassParser {  
+  import shapeless._
+
+  trait Parser[A] {
+    def apply(s: String): Option[A]
+  }
+
+  def apply[A](s: String)(implicit P: Parser[A]): Option[A] = P(s)
+}
+</code></pre>
+
+<p>이 때 <code>shapeless.Generic[A]</code> 를 이용하면 위에서 보았듯이 <code>A</code> 를 <code>HList</code> 로 (<em><a href="https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0#heterogenous-lists">Heterogenous List</a></em>) 로 변경할 수 있으므로 <code>Parser[HList]</code> 만 있으면 됩니다.</p>
+
+<p><code>HList</code> 도 <code>List</code> 처럼 <code>cons</code> 와 <code>nil</code> 로 구성되어 있습니다. <code>HNil</code> 과 <code>HList</code> 파서를 만들면,</p>
+
+<pre><code class="language-scala">// ref - https://meta.plasm.us/posts/2015/11/08/type-classes-and-generic-derivation/
+
+object CaseClassParser {  
+  ...
+
+  implicit val hnilParser = new Parser[HNil] {
+    override def apply(s: String): Option[HNil] =
+      if (s.isEmpty) Some(HNil) else None
+  }
+
+  implicit def hlistParser[H : Parser, T &lt;: HList : Parser] = new Parser[H :: T] {
+    override def apply(s: String): Option[H :: T] =
+      s.split(",").toList match {
+        case cell +: rest /* use `+:` instead of :: */ =&gt; for {
+          head &lt;- implicitly[Parser[H]].apply(cell)
+          tail &lt;- implicitly[Parser[T]].apply(rest.mkString(","))
+        } yield head :: tail
+      }
+  }
+}
+</code></pre>
+
+<p>그리고 <code>implicitly[Parser[H]]</code> 에서 사용할 개별 타입별 파서를 만들면</p>
+
+<pre><code class="language-scala">// ref - https://meta.plasm.us/posts/2015/11/08/type-classes-and-generic-derivation/
+
+object CaseClassParser {  
+  ...
+
+  implicit val intParser = new Parser[Int] {
+    override def apply(s: String): Option[Int] = Try(s.toInt).toOption
+  }
+
+  implicit val stringParser = new Parser[String] {
+    override def apply(s: String): Option[String] = Some(s)
+  }
+
+  implicit val doubleParser = new Parser[Double] {
+    override def apply(s: String): Option[Double] = Try(s.toDouble).toOption
+  }
+}
+</code></pre>
+
+<p>마지막으로, <em>case class</em> 를 <code>HList</code> 로 만들어줄 <code>caseClassParser</code> 만 만들면 됩니다.</p>
+
+<pre><code class="language-scala">// ref - https://meta.plasm.us/posts/2015/11/08/type-classes-and-generic-derivation/
+
+object CaseClassParser {  
+  ...
+
+  implicit def caseClassParser[C, R &lt;: HList]
+  (implicit G: Generic.Aux[C, R], reprParser: Parser[R]): Parser[C] = new Parser[C] {
+    override def apply(s: String): Option[C] = reprParser.apply(s).map(G.from)
+  } 
+}
+</code></pre>
+
+<p><code>reprParser.apply(s)</code> 는 <code>Option[R]</code> 이므로 <code>G.from</code> 을 이용해 변환해주면 됩니다.</p>
+
+<h2 id="previousposts">Previous Posts</h2>
+
+<ul>
+<li><a href="http://1ambda.github.io/easy-scalaz-1-state/">Easy Scalaz 1, State</a></li>
+<li><a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/">Easy Scalaz 2, Monad Transformer</a></li>
+<li><a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/">Easy Scalaz 3, ReaderWriterState with Kleisli</a></li>
+<li><a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/">Easy Scalaz 4, Yoneda and Free Monad</a> </li>
+</ul>
+
+<h2 id="references">References</h2>
+
+<ul>
+<li><a href="http://cs.lth.se/edan40">Haskell Image</a></li>
+<li><a href="http://eed3si9n.com/learning-scalaz/Tagged+type.html">Learning Scalaz: Tagged Type</a></li>
+<li><a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/Tag.scala">Scalaz 7.2: Tag.scala</a></li>
+<li><a href="https://groups.google.com/forum/#!topic/scalaz/Py_IIfp9d2Q">Scalaz Google Groups: Value Class vs Tag</a></li>
+<li><a href="http://docs.scala-lang.org/overviews/core/value-classes.html">Scala Docs: Value Classes</a></li>
+<li><a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html">Scala Docs: Context Bound</a></li>
+<li><a href="http://etorreborre.blogspot.kr/2011/11/practical-uses-for-unboxed-tagged-types.html">Practical uses for Unboxed Tagged Types</a></li>
+<li><a href="http://www.slideshare.net/IainHull/improving-correctness-with-types">Improving Correctness with Types</a></li>
+<li><a href="http://underscore.io/blog/posts/2014/01/29/unboxed-tagged-angst.html">Underscore: Unboxed Tagged Angst</a></li>
+<li><a href="http://www.slideshare.net/oxbow_lakes/practical-scalaz">Slideshare: Practical Scalaz</a></li>
+<li><a href="http://stackoverflow.com/questions/34266285/tagged-type-comparison-in-scalaz">Stackoverflow: Tagged Type Comprarison in Scalaz</a></li>
+<li><a href="https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0">Shapeless: Feature 2.0.0</a></li>
+<li><a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html">The Neophyte's Guide to Scala Part 13: Path-Dependent Type</a></li>
+<li><a href="https://meta.plasm.us/posts/2015/11/08/type-classes-and-generic-derivation/">metaplasm.us: Type classes and generic derivation</a></li>
+<li><a href="http://stackoverflow.com/questions/33585441/constructing-simple-scala-case-classes-from-strings-strictly-without-boiler-pla/33586304#33586304">Stackoverflow: Constructing simple Scala case classes from Strings, strictly without boiler-plate</a></li>
+</ul>]]></content:encoded></item><item><title><![CDATA[Easy Scalaz 4, Yoneda and Free Monad]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
 
 <p><code>Free[F, A]</code> 를 이용하면 Functor <code>F</code> 를 Monad 인스턴스로 만들 수 있습니다. 그런데, <code>Coyoneda[G, A]</code> 를 이용하면 아무 타입 <code>G</code> 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 <em>case class</em> 조차) 모나드 인스턴스로 만들 수 있습니다.</p>
 
@@ -4443,19 +5368,16 @@ Constrain-Based Sequential Pattern Mining</li>
 <li><a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/">Easy Scalaz 2, Monad Transformer</a></li>
 <li><a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/">Easy Scalaz 3, ReaderWriterState with Kleisli</a></li>
 <li><a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/">Easy Scalaz 4, Yoneda, Coyonead, Free, Trampoline</a></li>
-<li>[Easy Scalaz 5, ST, IO]</li>
-<li>[Easy Scalaz 6, Stream]</li>
+<li><a href="http://1ambda.github.io/easy-scalaz-5-playing-with-monoids">Easy Scalaz 5, Playing with Monoids</a></li>
+<li>[Easy Scalaz 6, ST, IO]</li>
+<li>[Easy Scalaz 7, Stream]</li>
 </ul>
 
 <p><strong>Monocle</strong></p>
 
 <p><a href="http://1ambda.github.io/scala-monocle-tutorial/">Scala Lens Library, Monocle</a></p>
 
-<p><strong>Functional Programming in Scala</strong> by <em>Martin Odersky</em></p>
-
-<p><a href="http://1ambda.github.io/functional-programming-in-scala-chapter-1/">Chapter 1</a> <br>
-<a href="http://1ambda.github.io/functional-programming-in-scala-chapter-2/">Chapter 2</a> <br>
-<a href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/">Chapter</a></p>]]></description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category><![CDATA[1ambda]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded><![CDATA[<h3 id="scala">Scala</h3>
+<p><strong>Functional Programming in Scala</strong> by <em>Martin</em></p>]]></description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category><![CDATA[1ambda]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded><![CDATA[<h3 id="scala">Scala</h3>
 
 <p><strong>Scalaz</strong></p>
 
@@ -4464,8 +5386,9 @@ Constrain-Based Sequential Pattern Mining</li>
 <li><a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/">Easy Scalaz 2, Monad Transformer</a></li>
 <li><a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/">Easy Scalaz 3, ReaderWriterState with Kleisli</a></li>
 <li><a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/">Easy Scalaz 4, Yoneda, Coyonead, Free, Trampoline</a></li>
-<li>[Easy Scalaz 5, ST, IO]</li>
-<li>[Easy Scalaz 6, Stream]</li>
+<li><a href="http://1ambda.github.io/easy-scalaz-5-playing-with-monoids">Easy Scalaz 5, Playing with Monoids</a></li>
+<li>[Easy Scalaz 6, ST, IO]</li>
+<li>[Easy Scalaz 7, Stream]</li>
 </ul>
 
 <p><strong>Monocle</strong></p>
@@ -4615,298 +5538,4 @@ Constrain-Based Sequential Pattern Mining</li>
 <h3 id="javascript">Javascript</h3>
 
 <p><a href="http://1ambda.github.io/javascript-object-inheritance/">Javascript Inheritance Details</a> <br>
-<a href="http://1ambda.github.io/angular-providers/">Angular, Providers</a>  </p>]]></content:encoded></item><item><title><![CDATA[Cloud Computing, P2P Systems]]></title><description><![CDATA[<p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt=""></p>
-
-<p>P2P 시스템의 기술들은 <em>cloud computing</em> 의 많은 분야에서 활용됩니다. 뒤에서 배울 <em>Chord P2P hashing</em> 같은 경우는 <em>Cassandra</em>, <em>Voldmort</em> 등의 <em>key-value store</em> 에서 쓰이고 있습니다. </p>
-
-<p><br></p>
-
-<h3 id="napster">Napster</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/napster.png" alt=""></p>
-
-<p>최초에 <em>peer</em> 는 서버에게 메세지를 보내 P2P 시스템에 가입했다는 사실을 알립니다.</p>
-
-<p><em>Napster</em> 에서는 중앙에 서버를 두어, 파일이 저장된 <em>peer</em> 를 기록합니다. 각 <em>peer</em> 는 파일이</p>]]></description><link>http://1ambda.github.io/cloud-computing-p2p-systems/</link><guid isPermaLink="false">6e527ab7-0598-4177-b199-dd4ef466f537</guid><category><![CDATA[coursera]]></category><category><![CDATA[cloud computing]]></category><category><![CDATA[P2P]]></category><category><![CDATA[Napster]]></category><category><![CDATA[Gnutella]]></category><category><![CDATA[BitTorrent]]></category><category><![CDATA[FastTrack]]></category><category><![CDATA[Chord]]></category><category><![CDATA[Pastry]]></category><category><![CDATA[Kelips]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Sat, 28 Feb 2015 16:18:25 GMT</pubDate><content:encoded><![CDATA[<p><img src="http://ook.co/wp-content/uploads/cloudcomputing.png" alt=""></p>
-
-<p>P2P 시스템의 기술들은 <em>cloud computing</em> 의 많은 분야에서 활용됩니다. 뒤에서 배울 <em>Chord P2P hashing</em> 같은 경우는 <em>Cassandra</em>, <em>Voldmort</em> 등의 <em>key-value store</em> 에서 쓰이고 있습니다. </p>
-
-<p><br></p>
-
-<h3 id="napster">Napster</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/napster.png" alt=""></p>
-
-<p>최초에 <em>peer</em> 는 서버에게 메세지를 보내 P2P 시스템에 가입했다는 사실을 알립니다.</p>
-
-<p><em>Napster</em> 에서는 중앙에 서버를 두어, 파일이 저장된 <em>peer</em> 를 기록합니다. 각 <em>peer</em> 는 파일이 어디있는지 검색하기 위해 중앙 서버에 질의해야 합니다. 그림에서 볼 수 있듯이, 각 파일은 서버가 아니라 <strong>클라이언트</strong> 에 저장되어 있습니다. 파일이 어느 클라이언트(<em>peer</em>) 에 저장되어있는지 알게되면, <em>ping</em> 을 날려 살아있는지 확인 후 파일을 다운 받습니다. </p>
-
-<p><em>Napster</em> 의 문제점은</p>
-
-<ul>
-<li>중앙 서버로의 요청이 너무나 많습니다.</li>
-<li><p>서버가 다운되면, 시스템이 멈춥니다.</p>
-
-<p><br></p></li>
-</ul>
-
-<h3 id="gnutella">Gnutella</h3>
-
-<p><em>Gnutella</em> 는 <em>Napster</em> 시스템에서 <strong>서버</strong>를 제거했습니다. 각 클라이언트 (<em>peer</em>) 는 파일이 어디 저장되어있는지 파악하기 위해 서로 통신하지요. 이처럼 클라이언트가 서버처럼 행동하기때문에 <em>servent</em> 라 부르기도 합니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella.png" alt=""></p>
-
-<p>위 슬라이드에서 알 수 있듯이, 각 피어는 근처에 있는 피어로의 링크를 가지고 있습니다. 이 링크는 <em>overlay graph</em> 라 부르기도 합니다.</p>
-
-<p><em>gnutella</em> 에서 피어간 통신에 사용되는 주요 메세지 타입은</p>
-
-<ul>
-<li><strong>Query:</strong> search</li>
-<li><strong>QueryHit:</strong> reponse to query</li>
-<li><strong>Ping:</strong> to probe network for other peers</li>
-<li><strong>Pong:</strong> reply to ping, contains address of another peer</li>
-<li><strong>Push:</strong> used to initiate file transfer</li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_header.png" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_search_ttl.png" alt=""></p>
-
-<p>위 그림에서 <code>TTL = 2</code> 이기 때문에 <em>query</em> 메세지는 <em>2-hop</em> 까지만 전파됩니다. 그리고 <em>gnutella</em> 에서는 각 피어가 최근에 퍼트린 <em>query</em> 메세지 리스트를 유지하고 있기 때문에 같은 메세지를 다시 전파하지 않습니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_queryhit_msg.png" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/gnutella_queryhit_msg_ex.png" alt=""></p>
-
-<p>피어가 보낸 <em>query</em> 에 대해 해당하는 파일을 가지고 있다는 응답은 <em>query hit</em> 메세지를 통해 전달됩니다.</p>
-
-<p><em>gnutella</em> 에서는 과도한 트래픽을 방지하기 위해 다음의 방법을 사용합니다.</p>
-
-<ul>
-<li>to avoid duplicate transmissions, each peer maintains a list of recently received messages</li>
-<li>query forwarded to all neighbors except peer from which received</li>
-<li>each query (identified by <code>DescriptorID</code>) forwarded only once</li>
-<li><em>QueryHit</em> routed back only to peer from which <em>Query</em> received with same <code>DescriptorID</code></li>
-<li>for flooded messages, duplicates with same <code>DescriptorID</code> and <em>Payload descriptor</em> are dropped</li>
-<li><em>QueryHit</em> with <code>DescriptorID</code> for which <em>Query</em> not seen is dropped</li>
-</ul>
-
-<p><br></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/after_receiving_queryhit.png" alt=""></p>
-
-<p><em>QueryHit</em> 메세지를 <em>requestor</em> 가 받으면 최적의 <em>responder</em> 를 고르고,  <strong>HTTP</strong> 를 이용해서 몇번의 통신을 한 뒤 파일을 전송받습니다. 여기서 <em>gnutella</em> 가 <em>HTTP</em> 를 이용하는 이유는, HTTP 가 <em>standard</em>, <em>well-debugged</em>, <em>widely used</em> 이기 때문입니다.</p>
-
-<p>그런데 만약, <em>responder</em> 가 방화벽(<em>firewall</em>) 뒤에 있으면 어떻게 될까요? 일반적으로 방화벽은 <em>incomming message</em> 를 필터링 합니다. <em>gnutella</em> 는 이럴 경우 대비해 <em>push</em> 를 만들어 놓았습니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/dealing_with_firewalls.png" alt=""></p>
-
-<p><em>query hit</em> 메세지를 받은 후에 <em>requestor</em> 가 보내는 <em>HTTP</em> 메세지에 <em>responder</em> 가 응답하지 않으면 <em>overlay link</em> (이미 연결되어있는) 을 통해서 <em>push</em> 메세지를 <em>requestor</em> 가 보냅니다. <em>responder</em> 는 방화벽 뒤에 있어도, <em>overlay link</em> 를 통해 받은 <em>push</em> 메세지를 확인하고 파일 전송을 시작합니다.</p>
-
-<p>만약 <em>requestor</em> 가 방화벽 뒤에 있다면, <em>gnutella</em> 프로토콜로는 파일을 전송 받을 수 없습니다.</p>
-
-<p><br></p>
-
-<p><em>gnutella</em> 에서 생기는 문제점은 </p>
-
-<ul>
-<li><em>ping/pong</em> constituted 50% traffic: use multiplex, cache and reduce freq of <em>ping/pong</em></li>
-<li>modem-conncted hosts do not have enough bandwidth for passing gnutella traffic: use a central server to act as proxy for such peers. or use <strong>FastTrack System</strong></li>
-<li>large number of <em>free loaders</em></li>
-<li>flooding causes excessive traffic: use <strong>Structured P2P system</strong> e.g <strong>Chord System</strong></li>
-</ul>
-
-<p><br></p>
-
-<h3 id="fasttrac">FastTrac</h3>
-
-<p><em>FastTrac</em> 은 <em>Kazza</em>, <em>KazzaLite</em>, <em>Grokster</em> 라는 기술을 기반으로 한 <em>Napster</em> <em>Gnutella</em> 의 하이브리드입니다. </p>
-
-<p><em>healthier participants</em> 를 이용하겠다는 기본적인 아이디어로부터 출발했습니다. <em>gnutella</em> 와 비슷하지만 노드중 일부가 <em>supernode</em> 가 되어, 특별한 역할을 수행합니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/fast_trac.jpg" alt=""></p>
-
-<ul>
-<li><em>supernode</em>는 <em>Napster server</em> 와 비슷하게 근처에 있는 노드의 <code>&lt;file name, peer point&gt;</code> 리스트를 저장합니다</li>
-<li><em>supernode</em> 의 멤버십은 시간이 지나면서 변합니다</li>
-<li>어떤 노드도 <em>supernode</em> 가 될 수 있습니다. 그러기 위해서는 <em>reputation</em> 을 얻어야 합니다</li>
-<li>각 노드는 데이터를 탐색하기 위해 <em>supernode</em> 에 질의합니다</li>
-</ul>
-
-<p>이 <em>reputation system</em> 은 <em>Kazaalite</em> 처럼 <em>upload</em> 한 파일의 양으로 결정할 수도 있고, 경제학적인 원리를 적용한 방법도 있습니다</p>
-
-<p><br></p>
-
-<h3 id="bittorrent">BitTorrent</h3>
-
-<p>이전에 언급했듯이 <strong>다운만 받는 peer</strong> 도 존재할 수 있습니다. <em>BitTorrent</em> 는 업로드 하는 <em>peer</em> 에게 보상을 해 주어, <em>peer</em> 들의 업로드를 더 이끌어 낼 수 있습니다. </p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/bit_torrent_network.jpg" alt=""></p>
-
-<p><em>BitTorrent</em> 네트워크 구성은 위 슬라이드와 같습니다.</p>
-
-<ul>
-<li><strong>Tracker:</strong> 파일당 하나씩 존재하며 <em>heartbeat</em> 를 받아 <em>peer</em> 의 <em>join</em>, <em>leave</em> 를 관리합니다.</li>
-<li><strong>Seed:</strong> 전체 파일을 가지고 있는 <em>peer</em> </li>
-<li><strong>Leecher:</strong> 파일의 일부분을 가지고 있는 <em>peer</em> </li>
-</ul>
-
-<p><em>BitTorrent</em> 에서는 블럭단위로 파일을 전송하는데, 이 때 사용하는 몇 가지 규칙이 있습니다.</p>
-
-<ul>
-<li><em>Local Rarest First:</em> 파일을 다운받을때, 귀한 블럭부터 먼저 받습니다</li>
-<li><em>Tit for tat:</em> 업로드 하는 만큼, 다운로드 <em>bandwidth</em> 를 할당받습니다. 다시 말해서 업로드를 많이해야 빠르게 받을 수 있습니다</li>
-<li><em>Choking:</em> 동시에 업로드하는 <em>neighbor</em> 수를 제한해서 <em>bandwidth</em> 가 너무 많이 사용되지 않도록 합니다. <em>best neighbor</em> 를 선택하여 <em>unchoked set</em> 을 유지하고, 주기적으로 이 집합을 재평가합니다. 이외의 다른 <em>peer</em> 는 <em>choked set</em> 입니다. </li>
-</ul>
-
-<p><em>optimistic unchoke</em> 기법은 주기적으로 랜덤한 <em>neighbor</em> 를 <em>unchoke</em> 해서, <em>unchoked set</em> 을 <em>fresh</em> 하게 유지합니다. 여기서 <em>random choice choking</em> 을 쓰는 이유는</p>
-
-<ul>
-<li>To avoid the sysem from getting stuck where only a few peers receive service</li>
-</ul>
-
-<p><br></p>
-
-<h3 id="dht">DHT</h3>
-
-<p>지금까지 본 <em>Napster</em>, <em>Gnutella</em>, <em>FastTrac</em> 은 일종의 <em>DHT, Distribute Hash Table</em> 입니다.</p>
-
-<p><em>DHT</em> 에서의 <em>performance concerns</em> 는</p>
-
-<ul>
-<li>load balancing</li>
-<li>fault-tolerance</li>
-<li>efficiency of lookup and inserts</li>
-<li>locality</li>
-</ul>
-
-<p>우리가 배울 <em>Chord</em> 는 이런 구조가 적용된 <em>structured peer to peer system</em> 입니다.</p>
-
-<p><br></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/performance_comparison_nap_gnu.jpg" alt=""></p>
-
-<p><em>Napster</em> 는 <em>peer</em> 의 경우 파일을 저장하지 않기 때문에 메모리가 많이 들지 않지만, <em>server</em> 에서 많은 메모리를 요구합니다. 서버로 질의가 가기때문에 <em>lookup latency</em> 나 <em>lookup</em> 을 위한 메세지 수 자체는 많지 않지만, 서버의 부하가 상당히 심할 수 있습니다.</p>
-
-<p>반면 <em>Gnutella</em> 에서는 서버가 없습니다. 그렇기 때문에 피어는 파일이 저장되어있는 주변 피어의 목록을 가지고 있어야 하는데, <code>N</code> 만큼의 이웃이 주변에 있을 수 있습니다. 따라서 한 피어에서 필요한 메모리 양은 <code>O(N)</code> 입니다.</p>
-
-<p>그리고 네트워크가 직선으로 구성되어 있다고 할때, <em>lookup latency</em> 는 <code>O(N)</code> (<code>N-1</code>) 이고 룩업을 위한 메세지 수도 <code>O(N)</code> (<code>2(N-1)</code>) 입니다.</p>
-
-<p>반면 <em>Chord</em> 는 모두 <code>O(log N)</code> 입니다. 이론적으로 <em>constant</em> 는 아니지만, <em>real world</em> 에서는 상당히 낮은 수가 될 수 있습니다.</p>
-
-<p><br></p>
-
-<h3 id="chord">Chord</h3>
-
-<p><em>Chord</em> 는 <em>Berkeley</em> 와 <em>MIT</em> 에서 개발된 <em>P2P</em> 프로토콜입니다.<em>latency</em> 와 <em>message cost of routing</em> (<em>lookups</em>/<em>inserts</em>) 를 줄이기 위해 지능적으로 <em>neighbor</em> 를 선택하고 <em>Consistent Hashing</em> 기법을 사용합니다.</p>
-
-<p><em>Consistent Hasing</em> 값은 <em>peer</em> 에 부여되는 주소값으로</p>
-
-<ul>
-<li>IP 와 Port로 <em>SHA1</em> 로 해싱해서 160 비트 스트링을 만들고 </li>
-<li><code>m</code> 비트로 절단해서 사용합니다</li>
-<li><em>peer</em> 의 <em>ID</em> 라 불리기도 하는데, 이 값은 당연히 최대 <code>2^m - 1</code> 입니다</li>
-<li>해싱값이므로 <em>unique</em> 하진 않지만 충돌이 일어날 확률은 굉장히 적습니다</li>
-<li>그리고 이 값이 <code>2^m</code> 개의 점이 되어 하나의 원을 구성합니다</li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/ring_of_peers.png" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_finger_table.png" alt=""></p>
-
-<p>각 노드는 (반) 시계방향으로의 <em>successor</em> 를 가지고 있고, 다른 노드를 가리키기 위한 <em>finger table</em> 을 가지고 있습니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_file_saving.png" alt=""></p>
-
-<p>파일도 마찬가지로 <em>SHA-1</em> 으로 해싱해서, 160 비트로 짜른 뒤 <code>mod 2^m</code> 연산해서, 같은 값이거나 그보다 큰 값을 가지는 <em>peer</em> 에 저장합니다.</p>
-
-<p>만약 균일하게 해싱된다면 <code>K</code> 개의 키, <code>N</code> 개의 피어에서 파일은 각 피어당 <code>K/N</code> 개씩 저장되므로 피어당 걸리는 부하는 <code>O(K/N)</code> 입니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_search_process.png" alt=""></p>
-
-<p>위 그림에서 <code>N80</code> 피어가 <code>K42</code> 파일을 찾을때, </p>
-
-<ul>
-<li><em>finger table</em> 에 <code>42</code> 가 없으므로 최대한 먼 <code>N16</code> 에 질의하고, </li>
-<li><code>N16</code> 은 <code>N32</code> 와 <code>N80</code> 밖에 모르므로 <code>N32</code> 를 거쳐 <code>N45</code> 로 질의합니다.</li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_search_analysis.png" alt=""></p>
-
-<p><em>chrod search</em> 는 <code>O(log N)</code> 의 시간이 듭니다. 증명에 대한 <em>intuition</em> 은 쉽습니다.</p>
-
-<p>만약 현재 <code>Here</code> 에서 <code>Key</code> 를 모른다고 합시다. 그러면 그 거리의 <code>1/2</code> 만큼은 점프를 해야합니다. 그것보다 더 적게 점프하면 거리를 <code>d</code> 라 합시다. <em>finger table entry</em> 값은 2배씩 증가하기 때문에, <code>2d</code> 만큼 점프할 수 있는 엔트리가 있어야 하고, 그럼 애초부터 <code>2d</code> 만큼 점프했어야 했기 때문에 모순입니다.</p>
-
-<p><code>log(N)</code> 만큼의 점프 뒤에는 <em>key</em> 까지의 거리는 아무리 멀어봐야 <code>2^m / N</code> 입니다. 균일하게 분포되는 해싱을 쓴다 가정하면, 이 사이에는 적은 수의 노드만 있습니다. 따라서 <code>O(logN)</code> 만큼만 더 점프한다면 높은 확률로 <em>key</em> 를 찾을 수 있습니다. <code>O(logN) + O(logN) = O(logN)</code> 이므로, <em>search</em> 는 <code>O(logN)</code> 입니다.</p>
-
-<p><em>insertion</em> 도 <em>searching</em> 과 마찬가지로 <code>O(logN)</code> 입니다. 그러나 이 성능은 <em>finger table</em> 과 <em>successor</em> 가 잘못되지 않았을 경우에만 참입니다.</p>
-
-<p><br></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_multiple_successor.png" alt=""></p>
-
-<p><em>chrod</em> 는 <em>successor</em> 한개만 가질땐 <em>failure</em> 에 취약하기 때문에, 위 그림처럼 다수개의 <em>successor</em> 를 가질 수 있습니다. 이 경우 성능은 어떻게될까요?</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/multiple_successor_analysis.png" alt=""></p>
-
-<p><code>2log(N)</code> 개의 <em>successor</em> 를 유지할 경우를 한번 생각해 봅시다. <code>50%</code> 씩 <em>failure</em> 가 발생하면</p>
-
-<ul>
-<li>하나의 노드에서 유지하는 <em>successor</em> 중, 적어도 하나의 <em>successor</em> 가 살아있을 확률은</li>
-</ul>
-
-<p><img src="http://latex.codecogs.com/gif.latex?1%20-%20%28%7B1%20%5Cover%202%7D%29%5E%7B2logN%7D%20%3D%201%20-%20%7B1%20%5Cover%20N%5E2%7D" alt=""></p>
-
-<ul>
-<li>위 확률은 모든 살아있는 노드(<code>50%</code>) 에서 참일때, 다시 말해서 모든 노드에서 적어도 하나의 <em>successor</em> 가 존재할 확률은 <code>N</code> 이 매우 클때</li>
-</ul>
-
-<p><img src="http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20N%5E2%7D%29%5E%7BN/2%7D%20%3D%20e%5E%7B-%7B1%5Cover%202N%7D%7D%20%5Capprox%201" alt=""></p>
-
-<p><br></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_joining.png" alt=""></p>
-
-<ul>
-<li>a new peer affects <code>O(logN)</code> other finger entires in the system, on average</li>
-<li>number of messages per peer join <code>O(logN * logN)</code></li>
-</ul>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/chord_stabilization_protocol.png" alt=""></p>
-
-<p><em>join</em>, <em>leave</em>, <em>failure</em> 등 <em>churn</em> 이 자주 일어나므로 <em>loop</em> 가 있는지 없는지 검사하기 위해 주기적으로 <em>stabilization protocol</em> 를 사용합니다.</p>
-
-<p><br></p>
-
-<h3 id="pastry">Pastry</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/pastry_routing.png" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/pastry_locality.png" alt=""></p>
-
-<p><em>Pastry</em> 는 <em>chord</em> 처럼 <em>node</em> 에 <em>id</em> 를 부여합니다. <em>routing table</em> 은 <em>prefix matching</em> 에 기반하기 때문에 <code>log(N)</code> 의 성능을 보여줍니다. 그리고 짧은 <em>prefix</em> 일 수록 가까이에 있을 확률이 높습니다.</p>
-
-<p><br></p>
-
-<h3 id="kelips">Kelips</h3>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips.png" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips2.png" alt=""></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips3.png" alt=""></p>
-
-<p><em>Kelips</em> 는 <em>1-hop lookup</em> 을 보여줍니다. 이럴 수 있는 이유는 위 그림에서 보듯이 <em>affinity group</em> 이란걸 사용하기 때문입니다. 루트 <code>N</code> 에 가까운 숫자 <code>k</code> 를 정하고, 이 수로 <code>mod</code> 연산을 해, 그룹을 만듭니다. 각각의 그룹은 내에 있는 모든 노드는 서로 어떤 파일을 저장하는지 알고 있습니다. 그리고 각 노드는 다른 그룹으로의 링크를 하나씩 가지고 있습니다. 따라서 어딜가든 거의 1번 혹은 2번 내에 <em>lookup</em> 이 가능합니다.</p>
-
-<p><em>chord</em> 에 비해 메모리를 더 잡아먹긴 합니다. <code>O(logN)</code> 보단 많은 양이지만, 그렇게 많지도 않습니다. 메모리가 귀하다면 <em>chord</em> 나 <em>pastry</em> 를, 그렇지 않고 <em>lookup</em> 속도가 중요하다면 <em>kelips</em> 를 사용하면 됩니다.</p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week3/kelips4.png" alt=""></p>
-
-<p><em>membership</em> 은 <em>gossip-based</em> 프로토콜로 관리할 수 있습니다. </p>
-
-<p><br></p>
-
-<h3 id="refs">Refs</h3>
-
-<p>(1) <a href="http://ook.co/solutions/cloud-computing/">Title Image</a> <br>
-(2) <strong>Cloud Computing Concept 1</strong> by <em>Indranil Gupta</em>, Coursera  </p>]]></content:encoded></item></channel></rss>
+<a href="http://1ambda.github.io/angular-providers/">Angular, Providers</a>  </p>]]></content:encoded></item></channel></rss>
