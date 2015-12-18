@@ -1,13 +1,13 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 18 Dec 2015 15:44:49 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 5, Playing with Monoids</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 18 Dec 2015 15:46:28 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 5, Playing with Monoids</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;이번 글에서는 모노이드를 가지고 놀면서, 아래 나열된 라이브러리 및 언어적 특성을 살펴보겠습니다.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Boolean Monoid&lt;/strong&gt; operations with &lt;a href="https://github.com/non/spire"&gt;Spire&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Algebraic Data Types&lt;/strong&gt; using &lt;a href="http://docs.scala-lang.org/overviews/core/value-classes.html"&gt;Value Class&lt;/a&gt;, &lt;a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Tag.scala"&gt;Scalaz.Tag&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Creating &lt;strong&gt;Monoid&lt;/strong&gt; for all subclasses using &lt;a href="https://github.com/milessabin/shapeless"&gt;Shapeless&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html"&gt;Context Bound&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html"&gt;Path Dependent Type&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Boolean Monoid operations with &lt;strong&gt;&lt;a href="https://github.com/non/spire"&gt;Spire&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Algebraic Data Types using &lt;strong&gt;&lt;a href="http://docs.scala-lang.org/overviews/core/value-classes.html"&gt;Value Class&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Tag.scala"&gt;Scalaz.Tag&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Creating Monoid for all subclasses using &lt;strong&gt;&lt;a href="https://github.com/milessabin/shapeless"&gt;Shapeless&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html"&gt;Context Bound&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html"&gt;Path Dependent Type&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id="monoid"&gt;Monoid&lt;/h2&gt;
@@ -19,11 +19,11 @@
 &lt;p&gt;이번 글에서는 모노이드를 가지고 놀면서, 아래 나열된 라이브러리 및 언어적 특성을 살펴보겠습니다.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Boolean Monoid&lt;/strong&gt; operations with &lt;a href="https://github.com/non/spire"&gt;Spire&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Algebraic Data Types&lt;/strong&gt; using &lt;a href="http://docs.scala-lang.org/overviews/core/value-classes.html"&gt;Value Class&lt;/a&gt;, &lt;a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Tag.scala"&gt;Scalaz.Tag&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Creating &lt;strong&gt;Monoid&lt;/strong&gt; for all subclasses using &lt;a href="https://github.com/milessabin/shapeless"&gt;Shapeless&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html"&gt;Context Bound&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html"&gt;Path Dependent Type&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Boolean Monoid operations with &lt;strong&gt;&lt;a href="https://github.com/non/spire"&gt;Spire&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Algebraic Data Types using &lt;strong&gt;&lt;a href="http://docs.scala-lang.org/overviews/core/value-classes.html"&gt;Value Class&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Tag.scala"&gt;Scalaz.Tag&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Creating Monoid for all subclasses using &lt;strong&gt;&lt;a href="https://github.com/milessabin/shapeless"&gt;Shapeless&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html"&gt;Context Bound&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="http://danielwestheide.com/blog/2013/02/13/the-neophytes-guide-to-scala-part-13-path-dependent-types.html"&gt;Path Dependent Type&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id="monoid"&gt;Monoid&lt;/h2&gt;
