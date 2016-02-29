@@ -84,7 +84,7 @@
 </head>
 <body>
 
-  <script src="public/jquery.js?v=2be0f9f02e"></script>
+  <script src="public/jquery.js?v=2d5a18a471"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
@@ -92,13 +92,39 @@
   <h1 class="blog_title margin_bottom_small"><a href="http://1ambda.github.io">Old Lisper</a></h1>
   <h4 class="text book">Functional Programming World</h4>
   <div class="social border solid top_small bottom_small padding_medium">
-  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://1ambda.github.io/articles/"><i class="fa fa-columns"></i> <span class="margin_lefarticlest_small desktop">Article</span></a></h6>
-  <h6 class="text book color c_black_medium without_margin padding_right_big"><a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin-square"></i> <span class="margin_left_small desktop">Linkedin</span></a></h6>
-  <h6 class="text book color c_black_medium without_margin"><a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a></h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big">
+    <a href="http://1ambda.github.io/articles/"><i class="fa fa-files-o"></i> <span class="margin_left_small desktop">Article</span></a>
+  </h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big">
+    <a href="http://kr.linkedin.com/in/1ambda" target="_blank"><i class="fa fa-linkedin"></i> <span class="margin_left_small desktop">Linkedin</span></a>
+  </h6>
+  <h6 class="text book color c_black_medium without_margin padding_right_big">
+    <a href="http://github.com/1ambda" target="_blank"><i class="fa fa-github"></i> <span class="margin_left_small desktop">GitHub</span></a>
+  </h6>
+  <h6 class="text book color c_black_medium without_margin">
+    <a href="http://1ambda.github.io/oh-my-github" target="_blank"><i class="fa fa-bar-chart-o"></i> <span class="margin_left_small desktop">oh-my-github</span></a>
+  </h6>
 </div>
 </header>
 
 <main class="site_width" role="main">
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class><a href="create-github-profile-in-10-minutes/">10분만에 Github Profile 만들기</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2016-02-29">Monday, February 29, 2016</time>
+      <br><br>
+      <a href="http://1ambda.github.io/create-github-profile-in-10-minutes/" data-disqus-identifier="138">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p></p><p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg" alt=""></p>
+      <p>Github 데이터를 이용해 프로필을 만들려면  Github API 를 이용해 데이터를 긁어옵니다.   데이터를 보여줄 웹 어플리케이션 (static) 을 만듭니다.   Github Page (gh-pages) 를 이용해 남들에게 보여줍니다. 이 때, (1) 에서 만든 데이터의 포맷을 정형화하면, 이것을 사용하는 (2) 의 웹 어플리케이션을 일종의 viewer 로 생각할 수 있습니다. 포맷이 고정되어 있으므로 데이터를 사용하는…</p>
+      <h5><a class="text book small uppercase color c_blue" href="create-github-profile-in-10-minutes/">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
 
   <article class="margin_bottom_big">
     <header class="text center margin_bottom_medium">
@@ -168,25 +194,8 @@
   </article>
 
 
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class><a href="easy-scalaz-2-monad-transformer/">Easy Scalaz 2, Monad Transformer</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-10-16">Friday, October 16, 2015</time>
-      <br><br>
-      <a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/" data-disqus-identifier="132">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p></p><p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""></p>
-      <p>지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는 composing 이 불가능합니다. Monad Do Not Compose 여러 모나드를 조합해서…</p>
-      <h5><a class="text book small uppercase color c_blue" href="easy-scalaz-2-monad-transformer/">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
   <nav class="pagination" role="navigation">
-    <span class="page-number">Page 1 of 20</span>
+    <span class="page-number">Page 1 of 21</span>
         <a class="older-posts" href="page/2/">Older Posts →</a>
 </nav>
 
@@ -203,7 +212,7 @@ $(document).ready(function(){
 </script>
 
   <footer class="blog_info margin_top_big padding_medium text center">
-    <h5 class="text book small">© 2015 <a href="index.html">Old Lisper</a>. All rights reserved.</h5>
+    <h5 class="text book small">© 2016 <a href="index.html">Old Lisper</a>. All rights reserved.</h5>
     <h5 class="text book small"><a href="https://github.com/dreyacosta/velox" target="_blank" class="text bold">Velox theme</a> by <a href="http://dreyacosta.com/">David Rey</a></h5>
     <h5 class="text book small">Proudly published with <a href="http://ghost.org"><span>Ghost</span></a></h5>
 

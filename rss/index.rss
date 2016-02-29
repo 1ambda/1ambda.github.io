@@ -1,4 +1,218 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Fri, 18 Dec 2015 15:46:28 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Easy Scalaz 5, Playing with Monoids</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Old Lisper</title><description>Functional Programming World</description><link>http://1ambda.github.io/</link><generator>Ghost 0.6</generator><lastBuildDate>Mon, 29 Feb 2016 14:23:40 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>10분만에 Github Profile 만들기</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;Github 데이터를 이용해 프로필을 만들려면 &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://developer.github.com/v3/"&gt;Github API&lt;/a&gt;&lt;/strong&gt; 를 이용해 데이터를 긁어옵니다.  &lt;/li&gt;
+&lt;li&gt;데이터를 보여줄 웹 어플리케이션 (&lt;em&gt;static&lt;/em&gt;) 을 만듭니다.  &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://pages.github.com/"&gt;Github Page (gh-pages)&lt;/a&gt;&lt;/strong&gt; 를 이용해 남들에게 보여줍니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이 때, (1) 에서 만든 데이터의 &lt;strong&gt;포맷을 정형화하면&lt;/strong&gt;, 이것을 사용하는 (2) 의 웹 어플리케이션을 일종의 &lt;em&gt;viewer&lt;/em&gt; 로 생각할 수 있습니다. 포맷이 고정되어 있으므로 데이터를 사용하는&lt;/p&gt;</description><link>http://1ambda.github.io/create-github-profile-in-10-minutes/</link><guid isPermaLink="false">243afde3-5959-44c5-8dd6-35eefb670c2c</guid><category>Github</category><category>oh-my-github</category><category>nodejs</category><category>npm</category><dc:creator>1ambda</dc:creator><pubDate>Mon, 29 Feb 2016 14:10:20 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;Github 데이터를 이용해 프로필을 만들려면 &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://developer.github.com/v3/"&gt;Github API&lt;/a&gt;&lt;/strong&gt; 를 이용해 데이터를 긁어옵니다.  &lt;/li&gt;
+&lt;li&gt;데이터를 보여줄 웹 어플리케이션 (&lt;em&gt;static&lt;/em&gt;) 을 만듭니다.  &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://pages.github.com/"&gt;Github Page (gh-pages)&lt;/a&gt;&lt;/strong&gt; 를 이용해 남들에게 보여줍니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이 때, (1) 에서 만든 데이터의 &lt;strong&gt;포맷을 정형화하면&lt;/strong&gt;, 이것을 사용하는 (2) 의 웹 어플리케이션을 일종의 &lt;em&gt;viewer&lt;/em&gt; 로 생각할 수 있습니다. 포맷이 고정되어 있으므로 데이터를 사용하는 &lt;em&gt;viewer&lt;/em&gt; 를 &lt;strong&gt;쉽게 교체하거나&lt;/strong&gt;, 자신이 원하는대로 &lt;strong&gt;커스터마이징&lt;/strong&gt; 할 수 있게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="demo"&gt;Demo&lt;/h3&gt;
+
+&lt;p&gt;시작 전에 오늘 만들 결과물의 데모를 보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://1ambda.github.io/oh-my-github/"&gt;Demo (Chrome, Firefox, Safari, IE11+)&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Langauge&lt;/strong&gt;: 즐겨 사용하는 프로그래밍 언어&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Repository&lt;/strong&gt;: 레포지토리 정보 (&lt;em&gt;stargazer&lt;/em&gt;, &lt;em&gt;fork count&lt;/em&gt; 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Contribution&lt;/strong&gt;: 오픈소스 커밋 내역&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Activity&lt;/strong&gt;: 최근 활동 내역 (&lt;em&gt;Push&lt;/em&gt;, &lt;em&gt;PullRequest&lt;/em&gt; 등)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;등의 정보를 확인할 수 있습니다. 커스터마이징 등은 아래에서 설명하겠습니다. &lt;/p&gt;
+
+&lt;h3 id="prerequisites"&gt;Prerequisites&lt;/h3&gt;
+
+&lt;p&gt;이제 Github 프로필을 만들어 보겠습니다. 준비물을 먼저 확인하면,&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;SSH Key&lt;/em&gt; 가 Github 에 등록이 안되어있을 경우 &lt;strong&gt;&lt;a href="https://help.github.com/articles/generating-an-ssh-key/"&gt;Github: Generating an SSH key&lt;/a&gt;&lt;/strong&gt; 를 참조해서 등록해주세요.  &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;oh-my-github&lt;/strong&gt; 란 이름의 &lt;strong&gt;&lt;a href="https://github.com/new"&gt;Github Repository&lt;/a&gt;&lt;/strong&gt; 를 만들어주세요. &lt;strong&gt;&lt;a href="https://pages.github.com/"&gt;Github Page&lt;/a&gt;&lt;/strong&gt; 를 이용해 배포시 사용할 저장소입니다. (이름은 반드시 &lt;strong&gt;oh-my-github&lt;/strong&gt; 여야 합니다)  &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://github.com/settings/tokens/new"&gt;Github Access Token&lt;/a&gt;&lt;/strong&gt; 을 만들어주세요. 50 개 이상의 Github API 호출을 위해선 Access Token 이 꼭 필요합니다. (Write Permission 은 필요 없습니다.)  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;데이터를 보여주는 정적 웹 어플리케이션인 &lt;a href="https://github.com/oh-my-github/viewer"&gt;viewer&lt;/a&gt; 와 Github API 를 호출해 데이터를 생성하는 &lt;a href="https://github.com/oh-my-github/oh-my-github"&gt;oh-my-github&lt;/a&gt; 설치법은 아래서 설명하겠습니다.&lt;/p&gt;
+
+&lt;h3 id="installviewer"&gt;Install: Viewer&lt;/h3&gt;
+
+&lt;p&gt;먼저 &lt;a href="https://github.com/oh-my-github/viewer"&gt;default viewer&lt;/a&gt; 를 클론 받고, &lt;code&gt;upstream&lt;/code&gt; 업데이트를 위해 remote 를 등록합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:oh-my-github/viewer.git oh-my-github
+$ cd oh-my-github
+
+$ git remote add upstream git@github.com:oh-my-github/viewer.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고, 위에서 만든 자신의 레포지토리 url 을 &lt;code&gt;origin&lt;/code&gt; 으로 등록합니다. &lt;code&gt;[GITHUB_ID]&lt;/code&gt; 대신 자신의 아이디를 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git remote remove origin
+$ git remote add origin git@github.com:[GITHUB_ID]/oh-my-github
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="installohmygithub"&gt;Install: oh-my-github&lt;/h3&gt;
+
+&lt;p&gt;먼저 &lt;a href="https://github.com/oh-my-github/oh-my-github"&gt;oh-my-github&lt;/a&gt; 를 설치하겠습니다. NodeJS 가 없다면, &lt;a href="https://github.com/creationix/nvm"&gt;NVM&lt;/a&gt; 설치 후 문서에 나와있는 대로 NodeJS 5.0.0 이상 버전을 설치해 주세요. 이 문서에서는 5.0.0 을 사용하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nvm use 5.0.0
+Now using node v5.0.0
+
+$ nvm ls
+   v0.12.9
+-&amp;gt;  v5.0.0
+    v5.4.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;a href="https://github.com/oh-my-github/oh-my-github"&gt;oh-my-github&lt;/a&gt; 를 설치합니다. 네트워크 상황에 따라 2분 ~ 4분정도 걸립니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install oh-my-github -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 Linux 를 사용하고 있고, 위 설치 과정에서 &lt;code&gt;LIBXXX&lt;/code&gt; 등의 에러를 마주쳤을 경우 &lt;a href="https://github.com/oh-my-github/oh-my-github/wiki/Installation-Guide-for-Linux"&gt;Linux Install Guide&lt;/a&gt; 를 참조해주세요.&lt;/p&gt;
+
+&lt;p&gt;이제 &lt;em&gt;viewer&lt;/em&gt; 를 클론 받은 디렉토리로 이동한 뒤 &lt;em&gt;oh-my-github&lt;/em&gt; 를 실행합니다. 여기서 &lt;code&gt;[GITHUB_TOKEN]&lt;/code&gt; 은 위에서 만든 &lt;a href="https://github.com/settings/tokens/new"&gt;Github Access Token&lt;/a&gt; 값이고, &lt;code&gt;[GITHUB_ID]&lt;/code&gt; 는 자신의 Github ID 입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ oh-my-github
+
+$ omg init [GITHUB_ID] oh-my-github       # (e.g) omg init 1ambda oh-my-github
+$ omg generate [GITHUB_TOKEN]             # (e.g) omg generate 394fbad49191aca
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;omg generate&lt;/code&gt; 를 실행하면, 현재 디렉토리에 &lt;code&gt;oh-my-github.json&lt;/code&gt; (프로필 데이터) 가 생성됩니다. &lt;a href="https://pages.github.com/"&gt;Github Page&lt;/a&gt; 에 배포하기 전에 먼저 로컬에 띄워 볼 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ omg preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;code&gt;gh-pages&lt;/code&gt; 브랜치를 만들고 push 를 해야하는데, 아래의 명령어를 이용해 한번에 해결할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ omg publish
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 &lt;code&gt;omg publish&lt;/code&gt; 명령어가 동작하지 않는다면, 직접 Git 커맨드를 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git add --all
+$ git commit -m "feat: Update Profile"
+$ git checkout -b gh-pages
+$ git push origin HEAD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 30초 정도 기다리고, 자신의 oh-my-github 레포지토리 &lt;a href="https://pages.github.com/"&gt;Github Page&lt;/a&gt; URL 을 확인해 봅니다. 예를 들어 Github ID 가 &lt;code&gt;1ambda&lt;/code&gt; 라면, &lt;a href="http://1ambda.github.io/oh-my-github"&gt;http://1ambda.github.io/oh-my-github&lt;/a&gt; 에 프로필이 생성됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="update"&gt;Update&lt;/h3&gt;
+
+&lt;h4 id="profile"&gt;Profile&lt;/h4&gt;
+
+&lt;p&gt;프로필 데이터 &lt;code&gt;oh-my-github.json&lt;/code&gt; 내용은 크게 분류하면 두가지로 나뉩니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;activities&lt;/code&gt;: 사용자의 활동 정보로, 이전 정보에 새로운 값이 추가됨(&lt;em&gt;append&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;repositories&lt;/code&gt;, &lt;code&gt;languages&lt;/code&gt; 등: 최신 정보로 덮어 씌워짐 (&lt;em&gt;overwrite&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;omg generate&lt;/code&gt; 를 실행할 때 마다, 새로운 이벤트가 있다면 &lt;code&gt;activities&lt;/code&gt; 값이 추가 (&lt;em&gt;append&lt;/em&gt;) 됩니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;더 정확히는, Github API 는 최대 10개월 혹은 최대 300개의 event 만 제공하기 때문에, 이것보다 더 많은 양의 event 를 프로필 데이터에 저장하고자 event id 값으로 중복 제거를 한 뒤 &lt;em&gt;append&lt;/em&gt; 방식으로 데이터를 쌓습니다. &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;따라서 프로필 데이터를 업데이트 하고, Github 에 푸시하려면 다음의 명령어를 실행하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd oh-my-github         # oh-my-github.json 이 위치한 곳
+
+$ omg generate [GITHUB_TOKEN]
+$ omg publish
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id="viewer"&gt;Viewer&lt;/h4&gt;
+
+&lt;p&gt;&lt;em&gt;viewer&lt;/em&gt; 를 &lt;a href="https://github.com/oh-my-github/viewer"&gt;upstream&lt;/a&gt; 에서 다음처럼 업데이트 할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd oh-my-github         # oh-my-github.json 이 위치한 곳
+
+$ git checkout master
+$ git pull upstream master --rebase
+
+$ git checkout gh-pages
+$ git rebase master
+
+$ git push origin HEAD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id="customizing"&gt;Customizing&lt;/h3&gt;
+
+&lt;p&gt;만약 &lt;a href="https://github.com/oh-my-github/viewer"&gt;default viewer&lt;/a&gt; 가 맘에 들지 않는다거나, 새로운 기능 (e.g 그래프) 을 추가하고 싶다면 클론받아 &lt;code&gt;app/src&lt;/code&gt; 아래의 코드를 수정할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app  
+├── LICENSE.md
+├── package.json
+├── src (웹 애플리케이션 소스)
+│   ├── actions
+│   ├── components
+│   ├── constants
+│   ├── containers
+│   ├── reducers
+│   ├── store
+│   ├── theme
+│   └── util
+└── tools (빌드도구 관련)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;app&lt;/code&gt; 디렉토리로 이동 후 &lt;code&gt;npm start -s&lt;/code&gt; 를 실행하고 코드를 수정한 뒤, &lt;code&gt;npm run build&lt;/code&gt; 를 실행하면 루트 디렉토리에 &lt;code&gt;bundle.js&lt;/code&gt; 와 &lt;code&gt;index.html&lt;/code&gt; 이 업데이트 됩니다. 이 두 파일을 자신의 &lt;strong&gt;oh-my-github&lt;/strong&gt; 에 업데이트 하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;추가로, 다른 사람들이 자신이 수정한 &lt;em&gt;viewer&lt;/em&gt; 를 찾을 수 있게 &lt;a href="https://www.npmjs.com/search?q=oh-my-github%2C+viewer"&gt;NPM&lt;/a&gt; 에 등록하고 싶다면 &lt;code&gt;package.json&lt;/code&gt; 을 수정 후 &lt;code&gt;app&lt;/code&gt; 디렉토리에서 &lt;code&gt;npm publish&lt;/code&gt; 명령을 실행하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;아래의 내용을 수정하고, 배포하면 NPM 에서 &lt;code&gt;oh-my-github, viewer&lt;/code&gt; 키워드로 검색할 수 있습니다. &lt;a href="https://www.npmjs.com/search?q=oh-my-github%2C+viewer"&gt;(NPM: oh-my-github, viewer)&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-json"&gt;{
+  ...
+
+  "name": "oh-my-github-viewer-default",
+  "version": "0.0.1",
+  "author": "1ambda",
+  "description": "",
+  "homepage": "https://github.com/oh-my-github/viewer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oh-my-github/viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oh-my-github/viewer/issues"
+  },
+
+  ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="references"&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://octodex.github.com/baracktocat"&gt;@baracktocat on octodex (Title Iamge)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/oh-my-github/oh-my-github"&gt;oh-my-github: generator&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/oh-my-github/viewer"&gt;oh-my-github: viewer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title>Easy Scalaz 5, Playing with Monoids</title><description>&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;이번 글에서는 모노이드를 가지고 놀면서, 아래 나열된 라이브러리 및 언어적 특성을 살펴보겠습니다.&lt;/p&gt;
 
@@ -5358,183 +5572,4 @@ Constrain-Based Sequential Pattern Mining&lt;/li&gt;
 &lt;h3 id="refs"&gt;Refs&lt;/h3&gt;
 
 &lt;p&gt;(1) &lt;a href="https://www.behance.net/gallery/625042/Icon-and-pattern-with-a-marketing-theme"&gt;Title image&lt;/a&gt; &lt;br&gt;
-(2) &lt;strong&gt;Pattern Discovery&lt;/strong&gt; by &lt;em&gt;Jiawei Han&lt;/em&gt; &lt;/p&gt;</content:encoded></item><item><title>Articles</title><description>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/"&gt;Easy Scalaz 2, Monad Transformer&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/"&gt;Easy Scalaz 3, ReaderWriterState with Kleisli&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/"&gt;Easy Scalaz 4, Yoneda, Coyonead, Free, Trampoline&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-5-playing-with-monoids"&gt;Easy Scalaz 5, Playing with Monoids&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[Easy Scalaz 6, ST, IO]&lt;/li&gt;
-&lt;li&gt;[Easy Scalaz 7, Stream]&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/scala-monocle-tutorial/"&gt;Scala Lens Library, Monocle&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Functional Programming in Scala&lt;/strong&gt; by &lt;em&gt;Martin&lt;/em&gt;&lt;/p&gt;</description><link>http://1ambda.github.io/articles/</link><guid isPermaLink="false">9666f26e-e434-403f-95b1-8e667199693c</guid><category>1ambda</category><dc:creator>1ambda</dc:creator><pubDate>Sat, 28 Feb 2015 16:50:51 GMT</pubDate><content:encoded>&lt;h3 id="scala"&gt;Scala&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Scalaz&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-1-state/"&gt;Easy Scalaz 1, State&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/"&gt;Easy Scalaz 2, Monad Transformer&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-3-readerwriterstate-with-kleisli/"&gt;Easy Scalaz 3, ReaderWriterState with Kleisli&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/"&gt;Easy Scalaz 4, Yoneda, Coyonead, Free, Trampoline&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://1ambda.github.io/easy-scalaz-5-playing-with-monoids"&gt;Easy Scalaz 5, Playing with Monoids&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[Easy Scalaz 6, ST, IO]&lt;/li&gt;
-&lt;li&gt;[Easy Scalaz 7, Stream]&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Monocle&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/scala-monocle-tutorial/"&gt;Scala Lens Library, Monocle&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Functional Programming in Scala&lt;/strong&gt; by &lt;em&gt;Martin Odersky&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-1/"&gt;Chapter 1&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-2/"&gt;Chapter 2&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-3/"&gt;Chapter 3&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-4/"&gt;Chapter 4&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-5/"&gt;Chapter 5&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-6/"&gt;Chapter 6&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/functional-programming-in-scala-chapter-7/"&gt;Chapter 7&lt;/a&gt;  &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Reactive Programming&lt;/strong&gt; by &lt;em&gt;Martin Odersky&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/reactive-programming-1/"&gt;Chapter 1&lt;/a&gt; - Monads, Random Generators &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-2/"&gt;Chapter 2&lt;/a&gt; - Stateful Object &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-3/"&gt;Chapter 3&lt;/a&gt; - Try, Future, Promise &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-4/"&gt;Chapter 4&lt;/a&gt; - Observable, Rx, Scheduler &lt;br&gt;
-&lt;a href="http://1ambda.github.io/reactive-programming-5/"&gt;Chapter 5&lt;/a&gt; - Actor   &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Articles&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/new-to-play-framework-2/"&gt;new to Play Framework2&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/partial-functions-scala/"&gt;Partial Functions, Scala&lt;/a&gt;  &lt;/p&gt;
-
-&lt;h3 id="haskell"&gt;Haskell&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Introduction to Functional Programming using Haskell&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/haskell-intro1"&gt;Chapter 1&lt;/a&gt; - Basics &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro2"&gt;Chapter 2&lt;/a&gt; - List Comprehension &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro3"&gt;Chapter 3&lt;/a&gt; - Recursion, Higher Order Function &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro4"&gt;Chapter 4&lt;/a&gt; - Monad &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro5"&gt;Chapter 5&lt;/a&gt; - IO Monad &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro6"&gt;Chapter 6&lt;/a&gt; - Type and Class &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro7"&gt;Chapter 7&lt;/a&gt; - The Countdown Problem &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro8"&gt;Chapter 8&lt;/a&gt; - Lazy Evaluation, Strict &lt;br&gt;
-&lt;a href="http://1ambda.github.io/haskell-intro9"&gt;Chapter 9&lt;/a&gt; - Induction &lt;br&gt;
-&lt;a href="http://1ambda.github.io/a-poor-mans-concurrency-monad"&gt;Poor Man's Concurrency Monad&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id="machinelearning"&gt;Machine Learning&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Machine Learning&lt;/strong&gt; by &lt;em&gt;Andrew Ng&lt;/em&gt;, Coursera&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/machine-learning-week-1/"&gt;Chapter 1&lt;/a&gt; - Linear Regression &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-2/"&gt;Chapter 2&lt;/a&gt; - Gradient Descent &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-3/"&gt;Chapter 3&lt;/a&gt; - Logistic Regression &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-4/"&gt;Chapter 4&lt;/a&gt; - Neural Network &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-5/"&gt;Chapter 5&lt;/a&gt; - Back Propagation &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-6/"&gt;Chapter 6&lt;/a&gt; - Practical Advices &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-7/"&gt;Chapter 7&lt;/a&gt; - Support Vector Machine &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-8/"&gt;Chapter 8&lt;/a&gt; - K-means, PCA Details &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-9/"&gt;Chapter 9&lt;/a&gt; - Anomaly Detection, Recommender System &lt;br&gt;
-&lt;a href="http://1ambda.github.io/machine-learning-week-10/"&gt;Chapter 10&lt;/a&gt; - Stochastic Gradient, Synthetic Data, Ceiling Analysis  &lt;/p&gt;
-
-&lt;h3 id="algorithm"&gt;Algorithm&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Algorithm: Design and Analysis Part 1&lt;/strong&gt; by &lt;em&gt;Tim Roughgarden&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;a href="http://1ambda.github.io/divide-and-conquer/"&gt;Divide and Conquer&lt;/a&gt; &lt;br&gt;
-(2) &lt;a href="http://1ambda.github.io/randomized-selection/"&gt;Randomized Selection&lt;/a&gt; &lt;br&gt;
-(3) &lt;a href="http://1ambda.github.io/graphs-the-contraction-algorithm/"&gt;Graphs, The Contraction Algorithm&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/graph-search-and-connectivity/"&gt;Graph Search and Connectivity&lt;/a&gt; &lt;br&gt;
-(5) &lt;a href="http://1ambda.github.io/dijkstra-heap-balanced-tree/"&gt;Dijkstra, Heap, Red-Black Tree&lt;/a&gt; &lt;br&gt;
-(6) &lt;a href="http://1ambda.github.io/hash-table-universal-hashing-bloom-filters/"&gt;Hash Table, Universal Hashing, Bloom filters&lt;/a&gt;  &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Algorithms, Part 1&lt;/strong&gt; by &lt;em&gt;Robert Sedgewick&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;a href="http://1ambda.github.io/union-find-algorithms-week-1/"&gt;Union Find&lt;/a&gt; &lt;br&gt;
-(2) &lt;a href="http://1ambda.github.io/analysis-of-algorithms/"&gt;Analysis of Algorithms&lt;/a&gt; &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Algorithms, Part 2&lt;/strong&gt; by &lt;em&gt;Robert Sedgewick&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;a href="http://1ambda.github.io/graph-challenges-minimum-spanning-trees"&gt;Spanning Tree, Shortest Paths&lt;/a&gt; &lt;br&gt;
-(2) &lt;a href="http://1ambda.github.io/radix-sort-suffix-sort"&gt;Radix Sort, Suffix Sort&lt;/a&gt; &lt;br&gt;
-(3) &lt;a href="http://1ambda.github.io/r-way-ternary-search-tries/"&gt;R-way, Ternary Tries&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/substring-search/"&gt;KMP, Boyer-Moore, Rabin-Karp&lt;/a&gt; &lt;br&gt;
-(5) &lt;a href="http://1ambda.github.io/maximum-flow/"&gt;Maximum Flow (Ford-Fulkerson)&lt;/a&gt; &lt;br&gt;
-(6) &lt;a href="http://1ambda.github.io/algorithm-data-compression/"&gt;Data Compression, Huffman, LZW&lt;/a&gt;   &lt;/p&gt;
-
-&lt;h3 id="artificialintelligence"&gt;Artificial Intelligence&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Artificial Intelligence (CS188)&lt;/strong&gt; by &lt;em&gt;Dan Klein, Pieter Abbeel&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;a href="http://1ambda.github.io/artificial-intelligence-1"&gt;Intro&lt;/a&gt; &lt;br&gt;
-(2) &lt;a href="http://1ambda.github.io/artificial-intelligence-2"&gt;Search&lt;/a&gt;  &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Artificial Intelligence Planning&lt;/strong&gt; by &lt;em&gt;Dr.Gerhard Wickler&lt;/em&gt;, &lt;em&gt;Prof. Austin Tate&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;a href="http://1ambda.github.io/ai-planning-1"&gt;Intro&lt;/a&gt; &lt;br&gt;
-(2) &lt;a href="http://1ambda.github.io/ai-planning-2"&gt;A*, STRIPS, forward and backward search&lt;/a&gt; &lt;br&gt;
-(3) &lt;a href="http://1ambda.github.io/ai-planning-3"&gt;PSP, PoP&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/ai-planning-4"&gt;STN, HTN&lt;/a&gt;  &lt;/p&gt;
-
-&lt;h3 id="cloudcomputing"&gt;Cloud Computing&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Cloud Computing Concept 1&lt;/strong&gt; by &lt;em&gt;Indranil Gupta&lt;/em&gt;, Coursera&lt;/p&gt;
-
-&lt;p&gt;(1) &lt;a href="http://1ambda.github.io/cloud-computing-1-1/"&gt;MapReduce&lt;/a&gt; &lt;br&gt;
-(2) &lt;a href="http://1ambda.github.io/cloud-computing-gossip-protocol/"&gt;Gossip Protocol&lt;/a&gt; &lt;br&gt;
-(3) &lt;a href="http://1ambda.github.io/cloud-computing-membership-protocol/"&gt;Membership Protocol&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/cloud-computing-p2p-systems/"&gt;P2P Systems&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/cloud-computing-snapshot/"&gt;Global Snapshot&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/cloud-computing-multicast/"&gt;Multicast&lt;/a&gt; &lt;br&gt;
-(4) &lt;a href="http://1ambda.github.io/cloud-computing-paxos/"&gt;Paxos&lt;/a&gt;  &lt;/p&gt;
-
-&lt;h3 id="dataanalysis"&gt;Data Analysis&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Pattern Discovery&lt;/strong&gt; by &lt;em&gt;Jiawei Han&lt;/em&gt;, Coursera&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/pattern-discovery-1/"&gt;Chapter 1&lt;/a&gt; - Apriori, FP Growth &lt;br&gt;
-&lt;a href="http://1ambda.github.io/pattern-discovery-2/"&gt;Chapter 2&lt;/a&gt; - Null-invariant, Pattern-Fusion, Constaint   &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Intro to Computational Thinking and Data Science&lt;/strong&gt;, edx&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/edx-600-2x-1/"&gt;Chapter 1&lt;/a&gt; - Modeling &lt;br&gt;
-&lt;a href="http://1ambda.github.io/edx-600-2x-2/"&gt;Chapter 2&lt;/a&gt; - Monte Carlo Simulation &lt;br&gt;
-&lt;a href="http://1ambda.github.io/edx-600-2x-3/"&gt;Chapter 3&lt;/a&gt; - Optimization Problem &lt;br&gt;
-&lt;a href="http://1ambda.github.io/edx-600-2x-4/"&gt;Chapter 4&lt;/a&gt; - State Modeling, Hierarchical Clustering   &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Coding The Matrix&lt;/strong&gt; by &lt;em&gt;Philip Klein&lt;/em&gt;, Coursera&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/coding-the-matrix-1/"&gt;Chapter 1&lt;/a&gt; - Function, Field, Vector &lt;br&gt;
-&lt;a href="http://1ambda.github.io/coding-the-matrix-w/"&gt;Chapter 2&lt;/a&gt; - Vector Space &lt;br&gt;
-&lt;a href="http://1ambda.github.io/coding-the-matrix-e/"&gt;Chapter 3&lt;/a&gt; - Matrix  &lt;/p&gt;
-
-&lt;h3 id="processmining"&gt;Process Mining&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Process Mining&lt;/strong&gt; by &lt;em&gt;Wil Van der Alast&lt;/em&gt;, Coursera&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/process-mining-week1/"&gt;Week 1&lt;/a&gt; - Process Mining Intro &lt;br&gt;
-&lt;a href="http://1ambda.github.io/process-mining-week2/"&gt;Week 2&lt;/a&gt; - Alpha Algorithm &lt;br&gt;
-&lt;a href="http://1ambda.github.io/process-mining-week3/"&gt;Week 3&lt;/a&gt; - Metric, C-nets &lt;br&gt;
-&lt;a href="http://1ambda.github.io/process-mining-week4/"&gt;Week 4&lt;/a&gt; - Conformance Checking, Dotted Chart &lt;br&gt;
-&lt;a href="http://1ambda.github.io/process-mining-week5/"&gt;Week 5&lt;/a&gt; - Decision, Social, Organization Mining  &lt;/p&gt;
-
-&lt;h3 id="java"&gt;Java&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Articles&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/java-interview-questions-collection-framework/"&gt;Java Interview Questions - Collection Framework&lt;/a&gt;  &lt;/p&gt;
-
-&lt;h3 id="javascript"&gt;Javascript&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href="http://1ambda.github.io/javascript-object-inheritance/"&gt;Javascript Inheritance Details&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://1ambda.github.io/angular-providers/"&gt;Angular, Providers&lt;/a&gt;  &lt;/p&gt;</content:encoded></item></channel></rss>
+(2) &lt;strong&gt;Pattern Discovery&lt;/strong&gt; by &lt;em&gt;Jiawei Han&lt;/em&gt; &lt;/p&gt;</content:encoded></item></channel></rss>

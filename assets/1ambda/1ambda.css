@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
 pre, code {
   background: #f8f8f8;
   border-radius: 10px;
