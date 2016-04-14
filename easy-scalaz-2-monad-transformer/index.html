@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Easy Scalaz 2, Monad Transformer">
-    <meta property="og:description" content="지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는...">
+    <meta property="og:description" content="지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는 composing 이 불가능합니다. Monad Do Not Compose 여러 모나드를 조합해서">
     <meta property="og:url" content="http://1ambda.github.io/easy-scalaz-2-monad-transformer/">
     <meta property="article:published_time" content="2015-10-16T14:46:45.943Z">
     <meta property="article:modified_time" content="2015-10-16T14:47:40.993Z">
@@ -71,8 +71,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Easy Scalaz 2, Monad Transformer">
-    <meta name="twitter:description" content="지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는...">
+    <meta name="twitter:description" content="지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는 composing 이 불가능합니다. Monad Do Not Compose 여러 모나드를 조합해서">
     <meta name="twitter:url" content="http://1ambda.github.io/easy-scalaz-2-monad-transformer/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="scala, scalaz, monad transformer, EitherT, OptionT, StateT">
     
     <script type="application/ld+json">
 {
@@ -83,7 +87,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -92,11 +96,11 @@
     "datePublished": "2015-10-16T14:46:45.943Z",
     "dateModified": "2015-10-16T14:47:40.993Z",
     "keywords": "scala, scalaz, monad transformer, EitherT, OptionT, StateT",
-    "description": "지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는..."
+    "description": "지난 시간엔 State Monad 를 다루었습니다. 그러나 State 만 이용해서는 유용한 프로그램을 작성할 수 없습니다. 우리가 다루는 연산은 Option, Future 등 다양한 side-effect 가 필요하기 때문인데요,  서로 다른 Monad 를 조합할 수 있다면 좋겠지만, 아쉽게도  Functor, Applicative 와 달리 모나드는 composing 이 불가능합니다. Monad Do Not Compose 여러 모나드를 조합해서"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -112,7 +116,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">

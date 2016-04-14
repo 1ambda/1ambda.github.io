@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Functional Programming in Scala, Chapter 7">
-    <meta property="og:description" content="7주차에 걸친 대장정의 마지막이다. 이번시간에는 stream, lazy evaluation 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다. Structural Induction on Trees 지난번엔 함수가 올바르게 동작함을 증명하기 위해 induction 을 사용했었는데 이번시간엔...">
+    <meta property="og:description" content="7주차에 걸친 대장정의 마지막이다. 이번시간에는 stream, lazy evaluation 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다. Structural Induction on Trees 지난번엔 함수가 올바르게 동작함을 증명하기 위해 induction 을 사용했었는데 이번시간엔 tree 에 대해 induction 을 사용한다. 모든 트리 t 에">
     <meta property="og:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-7/">
     <meta property="article:published_time" content="2014-11-05T11:52:10.362Z">
     <meta property="article:modified_time" content="2014-11-06T06:19:17.132Z">
@@ -69,8 +69,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Functional Programming in Scala, Chapter 7">
-    <meta name="twitter:description" content="7주차에 걸친 대장정의 마지막이다. 이번시간에는 stream, lazy evaluation 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다. Structural Induction on Trees 지난번엔 함수가 올바르게 동작함을 증명하기 위해 induction 을 사용했었는데 이번시간엔...">
+    <meta name="twitter:description" content="7주차에 걸친 대장정의 마지막이다. 이번시간에는 stream, lazy evaluation 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다. Structural Induction on Trees 지난번엔 함수가 올바르게 동작함을 증명하기 위해 induction 을 사용했었는데 이번시간엔 tree 에 대해 induction 을 사용한다. 모든 트리 t 에">
     <meta name="twitter:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-7/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="scala, coursera, functional programming, lazy evaluation">
     
     <script type="application/ld+json">
 {
@@ -81,7 +85,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -90,11 +94,11 @@
     "datePublished": "2014-11-05T11:52:10.362Z",
     "dateModified": "2014-11-06T06:19:17.132Z",
     "keywords": "scala, coursera, functional programming, lazy evaluation",
-    "description": "7주차에 걸친 대장정의 마지막이다. 이번시간에는 stream, lazy evaluation 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다. Structural Induction on Trees 지난번엔 함수가 올바르게 동작함을 증명하기 위해 induction 을 사용했었는데 이번시간엔..."
+    "description": "7주차에 걸친 대장정의 마지막이다. 이번시간에는 stream, lazy evaluation 에 대해 배우고 이걸 이용해 길이가 무한인 컬렉션을 만들어 보기도 하고 계산을 늦추는 것을 다양한 예제에 적용해 본다. Structural Induction on Trees 지난번엔 함수가 올바르게 동작함을 증명하기 위해 induction 을 사용했었는데 이번시간엔 tree 에 대해 induction 을 사용한다. 모든 트리 t 에"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -110,7 +114,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">

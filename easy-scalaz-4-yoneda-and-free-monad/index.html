@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Easy Scalaz 4, Yoneda and Free Monad">
-    <meta property="og:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수...">
+    <meta property="og:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수 있습니다. Free 를 이용하면 사용자는 자신만의 Composable DSL 을 구성하고,">
     <meta property="og:url" content="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/">
     <meta property="article:published_time" content="2015-12-06T08:34:34.617Z">
     <meta property="article:modified_time" content="2015-12-06T09:24:41.699Z">
@@ -75,8 +75,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Easy Scalaz 4, Yoneda and Free Monad">
-    <meta name="twitter:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수...">
+    <meta name="twitter:description" content="Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수 있습니다. Free 를 이용하면 사용자는 자신만의 Composable DSL 을 구성하고,">
     <meta name="twitter:url" content="http://1ambda.github.io/easy-scalaz-4-yoneda-and-free-monad/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="scala, monad, monoid, scalaz, free, trampoline, yoneda, coyoneda, free monoid, free monad">
     
     <script type="application/ld+json">
 {
@@ -87,7 +91,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -96,11 +100,11 @@
     "datePublished": "2015-12-06T08:34:34.617Z",
     "dateModified": "2015-12-06T09:24:41.699Z",
     "keywords": "scala, monad, monoid, scalaz, free, trampoline, yoneda, coyoneda, free monoid, free monad",
-    "description": "Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수..."
+    "description": "Free[F, A] 를 이용하면 Functor F 를 Monad 인스턴스로 만들 수 있습니다. 그런데, Coyoneda[G, A] 를 이용하면 아무 타입 G 나 Functor 인스턴스로 만들 수 있으므로 어떤 타입이든 (심지어 방금 만든 case class 조차) 모나드 인스턴스로 만들 수 있습니다. Free 를 이용하면 사용자는 자신만의 Composable DSL 을 구성하고,"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -116,7 +120,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">

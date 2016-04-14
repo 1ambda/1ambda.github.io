@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Functional Programming in Scala, Chapter 6">
-    <meta property="og:description" content="지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다....">
+    <meta property="og:description" content="지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. one-liner 의 절정을 보여주시는 교수님 (번역이 서툴러 어중간한 의역을 하느니">
     <meta property="og:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-6/">
     <meta property="article:published_time" content="2014-10-24T14:07:21.379Z">
     <meta property="article:modified_time" content="2014-10-25T15:14:27.007Z">
@@ -69,8 +69,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Functional Programming in Scala, Chapter 6">
-    <meta name="twitter:description" content="지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다....">
+    <meta name="twitter:description" content="지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. one-liner 의 절정을 보여주시는 교수님 (번역이 서툴러 어중간한 의역을 하느니">
     <meta name="twitter:url" content="http://1ambda.github.io/functional-programming-in-scala-chapter-6/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="scala, coursera, functional programming, collection">
     
     <script type="application/ld+json">
 {
@@ -81,7 +85,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -90,11 +94,11 @@
     "datePublished": "2014-10-24T14:07:21.379Z",
     "dateModified": "2014-10-25T15:14:27.007Z",
     "keywords": "scala, coursera, functional programming, collection",
-    "description": "지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다...."
+    "description": "지난 시간에는 referential transparency (참조투명성) 과 함수형 언어에서의 귀납법인 structural induction 에 대해서 배우고, 몇 개의 예제를 증명했었다.  이번 시간에는 스칼라의 컬렉션인 Seq, Set, Map 을 알아보고 마지막 챕터에서는 여기에 higher-order function 을 더해 미친듯한 표현력을 가진 코드를 작성해 본다. one-liner 의 절정을 보여주시는 교수님 (번역이 서툴러 어중간한 의역을 하느니"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -110,7 +114,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">

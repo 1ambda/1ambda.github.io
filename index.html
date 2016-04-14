@@ -52,7 +52,6 @@
     <meta property="og:title" content="Old Lisper">
     <meta property="og:description" content="Functional Programming World">
     <meta property="og:url" content="http://1ambda.github.io/">
-    
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Old Lisper">
     <meta name="twitter:description" content="Functional Programming World">
@@ -68,7 +67,7 @@
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -84,7 +83,8 @@
 </head>
 <body>
 
-  <script src="public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
@@ -108,6 +108,23 @@
 </header>
 
 <main class="site_width" role="main">
+
+  <article class="margin_bottom_big">
+    <header class="text center margin_bottom_medium">
+      <h1 class><a href="untitled/">Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지</a></h1>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2016-04-14">Thursday, April 14, 2016</time>
+      <br><br>
+      <a href="http://1ambda.github.io/untitled/" data-disqus-identifier="141">Comment</a>
+      </h5>
+    </header>
+
+    <section class="post-excerpt">
+      <p></p><p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png" alt=""></p>
+      <p>지난 한달 동안 자그마한 웹앱 프로젝트를 Redux 를 이용해서 진행했습니다. 그 과정에서 배운 몇 가지를 적었습니다. Redux: 1. combineReducers 를 이용해 Reducer 를 잘게 분해하기  Redux: 2. Reducer 에서는 관련있는 Action 만 처리하기  Redux: 3. redux internal 이해하기  Redux: 4. redux-saga 사용하기  Redux: 5. API 호출 실패에 대한 액션을 여러개…</p>
+      <h5><a class="text book small uppercase color c_blue" href="untitled/">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
+    </section>
+  </article>
+
 
   <article class="margin_bottom_big">
     <header class="text center margin_bottom_medium">
@@ -177,27 +194,11 @@
   </article>
 
 
-  <article class="margin_bottom_big">
-    <header class="text center margin_bottom_medium">
-      <h1 class><a href="about-type-class/">About Type Class</a></h1>
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-10-21">Wednesday, October 21, 2015</time>
-      <br><br>
-      <a href="http://1ambda.github.io/about-type-class/" data-disqus-identifier="133">Comment</a>
-      </h5>
-    </header>
-
-    <section class="post-excerpt">
-      <p></p><p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png" alt=""></p>
-      <p>프로그래머가 하는 행위를 극도로 단순화해서 표현하면 저수준 의 데이터를 고수준 데이터로 변환하는 일입니다. 여기서 저수준이란, Stream, Byte, JSON, String 등 현실세계의 데이터를, 고수준이라 함은 비즈니스 로직, 제약조건 등이 추가된 도메인 객체, 모델 등 데이터를 말합니다.  이로 인해 저수준을 고수준으로 변환하는건 조건이 충족되지 않은 데이터와 연산 과정에서 일어나는 시스템 오류를 처리해야하기…</p>
-      <h5><a class="text book small uppercase color c_blue" href="about-type-class/">Read this article <i class="fa fa-chevron-circle-right"></i></a></h5>
-    </section>
-  </article>
-
-
   <nav class="pagination" role="navigation">
     <span class="page-number">Page 1 of 21</span>
-        <a class="older-posts" href="page/2/">Older Posts →</a>
+        <a class="older-posts" href="page/2/">Older Posts <span aria-hidden="true">→</span></a>
 </nav>
+
 
 </main>
 

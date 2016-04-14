@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Cloud Computing, Gossip Protocol">
-    <meta property="og:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance...">
+    <meta property="og:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance 와 scalability 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해">
     <meta property="og:url" content="http://1ambda.github.io/cloud-computing-gossip-protocol/">
     <meta property="article:published_time" content="2015-02-21T05:41:54.242Z">
     <meta property="article:modified_time" content="2015-02-21T14:32:58.183Z">
@@ -68,8 +68,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Cloud Computing, Gossip Protocol">
-    <meta name="twitter:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance...">
+    <meta name="twitter:description" content="Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance 와 scalability 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해">
     <meta name="twitter:url" content="http://1ambda.github.io/cloud-computing-gossip-protocol/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="coursera, cloud computing, gossip">
     
     <script type="application/ld+json">
 {
@@ -80,7 +84,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -89,11 +93,11 @@
     "datePublished": "2015-02-21T05:41:54.242Z",
     "dateModified": "2015-02-21T14:32:58.183Z",
     "keywords": "coursera, cloud computing, gossip",
-    "description": "Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance..."
+    "description": "Multicast 이번시간에 배울 내용은 Gossip Protocol (혹은 Epidemic Protocol) 입니다. 기존에는 특정 그룹에게 메세지를 보내기 위해 multicast 를 이용했지만, 클라우드 컴퓨티 환경에서는 프로세스가 죽어 노드가 크래쉬를 일으킬수도 네트워크 문제때문에 패킷이 딜레이되거나, 드랍될 수 있고 노드가 빠르게 증가합니다. 그러나 멀티캐스트는 fault-tolerance 와 scalability 측면에서 부족한 부분이 많았습니다. 이런 문제를 해결하기 위해"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -109,7 +113,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
@@ -137,7 +142,7 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/cloud-computing/">cloud computing</a>, <a href="../tag/gossip/">gossip</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/cloud-computing/">cloud computing</a>, <a href="http://127.0.0.1:2368/tag/gossip/">gossip</a></h5>
       <h1 class="margin_bottom_medium">Cloud Computing, Gossip Protocol</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2015-02-21">Saturday, February 21, 2015</time>
       <br><br>

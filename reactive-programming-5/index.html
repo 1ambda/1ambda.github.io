@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Reactive Programming 5, Actor">
-    <meta property="og:description" content="(http://prabhubuzz.wordpress.com) Actor 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 Erlang/OTP 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 Akka 가 만들어졌다. Why Actors? 액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자....">
+    <meta property="og:description" content="(http://prabhubuzz.wordpress.com) Actor 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 Erlang/OTP 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 Akka 가 만들어졌다. Why Actors? 액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자. 지난번에 배웠던 bank account 예제를 들고오면 class BankAccount {     private var">
     <meta property="og:url" content="http://1ambda.github.io/reactive-programming-5/">
     <meta property="article:published_time" content="2014-12-27T05:33:25.395Z">
     <meta property="article:modified_time" content="2014-12-27T13:43:35.997Z">
@@ -69,8 +69,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Reactive Programming 5, Actor">
-    <meta name="twitter:description" content="(http://prabhubuzz.wordpress.com) Actor 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 Erlang/OTP 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 Akka 가 만들어졌다. Why Actors? 액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자....">
+    <meta name="twitter:description" content="(http://prabhubuzz.wordpress.com) Actor 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 Erlang/OTP 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 Akka 가 만들어졌다. Why Actors? 액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자. 지난번에 배웠던 bank account 예제를 들고오면 class BankAccount {     private var">
     <meta name="twitter:url" content="http://1ambda.github.io/reactive-programming-5/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="scala, coursera, reactive programming, actor">
     
     <script type="application/ld+json">
 {
@@ -81,7 +85,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -90,11 +94,11 @@
     "datePublished": "2014-12-27T05:33:25.395Z",
     "dateModified": "2014-12-27T13:43:35.997Z",
     "keywords": "scala, coursera, reactive programming, actor",
-    "description": "(http://prabhubuzz.wordpress.com) Actor 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 Erlang/OTP 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 Akka 가 만들어졌다. Why Actors? 액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자...."
+    "description": "(http://prabhubuzz.wordpress.com) Actor 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 Erlang/OTP 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 Akka 가 만들어졌다. Why Actors? 액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자. 지난번에 배웠던 bank account 예제를 들고오면 class BankAccount {     private var"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -110,7 +114,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">

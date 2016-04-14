@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Reactive Programming 3, Futures, Promises">
-    <meta property="og:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터...">
+    <meta property="og:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자. trait Adventure {     def collectCoins(): List[">
     <meta property="og:url" content="http://1ambda.github.io/reactive-programming-3/">
     <meta property="article:published_time" content="2014-12-21T11:09:38.762Z">
     <meta property="article:modified_time" content="2014-12-24T01:27:48.919Z">
@@ -72,8 +72,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Reactive Programming 3, Futures, Promises">
-    <meta name="twitter:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터...">
+    <meta name="twitter:description" content="이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자. trait Adventure {     def collectCoins(): List[">
     <meta name="twitter:url" content="http://1ambda.github.io/reactive-programming-3/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="coursera, reactive programming, scala, futures, promises, awaitable, try">
     
     <script type="application/ld+json">
 {
@@ -84,7 +88,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -92,12 +96,12 @@
     "url": "http://1ambda.github.io/reactive-programming-3/",
     "datePublished": "2014-12-21T11:09:38.762Z",
     "dateModified": "2014-12-24T01:27:48.919Z",
-    "keywords": "coursera, reactive programming,  scala, futures, promises, awaitable, try",
-    "description": "이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터..."
+    "keywords": "coursera, reactive programming, scala, futures, promises, awaitable, try",
+    "description": "이번시간엔 Try, Future, Awaitable, Async, Promise 에 대해 알아본다. 모나드가 삶을 윤택하게 하리라 Monads and Effects 프로그래밍에서 4가지 본질적 effects 는                   One           Many Synchronous     T/Try[T]     Iterable[T]   Asynchronous    Future[T]    Observable[T]   asynchoronous computation 을 살펴보기전에 synchronous 부터 살펴볼건데 간단한 어드벤쳐 게임으로 시작하자. trait Adventure {     def collectCoins(): List["
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -113,7 +117,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
@@ -141,7 +146,7 @@
 
 
     <header class="text center margin_bottom_medium">
-      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/reactive-programming/">reactive programming</a>, <a href="http://127.0.0.1:2368/tag/scala-2/"> scala</a>, <a href="http://127.0.0.1:2368/tag/futures/">futures</a>, <a href="http://127.0.0.1:2368/tag/promises/">promises</a>, <a href="http://127.0.0.1:2368/tag/awaitable/">awaitable</a>, <a href="http://127.0.0.1:2368/tag/try/">try</a></h5>
+      <h5 class="text book small uppercase color c_black_light margin_bottom_small">Posted in <a href="../tag/coursera/">coursera</a>, <a href="../tag/reactive-programming/">reactive programming</a>, <a href="http://127.0.0.1:2368/tag/scala-2/">scala</a>, <a href="http://127.0.0.1:2368/tag/futures/">futures</a>, <a href="http://127.0.0.1:2368/tag/promises/">promises</a>, <a href="http://127.0.0.1:2368/tag/awaitable/">awaitable</a>, <a href="http://127.0.0.1:2368/tag/try/">try</a></h5>
       <h1 class="margin_bottom_medium">Reactive Programming 3, Futures, Promises</h1>
       <h5 class="text book small uppercase color c_black_light margin_bottom_small"><time datetime="2014-12-21">Sunday, December 21, 2014</time>
       <br><br>

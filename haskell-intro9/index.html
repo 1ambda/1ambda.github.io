@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="하스켈로 배우는 함수형 언어 9">
-    <meta property="og:description" content="Intro 이번시간엔 함수형 프로그래밍에서 property 를 증명하는 방법인 induction 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 Rose Tree 를 구현하면서 Functor, Monoid, Foldable 등에 대해 좀 알아봅시다. 수학에서 다음 두 식은 똑같습니다. xz + yz = (x...">
+    <meta property="og:description" content="Intro 이번시간엔 함수형 프로그래밍에서 property 를 증명하는 방법인 induction 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 Rose Tree 를 구현하면서 Functor, Monoid, Foldable 등에 대해 좀 알아봅시다. 수학에서 다음 두 식은 똑같습니다. xz + yz = (x + y)z   근데, 잘 보면 연산의 수가 다릅니다. 좌측은 3개고,">
     <meta property="og:url" content="http://1ambda.github.io/haskell-intro9/">
     <meta property="article:published_time" content="2014-12-18T08:24:13.175Z">
     <meta property="article:modified_time" content="2014-12-21T06:30:50.167Z">
@@ -71,8 +71,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="하스켈로 배우는 함수형 언어 9">
-    <meta name="twitter:description" content="Intro 이번시간엔 함수형 프로그래밍에서 property 를 증명하는 방법인 induction 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 Rose Tree 를 구현하면서 Functor, Monoid, Foldable 등에 대해 좀 알아봅시다. 수학에서 다음 두 식은 똑같습니다. xz + yz = (x...">
+    <meta name="twitter:description" content="Intro 이번시간엔 함수형 프로그래밍에서 property 를 증명하는 방법인 induction 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 Rose Tree 를 구현하면서 Functor, Monoid, Foldable 등에 대해 좀 알아봅시다. 수학에서 다음 두 식은 똑같습니다. xz + yz = (x + y)z   근데, 잘 보면 연산의 수가 다릅니다. 좌측은 3개고,">
     <meta name="twitter:url" content="http://1ambda.github.io/haskell-intro9/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="edx, haskell, induction, functor, monoid, foldable">
     
     <script type="application/ld+json">
 {
@@ -83,7 +87,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -92,11 +96,11 @@
     "datePublished": "2014-12-18T08:24:13.175Z",
     "dateModified": "2014-12-21T06:30:50.167Z",
     "keywords": "edx, haskell, induction, functor, monoid, foldable",
-    "description": "Intro 이번시간엔 함수형 프로그래밍에서 property 를 증명하는 방법인 induction 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 Rose Tree 를 구현하면서 Functor, Monoid, Foldable 등에 대해 좀 알아봅시다. 수학에서 다음 두 식은 똑같습니다. xz + yz = (x..."
+    "description": "Intro 이번시간엔 함수형 프로그래밍에서 property 를 증명하는 방법인 induction 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 Rose Tree 를 구현하면서 Functor, Monoid, Foldable 등에 대해 좀 알아봅시다. 수학에서 다음 두 식은 똑같습니다. xz + yz = (x + y)z   근데, 잘 보면 연산의 수가 다릅니다. 좌측은 3개고,"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -112,7 +116,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">

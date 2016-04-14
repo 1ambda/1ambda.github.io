@@ -58,7 +58,7 @@
     <meta property="og:site_name" content="Old Lisper">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Cloud Computing, Snapshots">
-    <meta property="og:description" content="이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on...">
+    <meta property="og:description" content="이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on failure garbage collection of objects: object at servers that don't">
     <meta property="og:url" content="http://1ambda.github.io/cloud-computing-snapshot/">
     <meta property="article:published_time" content="2015-03-07T13:57:56.274Z">
     <meta property="article:modified_time" content="2015-03-07T13:59:42.200Z">
@@ -69,8 +69,12 @@
     
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Cloud Computing, Snapshots">
-    <meta name="twitter:description" content="이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on...">
+    <meta name="twitter:description" content="이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on failure garbage collection of objects: object at servers that don't">
     <meta name="twitter:url" content="http://1ambda.github.io/cloud-computing-snapshot/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="1ambda">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="coursera, cloud computing, snapshot, Chandy-Lamport">
     
     <script type="application/ld+json">
 {
@@ -81,7 +85,7 @@
         "@type": "Person",
         "name": "1ambda",
         "image": "//www.gravatar.com/avatar/aa2032ba2302419e3c2ede54f1fbf687?d=404&s=250",
-        "url": "http://1ambda.github.io/author/1ambda",
+        "url": "http://1ambda.github.io/author/1ambda/",
         "sameAs": "http://1ambda.github.io",
         "description": "Functional, Scala, Akka, Rx and Haskell"
     },
@@ -90,11 +94,11 @@
     "datePublished": "2015-03-07T13:57:56.274Z",
     "dateModified": "2015-03-07T13:59:42.200Z",
     "keywords": "coursera, cloud computing, snapshot, Chandy-Lamport",
-    "description": "이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on..."
+    "description": "이번시간에는 Distributed Snapshot 에 대해서 배웁니다. 클라우드 환경에서 각 어플리케이션(혹은 서비스) 는 여러개의 서버 위에서 돌아갑니다. 각 서버는 concurrent events 를 다루며, 서로 상호작용합니다. 이런 환경에서 global snapshot 을 캡쳐할 수 있다면 check pointing: can restart distributed application on failure garbage collection of objects: object at servers that don&#x27;t"
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.6">
+    <meta name="generator" content="Ghost 0.7">
     <link rel="alternate" type="application/rss+xml" title="Old Lisper" href="http://1ambda.github.io/rss/">
 
   <script>
@@ -110,7 +114,8 @@
 </head>
 <body>
 
-  <script src="../public/jquery.js?v=2d5a18a471"></script>
+  <!-- You can safely delete this line if your theme does not require jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   
 <header class="site_width text center padding_top_big margin_bottom_big">
