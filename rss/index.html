@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.7</generator><lastBuildDate>Thu, 14 Apr 2016 04:39:25 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png" alt=""></p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Old Lisper]]></title><description><![CDATA[Functional Programming World]]></description><link>http://1ambda.github.io/</link><generator>Ghost 0.7</generator><lastBuildDate>Thu, 14 Apr 2016 06:27:31 GMT</lastBuildDate><atom:link href="http://1ambda.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png" alt=""></p>
 
 <p>지난 한달 동안 자그마한 웹앱 프로젝트를 Redux 를 이용해서 진행했습니다. 그 과정에서 배운 몇 가지를 적었습니다.</p>
 
-<p><a href="http://1ambda.github.io/untitled/#1combinereducersreducer">Redux: 1. combineReducers 를 이용해 Reducer 를 잘게 분해하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#2reduceractionactiontype">Redux: 2. Reducer 에서는 관련있는 Action 만 처리하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#3reduxinternal">Redux: 3. redux internal 이해하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#4reduxsaga">Redux: 4. redux-saga 사용하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#5api">Redux: 5. API 호출 실패에 대한 액션을 여러개</a></p>]]></description><link>http://1ambda.github.io/untitled/</link><guid isPermaLink="false">1877a1e2-c38b-4f1f-88ec-28d4e3edcd13</guid><category><![CDATA[redux]]></category><category><![CDATA[redux-saga]]></category><category><![CDATA[webpack]]></category><category><![CDATA[js]]></category><category><![CDATA[es6]]></category><category><![CDATA[babel]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 14 Apr 2016 04:36:24 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png" alt=""></p>
+<p><a href="http://1ambda.github.io/tips-redux-and-webpack/#1combinereducersreducer">Redux: 1. combineReducers 를 이용해 Reducer 를 잘게 분해하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#2reduceractionactiontype">Redux: 2. Reducer 에서는 관련있는 Action 만 처리하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#3reduxinternal">Redux: 3. redux internal 이해하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#4reduxsaga">Redux: 4. redux-saga 사용하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#5api">Redux: 5. API 호출 실패에 대한 액션을 여러개</a></p>]]></description><link>http://1ambda.github.io/tips-redux-and-webpack/</link><guid isPermaLink="false">1877a1e2-c38b-4f1f-88ec-28d4e3edcd13</guid><category><![CDATA[redux]]></category><category><![CDATA[redux-saga]]></category><category><![CDATA[webpack]]></category><category><![CDATA[js]]></category><category><![CDATA[es6]]></category><category><![CDATA[babel]]></category><dc:creator><![CDATA[1ambda]]></dc:creator><pubDate>Thu, 14 Apr 2016 04:36:24 GMT</pubDate><content:encoded><![CDATA[<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png" alt=""></p>
 
 <p>지난 한달 동안 자그마한 웹앱 프로젝트를 Redux 를 이용해서 진행했습니다. 그 과정에서 배운 몇 가지를 적었습니다.</p>
 
-<p><a href="http://1ambda.github.io/untitled/#1combinereducersreducer">Redux: 1. combineReducers 를 이용해 Reducer 를 잘게 분해하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#2reduceractionactiontype">Redux: 2. Reducer 에서는 관련있는 Action 만 처리하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#3reduxinternal">Redux: 3. redux internal 이해하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#4reduxsaga">Redux: 4. redux-saga 사용하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#5api">Redux: 5. API 호출 실패에 대한 액션을 여러개 만들지 않기</a> <br>
-<a href="http://1ambda.github.io/untitled/#6jestmocha">Webpack: 6. 테스팅 프레임워크로 jest 대신 mocha 사용하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#7postcss">Webpack: 7. postcss 를 사용할 경우, 테스팅 환경에서 스타일파일 무시하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#8defineplugin">Webpack: 8. DefinePlugin 을 이용해 클라이언트 파일에 환경변수 주입하기</a> <br>
-<a href="http://1ambda.github.io/untitled/#9jsonserver">Etc: 9. json-server 사용하기</a>  </p>
+<p><a href="http://1ambda.github.io/tips-redux-and-webpack/#1combinereducersreducer">Redux: 1. combineReducers 를 이용해 Reducer 를 잘게 분해하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#2reduceractionactiontype">Redux: 2. Reducer 에서는 관련있는 Action 만 처리하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#3reduxinternal">Redux: 3. redux internal 이해하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#4reduxsaga">Redux: 4. redux-saga 사용하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#5api">Redux: 5. API 호출 실패에 대한 액션을 여러개 만들지 않기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#6jestmocha">Webpack: 6. 테스팅 프레임워크로 jest 대신 mocha 사용하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#7postcss">Webpack: 7. postcss 를 사용할 경우, 테스팅 환경에서 스타일파일 무시하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#8defineplugin">Webpack: 8. DefinePlugin 을 이용해 클라이언트 파일에 환경변수 주입하기</a> <br>
+<a href="http://1ambda.github.io/tips-redux-and-webpack/#9jsonserver">Etc: 9. json-server 사용하기</a>  </p>
 
 <h2 id="redux">Redux</h2>
 
@@ -81,7 +81,7 @@ export const handler = handleActions({
 
 <h3 id="2reduceractionactiontype">2. Reducer, Action, ActionType 을 한 파일로 모으기</h3>
 
-<p><a href="http://1ambda.github.io/untitled/">Redux Github</a> 에 나와있는 예제에서는 <code>ActionType</code> 과 <code>Action</code> 을 하나의 파일에 모아놓는데, 프로젝트가 커질수록 부담스럽습니다.</p>
+<p><a href="http://1ambda.github.io/tips-redux-and-webpack/">Redux Github</a> 에 나와있는 예제에서는 <code>ActionType</code> 과 <code>Action</code> 을 하나의 파일에 모아놓는데, 프로젝트가 커질수록 부담스럽습니다.</p>
 
 <p><code>Action</code>, <code>ActionType</code>, <code>Handler</code> 를 한 파일에 모아놓으면 이 핸들러가 어떤 일들을 하는지, 페이로드는 무엇인지 한 눈에 파악할 수 있습니다. </p>
 
