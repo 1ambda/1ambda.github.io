@@ -24,7 +24,7 @@
     </item>
     
     <item>
-      <title>javascript inheritance</title>
+      <title>Javascript Inheritance</title>
       <link>https://1ambda.github.com/23/javascript/javascript-inheritance/</link>
       <pubDate>Sat, 25 Jun 2016 12:22:02 +0900</pubDate>
       
@@ -839,6 +839,143 @@ remotes.map(remote =&amp;gt; {
 &lt;li&gt;&lt;a href=&#34;https://webpack.github.io/docs/list-of-plugins.html#defineplugin&#34;&gt;Webpack: DefinePlugin&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/coryhouse/react-slingshot&#34;&gt;react-slingshot&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>REST API: Put vs Post</title>
+      <link>https://1ambda.github.com/23/javascript/rest-api-put-vs-post/</link>
+      <pubDate>Sat, 25 Jun 2016 22:25:23 +0900</pubDate>
+      
+      <guid>https://1ambda.github.com/23/javascript/rest-api-put-vs-post/</guid>
+      <description>
+
+&lt;h3 id=&#34;idempotent&#34;&gt;idempotent&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;PUT&lt;/code&gt; 과 &lt;code&gt;POST&lt;/code&gt; 를 이해하려면, &lt;strong&gt;&lt;a href=&#34;http://stackoverflow.com/questions/1077412/what-is-an-idempotent-operation&#34;&gt;idempotent&lt;/a&gt;&lt;/strong&gt; 라는 개념의 도입이 필요하다. 한글로 직역하면 &lt;em&gt;멱등의&lt;/em&gt; 정도 되시겠다. 수학적으로 이해하는 편이 쉬운데,&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;f(x) = f(f(x))&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;라 보면 된다. 다시 말해 몇 번이고 같은 &lt;em&gt;연산&lt;/em&gt; 을 반복해도 같은 값이 나온다는 것. 이건 fault-tolerant API 를 디자인 하는데 있어서 굉장히 중요한 요소다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어보자. 클라이언트가 &lt;code&gt;POST /dogs&lt;/code&gt; 를 요청했는데, 어떤 이유로간에 요청이  time-out (408) 되었다고 해 보자. 클라이언트는 요청이 전달되었으나 네트워크가 끊어졌는지, 아니면 요청조차 전달이 되지 않았는지 알 수 없다.&lt;/p&gt;
+
+&lt;p&gt;이 때, 클라이언트가 원하는 operation 이 &lt;strong&gt;idempotent&lt;/strong&gt; 하다면 다시 요청해도 상관 없다. 항상 같은 결과를 만드니까. 그러나 &lt;code&gt;POST&lt;/code&gt; 는 &lt;strong&gt;idempotent&lt;/strong&gt; 하지 않다.&lt;/p&gt;
+
+&lt;h3 id=&#34;post&#34;&gt;POST&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;POST&lt;/code&gt; 는 클라이언트가 &lt;em&gt;리소스의 위치를 지정하지 않았을때&lt;/em&gt; 리소스를 생성하기 위해 사용하는 연산이다. 예를들어&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;POST /dogs HTTP/1.1
+
+{ &amp;quot;name&amp;quot;: &amp;quot;blue&amp;quot;, &amp;quot;age&amp;quot;: 5 }
+
+HTTP/1.1 201 Created
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;따라서 이 연산을 수행하면 &lt;code&gt;/dogs/2&lt;/code&gt; 에 생기고, 그 다음번엔 &lt;code&gt;/dogs/3&lt;/code&gt; 등 매번 다른곳에 새로운 리소스가 생성될 수 있으므로, 이 연산은 &lt;strong&gt;idempotent 하지 않다&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;put&#34;&gt;PUT&lt;/h3&gt;
+
+&lt;p&gt;반면 리소스의 위치가 명확히 지정된 다음의 요청을 고려해 보자.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;PUT /dogs/3 HTTP/1.1
+
+{ &amp;quot;name&amp;quot;: &amp;quot;blue&amp;quot;, &amp;quot;age&amp;quot;: 5 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;/dogs&lt;/code&gt; 의 프로퍼티가 &lt;code&gt;name&lt;/code&gt; 과 &lt;code&gt;age&lt;/code&gt; 뿐이라면, 이건 몇 번을 수행하더라도, 같은 결과를 보장한다. 다시 말해 &lt;strong&gt;idempotent&lt;/strong&gt; 하다.&lt;/p&gt;
+
+&lt;p&gt;그리고 위에 예에서 알 수 있듯이 &lt;code&gt;PUT&lt;/code&gt; 은 &lt;em&gt;리소스의 위치가 지정되었을때&lt;/em&gt; &lt;strong&gt;생성&lt;/strong&gt; 또는 &lt;strong&gt;업데이트&lt;/strong&gt; 를 위해 사용할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;### PATCH&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;PUT&lt;/code&gt; 이 리소스의 모든 프로퍼티를 업데이트 하기 위해 사용된다면, &lt;code&gt;PATCH&lt;/code&gt; 는 부분만을 업데이트하기 위해 사용한다. &lt;code&gt;PUT&lt;/code&gt; 과 마찬가지로 리소스의 위치를 클라이언트가 알고 있을 때 사용한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/630453/put-vs-post-in-rest&#34;&gt;SO&lt;/a&gt; 에는 3개의 메소드를 다음과 같이 요약하는 답변이 있다.&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;strong&gt;POST&lt;/strong&gt; to a URL &lt;strong&gt;creates a child resouce&lt;/strong&gt; at a server defiend URL&lt;br /&gt;
+(&lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5&#34;&gt;RFC 2616 POST&lt;/a&gt;)&lt;br /&gt;
+(2) &lt;strong&gt;PUT&lt;/strong&gt; to a URL &lt;strong&gt;create/replaces the resource&lt;/strong&gt; in is entirely at the client defined URL&lt;br /&gt;
+(&lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6&#34;&gt;RFC 2616 PUT&lt;/a&gt;)&lt;br /&gt;
+(3) &lt;strong&gt;PATCH&lt;/strong&gt; to a URL &lt;strong&gt;updates part of the resource&lt;/strong&gt; at that client defined URL&lt;br /&gt;
+(&lt;a href=&#34;http://tools.ietf.org/html/rfc5789&#34;&gt;RFC 5789: Patch Method for HTTP&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h3 id=&#34;response-code&#34;&gt;Response Code&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;POST&lt;/code&gt; 이나 &lt;code&gt;POST&lt;/code&gt; 요청이 리소스를 새로 생성할 경우엔 리소스의 위치를 response header 의 &lt;strong&gt;Location&lt;/strong&gt; field 에 담아 &lt;em&gt;201 Created&lt;/em&gt; 를 보낼 수 있다. 그러나 not-identifiable 한 리소스를 생성할 경우엔 &lt;em&gt;200 OK&lt;/em&gt; 또는 &lt;em&gt;204 No Content&lt;/em&gt; 를 보낼수도 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.w3.org/Protocols이나 `POST` /rfc2616/rfc2616-sec9스의tml#sec9.5&#34;&gt;원문&lt;/a&gt;을 첨부하자면,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The action performed by the POST method might not result in a resource that can be identified by a URI. In this case, either 200 (OK) or 204 (No Content) is the appropriate response status, depending on whether or not the response includes an entity that describes the result. &lt;br/&gt;&lt;br/&gt;
+If a resource has been created on the origin server, the response SHOULD be 201 (Created) and contain an entity which describes the status of the request and refers to the new resource, and a Location header (see section 14.30).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Async 하게 서버가 처리한다면, 요청은 수락 되었으나 아직 커밋되지 않았음을 알리기 위해 &lt;em&gt;202 Accepted&lt;/em&gt; 를 보내야 한다. (if the operation has not been commited yet)&lt;/p&gt;
+
+&lt;p&gt;아래 사진은, response code decision tree&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;a href=&#34;http://i.stack.imgur.com/whhD1.png&#34;&gt;&lt;img src=&#34;http://i.stack.imgur.com/whhD1.png&#34; /&gt;&lt;/a&gt;&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://i.stack.imgur.com/whhD1.png&#34;&gt;http://i.stack.imgur.com/whhD1.png&lt;/a&gt;)&lt;/p&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;safe-methods&#34;&gt;Safe Methods&lt;/h3&gt;
+
+&lt;p&gt;리소스를 수정하지 않는 메소드들, &lt;code&gt;OPTIONS&lt;/code&gt;, &lt;code&gt;GET&lt;/code&gt;, &lt;code&gt;HEAD&lt;/code&gt; 등을 &lt;em&gt;safe&lt;/em&gt; 하다고 말한다. 대부분의 경우 &lt;em&gt;idempotent&lt;/em&gt; 하면 &lt;em&gt;safe&lt;/em&gt; 하다. 물론 예외도 있는데 &lt;code&gt;DELETE&lt;/code&gt; 는 &lt;em&gt;idempotent&lt;/em&gt; 하지만 리소스를 변경하므로 &lt;em&gt;safe&lt;/em&gt; 하지 않다. 자세한 내용은 &lt;a href=&#34;http://tools.ietf.org/html/rfc7231#section-4.2&#34;&gt;RFC 7231: Safe Methods&lt;/a&gt; 를 보자. 참고로 &lt;a href=&#34;http://tools.ietf.org/html/rfc7231#section-4.2.1&#34;&gt;RFC 7231&lt;/a&gt; 은 &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;DELETE&lt;/code&gt; 와 &lt;em&gt;safe methods&lt;/em&gt; 를 &lt;em&gt;idempotent&lt;/em&gt; 하다고 정의한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;HEAD&lt;/code&gt; 는 Response-Body 없이 Header 만 얻기 위해 사용하고, &lt;code&gt;OPTIONS&lt;/code&gt; 는 해당 리소스에 대해 가능한 operation 이 무엇인지 응답을 얻기 위해 사용한다. 만약 &lt;code&gt;OPTIONS&lt;/code&gt; 에 대한 응답이 온다면 response &lt;code&gt;Allow&lt;/code&gt; 에 가능한 operation 이 와야한다. &lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html&#34;&gt;RFC2616&lt;/a&gt; 에는 다음과 같이 나와있다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;code&gt;OPTIONS&lt;/code&gt; method represents a request for information about the communication options available on the request/response chain identified by the Request-URI. This method allows the client to determine the options and/or requirements associated with a resource, or the capabilities of a server, without implying a resource action or initiating a resource retrieval. &lt;br/&gt;&lt;br/&gt;
+Responses to this method are not cacheable.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;cacheable-methods&#34;&gt;Cacheable Methods&lt;/h3&gt;
+
+&lt;p&gt;왜 &lt;code&gt;OPTIONS&lt;/code&gt; 메소드에 대한 응답은 캐시가 불가능한걸까? SO 에서 이 &lt;a href=&#34;http://stackoverflow.com/questions/13073313/http-options-not-cacheable&#34;&gt;답변&lt;/a&gt; 이 제일 나은것 같아서 가져왔다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;code&gt;OPTIONS&lt;/code&gt; HTTP request returns the available methods which can be performed on a resource. (The objects methods)&lt;/p&gt;
+
+&lt;p&gt;I can not say for certain why you can not cache the response, but its most likely a precaution. Caching would have little value for the &lt;code&gt;OPTIONS&lt;/code&gt; http method.&lt;/p&gt;
+
+&lt;p&gt;A Resource is &amp;ldquo;any information that can be given a name&amp;rdquo;, that name is its URI. the response from the OPTIONs request is only a list of methods that can be requested on this resource (e.g. &amp;ldquo;GET PUT POST&amp;rdquo; maybe the response). To actually get at the information stored, you must use the GET method.&lt;/p&gt;
+
+&lt;p&gt;History, more than anything; OPTIONS was defined that way to start with. The underlying reason is that HTTP caches are defined in terms of representations, which means the way you get something out of the cache is GET. This is why OPTIONS, PROPFIND, etc. caching are problematic.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;다시 말해서, 리소스는 주어진 URI 에 대한 정보인데 &lt;code&gt;OPTIONS&lt;/code&gt; 는 정보를 가지고 오는 것이 아니라, 정보에 대해 어떤 연산이 가능한지를 알려준다. HTTP 에서는 정보에 대해 캐싱하므로, &lt;code&gt;GET&lt;/code&gt; 이나 &lt;code&gt;HEAD&lt;/code&gt; 같이 정보를 돌려주는 연산만 캐싱할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;trace-connect&#34;&gt;Trace, Connect&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;TRACE&lt;/code&gt; 는 클라이언트가 방금 보낸 요청을 다시 달라고, 서버에게 요청하는 것이고 &lt;code&gt;CONNECT&lt;/code&gt; 는 HTTP 터널링을 할때 쓰인다. 중간의 프록시 서버를 위해서는 &lt;code&gt;CONNECT&lt;/code&gt; 로 요청하고, 마지막 프록시에서 end-point 로는 &lt;code&gt;GET&lt;/code&gt; 또는 &lt;code&gt;CONNECT&lt;/code&gt; 를 날린다. &lt;code&gt;HTTPS&lt;/code&gt; 라면 &lt;code&gt;CONNECT&lt;/code&gt; 를, &lt;code&gt;HTTP&lt;/code&gt; 라면 둘 중 아무거나 써도 상관 없다. 더 자세한건 &lt;a href=&#34;http://stackoverflow.com/questions/11697943/when-should-one-use-connect-and-get-http-methods-at-http-proxy-server&#34;&gt;SO 답변&lt;/a&gt; 으로&lt;/p&gt;
+
+&lt;p&gt;원문을 첨부하면,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;CONNECT:&lt;/strong&gt; This method could allow a client to use the web server as a proxy.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TRACE:&lt;/strong&gt; This method simply echoes back to the client whatever string has been sent to the server, and is used mainly for debugging purposes. This method, originally assumed harmless, can be used to mount an attack known as Cross Site Tracing, which has been discovered by Jeremiah Grossman (see links at the bottom of the page).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;summary&#34;&gt;Summary&lt;/h3&gt;
+
+&lt;p&gt;HTTP 메소드에 대해서 알아보았는데, 조금 더 찾아보니 HTTP 는 0.9 -&amp;gt; 1.0 -&amp;gt; 1.1 순으로 변화했다고 한다. 0.9 에선 &lt;code&gt;GET&lt;/code&gt; 을 이용한 Read-only 버전이었고 1.0 에 들어와서야 &lt;code&gt;HEAD&lt;/code&gt;, &lt;code&gt;POST&lt;/code&gt; 등을 이용해 서버로 데이터 전송이 가능해졌다.   HTTP 1.1 (RFC 2616) 에 와서야 &lt;code&gt;DELETE&lt;/code&gt;, &lt;code&gt;PUT&lt;/code&gt; 등이 추가되면서 변경, 삭제까지 가능해졌다.&lt;/p&gt;
+
+&lt;p&gt;다음번에 HTTP 를 또 살펴 볼 일이 생긴다면, &lt;a href=&#34;http://tools.ietf.org/html/rfc7234&#34;&gt;RFC 7243: Caching&lt;/a&gt; 과 &lt;a href=&#34;http://tools.ietf.org/html/rfc7235&#34;&gt;RFC 7235: Authentication&lt;/a&gt; 에 대해서 보지 않을까 싶다.&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;a href=&#34;http://restcookbook.com/HTTP%20Methods/put-vs-post/&#34;&gt;REST Cookbook: PUT vs POST&lt;/a&gt;&lt;br /&gt;
+(2) &lt;a href=&#34;http://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete&#34;&gt;HTTP status code for UPDATE and DELETE&lt;/a&gt;&lt;br /&gt;
+(3) &lt;a href=&#34;http://stackoverflow.com/questions/630453/put-vs-post-in-rest/18243587#18243587&#34;&gt;PUT vs POST in REST&lt;/a&gt;&lt;br /&gt;
+(4) &lt;a href=&#34;http://restcookbook.com/HTTP%20Methods/idempotency/&#34;&gt;REST Coookbook: idempotency&lt;/a&gt;&lt;br /&gt;
+(5) &lt;a href=&#34;http://zacstewart.com/2012/04/14/http-options-method.html&#34;&gt;HTTP OPTIONS Method&lt;/a&gt;&lt;br /&gt;
+(6) &lt;a href=&#34;https://www.mnot.net/blog/2012/10/29/NO_OPTIONS&#34;&gt;NO OPTIONS&lt;/a&gt;&lt;br /&gt;
+(7) &lt;a href=&#34;http://www.mkexdev.net/Article/Content.aspx?parentCategoryID=1&amp;amp;categoryID=11&amp;amp;ID=119&#34;&gt;HTTP History&lt;/a&gt;&lt;br /&gt;
+(8) &lt;a href=&#34;http://stackoverflow.com/questions/13073313/http-options-not-cacheable&#34;&gt;HTTP OPTIONS not cacheable&lt;/a&gt;&lt;br /&gt;
+(9) &lt;a href=&#34;http://stackoverflow.com/questions/11697943/when-should-one-use-connect-and-get-http-methods-at-http-proxy-server&#34;&gt;CONNECT vs GET in proxy&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
