@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>24s on Old Lisper</title>
+    <link>https://1ambda.github.com/24/</link>
+    <description>Recent content in 24s on Old Lisper</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 25 Jun 2016 11:28:05 +0900</lastBuildDate>
+    <atom:link href="https://1ambda.github.com/24/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Java</title>
+      <link>https://1ambda.github.com/24/java/</link>
+      <pubDate>Sat, 25 Jun 2016 11:28:05 +0900</pubDate>
+      
+      <guid>https://1ambda.github.com/24/java/</guid>
+      <description>
+
+&lt;h2 id=&#34;interview-quesitons&#34;&gt;Interview Quesitons&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;./interview-questions-collection&#34;&gt;Collection&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Interview Questions: Collection</title>
+      <link>https://1ambda.github.com/24/java/interview-questions-collection/</link>
+      <pubDate>Sat, 25 Jun 2016 12:06:44 +0900</pubDate>
+      
+      <guid>https://1ambda.github.com/24/java/interview-questions-collection/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;general&#34;&gt;General&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;strong&gt;Explain Collections Hierarchy?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://2.bp.blogspot.com/-M0M8nv5s2lQ/U3BcbRQcRvI/AAAAAAAAAec/oBBmQCPDm9Y/s1600/Collection-Classes.tif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://4.bp.blogspot.com/-o9Jk4Z4Tohs/U3Be46CxGTI/AAAAAAAAAeo/Wq8-hhZ8dCA/s1600/Collection-Classes_Map.tif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p align=&#34;center&#34;&gt;(http://www.java-redefined.com)&lt;/p&gt;
+
+&lt;p&gt;크게 보면 &lt;em&gt;Collection&lt;/em&gt; 과 &lt;em&gt;Map&lt;/em&gt; 인터페이스로 구분되어 있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Map&lt;/code&gt; 은 &lt;em&gt;key-value pair&lt;/em&gt; 컨테이너이기 때문에 단일 원소에 대한 컨테이너인 &lt;code&gt;Collection&lt;/code&gt; 과 호환되지 않습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Set&lt;/code&gt; 은 중복된 원소를 허용하지 않습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Set&lt;/code&gt; 과 &lt;code&gt;Map&lt;/code&gt; 에 정렬 기능이 필요하면 &lt;code&gt;SortedSet&lt;/code&gt;,  &lt;code&gt;SortedMap&lt;/code&gt; 인터페이스 구현체인 &lt;code&gt;TreeMap&lt;/code&gt;, &lt;code&gt;TreeSet&lt;/code&gt; 등을 이용할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(2) How do you remove an entry from a collection? and subsequently what is difference between &lt;code&gt;Collection.remove()&lt;/code&gt; and &lt;code&gt;Iterator.remove()&lt;/code&gt;, which one you will use, while removing elements during iteration?&lt;/p&gt;
+
+&lt;p&gt;아래에서 언급하겠지만 &lt;em&gt;fail-fast&lt;/em&gt; 와 관련된 문제입니다. 만약 순회하고 있지 않다면 &lt;code&gt;Collection.remove()&lt;/code&gt; 를 사용해도 상관 없지만&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;iterator&lt;/em&gt; 를 이용해서 순회하는 동안 컬렉션의 &lt;code&gt;remove()&lt;/code&gt; 메소드를 이용하면 &lt;code&gt;ConcurrentModificationException&lt;/code&gt; 예외가 발생합니다.  따라서 &lt;code&gt;Iterator.remove()&lt;/code&gt; 를 이용해야 합니다. &lt;a href=&#34;http://stackoverflow.com/questions/14200489/collection-iterator-remove-vs-collection-remove&#34;&gt;SO 답변&lt;/a&gt;에서도 그 이유를 찾을 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// invalid
+List&amp;lt;Integer&amp;gt; l = new ArrayList&amp;lt;Integer&amp;gt;(Arrays.asList(1, 2, 3, 4));
+for (int el : l) {
+  if (el &amp;lt; 3) {
+      l.remove(el);
+  }
+}
+    
+// correct way
+Iterator&amp;lt;Integer&amp;gt; it = l.iterator();
+while (it.hasNext()) {
+  int el = it.next();
+  if (el &amp;lt; 3) {
+      it.remove();
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;list-interface-related&#34;&gt;List interface related&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;List&lt;/code&gt; 는 중복된 원소를 허용하며 &lt;em&gt;ordered elements&lt;/em&gt; 를 담는 컨테이너입니다. 때때로 &lt;em&gt;Sequence&lt;/em&gt; 라 불리기도 합니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(1) &lt;code&gt;Vector&lt;/code&gt; vs &lt;code&gt;ArrayList&lt;/code&gt; vs &lt;code&gt;LinkedList&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Vector&lt;/code&gt; 의 모든 메소드는 &lt;em&gt;동기화 (synchronized)&lt;/em&gt; 됩니다. &lt;code&gt;ArrayList&lt;/code&gt; 는 &lt;em&gt;thread-unsafe&lt;/em&gt; 합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Vector&lt;/code&gt; 는 &lt;em&gt;JDK&lt;/em&gt; 첫 릴리즈부터 포함되어있던 레거시 클래스고, &lt;code&gt;ArrayList&lt;/code&gt; 는 &lt;em&gt;JDK 1.2&lt;/em&gt; 에서 컬렉션 프레임워크 도입과 함께 추가되었습니다.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;default&lt;/em&gt; 로 &lt;code&gt;Vector&lt;/code&gt; 는 두배씩 사이즈가 커지는 반면, &lt;code&gt;ArrayList&lt;/code&gt; 는 &lt;em&gt;50%&lt;/em&gt; 씩 증가합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LinkedList&lt;/code&gt; 도 &lt;em&gt;thread-unsafe&lt;/em&gt; 하기 때문에 대신 &lt;a href=&#34;http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html&#34;&gt;ConcurrentLinkedQueue&lt;/a&gt; 나 &lt;a href=&#34;http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingDeque.html&#34;&gt;LinkedBlockingDeque&lt;/a&gt; 를 이용할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(2) What is different between &lt;code&gt;Iterator&lt;/code&gt; and &lt;code&gt;ListIterator&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Iterator&lt;/code&gt; 를 이용해 &lt;code&gt;Set&lt;/code&gt; 등 컬렉션을 순회할 수 있지만 &lt;code&gt;ListIterator&lt;/code&gt; 는 &lt;code&gt;List&lt;/code&gt; 밖에 못 합니다&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Iterator&lt;/code&gt; 는 &lt;em&gt;forward-only&lt;/em&gt; 지만, &lt;code&gt;ListIterator&lt;/code&gt; 는 양방향 순회가 가능합니다&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ListIterator&lt;/code&gt; 는 &lt;em&gt;add&lt;/em&gt;, &lt;em&gt;replace&lt;/em&gt;, &lt;em&gt;getting index position&lt;/em&gt; 등의 기능이 더 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;참고로 &lt;em&gt;iterator&lt;/em&gt; 를 이용해 리스트를 순회하는 방법은&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;List&amp;lt;String&amp;gt; strList = new ArrayList&amp;lt;&amp;gt;();
+Iterator&amp;lt;String&amp;gt; it = strList.iterator();
+
+while(it.hasNext()){
+  String obj = it.next();
+  System.out.println(obj);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;set-interface-related&#34;&gt;Set interface related&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Set&lt;/code&gt; 은 &lt;em&gt;uniqueness of elements&lt;/em&gt; 를 보장합니다. 따라서 중복된 원소를 허용하지 않습니다. 만약 &lt;em&gt;ordering&lt;/em&gt; 이 있는 &lt;code&gt;Set&lt;/code&gt; 을 사용하고 싶다면 구현체로 &lt;code&gt;TreeSet&lt;/code&gt; 을 선택하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;strong&gt;How HashSet store elements?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;HashSet&lt;/code&gt; 은 &lt;em&gt;uniqueness&lt;/em&gt; 를 보장하기 위해 내부적으로 &lt;code&gt;Map&lt;/code&gt; 을 이용합니다. &lt;em&gt;key-value&lt;/em&gt; 를 저장하나, 모든 &lt;em&gt;value&lt;/em&gt; 를 같게끔 하죠.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private transient HashMap&amp;lt;E, Object&amp;gt; map;
+// This is added as value for each key
+private static final Object PRESENT = new Object();
+
+public boolean add(E e) {
+  return map.put(e, PRESENT) == null;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(2) Can a null element added to a &lt;code&gt;TreeSet&lt;/code&gt; or &lt;code&gt;HashSet&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;HashMap&lt;/code&gt;, &lt;code&gt;HashSet&lt;/code&gt; 은 하나의 &lt;em&gt;null-key&lt;/em&gt; 를 허용하지만, &lt;code&gt;TreeSet&lt;/code&gt;, &lt;code&gt;TreeMap&lt;/code&gt; 은 &lt;em&gt;null-key&lt;/em&gt; 를 허용하지 않습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;TreeMap&lt;/code&gt; 은 &lt;code&gt;NavigableMap&lt;/code&gt; 의 구현이고, &lt;code&gt;TreeSet&lt;/code&gt; 은 내부적으로 &lt;code&gt;NavigableMap&lt;/code&gt; 을 사용합니다. 그런데 &lt;code&gt;NavigableMap&lt;/code&gt; 이 &lt;em&gt;null-key&lt;/em&gt; 를 허용하지 않기 때문에, &lt;code&gt;TreeSet&lt;/code&gt;, &lt;code&gt;TreeMap&lt;/code&gt; 도 그렇습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;map-interface-related&#34;&gt;Map interface related&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Map&lt;/code&gt; 은 &lt;em&gt;key-value pair&lt;/em&gt; 를 저장하기 위해 사용합니다. &lt;code&gt;Map&lt;/code&gt; 인터페이스 구현체로 &lt;code&gt;HashMap&lt;/code&gt;, &lt;code&gt;LinkedHashMap&lt;/code&gt;, &lt;code&gt;HashTable&lt;/code&gt;, &lt;code&gt;EnumMap&lt;/code&gt;, &lt;code&gt;IdentityHashMap&lt;/code&gt;, &lt;code&gt;Properties&lt;/code&gt; 가 있습니다.&lt;/p&gt;
+
+&lt;p&gt;(1) Difference between &lt;code&gt;HashMap&lt;/code&gt; and &lt;code&gt;HashTable&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HashTable&lt;/code&gt; 은 &lt;em&gt;동기화 (synchronized)&lt;/em&gt; 되지만, &lt;code&gt;HashMap&lt;/code&gt; 은 그렇지 않습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HashTable&lt;/code&gt; 은 &lt;em&gt;null-key&lt;/em&gt; 나 &lt;em&gt;null-value&lt;/em&gt; 를 허용하지 않습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HashMap&lt;/code&gt; 의 &lt;em&gt;iterator&lt;/em&gt; 는 &lt;strong&gt;fail-fast&lt;/strong&gt; 인 반면 &lt;code&gt;HashTable&lt;/code&gt; 의 &lt;em&gt;enumerator&lt;/em&gt; 는 그렇지 않습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;참고로, &lt;em&gt;iterator&lt;/em&gt; 는 &lt;em&gt;iteration&lt;/em&gt; 동안 &lt;em&gt;caller&lt;/em&gt; 가 &lt;code&gt;remove&lt;/code&gt; 메소드를 이용해서 원소를 제거할 수 있지만, &lt;em&gt;enumerator&lt;/em&gt; 를 이용할때는 원소를 추가하거나 제거할 수 없습니다. 이런 기능 차이 때문에 &lt;em&gt;enumerator&lt;/em&gt; 가 기본적인 기능만 가지고 있고 더 빠릅니다. 또 다른 차이점은 &lt;em&gt;enumerator&lt;/em&gt; 는 &lt;code&gt;Stack&lt;/code&gt;, &lt;code&gt;Vector&lt;/code&gt; 처럼 레거시 클래스에 대해 사용합니다.&lt;/p&gt;
+
+&lt;p&gt;(2) What are &lt;code&gt;IdentityHashMap&lt;/code&gt; and &lt;code&gt;WeakHashMap&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;이부분은 &lt;a href=&#34;http://howtodoinjava.com/2013/07/09/useful-java-collection-interview-questions/#identityHashMap_weakHashMap_differences&#34;&gt;원문&lt;/a&gt;을 첨부합니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;IdentityHashMap&lt;/strong&gt; is similar to HashMap except that &lt;strong&gt;it uses reference equality when comparing elements&lt;/strong&gt;. IdentityHashMap class is not a widely used Map implementation. While this class implements the Map interface, it intentionally violates Map’s general contract, which mandates the use of the equals() method when comparing objects. IdentityHashMap is designed for use only in the rare cases wherein reference-equality semantics are required.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;WeakHashMap&lt;/strong&gt; is an implementation of the Map interface that &lt;strong&gt;stores only weak references to its keys&lt;/strong&gt;. Storing only weak references allows a key-value pair to be garbage collected when its key is no longer referenced outside of the WeakHashMap. This class is intended primarily for use with key objects whose equals methods test for object identity using the == operator. Once such a key is discarded it can never be recreated, so it is impossible to do a look-up of that key in a WeakHashMap at some later time and be surprised that its entry has been removed.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;more-questions&#34;&gt;More Questions&lt;/h3&gt;
+
+&lt;p&gt;(1) What do you understand by iterator &lt;strong&gt;fail-fast&lt;/strong&gt; property?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;fail-fast iterator&lt;/strong&gt; 는 &lt;em&gt;iteration&lt;/em&gt; 이 시작된 이후로 &lt;em&gt;collection&lt;/em&gt; 이 변경되는걸 알아채는 순간 &lt;code&gt;ConcurrentModificationException&lt;/code&gt; 을 던지면서 멈춥니다. 여기서 &lt;em&gt;변경&lt;/em&gt; 이란 한 스레드가 컬렉션을 순회하는 동안, 컬렉션에 있는 원소의 삭제, 변경 혹은 추가가 일어나는 것을 말합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;fail-fast&lt;/em&gt; 는 &lt;em&gt;modification count&lt;/em&gt; 란 것을 유지하고 있다가, &lt;em&gt;iteration thread&lt;/em&gt; 가 &lt;em&gt;modification count&lt;/em&gt; 의 변경을 알아채면 예외를 던지는 방식으로 구현됩니다.&lt;/p&gt;
+
+&lt;p&gt;(2) What is difference between &lt;strong&gt;fail-fast&lt;/strong&gt; and &lt;strong&gt;fail-safe&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;fail-safe iterator&lt;/strong&gt; 는 복사본에 대해 컬렉션 순회를 진행하기 때문에 원본에 변경이 일어나도 멈추지 않습니다. 일반적으로 &lt;code&gt;java.util.concurrent&lt;/code&gt; 에 있는 클래스들의 (e.g &lt;code&gt;ConcurrentHashMap&lt;/code&gt; 이나 &lt;code&gt;CopyOnWriteArrayList&lt;/code&gt;) &lt;em&gt;iterator&lt;/em&gt; 가 &lt;em&gt;fail-safe&lt;/em&gt; 입니다.&lt;/p&gt;
+
+&lt;p&gt;(3) How to avoid &lt;code&gt;ConcurrentModificationException&lt;/code&gt; while iterating a collection?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;먼저 &lt;em&gt;fail-safe iterator&lt;/em&gt; 를 사용할 수 있는지 확인합니다 &lt;em&gt;JDK 1.5&lt;/em&gt; 이상을 사용한다면, &lt;code&gt;ConcurrentHashMap&lt;/code&gt; 이나 &lt;code&gt;CopyOnWriteArrayList&lt;/code&gt; 를 사용할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;위 방법이 불가능하면 다음을 고려할 수 있으나, 퍼포먼스가 떨어질 수 있다는 점을 유의해야 합니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;list&lt;/em&gt; 를 &lt;em&gt;array&lt;/em&gt; 로 바꾸어, 순회합니다&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;list&lt;/em&gt; 를 순회하는 동안 &lt;em&gt;synchronized block&lt;/em&gt; 을 이용해 &lt;em&gt;lock&lt;/em&gt; 을 겁니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(4) What is difference between Synchronized Collection and Concurrent Collection?&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Java 5&lt;/em&gt; 와 함께 &lt;code&gt;ConcurrentHashMap&lt;/code&gt;, &lt;code&gt;CopyOnWriteArrayList&lt;/code&gt;, &lt;code&gt;BlockingQueue&lt;/code&gt; 등의 &lt;em&gt;concurrent collection&lt;/em&gt; 클래스들이 추가 되었습니다. 이 클래스들은 &lt;em&gt;synchronized collection&lt;/em&gt; 보다 성능이 더 나은데, 이는 일부분에만 &lt;em&gt;lock&lt;/em&gt; 을 걸기 때문입니다. 더 자세한 내용은 &lt;a href=&#34;http://javarevisited.blogspot.kr/2011/04/difference-between-concurrenthashmap.html&#34;&gt;여기로&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(5) What is &lt;code&gt;Comparable&lt;/code&gt; and &lt;code&gt;Comparator&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;자바에서 &lt;code&gt;TreeSet&lt;/code&gt; 이나 &lt;code&gt;TreeMap&lt;/code&gt; 처럼 &lt;em&gt;automatic sorting&lt;/em&gt; 기능이 있는 모든 컬렉션은 &lt;code&gt;compare&lt;/code&gt; 메소드를 사용합니다.&lt;/p&gt;
+
+&lt;p&gt;이 때 &lt;em&gt;element class&lt;/em&gt; 는 정렬을 위해 &lt;code&gt;Comparator&lt;/code&gt; &lt;strong&gt;또는&lt;/strong&gt; &lt;code&gt;Comparable&lt;/code&gt; 인터페이스를 반드시 구현해야 합니다. &lt;em&gt;wrapper class&lt;/em&gt; 인 &lt;code&gt;Integer&lt;/code&gt;, &lt;code&gt;Double&lt;/code&gt; 등이 &lt;code&gt;Comparable&lt;/code&gt; 인터페이스를 구현하는 이유가 바로 이것입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Comparable&lt;/code&gt; 은 원소가 컬렉션에 추가될때 자동적으로 정렬되도록 (&lt;em&gt;natural sorting&lt;/em&gt;) 하기 위해 사용하고, &lt;code&gt;Comparator&lt;/code&gt; 는 추가적인 정렬방법을 이용하기 위해 정의할 수 있습니다. &lt;a href=&#34;http://www.java2blog.com/2013/02/difference-between-comparator-and.html&#34;&gt;여기&lt;/a&gt;서 가져온 예제를 보면&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// Comparable
+public class Country implements Comparable&amp;lt;Country&amp;gt;{
+       @Override
+    public int compareTo(Country country) {
+        return (this.countryId &amp;lt; country.countryId ) ? -1: (this.countryId &amp;gt; country.countryId ) ? 1:0 ;
+}} 
+
+// Comparator
+
+Country indiaCountry=new Country(1, &amp;quot;India&amp;quot;);
+Country chinaCountry=new Country(4, &amp;quot;China&amp;quot;);
+Country nepalCountry=new Country(3, &amp;quot;Nepal&amp;quot;);
+Country bhutanCountry=new Country(2, &amp;quot;Bhutan&amp;quot;);
+        
+List&amp;lt;Country&amp;gt; listOfCountries = new ArrayList&amp;lt;Country&amp;gt;();
+listOfCountries.add(indiaCountry);
+listOfCountries.add(chinaCountry);
+listOfCountries.add(nepalCountry);
+listOfCountries.add(bhutanCountry); 
+
+Collections.sort(listOfCountries,new Comparator&amp;lt;Country&amp;gt;() {
+  @Override
+  public int compare(Country o1, Country o2) {
+    return o1.getCountryName().compareTo(o2.getCountryName());
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;a href=&#34;http://howtodoinjava.com/2013/07/09/useful-java-collection-interview-questions/#why_map_not_extend_collection&#34;&gt;Useful Java Collection Interview Questions&lt;/a&gt;&lt;br /&gt;
+(2) &lt;a href=&#34;http://websphereemerge.blogspot.kr/&#34;&gt;Title Image&lt;/a&gt;&lt;br /&gt;
+(3) &lt;a href=&#34;http://www.java-redefined.com/2014/05/java-collection-interview-questions.html&#34;&gt;http://www.java-redefined.com&lt;/a&gt;&lt;br /&gt;
+(4) &lt;a href=&#34;http://www.java2blog.com/2013/02/difference-between-comparator-and.html&#34;&gt;http://www.java2blog.com/&lt;/a&gt;&lt;br /&gt;
+(5) &lt;a href=&#34;http://www.javatpoint.com/java-collections-interview-questions&#34;&gt;http://www.javatpoint.com&lt;/a&gt;&lt;br /&gt;
+(6) &lt;a href=&#34;http://stackoverflow.com/questions/14200489/collection-iterator-remove-vs-collection-remove&#34;&gt;SO:  Iterator.remove() vs Collection.remove()&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

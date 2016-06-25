@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="">
+
+
+    <link rel="shortcut icon" href="https://1ambda.github.com/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Reactive Programming 5</title>
+    <link href="https://1ambda.github.com/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    
+
+  </head>
+  <body class="" data-url="/21/scala/reactive-programming-5/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="http://getgrav.org">
+  <svg id="grav-logo" width="100%" height="100%" viewBox="0 0 504 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <path d="M235.832,71.564l-7.98,-0.001c-1.213,0.001 -2.197,0.987 -2.197,2.204l0,15.327l-0.158,0.132c-4.696,3.962 -10.634,6.14 -16.719,6.14c-14.356,0 -26.034,-11.68 -26.034,-26.037c0,-14.358 11.678,-26.035 26.034,-26.035c5.582,0 10.919,1.767 15.437,5.113c0.877,0.649 2.093,0.56 2.866,-0.211l5.69,-5.69c0.444,-0.442 0.675,-1.055 0.639,-1.681c-0.034,-0.627 -0.336,-1.206 -0.828,-1.597c-6.76,-5.363 -15.214,-8.314 -23.805,-8.314c-21.18,0 -38.414,17.233 -38.414,38.415c0,21.183 17.234,38.415 38.414,38.415c10.937,0 21.397,-4.705 28.698,-12.914c0.358,-0.403 0.556,-0.921 0.556,-1.46l0,-19.603c0,-1.217 -0.985,-2.203 -2.2,-2.203"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M502.794,34.445c-0.408,-0.616 -1.1,-0.989 -1.838,-0.989l-8.684,0c-0.879,0 -1.673,0.522 -2.022,1.329l-24.483,56.839l-24.92,-56.852c-0.352,-0.799 -1.142,-1.316 -2.012,-1.316l-8.713,0c-0.744,0 -1.44,0.373 -1.843,0.995c-0.408,0.623 -0.476,1.408 -0.174,2.09l30.186,68.858c0.352,0.799 1.143,1.317 2.017,1.317l10.992,0c0.879,0 1.673,-0.527 2.021,-1.329l29.655,-68.861c0.289,-0.68 0.222,-1.461 -0.182,-2.081"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M388.683,34.772c-0.353,-0.798 -1.142,-1.316 -2.017,-1.316l-10.988,0c-0.879,0 -1.673,0.522 -2.021,1.329l-29.655,68.861c-0.294,0.675 -0.226,1.46 0.182,2.077c0.407,0.619 1.096,0.993 1.838,0.993l8.684,0c0.879,0 1.673,-0.526 2.022,-1.329l24.478,-56.842l24.92,56.854c0.353,0.798 1.143,1.317 2.013,1.317l8.717,0c0.744,0 1.44,-0.374 1.843,-0.993c0.408,-0.624 0.471,-1.41 0.174,-2.094l-30.19,-68.857Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M309.196,81.525l0.476,-0.229c8.675,-4.191 14.279,-13.087 14.279,-22.667c0,-13.881 -11.295,-25.174 -25.176,-25.174l-31.863,0c-1.214,0 -2.199,0.988 -2.199,2.202l0,68.855c0,1.219 0.985,2.204 2.199,2.204l7.979,0c1.214,0 2.2,-0.985 2.2,-2.204l0,-58.679l21.684,0c7.059,0 12.799,5.739 12.799,12.796c0,5.885 -3.996,10.989 -9.728,12.408c-1.032,0.261 -2.064,0.393 -3.071,0.393l-7.977,0c-0.829,0 -1.585,0.467 -1.959,1.205c-0.378,0.74 -0.305,1.625 0.187,2.296l22.62,30.884c0.412,0.566 1.07,0.901 1.771,0.901l9.915,0c0.827,0 1.587,-0.467 1.96,-1.207c0.378,-0.742 0.302,-1.629 -0.186,-2.296l-15.91,-21.688Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M107.191,80.969c-7.255,-4.794 -11.4,-8.845 -15.011,-16.109c-2.47,4.977 -8.236,12.376 -17.962,18.198c-4.856,15.106 -27.954,44.015 -35.43,39.916c-2.213,-1.212 -2.633,-2.808 -2.133,-4.456c0.536,-4.129 9.078,-13.62 9.078,-13.62c0,0 0.18,1.992 2.913,6.187c-3.609,-11.205 5.965,-25.031 8.5,-29.738c3.985,-1.269 4.274,-6.387 4.274,-6.387c0.255,-7.909 -3.278,-13.635 -6.701,-17.059c2.459,3.002 3.255,7.539 3.372,11.694l0,0.023c0.012,0.469 0.012,0.93 0.011,1.39c-0.117,3.439 -1.157,8.19 -3.383,8.19l0.006,0.03c-2.289,-0.098 -5.115,0.391 -7.639,1.18l-5.582,1.334c0,0 2.977,-0.136 4.584,1.252c-1.79,2.915 -5.769,6.533 -10.206,8.588c-6.457,2.995 -8.312,-2.964 -5.034,-6.838c0.805,-0.946 1.618,-1.745 2.387,-2.399c-0.495,-0.513 -0.807,-1.198 -0.889,-2.068c-0.001,-0.005 -0.004,-0.009 -0.005,-0.013c-0.45,-1.977 -0.202,-4.543 2.596,-8.623c0.551,-0.863 1.214,-1.748 2.007,-2.647c0.025,-0.031 0.046,-0.059 0.072,-0.089c0.034,-0.042 0.072,-0.08 0.108,-0.121c0.02,-0.023 0.039,-0.045 0.059,-0.068c0.2,-0.228 0.413,-0.45 0.639,-0.663c3.334,-3.414 8.599,-6.966 16.897,-10.152c9.675,-14.223 13.219,-16.89 13.219,-16.89c1.071,-1.096 2.943,-2.458 3.632,-2.805c-5.053,-8.781 -6.074,-21.158 -4.75,-24.493c-0.107,0.18 -0.206,0.365 -0.287,0.556c0.49,-1.143 0.819,-1.509 1.328,-2.111c1.381,-1.632 6.058,-2.488 7.737,0.971c0.895,1.844 1.063,4.232 1.034,6.023c-3.704,-0.193 -7.063,4.036 -7.063,4.036c0,0 3.067,-1.448 6.879,-1.473c0,0 1.015,0.883 2.283,2.542c-1.712,3.213 -4.524,10.021 -2.488,17.168c0.338,1.408 0.849,2.619 1.483,3.648c0.024,0.045 0.044,0.089 0.069,0.135c0.051,0.066 0.096,0.122 0.144,0.183c3.368,5.072 9.542,5.665 9.542,5.665c-2.906,-1.45 -5.274,-3.76 -6.816,-6.56c-0.8,-1.498 -1.291,-2.762 -1.592,-3.761c-1.636,-6.313 0.771,-9.999 2.149,-12.471c3.17,-4.917 8.944,-7.893 15.151,-7.185c8.712,0.995 14.968,8.862 13.973,17.571c-0.608,5.321 -3.781,9.723 -8.142,12.117c1.049,2.839 -0.073,6.28 -0.073,6.28c2.642,3.323 2.758,5.238 2.667,7.017c-3.357,-0.565 -6.618,1.701 -6.618,1.701c0,0 6.476,-1.546 10.238,1.81c2.446,2.631 4.078,5.009 5.051,6.766c1.393,2.505 7.859,2.683 7.123,7.188c-0.737,4.499 -5.669,4.542 -13.401,-0.56M69.571,0c-38.424,0 -69.571,31.148 -69.571,69.567c0,38.422 31.147,69.573 69.571,69.573c38.42,0 69.568,-31.151 69.568,-69.573c0,-38.42 -31.148,-69.567 -69.568,-69.567"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M73.796,51.693c0.813,-0.814 0.813,-2.134 0,-2.947c-0.815,-0.814 -2.133,-0.814 -2.947,0c-0.815,0.813 -0.815,2.133 0,2.947c0.814,0.813 2.132,0.813 2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M66.445,53.149c-0.814,0.813 -0.814,2.133 0,2.947c0.813,0.814 2.133,0.814 2.947,0c0.813,-0.814 0.813,-2.134 0,-2.947c-0.814,-0.813 -2.134,-0.813 -2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M79.231,54.233c-1.274,-1.274 -3.339,-1.272 -4.611,0l-2.713,2.712c-1.274,1.275 -1.274,3.339 0,4.612l2.978,2.978c1.274,1.275 3.338,1.274 4.611,0l2.712,-2.712c1.274,-1.274 1.274,-3.339 0,-4.612l-2.977,-2.978Z" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M95.759,41.445c-2.151,-2.578 1.869,-7.257 4.391,-4.463c4.645,5.148 -2.237,7.041 -4.391,4.463M105.004,44.132c3.442,-6.553 -1.427,-10.381 -4.773,-13.523c-5.36,-5.039 -10.706,-7.217 -16.811,-0.241c-6.102,6.977 -2.226,15.068 3.356,19.061c5.584,3.994 14.782,1.255 18.228,-5.297"
+      style="fill:#000;fill-rule:nonzero;"></path>
+  </svg>
+</a>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.com/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.com/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.com/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.com/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.com/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.com/23/javascript/javascript-inheritance/">
+                <span>javascript inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.com/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.com/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.com/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.com/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.com/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.com/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.com/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.com/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.com/21/scala/" itemprop="url"><span itemprop="title">Scala</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Reactive Programming 5</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#akka-actor">Akka, Actor</a>
+<ul>
+<li><a href="#why-actors">Why Actors?</a></li>
+<li><a href="#the-actor-model">The Actor Model</a>
+<ul>
+<li><a href="#the-actor-s-context">The Actor&rsquo;s Context</a></li>
+<li><a href="#creating-and-stopping">Creating and Stopping</a></li>
+</ul></li>
+<li><a href="#message-processcing-semantics">Message Processcing Semantics</a>
+<ul>
+<li><a href="#bank-account-using-actor">Bank Account using Actor</a></li>
+<li><a href="#message-ordering">Message Ordering</a></li>
+</ul></li>
+<li><a href="#designing-actor-system">Designing Actor System</a>
+<ul>
+<li><a href="#web-client">Web Client</a></li>
+<li><a href="#finding-links">Finding Links</a></li>
+<li><a href="#getter-actor">Getter Actor</a></li>
+<li><a href="#actor-based-logging">Actor-Based Logging</a></li>
+<li><a href="#handling-timeouts">Handling Timeouts</a></li>
+<li><a href="#scheduler">Scheduler</a></li>
+<li><a href="#the-receptionist">The Receptionist</a></li>
+<li><a href="#main">Main</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul></li>
+<li><a href="#testing-actor-system">Testing Actor System</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Reactive Programming 5</h1>
+                
+
+
+
+<h2 id="akka-actor">Akka, Actor</h2>
+
+<p><img src="http://prabhubuzz.files.wordpress.com/2012/09/demo1.png" alt="" />
+<p align="center">(<a href="http://prabhubuzz.wordpress.com">http://prabhubuzz.wordpress.com</a>)</p></p>
+
+<p><em>Actor</em> 는 원래 1973년에 인공지능 연구를 위해 개발되었는데, 1995년에는 <em>Erlang/OTP</em> 에서 텔레커뮤니케이션 플랫폼을 위해 사용되기도했다. 2006년에는 스칼라 스탠다드 라이브러리로 구현되었고, 2009년에는 <em>Akka</em> 가 만들어졌다.</p>
+
+<h3 id="why-actors">Why Actors?</h3>
+
+<p>액터가 왜 필요한지를 기존의 스레드를 사용하는 방법과 비교해 알아보자. 지난번에 배웠던 <em>bank account</em> 예제를 들고오면</p>
+
+<pre><code class="language-scala">class BankAccount {
+  private var balance = 0
+  
+  def deposit(amount: Int): Unit = 
+    if (amount &gt; 0) balance = balance + amount
+    
+  def withraw(amount: Int): Int = 
+    if (0 &lt; amount &amp;&amp; amount &lt;= balance) {
+      balance = balance - amount
+      balance
+    } else throw new Error(&quot;insufficient funds&quot;)
+}
+</code></pre>
+
+<p>이 예제를 두개의 스레드로 동시에 돌리면 충돌이 난다. 잔고가 얼마인지는 ´떤 스레드가 나중에 실행되느냐에 따라 달라질 수 있다.</p>
+
+<p>이를 해결하기 위한 일반적인 방법은 <em>synchronization</em> 을 이용하는 것이다. <em>lock, mutex, semaphore</em> 등을 이용할 수 있다.</p>
+
+<p>스칼라도 이를 지원하기 위해 모든 오브젝트마다 <em>synchronization</em> 블럭을 설정할 수 있다.</p>
+
+<pre><code class="language-scala">class BankAccount {
+  private var balance = 0
+  
+  def deposit(amount: Int): Unit = this.synchronized { 
+    if (amount &gt; 0) balance = balance + amount
+  }
+    
+  def withraw(amount: Int): Int = this.synchronized {
+    if (0 &lt; amount &amp;&amp; amount &lt;= balance) {
+      balance = balance - amount
+      balance
+    } else throw new Error(&quot;insufficient funds&quot;)
+  }
+}
+</code></pre>
+
+<p><code>deposit</code> 도 <code>balance</code> 를 수정하기 때문에 <em>synchronization</em> 블럭이 필요하다. 이 말은 결국 <code>balance</code> 를 수정하는 모든 곳에서 동기화 블럭을 작성해야 한다는 뜻이다.</p>
+
+<pre><code class="language-scala">def transfer(from: BankAccount, to: BankAccount, amount: Int): Unit = {
+  from.synchronized {
+    to.synchronized {
+      from.withdraw(amount)
+      to.deposit(amount)
+    }
+  }
+}
+</code></pre>
+
+<p>과도한 동기화는 데드락을 만들 수 있다. 이를 피하기 위해 <em>ordered lock</em> 을 이용하는 등 다양한 방법이 있다. 그러나 코드가 복잡해진다. 이건 간단한 예제라 별로 복잡해질게 없지만, 더 커다란 예제라면 끔찍해진다.</p>
+
+<ul>
+<li>blocking synchronization introduces <strong>dead-lock</strong></li>
+<li>blocking is bad for CPU utilization</li>
+<li>synchronous communication couples sender and receiver</li>
+</ul>
+
+<p><em>non-blocking object</em> 를 이용하되, 병렬로 실행할 수 있는 방법은 없을까? 그게 바로 액터다.</p>
+
+<h3 id="the-actor-model">The Actor Model</h3>
+
+<blockquote>
+<p>The Actor Model represents objects and their interactions, resembling human organizations are built upon the laws of physics</p>
+</blockquote>
+
+<ul>
+<li>Actor is an object with <strong>identity</strong></li>
+<li>Actor <strong>has a behavior</strong></li>
+<li>Actor only interacts using <strong>asynchonous message passing</strong></li>
+</ul>
+
+<pre><code class="language-scala">type Receive = PartialFunction[Any, Unit]
+
+trait Actor {
+  def receive: Receive
+  ...
+}
+</code></pre>
+
+<p>액터 타입에서 말해주듯이 메세지를 받는다. 액터는 <code>PartialFunction[Any, Unit]</code> 에서 볼 수 있듯이 어떤 인자든 처리할 수 있지만 아무것도 돌려주진 않는다. 타입 자체가 <em>asynchronous</em> 하게 메세지를 처리함을 보여준다.</p>
+
+<p>간단한 액터를 만들어 보면</p>
+
+<pre><code class="language-scala">class Counter extends Actor {
+  var count = 0 
+  def receive = {
+    case &quot;incr&quot; =&gt; count += 1
+  }
+}
+</code></pre>
+
+<p><code>&quot;incr&quot;</code> 만 받고, 자신은 메세지를 주지 않기 때문에 별로 할게 없다. 좀 더 예제를 키워보면</p>
+
+<pre><code class="language-scala">class Counter extends Actor {
+  var count = 0 
+  def receive = {
+    case &quot;incr&quot; =&gt; count += 1
+    case (&quot;get&quot;, customer: ActorRef) =&gt; customer ! count
+  }
+}
+</code></pre>
+
+<p><em>akka</em> 에서 액터는 <code>ActorRef</code> 라는 <em>address</em> 를 이용해서 메세지를 보낼 수 있다. <code>!</code> 는 <em>tell</em> 이라 읽는다. 메세지를 보낸단 뜻이다.</p>
+
+<pre><code class="language-scala">trait Actor {
+  implicit val self: ActorRef
+  def sender: ActorRef
+  ...
+}
+
+abstract class ActorRef {
+  def !(msg: Any)(implicit sender ActorRef = Actor.noSender): Unit
+  def tell(msg: Any, sender: ActorRef) = this.!(msg)(sender)
+  ...
+}
+</code></pre>
+
+<p>얼랭에서는 매번 <code>sender</code> 를 지정하는 모양이다. 그러나 이건 자주 사용되는 패턴이기때문에 메세지를 보낼때 <code>sender</code> 를 <em>implicit</em> 하게 보내 이렇게 코드를 작성할 수 있다.</p>
+
+<pre><code class="language-scala">def receive = {
+    case &quot;incr&quot; =&gt; count += 1
+    case (&quot;get&quot;, customer: ActorRef) =&gt; customer ! count
+}
+
+// same
+def receive = {
+    case &quot;incr&quot; =&gt; count += 1
+    case &quot;get&quot; =&gt; sender ! count
+}
+</code></pre>
+
+<h4 id="the-actor-s-context">The Actor&rsquo;s Context</h4>
+
+<pre><code class="language-scala">trait ActorContext {
+  def become(behavior: Receive, discardOld: Boolean = true): Unit
+  def unbecome(): Unit
+  ...
+}
+
+trait Actor {
+  implicit val context: ActorContext
+}
+</code></pre>
+
+<p>액터는 <code>ActorContext</code> 라는 <em>behavior stack</em> 을 가지고 있는데, <code>become</code> 이용해 <em>push</em> 하거나 <code>unbecome</code> 을 이용해 <em>pop</em> 할 수 있다.</p>
+
+<pre><code class="language-scala">class Counter extends Actor {
+  def counter(n: Int): Receive = {
+    case &quot;incr&quot; =&gt; context.become(counter(n + 1))
+    case &quot;get&quot; =&gt; sender ! n
+  }
+  
+  def receive = counter(0)
+}
+</code></pre>
+
+<p>여기서 볼 수 있는 것은</p>
+
+<ul>
+<li>state change is explicit (<code>become</code>)</li>
+<li>state is scoped to current behavior (<code>context</code>)</li>
+</ul>
+
+<p>일종의 <em>asynchronous tail-recursion</em> 과 비슷하다.</p>
+
+<h4 id="creating-and-stopping">Creating and Stopping</h4>
+
+<p>액터는 액터에 의해서 생성되고, 자기 자신에 의해서도 수행이 중단될 수 있다.</p>
+
+<pre><code class="language-scala">trait ActorContext {
+  def actorOf(p: Props, name: String): ActorRef
+  def stop(a: ActorRef): Unit
+}
+</code></pre>
+
+<p>이제 <code>Counter</code> 에게 메세지를 보내는 <code>CounterMain</code> 을 만들면</p>
+
+<pre><code class="language-scala">class CounterMain extends Actor {
+  val counter = context.actorOf(Props[Counter], &quot;counter&quot;)
+  
+  counter ! &quot;incr&quot;
+  counter ! &quot;incr&quot;
+  counter ! &quot;incr&quot;
+  counter ! &quot;get&quot;
+  
+  def receive = {
+    case count: Int = &gt;
+      println(s&quot;count was $count&quot;)
+      context.stop(self)
+  }
+}
+</code></pre>
+
+<p>돌리려면 <code>sbt &quot;run-akka akka.Main CounterMain&quot;</code> 처럼 실행해야 한다. <em>sbt</em> 세팅은</p>
+
+<pre><code class="language-scaka">import sbt._
+import Process._
+import Keys._
+
+name := &quot;reactive-programming&quot;
+
+version := &quot;1.0&quot;
+
+scalaVersion := &quot;2.11.2&quot;
+
+resolvers += &quot;Typesafe Repository&quot; at &quot;http://repo.typesafe.com/typesafe/releases/&quot;
+
+libraryDependencies ++= Seq(
+  &quot;org.scalatest&quot; % &quot;scalatest_2.11&quot; % &quot;2.2.1&quot; % &quot;test&quot;,
+  &quot;io.reactivex&quot; %% &quot;rxscala&quot; % &quot;0.22.0&quot;,
+  &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % &quot;2.3.8&quot;
+)
+
+testOptions in Test += Tests.Argument(&quot;-oI&quot;)
+</code></pre>
+
+<p>전체 코드는</p>
+
+<pre><code class="language-scala">package coursera.chapter5
+
+import akka.actor.Actor
+import akka.actor.Props
+
+class Counter extends Actor {
+  var count = 0
+
+  def receive = {
+    case &quot;incr&quot; =&gt;
+      println(&quot;Counter received 'incr'&quot;)
+      count += 1
+    case &quot;get&quot; =&gt; sender ! count
+  }
+}
+
+// sbt run-main akka.Main coursera.chapter.CounterMain
+class CounterMain extends Actor {
+
+  val counter = context.actorOf(Props[Counter], &quot;counter&quot;)
+
+  counter ! &quot;incr&quot;
+  counter ! &quot;incr&quot;
+  counter ! &quot;incr&quot;
+  counter ! &quot;get&quot;
+
+  def receive = {
+    case count: Int =&gt;
+      println(s&quot;count was $count&quot;)
+      context.stop(self)
+  }
+}
+
+// run main actor
+&gt; run-main akka.Main coursera.chapter5.CounterMain
+[info] Running akka.Main coursera.chapter5.CounterMain
+Counter received 'incr'
+Counter received 'incr'
+Counter received 'incr'
+count was 3
+[INFO] [12/27/2014 16:23:40.182] [Main-akka.actor.default-dispatcher-2] [akka://Main/user/app-terminator] application supervisor has terminated, shutting down
+[success] Total time: 1 s, completed Dec 27, 2014 4:23:40 PM
+&gt;
+</code></pre>
+
+<p>정리하자면 액터 모델에서의 <em>computation</em> 은</p>
+
+<ul>
+<li>send message</li>
+<li>create actors</li>
+<li>designate the behavior for the next message</li>
+</ul>
+
+<h3 id="message-processcing-semantics">Message Processcing Semantics</h3>
+
+<p>액터의 상태를 직접적으로 변경할 수 있는 방법은 없다. 상태를 변경하려면 메세지를 보내야 한다. 그리고 메세지를 보내려면 <em>address, 주소</em> <code>ActorRef</code> 를 알고 있어야 한다.</p>
+
+<ul>
+<li>every actor knows its own address <code>self</code></li>
+<li>creating an actor returns its address</li>
+<li>addresses can be sent within be sent within messages (e.g <code>sender</code>)</li>
+</ul>
+
+<p>액터를  보면 서로 독립적인 <em>computation, 연산</em> 을 수행한다. 이들은 병렬적으로 실행되며, 서로 커뮤니케이션 할 수 있는 유일한 방법은 메세지를 보내는 것 뿐이다.</p>
+
+<ul>
+<li>local execution, no notion of global synchronization</li>
+<li>all actors run fully concurrently</li>
+<li>message-passing primitive is one-way communication</li>
+</ul>
+
+<p>그리고 액터 하나를 기준으로 보면, <em>single-threaded</em> 로 처리 될 수 있다.</p>
+
+<ul>
+<li>messages are recived sequentially</li>
+<li>behavior change is effective before processing the next message</li>
+<li>processing one message is the atomic unit of execution</li>
+</ul>
+
+<p>메세지를 처리하는 메소드는 <em>synchronized method</em> 처럼 동작하지만 블러킹 없이 큐에 메세지를 넣는것으로 대신한다.</p>
+
+<h4 id="bank-account-using-actor">Bank Account using Actor</h4>
+
+<p>액터의 메세지를 <em>companion object</em> 에 정의하는 것 부터 시작하자.</p>
+
+<pre><code class="language-scala">package coursera.chapter5.banking
+
+import akka.actor.Actor
+import akka.actor.Props
+
+object Account {
+  case class Deposit(amount: BigInt) {
+    require(amount &gt; 0)
+  }
+  
+  case class Withdraw(amount: BigInt) {
+    require(amount &gt; 0)
+  }
+  
+  case object Done
+  case object Failed
+}
+
+class Account extends Actor {
+
+  import Account._
+
+  var balance = BigInt(0)
+  
+  def receive = {
+    case Deposit(amount) =&gt; 
+      balance += amount
+      sender ! Done                      
+    case Withdraw(amount) if amount &lt;= balance =&gt;
+      balance -= amount
+      sender ! Done
+    case _ =&gt;
+      sender ! Failed
+  }
+}
+</code></pre>
+
+<p><em>transfer</em> 를 구현하려면 한 액터(<code>BankAccount</code>) 로 부터 인출하고, 다른 액터에게 같은 금액을 입금하라고 명령을 내리는 액터를 만들면 된다.</p>
+
+<pre><code class="language-scala">package coursera.chapter5.banking
+
+import akka.actor.{Actor, Props, ActorRef}
+
+object WireTransfer {
+  case class Transfer(from: ActorRef, to: ActorRef, amount: BigInt)
+  case object Done
+  case object Failed
+}
+
+class WireTransfer extends Actor {
+  import WireTransfer._
+
+  def receive: Receive = {
+    case Transfer(from, to, amount) =&gt;
+      from ! Account.Withdraw(amount)
+      context.become(awaitFrom(to, amount, sender))
+  }
+
+  def awaitFrom(to: ActorRef, amount: BigInt, customer: ActorRef): Receive = {
+    case Account.Done =&gt;
+      to ! Account.Deposit(amount)
+      context.become(awaitTo(customer))
+    case Account.Failed =&gt; 
+      customer ! Failed
+      context.stop(self)
+  }
+
+  def awaitTo(customer: ActorRef): Receive = {
+    case Account.Done =&gt;
+      customer ! Done
+      context.stop(self)
+    case Account.Failed =&gt;
+      customer ! Failed
+      context.stop(self)
+  }
+}
+</code></pre>
+
+<p>디버깅 위해 <code>akka.event.LoggingReceive</code> 를 구현한 <code>Main</code> 을 보자.</p>
+
+<pre><code class="language-scala">package coursera.chapter5.banking
+
+import akka.actor.Actor
+import akka.actor.Props
+import akka.event.LoggingReceive
+
+// in sbt
+// &gt; run-main akka.Main coursera.chapter5.banking.Main
+class Main extends Actor {
+
+  val accA = context.actorOf(Props[Account], &quot;accA&quot;)
+  val accB = context.actorOf(Props[Account], &quot;accB&quot;)
+
+  accA ! Account.Deposit(50)
+
+  def receive = LoggingReceive {
+    case Account.Done =&gt; transfer(50)
+  }
+
+  def transfer(amount: BigInt): Unit = {
+    // transcation
+    val tx = context.actorOf(Props[WireTransfer], &quot;tx&quot;)
+
+    tx ! WireTransfer.Transfer(accA, accB, amount)
+    context.become(LoggingReceive {
+      case WireTransfer.Done =&gt;
+        println(&quot;successfully transfered&quot;)
+        context.stop(self)
+    })
+  }
+}
+</code></pre>
+
+<p>실행하려면 세팅을 좀 바꿔야한다. 나는 <code>main</code> 에서 그냥 실행하니까, <code>main/resources</code> 밑에 <code>application.conf</code> 를 만들고 이 세팅을 넣으면 된다. <code>test</code> 에서 실행하면 마찬가지로 <code>test/resources</code> 에 넣으면 되고.</p>
+
+<pre><code>akka {
+  loglevel = &quot;DEBUG&quot;
+    actor {
+      debug {
+        receive = on
+      }
+    }
+}
+</code></pre>
+
+<p>잡다구리한거 제거하고 로그를 뽑으면</p>
+
+<pre><code class="language-scala">&gt; run-main akka.Main coursera.chapter5.banking.Main
+[accountA] received handled message Deposit(50)
+[Main] received handled message Done
+[accountA] received handled message Withdraw(50)
+[accountB] received handled message Deposit(50)
+successfully transfered
+[Main] received handled message Done
+</code></pre>
+
+<p>액터 모델에서 메세지 전송은</p>
+
+<blockquote>
+<p>all communication is inherently unreliable</p>
+</blockquote>
+
+<p>즉, 메세지가 전달되지 않을수도 있다는 뜻이다. 근데 이건 액터 모델뿐만 아니라 <em>synchronous</em> 에서도 마찬가지다. 컴퓨터가 크래시 나거나, 네트워크가 끊기거나.</p>
+
+<p>그래서 프로토콜을 만들어 메세지가 실제로 전송되었는지 확인해야 한다.</p>
+
+<blockquote>
+<p>delivery of a message requires eventual availability of channel, recipient</p>
+</blockquote>
+
+<p>3가지 전략을 사용할 수 있는데</p>
+
+<ul>
+<li><strong>at-most-once:</strong> sending once deilvers <code>[0, 1]</code> times</li>
+<li><strong>at-least-once:</strong> resending until acknoledged delivers <code>[1, ~</code> times</li>
+<li><strong>exactly-once:</strong> processing only first reception delivers 1 time</li>
+</ul>
+
+<p>두번째 전략의 경우 센더가 메세지를 다시 보내기 위해 가지고 있어야 한다. 세번째 전략은 가장 비용이 큰 전략인데, 리시버가 메세지가 이미 처리되었는지 아닌지를 판별할 수 있어야 한다.</p>
+
+<p><em>reliability</em> 를 위해</p>
+
+<ul>
+<li>모든 메세지가 <em>persisted</em> 되고 (저장된다는 뜻인듯)</li>
+<li><em>unique correlation ID</em> 를 지정할 수 있고</li>
+<li>성공할때까지 메세지를 계속 보낼 수 있다.</li>
+</ul>
+
+<blockquote>
+<p>Reliability can only be ensured by <strong>business-level acknowledgement</strong></p>
+</blockquote>
+
+<p>근데 실제로는 리시버로부터 응답이 오기전까진 제대로 보내졌는지 알 수 없으므로 비즈니스 레벨 측면에서 신뢰성을 정의해야한다는 뜻인것 같다.</p>
+
+<p>은행계좌 예제에 지금까지 논의한 <em>reliability</em> 를 추가하기 위해</p>
+
+<ul>
+<li>log acivities of <code>WireTransfer</code> to persistent storage</li>
+<li>each transfer has a unique ID</li>
+<li>add ID to <code>Withdraw</code> and <code>Deposit</code></li>
+<li>store IDs of completed actions within <code>BankAccount</code></li>
+</ul>
+
+<h4 id="message-ordering">Message Ordering</h4>
+
+<p>본래 액터 모델에는 순서와 관련된 스펙이 없다고 한다. <em>akka</em> 에서는 이 부분을 수정하여 똑같은 목적지로 메세지를 보냈다면, 보낸 순서대로 메세지가 도착한다고 한다.</p>
+
+<blockquote>
+<p>If an actor sends multiple messages to the same destination, they will not arrive out of order (this is <strong>Akka-specific</strong>)</p>
+</blockquote>
+
+<p><em>E</em> 언어에서는 더 강화된 룰이 있다고 한다. <em>akka</em> 와는 좀 다른측면에 집중하기 때문이라고 함.</p>
+
+<h3 id="designing-actor-system">Designing Actor System</h3>
+
+<p>액터 모델을 따르는 크롤러를 구현해보자. 웹페이지를 긁어오는 부분부터 보면</p>
+
+<h4 id="web-client">Web Client</h4>
+
+<pre><code class="language-scala">val client = new AsyncHttpClient
+def get(url: String): String = {
+  val res = client.prepareGet(rul).execute().get
+  if (res.getStatusCode &lt; 400)
+    res.getResponseBodyExcerpt(131072) // 128KB
+  else throw BadStatus(response.getStatusCode)
+}
+</code></pre>
+
+<p>근데, 긁어오는 부분이 블러킹이라 좀 그렇다.</p>
+
+<ul>
+<li>액터에서 이 코드를 사용하면 긁는동안 다른 요청에 반응을 못하고,</li>
+<li>이 액터가 반응을 못하면 다른 액터로 그 영향이 전파된다. 수천개의 액터를 가지고있다면..</li>
+</ul>
+
+<pre><code class="language-scala">private val client = new AsyncHttpClient
+
+def ge(url: String)(implicit exec: Executor): Future[String] = {
+  val f = client.prepareGet(url).execute();
+  val p = Promis[String]()
+  
+  f.addListener(new Runnable {
+    def run = {
+      val res = f.get
+      if (res.getStatusCode &lt; 400)
+        p.success(res.getResponseBodyExcerpt(131072))
+      else p.failure(BadStatus(response.getStatusCode))
+    }
+  }, exec)
+  
+  p.future
+}
+</code></pre>
+
+<h4 id="finding-links">Finding Links</h4>
+
+<pre><code class="language-scala">val A_TAG = &quot;(?i)&lt;a ([^&gt;]+)&gt;.+?&lt;/a&gt;&quot;.r
+val HREF_ATTR = &quot;&quot;&quot;\s*(?i)href\s*=\s*(?:&quot;([^&quot;]*)&quot;|'([^']*)'|([^'&quot;&gt;\s]+))\s*&quot;&quot;&quot;.r
+
+def findLinks(body: String): Iterator[String] = {
+  for {
+    anchor &lt;- A_TAG.findAllMatchIn(body)
+    HREF_ATTR(dquot, quot, bare) &lt;- anchor.subgroups
+  } yield if (dquot != null) dquot
+  else if (quot != null) quot
+  else bare
+} 
+</code></pre>
+
+<p><code>&lt;a href=</code> 부분이 쌍따옴표나, 따옴표로 감싸져있거나, 아니면 그냥 링크부분이 문자열일 수 있으므로 나눠서 찾아본다.</p>
+
+<h4 id="getter-actor">Getter Actor</h4>
+
+<pre><code class="language-scala">class Getter(url: String, depth: Int) extends Actor {
+  implicit val exec = 
+    context.dispatcher.asInstanceOf[Executor with ExecutionContext]
+    
+  val future = WebClient.get(url)
+  
+  future.onComplete {
+    case Success(body) =&gt; self ! body
+    case Failure(err)  =&gt; self ! Status.Failure(err)
+  }
+  
+  ...
+  
+}
+</code></pre>
+
+<p>이건 너무나 자주 나오는 패턴매칭이므로 <em>akka</em> 에서는 <code>pipeTo</code> 를 이용해 이렇게 줄일 수 있다.</p>
+
+<pre><code class="language-scala">class Getter(url: String, depth: Int) extends Actor {
+  implicit val exec = 
+    context.dispatcher.asInstanceOf[Executor with ExecutionContext]
+    
+  val future = WebClient.get(url)
+  future.pipeTo(self)
+  
+  // or
+  WebClient get url pipeTo self
+  ... 
+}
+</code></pre>
+
+<p>여기서 <code>get</code> 과 <code>pipeTo</code> 가 비동기로 실행되야하기 때문에 <code>Executor</code> 가 필요하다. 그리고 이 <code>dispatcher</code> 는 상당히 중요한데, 이 디스패처가 액터를 실행하고, 퓨처를 실행한다. 그리고 이 디스패처는 공유될 수 있다.</p>
+
+<blockquote>
+<p>Actors are run by a dispatcher (potentially shared) which can also run Futures</p>
+</blockquote>
+
+<p>메세지를 받는 부분은</p>
+
+<pre><code class="language-scala">class Getter(url: String, depth: Int) extends Actor {
+  ...
+  
+  def receive = {
+    case body: String =&gt;
+      for (link &lt;- findLinks(body))
+        context.parent ! Controller.Check(link, depth)
+      stop()
+    case _: Status.Failure =&gt; stop()
+  }
+  
+  def stop(): Unit = {
+    context.parent ! Done
+    context.stop(self)
+  }
+}
+</code></pre>
+
+<p>모든 액터는 다른 액터에 의해 만들어지기 때문에 <code>context.parent</code> 로 접근할 수 있다.</p>
+
+<h4 id="actor-based-logging">Actor-Based Logging</h4>
+
+<ul>
+<li>Logging includes <em>IO</em> which can block indefinitely</li>
+<li><em>Akka</em>&rsquo;s logging passes that task to dedicated actors</li>
+</ul>
+
+<pre><code class="language-scala">class Controller extends Actor with AtcorLogging {
+  var cache = Set.empty[String]
+  var children = Set.empty[ActorRef]
+  
+  def receive = {
+    case Check(url, depth) =&gt;
+      log.debug(&quot;{} checking{}&quot;, depth, url)
+      if (!cache(url) &amp;&amp; depth &gt; 0)
+        children += context.actorOf(Props(new Getter(url, depth - 1)))
+      cache += url
+    case Getter.Done =&gt;
+      children -= sender
+      if (children.isEmpty) context.parent ! Result(cache)
+  }
+}
+</code></pre>
+
+<p>다른 쿼리를 처리하는 도중에 <code>Result(cache)</code> 가 부모에게 전송되었다고 하자. <em>mutable set</em> 이면 끔찍하다. 그러나 <em>immutable set</em> 을 사용하기 때문에 공유해도 문제 없다.</p>
+
+<h4 id="handling-timeouts">Handling Timeouts</h4>
+
+<p>웹서버가 어마어마하게 늦게 응답한다면 어떻게 할까?</p>
+
+<pre><code class="language-scala">class Controller extends Actor with AtcorLogging {
+  context.setReceiveTimeout(10 seconds)
+  
+  ...
+  
+  def receive = {
+    case Check       ...
+    case Getter.Done ...
+    case ReceiveTimeout =&gt; children foreach (_ ! Getter.Abort)
+  }
+}
+
+class Getter(url: String, depth: Int) extends Actor {
+  def receive = {
+    ...
+    case Abort =&gt; stop()
+  }
+  
+  ...
+}
+</code></pre>
+
+<h4 id="scheduler">Scheduler</h4>
+
+<p><em>akka</em> 는 <em>high volume</em>, <em>short duration</em>, <em>frequent cancellation</em> 을 위한 <em>time service</em> 를 제공한다. 스케쥴러도 그 중 하나다</p>
+
+<pre><code class="language-scala">trait Scheduler {
+  def scheduleOnce(delay: FiniteDuration, target: ActorRef, msg: Any)
+                   (implicit ec: ExecutionContext): Cancellable
+  def scheduleOnce(delay: FiniteDuration)(block: =&gt; Unit)
+                   (implicit ec: ExecutionContext): Cancellable
+  def scheduleOnce(delay: FiniteDuration, run: Runnable)
+                   (implicit ec: ExecutionContext): Cancellable                 
+}
+</code></pre>
+
+<p>태스크의 실행과 취소가 리소스를 두고 경쟁할 수 있기 때문에 취소가 호출된 후 메세지를 받는 일도 생긴다. 그러나 취소요청된 메세지는 저장되기때문에 필터링 할 수 있어 별 문제가 안된다.</p>
+
+<p>이 스케쥴러를 이용하면 위에서 본 취소 코드를 이렇게도 작성하면&hellip;<strong>안된다</strong></p>
+
+<pre><code class="language-scala">class Controller extends Actor with AtcorLogging {
+  import context.dispatcher
+  var children = Set.empty[ActorRef]
+  
+  context.system.scheduler.scheduleOnce(10 seconds) {
+    children foreach (_ ! Getter.Abort)
+  }
+  
+  ...
+}
+</code></pre>
+
+<p>스케쥴러와 액터의 컨텍스트가 다르기 때문에 동시에 <code>children</code> 을 수정하는 코드다. <strong>not thread-safe</strong> 다. 이건 컴파일러 에러도 안준다.</p>
+
+<p>액터의 컨텍스트에 접근하려면 메세지를 보내야 한다.</p>
+
+<pre><code class="language-scala">class Controller extends Actor with AtcorLogging {
+  import context.dispatcher
+  var children = Set.empty[ActorRef]
+  
+  context.system.scheduler.scheduleOnce(10 seconds, self, Timeout)
+  
+  def receive {
+    ...
+    case Timeout =&gt; children foreach (_ ! Getter.Abort)
+  }
+  
+  ...
+}
+</code></pre>
+
+<p>비슷한 문제를 더 살펴보자.</p>
+
+<pre><code class="language-scala">class Cache extends Actor {
+  val cache = Map.empty[String, String]
+  def receive = {
+    case Get(url) =&gt;
+      if (cache contains url) sender ! cache(url)
+      else
+        WebClient get url foreach { body =&gt;
+          cache += url -&gt; body // buggy
+          sender ! body
+        }  
+  }
+}
+</code></pre>
+
+<p>이것도 액터 컨텍스트 밖에서 <code>cache</code> 에 접근하고 있다. <code>get</code> 은 <code>Future</code> 를 돌려주는데, 이건 분명히 액터의 컨텍스트가 아니다. <code>cache += url -&gt; body</code> 이부분</p>
+
+<p>이전과 마찬가지로 액터에게 메세지를 ³´내는 방식으로 해결할 수 있다. 명심하자 액터 내부의 변수는 액터로 메세지를 보내 변경하자.</p>
+
+<pre><code class="language-scala">  val cache = Map.empty[String, String]
+  def receive = {
+    case Get(url) =&gt;
+      if (cache contains url) sender ! cache(url)
+      else
+        WebClient get url map(Result(sender, url, _)) pipeTo self
+     
+     case Result(client, url, body) =&gt;
+       cache += url -&gt; body
+       client ! body
+</code></pre>
+
+<p>근데 이것도 문제가 있다. <code>map</code> 이 <code>Future</code> 에 의해 실행되기 때문에, <code>sender</code> 가 메세지를 보낸 사람이란걸 보장할 수가 없다.</p>
+
+<blockquote>
+<p>Do not refer to actor state from code running asynchoronously</p>
+</blockquote>
+
+<pre><code class="language-scala">  val cache = Map.empty[String, String]
+  def receive = {
+    case Get(url) =&gt;
+      if (cache contains url) sender ! cache(url)
+      else
+        val client = sender
+        WebClient get url map(Result(client, url, _)) pipeTo self
+     
+     case Result(client, url, body) =&gt;
+       cache += url -&gt; body
+       client ! body
+</code></pre>
+
+<h4 id="the-receptionist">The Receptionist</h4>
+
+<pre><code class="language-scala">class Receptionist extends Actor {
+  def receive = wating
+  
+  // upon Get(url) start a traversal and become running
+  val wating: Receive = {
+    case Get(url) =&gt; context.become(runNext(Vector(Job(sender, url)))
+  }
+  
+  // upon Get(url) append that to queue and keep running
+  // upon Controller.Result(links) ship that to client
+  // and run next job from queue if any
+  def running(queue: Vector[Job]): Receive = {
+    case Controller.Result(links) =&gt;
+      val job = queue.head
+      job.client ! Result(job.url, links)
+      context.stop(sender)
+      context.become(runNext(queue.tail))
+    case Get(url) =&gt;
+      context.become(enqueueJob(queue, Job(sender, url)))
+  }
+}
+
+case class Job(client: ActorRef, url: String)
+var reqNo = 0
+
+def runNext(queue: Vector[Job]): Receive = {
+  reqNo += 1
+  if (queue.isEmpty) wating
+  else {
+    val controller = context.actorOf(Props[Controller], s&quot;c$reqNo&quot;)
+    controller ! Controller.Check[queue.head.url, 2)
+    running(queue)
+  }
+}
+
+def enqueueJob(queue: Vector[Job], job: Job): Receive = {
+  if (queue.size &gt; 3) {
+    sender ! Failed(job.url)
+    running(queue)
+  } else running(queue :+ job)
+}
+</code></pre>
+
+<p><code>Receive</code> 가 <code>Actor</code> 의 <em>state, 상태</em> 를 나타낸다. 어떤 메세지를 받을 수 있는지 정의하면서</p>
+
+<h4 id="main">Main</h4>
+
+<pre><code class="language-scala">import akka.actor.{Actor, Props, ReceiveTimeout}
+import scala.concurrent.duration._
+
+class Main extends Actor {
+  import Receptionist._
+  import context.dispatcher
+
+  val receptionist = context.actorOf(Props[Receptionist], &quot;receptionist&quot;)
+
+  receptionist ! Get(&quot;http://www.google.com&quot;)
+
+  context.system.scheduler.scheduleOnce(10 seconds, self, ReceiveTimeout)
+
+  def receive = {
+    case Result(url, links) =&gt;
+      println(links.toVector.sorted.mkString(s&quot;Results for '$url':\n&quot;, &quot;\n&quot;, &quot;\n&quot;))
+    case Failed(url) =&gt;
+      println(s&quot;Failed to fetch '$url'\n&quot;)
+    case ReceiveTimeout =&gt;
+      context.stop(self)
+  }
+
+  override def postStop(): Unit = {
+    WebClient.shutdown()
+  }
+}
+</code></pre>
+
+<p>전체 코드는 <a href="https://github.com/ardumont/scala-lab/tree/master/src/main/scala/concurrency/actor/crawler">여기</a> 서 확인할 수 있다.</p>
+
+<h4 id="summary">Summary</h4>
+
+<p>(1) A reactive application is <strong>non-blokcing</strong> &amp; <strong>event-driven</strong> top to bottom<br />
+(2) Actors are run by a dispatcher (potentially shared) which can also run Futures<br />
+(3) Prefer imuutable data structures, since they can be shared<br />
+(4) Do not refer to actor state from code running asynchronously<br />
+(5) Prefre <code>context.become</code> for different states, with data local to the behavior</p>
+
+<h3 id="testing-actor-system">Testing Actor System</h3>
+
+<p>테스팅은 오직 외부의 <em>observable effects</em> 만 가능하다.</p>
+
+<blockquote>
+<p>Tests can only verify externally observable effects</p>
+</blockquote>
+
+<p>여기 <code>Toggle</code> 이란 액터를 하나 만들어 보자.</p>
+
+<pre><code class="language-scala">import akka.actor.Actor
+
+class Toggle extends Actor {
+  // happy state
+  def happy: Receive = {
+    case &quot;How are you?&quot; =&gt;
+      sender ! &quot;happy&quot;
+      context become sad
+  }
+
+  // sad state
+  def sad: Receive = {
+    case &quot;How are you?&quot; =&gt;
+      sender ! &quot;sad&quot;
+      context become happy
+  }
+
+  // initial state: happy
+  def receive = happy
+}
+</code></pre>
+
+<p>이 액터를 테스트할 수 있는 유일한 방법은 메세지를 보내고, 그 응답을 확인하는 것이다. <em>akka</em> 의 테스트킷은 <code>TestProbe</code> 를 제공하는데, 일종의 <em>remote controlled actor</em> 다.</p>
+
+<p><em>SBT</em> 파일에 이렇게 디펜던시를 추가하고</p>
+
+<pre><code class="language-scala">resolvers += &quot;Typesafe Repository&quot; at &quot;http://repo.typesafe.com/typesafe/releases/&quot;
+
+libraryDependencies ++= Seq(
+  ...
+  &quot;com.typesafe.akka&quot; %% &quot;akka-testkit&quot; % &quot;2.3.8&quot;,
+  ...
+)
+</code></pre>
+
+<p>아래처럼 사용할 수 있다.</p>
+
+<pre><code class="language-scala">implicit val system = ActorSystem(&quot;TestSys&quot;)
+val toggle = sytem.actorOf(Props[Toggle])
+val p = TestProbe()
+
+p.send(toggle, &quot;How are you?&quot;)
+p.expectMsg(&quot;happy&quot;)
+p.send(toggle, &quot;unknown&quot;)
+p.expectNoMsg(1 second)
+...
+...
+
+system.shutdown()
+</code></pre>
+
+<p>이렇게 더 편하게 쓸 수 있다.</p>
+
+<pre><code class="language-scala">new TestKit(ActorSystem(&quot;TestSys&quot;)) with ImplicitSender {
+  val toggle = system.actorOf(Props[Toggle])
+  
+  toggle ! &quot;How are you&quot;
+  expectMsg(&quot;happy&quot;)
+  ...
+  ...
+  system.shutdown()
+}
+</code></pre>
+
+<p><code>ImplicitSender</code> 를 이용하면 테스트 시스템 내에서 자동으로 <em>sender</em> 가 <em>test actor</em> 로 지정된다.</p>
+
+<p>동작하는 코드는 <a href="https://github.com/ardumont/scala-lab/blob/master/src/main/scala/concurrency/actor/toggle/happySad.scala">여기</a>로</p>
+
+<p><br/></p>
+
+<p>일반적으로 테스트를 작성할때는 독립적인 모듈을 먼저 테스트한다. 그리고 필요한경우 가짜 데이터를 돌려주는 <em>mock</em> 등을 만든다.</p>
+
+<p>데이터베이스에서 데이터를 가져오는 모듈을 테스트하고 싶다면 그것만 테스트하면 된다. 실제 데이터베이스에 연결 해볼 필요는 없다.</p>
+
+<p>앞서 크롤러 같은 경우 <code>Receptionist</code> 를 테스팅하기 위해 가짜 <code>Controller</code> 를 만들 수 있다.</p>
+
+<pre><code class="language-scala">class FakeController extends Actor {
+  def receive = {
+    case Controller.Check(url, depth) =&gt;
+      context.system.scheduler.scheduleONce(1 seconds,
+                                            sender,
+                                            Controller.Result(Set(url)))
+  }
+}
+</code></pre>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong><br />
+(2) <a href="http://prabhubuzz.wordpress.com/2012/09/28/akka-really-mountains-of-concurrency/">http://prabhubuzz.wordpress.com</a></p>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../reactive-programming-4"> <i class="fa fa-chevron-left"></i></a>
+        
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.com/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.com/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.com/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.com/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.com/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.com/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.com/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.com/js/learn.js"></script>
+    <script src="https://1ambda.github.com/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+

@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="">
+
+
+    <link rel="shortcut icon" href="https://1ambda.github.com/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Easy Scalaz 4</title>
+    <link href="https://1ambda.github.com/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    
+
+  </head>
+  <body class="" data-url="/21/scala/easy-scalaz-4/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="http://getgrav.org">
+  <svg id="grav-logo" width="100%" height="100%" viewBox="0 0 504 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <path d="M235.832,71.564l-7.98,-0.001c-1.213,0.001 -2.197,0.987 -2.197,2.204l0,15.327l-0.158,0.132c-4.696,3.962 -10.634,6.14 -16.719,6.14c-14.356,0 -26.034,-11.68 -26.034,-26.037c0,-14.358 11.678,-26.035 26.034,-26.035c5.582,0 10.919,1.767 15.437,5.113c0.877,0.649 2.093,0.56 2.866,-0.211l5.69,-5.69c0.444,-0.442 0.675,-1.055 0.639,-1.681c-0.034,-0.627 -0.336,-1.206 -0.828,-1.597c-6.76,-5.363 -15.214,-8.314 -23.805,-8.314c-21.18,0 -38.414,17.233 -38.414,38.415c0,21.183 17.234,38.415 38.414,38.415c10.937,0 21.397,-4.705 28.698,-12.914c0.358,-0.403 0.556,-0.921 0.556,-1.46l0,-19.603c0,-1.217 -0.985,-2.203 -2.2,-2.203"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M502.794,34.445c-0.408,-0.616 -1.1,-0.989 -1.838,-0.989l-8.684,0c-0.879,0 -1.673,0.522 -2.022,1.329l-24.483,56.839l-24.92,-56.852c-0.352,-0.799 -1.142,-1.316 -2.012,-1.316l-8.713,0c-0.744,0 -1.44,0.373 -1.843,0.995c-0.408,0.623 -0.476,1.408 -0.174,2.09l30.186,68.858c0.352,0.799 1.143,1.317 2.017,1.317l10.992,0c0.879,0 1.673,-0.527 2.021,-1.329l29.655,-68.861c0.289,-0.68 0.222,-1.461 -0.182,-2.081"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M388.683,34.772c-0.353,-0.798 -1.142,-1.316 -2.017,-1.316l-10.988,0c-0.879,0 -1.673,0.522 -2.021,1.329l-29.655,68.861c-0.294,0.675 -0.226,1.46 0.182,2.077c0.407,0.619 1.096,0.993 1.838,0.993l8.684,0c0.879,0 1.673,-0.526 2.022,-1.329l24.478,-56.842l24.92,56.854c0.353,0.798 1.143,1.317 2.013,1.317l8.717,0c0.744,0 1.44,-0.374 1.843,-0.993c0.408,-0.624 0.471,-1.41 0.174,-2.094l-30.19,-68.857Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M309.196,81.525l0.476,-0.229c8.675,-4.191 14.279,-13.087 14.279,-22.667c0,-13.881 -11.295,-25.174 -25.176,-25.174l-31.863,0c-1.214,0 -2.199,0.988 -2.199,2.202l0,68.855c0,1.219 0.985,2.204 2.199,2.204l7.979,0c1.214,0 2.2,-0.985 2.2,-2.204l0,-58.679l21.684,0c7.059,0 12.799,5.739 12.799,12.796c0,5.885 -3.996,10.989 -9.728,12.408c-1.032,0.261 -2.064,0.393 -3.071,0.393l-7.977,0c-0.829,0 -1.585,0.467 -1.959,1.205c-0.378,0.74 -0.305,1.625 0.187,2.296l22.62,30.884c0.412,0.566 1.07,0.901 1.771,0.901l9.915,0c0.827,0 1.587,-0.467 1.96,-1.207c0.378,-0.742 0.302,-1.629 -0.186,-2.296l-15.91,-21.688Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M107.191,80.969c-7.255,-4.794 -11.4,-8.845 -15.011,-16.109c-2.47,4.977 -8.236,12.376 -17.962,18.198c-4.856,15.106 -27.954,44.015 -35.43,39.916c-2.213,-1.212 -2.633,-2.808 -2.133,-4.456c0.536,-4.129 9.078,-13.62 9.078,-13.62c0,0 0.18,1.992 2.913,6.187c-3.609,-11.205 5.965,-25.031 8.5,-29.738c3.985,-1.269 4.274,-6.387 4.274,-6.387c0.255,-7.909 -3.278,-13.635 -6.701,-17.059c2.459,3.002 3.255,7.539 3.372,11.694l0,0.023c0.012,0.469 0.012,0.93 0.011,1.39c-0.117,3.439 -1.157,8.19 -3.383,8.19l0.006,0.03c-2.289,-0.098 -5.115,0.391 -7.639,1.18l-5.582,1.334c0,0 2.977,-0.136 4.584,1.252c-1.79,2.915 -5.769,6.533 -10.206,8.588c-6.457,2.995 -8.312,-2.964 -5.034,-6.838c0.805,-0.946 1.618,-1.745 2.387,-2.399c-0.495,-0.513 -0.807,-1.198 -0.889,-2.068c-0.001,-0.005 -0.004,-0.009 -0.005,-0.013c-0.45,-1.977 -0.202,-4.543 2.596,-8.623c0.551,-0.863 1.214,-1.748 2.007,-2.647c0.025,-0.031 0.046,-0.059 0.072,-0.089c0.034,-0.042 0.072,-0.08 0.108,-0.121c0.02,-0.023 0.039,-0.045 0.059,-0.068c0.2,-0.228 0.413,-0.45 0.639,-0.663c3.334,-3.414 8.599,-6.966 16.897,-10.152c9.675,-14.223 13.219,-16.89 13.219,-16.89c1.071,-1.096 2.943,-2.458 3.632,-2.805c-5.053,-8.781 -6.074,-21.158 -4.75,-24.493c-0.107,0.18 -0.206,0.365 -0.287,0.556c0.49,-1.143 0.819,-1.509 1.328,-2.111c1.381,-1.632 6.058,-2.488 7.737,0.971c0.895,1.844 1.063,4.232 1.034,6.023c-3.704,-0.193 -7.063,4.036 -7.063,4.036c0,0 3.067,-1.448 6.879,-1.473c0,0 1.015,0.883 2.283,2.542c-1.712,3.213 -4.524,10.021 -2.488,17.168c0.338,1.408 0.849,2.619 1.483,3.648c0.024,0.045 0.044,0.089 0.069,0.135c0.051,0.066 0.096,0.122 0.144,0.183c3.368,5.072 9.542,5.665 9.542,5.665c-2.906,-1.45 -5.274,-3.76 -6.816,-6.56c-0.8,-1.498 -1.291,-2.762 -1.592,-3.761c-1.636,-6.313 0.771,-9.999 2.149,-12.471c3.17,-4.917 8.944,-7.893 15.151,-7.185c8.712,0.995 14.968,8.862 13.973,17.571c-0.608,5.321 -3.781,9.723 -8.142,12.117c1.049,2.839 -0.073,6.28 -0.073,6.28c2.642,3.323 2.758,5.238 2.667,7.017c-3.357,-0.565 -6.618,1.701 -6.618,1.701c0,0 6.476,-1.546 10.238,1.81c2.446,2.631 4.078,5.009 5.051,6.766c1.393,2.505 7.859,2.683 7.123,7.188c-0.737,4.499 -5.669,4.542 -13.401,-0.56M69.571,0c-38.424,0 -69.571,31.148 -69.571,69.567c0,38.422 31.147,69.573 69.571,69.573c38.42,0 69.568,-31.151 69.568,-69.573c0,-38.42 -31.148,-69.567 -69.568,-69.567"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M73.796,51.693c0.813,-0.814 0.813,-2.134 0,-2.947c-0.815,-0.814 -2.133,-0.814 -2.947,0c-0.815,0.813 -0.815,2.133 0,2.947c0.814,0.813 2.132,0.813 2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M66.445,53.149c-0.814,0.813 -0.814,2.133 0,2.947c0.813,0.814 2.133,0.814 2.947,0c0.813,-0.814 0.813,-2.134 0,-2.947c-0.814,-0.813 -2.134,-0.813 -2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M79.231,54.233c-1.274,-1.274 -3.339,-1.272 -4.611,0l-2.713,2.712c-1.274,1.275 -1.274,3.339 0,4.612l2.978,2.978c1.274,1.275 3.338,1.274 4.611,0l2.712,-2.712c1.274,-1.274 1.274,-3.339 0,-4.612l-2.977,-2.978Z" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M95.759,41.445c-2.151,-2.578 1.869,-7.257 4.391,-4.463c4.645,5.148 -2.237,7.041 -4.391,4.463M105.004,44.132c3.442,-6.553 -1.427,-10.381 -4.773,-13.523c-5.36,-5.039 -10.706,-7.217 -16.811,-0.241c-6.102,6.977 -2.226,15.068 3.356,19.061c5.584,3.994 14.782,1.255 18.228,-5.297"
+      style="fill:#000;fill-rule:nonzero;"></path>
+  </svg>
+</a>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.com/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.com/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.com/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.com/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.com/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.com/23/javascript/javascript-inheritance/">
+                <span>javascript inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.com/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.com/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.com/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.com/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.com/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.com/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.com/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.com/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.com/21/scala/" itemprop="url"><span itemprop="title">Scala</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Easy Scalaz 4</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#readerwriterstate-with-kleisli">ReaderWriterState with Kleisli</a></li>
+<li><a href="#kleisli">Kleisli</a></li>
+<li><a href="#reader">Reader</a></li>
+<li><a href="#flatmap-for-reader">flatMap for Reader</a>
+<ul>
+<li><a href="#dependency-injection-using-reader">Dependency Injection using Reader</a></li>
+</ul></li>
+<li><a href="#writer">Writer</a></li>
+<li><a href="#writer-example">Writer Example</a></li>
+<li><a href="#rwst">RWST</a></li>
+<li><a href="#rwst-example">RWST Example</a></li>
+<li><a href="#previous-posts">Previous Posts</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Easy Scalaz 4</h1>
+                
+
+
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png" alt="" /></p>
+
+<h2 id="readerwriterstate-with-kleisli">ReaderWriterState with Kleisli</h2>
+
+<p><em>Composition</em> (합성) 은 함수형 언어에서 중요한 테마중 하나인데요, 이번 시간에는 <em>Kleisli</em> 를 이용해 어떻게 함수를 타입으로 표현하고, 합성할 수 있는지 살펴보겠습니다. 그리고 나서, <em>Reader</em>, <em>Writer</em> 에 대해 알아보고, 이것들과 <em>State</em> 를 같이 사용하는 <em>RWST</em> 에 대해 알아보겠습니다.</p>
+
+<h2 id="kleisli">Kleisli</h2>
+
+<p><em>State</em> 가 <code>(S) =&gt; (S, A)</code> 를 타입클래스로 표현한 것이라면, <code>A =&gt; B</code> 를 타입클래스로 표현한 것도 있지 않을까요? 그렇게 되면, 스칼라에서 지원하는 <code>andThen</code>, <code>compose</code> 을 이용해서 함수를 조합하는 것처럼, 타입 클래스를 조합할 수 있을겁니다. <code>Kleisli</code> 가 바로, 그런 역할을 하는 타입 클래스입니다.</p>
+
+<blockquote>
+<p>Kleisli represents a function <code>A =&gt; M[B]</code></p>
+</blockquote>
+
+<p>타입을 보면, 단순히 <code>A =&gt; B</code> 이 아니라 <code>A =&gt; M[B]</code> 를 나타냅니다. 이는 <code>Kleisli</code> 가 <code>M</code> 을 해석하고, 조합할 수 있는 방법을 제공한다는 것을 의미합니다. 실제 구현을 보면,</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/Kleisli.scala#L8
+
+final case class Kleisli[M[_], A, B](run: A =&gt; M[B]) { self =&gt;
+  ...
+
+  def &gt;=&gt;[C](k: Kleisli[M, B, C])(implicit b: Bind[M]): Kleisli[M, A, C] =  kleisli((a: A) =&gt; b.bind(this(a))(k.run))
+
+  def andThen[C](k: Kleisli[M, B, C])(implicit b: Bind[M]): Kleisli[M, A, C] = this &gt;=&gt; k
+
+  def &gt;==&gt;[C](k: B =&gt; M[C])(implicit b: Bind[M]): Kleisli[M, A, C] = this &gt;=&gt; kleisli(k)
+
+  def andThenK[C](k: B =&gt; M[C])(implicit b: Bind[M]): Kleisli[M, A, C] = this &gt;==&gt; k
+
+  /** alias for `compose` */
+  def &lt;=&lt;[C](k: Kleisli[M, C, A])(implicit b: Bind[M]): Kleisli[M, C, B] = k &gt;=&gt; this
+
+  def compose[C](k: Kleisli[M, C, A])(implicit b: Bind[M]): Kleisli[M, C, B] = k &gt;=&gt; this
+
+  def &lt;==&lt;[C](k: C =&gt; M[A])(implicit b: Bind[M]): Kleisli[M, C, B] = kleisli(k) &gt;=&gt; this
+
+  def composeK[C](k: C =&gt; M[A])(implicit b: Bind[M]): Kleisli[M, C, B] = this &lt;==&lt; k
+  ...
+}
+</code></pre>
+
+<p><a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/example/src/main/scala/scalaz/example/KleisliUsage.scala">Kleisli Example</a> 에서 간단한 예제를 가져와서 사용법을 살펴보도록 하겠습니다.</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/example/src/main/scala/scalaz/example/KleisliUsage.scala
+
+case class Continent(name: String, countries: List[Country] = List.empty)
+case class Country(name: String, cities: List[City] = List.empty)
+case class City(name: String, isCapital: Boolean = false, inhabitants: Int = 20)
+
+val data: List[Continent] = List(
+  Continent(&quot;Europe&quot;),
+  Continent(&quot;America&quot;,
+    List(
+      Country(&quot;Canada&quot;,
+        List(
+          City(&quot;Ottawa&quot;), City(&quot;Vancouver&quot;))),
+      Country(&quot;USA&quot;,
+        List(
+          City(&quot;Washington&quot;), City(&quot;New York&quot;))))),
+  Continent(&quot;Asia&quot;,
+    List(
+      Country(&quot;India&quot;,
+        List(City(&quot;New Dehli&quot;), City(&quot;Calcutta&quot;))))))
+</code></pre>
+
+<p>여기에 다음의 ¨수를 정의하면</p>
+
+<pre><code class="language-scala">def continents(name: String): List[Continent] =
+  data.filter(k =&gt; k.name.contains(name))
+
+def countries(continent: Continent): List[Country] = continent.countries
+
+def cities(country: Country): List[City] = country.cities
+
+def save(cities: List[City]): Try[Unit] =
+  Try {
+    // do IO or some side-effectful operations
+    cities.foreach(c =&gt; println(&quot;Saving &quot; + c.name))
+  }
+
+def inhabitants(c: City): Int = c.inhabitants
+</code></pre>
+
+<p>이제 <code>A =&gt; M[B]</code> 형태의 여러 함수들을 만들었으므로 이를 <code>Kleisli</code> 를 이용해 조합할 수 있습니다. (이 예제에서 <code>M == List</code>)</p>
+
+<pre><code class="language-scala">// Kleisli[List, String, City]
+val allCities = kleisli(continents) &gt;==&gt; countries &gt;==&gt; cities
+
+// Kleisli[List, String, Int]
+val cityInhabitants = allCities map inhabitants
+</code></pre>
+
+<p><code>allCities</code> 는 <code>String</code> 을 인자로 받기도 하고, <code>M == List</code> 의 <code>Kleisli</code> 기 때문에 <code>List</code> 를 인자로 받을 수도 있습니다. (<code>=&lt;&lt;</code>)</p>
+
+<pre><code class="language-scala">allCities(&quot;America&quot;) map(println)
+
+// output
+City(Ottawa,false,20)
+City(Vancouver,false,20)
+City(Washington,false,20)
+City(New York,false,20)
+
+(allCities =&lt;&lt; List(&quot;America&quot;, &quot;Asia&quot;)).map(println)
+
+// output
+City(Ottawa,false,20)
+City(Vancouver,false,20)
+City(Washington,false,20)
+City(New York,false,20)
+City(New Dehli,false,20)
+City(Calcutta,false,20)
+</code></pre>
+
+<p><code>Kleisli</code> 가 제공하는 함수를 다시 살펴보면,</p>
+
+<pre><code class="language-scala">def =&lt;&lt;(a: M[A])(implicit m: Bind[M]): M[B] = m.bind(a)(run)
+
+def map[C](f: B =&gt; C)(implicit M: Functor[M]): Kleisli[M, A, C] =
+  kleisli(a =&gt; M.map(run(a))(f))
+
+def mapK[N[_], C](f: M[B] =&gt; N[C]): Kleisli[N, A, C] =
+  kleisli(run andThen f)
+
+def flatMapK[C](f: B =&gt; M[C])(implicit M: Bind[M]): Kleisli[M, A, C] =
+  kleisli(a =&gt; M.bind(run(a))(f))
+
+def flatMap[C](f: B =&gt; Kleisli[M, A, C])(implicit M: Bind[M]): Kleisli[M, A, C] =
+  kleisli((r: A) =&gt; M.bind[B, C](run(r))(((b: B) =&gt; f(b).run(r))))
+</code></pre>
+
+<p>여기서 <code>mapK :: M[B] =&gt; N[C]</code> 를 이용하면 현재 <code>Kleisli[M, _, _]</code> 를 <code>Kleisli[N, _, _]</code> 로 변경할 수 있습니다.</p>
+
+<p>위에서 정한 <code>save</code> 함수는 <code>List[A]</code> 를 받아 <code>Try[Unit]</code> 를 여기에 사용할 수 있습니다.</p>
+
+<pre><code class="language-scala">// Kleisli[Try, String, Unit]
+val getAndSaveCities = allCities mapK save
+</code></pre>
+
+<p><code>local</code> 을 이용하면 함수를 <em>prepend</em> 할 수 있습니다.</p>
+
+<pre><code class="language-scala">// def local[AA](f: AA =&gt; A): Kleisli[M, AA, B] =
+//   kleisli(f andThen run)
+
+def index(i: Int): String = data(i).name
+
+// Kleisli[List, Int, City]
+val allCitiesWithIndex = allCities local index
+
+allCitiesWithIndex(1) map(println)
+
+// output
+City(Ottawa,false,20)
+City(Vancouver,false,20)
+City(Washington,false,20)
+City(New York,false,20)
+</code></pre>
+
+<p><code>Kleisli</code> 에 대한 더 읽을거리는 아래 링크를 참조해주세요.</p>
+
+<ul>
+<li><a href="http://eed3si9n.com/learning-scalaz/Arrow.html">Scalaz Arrow</a></li>
+<li><a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/Kleisli.scala#L209">Scalaz - Kleisli.scala#KleisliArrow</a></li>
+</ul>
+
+<h2 id="reader">Reader</h2>
+
+<p><code>Kleisli</code> 가 <code>A =&gt; M[B]</code> 를 나타낸다면, <code>Reader</code> 는 <code>A =&gt; B</code> (<code>Function1</code>) 를 의미하는 타입클래스입니다. 얼핏 생각하기에 <code>Kleisli[Id, A, B]</code> 일것 같죠? 실제 구현을 보면 (<em>scalaz</em> 에서 타입 얼라이어스는 <code>package.scala</code> 에 정의되어 있습니다.)</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/package.scala
+
+type ReaderT[F[_], E, A] = Kleisli[F, E, A]
+val ReaderT = Kleisli
+type Reader[E, A] = ReaderT[Id, E, A]
+
+object Reader {
+    def apply[E, A](f: E =&gt; A): Reader[E, A] = Kleisli[Id, E, A](f)
+  }
+</code></pre>
+
+<p><code>Reader</code> 도 <code>Klelsli</code> 이므로, <code>Reader[A, B] &gt;==&gt; Reader[B, C]</code> 는 <code>Reader[A, C]</code> 가 됩니다. 게다가 <code>Kleisli</code> 는 <code>flatMap</code> 을 정의하고 있으므로 <em>monadic composition</em> 을 작성할 수 있습니다.</p>
+
+<blockquote>
+<p>The point of a <code>Reader</code> is to supply some configuration object without having to manually (or <em>implicitly</em>) pass i around all the functions.</p>
+</blockquote>
+
+<p>요는, 함수 사이의 체인을 엮어 새로운 함수를 만들수 있고 이로인해 직접 파라미터를 넘겨줄 필요가 없습니다. 예를 들어</p>
+
+<pre><code class="language-scala">type URI = String
+type Key = String
+type Value = String
+
+val uri: Reader[Get, URI]
+val queryString: Reader[URI, String]
+val body: Reader[String, Map[Key, Value]
+
+// Get =&gt; Map[Key, Value]
+val queryStringToBody = uri &gt;==&gt; queryString &gt;==&gt; body
+</code></pre>
+
+<p>간단히 구현을 해보겠습니다. 예외 처리는 외부에서 <code>Try</code> 혹은 <code>\/.fromTryCatchThrowable</code> 등으로 한다 가정하고 로직에만 집중해보면,</p>
+
+<pre><code class="language-scala">// model
+trait HttpRequest {
+  def url: String
+}
+case class GET(url: String) extends HttpRequest
+case class POST(url: String, body: Map[String, String]) extends HttpRequest
+
+val uri: Reader[GET, String] = Reader { req: GET =&gt; req.url }
+val queryString: Reader[String, String] = Reader { url: String =&gt; url.split(&quot;\\?&quot;)(1) }
+val body: Reader[String, Map[String, String]] = Reader { queries: String =&gt;
+  val qs = queries.split(&quot;&amp;&quot;).toList
+  qs.foldLeft(Map.empty[String, String]) { (acc: Map[String, String], q) =&gt;
+    val kv = q.split(&quot;=&quot;)
+    acc.updated(kv(0), kv(1))
+  }
+}
+
+val queryStringToBody: Reader[GET, Map[String, String]] = uri &gt;==&gt; queryString &gt;==&gt; body
+</code></pre>
+
+<p><code>queryStringToBody</code> 를 사용해 보면,</p>
+
+<pre><code class="language-scala">val get1 = GET(&quot;http://www.google.com/search?query=scalaz&amp;site=github&quot;)
+val post1 = POST(&quot;http://www.google.com/search&quot;, Map(&quot;query&quot; -&gt; &quot;scalaz&quot;, &quot;site&quot; -&gt; &quot;github&quot;))
+val post2 = POST(&quot;https://www.google.com/search&quot;, Map(&quot;query&quot; -&gt; &quot;scalaz&quot;, &quot;site&quot; -&gt; &quot;github&quot;))
+
+queryStringToBody.run(get1) shouldBe Map(&quot;query&quot; -&gt; &quot;scalaz&quot;, &quot;site&quot; -&gt; &quot;github&quot;)
+</code></pre>
+
+<p>함수를 몇개 더 작성해보면,</p>
+
+<pre><code class="language-scala">
+val toHttpsRequest = Reader { url: String =&gt; url.replaceAll(&quot;http://$&quot;, &quot;https://&quot;) }
+val sslProxy: Reader[_ &gt;: readerwriterstate.HttpRequest, readerwriterstate.HttpRequest] = Reader { req: readerwriterstate.HttpRequest =&gt;
+  req match {
+    case request if request.url.startsWith(&quot;https://&quot;) =&gt; request
+    case request: POST =&gt; request.copy(url = toHttpsRequest(request.url))
+    case request: GET  =&gt; request.copy(url = toHttpsRequest(request.url))
+  }
+}
+
+val convertGetToPost: Reader[_ &gt;: readerwriterstate.HttpRequest, POST] = Reader { req : readerwriterstate.HttpRequest =&gt;
+  req match {
+    case get: GET =&gt;
+      val split = get.url.split(&quot;\\?&quot;)
+      val (path, query) = (split(0), split(1))
+      val postBody = body.run(query)
+
+      POST(path, postBody)
+
+    case post: POST =&gt; post
+  }
+}
+</code></pre>
+
+<p>이제 <code>HttpRequest</code> 서브타입을 받아, 프록시를 적용하고, <code>GET</code> 이면 <code>POST</code> 로 변경하는 함수를 조합해보면 아래와 같습니다.</p>
+
+<p>(<code>:&gt;</code> 등 <em>Type Bound</em> 에 대해서는 <a href="http://twitter.github.io/scala_school/type-basics.html">Scala School - Type &amp; Polymorphism</a> 과 <a href="http://twitter.github.io/scala_school/advanced-types.html">Scala School - Advanced Types</a> 를 참조해주세요.)</p>
+
+<pre><code class="language-scala">val proxiedPost: Reader[_ &gt;: HttpRequest, POST] = sslProxy &gt;==&gt; convertGetToPost
+
+// spec
+proxiedPost.run(get1) shouldBe post2
+</code></pre>
+
+<h2 id="flatmap-for-reader">flatMap for Reader</h2>
+
+<p><code>Reader</code> 는 <code>Kleisli</code> 고, 이것간의 합성은 <code>&gt;==&gt;</code> 을 이용한다는것을 확인했습니다. 그럼 <code>flatMap</code> 은 어디에 쓰는걸까요?</p>
+
+<pre><code class="language-scala">type ReaderT[F[_], E, A] = Kleisli[F, E, A]
+type Reader[E, A] = ReaderT[Id, E, A]
+
+final case class Kleisli[M[_], A, B](run: A =&gt; M[B]) { self =&gt;
+  ...
+
+  // andThen
+  def &gt;=&gt;[C](k: Kleisli[M, B, C])(implicit b: Bind[M]): Kleisli[M, A, C] =  kleisli((a: A) =&gt; b.bind(this(a))(k.run))
+
+  def &gt;==&gt;[C](k: B =&gt; M[C])(implicit b: Bind[M]): Kleisli[M, A, C] = this &gt;=&gt; kleisli(k)
+
+  def flatMapK[C](f: B =&gt; M[C])(implicit M: Bind[M]): Kleisli[M, A, C] =
+    kleisli(a =&gt; M.bind(run(a))(f))
+
+  def flatMap[C](f: B =&gt; Kleisli[M, A, C])(implicit M: Bind[M]): Kleisli[M, A, C] =
+    kleisli((r: A) =&gt; M.bind[B, C](run(r))(((b: B) =&gt; f(b).run(r))))
+
+  ...
+}
+</code></pre>
+
+<p><code>flatMap</code> 을 보면 재미난 점이 보입니다. <code>Kleisli[M, A, B]</code> 와 <code>Kleisli[M, A, C]</code> 를 <code>flatMap</code> 으로 엮는데, <code>r: A</code> 를 넣어서 <code>run(r)</code> 을 실행하는걸 보실 수 있습니다. <code>Kleisli[M, A, C]</code> 까지도요!</p>
+
+<p>즉 <code>A</code> 자체가 일종의 설정(<em>Configuration</em>) 값으로써 모든 <code>Kleisli</code> 에서 사용됩니다. 그렇°에</p>
+
+<ul>
+<li><code>Reader[A, B]</code> 와 <code>Reader[B, C]</code> 는 <code>&gt;==&gt;</code> 으로</li>
+<li><code>Reader[A, B]</code> 와 <code>Reader[A, C]</code> 는 <code>flatMap</code> 으로 엮을 수 있습니다.</li>
+</ul>
+
+<h3 id="dependency-injection-using-reader">Dependency Injection using Reader</h3>
+
+<p><code>Reader</code> 를 이용하면 스칼라에서 별도의 라이브러리 없이 <em>Dependency Injection</em> (이하 <em>DI</em>) 를 구현할 수 있습니다. 이는 위에서 보았던 <code>flatMap</code> 의 특징을 이용하면 됩니다. 다음과 같은 모델이 있다고 할  때,</p>
+
+<pre><code class="language-scala">case class User(id: Long,
+                name: String,
+                age: Int,
+                email: String,
+                supervisorId: Long)
+
+trait UserRepository {
+  def get(id: Long): User
+  def find(name: String): User
+}
+
+trait UserService {
+  def getUser(id: Long): Reader[UserRepository, User] =
+    Reader(repo =&gt; repo.get(id))
+
+  def findUser(userName: String): Reader[UserRepository, User] =
+    Reader(repo =&gt; repo.find(userName))
+
+  def getUserInfo(userName: String): Reader[UserRepository, Map[String, String]] = for {
+    user &lt;- findUser(userName)
+    supervisor &lt;- getUser(user.supervisorId)
+  } yield Map(
+    &quot;email&quot; -&gt; s&quot;${user.email}&quot;,
+    &quot;boss&quot;  -&gt; s&quot;${supervisor.name}&quot;
+  )
+}
+</code></pre>
+
+<p>다음처럼 주입할 수 있습니다.</p>
+
+<pre><code class="language-scala">object UserRepositoryDummyImpl extends UserRepository {
+  override def get(id: Long): User = ???
+  override def find(name: String): User = ???
+}
+
+class UserApplication(userRepository: UserRepository) extends UserService
+object UserApplication extends UserApplication(UserRepositoryDummyImpl)
+</code></pre>
+
+<p>이외에도 스칼라에서 언어 자체의 기능만으로 DI 를 구현하는 방법으로 <em>Cake Pattern</em> , <em>Implicit</em> 등이 있습니다. (<a href="http://blog.originate.com/blog/2013/10/21/reader-monad-for-dependency-injection/">Scala Dependency Injection using Reader</a> 참조)</p>
+
+<p>위의 두 방법과 <code>Reader</code> 를 사용한 방법을 비교하면,</p>
+
+<ul>
+<li><em>Cake Pattern</em> 에 비해 코드가 짧고</li>
+<li><em>Implicit</em> 를 이용하지 않으므로 함수 시그니쳐가 간단합니다.</li>
+</ul>
+
+<h2 id="writer">Writer</h2>
+
+<p><code>Writer[W, A]</code> 는 <code>run: (W, A)</code> 을 값¼로 가지는 <em>case class</em> 입니다. 재미난 점은, <code>flatMap</code> 을 이용해 두개의 <code>Writer</code> 를 엮으면 각각의 값인 <code>(w1, a1)</code>, <code>(w2, a2)</code> 에 대해서 사용자가 다루는 값인 <code>a1, a2</code> 를 제하고 <code>w1</code> 과 <code>w2</code> 가 일종의 <a href="http://1ambda.github.io/easy-scalaz-1-state/">State</a> 처럼 관리되어 자동으로 <em>append</em> 된다는 점입니다. 따라서 많은 튜토리얼들이 <em>logging</em> 을 예로 들어 <code>Writer</code> 를 설명하곤 합니다.</p>
+
+<pre><code class="language-scala">test(&quot;WriterOps&quot;) {
+  val w1: Writer[String, Int] = 10.set(&quot;w1 created&quot;)
+  val w2: Writer[String, Int] = 20.set(&quot;w2 created&quot;)
+
+  val result: Writer[String, Int] = for {
+    n1 &lt;- w1
+    n2 &lt;- w2
+  } yield n1 + n2
+
+  // What if we use `List[String]` instead of `String`?
+  result.run shouldBe (&quot;w1 createdw2 created&quot;, 30)
+}
+</code></pre>
+
+<p><em>Scalaz</em> 구현을 보면</p>
+
+<pre><code class="language-scala">type Writer[W, A] = WriterT[Id, W, A]
+
+final case class WriterT[F[_], W, A](run: F[(W, A)]) { self =&gt;
+  ...
+
+  def flatMap[B](f: A =&gt; WriterT[F, W, B])(implicit F: Bind[F], s: Semigroup[W]): WriterT[F, W, B] =
+    flatMapF(f.andThen(_.run))
+
+  def flatMapF[B](f: A =&gt; F[(W, B)])(implicit F: Bind[F], s: Semigroup[W]): WriterT[F, W, B] =
+    writerT(F.bind(run){wa =&gt;
+      val z = f(wa._2)
+      F.map(z)(wb =&gt; (s.append(wa._1, wb._1), wb._2))
+    })
+
+  ...
+</code></pre>
+
+<p><code>WriterT</code> 에서 <code>F</code> 를 <code>Id</code> 라 하면 <code>Writer</code> 가 되고 <code>flatMap</code> 로직은 다음처럼 단순화 할 수 있습니다.</p>
+
+<pre><code class="language-scala">case class Writer[W, A](run: (W, A)) { self =&gt;
+  def flatMap[B](f: A =&gt; Writer[W, B])(implicit s: Semigroup[W]) {
+    val (w1, a) = self.run
+    val (w2, b) = f(a)
+    (s.append(w1, w2), b)
+  }
+}
+</code></pre>
+
+<p>여기서 <a href="https://github.com/scalaz/scalaz/blob/series/7.1.x/core/src/main/scala/scalaz/Semigroup.scala">Semigroup.scala</a> 은, <em>Associativity</em> (결합법칙) 을 만족하는 <em>binary operator</em> 를 정의하는 타입 클래스입니다. (위에서 <code>append</code>)</p>
+
+<pre><code class="language-scala">// https://github.com/scalaz/scalaz/blob/series/7.1.x/core/src/main/scala/scalaz/Semigroup.scala#L55
+
+ /**
+   * A semigroup in type F must satisfy two laws:
+    *
+    *  - '''closure''': `∀ a, b in F, append(a, b)` is also in `F`. This is enforced by the type system.
+    *  - '''associativity''': `∀ a, b, c` in `F`, the equation `append(append(a, b), c) = append(a, append(b , c))` holds.
+   */
+  trait SemigroupLaw {
+    def associative(f1: F, f2: F, f3: F)(implicit F: Equal[F]): Boolean =
+      F.equal(append(f1, append(f2, f3)), append(append(f1, f2), f3))
+  }
+</code></pre>
+
+<p><a href="https://github.com/scalaz/scalaz/blob/series/7.1.x/core/src/main/scala/scalaz/Monoid.scala">Monoid</a> 는 결합법칙을 만족하는 덧셈 연산과, 항등원 연산을 정의하는 타입 클래스인데, <em>Scalaz</em> 에서는 <code>Monoid</code> 가 <code>Semigroup</code> 을 상속받습니다.</p>
+
+<pre><code class="language-scala">trait Monoid[F] extends Semigroup[F] { self =&gt;
+  ...
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png" alt="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png" /></p>
+
+<p><br/></p>
+
+<p>따라서 <code>Writer[W, A]</code> 의 <code>flatMap</code> 을 이용하기 위해서는 <code>W</code> 가 <code>Semigroup</code> 여야 하고 그래야만 <code>flatMap</code> 내부에서 자동으로 <code>W</code> 를 <em>append</em> 할 수 있습니다.</p>
+
+<p>스칼라에서 제공하는 <code>List</code> 등의 기본 타입은 <em>Scalaz</em> 에서 <code>Monoid</code> 를 제공합니다. (<a href="https://github.com/scalaz/scalaz/blob/series/7.1.x/core/src/main/scala/scalaz/std/List.scala#L109">scalaz.std.List</a>, <a href="https://github.com/scalaz/scalaz/tree/series/7.1.x/core/src/main/scala/scalaz/std">scalaz.std</a> 참조)</p>
+
+<p>정리하면, <code>Writer[W, A]</code> 를 이용하면 값인 <code>A</code> 를 조작하면서 <code>W</code> 를 신경쓰지 않고, 자동으로 <code>append</code> 시킬 수 있습니다. (e.g <em>logging</em>)</p>
+
+<h2 id="writer-example">Writer Example</h2>
+
+<p>간단한 모델을 만들면,</p>
+
+<pre><code class="language-scala">import scalaz._, Scalaz._
+
+trait ThreadState
+case object Waiting    extends ThreadState
+case object Running    extends ThreadState
+case object Terminated extends ThreadState
+case class Thread(tid: String, name: String, state: ThreadState)
+case class Process(pid: String, threads: List[Thread])
+
+object Process {
+  type Logger[A] = Writer[Vector[String], A]
+
+  def genRandomID: String = java.util.UUID.randomUUID().toString.replace(&quot;-&quot;, &quot;&quot;)
+
+  def createThread(name: String): Logger[Thread] = {
+    val tid = genRandomID
+    Thread(tid, name, Waiting).set(Vector(s&quot;Thread [$tid] was created&quot;))
+  }
+
+  def createEmptyProcess: Logger[Process] = {
+    val pid = genRandomID
+    Process(pid, Nil).set(Vector(s&quot;Empty Process [$pid] was created&quot;))
+  }
+
+  def createNewProcess: Logger[Process] = for {
+    mainThread &lt;- createThread(&quot;main&quot;)
+    process &lt;- createEmptyProcess
+    _ &lt;- Vector(s&quot;Main Thread [${mainThread.tid}] was added to Process [${process.pid}&quot;).tell
+  } yield process.copy(threads = mainThread.copy(state = Running) :: process.threads)
+}
+</code></pre>
+
+<p>여기서 <code>W</code> 로 <code>List[String]</code> 대신 <code>Vector[String]</code> 을 사용하는 이유는, <em>append</em> 가 더 빠르기 때문입니다. (<a href="http://docs.scala-lang.org/overviews/collections/performance-characteristics.html">Scala Collection Performance Characteristics</a> 참조)</p>
+
+<pre><code class="language-scala">test(&quot;Writer usage2&quot;) {
+  import readerwriterstate.Process._
+
+  val (written, process) = createNewProcess.run
+
+  process.threads.length shouldBe 1
+  process.threads.head.name shouldBe &quot;main&quot;
+
+  /* map lets you map over the value side */
+  val ts: Logger[List[Thread]] = createNewProcess.map(p =&gt; p.threads)
+  ts.value.length shouldBe 1
+
+  /* with mapWritten you can map over the written side */
+  val edited: Vector[String] = createNewProcess.mapWritten(_.map { log =&gt; &quot;[LOG]&quot; + log }).written
+  println(edited.mkString(&quot;\n&quot;))
+
+  /** output
+   * [LOG]Thread [557ad5bd0f3b4d49bac85b05ebedcd7b] was created
+   * [LOG]Empty Process [710bd940ebdd4a82b949a32b585a12d9] was created
+   * [LOG]Main Thread [557ad5bd0f3b4d49bac85b05ebedcd7b] was added to Process [710bd940ebdd4a82b949a32b585a12d9]
+   */
+
+  /* with mapValue, you can map over both sides */
+  createNewProcess.mapValue { case (log, p) =&gt;
+    (log :+ &quot;Add an IO thread&quot;,
+     p.copy(threads = Thread(genRandomID, &quot;IO-1&quot;, Waiting) :: p.threads))
+  }
+
+  // `:++&gt;` `:++&gt;&gt;`, `&lt;++:`, `&lt;&lt;++:`
+  createNewProcess :++&gt; Vector(&quot;add some log&quot;)
+  val emptyWithLog = createEmptyProcess :++&gt;&gt; { process =&gt;
+    Vector(s&quot;${process.pid} is an empty process&quot;)
+  }
+
+   println(emptyWithLog.written)
+
+  // output: Vector(Empty Process [cf211fc366ab4d20a0c25a27d173accd] was created, cf211fc366ab4d20a0c25a27d173accd is an empty process)
+
+  // Writer is an applicative
+  val emptyProcesses: Logger[List[readerwriterstate.Process]] =
+    (createEmptyProcess |@| createEmptyProcess) { List(_) |+| List(_) }
+
+  val ps = emptyProcesses.value
+  ps.length shouldBe 2
+}
+</code></pre>
+
+<p><a href="http://eed3si9n.com/learning-scalaz/Applicative+Builder.html">Applicative Builder</a>, <a href="https://github.com/scalaz/scalaz/blob/series/7.1.x/core/src/main/scala/scalaz/WriterT.scala#L30">WriterT Functions</a> 를 참고하시면 이해가 더 쉽습니다.</p>
+
+<h2 id="rwst">RWST</h2>
+
+<p><a href="https://github.com/scalaz/scalaz/blob/series/7.1.x/core/src/main/scala/scalaz/ReaderWriterStateT.scala">ReaderWriterState</a> 는 다름이 아니라, 이제까지 보았던 <code>Reader</code>, <code>Writer</code>, <code>State</code> 를 모두 이용하는 타입 클래스입니다. <code>Reader</code> 로 설정값을 읽고, <code>Writer</code> 로 중간 과정을 기록하고, <code>State</code> 로 상태를 변경 또는 유지해 가며 연산을 수행할 수 있습니다. <em>Scalaz</em> 에서는 예제로 <a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/example/src/main/scala/scalaz/example/ReaderWriterStateTUsage.scala">ReaderWriterStateTUsage.scala</a> 를 제공하고 있습니다.</p>
+
+<p>이제까지 늘 그래왔듯이, <code>ReaderWriterState[R, W, S, A]</code> 또한 <code>ReaderWriterStateT[Id, R, W, S, A]</code> 의 <em>type alias</em> 입니다. <code>Reader</code>, <code>Writer</code>, <code>State</code> 에서 사용했었던 함수들도 같이 제공됩니다.</p>
+
+<pre><code class="language-scala">type ReaderWriterState[-R, W, S, A] = ReaderWriterStateT[Id, R, W, S, A]
+type ReaderWriterStateT[F[_], -R, W, S, A] = IndexedReaderWriterStateT[F, R, W, S, S, A]
+
+object ReaderWriterState extends ReaderWriterStateTInstances with ReaderWriterStateTFunctions {
+  def apply[R, W, S, A](f: (R, S) =&gt; (W, A, S)): ReaderWriterState[R, W, S, A] = IndexedReaderWriterStateT[Id, R, W, S, S, A] { (r: R, s: S) =&gt; f(r, s) }
+}
+</code></pre>
+
+<p><code>apply</code> 를 보면, <code>ReaderWriterState</code> 는 타입 <code>(R, S) =&gt; (W, A, S)</code> 함수를 넘겨주어 생성할 수 있습니다. <code>Reader</code>, <code>State</code> 를 받고, <code>Writer</code>, <code>A</code> (결과값), <code>State</code> 를 돌려주는 것으로 해석할 수 있습니다.</p>
+
+<p><code>ReadwrWriterState.flatMap</code> 은 <code>State</code>, <code>Writer</code>, <code>Reader</code> 의 <code>flatMap</code> 을 모두 조합한것처럼 생겼습니다. 하는일도 그렇구요.</p>
+
+<pre><code class="language-scala">/** A monad transformer stack yielding `(R, S1) =&gt; F[(W, A, S2)]`. */
+sealed abstract class IndexedReaderWriterStateT[F[_], -R, W, -S1, S2, A] {
+
+  ...
+
+  def flatMap[B, RR &lt;: R, S3](f: A =&gt; IndexedReaderWriterStateT[F, RR, W, S2, S3, B])(implicit F: Bind[F], W: Semigroup[W]): IndexedReaderWriterStateT[F, RR, W, S1, S3, B] =
+    new IndexedReaderWriterStateT[F, RR, W, S1, S3, B] {
+      def run(r: RR, s1: S1): F[(W, B, S3)] = {
+        F.bind(self.run(r, s1)) {
+          case (w1, a, s2) =&gt; {
+            F.map(f(a).run(r, s2)) {
+              case (w2, b, s3) =&gt; (W.append(w1, w2), b, s3)
+            }
+          }
+        }
+      }
+    }
+
+  ...
+</code></pre>
+
+<ul>
+<li><a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/ReaderWriterStateT.scala#L4">Scalaz - IndexedReaderWriterStateT</a></li>
+<li><a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/ReaderWriterStateT.scala#L179">Scalaz - ReaderWriterStateTMonad</a></li>
+</ul>
+
+<h2 id="rwst-example">RWST Example</h2>
+
+<p>예제를 위해 간단한 모델을 만들어 보겠습니다.</p>
+
+<ul>
+<li><code>Reader</code> 로 <code>DatabaseConfig</code> 를</li>
+<li><code>Writer</code> 로 <code>Vector[String]</code> 을</li>
+<li><code>State</code> 로 <code>Connection</code> 을 이용하고</li>
+</ul>
+
+<p>결과값으로 타입 <code>A</code> 를 돌려주는 <code>Task[A]</code> 를 만들면 아래와 같습니다.</p>
+
+<pre><code class="language-scala">object Database {
+  type Task[A] = ReaderWriterState[DatabaseConfig, Vector[String] /* log */, Connection, A]
+  ...
+</code></pre>
+
+<p>여기에 몇 가지 제약조건을 걸어보겠습니다.</p>
+
+<ul>
+<li><code>DatabaseConfig.operationTimeoutMillis</code> 에 의해서 타임아(<code>OperationTimeoutException</code>) 발생</li>
+<li><code>OperationTimeoutException</code> 발생시, 연산을 즉시 중단하고, 오류 없이 수행이 되었을 경우 <em>commit</em></li>
+<li><em>Post Commit Action</em> 등록을 할 수 있어야 하며, <em>commit</em> 후 순차대로 자동 실행</li>
+</ul>
+
+<p>이제 필요한 몇몇 클래스를 만들고</p>
+
+<pre><code class="language-scala">type Action = () =&gt; Unit
+case class PostCommitAction(id: String, action: Action)
+case class DatabaseConfig(operationTimeoutMillis: Long)
+case class ResultSet() /* dummy */
+
+case class Connection(id: String,
+                      actions: List[PostCommitAction] = Nil) {
+
+  def commit = {}
+  def executeAndReturn(query: String): ResultSet = ResultSet()
+  def execute(query: String): Unit = {}
+}
+
+class OperationTimeoutException private(ex: RuntimeException) extends RuntimeException(ex) {
+  def this(message:String) = this(new RuntimeException(message))
+  def this(message:String, throwable: Throwable) = this(new RuntimeException(message, throwable))
+}
+
+object OperationTimeoutException {
+  def apply(message:String) = new OperationTimeoutException(message)
+  def apply(message:String, throwable: Throwable) = new OperationTimeoutException(message, throwable)
+}
+</code></pre>
+
+<p>이제 사용자가 API 를 사용하는 것을 한번 상상해보겠습니다. <em>commit</em> 이 어쨌건, 사용자가 하고싶은 일은 쿼리를 실행해서 결과값을 받아오거나, 필요한 <em>post commit action</em> 을 등록하는 일일겁니다. 나머지는 다 알아서 해주겠거니 하고 기대하고 있겠지요. 아래와 같은 API 가 있다면,</p>
+
+<pre><code class="language-scala">def createTask[A](f: Connection =&gt; A): Task[A]
+def addPostCommitAction(action: Action): Task[Unit]
+def run[A](task: Task[A]): Option[A]
+</code></pre>
+
+<p>사용자들이 이런 방식으로 사용할 수 있습니다.</p>
+
+<pre><code class="language-scala">case class Person(name: String, address: Address)
+case class Address(street: String)
+
+def getPerson(name: String): Task[Person] = createTask { conn =&gt;
+  val rs: ResultSet = conn.executeAndReturn(s&quot;SELECT * FROM USER WHERE name == '$name'&quot;)
+
+  /* get a person using the result set */
+  ...
+}
+
+def updateAddress(person : Person): Task[Unit] = createTask { conn =&gt;
+  /* do something */
+  conn.execute(
+    s&quot;UPDATE ADDRESS SET street = '${person.address.street}' where person_name = '${person.name}'&quot;)
+}
+
+val getAndUpdatePersonTask: Task[Person] = for {
+  p &lt;- getPerson(&quot;1ambda&quot;)
+  updatedP = p.copy(address = Address(&quot;BACON STREET 234&quot;))
+  _ &lt;- addPostCommitAction(() =&gt; println(&quot;post commit action1&quot;))
+  _ &lt;- updateAddress(updatedP)
+  _ &lt;- addPostCommitAction(() =&gt; println(&quot;post commit action2&quot;))
+} yield updatedP
+
+val person: Option[Person] = Database.run(getAndUpdatePersonTask)
+</code></pre>
+
+<p>이제 상상했던 함수를 구현해 보면,</p>
+
+<pre><code class="language-scala">// https://github.com/1ambda/scala/blob/master/learning-scalaz/src/main/scala/readerwriterstate/Database.scala
+
+import java.util.UUID
+import scalaz._, Scalaz._
+import Database._
+import com.github.nscala_time.time.Imports._
+
+object Database {
+
+  ...
+  object Implicit {
+    implicit def defaultConnection: Connection = Connection(genRandomUUID)
+    implicit def defaultConfig = DatabaseConfig(500)
+  }
+
+  private def genRandomUUID: String = UUID.randomUUID().toString
+
+  private def execute[A](f: =&gt; A, conf: DatabaseConfig): A = {
+    val start = DateTime.now
+
+    val a = f
+
+    val end = DateTime.now
+
+    val time: Long = (start to end).millis
+
+    if (time &gt; conf.operationTimeoutMillis)
+      throw OperationTimeoutException(s&quot;Operation timeout: $time millis&quot;)
+
+    a
+  }
+
+  def createTask[A](f: Connection =&gt; A): Task[A] =
+    ReaderWriterState { (conf, conn) =&gt;
+      val a = execute(f(conn), conf)
+      (Vector(s&quot;Task was created with connection[${conn.id}]&quot;), a, conn)
+    }
+
+  def addPostCommitAction(action: Action): Task[Unit] =
+    ReaderWriterState { (conf, conn: Connection) =&gt;
+
+      val postCommitAction = PostCommitAction(genRandomUUID, action)
+      (Vector(s&quot;Add PostCommitAction(${postCommitAction.id})&quot;),
+        Unit,
+        conn.copy(actions = conn.actions :+ postCommitAction))
+    }
+
+  def run[A](task: Task[A])
+            (implicit defaultConf: DatabaseConfig, defaultConn: Connection): Option[A] = {
+
+    \/.fromTryCatchThrowable[(Vector[String], A, Connection), Throwable](
+      task.run(defaultConf, defaultConn)
+    ) match {
+      case -\/(t) =&gt;
+        println(s&quot;Operation failed due to ${t.getMessage}&quot;) /* logging */
+        none[A]
+
+      case \/-((log: Vector[String], a: A, conn: Connection)) =&gt;
+        conn.commit /* close connection */
+
+        log.foreach { text =&gt; println(s&quot;[LOG] $text&quot;)} /* logging */
+
+        /* run post commit actions */
+        conn.actions foreach { _.action() }
+
+        a.some
+    }
+  }
+</code></pre>
+
+<p>이제 실제로 <em>500 ms</em> 를 초과하는 연산을 실행하면, 예외가 발생하는 것을 확인할 수 있습니다.</p>
+
+<pre><code class="language-scala">  test(&quot;Database example&quot;) {
+
+    val slowQuery: Task[Person] = createTask { conn =&gt;
+      sleep(600)
+      Person(&quot;Sherlock&quot;, Address(&quot;BACON ST 221-B&quot;))
+    }
+
+    val getPeopleTask: Task[List[Person]] = for {
+      p1 &lt;- getPerson(&quot;Mycroft&quot;)
+      p2 &lt;- getPerson(&quot;Watson&quot;)
+      p3 &lt;- slowQuery
+      _ &lt;- addPostCommitAction(() =&gt; println(&quot;post commit1&quot;))
+    } yield p1 :: p2 :: p3 :: Nil
+
+    import Database.Implicit._
+    val people = Database.run(getPeopleTask)
+
+    // log: Operation failed due to java.lang.RuntimeException: Operation timeout: 603 millis
+    people shouldBe None
+}
+</code></pre>
+
+<h2 id="previous-posts">Previous Posts</h2>
+
+<ul>
+<li><a href="http://1ambda.github.io/easy-scalaz-1-state/">Easy Scalaz 1, State</a></li>
+<li><a href="http://1ambda.github.io/easy-scalaz-2-monad-transformer/">Easy Scalaz 2, Monad Transformer</a></li>
+</ul>
+
+<h2 id="references">References</h2>
+
+<ul>
+<li><a href="http://cs.lth.se/edan40">Haskell Image</a></li>
+<li><a href="https://coderwall.com/p/ye_s_w/tooling-the-reader-monad">Tooling The Reader Monad</a></li>
+<li><a href="http://blog.originate.com/blog/2013/10/21/reader-monad-for-dependency-injection/">Reader Monad For Dependency Injection</a></li>
+<li><a href="http://slides.com/danielbedo/reader-monad">Slideshare: Reader Monad</a></li>
+<li><a href="https://wiki.haskell.org/Typeclassopedia">Typeclassopedia Image</a></li>
+<li><a href="http://docs.scala-lang.org/overviews/collections/performance-characteristics.html">Scala Collection Performance Characteristics</a></li>
+</ul>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../easy-scalaz-3"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../easy-scalaz-5" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.com/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.com/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.com/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.com/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.com/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.com/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.com/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.com/js/learn.js"></script>
+    <script src="https://1ambda.github.com/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+

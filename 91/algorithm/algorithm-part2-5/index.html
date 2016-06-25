@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="">
+
+
+    <link rel="shortcut icon" href="https://1ambda.github.com/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Algorithm: Maximum Flow (Ford-Fulkerson)</title>
+    <link href="https://1ambda.github.com/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    
+
+  </head>
+  <body class="" data-url="/91/algorithm/algorithm-part2-5/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="http://getgrav.org">
+  <svg id="grav-logo" width="100%" height="100%" viewBox="0 0 504 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <path d="M235.832,71.564l-7.98,-0.001c-1.213,0.001 -2.197,0.987 -2.197,2.204l0,15.327l-0.158,0.132c-4.696,3.962 -10.634,6.14 -16.719,6.14c-14.356,0 -26.034,-11.68 -26.034,-26.037c0,-14.358 11.678,-26.035 26.034,-26.035c5.582,0 10.919,1.767 15.437,5.113c0.877,0.649 2.093,0.56 2.866,-0.211l5.69,-5.69c0.444,-0.442 0.675,-1.055 0.639,-1.681c-0.034,-0.627 -0.336,-1.206 -0.828,-1.597c-6.76,-5.363 -15.214,-8.314 -23.805,-8.314c-21.18,0 -38.414,17.233 -38.414,38.415c0,21.183 17.234,38.415 38.414,38.415c10.937,0 21.397,-4.705 28.698,-12.914c0.358,-0.403 0.556,-0.921 0.556,-1.46l0,-19.603c0,-1.217 -0.985,-2.203 -2.2,-2.203"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M502.794,34.445c-0.408,-0.616 -1.1,-0.989 -1.838,-0.989l-8.684,0c-0.879,0 -1.673,0.522 -2.022,1.329l-24.483,56.839l-24.92,-56.852c-0.352,-0.799 -1.142,-1.316 -2.012,-1.316l-8.713,0c-0.744,0 -1.44,0.373 -1.843,0.995c-0.408,0.623 -0.476,1.408 -0.174,2.09l30.186,68.858c0.352,0.799 1.143,1.317 2.017,1.317l10.992,0c0.879,0 1.673,-0.527 2.021,-1.329l29.655,-68.861c0.289,-0.68 0.222,-1.461 -0.182,-2.081"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M388.683,34.772c-0.353,-0.798 -1.142,-1.316 -2.017,-1.316l-10.988,0c-0.879,0 -1.673,0.522 -2.021,1.329l-29.655,68.861c-0.294,0.675 -0.226,1.46 0.182,2.077c0.407,0.619 1.096,0.993 1.838,0.993l8.684,0c0.879,0 1.673,-0.526 2.022,-1.329l24.478,-56.842l24.92,56.854c0.353,0.798 1.143,1.317 2.013,1.317l8.717,0c0.744,0 1.44,-0.374 1.843,-0.993c0.408,-0.624 0.471,-1.41 0.174,-2.094l-30.19,-68.857Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M309.196,81.525l0.476,-0.229c8.675,-4.191 14.279,-13.087 14.279,-22.667c0,-13.881 -11.295,-25.174 -25.176,-25.174l-31.863,0c-1.214,0 -2.199,0.988 -2.199,2.202l0,68.855c0,1.219 0.985,2.204 2.199,2.204l7.979,0c1.214,0 2.2,-0.985 2.2,-2.204l0,-58.679l21.684,0c7.059,0 12.799,5.739 12.799,12.796c0,5.885 -3.996,10.989 -9.728,12.408c-1.032,0.261 -2.064,0.393 -3.071,0.393l-7.977,0c-0.829,0 -1.585,0.467 -1.959,1.205c-0.378,0.74 -0.305,1.625 0.187,2.296l22.62,30.884c0.412,0.566 1.07,0.901 1.771,0.901l9.915,0c0.827,0 1.587,-0.467 1.96,-1.207c0.378,-0.742 0.302,-1.629 -0.186,-2.296l-15.91,-21.688Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M107.191,80.969c-7.255,-4.794 -11.4,-8.845 -15.011,-16.109c-2.47,4.977 -8.236,12.376 -17.962,18.198c-4.856,15.106 -27.954,44.015 -35.43,39.916c-2.213,-1.212 -2.633,-2.808 -2.133,-4.456c0.536,-4.129 9.078,-13.62 9.078,-13.62c0,0 0.18,1.992 2.913,6.187c-3.609,-11.205 5.965,-25.031 8.5,-29.738c3.985,-1.269 4.274,-6.387 4.274,-6.387c0.255,-7.909 -3.278,-13.635 -6.701,-17.059c2.459,3.002 3.255,7.539 3.372,11.694l0,0.023c0.012,0.469 0.012,0.93 0.011,1.39c-0.117,3.439 -1.157,8.19 -3.383,8.19l0.006,0.03c-2.289,-0.098 -5.115,0.391 -7.639,1.18l-5.582,1.334c0,0 2.977,-0.136 4.584,1.252c-1.79,2.915 -5.769,6.533 -10.206,8.588c-6.457,2.995 -8.312,-2.964 -5.034,-6.838c0.805,-0.946 1.618,-1.745 2.387,-2.399c-0.495,-0.513 -0.807,-1.198 -0.889,-2.068c-0.001,-0.005 -0.004,-0.009 -0.005,-0.013c-0.45,-1.977 -0.202,-4.543 2.596,-8.623c0.551,-0.863 1.214,-1.748 2.007,-2.647c0.025,-0.031 0.046,-0.059 0.072,-0.089c0.034,-0.042 0.072,-0.08 0.108,-0.121c0.02,-0.023 0.039,-0.045 0.059,-0.068c0.2,-0.228 0.413,-0.45 0.639,-0.663c3.334,-3.414 8.599,-6.966 16.897,-10.152c9.675,-14.223 13.219,-16.89 13.219,-16.89c1.071,-1.096 2.943,-2.458 3.632,-2.805c-5.053,-8.781 -6.074,-21.158 -4.75,-24.493c-0.107,0.18 -0.206,0.365 -0.287,0.556c0.49,-1.143 0.819,-1.509 1.328,-2.111c1.381,-1.632 6.058,-2.488 7.737,0.971c0.895,1.844 1.063,4.232 1.034,6.023c-3.704,-0.193 -7.063,4.036 -7.063,4.036c0,0 3.067,-1.448 6.879,-1.473c0,0 1.015,0.883 2.283,2.542c-1.712,3.213 -4.524,10.021 -2.488,17.168c0.338,1.408 0.849,2.619 1.483,3.648c0.024,0.045 0.044,0.089 0.069,0.135c0.051,0.066 0.096,0.122 0.144,0.183c3.368,5.072 9.542,5.665 9.542,5.665c-2.906,-1.45 -5.274,-3.76 -6.816,-6.56c-0.8,-1.498 -1.291,-2.762 -1.592,-3.761c-1.636,-6.313 0.771,-9.999 2.149,-12.471c3.17,-4.917 8.944,-7.893 15.151,-7.185c8.712,0.995 14.968,8.862 13.973,17.571c-0.608,5.321 -3.781,9.723 -8.142,12.117c1.049,2.839 -0.073,6.28 -0.073,6.28c2.642,3.323 2.758,5.238 2.667,7.017c-3.357,-0.565 -6.618,1.701 -6.618,1.701c0,0 6.476,-1.546 10.238,1.81c2.446,2.631 4.078,5.009 5.051,6.766c1.393,2.505 7.859,2.683 7.123,7.188c-0.737,4.499 -5.669,4.542 -13.401,-0.56M69.571,0c-38.424,0 -69.571,31.148 -69.571,69.567c0,38.422 31.147,69.573 69.571,69.573c38.42,0 69.568,-31.151 69.568,-69.573c0,-38.42 -31.148,-69.567 -69.568,-69.567"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M73.796,51.693c0.813,-0.814 0.813,-2.134 0,-2.947c-0.815,-0.814 -2.133,-0.814 -2.947,0c-0.815,0.813 -0.815,2.133 0,2.947c0.814,0.813 2.132,0.813 2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M66.445,53.149c-0.814,0.813 -0.814,2.133 0,2.947c0.813,0.814 2.133,0.814 2.947,0c0.813,-0.814 0.813,-2.134 0,-2.947c-0.814,-0.813 -2.134,-0.813 -2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M79.231,54.233c-1.274,-1.274 -3.339,-1.272 -4.611,0l-2.713,2.712c-1.274,1.275 -1.274,3.339 0,4.612l2.978,2.978c1.274,1.275 3.338,1.274 4.611,0l2.712,-2.712c1.274,-1.274 1.274,-3.339 0,-4.612l-2.977,-2.978Z" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M95.759,41.445c-2.151,-2.578 1.869,-7.257 4.391,-4.463c4.645,5.148 -2.237,7.041 -4.391,4.463M105.004,44.132c3.442,-6.553 -1.427,-10.381 -4.773,-13.523c-5.36,-5.039 -10.706,-7.217 -16.811,-0.241c-6.102,6.977 -2.226,15.068 3.356,19.061c5.584,3.994 14.782,1.255 18.228,-5.297"
+      style="fill:#000;fill-rule:nonzero;"></path>
+  </svg>
+</a>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.com/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.com/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.com/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.com/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.com/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.com/23/javascript/javascript-inheritance/">
+                <span>javascript inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.com/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.com/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.com/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.com/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.com/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.com/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.com/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.com/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.com/91/algorithm/" itemprop="url"><span itemprop="title">Algorithm</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Algorithm: Maximum Flow (Ford-Fulkerson)</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#min-cut">Min Cut</a></li>
+<li><a href="#max-flow">Max Flow</a>
+<ul>
+<li><a href="#summary">Summary</a></li>
+</ul></li>
+<li><a href="#ford-fulkerson-algorithm">Ford-Fulkerson Algorithm</a></li>
+<li><a href="#maxflow-mincut-theorem">Maxflow-Mincut Theorem</a>
+<ul>
+<li><a href="#weak-duality">Weak Duality</a></li>
+</ul></li>
+<li><a href="#running-time-analysis">Running Time Analysis</a>
+<ul>
+<li><a href="#integer-capacities">Integer Capacities</a></li>
+<li><a href="#bad-case-for-ff">Bad case for FF</a></li>
+</ul></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#max-flow-application">Max Flow Application</a>
+<ul>
+<li><a href="#bipartite-maching-problem">Bipartite maching problem</a></li>
+<li><a href="#baseball-elimination">Baseball elimination</a></li>
+</ul></li>
+<li><a href="#performance">Performance</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Algorithm: Maximum Flow (Ford-Fulkerson)</h1>
+                
+
+
+
+<p><img src="https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png" alt="" /></p>
+
+<h3 id="min-cut">Min Cut</h3>
+
+<p><em>edge weighted</em> 그래프에서 <code>st</code>-<em>cut</em> 이란 <em>vertices</em> 를 두개의 <em>disjont sets</em> 으로 나누는 것이다. 이때 <code>s</code>, <code>t</code> 는 각각 다른 집합 <code>A</code>, <code>B</code> 에 속해있다.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Min-cut.svg/220px-Min-cut.svg.png" alt="" />
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p></p>
+
+<p><strong>capacity</strong> 란 컷으로 나뉘어진 두 집합 <code>A</code>, <code>B</code> 를 기준으로 <code>A</code> 에서 <code>B</code> 로 가기 위한 모든 <em>edge</em> 의 <em>weight</em> 를 모두 합친 것이다. <code>B</code> 에서 <code>A</code> 로의 <em>edge</em> 는 세지 않는 다는 것에 주의하자.</p>
+
+<p><em>mincut problem</em> 은 <em>min capacity</em> 를 갖는 <em>cut</em> 을 찾는 문제다. 응용으로는</p>
+
+<ul>
+<li>실제 전쟁에서 보급로를 끊거나</li>
+<li>독재 정부에서 커뮤니케이션을 제한하거나</li>
+</ul>
+
+<h3 id="max-flow">Max Flow</h3>
+
+<p><img src="http://kunuk.files.wordpress.com/2010/11/fordfulkerson1.gif?w=700" alt="" />
+<p align="center">(<a href="http://kunuk.wordpress.com">http://kunuk.wordpress.com</a>)</p></p>
+
+<p><em>edge</em> 에 <em>weight</em> 이외에도 <em>flow</em> 를 할당할 수 있다. 이 플로우는 몇 가지 성질을 만족하는데</p>
+
+<ul>
+<li><strong>capacity constraint:</strong> <code>0 &lt;= edge's flow &lt;= edge's capa</code></li>
+<li><strong>local equilibrium:</strong> <code>inflow = outflow</code> at every vertex except <code>s</code> and <code>t</code></li>
+</ul>
+
+<p>즉 한 에지에서 캐퍼시티는 항상 플로우보다 크거나 같고, <code>s, t</code> 를 제외한 모든 노드에서 <em>inflow = outflow</em> 다.</p>
+
+<p><em>flow</em> 의 <em>value</em> 는 <code>t</code> 에서의 <em>inflow</em> 다. 이때 <code>s</code> 를 가리키는 노드가 없고, <code>t</code> 가 가리키는 노드가 없다고 가정한다. 다시 말해 <code>s</code> 는 시작점, <code>t</code> 는 종료지점이다.</p>
+
+<p>따라서 플로우를 어떻게 할당하냐에 따라 <em>value</em> 가 달라질 수 있다. 이 때 <em>maximum flow</em> 문제는 최대 값을 갖는 <em>flow</em> 를 찾는 문제다.</p>
+
+<p><em>max flow</em> 의 응용은</p>
+
+<ul>
+<li>운송량을 최대로 하는 보급로를 찾기</li>
+</ul>
+
+<h4 id="summary">Summary</h4>
+
+<p>정리하면 <em>weighted digraph</em> 에서 <em>source vertex</em> <code>s</code>, <em>target vertex</em> <code>t</code> 에 대해</p>
+
+<p>두 가지 문제를 정의할 수 있다.</p>
+
+<ul>
+<li><strong>min cut:</strong> Find a cut of minimum capacity</li>
+<li><strong>max flow:</strong> Find a flow of maximum value</li>
+</ul>
+
+<p>사실 이 문제는 상당히 유사한데, <em>dual</em> 관계다. 하나를 풀면 다른 하나도 풀 수 있다.</p>
+
+<h3 id="ford-fulkerson-algorithm">Ford-Fulkerson Algorithm</h3>
+
+<p>기본적인 아이디어는 <em>augmenting path</em> 를 찾으면서 <em>flow</em> 값을 증가시키는 것이다.</p>
+
+<ul>
+<li><em>forward edge</em> (not full) 을 이용해서 <em>flow</em> 값을 증가시키고</li>
+<li><em>backward edge</em> (not empty) 를 이용해서 감소시킬 수 있다</li>
+</ul>
+
+<p><em>backward edge</em> 의 아이디어는 <em>local equilibrium</em> 이다. 진행할 수 없는 상황에서 <em>backward edge</em> 를 만들고, 거기서 <em>flow</em> 의 평형을 맞추는 값만큼 뺀 후 다시 진행한다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpWXljek0wSTJNaWRqWTNZVEx6RWpaaDF5TTVZMk10TWpabVZUTDVNR1ppbHpZaUJ6TDNNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+
+<p>더이상 <em>augmenting path</em> 를 찾을 수 없을 때 알고리즘이 종료된다. 이건 <em>full forward edge</em> 가 존재하거나 <em>empty backword edge</em> 가 만들어졌기 때문이다.</p>
+
+<p><img src="http://www.cs.princeton.edu/courses/archive/spr13/cos226/lectures/summaries/maxFlowCheckpoint.png" alt="" />
+<p align="center">(<a href="http://www.cs.princeton.edu/">http://www.cs.princeton.edu/</a>)</p></p>
+
+<p>알고리즘을 서술하면</p>
+
+<pre><code>// Fold-Fulkerson algorithm
+
+Start with 0 flow
+While there exists an augmenting path
+- find an augmenting path
+- compute bottleneck capacity
+- increase flow on that path by bottleneck capacity
+</code></pre>
+
+<p>그럼, 이제 문제는 <em>min cut</em> 은 어떻게 계산하고 <em>augmenting path</em> 는 어떻게 찾을지로 치환된다.</p>
+
+<p>그리고 추가적인 질문으로 <em>FF</em> 알고리즘이 <em>max flow</em> 를 찾는지, 그리고 항상 종료된다는 걸 보장하는지, 종료된다면 얼마만큼의 <em>augmentations</em> 를 찾아내는지를 물어볼 수 있다.</p>
+
+<p>좀 더 자세한 알고리즘 설명은 이 <a href="http://www.cs.princeton.edu/courses/archive/spring13/cos226/lectures/64MaxFlow.pdf">슬라이드</a> 를 참조할 것</p>
+
+<h3 id="maxflow-mincut-theorem">Maxflow-Mincut Theorem</h3>
+
+<p><em>cut</em> 과 <em>flow</em> 는 무슨 관계일까?</p>
+
+<p><em>net flow accros cut</em> <code>(A, B)</code> 는 <code>A-&gt;B</code> 로의 <em>flow</em> 를 모두 합한 것에서 <code>B-&gt;A</code> 로의 <em>flow</em> 를 모두 뺀 것이다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWhKV1lsRkRaeVFtTTVZV0xtVkRPaTF5TTFjek10TXpZbGxUTGxCRE1pWkRaaFZ6TDVNek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+
+<blockquote>
+<p><em>flow-value lemma:</em> Let <code>f</code> be any flow and let <code>(A, B)</code> be any cut. Then the net flow accros <code>(A, B)</code> equals the value of <code>f</code></p>
+</blockquote>
+
+<p><code>B</code> 의 사이즈에 대해 귀납법을 이용하면 증명은 어렵지 않다.</p>
+
+<p>(1) Base case <code>B = { t }</code></p>
+
+<p><em>base case</em> 에선 당연히 <em>value</em> 와 <em>net flow accros</em> 가 동일하다.</p>
+
+<p>(2) Inductive case</p>
+
+<p><code>A</code> 에서 <code>B</code> 로 <em>vertex</em> 를 하나씩 옮겨도 <em>local equilibrium</em> 이 참이므로 이 속성은 유지된다. 옮기려는 <em>vertex</em> 를 <code>k</code> 라 하면</p>
+
+<p><code>k</code> 를 기준으로 <em>inflow</em></p>
+
+<ul>
+<li><code>A -&gt; k</code></li>
+<li><code>B -&gt; k</code></li>
+</ul>
+
+<p>는 다음의 <em>outflow</em> 와 동일하다.</p>
+
+<ul>
+<li><code>k</code> -&gt; <code>A</code></li>
+<li><code>k</code> -&gt; <code>B</code></li>
+</ul>
+
+<p>그런데 <code>k</code> 를 <code>B</code> 로 옮기게 되면 <em>net flow accros</em> 에 미치는 영향이 <em>inflow</em>, <em>outflow</em> 간 반대가 되지만 어쨌든 <em>local equilibrium</em> 에 의해 값은 같으므로 어차피 <em>value</em> 와 같다.</p>
+
+<p>그리고 결국 <code>k</code> 를 계속 옮기다 보면<code>s</code> 의 <em>outflow</em> 는 <code>t</code> 의 <em>inflow</em> 와 같고 이것인 <em>value of flow</em> 와 같다.</p>
+
+<h4 id="weak-duality">Weak Duality</h4>
+
+<p><em>weak duality</em> 란 <code>f</code> 를 아무 플로우, <code>(A, B)</code> 를 어느 컷이라 할 때</p>
+
+<blockquote>
+<p><em>value of flow</em> <code>&lt;=</code> <em>capacity of cut</em></p>
+</blockquote>
+
+<p>이 성립함을 말한다. 따라서 <em>max flow</em> 는 <em>min cut</em> 이다. 증명과정을 좀 보자. 위에서 귀납법으로 참임을 보인 성질에 의해 다음이 성립한다. <del>뜬금없이 증명해버림</del></p>
+
+<p><em>value of flow</em> <code>f</code> = *net flow accros <code>(A, B)</code> &lt;= capacity of <code>(A, B)</code></p>
+
+<ul>
+<li><strong>Augmenting path theorem:</strong> A flow <code>f</code> is a maxflow iff no augmenting paths</li>
+<li><strong>Maxflow-mincut theorem:</strong> Value of the maxflow = capacity of mincut</li>
+</ul>
+
+<p>즉 이 말은 <del>동어 반복의 향연</del></p>
+
+<p>(1) 플로우 <code>f</code> 의 <em>value</em> 와 동일한 값의 <em>capacity</em> 를 가지는 어떤 컷이 있다.<br />
+(2) <code>f</code> 는 <em>max flow</em> 다<br />
+(3) <code>f</code> 에 대해 <em>augmenting path</em> 가 없다.</p>
+
+<p>정리해 보면 <em>max flow</em> 로 부터 <em>min cut</em> 을 계산할 수 있다는 소리가 된다. 잘 보면 <em>max flow</em> <code>f</code> 에서는 <em>augmenting path</em> 가 없다.</p>
+
+<p>다시 말해</p>
+
+<ul>
+<li>한 집합은 <code>s</code> 에서 <em>non-full forward</em> 로 출발하지만 <em>empty backward</em> 에 의해 막히고</li>
+<li>다른 집단은 <em>full foraward</em> 때문에 <code>t</code> 로의 <em>non empty backword</em> 가 막힌다.</li>
+<li>이 두집단의 자르는 <em>cut</em> 은 <em>full forward</em>, <em>empty backward</em> 로만 구성된다.</li>
+</ul>
+
+<p>이 컷은 <em>net flow accros cut</em> 고 첫번째 집단은 <code>A</code>, 두번째 집단은 <code>B</code> 가 된다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTWjVZR05sSlRPaE4yTm1KVEw1TVdZNTBDTzJnek10VW1ZaUZXTG1CRFpoRkRaaU56THpRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+
+<p>따라서 러닝타임은 <em>max flow</em> <code>f</code> 가 주어진다면 모든 <em>vertex</em>, <em>edge</em> 를 한번씩 보며 <code>A</code> 를 찾는 시간이므로 <code>V + E</code> 다.</p>
+
+<h3 id="running-time-analysis">Running Time Analysis</h3>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WTBJRE40a3pNMklXWW1KVEx5SVRaNTB5WWpaek10QVROaGhUTGlSV1lqUkdPM1V6TDNRek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p>아까 했던 질문들에 답해보면</p>
+
+<ul>
+<li><em>mincut</em> 을 계산하긴 쉽다.</li>
+<li><em>BFS</em> 로 <em>augmenting path</em> 를 찾을 수 있다.</li>
+<li><em>Ford-Fulkerson</em> 이 종료되면 <em>max flow</em> 를 찾을 수 있다</li>
+<li><em>capacity</em> 가 정수거나, <em>argumenting path</em> 를 신중히 고른다면 <em>FF</em> 는 종료된다.</li>
+<li>얼마나 많은 <em>augmentations</em> 가 있을진 생각좀 해봐야 한다.</li>
+</ul>
+
+<p>간단한 경우부터 좀 보자.</p>
+
+<h4 id="integer-capacities">Integer Capacities</h4>
+
+<p><em>edge capacities</em> 가 <code>[1, U]</code> 사이의 값이면 <em>FF</em> 알고리즘에 걸쳐서 모든 <em>flow</em> 값은 정수다. 쉽게 증명 가능한데</p>
+
+<ul>
+<li>Bottleneck capacity is an integer</li>
+<li>Flow on an edge increases / decreases by bottleneck capa</li>
+</ul>
+
+<blockquote>
+<p><code># of augmentations &lt;= max flow value</code></p>
+</blockquote>
+
+<p>다시 말해 <em>augmentations</em> 의 수는 <em>max flow value</em> 보다 작거나 같다. 왜냐하면 처음에 <code>0</code> 부터 시작해서 매 <em>augmentation</em> 마다 적어도 <em>value</em> 를 1 씩 증가시키기 때문이다.</p>
+
+<ul>
+<li><strong>Integrality theorem:</strong> There exists an integer-values maxflow</li>
+</ul>
+
+<p>이 때 <em>FF</em> 알고리즘이 종료되면 <em>max flow</em> 를 찾아내고, 이것은 위에서 보였듯이 <em>integer-value</em> 를 가진다.</p>
+
+<h4 id="bad-case-for-ff">Bad case for FF</h4>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTW1Oek15RW1Zd0FqTWlWVExpbHpZNTBDWmhSMk10VURad01UTDJZek1oTldNeEl6THhVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p><em>integer value max flow</em> 에선 운이 나쁠 경우 <em>max flow value</em> 만큼 <em>augmentation</em> 이 일어난다. 위 슬라이드에서 볼 수 있듯이 그래프 사이즈에 비해 어마어마한 <em>augmentation</em> 이 일어날 수 있다.</p>
+
+<p>다행히도 <em>shortest, fattest path</em> 를 이용해 이런 상황을 피할 수 있다.</p>
+
+<ul>
+<li><em>shortest path:</em> augmenting path with <strong>fuwest number of edges</strong></li>
+<li><em>fattest path:</em> augmenting path with <strong>maximum bottleneck capacity</strong></li>
+</ul>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5WWtWMk4yTUdNbFZUWmpWVEx6UVdZaTFDTWtOMk10UVdNaUJUTGlaR1owTVRNbVoyTDFVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p>따라서 <em>FF</em> 알고리즘의 성능은 어떤 <em>augmenting path</em> 를 선택하느냐에 따라 달라질 수 있다.</p>
+
+<h3 id="implementation">Implementation</h3>
+
+<p><em>Ford-Fulkerson</em> 알고리즘을 구현함에 있어서 실제로 사용하게 될 값은 두 가지다.</p>
+
+<ul>
+<li><em>forward edge residual capacity</em> = <code>c - f</code></li>
+<li><em>backward edge residual capacity</em> = <code>f</code></li>
+</ul>
+
+<p>따라서 <em>flow</em>, <em>capacity</em> 보다는 <em>residual capacity</em> 를 <em>edge</em> 의 가중치로 표시하는 <em>residual network</em> 를 이용하는편이 더 직관적이다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2lSMk1rRkdNNGN6WTVVVExsRjJZNTB5WWlsek10RVRPeVFXTDRjak41TVRObVp6TDNVek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p>실제 클래스 구현은</p>
+
+<pre><code class="language-java">public class FlowEdge {
+  
+  private final int v, w;
+  private final double capacity;
+  private double flow;
+  
+  public FlowEdge(int v, int w, double capacity) {
+    this.v = v; 
+    this.w = w;
+    this.capacity = capacity;
+  }
+  
+  public int from() { return v; }
+  public int to() { return w; }
+  public double capacity() { return capacity; }
+  public double flow() { return flow; }
+  
+  // other endpoint
+  int other(int vertex) {
+    if (vertex == v) return w;
+    else if (vertex == w) return v;
+    else throw new RuntimeException(&quot;Illegal endpoint&quot;);
+  }
+  
+  // residual capacity toward v
+  double residualCapacityTo(int vertex) {
+    if (vertex == v)      return flow;            // backward edge
+    else if (vertex == w) return capacity - flow; // forward edge
+    else throw new IllegalArgumentException();
+  }
+  
+  // add delta flow toward v
+  void addResidualFlowTo(int vertex, double delta) {
+    if (vertex == v)      flow -= delta; // backward edge
+    else if (vertex == w) flow += delta; // forward edge
+    else throw new IllegalArgumentException();
+  } 
+}
+</code></pre>
+
+<p><code>FlowNetwork</code> 는</p>
+
+<pre><code class="language-java">public class FlowNetwork {
+  private final int V;
+  // Bag is a list without remove op
+  private Bag&lt;FlowEdge&gt;[] adj;
+  
+  public FlowNetwork(int V) {
+    this.V = V;
+    adj = (Bag&lt;FlowEdge&gt;[]) new Bag[V];
+    for (int v = 0; v &lt; V; v++)
+      adj[v] = new Bag&lt;FlowEdge&gt;();
+  }
+  
+  public void addEdge(FlowEdge e) {
+    int v = e.from();
+    int w = e.to();
+    adj[v].add(e); // add forward edge
+    adj[w].add(e); // add backward edge
+  }
+  
+  public Iterable&lt;FlowEdge&gt; adj(int v) { 
+    return adj[v];
+  }
+
+  public int V() { return V; }
+}
+</code></pre>
+
+<p><em>FF</em> 알고리즘 구현은 아래와 같다. <em>shortest augmenting path</em> 를 찾기 위해 <em>BFS</em> 를 이용했다.</p>
+
+<pre><code class="language-java">public class FordFulkerson {
+
+  private boolean[] marked;  // ture if s-&gt;v path in residual network
+  private FlowEdge[] edgeTo; // last edge on s-&gt;v path
+  private double value;      // value of flow
+  
+  public FordFulkersen(FlowNetwork G, int s, int t) {
+    value = 0.0;
+    
+    while (hasAugmentingPath(G, s, t)) {
+      double bottle = Double.POSITIVE_INFINITY;
+      
+      // compute bottleneck capacity
+      for (int v = t; v != s; v = edgeTo[v].other(v))
+        bottle = Math.min(bottle, edgeTo[v].residualCapacityTo(v));
+      
+      // augment flow
+      for (int v = t; v != s; v = edgeTo[v].other(v))
+        edgeTo[v].addResidualFlowTo(v, bottle);
+      
+      value += bottle;
+    }
+  }
+
+  // find a shortest augmenting path using BFS
+  private boolean hasAugmentingPath(FlowNetwork G, int s, int t) {
+    edgeTo = new FlowEdge[G.V()];
+    marked = new boolean[G.V()];
+    
+    Queue&lt;Integer&gt; q = new LinkedList&lt;Integer&gt;();
+    q.add(s);
+    marked[s] = true;
+    
+    while (!q.isEmpty()) {
+      int v = q.remove();
+      
+      for (FlowEdge e : G.adj(v)) {
+        int w = e.other(v);
+        
+        // path s-&gt;w is in the residual network?
+        if (e.residualCapacityTo(w) &gt; 0 &amp;&amp; !marked[w]) {
+          edgeTo[w] = e;
+          marked[w] = true;
+          q.add(w);
+        }
+      }
+    }
+    
+    return marked[t];
+  }
+  
+  public double value() { return value; }
+  // is `v` reachable from s in residual network?
+  public boolean inCut(int v) { return marked[v]; } 
+}
+</code></pre>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Max-flow_min-cut_example.svg/288px-Max-flow_min-cut_example.svg.png" alt="" />
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p></p>
+
+<p>테스트 코드도 좀 돌려보자. 예제는 위와 같고, 코드는 아래에 있다.</p>
+
+<pre><code class="language-java">public class FordFulkensonTest {
+
+  @Test
+  public void test() {
+    int E = 5;
+    
+    int s = 0;
+    int t = 3;
+   
+    // http://en.wikipedia.org/wiki/Max-flow_min-cut_theorem#Example
+    FlowEdge[] edges = new FlowEdge[E];
+    edges[0] = new FlowEdge(s, 1, 4.0);
+    edges[1] = new FlowEdge(s, 2, 3.0);
+    edges[2] = new FlowEdge(1, 2, 3.0);
+    edges[3] = new FlowEdge(1, t, 4.0);
+    edges[4] = new FlowEdge(2, t, 5.0);
+   
+    int V = 4;
+    FlowNetwork G = new FlowNetwork(V);
+    
+    for (FlowEdge e : edges)
+      G.addEdge(e);
+     
+    FordFulkerson FF = new FordFulkerson(G, s, t);
+    
+    assert(FF.value() == 7);
+  }
+}
+</code></pre>
+
+<h3 id="max-flow-application">Max Flow Application</h3>
+
+<p><em>shortest path</em> 처럼 <em>max flow</em> 도 정말 많은 곳에 응용할 수 있다.</p>
+
+<ul>
+<li>Bipartite maching</li>
+<li>Network reliability</li>
+<li>Baseball elimination</li>
+<li>Image segmentation</li>
+<li>Distributed computing</li>
+<li>&hellip;</li>
+</ul>
+
+<h4 id="bipartite-maching-problem">Bipartite maching problem</h4>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDTTRNalowTVdPNE1UTTBVV0x6TVRONDBDTzFVMk10WUROakZUTDJVMk0wVUROa056THhZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p><code>N</code> 명의 <em>student</em> 가 <code>N</code> 개의 <em>company</em> 로부터 각각 몇개씩의 주문을 받았을 때, <code>1:1</code> 로 대응하는 그래프를 그릴 수 있느냐의 문제다.</p>
+
+<p><em>max flow</em> 알고리즘을 이용해 <em>bipartite maching</em> 문제를 풀 수 있다.</p>
+
+<ul>
+<li>Create <code>s</code>, <code>t</code>, one vertex for each student, and one vertex for each company(job)</li>
+<li>Add edge from <code>s</code> to each student (capacity 1)</li>
+<li>Add edge from each job to <code>t</code> (capacity 1)</li>
+<li>Add edge from student to each job offered (infinite capacity)</li>
+</ul>
+
+<p>이렇게하면 <em>local equilibrium</em> 에 의해 각 <em>student</em> 마다 하나씩의 <em>out-flow</em> 밖에 가지지 못하고, 마찬가지로 <em>job</em> 도 하나씩의 <em>in-flow</em> 밖에 가지지 못하므로 <code>1:1</code> 대응을 만들 수 있다.</p>
+
+<p>완벽히 매칭이 이루어지는지, 아닌지를 <em>min cut</em> 을 이용해 알 수 있다. 그림을 보자.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTm1OV08xSUdOd1VtWTJNVExsQnpNaDFTWjJRek10WXpNaUZUTGlWMk4wZ1ROa0p6THpZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<ul>
+<li>Let <code>S</code> = students on <code>s</code> side of cut.</li>
+<li>Let <code>T</code> = companies on <code>s</code> side of cut.</li>
+<li><code>|S|</code> &gt; <code>|T|</code>; students in <code>S</code> can be matched only to companies in <code>T</code>.</li>
+</ul>
+
+<h4 id="baseball-elimination">Baseball elimination</h4>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzV5TWhWVE9oZERNeGNET2paVEx6a0RPaDFDTm1WMk10UXpNMllUTGhKVFppSlRZME16TDFZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<blockquote>
+<p>Which teams have a chance of finishing the season with the most wins?</p>
+</blockquote>
+
+<p>이건 게임이 얼마나 남았느냐 뿐만 아니라, 누구와 상대하냐도 문제가 되기 때문에 이렇게 그래프를 그려 풀 수 있다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTTm1SR08yVTJZMlFqTTRnVEwxTURNaTFTWmpoek10TVRZaVJXTDJFMk5sSkdPakp6TDNZek53OHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p>여기서 디트로이트 (<code>4</code>) 는 수학적으로 봤을때 우승이 불가능하므로 미리 제거했다. 그리고, <code>s</code> 에서 출발하는 <em>edge</em> 를 각 팀간 남은 경기로, 그리고 <code>t</code> 로 들어가는 <em>edge</em> 를 디트로이트의 남은경기, 이긴경기에서 해당 팀의 이긴경기를 빼서 <em>upper bound</em> 를 설정한다.</p>
+
+<blockquote>
+<p>Team 4 (디트로이트) not eliminated iff all edges pointing from <code>s</code> are full in max flow</p>
+</blockquote>
+
+<h3 id="performance">Performance</h3>
+
+<p><em>max flow</em> 문제의 경우 <em>FF</em> 알고리즘을 이용하면 <em>worst case</em> 에서 <code>E^2U</code> 성능이 나온다고 한다. 근데 이건 1955년도에 발견된 알고리즘이고, 가장 최근에는 <em>compact network</em> 라는 기법이 2012년에 만들어졌다. 이건 <code>E^2 / log E</code> 의 <em>worst case performance</em> 라고 함.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Ro$bert Sedgewick</strong><br />
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a><br />
+(3) <a href="https://graph-tool.skewed.de/static/doc/flow.html">https://graph-tool.skewed.de/</a><br />
+(4) <a href="http://en.wikipedia.org/wiki/Cut_(graph_theory)">Wikipedia: Cut</a><br />
+(5) <a href="http://kunuk.wordpress.com/2010/11/09/graph-flow-ford-fulkerson-algorithm-example-with-c/">http://kunuk.wordpress.com - Flow</a><br />
+(6) <a href="http://www.programering.com/a/MDN0gDNwATY.html">http://www.programering.com</a><br />
+(7) <a href="http://en.wikipedia.org/wiki/Max-flow_min-cut_theorem#Example">Wikipeda - Max Flow</a></p>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../algorithm-part2-4"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../algorithm-part2-6" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.com/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.com/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.com/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.com/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.com/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.com/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.com/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.com/js/learn.js"></script>
+    <script src="https://1ambda.github.com/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+

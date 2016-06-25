@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="">
+
+
+    <link rel="shortcut icon" href="https://1ambda.github.com/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Process Mining 4: Conformance Checking, Dotted Chart</title>
+    <link href="https://1ambda.github.com/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.com/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    
+
+  </head>
+  <body class="" data-url="/92/data-analysis/process-mining-4/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="http://getgrav.org">
+  <svg id="grav-logo" width="100%" height="100%" viewBox="0 0 504 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <path d="M235.832,71.564l-7.98,-0.001c-1.213,0.001 -2.197,0.987 -2.197,2.204l0,15.327l-0.158,0.132c-4.696,3.962 -10.634,6.14 -16.719,6.14c-14.356,0 -26.034,-11.68 -26.034,-26.037c0,-14.358 11.678,-26.035 26.034,-26.035c5.582,0 10.919,1.767 15.437,5.113c0.877,0.649 2.093,0.56 2.866,-0.211l5.69,-5.69c0.444,-0.442 0.675,-1.055 0.639,-1.681c-0.034,-0.627 -0.336,-1.206 -0.828,-1.597c-6.76,-5.363 -15.214,-8.314 -23.805,-8.314c-21.18,0 -38.414,17.233 -38.414,38.415c0,21.183 17.234,38.415 38.414,38.415c10.937,0 21.397,-4.705 28.698,-12.914c0.358,-0.403 0.556,-0.921 0.556,-1.46l0,-19.603c0,-1.217 -0.985,-2.203 -2.2,-2.203"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M502.794,34.445c-0.408,-0.616 -1.1,-0.989 -1.838,-0.989l-8.684,0c-0.879,0 -1.673,0.522 -2.022,1.329l-24.483,56.839l-24.92,-56.852c-0.352,-0.799 -1.142,-1.316 -2.012,-1.316l-8.713,0c-0.744,0 -1.44,0.373 -1.843,0.995c-0.408,0.623 -0.476,1.408 -0.174,2.09l30.186,68.858c0.352,0.799 1.143,1.317 2.017,1.317l10.992,0c0.879,0 1.673,-0.527 2.021,-1.329l29.655,-68.861c0.289,-0.68 0.222,-1.461 -0.182,-2.081"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M388.683,34.772c-0.353,-0.798 -1.142,-1.316 -2.017,-1.316l-10.988,0c-0.879,0 -1.673,0.522 -2.021,1.329l-29.655,68.861c-0.294,0.675 -0.226,1.46 0.182,2.077c0.407,0.619 1.096,0.993 1.838,0.993l8.684,0c0.879,0 1.673,-0.526 2.022,-1.329l24.478,-56.842l24.92,56.854c0.353,0.798 1.143,1.317 2.013,1.317l8.717,0c0.744,0 1.44,-0.374 1.843,-0.993c0.408,-0.624 0.471,-1.41 0.174,-2.094l-30.19,-68.857Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M309.196,81.525l0.476,-0.229c8.675,-4.191 14.279,-13.087 14.279,-22.667c0,-13.881 -11.295,-25.174 -25.176,-25.174l-31.863,0c-1.214,0 -2.199,0.988 -2.199,2.202l0,68.855c0,1.219 0.985,2.204 2.199,2.204l7.979,0c1.214,0 2.2,-0.985 2.2,-2.204l0,-58.679l21.684,0c7.059,0 12.799,5.739 12.799,12.796c0,5.885 -3.996,10.989 -9.728,12.408c-1.032,0.261 -2.064,0.393 -3.071,0.393l-7.977,0c-0.829,0 -1.585,0.467 -1.959,1.205c-0.378,0.74 -0.305,1.625 0.187,2.296l22.62,30.884c0.412,0.566 1.07,0.901 1.771,0.901l9.915,0c0.827,0 1.587,-0.467 1.96,-1.207c0.378,-0.742 0.302,-1.629 -0.186,-2.296l-15.91,-21.688Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M107.191,80.969c-7.255,-4.794 -11.4,-8.845 -15.011,-16.109c-2.47,4.977 -8.236,12.376 -17.962,18.198c-4.856,15.106 -27.954,44.015 -35.43,39.916c-2.213,-1.212 -2.633,-2.808 -2.133,-4.456c0.536,-4.129 9.078,-13.62 9.078,-13.62c0,0 0.18,1.992 2.913,6.187c-3.609,-11.205 5.965,-25.031 8.5,-29.738c3.985,-1.269 4.274,-6.387 4.274,-6.387c0.255,-7.909 -3.278,-13.635 -6.701,-17.059c2.459,3.002 3.255,7.539 3.372,11.694l0,0.023c0.012,0.469 0.012,0.93 0.011,1.39c-0.117,3.439 -1.157,8.19 -3.383,8.19l0.006,0.03c-2.289,-0.098 -5.115,0.391 -7.639,1.18l-5.582,1.334c0,0 2.977,-0.136 4.584,1.252c-1.79,2.915 -5.769,6.533 -10.206,8.588c-6.457,2.995 -8.312,-2.964 -5.034,-6.838c0.805,-0.946 1.618,-1.745 2.387,-2.399c-0.495,-0.513 -0.807,-1.198 -0.889,-2.068c-0.001,-0.005 -0.004,-0.009 -0.005,-0.013c-0.45,-1.977 -0.202,-4.543 2.596,-8.623c0.551,-0.863 1.214,-1.748 2.007,-2.647c0.025,-0.031 0.046,-0.059 0.072,-0.089c0.034,-0.042 0.072,-0.08 0.108,-0.121c0.02,-0.023 0.039,-0.045 0.059,-0.068c0.2,-0.228 0.413,-0.45 0.639,-0.663c3.334,-3.414 8.599,-6.966 16.897,-10.152c9.675,-14.223 13.219,-16.89 13.219,-16.89c1.071,-1.096 2.943,-2.458 3.632,-2.805c-5.053,-8.781 -6.074,-21.158 -4.75,-24.493c-0.107,0.18 -0.206,0.365 -0.287,0.556c0.49,-1.143 0.819,-1.509 1.328,-2.111c1.381,-1.632 6.058,-2.488 7.737,0.971c0.895,1.844 1.063,4.232 1.034,6.023c-3.704,-0.193 -7.063,4.036 -7.063,4.036c0,0 3.067,-1.448 6.879,-1.473c0,0 1.015,0.883 2.283,2.542c-1.712,3.213 -4.524,10.021 -2.488,17.168c0.338,1.408 0.849,2.619 1.483,3.648c0.024,0.045 0.044,0.089 0.069,0.135c0.051,0.066 0.096,0.122 0.144,0.183c3.368,5.072 9.542,5.665 9.542,5.665c-2.906,-1.45 -5.274,-3.76 -6.816,-6.56c-0.8,-1.498 -1.291,-2.762 -1.592,-3.761c-1.636,-6.313 0.771,-9.999 2.149,-12.471c3.17,-4.917 8.944,-7.893 15.151,-7.185c8.712,0.995 14.968,8.862 13.973,17.571c-0.608,5.321 -3.781,9.723 -8.142,12.117c1.049,2.839 -0.073,6.28 -0.073,6.28c2.642,3.323 2.758,5.238 2.667,7.017c-3.357,-0.565 -6.618,1.701 -6.618,1.701c0,0 6.476,-1.546 10.238,1.81c2.446,2.631 4.078,5.009 5.051,6.766c1.393,2.505 7.859,2.683 7.123,7.188c-0.737,4.499 -5.669,4.542 -13.401,-0.56M69.571,0c-38.424,0 -69.571,31.148 -69.571,69.567c0,38.422 31.147,69.573 69.571,69.573c38.42,0 69.568,-31.151 69.568,-69.573c0,-38.42 -31.148,-69.567 -69.568,-69.567"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M73.796,51.693c0.813,-0.814 0.813,-2.134 0,-2.947c-0.815,-0.814 -2.133,-0.814 -2.947,0c-0.815,0.813 -0.815,2.133 0,2.947c0.814,0.813 2.132,0.813 2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M66.445,53.149c-0.814,0.813 -0.814,2.133 0,2.947c0.813,0.814 2.133,0.814 2.947,0c0.813,-0.814 0.813,-2.134 0,-2.947c-0.814,-0.813 -2.134,-0.813 -2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M79.231,54.233c-1.274,-1.274 -3.339,-1.272 -4.611,0l-2.713,2.712c-1.274,1.275 -1.274,3.339 0,4.612l2.978,2.978c1.274,1.275 3.338,1.274 4.611,0l2.712,-2.712c1.274,-1.274 1.274,-3.339 0,-4.612l-2.977,-2.978Z" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M95.759,41.445c-2.151,-2.578 1.869,-7.257 4.391,-4.463c4.645,5.148 -2.237,7.041 -4.391,4.463M105.004,44.132c3.442,-6.553 -1.427,-10.381 -4.773,-13.523c-5.36,-5.039 -10.706,-7.217 -16.811,-0.241c-6.102,6.977 -2.226,15.068 3.356,19.061c5.584,3.994 14.782,1.255 18.228,-5.297"
+      style="fill:#000;fill-rule:nonzero;"></path>
+  </svg>
+</a>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.com/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.com/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.com/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.com/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.com/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.com/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.com/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.com/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.com/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.com/23/javascript/javascript-inheritance/">
+                <span>javascript inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.com/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.com/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.com/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.com/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.com/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.com/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.com/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.com/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.com/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.com/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.com/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.com/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.com/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.com/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.com/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.com/92/data-analysis/" itemprop="url"><span itemprop="title">Data Analysis</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                <span itemprop="title"> Process Mining 4: Conformance Checking, Dotted Chart</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#two-phase-process-discovery-limitations">Two-Phase Process Discovery, Limitations</a></li>
+<li><a href="#alternative-process-discovery-techniques">Alternative Process Discovery Techniques</a></li>
+<li><a href="#language-based-region">Language-based Region</a></li>
+<li><a href="#genetic-process-mining">Genetic Process Mining</a></li>
+<li><a href="#inductive-process-mining">Inductive Process Mining</a></li>
+<li><a href="#intro-to-conformance-checking">Intro to Conformance Checking</a></li>
+<li><a href="#footprints-based-conformance-checking">Footprints-based Conformance Checking</a></li>
+<li><a href="#token-based-replay">Token-based Replay</a>
+<ul>
+<li><a href="#limitations">Limitations</a></li>
+</ul></li>
+<li><a href="#alignment-based-conformance-checking">Alignment-based Conformance Checking</a></li>
+<li><a href="#alignment-based-fitness">Alignment-based Fitness</a></li>
+<li><a href="#exploring-event-data">Exploring Event Data</a>
+<ul>
+<li><a href="#dotted-chart">Dotted Chart</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Process Mining 4: Conformance Checking, Dotted Chart</h1>
+                
+
+
+
+<h3 id="two-phase-process-discovery-limitations">Two-Phase Process Discovery, Limitations</h3>
+
+<p>지난시간에 두 단계를 거치는 프로세스 마이닝 알고리즘을 봤었다.</p>
+
+<p>하나는 <em>heuristic mining</em> 으로 <em>dependency graph</em> 를 만들고, 이것을 <em>C-nets</em> 으로 변환했었다.</p>
+
+<p>다른 하나는 <em>transition system</em> 을 학습하는 것으로 먼저 <em>state abstraction</em> 을 이용해 <em>transition system</em> 을 만들고 여기에 숨어있는 <em>state-based region</em> 을 이용해 <em>Petri-nets</em> 을 만들었다.</p>
+
+<p>그런데, <em>state-based region</em> 접근 방법에는 문제점이 있다.</p>
+
+<p>(1) Inability to discover particular <strong>process construct</strong>s<br />
+(2) Inability to balance the four forces (<em>fitness</em>, <em>precision</em>, <em>generalization</em>, simplicity)</p>
+
+<p>예를 하나 보자. <code>&lt;a, a&gt;^55</code> 란 로그가 있을때 만들어지는 트랜지션 시스템으로 <code>s1 -&gt; s2 -&gt; s3</code> 가 있다. 여기엔 몇개의 <em>non-trivial region</em> 이 있을까?</p>
+
+<p>없다. <em>empty set</em>, <code>{s1, s2, s3}</code> 가 있는데, <em>trivial region</em> 이므로</p>
+
+<p>따라서 이걸 이용해 <em>petri-net</em> 을 만들면 <em>place</em> 가 없는 <em>petri-net</em> 이 만들어 지고, <code>&lt;a, a, a&gt;</code> 등의 로그를 허용하므로 에러가 있다.</p>
+
+<p><code>&lt;a, c&gt;, &lt;a, b, c&gt;, &lt;a, b, b, c&gt; ...</code> 의 로그를 훈련시켜 만든 트랜지션 시스템은 대략 이런 모양이다</p>
+
+<p><code>s1 -&gt; s2 &gt; s3</code> (<code>s2</code> 는 자기 자신으로의 액션 <code>b</code> 가 있음)</p>
+
+<p>이 때 여기에는 <em>non-trivial region</em> 이 3개가 생기는데, 이걸 이용해 <em>petri-net</em> 을 만들면 <code>b</code> 만 붕 떠 있어, <code>b</code> 가 가운데 실행되지 않고 먼저나, 나중에 실행되는 <em>petri-net</em> 이 만들어 진다. <em>underfit</em> 이다.</p>
+
+<blockquote>
+<p>Petri net can simulate the behavior of the transition system, but not the other way around (no bisimulation)</p>
+</blockquote>
+
+<p>첫 번째 문제같은 경우는 <em>forward closure</em> 속성을 검사해서, 문제가 발견되면 <em>label</em> 을 <em>spliting</em> 하는걸로 해결할 수 있다. (이미지를 첨부하고 싶은데 찾을 수가 없다.) 두 번째 문제도 같은 방법으로 해결할 수 있다. <em>ProM</em> 에는 <em>bisimulation</em> 을 위한 플러그인이 있다.</p>
+
+<p>이제 특정 프로세스 패턴을 발견하지 못하는 문제를 해결했다. 이제 문제 (2) 를 해결해 보자.</p>
+
+<blockquote>
+<p>(2) Inability to balance the four forces (<em>fitness</em>, <em>precision</em>, <em>generalization</em>, simplicity)</p>
+</blockquote>
+
+<p>먼저 <em>step 1</em> 에서 트랜지션 시스템을 학습할때는 <em>fitness, generalization</em>, <em>precision</em>, <em>simplicity</em> 의 <em>trade-off</em> 를 봐가면서 해야한다.</p>
+
+<p><em>step 2</em> 에서는 <em>region</em> 을 이용해서 <em>concurrency</em> 를 발견하는데 사실 잘 생각해 보면 <em>Petri-nets</em> 은 트랜지션시스템에서의 변환이므로 이 단계에서는 <em>simplicity</em> 나 <em>generalization</em> 의 개선 여지가 없다. 트랜지션 시스템이 이미 복잡한데 어떻게 페트리넷을 간단하게 할까? 마찬가지로 트랜지션 시스템이 이미 <em>overfit</em> 되어있는데, 어떻게 이 문제를 풀까? 이 두 가지 문제를 해결하려면 (1) 로 돌아가야 한다.</p>
+
+<p>정리하자면 <em>Region-based techniques</em> 은</p>
+
+<ul>
+<li><strong>Overfitting</strong> may be a problem</li>
+<li>Inability to leave out <strong>infrequent</strong> behavior (but can be done in the transtion system)</li>
+<li><strong>Noise</strong> and <strong>incompleteness</strong> connot be handled well</li>
+</ul>
+
+<h3 id="alternative-process-discovery-techniques">Alternative Process Discovery Techniques</h3>
+
+<p>이전까지는 모델의 퍼포먼스를 기준으로 삼았지만 사실</p>
+
+<ul>
+<li>speed</li>
+<li>memory usage</li>
+<li>representational bias</li>
+<li>flexibility(related problems),</li>
+<li>implementation vs apporach</li>
+</ul>
+
+<p>등을 고려해야 한다.</p>
+
+<p><em>petri net</em> 에서 무엇을 해야 <em>behavior</em> 를 추가할 수 있을까? <em>place</em> 는 일종의 <em>constraint</em> 라 보면 된다. 그리고 <em>place</em> 에 토큰이 많아지면 다 더 다양한 로그가 생길 수 있다.</p>
+
+<ul>
+<li>Add a transition</li>
+<li>Remove a place</li>
+<li>Add an arc from a transition to a place</li>
+<li>Remove an arc from a place to a transtion</li>
+</ul>
+
+<p>반대로 <em>behavior</em> 를 제거하려면</p>
+
+<ul>
+<li>Remove a transition</li>
+<li>Add a place</li>
+<li>Add an arc from a place to transition</li>
+<li>Remove an arc from a transition to a place</li>
+</ul>
+
+<p><em>process discovery</em> 가 <em>finding place</em> 라는 점을 고려하면 <em>alpha algorithm</em> 에서는 <em>constraint</em> 인 <em>place</em> 를 발견하는 과정이었다. <em>state-based region</em> 에서는 먼저 <em>transition</em> 을 만들고, 이걸 <em>place</em> 로 변환했었다.</p>
+
+<p>이번엔 <em>language-based region</em> 이란 기법을 배워보자.</p>
+
+<h3 id="language-based-region">Language-based Region</h3>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-36-728.jpg?cb=1305062477" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-37-728.jpg?cb=1305062477" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-38-728.jpg?cb=1305062477" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-40-728.jpg?cb=1305062477" alt="" /></p>
+
+<p><br/></p>
+
+<p><code>c * 1 + A' * x - A * y &gt;= 0</code> 등의 식으로 표현되는데, 이 말은 <em>place</em> 가 음수가 될 수 없다는 뜻이라 보면 된다. <del>이제 나도 뭔소린지 모르겠다 너무멀리 와버렸음 ㅠㅠ</del></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?c%20*%201%20&amp;plus;%20A%27%20x%20-%20Ay%20%5Cgeq%200" alt="" /></p>
+
+<p>여기서 <code>A', A</code> 는 <em>log</em>, <code>x, y</code> 는 <em>petri-nets</em>, <code>c</code> 는 초기에 <em>place</em> 내에 있는 토큰의 수다. 이 때 위 방정식을 만족하는 <code>x, y, c</code> 가 <em>region</em> 이다.</p>
+
+<ul>
+<li><code>c</code> is the initial number of tokens in the place</li>
+</ul>
+
+<p>예를 들어</p>
+
+<p><code>&lt;a&gt;, &lt;b&gt;, &lt;a, b&gt;, &lt;b, a&gt;</code> 인 로그가 있다고 하자. 그러면 진리표처럼 로그 내에 <code>a, b</code> 쌍을 <code>0, 1</code> 로 표현할 수 있다. 이걸 <code>A</code> 라 하면</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?A%20%3D%20%5Cbegin%7Bpmatrix%7D%201%20%26%200%5C%5C%200%20%26%201%5C%5C%201%20%26%201%5C%5C%201%20%26%201%20%5Cend%7Bpmatrix%7D" alt="" /></p>
+
+<p>그리고 <code>A'</code> 를 만들기 위해 마지막 <em>trace</em> 는 무시하도록 하자. 그러면 다음 식을 만들 수 있다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?c%20*%20%5Cbegin%7Bpmatrix%7D%201%5C%5C%201%5C%5C%201%5C%5C%201%20%5Cend%7Bpmatrix%7D%20&amp;plus;%20%5Cbegin%7Bpmatrix%7D%200%20%26%200%5C%5C%200%20%26%200%5C%5C%201%20%26%200%5C%5C%200%20%26%201%20%5Cend%7Bpmatrix%7D%20*%20%5Cbegin%7Bpmatrix%7D%20x_a%5C%5C%20x_b%20%5Cend%7Bpmatrix%7D%20-%20%5Cbegin%7Bpmatrix%7D%201%20%26%200%5C%5C%200%20%26%201%5C%5C%201%20%26%201%5C%5C%201%20%26%201%20%5Cend%7Bpmatrix%7D%20*%20%5Cbegin%7Bpmatrix%7D%20y_a%5C%5C%20b_b%20%5Cend%7Bpmatrix%7D%20%5Cgeq%20%5Cbegin%7Bpmatrix%7D%200%5C%5C%200%5C%5C%200%5C%5C%200%20%5Cend%7Bpmatrix%7D" alt="" /></p>
+
+<ul>
+<li><code>x_a</code> is the number of arcs from transition <code>a</code> to the place</li>
+<li><code>x_b</code> is the number of arcs from transition <code>b</code> to the place</li>
+<li><code>y_a</code> is the number of arcs from the place to transtion <code>a</code></li>
+<li><code>y_b</code> is the number of arcs from the place to transtion <code>b</code></li>
+</ul>
+
+<p>식을 풀면</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5C%20%5C%5C%20c%20-%20y_a%20%5Cgeq%200%20%5C%5C%20c%20-%20y_b%20%5Cgeq%200%20%5C%5C%20c%20&amp;plus;%20x_a%20-%20y_a%20-%20y_b%20%5Cgeq%200%20%5C%5C%20c%20&amp;plus;%20x_b%20-%20y_a%20-%20y_b%20%5Cgeq%200%20%5C%5C" alt="" /></p>
+
+<p>하나의 답으로</p>
+
+<ul>
+<li><code>c=1, x_a=0, x_b=0, y_a=1, y_b=0</code></li>
+<li><code>c=1, x_a=0, x_b=0, y_a=0, y_b=1</code></li>
+</ul>
+
+<p><em>language-based region</em> 에서는</p>
+
+<ul>
+<li>any solution is a feasible place</li>
+<li>additional constraints can be added easily</li>
+<li><strong>goal function</strong> can be used to select most interesting places</li>
+<li>optimiazation problem (e.g ILP)</li>
+</ul>
+
+<h3 id="genetic-process-mining">Genetic Process Mining</h3>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter06advancedprocessdiscoverytechniques-110510153227-phpapp02/95/process-mining-chapter-6-advanced-process-discoverytechniques-22-728.jpg?cb=1305062477" alt="" /></p>
+
+<p>이번엔 <em>genetic process mining</em> 기법을 살펴보자.</p>
+
+<p><em>event log</em> 로 부터 <em>initial population</em> 을 만들고, 이것에 대해 <em>conformance checking</em> 등을 이용해 얼마나 좋은 모델인가 본다. 이것을 다시 매 턴마다 랜덤하게 변이시키면서 계속 반복하는 것이다.</p>
+
+<p>많은 <em>generation</em>, <em>mutation</em> 이 있을 수 있기 때문에 굉장히 느리지만 <em>very flexible</em> 할 수 있다. 왜냐하면 <em>qualty measure</em> 을 이용해서 4 품질(fitness 등) 을 조절할 수 있기 때문이다.</p>
+
+<h3 id="inductive-process-mining">Inductive Process Mining</h3>
+
+<p>로그를 <em>trace</em> 를 기준으로 쪼개는 방법인데</p>
+
+<pre><code>abdef
+acdef
+abdeg
+adceg
+</code></pre>
+
+<p>가 있을때, <code>abcd</code>, <code>efg</code> 기준으로 쪼개면</p>
+
+<pre><code>abd
+acd
+abd
+adc
+
+ef
+ef
+eg
+eg
+</code></pre>
+
+<p>로 분리할 수 있다. 여기서 <code>abcd</code> 부분을 또 쪼개면 <code>a</code> <code>seq</code> <code>bcd</code> 로 쪼갤 수 있다. 마찬가지로 뒷부분도 <code>e</code> <code>seq</code> <code>fg</code> 로 쪼갤 수 있다. 뒷부분의 경우 <code>f xor g</code> 로 다시 쪼갤 수 있고. 이렇게 반복하면서 쪼개는 방법이다. 이 결과로 만들어지는 것이 <em>process tree</em> 다. 이를 <em>petri-net</em> 이나 <em>BPMN</em> 으로 변경할 수 있다.</p>
+
+<p><em>ProM</em> 에도 플러그인이 있다고 함.</p>
+
+<h3 id="intro-to-conformance-checking">Intro to Conformance Checking</h3>
+
+<p><img src="http://www.win.tue.nl/~mpechen/projects/edm/images/framework.jpg" alt="" />
+<p align="center">(<a href="http://www.win.tue.nl">http://www.win.tue.nl</a>)</p></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-4-728.jpg?cb=1305062420" alt="" />
+<br/></p>
+
+<p>다른 품질도 중요하긴 한데, <em>replay fitness</em> 가 주된 관심사라고 한다. <em>conformance checking</em> 의 주된 용도는</p>
+
+<ul>
+<li>Auditing and compliance</li>
+<li>Evaluating process discovery algorithm</li>
+<li>Conformance to specification (software, service)</li>
+</ul>
+
+<p><em>conformance checking</em> 은 <em>runtime</em> 에 할수도 있다.</p>
+
+<h3 id="footprints-based-conformance-checking">Footprints-based Conformance Checking</h3>
+
+<p>알파 알고리즘을 사용할때 <em>footprints</em> 를 봤었다. 테이블에 각 <em>trace</em> 사이의 <em>direct succession, causality, parallel, choice</em> 를 표시한 것이다.</p>
+
+<p>로그로 부터 <em>footprint</em> 가 나왔기 때문에 로그의 <em>footprint-based conformance</em> 는 항상 <code>1</code> 이다. 다시 말해서</p>
+
+<blockquote>
+<p>footprints of log and model coincide</p>
+</blockquote>
+
+<p>그런데, 모델을 만들고 보니 다음과 같이 로그와 모델의 <em>footprint</em> 를 작성했다고 하자.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-34-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><code>a - d, b - d</code> 부분이 다르다. 따라서 다른 부분을 파악해서 값으로 매기면</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-35-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-36-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><br/></p>
+
+<p><em>flower model</em> 에서는 수 많은 조합이 가능하기 때문에 <em>footprint-based conformance</em> 가 떨어진다.</p>
+
+<p><em>footprint-based conformance</em> 자체는 굉장히 유연하다.</p>
+
+<ul>
+<li><em>log to log</em></li>
+<li><em>log to model</em></li>
+<li><em>model to model</em></li>
+</ul>
+
+<p>모두 가능하다. 그러나</p>
+
+<ul>
+<li>frequencies are not used</li>
+<li>behavior is only considered indiretcly (directly follows relation)</li>
+<li>aims to capture fitness, precision and generalization in a single metric</li>
+</ul>
+
+<p>다양한 <em>metric</em> 으로 <em>fitness</em> 을 분류하고 싶을 수도 있는데, <em>footprint-based</em> 는 그러질 못한다. 이 때문에 <em>token-based conformance</em> 를 이용하기도 한다.</p>
+
+<h3 id="token-based-replay">Token-based Replay</h3>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-12-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><em>traces</em> 를 모델에 실제 <em>replay</em> 해 보면서 <em>missing token</em>, <em>remaining token</em> 을 기록한다.</p>
+
+<ul>
+<li><code>p</code>, <em>produced tokens</em></li>
+<li><code>c</code>, <em>consumed tokens</em></li>
+<li><code>m</code>, <em>missing tokens</em></li>
+<li><code>r</code>, <em>remaining tokens</em></li>
+</ul>
+
+<p><img src="http://latex.codecogs.com/gif.latex?fitness%28%5Csigma%2C%20N%29%20%3D%20%5C%5C%20%5C%5C%20%7B1%20%5Cover%202%7D%20%281%20-%20%7Bm%20%5Cover%20c%7D%29%20&amp;plus;%20%7B1%20%5Cover%202%7D%281%20-%20%7Br%20%5Cover%20p%7D%29" alt="" /></p>
+
+<p>그리고, 어느 <em>place</em> 에서든 <em>invariants</em> 는</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5C%20%5C%5C%20p%20&amp;plus;%20m%20%5Cgeq%20c%20%5Cgeq%20m%5C%20%5C%20%5Cmbox%7B%28at%5C%20any%5C%20time%29%7D%20%5C%5C%20r%20%3D%20p%20&amp;plus;%20m%20-%20c%5C%20%5C%20%5Cmbox%7B%28at%5C%20the%5C%20end%29%7D" alt="" /></p>
+
+<p><em>replay</em> 의 시작과 끝을 생각해 보면</p>
+
+<ul>
+<li>In the beginning, a token is <strong>produced</strong> for the <em>source place</em> <code>p = 1</code></li>
+<li>At the end, a token is <strong>consumed</strong> from the <em>sink place</em> (also if not there) <code>c' = c + 1</code></li>
+</ul>
+
+<p>뭔 소린가 했는데, <em>conformance checking</em> 을 위해 초기에 토큰을 하나 넣어주고, <em>replay</em> 가 끝났을 때 <em>sink place</em> 에서 <em>consume</em> 해서 <code>c</code> 값을 하나 증가시킨다는 이야기</p>
+
+<p>왼쪽 위의 값을 주목하면서 따라가 보자.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-17-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-18-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-19-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><br/></p>
+
+<p>이번엔 좀 문제가 있는 <em>event log</em></p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-20-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-21-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-22-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-24-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><br/></p>
+
+<p>각 <em>log</em> 가 <em>transition</em> 에서 얼마나 실행되었는지 기록해서 모델에 어떤 문제가 있는지 파악할 수 있다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-30-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><em>frequency</em> 는 <code>p, c, m, r</code> 에 곱해서 전체 <em>fitness</em> 값을 얻으면 된다.</p>
+
+<p>만약 <em>consumed token</em> 이 모두 <em>missing token</em> 이고, <em>produced token</em> 이 모두 <em>remaining token</em> (미사용) 이면 <em>fitness</em> 는 <code>0</code> 이다.</p>
+
+<h4 id="limitations">Limitations</h4>
+
+<ul>
+<li>Basic replay approache assumes <strong>visible, unique labeled</strong> transitions</li>
+<li>ProM implementation uses <strong>heuristics</strong> to deal with slient transitions having same label</li>
+<li>Conformance value is too optimistic due tu <strong>token flooding</strong></li>
+<li>Local decision marking may misleading</li>
+</ul>
+
+<p>특히 마지막은 중요한데, 우리는 <em>value</em> 를 보고 싶은게 아니라 <em>closest path</em> 를 보고싶어 할수도 있다.</p>
+
+<p>예를 들어 <code>&lt;a, c1, c2, c3, e1, e2, e3&gt;</code> 값이 <code>0.8</code> 로 나왔다 하면, &ldquo;그럼 올바른 <em>path</em> 는 무얼까?&rdquo; 하고 질문할 수 있다.</p>
+
+<blockquote>
+<p>Replay technique does not provide corresponding path through model</p>
+</blockquote>
+
+<p>다음장에서 배울 <em>alignment</em> 를 이용하면 모델에서 가능한 <em>real path</em> 를 얻을 수 있다.</p>
+
+<h3 id="alignment-based-conformance-checking">Alignment-based Conformance Checking</h3>
+
+<p>먼저 생각해 볼 거리는</p>
+
+<blockquote>
+<p>Conformance checking <strong>should not impose restriction</strong> on the process notation e.g slient transitions and two transitions with same label should be possible</p>
+
+<p>Should provide <strong>closest maching path</strong> (required for <em>performance analysis</em>)</p>
+</blockquote>
+
+<p>특히 <em>closest maching path</em> 가 제공되면 <em>fitness</em> 를 넘어 <em>generalization</em>, <em>precision</em>, <em>bottle-neck</em> 등에 이용할 수 있다. 대략 이런 느낌이라고 보면 된다.</p>
+
+<p><img src="http://image.slidesharecdn.com/alignmentbasedprecisionchecking-121013004859-phpapp01/95/alignment-based-precision-checking-5-728.jpg?cb=1350107718" alt="" /></p>
+
+<p>즉 <em>replay</em> 불가능한 로그에서 <em>replay</em> 가능한 로그와 차이점을 반영한 것이라 보면 된다. 그러면, 다음중 어떤 것이 더 <em>possible</em> 한 로그일까?</p>
+
+<pre><code>a &gt;&gt; c1 c2 e1 e2 e3 // invalid path
+&gt;&gt; b c1 c2 e1 e2 e3 // valid path
+
+a1 c1 c2 &gt;&gt; &gt;&gt; &gt;&gt; e1 e2 e3 // invalid 
+a1 c1 c2 d1 d2 d3 &gt;&gt; &gt;&gt; &gt;&gt; // valid
+</code></pre>
+
+<p>이건 <em>cost function</em> 에 따라 다르다. <em>standard cost function</em> 의 경우 <code>&gt;&gt;</code> (<em>move</em>) 의 수를 센다.</p>
+
+<p>근데 몇 가지 생각해볼 거리가 있다. <code>-2</code> 와 <code>+2</code> 의 <em>cost</em> 가 있을 때 어떤 것을 택할건가 하는 문제들이다. 이 차이 때문에 루프가 있을수도 있다.</p>
+
+<h3 id="alignment-based-fitness">Alignment-based Fitness</h3>
+
+<p>1 에서 <em>optimal cost</em> / <em>worst cost</em> 를 빼면 된다. 강의에서 나오는 <em>log</em> 의 경우</p>
+
+<pre><code>// optimal
+a &gt;&gt; c1 c2 e1 e2 e3
+&gt;&gt; b c1 c2 e1 e2 e3
+
+// worst
+a1 c1 c2 e1 e2 e3 &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt;
+&gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; &gt;&gt; b1 c1 c2 d1 d2 d3
+</code></pre>
+
+<p>따라서 <code>1 - (2 / 12) = 0.83</code></p>
+
+<p><em>alignment-based conformance checking</em> 의 장점으로는</p>
+
+<ul>
+<li>observed behavior is directly related to modeled behavior</li>
+<li>very <strong>flexible</strong> (any cost structure)</li>
+<li>detailed diagnostics</li>
+<li>after aligning log and model, other quality dimensions can be investigated</li>
+</ul>
+
+<p>다른 장점으로는 <em>drilling down</em> 도 있다. 즉 <em>replay</em> 되는 것과 아닌 것을 분리해서 분석할 수 있다는 뜻이다. 분리 된 것중 이상한 로그를 <em>새로운</em> 로그처럼 취급해서 다양한 기법들을 적용할 수 있다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-32-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><br/></p>
+
+<p>지금까지 <em>fitness</em> 만 좀 봤지만 다른 퀄리티에 대해서도 적용 가능하다. 그리고 지금까지는 <em>control flow</em> 관점으로 좀 봤는데, <em>cost, time</em> 등 다른 기준으로도 볼 수 있다. 이를 위한 기법으로 <em>data-aware alignments</em> 가 있다.</p>
+
+<h3 id="exploring-event-data">Exploring Event Data</h3>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter07conformancechecking-110510153239-phpapp02/95/process-mining-chapter-7-conformance-checking-3http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-16-728.jpg?cb=13050623738-728.jpg?cb=1305062420" alt="" /></p>
+
+<p><del>멘탈이 터짐</del></p>
+
+<p><em>model view</em>, <em>instance view</em>, <em>event view</em> 사이에 관계가 있다고 함.</p>
+
+<p><br/></p>
+
+<h4 id="dotted-chart">Dotted Chart</h4>
+
+<p>모든 이벤트를 볼 수 있는 일종의 <em>view</em> 인데 <em>dot</em> 과 <em>event</em> 사이에는 1:1 관계가 있다. 모든 <em>event</em> 에는 <em>timestamp</em> 가 있는데, 이것을 이용해 <code>X</code> 를 계산하고 다른 <em>attribute</em> 를 이용해서 <code>Y</code> 축을 잡는다. 액티비티나 리소스에 따라 다른 색을 가질 수 있다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-16-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-17-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><br/></p>
+
+<p>이게 중요한 이유가 <code>Y</code> 축과 컬러를 어떻게 하느냐에 따라 정말 다양한 <em>view</em> 를 얻을 수 있다. 그래서 강의에서 헬리콥터 뷰 라고 표현함. 심지어 <em>time</em> 을 <em>logical time</em> (step 1) 등으로 수정해서 볼 수도 있다.</p>
+
+<p>다양한 뷰를 조절해 가면서 왜 <em>delayed</em> 되었는지, <em>decision</em> 이 없다면 이전 스텝이 무엇인지 등을 파악할 수 있다.</p>
+
+<p><em>dotted chart</em> 를 이용하면 모델을 작업 하기 전에 <em>input</em> 만을 이용해 다양한 직관을 얻을 수 있다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483">Book: Process Mining</a><br />
+(2) <a href="https://d396qusza40orc.cloudfront.net/procmin/lecture_slides/22-Petri%20Nets%20%281%29.pdf">Slide</a><br />
+(3) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst<br />
+(4) <a href="www.processmining.org">www.processmining.org</a><br />
+(5) <a href="http://fluxicon.com">http://fluxicon.com</a><br />
+(6) <a href="http://www.win.tue.nl/~mpechen/projects/edm/">http://www.win.tue.nl</a><br />
+(7) <a href="http://www.slideshare.net/caise2013vlc/ramezani-taghiabadi-temporal-compliance-checking-2">Temporal Compliance Checking</a><br />
+(9) <a href="http://www.slideshare.net/aryaadriansyah/alignment-based-precision-checking">Alignment-based onformance Checking</a></p>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../process-mining-3"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../process-mining-5" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.com/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.com/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.com/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.com/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.com/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.com/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.com/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.com/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.com/js/learn.js"></script>
+    <script src="https://1ambda.github.com/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
