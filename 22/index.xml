@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>22s on Old Lisper</title>
-    <link>https://1ambda.github.com/22/</link>
+    <link>https://1ambda.github.io/22/</link>
     <description>Recent content in 22s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 01:21:27 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/22/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/22/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Haskell</title>
-      <link>https://1ambda.github.com/22/haskell/</link>
+      <link>https://1ambda.github.io/22/haskell/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:27 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/</guid>
+      <guid>https://1ambda.github.io/22/haskell/</guid>
       <description>
 
 &lt;h1 id=&#34;introduction-to-functional-programming-using-haskell&#34;&gt;Introduction to Functional Programming using Haskell&lt;/h1&gt;
@@ -37,10 +37,10 @@
     
     <item>
       <title>하스켈로 배우는 함수형 언어 1</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-1/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-1/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:41 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-1/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-1/</guid>
       <description>
 
 &lt;p&gt;먼저 이 글은 &lt;strong&gt;edx&lt;/strong&gt; 의 &lt;em&gt;FP101.x (Introduction to Functional Programming)&lt;/em&gt; 수업을 기반으로 작성되었음을 알려드립니다.&lt;/p&gt;
@@ -509,10 +509,10 @@ odds1 n = map (\x -&amp;gt; x `mod` 2 /= 0) [0..n]
     
     <item>
       <title>하스켈로 배우는 함수형 언어 2</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-2/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-2/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:42 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-2/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-2/</guid>
       <description>
 
 &lt;p&gt;이번시간엔 &lt;em&gt;list comprehension&lt;/em&gt; 을 배웁니다. 수학에서는 집합의 원소를 이용해 새로운 집합을 만들 때 사용하는데요,&lt;/p&gt;
@@ -785,10 +785,10 @@ concat [[(x, y) | y &amp;lt;- [4, 5, 6]] | x &amp;lt;- [1, 2, 3]]
     
     <item>
       <title>하스켈로 배우는 함수형 언어 3</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-3/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-3/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:44 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-3/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-3/</guid>
       <description>
 
 &lt;p&gt;하스켈에서 &lt;em&gt;repetition (반복)&lt;/em&gt; 은 &lt;em&gt;recursion&lt;/em&gt; 을 통해 표현됩니다. 간단한 재귀부터 시작해서 &lt;em&gt;mutual recursion&lt;/em&gt; 까지 알아보고, &lt;em&gt;Higher order function&lt;/em&gt; (특히 &lt;code&gt;fold&lt;/code&gt;) 에 대해 배운 뒤 적용을 위해 &lt;em&gt;church numerals&lt;/em&gt; 를 구현해보고, 마지막으로 간단한 문자열 전송기를 모델링 해 보겠습니다.&lt;/p&gt;
@@ -1436,10 +1436,10 @@ iterate&#39; f = unfold (const False) id f -- const False is pred. always return
     
     <item>
       <title>하스켈로 배우는 함수형 언어 4</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-4/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-4/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-4/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-4/</guid>
       <description>
 
 &lt;p&gt;이번시간엔 모나드를 배웁니다. &lt;del&gt;네. 올것이 왔습니다.&lt;/del&gt; 간단한 파서를 구현하는 것 부터 시작해 보겠습니다.&lt;/p&gt;
@@ -2258,10 +2258,10 @@ sequence (mx:mxs) = do x &amp;lt;- mx
     
     <item>
       <title>하스켈로 배우는 함수형 언어 5</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-5/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-5/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:46 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-5/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-5/</guid>
       <description>
 
 &lt;p&gt;키보드를 읽거나 화면에 무엇인가 쓰는 &lt;em&gt;intertactive program&lt;/em&gt; 은 &lt;em&gt;side-effect&lt;/em&gt; 를 만듭니다. 그런데, 하스켈은 &lt;em&gt;side-effect&lt;/em&gt; 가 없지요. 그럼 입출력이 불가능한 것일까요?&lt;/p&gt;
@@ -2706,10 +2706,10 @@ wait n = seqn [return () | _ &amp;lt;- [1..n]]
     
     <item>
       <title>하스켈로 배우는 함수형 언어 6</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-6/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-6/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:49 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-6/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-6/</guid>
       <description>
 
 &lt;p&gt;이번시간엔 어떻게 &lt;em&gt;type&lt;/em&gt; 과 &lt;em&gt;class&lt;/em&gt; 를 정의하는지 배울겁니다. 이렇게 &lt;em&gt;commonality&lt;/em&gt; 를  추출해서 &lt;em&gt;type&lt;/em&gt; 과 &lt;em&gt;class&lt;/em&gt; 로 만듦으로써 작업의 양을 줄일 수 있습니다. 이 과정을 추상화라 부르기도 합니다.&lt;/p&gt;
@@ -3351,10 +3351,10 @@ balance xs = Node (balance ys) (balance zs)
     
     <item>
       <title>하스켈로 배우는 함수형 언어 7</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-7/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-7/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:50 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-7/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-7/</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;the countdown problem&lt;/em&gt; 은 프랑스 퀴즈 프로그램에서 유래한 문제입니다. 주어진 양수를 단 한번씩만 이용하여 특정 숫자를 만드는 문제입니다. 사용가능한 연산자는 &lt;code&gt;+, *, -, /&lt;/code&gt; 입니다.&lt;/p&gt;
@@ -3553,10 +3553,10 @@ valid Div x y = x `mod` y == 0 &amp;amp;&amp;amp; y /= 1
     
     <item>
       <title>하스켈로 배우는 함수형 언어 8</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-8/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-8/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:52 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-8/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-8/</guid>
       <description>
 
 &lt;p&gt;고차함수가 있는 다른언어와 비교했을 때 하스켈은 무슨 특징이 있을까요? 하스켈은 &lt;em&gt;expression&lt;/em&gt; 을 평가하기 위해 디폴트로 &lt;em&gt;lazy evaluation&lt;/em&gt; 을 사용한다는 점에서 다른 언어들과 다릅니다.&lt;/p&gt;
@@ -3863,10 +3863,10 @@ foldl&#39; f v (x:xs) ((foldl&#39; f) $! (f v x)) xs
     
     <item>
       <title>하스켈로 배우는 함수형 언어 9</title>
-      <link>https://1ambda.github.com/22/haskell/intro-to-haskell-9/</link>
+      <link>https://1ambda.github.io/22/haskell/intro-to-haskell-9/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:53 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/intro-to-haskell-9/</guid>
+      <guid>https://1ambda.github.io/22/haskell/intro-to-haskell-9/</guid>
       <description>
 
 &lt;h3 id=&#34;intro&#34;&gt;Intro&lt;/h3&gt;
@@ -4580,10 +4580,10 @@ instance Foldable Rose where
     
     <item>
       <title>Poor Man&#39;s Concurrency Monad</title>
-      <link>https://1ambda.github.com/22/haskell/poor-mans-concurrency-monad/</link>
+      <link>https://1ambda.github.io/22/haskell/poor-mans-concurrency-monad/</link>
       <pubDate>Sat, 25 Jun 2016 01:22:05 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/poor-mans-concurrency-monad/</guid>
+      <guid>https://1ambda.github.io/22/haskell/poor-mans-concurrency-monad/</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;FP 101x&lt;/em&gt; 의 최종 보스입니다. &lt;del&gt;Rose Tree 는 거들뿐&lt;/del&gt; &lt;em&gt;Koen Claessen&lt;/em&gt; 가 1999년에 발표한 &lt;a href=&#34;http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.39.8039&#34;&gt;&lt;em&gt;Poor Man&amp;rsquo;s Concurrenc Monad&lt;/em&gt;&lt;/a&gt; 를 배경으로 하는 과제인데, 언어에 &lt;em&gt;primitive&lt;/em&gt; 추가 없이 &lt;em&gt;concurrency&lt;/em&gt; 를 모델링 하는 방법을 보여줍니다.&lt;/p&gt;

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>23s on Old Lisper</title>
-    <link>https://1ambda.github.com/23/</link>
+    <link>https://1ambda.github.io/23/</link>
     <description>Recent content in 23s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 11:27:04 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/23/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/23/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Javascript</title>
-      <link>https://1ambda.github.com/23/javascript/</link>
+      <link>https://1ambda.github.io/23/javascript/</link>
       <pubDate>Sat, 25 Jun 2016 11:27:04 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/23/javascript/</guid>
+      <guid>https://1ambda.github.io/23/javascript/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;tips-for-webpack-and-redux&#34;&gt;Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지 팁들&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;javascript-inheritance&#34;&gt;Javascript Inheritance&lt;/a&gt;&lt;/li&gt;
@@ -25,10 +25,10 @@
     
     <item>
       <title>Javascript Inheritance</title>
-      <link>https://1ambda.github.com/23/javascript/javascript-inheritance/</link>
+      <link>https://1ambda.github.io/23/javascript/javascript-inheritance/</link>
       <pubDate>Sat, 25 Jun 2016 12:22:02 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/23/javascript/javascript-inheritance/</guid>
+      <guid>https://1ambda.github.io/23/javascript/javascript-inheritance/</guid>
       <description>
 
 &lt;h2 id=&#34;prototype-inheritance&#34;&gt;Prototype Inheritance?&lt;/h2&gt;
@@ -353,10 +353,10 @@ console.log( Shape.prototype.constructor ); // Shape;
     
     <item>
       <title>Tips for Webpack and Redux</title>
-      <link>https://1ambda.github.com/23/javascript/tips-for-webpack-and-redux/</link>
+      <link>https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/</link>
       <pubDate>Sat, 25 Jun 2016 12:24:38 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/23/javascript/tips-for-webpack-and-redux/</guid>
+      <guid>https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png?width=30%&amp;amp;height=30%&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -844,10 +844,10 @@ remotes.map(remote =&amp;gt; {
     
     <item>
       <title>REST API: Put vs Post</title>
-      <link>https://1ambda.github.com/23/javascript/rest-api-put-vs-post/</link>
+      <link>https://1ambda.github.io/23/javascript/rest-api-put-vs-post/</link>
       <pubDate>Sat, 25 Jun 2016 22:25:23 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/23/javascript/rest-api-put-vs-post/</guid>
+      <guid>https://1ambda.github.io/23/javascript/rest-api-put-vs-post/</guid>
       <description>
 
 &lt;h3 id=&#34;idempotent&#34;&gt;idempotent&lt;/h3&gt;

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Old Lisper</title>
-    <link>https://1ambda.github.com/</link>
+    <link>https://1ambda.github.io/</link>
     <description>Recent content on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 11:28:05 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Java</title>
-      <link>https://1ambda.github.com/24/java/</link>
+      <link>https://1ambda.github.io/24/java/</link>
       <pubDate>Sat, 25 Jun 2016 11:28:05 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/24/java/</guid>
+      <guid>https://1ambda.github.io/24/java/</guid>
       <description>
 
 &lt;h2 id=&#34;interview-quesitons&#34;&gt;Interview Quesitons&lt;/h2&gt;
@@ -28,10 +28,10 @@
     
     <item>
       <title>Javascript</title>
-      <link>https://1ambda.github.com/23/javascript/</link>
+      <link>https://1ambda.github.io/23/javascript/</link>
       <pubDate>Sat, 25 Jun 2016 11:27:04 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/23/javascript/</guid>
+      <guid>https://1ambda.github.io/23/javascript/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;tips-for-webpack-and-redux&#34;&gt;Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지 팁들&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;javascript-inheritance&#34;&gt;Javascript Inheritance&lt;/a&gt;&lt;/li&gt;
@@ -41,10 +41,10 @@
     
     <item>
       <title>oh-my-github</title>
-      <link>https://1ambda.github.com/51/oh-my-github/</link>
+      <link>https://1ambda.github.io/51/oh-my-github/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/51/oh-my-github/</guid>
+      <guid>https://1ambda.github.io/51/oh-my-github/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;tutorial&#34;&gt;oh-my-github&lt;/a&gt; - 10 분만에 Github Profile 만들기 (Korean)&lt;/li&gt;
 &lt;/ul&gt;
@@ -53,10 +53,10 @@
     
     <item>
       <title>Data Analysis</title>
-      <link>https://1ambda.github.com/92/data-analysis/</link>
+      <link>https://1ambda.github.io/92/data-analysis/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:26 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/</guid>
       <description>
 
 &lt;h2 id=&#34;machine-learning&#34;&gt;Machine Learning&lt;/h2&gt;
@@ -121,10 +121,10 @@
     
     <item>
       <title>Cloud Computing</title>
-      <link>https://1ambda.github.com/93/cloud-computing/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:23 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/</guid>
       <description>
 
 &lt;h2 id=&#34;cloud-computing&#34;&gt;Cloud Computing&lt;/h2&gt;
@@ -143,10 +143,10 @@
     
     <item>
       <title>Algorithm</title>
-      <link>https://1ambda.github.com/91/algorithm/</link>
+      <link>https://1ambda.github.io/91/algorithm/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:04 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/</guid>
       <description>
 
 &lt;h2 id=&#34;algorithms&#34;&gt;Algorithms&lt;/h2&gt;
@@ -185,10 +185,10 @@
     
     <item>
       <title>Haskell</title>
-      <link>https://1ambda.github.com/22/haskell/</link>
+      <link>https://1ambda.github.io/22/haskell/</link>
       <pubDate>Sat, 25 Jun 2016 01:21:27 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/22/haskell/</guid>
+      <guid>https://1ambda.github.io/22/haskell/</guid>
       <description>
 
 &lt;h1 id=&#34;introduction-to-functional-programming-using-haskell&#34;&gt;Introduction to Functional Programming using Haskell&lt;/h1&gt;
@@ -210,10 +210,10 @@
     
     <item>
       <title>Scala</title>
-      <link>https://1ambda.github.com/21/scala/</link>
+      <link>https://1ambda.github.io/21/scala/</link>
       <pubDate>Sat, 25 Jun 2016 00:01:56 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/</guid>
+      <guid>https://1ambda.github.io/21/scala/</guid>
       <description>
 
 &lt;h1 id=&#34;scala&#34;&gt;Scala&lt;/h1&gt;
@@ -269,10 +269,10 @@
     
     <item>
       <title></title>
-      <link>https://1ambda.github.com/0/home/</link>
+      <link>https://1ambda.github.io/0/home/</link>
       <pubDate>Thu, 23 Jun 2016 10:15:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/0/home/</guid>
+      <guid>https://1ambda.github.io/0/home/</guid>
       <description>
 
 &lt;h1 id=&#34;home&#34;&gt;HOME&lt;/h1&gt;
@@ -285,7 +285,7 @@
 &lt;li&gt;&lt;a href=&#34;https://1ambda.github.io/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;characteristics&#34;&gt;Characteristics&lt;/h2&gt;
+&lt;h2 id=&#34;1ambda&#34;&gt;1ambda&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;빌드 도구와 개발 인프라에 과도하게 집착합니다.&lt;/li&gt;
@@ -301,10 +301,10 @@
     
     <item>
       <title>10분만에 Github Profile 만들기</title>
-      <link>https://1ambda.github.com/51/oh-my-github/tutorial/</link>
+      <link>https://1ambda.github.io/51/oh-my-github/tutorial/</link>
       <pubDate>Sat, 25 Jun 2016 14:53:48 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/51/oh-my-github/tutorial/</guid>
+      <guid>https://1ambda.github.io/51/oh-my-github/tutorial/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg?width=200&amp;amp;height=200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -515,10 +515,10 @@ $ git push origin HEAD
     
     <item>
       <title>CC 01: Map Reduce</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-1/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-1/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:29 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-1/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-1/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -783,10 +783,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>ML 01: Linear Regression</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-1/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-1/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:15 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-1/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-1/</guid>
       <description>
 
 &lt;p&gt;&lt;strong&gt;Machine Learning&lt;/strong&gt; by Andrew Ng, &lt;em&gt;Coursera&lt;/em&gt;&lt;/p&gt;
@@ -969,10 +969,10 @@ if &lt;code&gt;a&lt;/code&gt; is too large, &lt;em&gt;gradient desscent&lt;/em&g
     
     <item>
       <title>Design and Analysis: Divide &amp; Conquer</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:35 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;Divide and Conquer (분할 정복)&lt;/em&gt; 을 배운다. &lt;em&gt;merge, quick sort&lt;/em&gt; 를 배우고 이 과정에서 왜 &lt;em&gt;combine&lt;/em&gt; 단계가 &lt;code&gt;O(n)&lt;/code&gt; 이 되어야 하는지 알아본다. 뒷부분에서는 &lt;em&gt;Big O&lt;/em&gt; 뿐만 아니라 &lt;em&gt;master method&lt;/em&gt;, &lt;em&gt;decomposition approach&lt;/em&gt; 를 이용해 성능을 분석한다.&lt;/p&gt;
@@ -1320,10 +1320,10 @@ y = 10^n/2 c + d&lt;/p&gt;
     
     <item>
       <title>Javascript Inheritance</title>
-      <link>https://1ambda.github.com/23/javascript/javascript-inheritance/</link>
+      <link>https://1ambda.github.io/23/javascript/javascript-inheritance/</link>
       <pubDate>Sat, 25 Jun 2016 12:22:02 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/23/javascript/javascript-inheritance/</guid>
+      <guid>https://1ambda.github.io/23/javascript/javascript-inheritance/</guid>
       <description>
 
 &lt;h2 id=&#34;prototype-inheritance&#34;&gt;Prototype Inheritance?&lt;/h2&gt;
@@ -1648,10 +1648,10 @@ console.log( Shape.prototype.constructor ); // Shape;
     
     <item>
       <title>Interview Questions: Collection</title>
-      <link>https://1ambda.github.com/24/java/interview-questions-collection/</link>
+      <link>https://1ambda.github.io/24/java/interview-questions-collection/</link>
       <pubDate>Sat, 25 Jun 2016 12:06:44 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/24/java/interview-questions-collection/</guid>
+      <guid>https://1ambda.github.io/24/java/interview-questions-collection/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://4.bp.blogspot.com/_b6abT-2H2yE/TSTixbyU8GI/AAAAAAAAAUU/LcqDidb_liw/s1600/screen-capture-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>21s on Old Lisper</title>
-    <link>https://1ambda.github.com/21/</link>
+    <link>https://1ambda.github.io/21/</link>
     <description>Recent content in 21s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 00:01:56 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/21/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/21/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Scala</title>
-      <link>https://1ambda.github.com/21/scala/</link>
+      <link>https://1ambda.github.io/21/scala/</link>
       <pubDate>Sat, 25 Jun 2016 00:01:56 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/</guid>
+      <guid>https://1ambda.github.io/21/scala/</guid>
       <description>
 
 &lt;h1 id=&#34;scala&#34;&gt;Scala&lt;/h1&gt;
@@ -71,10 +71,10 @@
     
     <item>
       <title>Easy Scalaz 1</title>
-      <link>https://1ambda.github.com/21/scala/easy-scalaz-1/</link>
+      <link>https://1ambda.github.io/21/scala/easy-scalaz-1/</link>
       <pubDate>Wed, 06 Jan 2016 00:37:23 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/easy-scalaz-1/</guid>
+      <guid>https://1ambda.github.io/21/scala/easy-scalaz-1/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/about-type-class/Typeclassopedia-diagram.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -139,10 +139,10 @@
     
     <item>
       <title>Easy Scalaz 2</title>
-      <link>https://1ambda.github.com/21/scala/easy-scalaz-2/</link>
+      <link>https://1ambda.github.io/21/scala/easy-scalaz-2/</link>
       <pubDate>Tue, 05 Jan 2016 00:16:24 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/easy-scalaz-2/</guid>
+      <guid>https://1ambda.github.io/21/scala/easy-scalaz-2/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -521,10 +521,10 @@ def retrieve(url: URL): State[Cache, StarCount] = for {
     
     <item>
       <title>Easy Scalaz 3</title>
-      <link>https://1ambda.github.com/21/scala/easy-scalaz-3/</link>
+      <link>https://1ambda.github.io/21/scala/easy-scalaz-3/</link>
       <pubDate>Sat, 25 Jun 2016 00:16:24 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/easy-scalaz-3/</guid>
+      <guid>https://1ambda.github.io/21/scala/easy-scalaz-3/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -1157,10 +1157,10 @@ type IndexedState[-S1, S2, A] = IndexedStateT[Id, S1, S2, A]
     
     <item>
       <title>Easy Scalaz 4</title>
-      <link>https://1ambda.github.com/21/scala/easy-scalaz-4/</link>
+      <link>https://1ambda.github.io/21/scala/easy-scalaz-4/</link>
       <pubDate>Sun, 03 Jan 2016 00:16:35 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/easy-scalaz-4/</guid>
+      <guid>https://1ambda.github.io/21/scala/easy-scalaz-4/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -1931,10 +1931,10 @@ object Database {
     
     <item>
       <title>Easy Scalaz 5</title>
-      <link>https://1ambda.github.com/21/scala/easy-scalaz-5/</link>
+      <link>https://1ambda.github.io/21/scala/easy-scalaz-5/</link>
       <pubDate>Sat, 02 Jan 2016 00:16:47 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/easy-scalaz-5/</guid>
+      <guid>https://1ambda.github.io/21/scala/easy-scalaz-5/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -2910,10 +2910,10 @@ sealed abstract class InjectInstances {
     
     <item>
       <title>Easy Scalaz 6</title>
-      <link>https://1ambda.github.com/21/scala/easy-scalaz-6/</link>
+      <link>https://1ambda.github.io/21/scala/easy-scalaz-6/</link>
       <pubDate>Fri, 01 Jan 2016 00:16:53 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/easy-scalaz-6/</guid>
+      <guid>https://1ambda.github.io/21/scala/easy-scalaz-6/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/easy-scalaz/1-state/haskell.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -3834,10 +3834,10 @@ object CaseClassParser {
     
     <item>
       <title>Functional Programming 1</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-1/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-1/</link>
       <pubDate>Wed, 07 Jan 2015 00:46:26 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-1/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-1/</guid>
       <description>
 
 &lt;h3 id=&#34;1-1-programming-paradigms&#34;&gt;1.1 Programming Paradigms&lt;/h3&gt;
@@ -4155,10 +4155,10 @@ someOtherExp
     
     <item>
       <title>Functional Programming 2</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-2/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-2/</link>
       <pubDate>Wed, 06 Jan 2016 00:47:07 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-2/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-2/</guid>
       <description>
 
 &lt;h3 id=&#34;2-1-higher-order-functions&#34;&gt;2.1 Higher-Order Functions&lt;/h3&gt;
@@ -4609,10 +4609,10 @@ r max s // r max s
     
     <item>
       <title>Functional Programming 3</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-3/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-3/</link>
       <pubDate>Sat, 25 Jun 2016 00:47:08 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-3/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-3/</guid>
       <description>
 
 &lt;h3 id=&#34;3-1-class-hierarchies&#34;&gt;3.1 Class Hierarchies&lt;/h3&gt;
@@ -4874,10 +4874,10 @@ If index is outside the range from 0 up the length of the list minus one, a &lt;
     
     <item>
       <title>Functional Programming 4</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-4/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-4/</link>
       <pubDate>Sat, 25 Jun 2016 00:47:10 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-4/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-4/</guid>
       <description>
 
 &lt;h2 id=&#34;types-and-pattern-matching&#34;&gt;Types and Pattern Matching&lt;/h2&gt;
@@ -5472,10 +5472,10 @@ List(2 :: xs)
     
     <item>
       <title>Functional Programming 5</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-5/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-5/</link>
       <pubDate>Sat, 25 Jun 2016 00:47:11 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-5/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-5/</guid>
       <description>
 
 &lt;p&gt;지난주엔 Scala 가 &lt;em&gt;리스코프 치환 원칙&lt;/em&gt; 을 지키기 위해 어떻게 &lt;em&gt;Variance(공변성)&lt;/em&gt; 을 문법적으로 지원하는지 알아보았다. 직접 &lt;code&gt;List&lt;/code&gt; 컨테이너를 구현해 보면서 함수의 인자는 &lt;em&gt;Covariant&lt;/em&gt;, 리턴타입은 &lt;em&gt;Contravariant&lt;/em&gt; 란 것도 알게 되었고, &lt;code&gt;Nil&lt;/code&gt; 을 만들기 위해 &lt;code&gt;Nothing&lt;/code&gt; 을 어떻게 엮을 수 있는지도 직접 확인해 보았다. 마지막으로, 프로그래머가 가장 많이 작성하는 로직인 &lt;em&gt;Decomposition&lt;/em&gt; 을 &lt;em&gt;Pattern Matching&lt;/em&gt; 을 이용해 더 우아하게 작성하는법도 배웠다. &lt;del&gt;오오 추상화 오오&lt;/del&gt;&lt;/p&gt;
@@ -5995,10 +5995,10 @@ if &lt;code&gt;P(xs)&lt;/code&gt; holds, then &lt;code&gt;P(x :: xs)&lt;/code&gt
     
     <item>
       <title>Functional Programming 6</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-6/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-6/</link>
       <pubDate>Sat, 25 Jun 2016 00:47:12 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-6/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-6/</guid>
       <description>
 
 &lt;p&gt;지난 시간에는 &lt;em&gt;referential transparency (참조투명성)&lt;/em&gt; 과 함수형 언어에서의 귀납법인 &lt;em&gt;structural induction&lt;/em&gt; 에 대해서 배우고, 몇 개의 예제를 증명했었다.&lt;/p&gt;
@@ -6623,10 +6623,10 @@ res73: scala.collection.immutable.Map[Char,List[String]] = Map(p -&amp;gt; List(
     
     <item>
       <title>Functional Programming 7</title>
-      <link>https://1ambda.github.com/21/scala/functional-programming-7/</link>
+      <link>https://1ambda.github.io/21/scala/functional-programming-7/</link>
       <pubDate>Sat, 25 Jun 2016 00:47:14 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/functional-programming-7/</guid>
+      <guid>https://1ambda.github.io/21/scala/functional-programming-7/</guid>
       <description>
 
 &lt;h1 id=&#34;functional-programming-in-scala-7&#34;&gt;Functional Programming in Scala 7&lt;/h1&gt;
@@ -7164,10 +7164,10 @@ ex.take(3).toList // List(2, 4, 6)
     
     <item>
       <title>Reactive Programming 1</title>
-      <link>https://1ambda.github.com/21/scala/reactive-programming-1/</link>
+      <link>https://1ambda.github.io/21/scala/reactive-programming-1/</link>
       <pubDate>Sat, 25 Jun 2016 01:08:44 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/21/scala/reactive-programming-1/</guid>
+      <guid>https://1ambda.github.io/21/scala/reactive-programming-1/</guid>
       <description>
 
 &lt;h2 id=&#34;monad-generator&#34;&gt;Monad, Generator&lt;/h2&gt;

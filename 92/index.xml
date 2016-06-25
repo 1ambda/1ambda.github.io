@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>92s on Old Lisper</title>
-    <link>https://1ambda.github.com/92/</link>
+    <link>https://1ambda.github.io/92/</link>
     <description>Recent content in 92s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 10:05:26 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/92/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/92/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Data Analysis</title>
-      <link>https://1ambda.github.com/92/data-analysis/</link>
+      <link>https://1ambda.github.io/92/data-analysis/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:26 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/</guid>
       <description>
 
 &lt;h2 id=&#34;machine-learning&#34;&gt;Machine Learning&lt;/h2&gt;
@@ -80,10 +80,10 @@
     
     <item>
       <title>ML 01: Linear Regression</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-1/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-1/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:15 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-1/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-1/</guid>
       <description>
 
 &lt;p&gt;&lt;strong&gt;Machine Learning&lt;/strong&gt; by Andrew Ng, &lt;em&gt;Coursera&lt;/em&gt;&lt;/p&gt;
@@ -266,10 +266,10 @@ if &lt;code&gt;a&lt;/code&gt; is too large, &lt;em&gt;gradient desscent&lt;/em&g
     
     <item>
       <title>ML 02: Gradient Descent</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-2/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-2/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:17 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-2/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-2/</guid>
       <description>
 
 &lt;p&gt;&lt;strong&gt;Machine Learning&lt;/strong&gt; by Andrew Ng, &lt;em&gt;Coursera&lt;/em&gt;&lt;/p&gt;
@@ -447,10 +447,10 @@ J = 1 / (2*m) * sum(sqrErros);
     
     <item>
       <title>ML 03: Logistic Regression</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-3/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-3/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:21 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-3/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-3/</guid>
       <description>
 
 &lt;p&gt;지난 시간엔 &lt;em&gt;Regression&lt;/em&gt; 을 해결하기 위해 &lt;em&gt;graident descent&lt;/em&gt; 알고리즘을 도입했었다. &lt;em&gt;learning rate&lt;/em&gt;, &lt;em&gt;vectorization&lt;/em&gt; 등에 대해서 알아 보기도 했고. 이번시간엔 &lt;em&gt;classification&lt;/em&gt; 과 &lt;em&gt;regulrzation&lt;/em&gt; 에 대해서 배워 본다.&lt;/p&gt;
@@ -731,10 +731,10 @@ initialTheta= zeros(2,1);
     
     <item>
       <title>ML 04: Neural Network</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-4/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-4/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:25 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-4/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-4/</guid>
       <description>
 
 &lt;p&gt;지난 시간에는 실리콘 밸리의 머신러닝 개발자들이 귀한대접을 받는다는 훈훈한 덕담으로 강의가 끝났다. 이번시간에는 뜬금없이 &lt;em&gt;Neural Network (신경망)&lt;/em&gt; 을 건들다가 놀랍게도 그것이 &lt;em&gt;logistic regression&lt;/em&gt; 과 연관이 있으며 &lt;code&gt;n&lt;/code&gt; 이 매우 클 경우의 &lt;em&gt;classification&lt;/em&gt; 문제를 해결할 수 있다는 것을 배운다.&lt;/p&gt;
@@ -862,10 +862,10 @@ initialTheta= zeros(2,1);
     
     <item>
       <title>ML 05: Back Propagation</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-5/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-5/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:28 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-5/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-5/</guid>
       <description>
 
 &lt;p&gt;지난시간엔 왜 &lt;em&gt;neural network&lt;/em&gt; 를 사용하는지 알아보았다. 데이터의 차수가 매우 클 때 &lt;em&gt;logistic regression&lt;/em&gt; 으로는 성능이 떨어지거나 &lt;em&gt;overfitting&lt;/em&gt; 의 문제가 발생할 수 있다는 사실을 알게 되었고, 마지막엔 &lt;em&gt;multi class&lt;/em&gt; 문제를 어떻게 해결할지도 잠깐 논의 해봤다.&lt;/p&gt;
@@ -1051,10 +1051,10 @@ initialTheta= zeros(2,1);
     
     <item>
       <title>ML 06: Practical Advices</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-6/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-6/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:29 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-6/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-6/</guid>
       <description>
 
 &lt;p&gt;지난시간엔 &lt;em&gt;back propagation&lt;/em&gt; 구현해 보고 여기에 적용할 수 있는 소소한 것들 &lt;em&gt;random initialization&lt;/em&gt; 과 &lt;em&gt;gradient checking&lt;/em&gt; 등도 알아 보았다.&lt;/p&gt;
@@ -1397,10 +1397,10 @@ return
     
     <item>
       <title>ML 07: Support Vector Machine</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-7/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-7/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:31 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-7/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-7/</guid>
       <description>
 
 &lt;p&gt;이번시간에 &lt;em&gt;Support Vector Machine, SVM&lt;/em&gt; 을 배운다.&lt;/p&gt;
@@ -1641,10 +1641,10 @@ return
     
     <item>
       <title>ML 08: K-means, PCA Details</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-8/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-8/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:32 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-8/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-8/</guid>
       <description>
 
 &lt;p&gt;이번시간에는 &lt;em&gt;PCA&lt;/em&gt; 와 &lt;em&gt;clustering&lt;/em&gt; 을 배운다. &lt;em&gt;PCA&lt;/em&gt; 가 어떻게 돌아가는지 알기위해 &lt;em&gt;covariance matrix&lt;/em&gt;, &lt;em&gt;eigen decomposition&lt;/em&gt;, &lt;em&gt;singular value decomposition&lt;/em&gt; 등의 배경지식도 익혀보자. ~~K-means 는 거들뿐&lt;/p&gt;
@@ -2138,10 +2138,10 @@ Set &lt;code&gt;mu_1 = x^(i_1), ..., mu_k = x^(i_k)&lt;/code&gt;&lt;/p&gt;
     
     <item>
       <title>ML 09: Anomaly Detection, Recommender System</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-9/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-9/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:34 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-9/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-9/</guid>
       <description>
 
 &lt;p&gt;이번시간엔 &lt;em&gt;anomaly detection&lt;/em&gt; 과 &lt;em&gt;recommender system&lt;/em&gt; 을 배운다.&lt;/p&gt;
@@ -2498,10 +2498,10 @@ Set &lt;code&gt;mu_1 = x^(i_1), ..., mu_k = x^(i_k)&lt;/code&gt;&lt;/p&gt;
     
     <item>
       <title>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis</title>
-      <link>https://1ambda.github.com/92/data-analysis/machine-learning-week-10/</link>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-10/</link>
       <pubDate>Sat, 25 Jun 2016 14:25:35 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/machine-learning-week-10/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-10/</guid>
       <description>
 
 &lt;p&gt;이번 주에는 &lt;em&gt;mini-batch, stochastic graident descent&lt;/em&gt;, &lt;em&gt;online learning&lt;/em&gt;, &lt;em&gt;map-reduce&lt;/em&gt; 등의 개념에 대해 배운다.&lt;/p&gt;
@@ -2803,10 +2803,10 @@ Set &lt;code&gt;mu_1 = x^(i_1), ..., mu_k = x^(i_k)&lt;/code&gt;&lt;/p&gt;
     
     <item>
       <title>Intro to Data Science 1</title>
-      <link>https://1ambda.github.com/92/data-analysis/intro-to-data-science-1/</link>
+      <link>https://1ambda.github.io/92/data-analysis/intro-to-data-science-1/</link>
       <pubDate>Sat, 25 Jun 2016 14:20:42 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/intro-to-data-science-1/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/intro-to-data-science-1/</guid>
       <description>
 
 &lt;h3 id=&#34;simulation-models&#34;&gt;Simulation Models&lt;/h3&gt;
@@ -3093,10 +3093,10 @@ exampleHist(10000)
     
     <item>
       <title>Intro to Data Science 2</title>
-      <link>https://1ambda.github.com/92/data-analysis/intro-to-data-science-2/</link>
+      <link>https://1ambda.github.io/92/data-analysis/intro-to-data-science-2/</link>
       <pubDate>Sat, 25 Jun 2016 14:20:43 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/intro-to-data-science-2/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/intro-to-data-science-2/</guid>
       <description>
 
 &lt;blockquote&gt;
@@ -3472,10 +3472,10 @@ def tryFits(fName):
     
     <item>
       <title>Intro to Data Science 3</title>
-      <link>https://1ambda.github.com/92/data-analysis/intro-to-data-science-3/</link>
+      <link>https://1ambda.github.io/92/data-analysis/intro-to-data-science-3/</link>
       <pubDate>Sat, 25 Jun 2016 14:20:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/intro-to-data-science-3/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/intro-to-data-science-3/</guid>
       <description>
 
 &lt;h3 id=&#34;optimization-problems&#34;&gt;Optimization Problems&lt;/h3&gt;
@@ -4122,10 +4122,10 @@ def shortestDFS(graph, start, end, path=[], shortest=None):
     
     <item>
       <title>Intro to Data Science 4</title>
-      <link>https://1ambda.github.com/92/data-analysis/intro-to-data-science-4/</link>
+      <link>https://1ambda.github.io/92/data-analysis/intro-to-data-science-4/</link>
       <pubDate>Sat, 25 Jun 2016 14:20:46 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/92/data-analysis/intro-to-data-science-4/</guid>
+      <guid>https://1ambda.github.io/92/data-analysis/intro-to-data-science-4/</guid>
       <description>
 
 &lt;p&gt;그래프는 네트워크를 표현하는 것 뿐만 아니라, &lt;em&gt;state&lt;/em&gt; 를 표현할 수 있다.&lt;/p&gt;

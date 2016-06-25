@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>91s on Old Lisper</title>
-    <link>https://1ambda.github.com/91/</link>
+    <link>https://1ambda.github.io/91/</link>
     <description>Recent content in 91s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 10:05:04 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/91/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/91/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Algorithm</title>
-      <link>https://1ambda.github.com/91/algorithm/</link>
+      <link>https://1ambda.github.io/91/algorithm/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:04 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/</guid>
       <description>
 
 &lt;h2 id=&#34;algorithms&#34;&gt;Algorithms&lt;/h2&gt;
@@ -54,10 +54,10 @@
     
     <item>
       <title>Design and Analysis: Divide &amp; Conquer</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:35 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-1/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;Divide and Conquer (분할 정복)&lt;/em&gt; 을 배운다. &lt;em&gt;merge, quick sort&lt;/em&gt; 를 배우고 이 과정에서 왜 &lt;em&gt;combine&lt;/em&gt; 단계가 &lt;code&gt;O(n)&lt;/code&gt; 이 되어야 하는지 알아본다. 뒷부분에서는 &lt;em&gt;Big O&lt;/em&gt; 뿐만 아니라 &lt;em&gt;master method&lt;/em&gt;, &lt;em&gt;decomposition approach&lt;/em&gt; 를 이용해 성능을 분석한다.&lt;/p&gt;
@@ -405,10 +405,10 @@ y = 10^n/2 c + d&lt;/p&gt;
     
     <item>
       <title>Design and Analysis: Randomized Selection</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-2/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-2/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:47 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-2/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-2/</guid>
       <description>
 
 &lt;h3 id=&#34;intuition&#34;&gt;Intuition&lt;/h3&gt;
@@ -596,10 +596,10 @@ y = 10^n/2 c + d&lt;/p&gt;
     
     <item>
       <title>Design and Analysis: Graph Contraction Algorithm</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-3/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-3/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:48 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-3/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-3/</guid>
       <description>
 
 &lt;p&gt;이번엔 지난시간에 배운 &lt;em&gt;randomized algorithm&lt;/em&gt; 을 새로운 &lt;em&gt;domain&lt;/em&gt; 인 그래프에 적용해 보고, &lt;em&gt;contraction algorithm&lt;/em&gt; 이 무엇인지 알아본다.&lt;/p&gt;
@@ -818,10 +818,10 @@ y = 10^n/2 c + d&lt;/p&gt;
     
     <item>
       <title>Design and Analysis: Graph Search and Connectivity</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-4/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-4/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:50 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-4/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-4/</guid>
       <description>
 
 &lt;p&gt;기본적인 그래프 탐색 방법 &lt;em&gt;DFS&lt;/em&gt;, &lt;em&gt;BFS&lt;/em&gt; 에 대해 배우고 약간씩 응용하여 &lt;em&gt;shortest path&lt;/em&gt;, &lt;em&gt;conncected components&lt;/em&gt;, &lt;em&gt;topological order&lt;/em&gt;, &lt;em&gt;strongly connected components&lt;/em&gt; 등을 찾는 방법을 배운다.&lt;/p&gt;
@@ -1191,10 +1191,10 @@ set f(i) := t
     
     <item>
       <title>Design and Analysis: Dijkstra, Heap, Red-Black Tree</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-5/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-5/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:51 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-5/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-5/</guid>
       <description>
 
 &lt;h3 id=&#34;dijkstra-s-shortest-path-algorithm&#34;&gt;Dijkstra&amp;rsquo;s Shortest-Path Algorithm&lt;/h3&gt;
@@ -1600,10 +1600,10 @@ if a &amp;lt; i, recurse z, (i - a - 1)&#39;th statistic
     
     <item>
       <title>Design and Analysis: Hash Table, Universal Hashing, Bloom filters</title>
-      <link>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-6/</link>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-6/</link>
       <pubDate>Sat, 25 Jun 2016 12:54:52 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/design-and-analysis-part1-6/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-6/</guid>
       <description>
 
 &lt;h3 id=&#34;hash-table&#34;&gt;Hash Table&lt;/h3&gt;
@@ -2051,10 +2051,10 @@ if a &amp;lt; i, recurse z, (i - a - 1)&#39;th statistic
     
     <item>
       <title>Algorithm: Union Find</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part1-1/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part1-1/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:04 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part1-1/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part1-1/</guid>
       <description>
 
 &lt;h3 id=&#34;union-find&#34;&gt;Union Find&lt;/h3&gt;
@@ -2573,10 +2573,10 @@ public class WeightedQuickUnionTest {
     
     <item>
       <title>Algorithm: Analysis</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part1-2/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part1-2/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:05 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part1-2/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part1-2/</guid>
       <description>
 
 &lt;p&gt;알고리즘을 분석해야 하는 이유는&lt;/p&gt;
@@ -2825,10 +2825,10 @@ for (int i = 0; i &amp;lt; N; i++)
     
     <item>
       <title>Algorithm: Spanning Tree, Shortest Paths</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part2-1/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part2-1/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:15 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part2-1/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part2-1/</guid>
       <description>
 
 &lt;h4 id=&#34;is-a-graph-bipartite&#34;&gt;Is a graph bipartite?&lt;/h4&gt;
@@ -3519,10 +3519,10 @@ for all other vertice&lt;/li&gt;
     
     <item>
       <title>Algorithm: Radix Sort, Suffix Sort</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part2-2/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part2-2/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:17 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part2-2/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part2-2/</guid>
       <description>
 
 &lt;h3 id=&#34;strings-in-java&#34;&gt;Strings in Java&lt;/h3&gt;
@@ -4168,10 +4168,10 @@ winstwins
     
     <item>
       <title>Algorithm: R-way, Ternary Tries</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part2-3/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part2-3/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:19 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part2-3/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part2-3/</guid>
       <description>
 
 &lt;h3 id=&#34;string-symbol-table&#34;&gt;String Symbol Table&lt;/h3&gt;
@@ -4645,10 +4645,10 @@ public int search(Node x, String query, int d, int length) {
     
     <item>
       <title>Algorithm: KMP, Boyer-Moore, Rabin-Karp</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part2-4/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part2-4/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:20 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part2-4/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part2-4/</guid>
       <description>
 
 &lt;h3 id=&#34;intro-to-substring-search&#34;&gt;Intro to Substring Search&lt;/h3&gt;
@@ -5264,10 +5264,10 @@ return N;
     
     <item>
       <title>Algorithm: Maximum Flow (Ford-Fulkerson)</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part2-5/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part2-5/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:21 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part2-5/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part2-5/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://graph-tool.skewed.de/static/doc/_images/example-edmonds-karp.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -5755,10 +5755,10 @@ While there exists an augmenting path
     
     <item>
       <title>Algorithm: Data Compression, Huffman, LZW</title>
-      <link>https://1ambda.github.com/91/algorithm/algorithm-part2-6/</link>
+      <link>https://1ambda.github.io/91/algorithm/algorithm-part2-6/</link>
       <pubDate>Sat, 25 Jun 2016 13:01:22 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/91/algorithm/algorithm-part2-6/</guid>
+      <guid>https://1ambda.github.io/91/algorithm/algorithm-part2-6/</guid>
       <description>
 
 &lt;h3 id=&#34;data-compression&#34;&gt;Data Compression&lt;/h3&gt;

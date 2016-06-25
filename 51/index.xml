@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>51s on Old Lisper</title>
-    <link>https://1ambda.github.com/51/</link>
+    <link>https://1ambda.github.io/51/</link>
     <description>Recent content in 51s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 10:05:45 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/51/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/51/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>oh-my-github</title>
-      <link>https://1ambda.github.com/51/oh-my-github/</link>
+      <link>https://1ambda.github.io/51/oh-my-github/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/51/oh-my-github/</guid>
+      <guid>https://1ambda.github.io/51/oh-my-github/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;tutorial&#34;&gt;oh-my-github&lt;/a&gt; - 10 분만에 Github Profile 만들기 (Korean)&lt;/li&gt;
 &lt;/ul&gt;
@@ -24,10 +24,10 @@
     
     <item>
       <title>10분만에 Github Profile 만들기</title>
-      <link>https://1ambda.github.com/51/oh-my-github/tutorial/</link>
+      <link>https://1ambda.github.io/51/oh-my-github/tutorial/</link>
       <pubDate>Sat, 25 Jun 2016 14:53:48 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/51/oh-my-github/tutorial/</guid>
+      <guid>https://1ambda.github.io/51/oh-my-github/tutorial/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg?width=200&amp;amp;height=200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>0s on Old Lisper</title>
-    <link>https://1ambda.github.com/0/</link>
+    <link>https://1ambda.github.io/0/</link>
     <description>Recent content in 0s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Thu, 23 Jun 2016 10:15:45 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/0/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/0/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title></title>
-      <link>https://1ambda.github.com/0/home/</link>
+      <link>https://1ambda.github.io/0/home/</link>
       <pubDate>Thu, 23 Jun 2016 10:15:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/0/home/</guid>
+      <guid>https://1ambda.github.io/0/home/</guid>
       <description>
 
 &lt;h1 id=&#34;home&#34;&gt;HOME&lt;/h1&gt;
@@ -28,7 +28,7 @@
 &lt;li&gt;&lt;a href=&#34;https://1ambda.github.io/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;characteristics&#34;&gt;Characteristics&lt;/h2&gt;
+&lt;h2 id=&#34;1ambda&#34;&gt;1ambda&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;빌드 도구와 개발 인프라에 과도하게 집착합니다.&lt;/li&gt;

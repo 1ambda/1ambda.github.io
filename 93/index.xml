@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>93s on Old Lisper</title>
-    <link>https://1ambda.github.com/93/</link>
+    <link>https://1ambda.github.io/93/</link>
     <description>Recent content in 93s on Old Lisper</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Sat, 25 Jun 2016 10:05:23 +0900</lastBuildDate>
-    <atom:link href="https://1ambda.github.com/93/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://1ambda.github.io/93/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Cloud Computing</title>
-      <link>https://1ambda.github.com/93/cloud-computing/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/</link>
       <pubDate>Sat, 25 Jun 2016 10:05:23 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/</guid>
       <description>
 
 &lt;h2 id=&#34;cloud-computing&#34;&gt;Cloud Computing&lt;/h2&gt;
@@ -34,10 +34,10 @@
     
     <item>
       <title>CC 01: Map Reduce</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-1/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-1/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:29 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-1/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-1/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -302,10 +302,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>CC 02: Gossip Protocol</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-2/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-2/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:40 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-2/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-2/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -460,10 +460,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>CC 03: Membership Protocol</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-3/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-3/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:41 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-3/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-3/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -741,10 +741,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>CC 04: P2P Systems</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-4/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-4/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:44 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-4/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-4/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -1035,10 +1035,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>CC 05: Global Snapshot</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-5/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-5/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:45 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-5/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-5/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -1207,10 +1207,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>CC 06: Multicast</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-6/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-6/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:46 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-6/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-6/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
@@ -1383,10 +1383,10 @@ public void run(String inputPath, String outputPath) throw Exception {
     
     <item>
       <title>CC 07: Paxos</title>
-      <link>https://1ambda.github.com/93/cloud-computing/cloud-computing-7/</link>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-7/</link>
       <pubDate>Sat, 25 Jun 2016 14:42:47 +0900</pubDate>
       
-      <guid>https://1ambda.github.com/93/cloud-computing/cloud-computing-7/</guid>
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-7/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
