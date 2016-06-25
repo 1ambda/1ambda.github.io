@@ -16,10 +16,17 @@
       <pubDate>Sat, 25 Jun 2016 11:27:04 +0900</pubDate>
       
       <guid>https://1ambda.github.io/23/javascript/</guid>
-      <description>&lt;ul&gt;
+      <description>
+
+&lt;h2 id=&#34;javascript&#34;&gt;Javascript&lt;/h2&gt;
+
+&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;tips-for-webpack-and-redux&#34;&gt;Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지 팁들&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;javascript-inheritance&#34;&gt;Javascript Inheritance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;rest-api-put-vs-post&#34;&gt;REST API: Put vs Post&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
 </description>
     </item>
     

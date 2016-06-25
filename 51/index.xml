@@ -16,7 +16,13 @@
       <pubDate>Sat, 25 Jun 2016 10:05:45 +0900</pubDate>
       
       <guid>https://1ambda.github.io/51/oh-my-github/</guid>
-      <description>&lt;ul&gt;
+      <description>
+
+&lt;h1 id=&#34;oh-my-github&#34;&gt;oh-my-github&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 는 개발자가, 자신의 Github Profile 을 생성하고, gh-pages 로 호스팅 할 수 있도록 도와주는 툴입니다.&lt;/p&gt;
+
+&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;tutorial&#34;&gt;oh-my-github&lt;/a&gt; - 10 분만에 Github Profile 만들기 (Korean)&lt;/li&gt;
 &lt;/ul&gt;
 </description>
