@@ -16,13 +16,11 @@
       <pubDate>Thu, 23 Jun 2016 10:15:45 +0900</pubDate>
       
       <guid>https://1ambda.github.com/0/home/</guid>
-      <description>
-
-&lt;h3 id=&#34;chapter-x&#34;&gt;Chapter X&lt;/h3&gt;
-
-&lt;h1 id=&#34;some-chapter-title&#34;&gt;Some Chapter title&lt;/h1&gt;
-
-&lt;p&gt;Lorem ipsum&lt;/p&gt;
+      <description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://linkedin.com/in/1ambda&#34;&gt;Linkedin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda&#34;&gt;Github&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://1ambda.github.io/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
