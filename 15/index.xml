@@ -20,35 +20,17 @@
 
 &lt;h2 id=&#34;infrastructure&#34;&gt;Infrastructure&lt;/h2&gt;
 
-&lt;p&gt;아래의 주제들을 다룹니다&lt;/p&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;container&#34;&gt;Container&lt;/h3&gt;
-
 &lt;ul&gt;
-&lt;li&gt;Container Engine (e.g &lt;a href=&#34;https://www.docker.com/&#34;&gt;docker&lt;/a&gt;, &lt;a href=&#34;https://coreos.com/rkt/&#34;&gt;rkt&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Container Orchestration (e.g &lt;a href=&#34;http://kubernetes.io/&#34;&gt;kubernetes&lt;/a&gt;, &lt;a href=&#34;https://mesosphere.com/&#34;&gt;mesosphere&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container Infrastructure&lt;/strong&gt;: &lt;a href=&#34;https://coreos.com/rkt/&#34;&gt;rkt&lt;/a&gt; 와 같은 container engine 부터 &lt;a href=&#34;http://kubernetes.io/&#34;&gt;kubernetes&lt;/a&gt; 와 같은 orchestration tool 등&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Infrastructure Automation&lt;/strong&gt;: &lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt; 이나 &lt;a href=&#34;https://www.habitat.sh/&#34;&gt;Habitat&lt;/a&gt; 등 자동화를 위한 모든 방법들&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data Infrastructure&lt;/strong&gt;: &lt;a href=&#34;http://kafka.apache.org/&#34;&gt;Apache Kafka&lt;/a&gt; 등 Data Pipeline 을 구성하고, 유지 하는 방법등에 대한 이야기&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;data&#34;&gt;Data&lt;/h3&gt;
+&lt;h3 id=&#34;published&#34;&gt;Published&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://kafka.apache.org/&#34;&gt;Apache Kafka&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://localhost:1313/15/infrastructure/container/kubernetes-intro/&#34;&gt;Kubernetes Intro&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;automation&#34;&gt;Automation&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.habitat.sh/&#34;&gt;Habitat&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -165,8 +147,6 @@ Server Version: version.Info{Major:&amp;quot;1&amp;quot;, Minor:&amp;quot;3&amp;
 
 &lt;p&gt;조금 더 자세히 보면,&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/arc_k8s_simple.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;master 에는 작업을 위한 &lt;a href=&#34;http://kubernetes.io/docs/admin/kube-apiserver/&#34;&gt;api server&lt;/a&gt;,
 state 를 관리하기 위한 분산 저장소 (default 로 &lt;a href=&#34;https://coreos.com/etcd/&#34;&gt;etcd&lt;/a&gt;),
@@ -203,8 +183,6 @@ docker 에서 container 끼리 통신하려면 같은 network 위에 있도록 �
 &lt;p&gt;pod 의 종료, 삭제 관련해서는 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/pods/#termination-of-pods&#34;&gt;Termination of Pods&lt;/a&gt; 를 참고하시면 됩니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/physical-layout.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;위에서 k8s 가 auto-restart 등을 해준다고 했었는데 테스트 해보겠습니다. 그 전에 먼저 클러스터가 정상적으로 세팅이 되었는지 확인해 보겠습니다. 저는 minikube 를 이용해서 로컬에서 실행했으므로 아래와 같은 결과가 나옵니다.
 kubectl 을 여러 클러스터 중 하나에 붙어서 커맨드를 날릴 수 있도록 도와주는 docker-machine 정도로 이해하시면 됩니다. (단위가 다르지만)&lt;/p&gt;

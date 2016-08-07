@@ -1138,8 +1138,6 @@ Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;3&quot;, GitVersio
 
 <p>조금 더 자세히 보면,</p>
 
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/arc_k8s_simple.jpg" alt="" /></p>
-
 <ul>
 <li>master 에는 작업을 위한 <a href="http://kubernetes.io/docs/admin/kube-apiserver/">api server</a>,
 state 를 관리하기 위한 분산 저장소 (default 로 <a href="https://coreos.com/etcd/">etcd</a>),
@@ -1176,8 +1174,6 @@ docker 에서 container 끼리 통신하려면 같은 network 위에 있도록 �
 <p>pod 의 종료, 삭제 관련해서는 <a href="http://kubernetes.io/docs/user-guide/pods/#termination-of-pods">Termination of Pods</a> 를 참고하시면 됩니다.</p>
 
 <p><br/></p>
-
-<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/physical-layout.png" alt="" /></p>
 
 <p>위에서 k8s 가 auto-restart 등을 해준다고 했었는데 테스트 해보겠습니다. 그 전에 먼저 클러스터가 정상적으로 세팅이 되었는지 확인해 보겠습니다. 저는 minikube 를 이용해서 로컬에서 실행했으므로 아래와 같은 결과가 나옵니다.
 kubectl 을 여러 클러스터 중 하나에 붙어서 커맨드를 날릴 수 있도록 도와주는 docker-machine 정도로 이해하시면 됩니다. (단위가 다르지만)</p>
@@ -1711,8 +1707,8 @@ deployment:
     </div>
 
     <div id="navigation">
+        <a class="nav nav-prev" href="../../"> <i class="fa fa-chevron-left"></i></a>
         
-        <a class="nav nav-next" href="../" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
     </div>
 
     </section>

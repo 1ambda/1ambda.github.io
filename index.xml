@@ -20,35 +20,17 @@
 
 &lt;h2 id=&#34;infrastructure&#34;&gt;Infrastructure&lt;/h2&gt;
 
-&lt;p&gt;아래의 주제들을 다룹니다&lt;/p&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;container&#34;&gt;Container&lt;/h3&gt;
-
 &lt;ul&gt;
-&lt;li&gt;Container Engine (e.g &lt;a href=&#34;https://www.docker.com/&#34;&gt;docker&lt;/a&gt;, &lt;a href=&#34;https://coreos.com/rkt/&#34;&gt;rkt&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Container Orchestration (e.g &lt;a href=&#34;http://kubernetes.io/&#34;&gt;kubernetes&lt;/a&gt;, &lt;a href=&#34;https://mesosphere.com/&#34;&gt;mesosphere&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container Infrastructure&lt;/strong&gt;: &lt;a href=&#34;https://coreos.com/rkt/&#34;&gt;rkt&lt;/a&gt; 와 같은 container engine 부터 &lt;a href=&#34;http://kubernetes.io/&#34;&gt;kubernetes&lt;/a&gt; 와 같은 orchestration tool 등&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Infrastructure Automation&lt;/strong&gt;: &lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt; 이나 &lt;a href=&#34;https://www.habitat.sh/&#34;&gt;Habitat&lt;/a&gt; 등 자동화를 위한 모든 방법들&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data Infrastructure&lt;/strong&gt;: &lt;a href=&#34;http://kafka.apache.org/&#34;&gt;Apache Kafka&lt;/a&gt; 등 Data Pipeline 을 구성하고, 유지 하는 방법등에 대한 이야기&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;data&#34;&gt;Data&lt;/h3&gt;
+&lt;h3 id=&#34;published&#34;&gt;Published&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://kafka.apache.org/&#34;&gt;Apache Kafka&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://localhost:1313/15/infrastructure/container/kubernetes-intro/&#34;&gt;Kubernetes Intro&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;automation&#34;&gt;Automation&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.habitat.sh/&#34;&gt;Habitat&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
 </description>
     </item>
     
