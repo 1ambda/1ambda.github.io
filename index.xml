@@ -26,10 +26,10 @@
 &lt;li&gt;&lt;strong&gt;Data Infrastructure&lt;/strong&gt;: &lt;a href=&#34;http://kafka.apache.org/&#34;&gt;Apache Kafka&lt;/a&gt; 등 Data Pipeline 을 구성하고, 유지 하는 방법등에 대한 이야기&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;published&#34;&gt;Published&lt;/h3&gt;
+&lt;h2 id=&#34;published&#34;&gt;Published&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://localhost:1313/15/infrastructure/container/kubernetes-intro/&#34;&gt;Kubernetes Intro&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;container/kubernetes-intro/&#34;&gt;Kubernetes Intro&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>
