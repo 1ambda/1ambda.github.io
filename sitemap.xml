@@ -79,6 +79,13 @@
   </url>
   
   <url>
+    <loc>https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/</loc>
+    <lastmod>2016-08-06T20:41:38+09:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://1ambda.github.io/51/oh-my-github/tutorial/</loc>
     <lastmod>2016-06-25T14:53:48+09:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -410,13 +417,6 @@
   <url>
     <loc>https://1ambda.github.io/91/algorithm/algorithm-part2-6/</loc>
     <lastmod>2016-06-25T13:01:22+09:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/</loc>
-    <lastmod>2016-08-06T20:41:38+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
