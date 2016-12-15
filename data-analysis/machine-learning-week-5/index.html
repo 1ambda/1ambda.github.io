@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>ML 05: Back Propagation</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/data-analysis/machine-learning-week-5/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/data-analysis/machine-learning-week-5.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/data-analysis/" itemprop="url"><span itemprop="title">Data Analysis</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> ML 05: Back Propagation</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#cost-function">Cost Function</a></li>
+<li><a href="#backpropagation-algorithm">Backpropagation: Algorithm</a></li>
+<li><a href="#back-propagation-intuition">Back propagation: Intuition</a></li>
+<li><a href="#unrolling-parameters">Unrolling Parameters</a></li>
+<li><a href="#gradient-checking">Gradient Checking</a></li>
+<li><a href="#random-initialization">Random Initialization</a></li>
+<li><a href="#putting-it-toghther">Putting It Toghther</a></li>
+<li><a href="#autonomous-driving">Autonomous Driving</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>ML 05: Back Propagation</h1>
+                
+
+
+
+<p>지난시간엔 왜 <em>neural network</em> 를 사용하는지 알아보았다. 데이터의 차수가 매우 클 때 <em>logistic regression</em> 으로는 성능이 떨어지거나 <em>overfitting</em> 의 문제가 발생할 수 있다는 사실을 알게 되었고, 마지막엔 <em>multi class</em> 문제를 어떻게 해결할지도 잠깐 논의 해봤다.</p>
+
+<p>이번에는 <em>back propagation</em>, <em>gradient checking</em> 에 대해서 배워보자.</p>
+
+<h3 id="cost-function">Cost Function</h3>
+
+<p>시작하기 전에 몇 가지 표기법을 정의하자.</p>
+
+<p><code>L</code> 을 레이어의 수, <code>s_l</code> 을 해당 레이어의 유닛 수라 하자. 그러면 <em>bianry classification</em> 에서 <code>S_L = 1</code> 이다. 아웃풋 레이어의 유닛 수를 더 간단히 <code>K</code> 라 하자.</p>
+
+<p>이제 <em>neural network</em> 에 대한 <em>cost function</em> 을 볼건데 먼저 <em>binary classification</em> 의 <em>regularized cost function</em> 식을 다시 보자.</p>
+
+<p><img src="http://3.bp.blogspot.com/-qNym-oCdMIg/Trd03YeslWI/AAAAAAAAApQ/GUfXiJ3vpUE/s400/Screen+shot+2011-11-07+at+3.03.55+AM.png" alt="http://aimotion.blogspot.kr/" /></p>
+
+<p>지난 시간에 언급했듯이 신경망에서 각 단계는 <em>logistic regression</em> 과 같이 때문에 <code>L</code> 의 신경망은 <code>L-1</code> 의 <em>logistic regression</em> 의 식으로 변환할 수 있다.</p>
+
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[3].png" align="center" /></p>
+
+<p><del>이 식의 가장 큰 문제점은 이 식을 보면 당황스럽다는 것이다.</del></p>
+
+<p>뒷 부분 <em>regularization term</em> 은 이해하기 어렵지 않다. 신경망에선 <code>weight</code> (<em>theta</em>) 의 행렬이 이전 레이어와 다음 레이어의 유닛 수로 구성되므로 <code>(theta_ji^l)^2</code> 으로 모든 <code>theta^2</code> 를 구할 수 있다.</p>
+
+<p>여기서 <code>i = 1</code> 부터 시작하는 이유는 <em>logistic regression</em> 의 <em>regularization term</em> 에서 <code>theta_0</code> 을 포함하지 않는것과 같다.</p>
+
+<p>문제는 시그마 <code>K</code> 부분인데, <code>K</code> 가 이 신경망에서 클래스의 개수 라는 점을 고려하면 <code>y_k</code> 는 <code>[0; 0; 1; 0; ...]</code> 에서 <code>k</code> 번째 값, <code>(h0)_k</code> 또한 <code>k</code> 번째 <em>output unit</em> 의 값 이라 보면 된다.</p>
+
+<p>원래 <em>cost function</em> 정의 자체가 우리가 가진 <em>hypothesis</em> 로 구한 값과 본래의 값 <code>y</code> 와의 차이를 알려주는 것이므로 <code>K</code> 개의 클래스가 있을때는 각 클래스 위치의 값과 본래의 <em>k-dimensional vector</em> <code>y</code> 값의 해당 포지션의 차이를 모두 합한 값을 구하는 것이라 <em>neural network</em> 의 <em>cost function</em>  정의할 수 있다.</p>
+
+<h3 id="backpropagation-algorithm">Backpropagation: Algorithm</h3>
+
+<p><em>gradient computation</em> 을 위해서는 <em>cost function</em> 과 각 <code>l</code> 의 <code>i</code>, <code>j</code> 위치의 <code>theta</code> 에 대해서 <em>cost function</em> 의 <em>partial derivative</em> 를 구해야 한다. <del>네?</del></p>
+
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[7].png" align="center" />
+<p align="center">(<a href="http://www.holehouse.org/">http://www.holehouse.org/</a>)</p></p>
+
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[8].png" alt="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[8].png" /></p>
+
+<p>다음과 같은 신경망이 있다고 하자, 그리고 <em>training set</em> 이 <code>(x, y)</code> 만 있다고 한다면 <em>cost function</em> 을 얻기 위해 다음의 <em>forward propagation</em> 을 진행하면 된다.</p>
+
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[9].png" alt="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[9].png" />
+<p align="center">(<a href="http://www.holehouse.org/">http://www.holehouse.org/</a>)</p></p>
+
+<p>그럼 <code>i, j, l</code> 에 대한 <em>cost function</em> 의 <em>partial derivative</em> 는 어떻게 구할까?</p>
+
+<p><strong>back propagation</strong> 을 이용하면 된다. 개요는 이렇다. 마지막 단계에서 신경망을 이용해 얻은 값 <code>a4</code> 와 실제 값인 <code>y</code> 의 차이를 <code>d4</code>(<em>delta</em>) 라 하자. 보면 알겠지만 이건 <em>error</em> 다. 이 에러값을 이용해 <code>d3</code> 즉 레이어 3 에서의 에러값을 구하고, 반복하면서 <code>d2</code> 까지 구한다. (<code>d1</code> 은 없다. <code>a1</code> 이 <em>input</em> 이기때문)</p>
+
+<p><em>forward propagation</em> 과 다르게 뒤에서 앞쪽으로 <em>error</em> 가 전파되기 때문에 <em>back propagation, BP</em> 라 부른다. BP 로 찾은 <code>d</code> 값을 이용하면 <em>partial derivative</em> 를 쉽게 구할 수 있다. <code>d3, d2</code> 를 구하는 방법은 아래와 같다.</p>
+
+<p><img src="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[10].png" alt="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning_files/Image%20[10].png" />
+<p align="center">(<a href="http://www.holehouse.org/">http://www.holehouse.org/</a>)</p></p>
+
+<p>식에 대한 <em>intuition</em> 은 이전 레이어의 유닛의 <code>d</code> 를 얻기 위해서 다음 레이어의 모든 <code>d</code> 와 <code>theta</code> 의 곱을 이용한다는 사실이다. 이건 <em>FP</em> 에서 다음 단계의 유닛 <code>a</code> 를 얻기 위해 이전 단계의 모든 유닛과 <code>theta</code> 를 이용한다는 사실을 거꾸로 생각해보면 이해할 수 있다.</p>
+
+<p>이때 <em>sigmoid function</em> <code>g</code> 의 미분은 <code>g' = g(1-g)</code> 이고, <code>g'(z3)</code> 는 <code>a3 * (1 - a3)</code> 으로 고쳐쓸 수 있다.</p>
+
+<p>만약에 <em>regularization term</em> 을 무시한다면 다시 말해 <code>lambda = 0</code> 이면, <em>partial derivative</em> 는 <code>d</code> 를 이용해 쉽게 작성할 수 있다.</p>
+
+<p>알고리즘을 좀 자세히 살펴보면</p>
+
+<p><img src="http://my.csdn.net/uploads/201207/18/1342599882_9006.jpg" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p></p>
+
+<p>지금까지의 설명과 같이 먼저 <em>FP</em> 를 진행해서 각 레이어의 유닛 <code>a</code> 을 구하고, <em>BP</em> 를 진행한다.</p>
+
+<p>이 때 마지막 단계에서 삼각형(<em>large delta</em>, <code>Delta</code>) 에 이전 단계의 <code>DELTA</code> 와 <code>aj^(l)di(l+1)</code> 를 더하는데, 사실 <code>aj^(l)di(l+1)</code> 가 바로 <em>reulgarization term</em> 을 무시했을 때의 <em>partial derivative</em> 다.</p>
+
+<p>이렇게 모든 <code>DELTA</code> 를 구하고 나서 이제 <code>D</code> 에 <em>regularization term</em> 을 추가한다.</p>
+
+<p><img src="http://my.csdn.net/uploads/201207/19/1342669084_1797.jpg" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p></p>
+
+<p>이제 <em>regularization term</em> 까지 더한 <code>D</code> 가 바로 <em>partial derivative</em> 다. <del>너무 난해하다</del></p>
+
+<h3 id="back-propagation-intuition">Back propagation: Intuition</h3>
+
+<p>조금 더 <em>Back propagation, BP</em> 를 살펴보자. <code>dj^(l-1)</code> 를 얻기 위해 <code>d^(l)</code> 과 <code>theta</code> 를 이용한다는 사실은 알겠다. 근데 <code>g'</code> 이라던지 이런건 도대체 어디서 나온걸까?</p>
+
+<p>처음으로 다시 돌아가면 <em>cost function</em> 에서 <em>training set</em> 이 1개라면 다시 말해 <code>m=1</code> 이고, <code>lambda=0</code> 이라면 <em>cost function</em> 은 <code>h(x), y</code> 에 의해 좌우된다. 결국 <em>squared error</em> 와 다를바 없다는 소리다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360304035_3064.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>결국 <code>dj^(l)</code> 은 <code>aj^(l)</code> 의 <em>error of cost</em> 다. 더 엄밀히 수학적으로 말하자면 <code>dj^(l)</code> 은 <code>cost(i)</code> 에 대한 <code>zj^(l)</code> 의 <em>partial derivative</em> 다. <code>zj^(l)</code> 이 변할때 <code>i</code> 에 대한 <em>cost</em> 가 얼마나 변하는지가 바로 <code>d</code> 란 이야기다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360304589_4715.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><code>d</code> 에 대한 더 엄밀한 수학적 증명은</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?delta_k%20=%20frac{partial%20J(Theta)}{partial%20z_k}%20=%20frac{partial%20J(Theta)}{partial%20a_k}frac{partial%20a_k}{partial%20z_k}%20=%20Theta_{k}delta_{k+1}cdot%20g%27(z_k)%20\%20Delta%20w_{ij}%20=%20Delta%20w_{ij}%20+%20frac{partial%20J(Theta)}{partial%20w_{ij}}%20=%20Delta%20w_{ij}%20+%20a_j^l%20cdot%20delta_k^(l+1)\%20frac{partial%20J(Theta)}{partial%20w_{ij}}%20=%20frac{partial%20J(Theta)}{partial%20z_k}%20cdot%20frac{partial%20z_k}{partial%20w_{ij}}" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p></p>
+
+<h3 id="unrolling-parameters">Unrolling Parameters</h3>
+
+<p><em>octave</em> 에서 <code>reshape</code> 함수를 이용해서 벡터를 매트릭스로 변환하는 방법을 알려준다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360306972_1270.png" alt="" />
+<img src="http://img.my.csdn.net/uploads/201302/08/1360307271_1026.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<h3 id="gradient-checking">Gradient Checking</h3>
+
+<p><em>BP</em> 를 이용해서 <em>neural network</em> 의 <em>cost function</em> 을 위한 <em>partial derivative</em> 를 구하는 방법을 배웠는데, 안타깝게도 이게 쉽게 구현할 수 있는것이 아니라서 버그가 생길 수 있다.</p>
+
+<p><em>gradient checking</em> 이란 방법을 이용하면 <em>FP, BP</em> 의 구현이 완벽함을 보일 수 있다. 배워보자.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360308451_8919.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>말 그대로 기울기에 대한 근사치를 구해서 비교하여 검증하는 방법이다. <code>e</code>(엡실론) 이 매우 작다 하고, <code>0-e</code> 와 <code>0+e</code> 두 점 사이의 기울기를 구해 <em>gradient</em> 와 근사한 값을 구한다.</p>
+
+<p>우리는 <code>0</code> 가 하나가 아니기 때문에, 각각의 <code>0</code>(<code>theta</code>) 에 대해 모두 <em>gradient</em> 의 근사치를 구해야 한다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360308632_9597.png" alt="" />
+<img src="http://img.my.csdn.net/uploads/201302/08/1360308843_4503.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>마지막에서 <em>gradient checking</em> 을 이용해 구한 <code>gradApprox</code> 와 실제 *BP 를 이용해 구한 <em>graident</em> 인 <code>Dvec</code> 과 비슷한지 검사한다.</p>
+
+<p>그러나, 한가지 알아야할 사실이 있다. <em>gradient checking</em> 은 굉장히 비싸기 때문에 <code>Dvec</code> 과 비슷한 값을 구했는지 검사한 후에는 <em>gradient checking</em> 를 꺼야한다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360310625_8308.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<h3 id="random-initialization">Random Initialization</h3>
+
+<p><em>gradient desecnt</em> 를 위한 함수를 사용할때 <code>initialTheta</code> 를 줘야한다. 그냥 <code>zeros</code> 로 만들까? <em>neural network</em> 에서 모든 <code>theta</code> 가 <code>0</code> 으로 시작하면 모든 유닛의 값이 같아진다. 오류(<code>d</code>) 도 같고, <em>partial derivative</em> 의 값도 같으므로  다음 이터레이션에서도 같은 유닛은 같은 값을 가지고 이게 반복된다.</p>
+
+<p>결국 내가 가진 모든 히든 유닛이 같은 계산을 해 내고 있으므로, 하나의 <em>feature</em> 에 대한 극도로 중복된 연산을 볼 수 있다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/08/1360312970_4725.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><code>theta</code> 가 대칭이기 때문에 발생하는 문제인데 <em>symmetry breaking</em> 을 위해 <code>[-e, e]</code> 사이의 <code>theta</code> 를 랜덤으로 골라보자. 물론 이 <code>e</code> 는 <em>gradient checking</em> 에서의 <code>e</code> 와 관련이 없다.</p>
+
+<p><img src="http://my.csdn.net/uploads/201207/20/1342765672_2379.jpg" alt="" /><p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p></p>
+
+<h3 id="putting-it-toghther">Putting It Toghther</h3>
+
+<p>(1) <em>neural network</em> 를 훈련시킬 때 먼저 해야 할 일은 아키텍쳐를 고르는 일이다.</p>
+
+<p><em>output unit</em> 과 <em>input unit</em> 은 <em>class</em> 와 <em>feature</em> 수로 결정된다. 문제는 <em>hidden unit</em> 과 <em>hidden layer</em> 의 수다.</p>
+
+<p>기본적으로는 1개의 히든 레이어를 사용하거나, 1개 이상을 사용한다면 같은 수의 히든 유닛을 모든 히든 레이어에서 사용하는것이 대부분 계산 비용 면에서 낫다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/09/1360373142_6515.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>(2) <em>weights</em> 를 랜덤하게 초기화 한다.<br />
+(3) <em>forward propagation</em><br />
+(4) <em>cost function</em> 을 구한다.<br />
+(5)  <em>partial derivatives</em> 구하기 위해 <em>back propagation</em></p>
+
+<p><em>BP</em> 를 할때는 <em>traning set</em> 의 수 <code>m</code> 번 만큼 루프를 돌면서 각 <code>(xi, yi)</code> 를 이용해 <em>FP</em>, <em>BP</em> 를 한다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/09/1360373729_4414.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>(6) <em>gradient checking</em> 을 이용해 얻은 근사치와 <em>partial derivatives</em> 를 비교한다. 값이 적당히 비슷하면 <em>gradient checking</em> 코드를 제거한다.<br />
+(7) <em>cost function</em> 을 최소화 하기 위해 <em>gradient descent</em> 나 <em>advanced optimization method</em> 를 사용한다.</p>
+
+<p>한 가지 알아야 할 사실은 <em>neural network</em> 의 <em>cost function</em> 은 <em>non-convex</em> 이기 때문에 <em>local optimum</em> 에서 멈출 수 있다.</p>
+
+<p>그런덷 문제가 굉장히 크다면 <em>gradient descent</em> 로 찾은 <em>local optimum</em> 도 충분히 좋은 값이라고 한다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/09/1360374039_7863.png" alt="" /><p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>처음에 1장에서 봤던 언덕 그림이다.</p>
+
+<p><img src="http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5" alt="" /><p align="center">(<a href="http://mapository.tistory.com/59">http://mapository.tistory.com/59</a>)</p></p>
+
+<p>여기서 <em>gradient descent</em> 가 하는 일은 언덕을 내려가는거고, <em>back propagation</em> 이 하는 일은 방향을 잡아주는 일이다.(<code>z</code> 가 변했을 때 <em>cost function</em> 값이 변하는 양인 오차 <code>d</code> 의 값이 적어지도록 방향을 잡아줌)</p>
+
+<p>그래서 신경망에서 <em>gradient descent</em> 를 사용한다 하더라도 적당히 좋은 로컬 옵티멈을 찾아준다는 훈훈한 이야기</p>
+
+<h3 id="autonomous-driving">Autonomous Driving</h3>
+
+<p>무인 운전을 신경망으로 어떻게 해결하는지를 보여준다. 미리 사람이 한번 운전한 경로(<code>y</code>) 를 바탕으로 학습하는데, 생각도 못해본 분야들에 이미  이런 기술들이 적용되어 있구나 싶다. <del>무려 1992년에 했던 실험이다</del></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://aimotion.blogspot.kr/">http://aimotion.blogspot.kr/</a><br />
+(2) <a href="http://www.holehouse.org/mlclass/09_Neural_Networks_Learning.html">http://www.holehouse.org/mlclass/</a><br />
+(3) <a href="http://blog.csdn.net/abcjennifer/article/details/7758797">http://blog.csdn.net/abcjennifer/</a><br />
+(4) <a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../machine-learning-week-4"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../machine-learning-week-6" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

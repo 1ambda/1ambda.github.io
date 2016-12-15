@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>하스켈로 배우는 함수형 언어 8</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/haskell/intro-to-haskell-8/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/haskell/intro-to-haskell-8.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/haskell/" itemprop="url"><span itemprop="title">Haskell</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> 하스켈로 배우는 함수형 언어 8</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#reduction-strategies">Reduction Strategies</a></li>
+<li><a href="#infinite-list">Infinite List</a></li>
+<li><a href="#modular-programming">Modular Programming</a></li>
+<li><a href="#generate-primes">Generate Primes</a></li>
+<li><a href="#strict-application">Strict Application</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>하스켈로 배우는 함수형 언어 8</h1>
+                
+
+
+
+<p>고차함수가 있는 다른언어와 비교했을 때 하스켈은 무슨 특징이 있을까요? 하스켈은 <em>expression</em> 을 평가하기 위해 디폴트로 <em>lazy evaluation</em> 을 사용한다는 점에서 다른 언어들과 다릅니다.</p>
+
+<p>이번시간엔 <em>evaluation</em> 의 개념부터 시작해서, 다양한 종류의 <em>evaluation</em> 전략들을 살펴보겠습니다.</p>
+
+<h3 id="evaluation">Evaluation</h3>
+
+<ul>
+<li>Avoid doing <strong>unnecessay evaluation</strong></li>
+<li>Allows programs to be <strong>more modular</strong></li>
+<li>Allows us to program with <strong>infinite lists</strong></li>
+</ul>
+
+<p>하스켈은 <em>lazy evaluation</em> 을 이용해 위에 나열한 것들을 제공합니다. <em>lazy evaluation</em> 을 이야기 하기 전에 먼저 <em>evaluation</em> 이 무엇인지 살펴봅시다.</p>
+
+<blockquote>
+<p>Basically, expressions are evaluated or reduced by successively applying definitions until no further simplification is possible</p>
+</blockquote>
+
+<p>예를 들어서 <code>square n = n * n</code> 이란 <em>definition</em> 이 있을때, <em>expression</em> <code>square(3 + 4)</code> 는 이렇게 두 가지 방식으로 평가될 수 있습니다.</p>
+
+<pre><code class="language-haskell">square (3 + 4)
+square 7
+7 * 7
+49
+
+-- bad
+square (3 + 4)
+(3 + 4) * (3 + 4)
+7 * (3 + 4)
+7 * 7
+49
+</code></pre>
+
+<p>만약에 아래 버전처럼 <code>(3 + 4) * (3 + 4)</code> 로 평가된다면, 똑같은 계산을 두번이나 하게 될 겁니다. 더 심각한 문제는 <em>side effect</em> 가 발생한다면 값이 달라질 수도 있다는 것이지요!</p>
+
+<p>아래 예제를 한번 봅시다. <em>evaluation</em> 전략에 따라 값이 달라지는 것을 보여줍니다.</p>
+
+<pre><code class="language-haskell">-- initially, n := 0
+
+-- left first
+n + (n := 1)
+0 + (n := 1)
+0 + 1
+1
+
+-- right first
+n + (n := 1)
+n + 1
+1 + 1
+2
+</code></pre>
+
+<blockquote>
+<p><strong>FACT:</strong> In Haskell, two diffrent (but terminating) ways of evaluating the same expression will always give the same final result.</p>
+</blockquote>
+
+<p>다행히도 하스켈은 어떤 전략을 사용하든 <em>terminating expression</em> 에 대해서는 항상 같은 결과를 돌려줍니다.</p>
+
+<h3 id="reduction-strategies">Reduction Strategies</h3>
+
+<p>일반적으로 평가방법은 크게 두 가지로 나눌 수 있습니다. 어떤 <em>reducible subexpression (redex)</em> 를 선택하냐에 따라</p>
+
+<p>(1) <strong>Innermost reduction:</strong> An inner most redex is always reduced<br />
+(2) <strong>Outermost reduction:</strong> An outermost redex is always reduced</p>
+
+<pre><code class="language-haskell">loop = tail loop
+
+// innermost reduction
+fst (1, loop)
+fst (1, tail loop)
+fst (1, tail (tail loop))
+...
+
+// outermost reduction
+fst (1, lop)
+1
+</code></pre>
+
+<p>위 결과를 보면 <em>innermost</em> 가 종료되지 않는 경우에도, <em>outermost</em> 는 결과를 돌려줄 수 있다는 사실을 알 수 있습니다.</p>
+
+<p>또한 어느 하나의 <em>reduction sequence</em> 라도 종료된다면 <em>outermost reduction</em> 도 종료됩니다. 같은 결과를 돌려주면서요. 원문을 첨부하면,</p>
+
+<blockquote>
+<p>For a given expression if there exists any reduction sequence that terminates, then outermost reduction <strong>also</strong> terminates, with the same result</p>
+</blockquote>
+
+<p><em>innermost</em> 에 비해 더 많은 경우에 종료되므로 <em>outermost</em> 가 좋다고 볼 수도 있겠습니다. 그러나, <em>outermost reduction</em> 은 좀 비효율적입니다.</p>
+
+<pre><code class="language-haskell">// innermost
+square (3 + 4)
+square 7
+7 * 7
+49
+
+// outermost
+square (3 + 4)
+(3 + 4) * (3 + 4)
+7 * (3 + 4)
+7 * 7
+49
+</code></pre>
+
+<p>따라서 하스켈에서는 <em>outermost</em> 에 <em>sharing</em> 을 더해 <em>lazy evalution</em> 이라 부르고 이 방법을 <em>evalution</em> 에 이용합니다.</p>
+
+<pre><code class="language-haskell">square (3 + 4) -- sharing, n = (3 + 4)
+= n * n -- reduced shared expression `n` into 7
+= 7 * 7
+= 49
+</code></pre>
+
+<p><em>innermost, outermost</em> 예제를 좀 더 살펴봅시다.</p>
+
+<pre><code class="language-haskell">mult :: (Int, Int) -&gt; Int
+mult (x, y) = x * y
+</code></pre>
+
+<p>이제 <code>mult(1 + 2, 3 + 4)</code> 를 <em>innermost</em> 로 평가한다고 한다면,</p>
+
+<pre><code class="language-haskell">mult(1 + 2, 3 + 4)
+mult(3, 3 + 4) -- conventionally, we select left innermost
+mult(3, 7)
+3 * 7 -- apply outermost
+24
+</code></pre>
+
+<p><em>innermost</em> 는 <em>argument (인자)</em> 가 먼저 평가 되어야 하기 때문에, 인자가 <em>value</em> 인 경우 사용할 수 있습니다. 반대로 <em>outermost</em> 전략을 사용한다고 결정하려면 인자가 <em>name</em> 이어야 합니다.</p>
+
+<p>어떤 함수들의 경우는 <em>outermost</em> 를 사용함에도 먼저 인자가 평가되어야 합니다. 예를 들어 <code>*, +</code> 같은 <em>built-in operator</em> 는 무조건 인자가 먼저 평가되야 합니다. 이런 함수들을 <em>strict</em> 하다고 말 합니다.</p>
+
+<p>좀 더 엄밀한 정의는</p>
+
+<blockquote>
+<p>A function f is said to be strict if, when applied to a nonterminating expression, it also fails to terminate.</p>
+</blockquote>
+
+<p><code>mult</code> 를 <em>curried function</em> 으로 재 작성해 봅시다.</p>
+
+<pre><code class="language-haskell">mult :: Int -&gt; Int -&gt; Int
+mult x = \y -&gt; x * y
+
+-- evaluation
+mult (1 + 2) (3 + 4)
+mult 3 (3 + 4)
+(\y -&gt; 3 * y)(3 + 4)
+(\y -&gt; 3 * y)(7)
+3 * 7
+</code></pre>
+
+<p>이제 인자가 한턴에 하나씩 계산됩니다. 이는 <code>mult 3 (3 + 4)</code> 에서 <em>left, innermost redex</em> 가 <code>mult 3</code> 이기 때문입니다. <code>mult (3, 3 + 4)</code> 에선 <code>3 + 4</code> 가 <em>left, innermost redex</em> 였지만요.</p>
+
+<p>참고로 하스켈에서 <em>lambda expression</em> 내부의 <em>redex</em> 를 선택하는건 불가능합니다. 이는 람다도 함수이고, 함수 내부는 볼 수 없는 <em>black box</em> 이기 때문입니다.</p>
+
+<blockquote>
+<p>Note that in Haskell, the selection of redexes within lambda expressions
+is prohibited. The rational for not “reducing under lambdas” is that functions are viewed as black boxes that we are not permitted to look inside.</p>
+</blockquote>
+
+<p>일반적으로 <em>innermost</em> 전략을 <em>call by value</em>, <em>outermost</em> 전략을 <em>call by name</em> 이라 부릅니다.</p>
+
+<h3 id="infinite-list">Infinite List</h3>
+
+<p>여기 <code>1</code> 의 무한한 나열을 표현하는 <code>ones</code> 에 대해 <em>expression</em> <code>head ones</code> 가 어떻게 평가되는지 <em>innermost</em> 와 <em>lazy evaluation</em> 의 두 가지 방법을 비교해 봅시다.</p>
+
+<pre><code class="language-haskell">ones :: [Int]
+ones = 1 : ones
+
+-- innermost
+head one
+head (1 : one)
+head (1 : 1 : one)
+...
+
+-- lazy evaluation
+head one
+head (1: ones)
+1
+</code></pre>
+
+<p><em>innermost</em> 의 경우에는 <em>evaluation</em> 이 끝나지 않습니다. 반면 <em>lazy evaluation</em> 은 식이 끝나면서 결과를 얻을 수 있죠.</p>
+
+<blockquote>
+<p>Using <strong>lazy evaluation</strong>, expressions are only evaluated as much as required to produce the final result</p>
+</blockquote>
+
+<p>즉 필요한 만큼만 평가됩니다. 따라서 <em>lazy evaluation</em> 을 이용한 평가방법이 있으므로 <code>ones = 1 : ones</code> 처럼 무한할 <strong>가능성이 있는</strong> 데이터를 표현할 수 있습니다.</p>
+
+<h3 id="modular-programming">Modular Programming</h3>
+
+<pre><code class="language-haskell">take 5 ones
+-- [1, 1, 1, 1, 1]
+</code></pre>
+
+<p>위의 예제에서 볼 수 있듯이 <em>lazy evaluation</em> 을 이용하면 <em>expression</em> 을 두 부분으로 나눕니다.</p>
+
+<ul>
+<li><strong>Control Part:</strong> <code>take 5</code></li>
+<li><strong>Data:</strong> <code>ones</code></li>
+</ul>
+
+<p>인자를 받아 주어진 숫자만큼 복사하는 <code>replicate</code> 함수도 만들어 볼까요?</p>
+
+<pre><code class="language-haskell">replicate' :: Int -&gt; a -&gt; [a]
+replicate' 0 _ = []
+replicate' n x = x : replicate' (n - 1) x
+</code></pre>
+
+<h3 id="generate-primes">Generate Primes</h3>
+
+<p>무한한 길이의 원소를 표현할 수 있다는 법을 배웠습니다. 이 방법을 이용해 존재하는 모든 소수의 집합을 표현하는 리스트를 만들어 볼까요?</p>
+
+<p><em>Sieve of Eratosthenes (에라토스테네스의 체)</em> 란 방법을 사용하겠습니다. 알고리즘은 <a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">여기</a> 를 참조하세요.</p>
+
+<pre><code class="language-haskell">primes :: [Int]
+primes = seive [2..]
+
+seive :: [Int] -&gt; [Int]
+seive (p : xs) = p : [x | x &lt;- xs, x `mod` p /= 0]
+
+take 10 primes
+-- [2,3,5,7,9,11,13,15,17,19]
+
+takeWhile (&lt;15) primes
+-- [2, 3, 5, 7, 11, 13]
+</code></pre>
+
+<h3 id="strict-application">Strict Application</h3>
+
+<p>하스켈에선 <em>lazy evaluation</em> 이 기본이지만, <em>strict</em> 버전으로 함수를 적용할 수 있는 방법도 제공합니다. <code>$!</code> 키워드를 이용하면 되는데요, <code>f $! x</code> 같은 경우 <code>f</code> 를 적용하기 전에 <code>x</code> 가 모두 평가되야 합니다.</p>
+
+<p>더 엄밀히 말하면 <em>top-level of evaluation</em> 이 이루어지는데요, 인자 <code>x</code> 의 타입이 <code>Int</code> 나 <code>Bool</code> 같은 <em>basic type</em> 일 경우는 <em>complete evaluation</em> 이 이루어집니다.</p>
+
+<p>반대로, <code>(Int, Bool)</code> 같은 복합타입이라면 <em>pair of expression</em> 이 얻어질 때 까지만 평가가 이루어집니다. 유사하게 타입이 리스트라면 <code>[]</code> 나 <code>a : b</code> 같은 컨싱이 얻어질때까지만 평가가 이루어집니다.</p>
+
+<blockquote>
+<p>More formally, an expression of the form <code>f $! x</code> is only a redex once evaluation of the argument x, using lay evaluaion as normal, has reached the point where it is known that the result is not an undefined value, at which point the expression can be reduced to the normal application <code>f x</code></p>
+</blockquote>
+
+<p>예를 들어 <code>square $! (1 + 2)</code> 의 경우</p>
+
+<pre><code class="language-haskell">square $! (1 + 2)
+square $! 3
+square 3
+3 * 3
+9 
+</code></pre>
+
+<p>다수개의 인자를 갖는 <em>curried function</em> 과 <code>$!</code> 가 쓰일 경우에는 다양한 형태가 될 수 있습니다.</p>
+
+<pre><code class="language-haskell">(f $! x) y    -- forces top-level evaluation of x
+(f x) $! y    -- forces top-level evaluation of y
+(f $! x) $! y -- forces top-level evaluation of x and y
+</code></pre>
+
+<p>하스켈에서 <em>strict application</em> 은 주로 프로그램의 <em>space performance</em> 을 개선하기 위해 사용됩니다. 예를 들어 다음과 같은 <code>sumWith</code> 함수가 있다고 합시다.</p>
+
+<pre><code class="language-haskell">sumWith :: Int -&gt; [Int] -&gt; Int
+sumWith v [] = v
+sumWith v (x:xs) sumWith (v + x) xs
+</code></pre>
+
+<p><em>lazy evaluation</em> 에서는</p>
+
+<pre><code class="language-haskell">sumWith 0 [1, 2, 3]
+sumWith (0 + 1) [2, 3]
+sumWith ((0 + 1) + 2) [3]
+sumWith (((0 + 1) + 2) + 3) []
+(((0 + 1) + 2) + 3)
+...
+...
+6
+</code></pre>
+
+<p>계산 전에 <code>(((0 + 1) + 2) + 3)</code> 가 만들어 지는걸 볼 수 있습니다. <code>sumWith 0 [1.. 10000]</code> 같은 큰 수의 계산일 경우 공간이 좀 아까울 수 있지요.</p>
+
+<p>따라서 <code>sumWith</code> 에 <code>$!</code> 를 이용하면</p>
+
+<pre><code class="language-haskell">sumWith v [] = v
+sumWith v (x:xs) = (sumWith $! (v + x)) xs
+
+sumWith 0 [1, 2, 3]
+sumWtih $! (0 + 1) [2, 3]
+sumWith $! 1 [2, 3]
+sumWith 1 [2, 3]
+...
+</code></pre>
+
+<p><code>sumWith</code> 뿐만 아니라 고차함수인 <code>foldl</code> 등에도 적용해 볼 수 있습니다.</p>
+
+<pre><code class="language-haskell">foldl' :: (a -&gt; b -&gt; a) -&gt; a -&gt; [b] -&gt; a
+foldl' f v [] = v
+foldl' f v (x:xs) ((foldl' f) $! (f v x)) xs
+</code></pre>
+
+<p>이러면, <code>sumWith</code> 를 <code>foldl' (+)</code> 로 정의할 수 있습니다.</p>
+
+<h2 id="references">References</h2>
+
+<p>(1) <strong>DelftX FP 101x</strong><br />
+(2) <em>Programming in Haskell</em></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../intro-to-haskell-7"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../intro-to-haskell-9" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

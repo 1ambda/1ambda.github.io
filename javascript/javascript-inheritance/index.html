@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Javascript Inheritance</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/javascript/javascript-inheritance/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/javascript/javascript-inheritance.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/javascript/" itemprop="url"><span itemprop="title">Javascript</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Javascript Inheritance</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#prototype-inheritance">Prototype Inheritance?</a>
+<ul>
+<li><a href="#proto"><strong>proto</strong></a></li>
+<li><a href="#object-function">Object, Function</a></li>
+<li><a href="#prototype-inhertance-vs-classical-inheritance">Prototype Inhertance vs Classical Inheritance</a></li>
+<li><a href="#new-vs-object-create">new vs Object.create</a></li>
+<li><a href="#constructor">.constructor</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Javascript Inheritance</h1>
+                
+
+
+
+<h2 id="prototype-inheritance">Prototype Inheritance?</h2>
+
+<p>자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다.</p>
+
+<ul>
+<li>.constructor</li>
+<li>.__proto__</li>
+<li>.prototype</li>
+<li>Object.create</li>
+<li>new</li>
+<li>Object, Function</li>
+</ul>
+
+<p>먼저 예제부터 보시겠습니다.</p>
+
+<pre><code class="language-javascript">// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
+// Shape - superclass (1)
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+// superclass method (2)
+Shape.prototype.move = function(x, y) {
+    this.x += x;
+    this.y += y;
+    console.info(&quot;Shape moved.&quot;);
+};
+
+// Rectangle - subclass (3)
+function Rectangle() {
+  Shape.call(this); // call super constructor.
+}
+
+// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype); (4)
+Rectangle.prototype.constructor = Rectangle; (5)
+
+var rect = new Rectangle();
+
+rect instanceof Rectangle // true.
+rect instanceof Shape // true.
+
+rect.move(1, 1); // Outputs, &quot;Shape moved.&quot;
+</code></pre>
+
+<p>(1). 먼저 <code>Shape</code> 이라는 함수를 만듭니다. 자바스크립트에서는 객체를 생성하기 위한 함수를 <code>Constructor(생성자)</code> 라고 부르며, 생성자임을 알아볼 수 있게 첫 글자를 <strong>대문자</strong>로 작성하는 것이 관례입니다. 이렇게 만들어진 생성자는 <code>new</code> 를 통해 호출할 수 있습니다. 물론 생성자는 그 자체로서 함수이기 때문에 <code>Shape()</code> 과 같이 호출도 가능합니다. 그러나 <code>new</code> 가 있는것과 없는것은 조금 차이가 있습니다. 아래에서 알아보겠습니다.</p>
+
+<p>(2). 생성자에 존재하는 <code>prototype</code> 속성, 즉 <code>Shape.prototype</code> 에 <code>move</code> 란 메소드를 추가하고 있습니다. 생성자의 <code>prototype</code> 속성에 추가된 모든 것들은 이 생성자를 통해 생성된 모든 객체에서 사용 가능합니다. 그러나, 생성자의 <code>prototype</code> 이 아니라, 인스턴스에 추가된 속성들은 그 인스턴스만 사용할 수 있습니다.</p>
+
+<pre><code class="language-javascript"> var s1 = new Shape();
+s1.move(3, 3);
+
+s1.isShape = true;
+
+var s2 = new Shape();
+console.log (s2.isShape) // undefined
+console.log (typeof s2.isShape === &quot;undefined&quot;) // true
+</code></pre>
+
+<p>(3). <code>Rectangle</code> 이라는 새로운 생성자를 정의하고 있습니다. 그리고 이 생성자 내에서 <code>Shape.call(this)</code> 를 호출하여, <code>new Rectangle()</code> 을 통해 만들어지는 모든 인스턴스가 <code>Shape</code> 처럼 <code>this.x</code> 와 <code>this.y</code> 를 가지고, 0으로 초기화 하도록 합니다. 이 과정이 끝나면 다음과 같은 결과가 나옵니다.</p>
+
+<pre><code class="language-javascript">
+function Rectangle() {
+	Shape.call(this);
+}
+
+var r1 = new Rectangle();
+console.log (r1.x); // 0
+console.log (r2.y); // 0
+</code></pre>
+
+<p>그러나 이 시점에서 <code>r1</code> 은 <code>move</code> 란 메소드를 사용할 수 없습니다. <code>Shape.move</code> 는 있지만 이 <code>move</code> 메소드를 상속받은것은 아닙니다. <code>Rectangle</code> 은 단지 <code>this.x</code>, <code>this.y</code> 란 멤버변수를 상속받은 것 뿐입니다.</p>
+
+<pre><code class="language-javascript">console.log (r1.move); // undefined 
+</code></pre>
+
+<p>(4). 드디어 <code>Rectangle.prototye</code> 에 <code>Shape.prototype</code> 을 연결해 주어 <code>r1</code> 에서도 <code>Shape.prototype</code> 에 정의된 메소드들을 사용할 수 있게끔 해줍니다.</p>
+
+<pre><code class="language-javascript">r1.move(2, 2);
+console.log(r1.x); // 2
+console.log(r1.y); // 2
+</code></pre>
+
+<p>여기서 Rectangle.prototype = Shape.prototype 을 하지않고 새롭게 Object.create 해주는 이유는, <code>Rectangle.prototype</code> 에 새로운 속성을 추가했을때, <code>Shape.prototype</code> 에 추가되도록 하지 않기 위함입니다. 다시 말해, <code>Rectangle</code> 에 추가한 것은, <code>Rectangle</code> 에만 추가되라는 것이지요.</p>
+
+<p><code>Rectangle.prototype = new Shape();</code> 처럼 <code>new</code> 를 사용하게 되면, 생성자를 호출하게 되어 <code>Rectangle.prototype</code> 에 인스턴스 변수인 <code>this.x</code> 와 <code>this.y</code> 가 추가됩니다.   이것은 우리가 원하지 않은 동작이기에, 일반적으로 <code>new</code> 를 이용해서 프로토타입을 생성하지 않습니다.</p>
+
+<p>(5). <code>Object.create(Shape.prototype)</code> 으로 생성한 객체는 <code>constructor</code> 값으로 <code>Shape</code> 를 가지고 있습니다. 이 객체를 이제, <code>Rectangle.prototype</code> 에서 사용하므로 값을 변경해 줍니다.</p>
+
+<h3 id="proto"><strong>proto</strong></h3>
+
+<p><code>__proto__</code> 속성은 자바스크립트에서 상속의 핵심입니다. 모든 객체들은 자신의 속성을 찾다가 실패하면, <code>__proto__</code> 를 통해 더 검색을 시도합니다. 무슨말인고 하니, 다음과 같은 코드가 있을때</p>
+
+<pre><code class="language-javascript">
+var r1 = new Rectangle();
+
+r1.move(1, 1);
+</code></pre>
+
+<p>실제로 <code>Rectangle</code> 은 <code>move</code> 라는 메소드를 인스턴스 멤버로도, 프로토타입 멤버로도 가지고 있지 않습니다. 다시 말해서, 아래와 같은 코드를 작성한 적이 없단 말이지요.</p>
+
+<pre><code class="language-javascript">// Method per instance
+function Rectangle() {
+	this.move = function(_x, _y) { this.x = _x; this.y = _y; };
+}
+
+// Method for specific instance
+r1.move = function(_x, _y) { this.x = _x; this.y = _y; };
+
+// Prototype method
+Rectangle.prototype.move = function(_x, _y) { this.x = _x; this.y = _y; };
+</code></pre>
+
+<p>이런 작업을 해 준 적이 없는데, 어떻게 <code>move</code> 메소드를 찾는걸까요? 우리는 <code>move</code> 를 <code>Shape.prototype</code> 에만 추가했는데요! 비결은 아래와 같습니다.</p>
+
+<ol>
+<li><p><code>r1</code> 인스턴스 자체에 <code>move</code> 메소드가 인스턴스에 없기 때문에 <code>r1.__proto__</code> 에서 탐색하게 됩니다.</p></li>
+
+<li><p>인스턴스가 가지고 있는 <code>__proto__</code> 의 값은, 생성자의 프로토타입, 즉 <code>Rectangle.prototype</code> 입니다. 따라서 이곳을 검색합니다. 그러나 <code>Rectangle</code> 프로토타입에도 <code>move</code> 메소드는 없습니다.</p></li>
+
+<li><p><code>Rectangle.prototype.__proto__</code> 를 검색합니다. <code>Rectangle.prototype</code> 은 <code>Object.create(Shape.prototype)</code> 을 통해 생성되었고, 이것은 인스턴스 멤버가 없는 <code>Shape</code> 인스턴스 이기 때문에, <code>Rectangle.prototype.__proto__</code> 의 값은 <code>Shape.prototype</code> 이 됩니다.</p></li>
+
+<li><p><code>Shape.prototype</code> 에는 <code>move</code> 가 있기 때문에, 이를 실행합니다.</p></li>
+
+<li><p>만약 <code>Shape.prototype</code> 에도 <code>move</code> 가 없다면, <code>Shape.prototype.__proto__</code> 를 탐색합니다. 모든 객체는 Default 값으로 <code>Object</code> 를 상속받으며, <code>Shape</code> 도 마찬가지입니다. <code>Shape</code> 은 <code>Object</code> 를 상속받았기 때문에 <code>Shape.prototype.__proto__</code> 는 <code>Object.prototype</code> 을 가리킵니다. 여기서 메소드를 검색합니다.</p></li>
+
+<li><p>만약 <code>Object.prototype</code> 에도 없다면, <code>Object.prototype.__proto__</code> 를 검색하나, 이 값은 <code>null</code> 이기 때문에 멤버 검색에 실패하고 <code>undefined</code> 를 돌려줍니다.</p></li>
+</ol>
+
+<p>다른 예제지만, 이미지를 통해 보는것도 이해에 도움이 될 듯 하여 이미지를 같이 첨부합니다.</p>
+
+<p><br/>
+<p>
+<img src="http://mckoss.com/jscript/Prototype.gif" />
+</p>
+<p align="center">
+(<a href="http://mckoss.com/jscript/object.htm">http://mckoss.com/jscript/object.htm</a>)
+</p>
+<br/></p>
+
+<h3 id="object-function">Object, Function</h3>
+
+<p>자바스크립트의 모든 함수는 <code>Function</code> 의 인스턴스입니다. 무슨 말인고 하니, 사용자가 정의한 함수들은 <code>__proto__</code> 값으로 <code>Function.prototype</code> 을 가진다는 뜻이지요.</p>
+
+<pre><code class="language-javascript">
+function example() {};
+
+example.__proto__ === Function.prototype; // true
+</code></pre>
+
+<p>그리고 <code>Function</code> 은 <code>Object</code> 를 상속합니다. 다시 말해,</p>
+
+<pre><code class="language-javascript">example.__proto__.__proto__ == Object.prototype
+</code></pre>
+
+<p>그리고 이전에 언급했듯이, <code>Object.prototype.__proto__</code> 는 <code>null</code> 입니다.</p>
+
+<pre><code class="language-javascript">Object.prototype.__proto__ === null // true
+</code></pre>
+
+<p>그리고 <code>Object</code> 그 자체는, <code>Function</code> 을 상속합니다.</p>
+
+<pre><code class="language-javascript">Object.__proto__ === Function.prototype // true
+</code></pre>
+
+<p>그래서 <code>Function</code> 과 <code>Object</code> 를 설명할때, 아래와 같은 그림으로 설명할 수 있습니다. 아래 그림에서 빨간 선으로 이어진 <code>[[Prototype]]</code> 은 <code>__proto__</code> 입니다.</p>
+
+<p><br/>
+<p align="center">
+<img src="http://i.stack.imgur.com/rcGmc.png" />
+</p>
+<p align="center">
+(<a href="http://iwiki.readthedocs.org/en/latest/javascript/js_core.html#inheritance">http://iwiki.readthedocs.org/en/latest/javascript/js_core.html#inheritance</a>)
+</p>
+<br/></p>
+
+<h3 id="prototype-inhertance-vs-classical-inheritance">Prototype Inhertance vs Classical Inheritance</h3>
+
+<p>&ldquo;그래요. 프로토타입 기반 상속이란 이런거군요!. 근데 이거 왜 하는건가요?&rdquo;</p>
+
+<p>제 짧은 지식으로 어줍잖게 대답하는 것보다, 링크로 연결해드리는게 더 나을것 같아서 관련 링크를 적어놓습니다. 꼭 읽어보셨으면 좋겠습니다.</p>
+
+<ol>
+<li><p><a href="http://stackoverflow.com/questions/19633762/classical-inheritance-vs-protoypal-inheritance-in-javascript">classical-inheritance-vs-protoypal-inheritance-in-javascript</a></p></li>
+
+<li><p><a href="http://aaditmshah.github.io/why-prototypal-inheritance-matters/#toc_6">why-prototypal-inheritance-matters</a></p></li>
+
+<li><p><a href="http://stackoverflow.com/questions/2800964/benefits-of-prototypal-inheritance-over-classical">benefits-of-prototypal-inheritance-over-classical</a></p></li>
+
+<li><p><a href="http://stackoverflow.com/questions/1450582/classical-vs-prototypal-inheritance">classical-vs-prototypal-inheritance</a></p></li>
+</ol>
+
+<h3 id="new-vs-object-create">new vs Object.create</h3>
+
+<p>위에서 잠깐 언급했듯이 일반적으로는 프로토타입 객체를 만들기 위해서 <code>Object.create()</code>를 사용한다고 했었습니다. <code>new</code> 대신에요. 왜 그런가 <code>Object.create</code> 의 동작을 한번 알아보겠습니다.</p>
+
+<ol>
+<li><code>Object.create</code> 는 첫 번째 인자로 프로토타입을 받습니다.</li>
+<li>빈 객체를 하나 만들고, 이 객체의 <code>__proto__</code> 에 인자로 받은 프로토타입 객체를 연결합니다.</li>
+<li>프로토타입이 연결된 객체를 리턴합니다.</li>
+</ol>
+
+<p>아마 코드는 아래와 비슷할 겁니다. 간단한 설명을 위해 두번째 인자는 생략하겠습니다.</p>
+
+<pre><code class="language-javascript">Object.prototype.create == function(proto) {
+  var obj = {};
+  obj.__proto__ = proto;
+  return obj;
+}
+</code></pre>
+
+<p>따라서 어떠한 경우에도 생성자를 호출하지 않으므로 다음과 같은 코드가 생성자에 있을 경우 호출되지 않을겁니다.</p>
+
+<pre><code class="language-javascript">
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+  
+  console.log(&quot;This is constructor for Shape&quot;);
+}
+
+var created = Object.create(Shape.prototype);
+var newed  = new Shape(); // &quot;This is constructor for Shape&quot; 
+
+console.log( created.x ); // undefined
+console.log( newed.x ); // 0;
+</code></pre>
+
+<p><code>new</code> 를 이용해 생성한 객체만 생성자가 호출되어, <strong>&ldquo;This is constructor for Shape&rdquo;</strong> 가 출력되고 <code>this.x = 0</code> 이 실행됩니다.</p>
+
+<p><code>new Shape()</code> 의 로직은 아마 다음과 비슷할 겁니다. (더 자세한 내용은 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new">MDN: new Operator</a> 를 보시면 되겠습니다.)</p>
+
+<ol>
+<li>새로운 오브젝트를 생성하고,</li>
+<li>이 오브젝트의 <code>__proto__</code> 에 생성자의 프로토타입 객체를 연결합니다.</li>
+<li>생성자를 호출하고, 리턴합니다.</li>
+</ol>
+
+<pre><code class="language-javascript">// new Shape();
+
+{
+  var obj = {};
+  obj.__proto__ = Shape.prototype;
+  return Shape.apply(obj, arguments) || obj; 
+}
+</code></pre>
+
+<p>이렇게 <code>new</code> 연산자는 생성자를 호출하기 때문에, 새롭게 사용할 프로토타입 객체에 의도치 않은 속성이 추가될 수 있습니다. 위의 예에서 <code>Rectangle</code> 에서 새롭게 사용할 프로토타입 객체는, 다시 말해 <code>Rectangle.prototype</code> 에 들어갈 객체는 단순히 <code>__proto__</code> 값으로 <code>Shape.prototype</code> 만 가지고 있으면 됩니다.</p>
+
+<p>만약 <code>Object.create</code> 대신 <code>new</code> 를 사용하게 되면 <code>Rectangle.prototype.x</code> 와 <code>Rectangle.prototype.y</code> 가 <code>0</code> 으로 초기화되게 됩니다. 이는 원치 않았던 부작용입니다. 이런 이유에서 일반적인 경우에는 <code>new</code> 대신 <code>Object.create</code> 를 프로토타입 객체 생성에 사용해야 합니다. 아래처럼요</p>
+
+<pre><code class="language-javascript">// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype);
+</code></pre>
+
+<h3 id="constructor">.constructor</h3>
+
+<p>모든 프로토타입 객체들은, <code>constructor</code> 란 프로퍼티가 있습니다. 이 값은 생성자를 가리킵니다. 그러므로 아래 코드는 <code>true</code> 를 출력합니다.</p>
+
+<pre><code class="language-javascript">Rectangle.prototype.constructor === Rectangle // true
+</code></pre>
+
+<p>우리의 예제인 <code>Rectangle</code> 에서도 위에 있는 코드처럼 프로토타입의 <code>constructor</code> 값을 초기화 하고 있습니다. 왜 그래야 할까요?</p>
+
+<p>사실 <code>.constructor</code> 값은 별로 의미있는 값은 아닙니다. 만약 우리가 <code>constructor</code> 값으로 어떤 종류의 객체인지 판별한다면, 의미는 있겠지요. 그러나 일반적으로는 <code>instanceof</code> 를 사용합니다.</p>
+
+<pre><code class="language-javascript">function Shape() { this.x = 0; }
+
+var s1 = new Shape();
+
+console.log( s1.__proto__.constrctor === Shape) // true
+console.log( s1 instanceof Shape) // true
+</code></pre>
+
+<p>그럼 이렇게 <code>constructor</code> 를 비교하는 작업을 <code>instanceof</code> 내부에서 사용하느냐, 그것도 아닙니다. <code>instanceof</code> 는 <code>s1.__proto__</code> 와 <code>Shape.prototype</code> 을 비교합니다.</p>
+
+<p><code>.constructor</code> 는 사실 정말로 쓸모가 없을지도 모르겠습니다. 그러나 자바스크립트 표준이 프로토타입 객체의 <code>constructor</code> 프로퍼티는 생성자를 가르켜야 한다고 말하는 한, 적어도 세팅은 해주는게 나쁘지 않다는게 제 생각입니다. 아래는 관련된 논의입니다.</p>
+
+<p>Link : <strong><a href="http://stackoverflow.com/questions/4012998/what-it-the-significance-of-the-javascript-constructor-property">What it the significance of the javascript constructor property</a></strong></p>
+
+<p>다시 우리의 예제로 돌아와서, 코드를 살펴보겠습니다.</p>
+
+<pre><code class="language-javascript">// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype); (1)
+Rectangle.prototype.constructor = Rectangle; (2)
+</code></pre>
+
+<p><code>Rectangle.prototype.constuctor</code> 를 다시 세팅해 주는 이유는, 이 값이 <code>Shape</code> 이기 때문입니다. <code>Rectangle.protoype</code> 은 <code>__proto__</code> 를 <code>Shape.prototype</code> 으로 가지는 오브젝트고, 따라서 (1) 라인에서 코드를 실행시켰을 때는 다음과 같은 결과가 나옵니다.</p>
+
+<p><code>console.log( Rectangle.prototype.constructor ); // Shape</code></p>
+
+<p>왜냐 하면 <code>Rectangle.prototype</code> 에는 <code>constructor</code> 가 없기 때문에 <code>Rectangle.prototype.__proto__</code> 에서 <code>constructor</code> 를 찾는데, <code>Rectangle.prototype.__proto__</code> 는 <code>Shape.prototype</code> 이기 때문이지요.</p>
+
+<p>기본적으로 우리가 생성자를 만들면, 자바스크립트는 다음과 같이 프로토타입 객체를 만들고 이 프로토타입 객체의 <code>constructor</code> 를 세팅해 줍니다.</p>
+
+<pre><code class="language-javascript">function Shape() { this.x = 0; }
+
+console.log( Shape.prototype.constructor ); // Shape;
+</code></pre>
+
+<p><code>Rectangle.prototype.constructor</code> 는 본래 처음 <code>Rectangle</code> 생성자를 만들었을때는 <code>Rectangle</code> 이었겠지만, (1) 라인의 코드를 실행 시킨 순간 <code>Shape</code> 으로 변경되고, 더 정확히 이 값은 <code>Rectangle.prototype.__proto__.consturctor</code> 에서 옵니다. 결국 값이 바뀌었기 때문에 원래대로 돌려주어야 하므로 아래와 같은 코드를 작성해준 것입니다.</p>
+
+<pre><code class="language-javascript">Rectangle.prototype.constructor = Rectangle;
+</code></pre>
+
+<p>자 이제, 아래 그림이 완벽히 이해되실 겁니다.</p>
+
+<p><br/>
+<p align="center">
+<img src="http://i.stack.imgur.com/UfXRZ.png" />
+</p>
+<p align="center">
+(<a href="http://dmitrysoshnikov.com/ecmascript/javascript-the-core/">http://dmitrysoshnikov.com/ecmascript/javascript-the-core/</a>)
+</p>
+<br/></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../"> <i class="fa fa-chevron-left"></i></a>
+        
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Golang Tutorial</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/golang/golang-tutorial/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/golang/golang-tutorial.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/golang/" itemprop="url"><span itemprop="title">Golang</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Golang Tutorial</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#gopath-를-처음-여행하는-gopher-들을-위한-golang-안내서">GOPATH 를 처음 여행하는 GOPHER 들을 위한 GOLANG 안내서</a>
+<ul>
+<li><a href="#problem-1-너무나-느린-빌드">Problem 1: 너무나 느린 빌드</a></li>
+<li><a href="#problem-2-복잡해질-수-있는-다양한-문법적-기능">Problem 2: 복잡해질 수 있는 다양한 문법적 기능</a></li>
+<li><a href="#다른-언어를-여행하다-온-프로그래머를-위한-golang-가이드">다른 언어를 여행하다 온 프로그래머를 위한 Golang 가이드</a>
+<ul>
+<li><a href="#go-struct">Go: Struct</a></li>
+<li><a href="#go-interface">Go: Interface</a></li>
+<li><a href="#go-error-handling">Go: Error Handling</a></li>
+<li><a href="#go-concurrency">Go: Concurrency</a></li>
+</ul></li>
+<li><a href="#idiomatic-go-tips">Idiomatic Go, Tips</a></li>
+<li><a href="#development">Development</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Golang Tutorial</h1>
+                
+
+
+
+<p><img src="https://github.com/1ambda/1ambda.github.io/raw/master/assets/images/golang/golang-tutorial.jpg" alt="" /></p>
+
+<h2 id="gopath-를-처음-여행하는-gopher-들을-위한-golang-안내서">GOPATH 를 처음 여행하는 GOPHER 들을 위한 GOLANG 안내서</h2>
+
+<p>2016년은 다사다난한 해였던것 같습니다. 개인적으로도, 사회적으로도 말입니다 :) JVM 위에서만 놀던 제가 Golang (이하 Go) 을 배운것을 보면요. 이 글에서는 1달 남짓한 기간동안 Go 를 배우며 들었던 느낌들을 튜토리얼 형태로 적어보았습니다.</p>
+
+<p><br/></p>
+
+<p>사실 Go 를 처음 봤을땐 그다지 탐탁치 않았습니다. 많은 이들이 말하듯 낡은 C 언어를 현대적으로 포장된 했다는 느낌을 많이 받아서 내게 필요할까 의문이 들기도 했었구요. 구체적으로는</p>
+
+<ul>
+<li>Generic 이 지원되지 않으며</li>
+<li>아키텍처마다 별도의 컴파일이 필요하고</li>
+<li>npm 등과 비교하면 쓸만한 의존성 관리 툴도 없고 (당시에는)</li>
+<li><code>$GOPATH</code> 아래 코드를 위치하도록 하는 이상한 강제사항도 있을뿐만 아니라</li>
+<li>세련되지 않은 문법과</li>
+<li>다른 함수형 언어와 비교했을때 언어학적으로 흥미로울것 없는 언어처럼 보였습니다.</li>
+</ul>
+
+<p>Go 는 필요 없다고까지 느꼈던 제가 Tutorial 을 따라 읽고, 컨퍼런스 영상까지 찾아보며 새로운 언어를 배운 이유는 팀을 옮기며 맡게된 업무에서 기존에 사용하던 언어 (Java, Scala) 의 한계를 절실히 느꼈기 때문입니다. JVM 위에서 돌아가는 대규모 오픈소스 프로젝트에서는 다음과 같은 문제들이 종종 발생하곤 합니다.</p>
+
+<p><br/></p>
+
+<h3 id="problem-1-너무나-느린-빌드">Problem 1: 너무나 느린 빌드</h3>
+
+<p>모든 작업에 앞서서 제가 가장 먼저 하는 일은 “빠른 피드백 루프를 갖추기” 입니다. 테스트를 작성하거나, 기능을 변경하거나 심지어 버그가 발생해 가설을 세우는 상황에서도 피드백 루프가 간단하다면 몇 번이고 실험하는데 부담이 없습니다. 이것이 우리가 복잡한 로직에서 println 를 수십번 적는 대신 debug 버튼을 클릭하는 이유입니다.</p>
+
+<p>그런데, 빌드가 느리면 답이 없습니다. 단위 테스트야 IDEA 에서 실행한다고 해도 PR 이 머지되려면 CI 에서 돌아가는 통합 테스트는 물론이고 라이센스 검증 등 수 많은 단계를 거쳐야 합니다. 빌드가 느리면 이 모든 과정이 느려지고, CI 큐가 꽉차고 피드백을 위해 더 많이 기다려야 하고, 머지가 느려지고, 이 PR 을 기다리는 다른 PR 에 영향을 주고, 전체적인 개발 속도가 느려집니다.</p>
+
+<blockquote>
+<p><em>&ldquo;우리는 만드는 방법을 혁신하지 않고서는, 제품을 혁신할 수 없습니다.”</em></p>
+</blockquote>
+
+<h3 id="problem-2-복잡해질-수-있는-다양한-문법적-기능">Problem 2: 복잡해질 수 있는 다양한 문법적 기능</h3>
+
+<p>자유도가 높은 문법은 같은 일을 하는 다양한 스타일의 코드를 만듭니다. Scala 에는 심지어 <a href="http://www.lihaoyi.com/post/StrategicScalaStylePrincipleofLeastPower.html">Principle Of Least Power</a> 라는 가이드 마저 있습니다. 결국 많은 기능을 가진 언어로 작성된 PR을 리뷰한다는 것은 읽어야 할 것이 많고 시간이 부족한 리뷰어에게 큰 부담이 됩니다. 또한 컨트리뷰터는 코드를 작성하고 떠날 수 있지만, 그가 작성한 코드는 남아 유지보수의 대상이 됩니다.</p>
+
+<p>바꾸어 말하면, 누가 봐도 어떤 일을 하는 코드인지 쉽게 알 수 있고, 변경과 수정이 용이한 idiomatic 한 코드를 누구나 작성할 수 있는 언어가 필요합니다.</p>
+
+<blockquote>
+<p>When reading code, it should be clear what the program will do.<br />
+When writing code, it should be clear how to make the program do what you want.
+by Rob Pike in <a href="https://www.youtube.com/watch?v=rFejpH_tAHM"><em>Simplicity is Complicated</em></a></p>
+</blockquote>
+
+<p>Error 는 Go 의 철학을 보여주는 한 예입니다. Go 에서는 Exception 이 없습니다. Exception 은 만들어진 장소에서 처리되지 않는다면 GOTO 문과 같아 코드를 읽기 어렵게 만듭니다. 대신, Go 는 Error 를 값으로 취급해 항상 리턴하도록 하여 코드가 어떤 예외 처리를 하는지 알기 쉽게 만듭니다. 사실 Exception 을 즉시 처리되어야 하는 것으로 본다면, 다른 곳에서 처리되야 할 이유가 없습니다.</p>
+
+<blockquote>
+<p>… exceptional code is hopelessly serial. There is only one exception in flight, how quaint is that? There can be only one exception at any moment in flight. … [they] require immediate an exclusive attention. [The exception] comes to the fore, you must handle it right now.</p>
+</blockquote>
+
+<p>동일한 스타일의 코드를 강제하기 위해서, 우리는 많은 오픈소스에서 lint tool (e.g <a href="https://github.com/checkstyle/checkstyle">checkstyle</a>) 등을 사용하는 것을 보아 왔습니다. 그러나 이것은 validation 일뿐 reformatting 이 아닙니다. 수정하려면 사람의 노력이 필요합니다. reformatting 을 위한 <a href="https://github.com/olafurpg/scalafmt">scalafmt</a> 이나 <a href="https://github.com/google/google-java-format">google-java-format</a> 툴들은 많은 문법을 지원해야 하기 때문에 성숙도가 떨어집니다. 이 툴들을 이용해 수정된 코드를 보고 있노라면 Idiomatic 하다고 말하긴 어렵습니다.</p>
+
+<p>Java 는 50개 정도의 키워드를 가지고 있고 Scala 는 그것보다는 좀 더 많습니다. 반면 Go 는 25개의 키워드로만 구성되어 있습니다. 문법이 간단하므로 idiomatic 한 코드를 작성하기 쉽고, 완성도 높은 gofmt 를 만들 수 있습니다. 우스갯소리로, 어느 누구도 gofmt 의 스타일을 좋아하지 않는다는 이야기도 있지만, 적어도 통일성 있는 스타일링을 사람의 도움 없이 기계적으로 수행할 수 있습니다.</p>
+
+<blockquote>
+<p>Gofmt&rsquo;s style is no one&rsquo;s favorite, yet gofmt is everyone&rsquo;s favourite.</p>
+</blockquote>
+
+<p>Java 와 Scala 는 훌륭한 언어입니다. 많은 사람들이 즐겨 사용하는 Spring, Play, Akka 와 같은 좋은 프레임워크를 가지고 있고, 안정적입니다. 그 외에도 수 많은 장점이 있습니다만, 이 두 부분에서 미흡합니다. 솔직히 말하자면, 저는 2016 년에도 이런 상황에서 개발해야 된다는 사실이 믿기지 않습니다. 더 놀라운 사실은, 각 언어들은 현란한 기능을 추가하고 자신을 뽐내는것에만 바쁘지 우리가 매일 매일 겪는 진짜 문제를 해결하지 하려 않는다는 것입니다. 이런것들은 결국 커뮤니티가 해결해야 될 숙제로 남습니다.</p>
+
+<blockquote>
+<p>Leading edge language features don&rsquo;t usually address what you really want. Golang is designed for large applications, large teams and large dependencies.
+By Rob Pike <a href="https://talks.golang.org/2012/splash.article"><em>Go at Google</em></a></p>
+</blockquote>
+
+<p><br/></p>
+
+<h3 id="다른-언어를-여행하다-온-프로그래머를-위한-golang-가이드">다른 언어를 여행하다 온 프로그래머를 위한 Golang 가이드</h3>
+
+<p>언어를 배우는 데에는 다양한 방법이 있습니다. 저는 주로 간단한 튜토리얼을 읽은 후 언어의 철학과 디자인을 살펴보고 충분한 동기를 얻은 후에야 다른 기능들을 살펴보곤 합니다. 다행히도, Go 블로그, Go 언어 홈페이지에는 Google Go 팀이 작성한 읽을거리들이 많습니다. 그 중에서 꼭 봐야 할 몇 가지를 소개합니다.</p>
+
+<ul>
+<li>(Quick Tutorial) <a href="https://talks.golang.org/2014/taste.slide#40">A Taste of Go</a></li>
+<li>(Quick Tutorial) <a href="https://github.com/a8m/go-lang-cheat-sheet">Golang Cheat Sheet</a></li>
+<li>(Design) <a href="https://www.youtube.com/watch?v=rFejpH_tAHM">Simplicity is Complicated</a></li>
+<li>(Design) <a href="https://golang.org/doc/faq#Design">Golang FAQ: Design</a></li>
+<li>(Design) <a href="(https://go-proverbs.github.io/)">Go Proverb</a></li>
+<li>(Design) <a href="https://talks.golang.org/2012/splash.article">Go at Google</a></li>
+</ul>
+
+<p>언어의 문법이 눈에 익고 문법 설계의 이유를 알고 나면 자신이 사용했던 언어와의 차이점을 묻게 됩니다. Go 언어 초보자로서 제가 가장 먼저 궁금했던 내용은 Struct, Interface, Concurrency, Error Handling 와 관련된 것들이었습니다. 좋은 아티클들이 많기 때문에 링크를 걸도록 하고 설명은 제가 특이하게 느낀 점들만 간단히 적도록 하겠습니다.</p>
+
+<h4 id="go-struct">Go: Struct</h4>
+
+<p>Go 언어에는 멤버 변수를 가진 <code>Struct</code> 는 있지만 멤버 함수까지 포함한 Class 는 없습니다. 대신 <code>Struct</code> 의 멤버 함수처럼 쓰일 수 있는 <a href="https://tour.golang.org/methods/1">Method</a> 나 <a href="https://tour.golang.org/methods/4">Pointer Recevier</a> 가 있습니다.</p>
+
+<pre><code class="language-go">type Vertex struct {
+     X, Y float64
+}
+
+func (v Vertex) Abs() float64 {
+     return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func (v *Vertex) Scale(f float64) {
+     v.X = v.X * f
+     v.Y = v.Y * f
+}
+</code></pre>
+
+<p>또한 Inheritance 를 위한 직접적인 키워드가 없습니다. <a href="https://golang.org/doc/effective_go.html#embedding">Embedding</a> 을 이용할 수 있습니다. 예를 들어 아래 코드에서는  <code>Job</code> 내에서 <code>log.Logger</code> 의 메소드를 호출하는 것을 볼 수 있습니다.</p>
+
+<pre><code class="language-go">type Job struct {
+    Command string
+    *log.Logger
+}
+
+job.Log(“…”)
+</code></pre>
+
+<blockquote>
+<p>If C++ and Java are about type hierarchies and the taxonomy of types, <strong>Go is about composition</strong></p>
+</blockquote>
+
+<p>이런 문법들을 보고 있노라면, Go 에서는 해당 Data (<code>Struct</code>) 가 와 Action (<code>Method</code>) 은 별개인 것 처럼 느껴집니다. 메소드의 정의도 Java 의 클래스와 달리 외부에 하기때문인데요, 마치 Scala 의 case class 를 값으로 이용하고 함수는 companion object 에만 정의하는 것과 비슷합니다. 그리고 상속대신 합성을 이용하는 부분은 더 유연해 보이기도 합니다.</p>
+
+<ul>
+<li><a href="https://dave.cheney.net/2014/03/25/the-empty-struct">The empty struct</a></li>
+<li><a href="http://thenewstack.io/understanding-golang-type-system/">Understanding Golang Type System</a></li>
+</ul>
+
+<h4 id="go-interface">Go: Interface</h4>
+
+<blockquote>
+<p>Q. Hey gophers, what was the best/worst moment of your experienes lenaring golang?<br />
+<strong>A. The worst was interface, but the best was also interface</strong></p>
+</blockquote>
+
+<p><code>Struct</code> 가 데이터라면 <a href="https://tour.golang.org/methods/9">Interface</a> 는 메소드의 집합입니다. <code>Struct</code> 와 마찬가지로 <a href="https://golang.org/doc/effective_go.html#embedding">Embedding</a> 을 이용할 수 있습니다.</p>
+
+<pre><code class="language-go">type Reader interface {
+    Read(p []byte) (n int, err error)
+}
+
+type Writer interface {
+    Write(p []byte) (n int, err error)
+}
+
+// ReadWriter is the interface that combines the Reader and Writer interfaces.
+type ReadWriter interface {
+    Reader
+    Writer
+}
+</code></pre>
+
+<p>Go 에서는 주로 작은 인터페이스, 즉 1개의 메소드만 선언하고 있는 인터페이스를 이용하는것이 권장됩니다. 이유는 해당 인터페이스를 쉽게 구현할 수 있어 유용한 구현체를 많이 만들 수 있기 때문입니다. 예를 들어 위에서 언급한 <code>Writer</code> 의 경우에는 <code>bytes.Buffer</code>, <code>io.multiWriter</code>, <code>gzip.Writer</code>, <code>net.Pipe</code>, <code>net.Conn</code>, <code>httpResponseWriter</code> 등 수 많은 유용한 구현체를 가지고 있습니다. 예를 들어 이런 코드 작성도 가능합니다.</p>
+
+<pre><code class="language-go">var but bytes.Buffer
+…
+var wr io.Writer = &amp;buf
+if test.chunked {
+    wr = internal.NewChunkedWriter(wr)
+}
+if test.compressed {
+    buf.WriteString(&quot;Content-Encoding: gzip\r\n&quot;) wr = gzip.NewWriter(wr)
+}
+...
+</code></pre>
+
+<p>아래는 인터페이스와 관련된 아티클들입니다.</p>
+
+<ul>
+<li><a href="http://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go">How to use interfaces in Go</a></li>
+<li><a href="http://stackoverflow.com/questions/23148812/go-whats-the-meaning-of-interface">What’s the meaning of interface{}</a></li>
+</ul>
+
+<h4 id="go-error-handling">Go: Error Handling</h4>
+
+<blockquote>
+<p>Error values in Go aren’t special, they are just values like any other, and so you have the entire language at your disposal.</p>
+</blockquote>
+
+<p>Error 와 관련해서는 읽을거리를 좀 많이 찾아봤습니다. 제가 이해가 안되었던 부분이 많아서 인데요, 각각의 내용은 길지 않으니 모두 읽어보셔도 좋을것 같습니다.</p>
+
+<ul>
+<li><a href="https://blog.golang.org/defer-panic-and-recover">Go Blog: Defer, Panic, and Recover</a> - <a href="https://blog.golang.org/error-handling-and-go">Go Blog: Error Handling and Go</a></li>
+<li><a href="https://blog.golang.org/errors-are-values">Go Blog: Errors are Values</a></li>
+<li><strong>Dave Cheney: Don&rsquo;t just check errors, handle them gracefully</strong> <a href="https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully">Article</a>, <a href="https://www.youtube.com/watch?v=lsBF58Q-DnY">Video</a></li>
+</ul>
+
+<blockquote>
+<p>Go solves the exception problem by not having exceptions.
+…
+The decision to not include exceptions in Go is an example of its simplicity and orthogonality. Using multiple return values and a simple convention, Go solves the problem of letting programmers know when things have gone wrong and reserves panic for the truly exceptional.</p>
+</blockquote>
+
+<ul>
+<li><a href="https://dave.cheney.net/2012/01/18/why-go-gets-exceptions-right">Dave Cheney: Why Go gets exceptions right</a> - <a href="https://dave.cheney.net/2014/12/24/inspecting-errors">Dave Cheney: Inspecting errors</a></li>
+<li><a href="https://dave.cheney.net/2014/11/04/error-handling-vs-exceptions-redux">Dave Cheney: Error handling vs. exceptions redux</a></li>
+<li><a href="https://dave.cheney.net/2015/01/26/errors-and-exceptions-redux">Dave Cheney: Errors and Exceptions, redux</a></li>
+</ul>
+
+<h4 id="go-concurrency">Go: Concurrency</h4>
+
+<blockquote>
+<p>Concurrency is about structure, while Paralleism is about execution</p>
+</blockquote>
+
+<p><code>channel</code> 과 <code>goroutine</code> 은  는 Go 가 자랑하는 기능중 하나입니다. 아래 나오는 자료들은 꼭 보시길 추천드립니다. <strong>Concurrency is not Parallelism</strong> 에서는 Concurrency 의 개념과 이를 구현하기 위해 Go 에서 사용가능한 빌딩 블럭들을 알아봅니다. <strong>Go Concurrency Patterns</strong> 에서는 Mock 형태의 Google Search 서비스를 만들고 select, timeout 등을 이용해서 개선하는 방법을 보여줍니다. <strong>Curious Channels</strong> 에서는 channel 등을 사용할 때 주의해야 할 부분에 대해서 이야기 합니다.</p>
+
+<ul>
+<li><strong>Rob Pike: Concurrency is not Parallelism</strong> <a href="https://talks.golang.org/2012/waza.slide">Slide</a>, <a href="https://www.youtube.com/watch?v=B9lP-E4J_lc">Video</a></li>
+<li><a href="https://www.youtube.com/watch?v=f6kdp27TYZs">Go Concurrency Patterns</a></li>
+<li><a href="https://dave.cheney.net/2013/04/30/curious-channels">Curious Channels</a></li>
+</ul>
+
+<p>혹시나 여유가 되신다면 아래의 영상들도 보시길 추천드립니다. 특히 <strong>Complex Concurrency Patterns with Go</strong> 는 높은 성능이 요구되는 Kafka Client 를 Go 로 만들면서 겪었던 문제들을 이야기 합니다.</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=QDDwwePbDtw">Advanced Go Concurrency Patterns</a></li>
+<li><a href="https://www.youtube.com/watch?v=2HOO5gIgyMg">Complex Concurrency Patterns with Go</a></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="idiomatic-go-tips">Idiomatic Go, Tips</h3>
+
+<p>새로운 언어를 배울때는, 책을 읽는것도 좋은 방법이지만 다른사람의 경험으로 부터도 많은것을 배울 수 있습니다.</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ynoY2xz-F8s">Understanding nil</a></li>
+<li><strong>Rob Pike: Go Proverb</strong> <a href="https://go-proverbs.github.io/">Page</a>, <a href="https://www.youtube.com/watch?v=PAAkCSZUG1c">Video</a></li>
+<li><a href="http://openmymind.net/Things-I-Wish-Someone-Had-Told-Me-About-Go/">Things I Wish Someone Had Told Me About Go</a></li>
+<li><strong>Twelve Go Best Practices</strong>: <a href="https://talks.golang.org/2013/bestpractices.slide#1">Slide</a>, <a href="https://www.youtube.com/watch?v=8D3Vmm1BGoY">Video</a></li>
+<li><strong>Go best practices, six years in:</strong> <a href="https://peter.bourgon.org/go-best-practices-2016/">Article</a>, <a href="https://www.infoq.com/presentations/go-patterns">Video</a></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="development">Development</h3>
+
+<p>Go 에는 언어 자체적으로 제공되는 기본 툴들이 많습니다. <a href="https://www.youtube.com/watch?v=uBjoTxosSys">Tooling in Action</a> 에서는 이런 기본 툴 뿐만 아니라, 프로파일링에 사용할 수 있는 툴등 다양한 것들을 쉽게 설명합니다.</p>
+
+<p>IDE 관련해서는 최초에는 Emacs 에 <a href="https://github.com/syl20bnr/spacemacs">Spacemacs</a> 를 얹고 Golang layout 을 이용했으나 불편함을 많이 느꼈습니다. 그 다음에는 <a href="https://www.jetbrains.com/idea/">Intellij</a> 를 사용했었고, 가장 최근에는 <a href="https://atom.io">Atom</a> 을 이용하고 있습니다. 써보진 않았지만 <a href="https://code.visualstudio.com/">VS Code</a> 도 괜찮다고 들었습니다. IDE 는 무엇이든 본인에게 제일 편한걸 쓰는게 좋은것 같습니다.</p>
+
+<p><br/></p>
+
+<h3 id="summary">Summary</h3>
+
+<p>언어는 도구일 뿐입니다. 따라서 문제에 맞는 도구를 골라 사용하면 될 일입니다. 다만, 저와 비슷한 문제들을 고민하고 계시거나, 위에서 언급했던 Go 의 특성 / 기능들이 괜찮다고 생각된다면 한번 도전해 보시는것도 나쁘지 않을것 같습니다 :)</p>
+
+<p>위에 나온 모든 링크는 <a href="https://github.com/1ambda/golang">https://github.com/1ambda/golang</a> 에서 모아보실 수 있습니다.</p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

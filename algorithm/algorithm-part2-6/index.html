@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Algorithm: Data Compression, Huffman, LZW</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/algorithm/algorithm-part2-6/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/algorithm/algorithm-part2-6.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/algorithm/" itemprop="url"><span itemprop="title">Algorithm</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Algorithm: Data Compression, Huffman, LZW</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#data-compression">Data Compression</a>
+<ul>
+<li><a href="#binary-stream">Binary Stream</a></li>
+<li><a href="#data-representation">Data Representation</a></li>
+</ul></li>
+<li><a href="#universal-data-compression">Universal Data Compression</a></li>
+<li><a href="#run-length-encoding">Run-Length Encoding</a></li>
+<li><a href="#huffman-encoding">Huffman Encoding</a>
+<ul>
+<li><a href="#shannon-fano-algorithm">Shannon-Fano algorithm</a></li>
+<li><a href="#huffman-algorithm">Huffman algorithm</a></li>
+<li><a href="#compression">Compression</a></li>
+<li><a href="#huffman-summary">Huffman Summary</a></li>
+</ul></li>
+<li><a href="#lzw-compression">LZW Compression</a>
+<ul>
+<li><a href="#lzw-implementation">LZW Implementation</a></li>
+<li><a href="#lossless-data-compression">Lossless Data Compression</a></li>
+</ul></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Algorithm: Data Compression, Huffman, LZW</h1>
+                
+
+
+
+<h3 id="data-compression">Data Compression</h3>
+
+<p>주된 이유는 전송 시간과 저장 공간을 절약하기 위해서다. 무어의 법칙이 말해주듯이 제품의 성능은 점점 좋아지는데, 그럼에도 불구하고 사람들이 만들어 내는 데이터의 양은 더 급격히 증가한다. 그래서 압축이 필요하다.</p>
+
+<p>이번시간에 배울 기법은 3 가지다.</p>
+
+<ul>
+<li>Run-length</li>
+<li>Huffman</li>
+<li>LZW</li>
+</ul>
+
+<p><em>data compression</em> 응용은</p>
+
+<ul>
+<li><em>generic file compression</em></li>
+</ul>
+
+<p>GZIP 같은 파일 압축이나, PKZIP 같은 아키이빙. 그리고 파일시스템에서도 압축을 할 수 있다.</p>
+
+<ul>
+<li><em>multimedia</em>, <em>communication</em>, <em>database</em></li>
+</ul>
+
+<p><em>GIF</em>, <em>MP3</em>, <em>V.42 bis model</em>(?) 등 다양한 곳에 압축을 활용한다고 한다.</p>
+
+<p><br/></p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVTT2paRE5qTnpZMEVXTjNNVEw0Z1RONDBDTjFFMk10RWpad0VUTGtWRE41SWpNMGt6THlnVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p>강의에서 사용하는 용어를 좀 정리하고 가자. 바이너리 <code>B</code> 에 대해 <em>compression, 압축</em> <code>C(B)</code> 를 하고 <em>expansion, 복원(?)</em> 를 해서 <code>B</code> 를 얻는다. 중요한점은 <em>loseless</em> 여야 한다는 것.</p>
+
+<p><em>compression ratio</em> 는 <code>C(B) / B</code> 로 정의한다. <em>natural language</em> 의 경우 <code>50~75%</code> 이상의 압축이 가능하다고 한다.</p>
+
+<h4 id="binary-stream">Binary Stream</h4>
+
+<p>구현에 사용할 바이너리 스트림 API 를 보자. 코드는 <a href="http://introcs.cs.princeton.edu/java/stdlib/BinaryStdIn.java.html">BinaryStdIn.java</a> <a href="http://introcs.cs.princeton.edu/java/stdlib/BinaryStdOut.java.html">BinaryStdOut.java</a> 에서 구할 수 있다.</p>
+
+<pre><code class="language-java">public class BinaryStdIn {
+    boolean readBoolean() {} //read 1 bit and return as a boolean
+    char readChar() {} //read 8 bits and return as a char
+    char readChar(int r) {} //read r bitsand return as a char
+    [similar methods for byte (8 bits); short (16 bits); int (32 bits); long and double (64 bits)]
+    boolean isEmpty() {} //is the bitstream empty?
+    void close() {} //close the bitstream
+}
+
+public class BinaryStdOut {
+    void write(boolean b) {} //write the specified bit
+    void write(char c) {} //write the specified 8-bit char
+    void write(char c, int r) {} //write the r least significant bits of the specified char
+    [similar methods for byte (8 bits); short (16 bits); int (32 bits); long and double (64 bits)]
+    void close() {} //close the bitstream
+}
+</code></pre>
+
+<p>찾아보니까 자바에서 기본적으로 제공되는건 <code>ByteArrayStream</code> 이 있더라.</p>
+
+<h4 id="data-representation">Data Representation</h4>
+
+<p><code>12/31/1999</code> 를 표시하는 법을 생각해 보자.</p>
+
+<p>(1) <code>char</code> 면 <em>8 bit</em>  10개니까 <em>80 bit</em><br />
+(2) <code>int</code>  면 <em>32 bit</em>  3개니까 <em>96 bit</em><br />
+(3) <code>bit</code> 단위를 지정할 수 있다면 <em>4 + 5 + 12 + 3(align) = 24 bit</em></p>
+
+<pre><code class="language-java">month = 12
+day = 31
+year = 199
+
+BinaryStdOut.write(month, 4)
+BinaryStdOut.write(day, 5)
+BinaryStdOut.write(year, 12)
+</code></pre>
+
+<p>이는 데이터 표현만 잘 해도 알고리즘 없이 상당부분 압축할 수 있다는 소리다. 일레로 1990년도에 만들어졌던 유전자 데이터베이스는 아스키로 <code>AGCT</code> 를 표현했다고 한다. 4종류의 문자밖에 없으니까 <em>2 bit</em> 로 표현 가능함에도 불구하고</p>
+
+<h3 id="universal-data-compression">Universal Data Compression</h3>
+
+<blockquote>
+<p>No algorithm can compress every bitstring</p>
+</blockquote>
+
+<p><em>contraction</em> 을 이용해 증명하면</p>
+
+<ul>
+<li>모든 비트스트림을 압축할 수 있는 알고리즘 <code>U</code> 가 있다 하자.</li>
+<li>주어진 비트스트링 <code>b0</code> 을 압축해서 더 작은 사이즈의 <code>b1</code> 을 얻고</li>
+<li>이 과정을 반복하면 사이즈가 <code>0</code> 이 될때까지 압축이 가능하다. 이건 말이 안된다.</li>
+<li>따라서 모든 비트스트림을 압축할 수 있는 알고리즘 <code>U</code> 는 없다.</li>
+</ul>
+
+<h3 id="run-length-encoding">Run-Length Encoding</h3>
+
+<p><code>0000000000000001111111000000011111111111</code> 의 비트가 있을때 <em>n-bit</em> 로 <code>0</code> 또는 <code>1</code> 의 <em>runs</em> (긴 나열을 말하는 듯함) 을 표시한다.</p>
+
+<p>예를 들어 위의 데이터를 4비트 카운트를 이용해 표시하면</p>
+
+<pre><code>bin  1111 0111 0111 1011
+dec    15    7    7   11
+</code></pre>
+
+<p>만약에 <em>run</em> 의 길이가 지정된 <em>n-bit</em> 로 표시할 수 있는 수보다 크면 <code>0</code> 부터 다시 세면 된다. <em>JPEG</em>, <em>ITU-T T4 Group 3</em> 등에 응용한다고 함.</p>
+
+<p>구현은</p>
+
+<pre><code class="language-java">// http://algs4.cs.princeton.edu/55compression/RunLength.java.html
+public class RunLength {
+
+  private final static int R = 256; // max run-length count
+  private final static int lgR = 8; // # of bits per count
+  
+  public static void compress() {
+    int run = 0;
+    boolean old = false;
+    
+    while (!BinaryStdIn.isEmpty()) {
+      boolean current = BinaryStdIn.readBoolean();
+      
+      // alternate bit
+      if (current != old) {
+        BinaryStdOut.write(run, lgR);
+        run = 1;
+        old = !old;
+      }
+      // same bit
+      else {
+        // max count
+        if (run == R - 1) {
+          BinaryStdOut.write(run, lgR);
+          // print dummy alternate bit whose length is 0
+          run = 0;
+          BinaryStdOut.write(run, lgR); 
+        }
+        
+        run++;
+      }
+    }
+    
+    BinaryStdOut.write(run, lgR);
+    BinaryStdOut.close();
+  }
+  
+  public static void expand() {
+    boolean bit = false;
+    
+    while (!BinaryStdIn.isEmpty()) {
+      int run = BinaryStdIn.readInt(lgR); // read lgR bit
+      
+      for (int i = 0; i &lt; run; i ++)
+        BinaryStdOut.write(bit);
+      
+      bit = !bit;
+    }
+    
+    BinaryStdOut.close();
+  }
+}
+</code></pre>
+
+<p><del>테스틀 어찌해야하는가</del></p>
+
+<p><br/></p>
+
+<p><img src="http://help.adobe.com/en_US/Director/11.0/images/vector_bitmap_image.png" alt="" />
+<p align="center">(<a href="http://help.adobe.com">http://help.adobe.com</a>)</p></p>
+
+<p><em>bitmap</em> 을 압축하는데 <em>run-length</em> 를 사용하면 효과적이다. 글자에서 대부분의 비트가 <code>0</code> (흰색) 이기 때문이다.</p>
+
+<p>흑백 그림을 예로 들어보자. 인치당 <code>300</code> 픽셀이고, 사이즈가 <code>8.5 x 11</code> 인치라 했을때, 한 이미지를 표시하기 위해 필요한 비트는 <code>300 * 8.5 * 300 * 11</code> = <code>8.415</code> 백만 비트가 필요하다.</p>
+
+<h3 id="huffman-encoding">Huffman Encoding</h3>
+
+<p><em>fixed-length code</em> 말고 모스코드같은 <em>variable-length code</em> 를 생각해 보자.</p>
+
+<p>모스코드에서 <code>* * * - - - * * *</code> 는 여러 방법으로 해석될 수 있다. <code>SOS</code>, <code>V7</code>, <code>IAMIE</code>, <code>EEWNI</code> 모두 가능하다. 모호한것이다. 모스부호에서는 이 문제를 해결하기 위해 글자마다 갭을 두어, 올바르게 해석될 수 있도록 한다.</p>
+
+<p>인코딩에서 <em>ambiguity</em> 를 해결하려면 어떤 <em>codeword</em> 도 다른 <em>code word</em> 의 <em>prefix</em> 가 되지 않도록 해야 한다.</p>
+
+<ul>
+<li>Fixed-length code</li>
+<li>Append special stop char to each codeword (e.g 모스)</li>
+<li>Prefix-free code</li>
+</ul>
+
+<p>이 중에서 <em>prefix-free</em> 인 코드를 만드는법을 살펴보자. <em>binary trie</em> 를 만들어 <em>leaf</em> 에 문자를 놓고, 그 문자까지 도달하는 경로가 인코딩 값이다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTjJRVE9tTnpZemdETjVVVEw0UTJZaTF5WXdVek10WWpNNUlXTDJRek5oZFRPaWR6THlrVE0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<p><em>compression</em> 을 위해 심볼테이블을 만들거나, 아니면 <em>leaf</em> 부터 따라 올라가고, 그 <em>path</em> 를 뒤집어 출력할 수 있다.</p>
+
+<p><em>expansion</em> 은 루트부터 시작해서 <em>path</em> 를 따라 내려가다가 <em>leaf</em> 에서 만나는 문자를 출력하면 된다.</p>
+
+<p>한가지 생각해 볼 것은, 빈도가 많은 문자를 짧은 인코딩 값(<em>path</em>) 를 가지도록 해야 압축률이 높아진다는 것이다. 이를 위해 각 문자의 <em>frequency</em> 를 이용해야 한다.</p>
+
+<p>허프만 코드 API를 보면</p>
+
+<pre><code class="language-java">public class Huffman {
+
+	// support extended ASCII
+	private static final int R = 256;
+	
+	private static class Node implements Comparable&lt;Node&gt; {
+
+		private char ch;
+		private int  freq;
+		private final Node left, right;
+	
+		public Node(char ch, int freq, Node left, Node right) {
+			this.ch = ch;
+			this.freq = freq;
+			this.left = left;
+			this.right = right;
+		}
+	
+		public boolean isLeaf() {
+			return left == null &amp;&amp; right == null;
+		}
+
+		@Override
+		public int compareTo(Node that) {
+			return this.freq - that.freq;
+		}
+	}
+	
+	public static void compress()
+	public static void expand()
+	private static Node buildTrie(int[] freq)
+	private static void writeTrie(Node x)
+	private static void buildCode(String[] st, Node x, String s)
+	private static Node readTrie()
+}
+</code></pre>
+
+<p>이제 <em>expansion</em> 을 구현하자. 스트림의 가장 첫 부분에, 몇 개의 문자인지를 <em>int</em> 로 표시하는 규약을 정하면</p>
+
+<pre><code class="language-java">public void expand() {
+  Node root = readTrie(); // read in encoding trie
+  int N = BinaryStdIn.readInt(); // read in # of chars
+  
+  for (int i = 0; i &lt; N; i++) {
+    Node x = root;
+    while (!x.isLeaf()) {
+      if (!BinaryStdIn.readBoolean())
+        x = x.left;  // 0
+      else
+        x = x.right; // 1
+    }
+    
+    BinaryStdOut.write(x.ch, 8); // print char
+  }
+  
+  BinaryStdOut.close();
+}
+</code></pre>
+
+<p><em>running time</em> 은 <code>N</code> 에 비례한다.</p>
+
+<p><em>expansion</em> 하는 쪽에서도 <em>trie</em> 를 가지고 있어야한다. <em>trie</em> 를 전송하기 위해 <code>writeTrie</code> 함수를 만들어 보자. <em>trie</em> 를 <em>preorder</em> 로 순회하면서 <em>leaf</em> 의 경우 <code>1</code> 과 문자 값을, <em>internal node</em> 의 경우 <code>0</code> 을 출력한다.</p>
+
+<pre><code class="language-scala">private static void writeTrie(Node x) {
+  if (x.isLeaf()) {
+    BinaryStdOut.write(true); // leaf
+    BinaryStdOut.write(x.ch, 8);
+    return;
+  }
+  
+  BinaryStdOut.write(false);
+  writeTrie(x.left);
+  writeTrie(x.right);
+}
+</code></pre>
+
+<p>이러면 비트스트림으로 온 <em>trie</em> 를 해석하는 함수 <code>readTrie</code> 를 만들자. 마찬가지로 <em>pre-order</em> 로 읽는다.</p>
+
+<pre><code class="language-java">private static Node readTrie() {
+  // leaf
+  if (BinaryStdIn.readBoolean()) {
+    char c = BinaryStdIn.readChar(8);
+    return new Node(c, 0, null, null);
+  }
+  
+  Node l = readTrie(); 
+  Node r = readTrie();
+  return new Node('\0', 0, l, r);
+}
+</code></pre>
+
+<h4 id="shannon-fano-algorithm">Shannon-Fano algorithm</h4>
+
+<p>어떻게 가장 최적(압축률이 높은) <em>prefix-free code</em> 를 만들까? <em>Shannon-Fano</em> 알고리즘을 이용하면</p>
+
+<ul>
+<li><em>symbol</em> <code>S</code> 를 <code>freq</code> 으 합이 최대한 같은 두 집단으로 나눈다 <code>S0, S1</code></li>
+<li><code>S0</code> 은 <code>0</code> 부터 시작하고, <code>S1</code> 은 <code>1</code> 부터 시작하도록 <em>codeword</em> 를 만든다</li>
+<li>위 두 단계를 반복한다.</li>
+</ul>
+
+<p>근데 이 알고리즘은 보면 알겠지만, 최적이 아니다. 이는 <code>freq</code> 값이 <code>{5, 1}</code>, <code>{2, 1, 2, 1}</code> 처럼 구성될 수 있기 때문이다.</p>
+
+<h4 id="huffman-algorithm">Huffman algorithm</h4>
+
+<p>허프만 알고리즘은 최적의 <em>prefix-free code</em> 를 만들기 위해</p>
+
+<ul>
+<li>각 문자를 이용해 <em>single node trie</em> 를 만든다.</li>
+<li><code>freq</code> 값이 가장 작은 두개를 골라 합치고, <em>internal node</em> 에 값을 누적</li>
+<li>반복한다</li>
+</ul>
+
+<p><img src="http://lcm.csa.iisc.ernet.in/dsa/img161.gif" alt="" />
+<p align="center">(<a href="http://lcm.csa.iisc.ernet.in/dsa">http://lcm.csa.iisc.ernet.in/dsa</a>)</p></p>
+
+<p>이 과정에서 가장 낮은 <em>frequency</em> 를 갖는 문자가 아래로 가는 것을 보장하기 때문에 최적의 <em>prefix-free code</em> 를 찾는다 말할 수 있다. (좀 더 자세한 증명은 책을 보라고 함)</p>
+
+<p>구현은</p>
+
+<pre><code class="language-java">// construct huffman encoding trie 
+private static Node buildTree(int[] freq) {
+	PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;Node&gt;();
+		
+	for (char c = 0; c &lt; R; c++) 
+		if (freq[c] &gt; 0)
+			pq.add(new Node(c, freq[c], null, null));
+		
+	// if only one char
+	if (pq.size() == 1) {
+		if (freq['\0'] == 0) pq.add(new Node('\0', 0, null, null));
+		else                 pq.add(new Node('\1', 0, null, null));
+	}
+		
+	// merge two tries
+	while (pq.size() &gt; 1) {
+		Node l = pq.remove();
+		Node r = pq.remove();
+		Node p = new Node('\0', l.freq + r.freq, l, r); // parent
+		pq.add(p);
+	}
+	
+	return pq.remove();
+}
+</code></pre>
+
+<h4 id="compression">Compression</h4>
+
+<p>구현은</p>
+
+<pre><code class="language-java">public static void compress() {
+	String s = BinaryStdIn.readString(); // input
+	char[] input = s.toCharArray();
+	
+	// tabulate freq counts
+	int[] freq = new int[R];
+	for (int i = 0; i &lt; R; i++)
+		freq[input[i]]++;
+	
+	// build huffman trie
+	Node root = buildTrie(freq);
+	
+	// build syombol table
+	String[] st = new String[R];
+	buildCode(st, root, &quot;&quot;);
+	
+	// print trie for decoder
+	writeTrie(root);
+	
+	// print N (# of input)
+	BinaryStdOut.write(input.length);
+	
+	// encode
+	for (int i = 0; i &lt; input.length; i++) {
+		String code = st[input[i]];
+		
+		// traverse huffman trie
+		for (int j = 0; j &lt; code.length(); i++) {
+			if (code.charAt(j) == '0')
+				BinaryStdOut.write(false);
+			else if (code.charAt(j) == '1')
+				BinaryStdOut.write(true);
+			else throw new IllegalStateException(&quot;Illegal State&quot;);
+		}
+	}
+	
+	BinaryStdOut.close();
+}
+
+private static void buildCode(String[] st, Node x, String s) {
+	if (!x.isLeaf()) {
+		buildCode(st, x.left, s + '0');
+		buildCode(st, x.right, s + '1');
+	} else {
+		st[x.ch] = s; 
+	}
+}
+</code></pre>
+
+<p>전체 코드는 <a href="ko.thetimenow.com/pst/pacific_standard_time">Huffman.java</a> 로</p>
+
+<h4 id="huffman-summary">Huffman Summary</h4>
+
+<p>정리하면</p>
+
+<ul>
+<li>tabulate char frequencies and build trie</li>
+<li>encode file by traversing trie or lookup table</li>
+</ul>
+
+<p>러닝타임은 바이너리 힙을 이용할 경우(우선순위 큐) <code>N + RlogR</code> 이다. 여기서 <code>R</code> 은 알파벳 사이즈. <code>N</code> 은 입력 문자의 수다.</p>
+
+<p>즉 <code>N</code> 은 입력 문자를 인코딩 하는데, <code>R logR</code> 은 <code>R</code> 개의 문자에 대해 <code>freq</code> 값을 이용해 <em>trie</em> 를 만드는데 걸리는 시간</p>
+
+<h3 id="lzw-compression">LZW Compression</h3>
+
+<p><em>Lempel-Ziv-Welch</em> 의 약자다. 세 분이 만드신듯</p>
+
+<p>알고리즘을 보기 전에 데이터 압축 모델에 대해 좀 생각해보자.</p>
+
+<p>(1) 빠르고, 범용적이지만 최적은 아닌 <strong>static model</strong> (e.g ASCII)
+(2) 모델을 매번 생성하고, 전송해야하지만 최적인 <strong>Dynamic model</strong> (e.g Huffman)</p>
+
+<p>이 둘을 섞은 <em>adaptive model</em> 도 있다. 즉 매 텍스트마다 모델을 업그레이드 해 나가는 것이다. <del>머신러닝?!</del></p>
+
+<blockquote>
+<p>Progressively learn and upate model as you read text</p>
+</blockquote>
+
+<ul>
+<li>More accurate modeling produces better compression</li>
+<li>Decoding must start from beginning</li>
+</ul>
+
+<p><em>LZW compression</em> 이 그 예다. <em>LZW</em> 압축 알고리즘은 모델을 읽으면서 만들기 때문에, 전송할 필요가 없다.</p>
+
+<p>텍스트를 읽다가 <em>codeword table</em> 에 이미 존재하면, 문자를 더 읽어 테이블에 없을 경우에만 추가한다. 그림으로 보면</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmlSR00yUW1OeVF6WWpaVEw0UTJNNDBTTjFVMk10a3pZM01XTHlFV05obGpZNU0yTHhBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+
+<ul>
+<li>Create ST associating <code>W</code>-bit codewords with string keys</li>
+<li>Initialize ST with codewords for single-char keys</li>
+<li>Find longest string <code>s</code> in ST that is a prefix of unscanned part of input</li>
+<li>Write the <code>W</code>-bit codeword associated with <code>s</code></li>
+<li>Add <code>s + c</code> to ST where <code>c</code> is next char in the input</li>
+</ul>
+
+<p><em>LZW compression</em> 에선 <em>longest string matching</em> 이 필요하므로 <em>trie</em> 를 이용할 수 있다.</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVDWmtsek5pRldPbVJtTmpSVEw1RVRZNTBDT3pFek10UVRZMElXTG1GVFk1TVdPbVZ6THpBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" />
+<p align="center">(<a href="http://www.programering.com">http://www.programering.com</a>)</p></p>
+
+<h4 id="lzw-implementation">LZW Implementation</h4>
+
+<p>자세한 코드는 <a href="http://algs4.cs.princeton.edu/55compression/LZW.java.html">LZW.java</a> 여기로. 그리고 메모리 사용량을 줄이기 위해 <em>ternary search trie</em> 를 이용한다. <a href="http://algs4.cs.princeton.edu/55compression/TST.java.html">TST.java</a></p>
+
+<pre><code class="language-java">// ref: http://algs4.cs.princeton.edu/55compression/LZW.java.html
+private static final int R = 256;  // # of input chars
+private static final int L = 4096; // # of codewords = 2^W
+private static final int W = 12;   // codeword width
+
+public static void compress() {
+  String input = BinaryStdIn.readString();
+  
+  // codewords for single chars
+  TST&lt;Integer&gt; tst = new TST&lt;Integer&gt;();
+  for(int i = 0; i &lt; R; i++)
+    sts.put(&quot;&quot; + (char) i, i);
+  
+  int code = R + 1;
+  
+  while (input.length() &gt; 0) {
+    String s = tst.longestPrefixOf(input);
+    BinaryStdOut.write(s, W);
+    
+    int t = s.length();
+    if (t &lt; input.length() &amp;&amp; code &lt; L)
+      st.put(input.substring(0, t + 1), code++)
+    
+    input = input.substring(t);
+  }
+  
+  BinaryStdOut.write(R, W); // write &quot;stop&quot; codeword
+  BinaryStdOut.close();
+}
+</code></pre>
+
+<p><em>expansion</em> 은 테이블에서 <em>codeword</em> 를 읽어가면서 테이블을 만들면 된다. 심볼이 아니라 값으로 검색하므로 <code>2^W</code> 길이의 <em>array</em> 만 있으면 된다.</p>
+
+<p><em>tricky case</em> 가 있는데</p>
+
+<p><img src="http://www.programering.com/images/remote/ZnJvbT1pdGV5ZSZ1cmw9Y21idzVpTTBNbVp3WVdaaloyWTRJVEwxY1RZaDF5TnlJMk10VUROaGRUTHdVVE4zWTJZM2t6TDFBak0xOHlNNUFETXZRbmJsMUdhakZHZDBGMkxrRjJic0JYZHYwMmJqNVNaNVZHZHA1aU1zUjJMdm9EYzBSSGE.jpg" alt="" /></p>
+
+<p><em>compression</em> 은 같은데 <em>expansion</em> 이 좀 복잡하다. <code>41 42 81 83 80</code> 에서 <code>83</code> 을 해석할때, 테이블에 있어야 해석을 하는데 없으므로 막혀버린다.</p>
+
+<p>이 경우를 잘 보면 <code>83</code> 을 해석해야 하고, 현재 테이블에 <code>82</code> 까지의 심볼만 존재한다. 그리고 방금 전 까지 읽은건 <code>81</code> 이다. <code>83</code> 은 <code>ABA</code> 인데, 이건 <code>81</code> 의 심볼을 <code>val</code> 이라 하면 <code>val + val.charAt(0)</code> 과 동일하다.</p>
+
+<p>구현은</p>
+
+<pre><code class="language-java">public static void expand() {
+	String[] st = new String[L];
+	int i; // next available codeword value
+	
+	for (i = 0; i &lt; R; i++) 
+		st[i] = &quot;&quot; + (char) i;
+	
+	st[i++] = &quot;&quot;; // termination codeword
+	
+	int codeword = BinaryStdIn.readInt(W);
+	if (codeword == R) return; // if empty message
+	String val = st[codeword];
+	
+	while(true) {
+		BinaryStdOut.write(val);
+		
+		codeword = BinaryStdIn.readInt(W);
+		if (codeword == R) break;
+		
+		String s = st[codeword];
+		
+		// tricky case
+		if (codeword == i) s = val + val.charAt(0);
+		// add string into table
+		if (i &lt; L) st[i++] = val + s.charAt(0);
+		
+		val = s;
+	}
+	
+	BinaryStdOut.close();
+}
+</code></pre>
+
+<p>해석할때 <code>val</code> 은 지난단계의 해석, <code>s</code> 는 현재 읽은 값의 해석이라 생각하면 쉽다.</p>
+
+<h4 id="lossless-data-compression">Lossless Data Compression</h4>
+
+<p><em>LZW</em> 같은 경우 특허가 있었는데, 2003년에 만료되었다고 한다. 이 알고리즘의 많은 변형이 있는데, <em>LZ77</em> 은 특허가 없어서 오픈소스에 많이 쓰인다고 함. <em>deflate  zlib</em> 는 <em>LZ77</em> 과 <em>Huffman</em> 을 섞여 쓰는 대표적인 압축 알고리즘</p>
+
+<p><em>bit / char</em> 를 기준으로 보면 아스키는 <code>7</code>, 허프만은 <code>4.7</code> 정도의 성능을 보여준다. 1995년에는 <em>Burrows-Wheeler</em> 알고리즘이 발명되었는데 <code>2.29</code> 정도까지 압축한다. 1999년에는 <em>RK</em> 알고리즘이 <code>1.89</code> 까지 압축에 성공함.</p>
+
+<h3 id="summary">Summary</h3>
+
+<ul>
+<li><strong>Huffman:</strong> represent <em>fixed-length symbols</em> with <em>variable-length codes</em></li>
+<li><strong>LZW:</strong> represent <em>variable-length symbols</em> with <em>fixed-length codes</em></li>
+</ul>
+
+<p><em>lossy compression</em> 의 경우 <em>FFT</em>, 프랙탈 등 수학적 도구를 이용해 만드 알고리즘들이 많다.</p>
+
+<p>그리고 압축의 이론적 한계는 <em>shanon entropy</em> 에 의해</p>
+
+<p><img src="http://crackingthenutshell.com/wp-content/uploads/file/shannons-formula-small.jpg" alt="" /></p>
+
+<h3 id="reference">Reference</h3>
+
+<p>(1) <em>Algorithms: Part 2</em> by <strong>Robert Sedgewick</strong><br />
+(2) <a href="http://introcs.cs.princeton.edu/java/73dfa/">http://introcs.cs.princeton.edu</a><br />
+(3) <a href="http://www.lawfareblog.com/2013/09/the-nsa-and-encryption/">The NSA and Encryption</a><br />
+(4) <a href="http://www.programering.com/a/MTO4YzNwATE.html">Data Compression Lecture Note</a><br />
+(5) <a href="http://lcm.csa.iisc.ernet.in/dsa/node88.html">Huffman Algorithm</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../algorithm-part2-5"> <i class="fa fa-chevron-left"></i></a>
+        
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

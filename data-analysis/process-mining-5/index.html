@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Process Mining 5: Decision, Social, Organization Mining</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/data-analysis/process-mining-5/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/data-analysis/process-mining-5.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/data-analysis/" itemprop="url"><span itemprop="title">Data Analysis</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Process Mining 5: Decision, Social, Organization Mining</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#mining-decision-points">Mining Decision Points</a></li>
+<li><a href="#mining-bottlenecks">Mining Bottlenecks</a></li>
+<li><a href="#mining-social-networks">Mining Social Networks</a></li>
+<li><a href="#organizational-mining">Organizational Mining</a></li>
+<li><a href="#conbining-different-perspectives">Conbining Different Perspectives</a></li>
+<li><a href="#comparative-process-mining-using-process-cubes">Comparative Process Mining Using Process Cubes</a></li>
+<li><a href="#refined-process-mining-framework">Refined Process Mining Framework</a>
+<ul>
+<li><a href="#de-jure-vs-de-facto">De Jure vs De Facto</a></li>
+<li><a href="#cartography">Cartography</a></li>
+<li><a href="#auditing">Auditing</a></li>
+<li><a href="#navigation">Navigation</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Process Mining 5: Decision, Social, Organization Mining</h1>
+                
+
+
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-3-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>지난 4 주간 배운바를 간단히 정리해보면</p>
+
+<ul>
+<li>첫 2주는 <em>model discovery</em></li>
+<li>지난 2주는 <em>conformance checking</em></li>
+</ul>
+
+<p>이 것들은 <em>control flow</em> 에 관련된 것들이었다. 이제는 기본적인 <em>event log</em> 의 데이터 뿐만 아니라 <em>time, resource, data</em> 등을 이용하면서 <em>model enhancement</em> 를 할 수 있는 기법들을 배워보자.</p>
+
+<p>앞으로 이야기 할 내용은</p>
+
+<ul>
+<li>mining decision points</li>
+<li>mining bottlenecks</li>
+<li>mining social networks</li>
+<li>comparative process mining</li>
+<li>operational support: detect, predict, recommend</li>
+</ul>
+
+<h3 id="mining-decision-points">Mining Decision Points</h3>
+
+<p><em>model enhancement</em> 은 <em>conformance checking</em> 과는 다르게, 모델을 더 나은 방향으로 <strong>변형</strong>하는 것을 목표로 한다.</p>
+
+<ul>
+<li><strong>extend:</strong> adding additional perspectives to the model using event data</li>
+<li><strong>repair:</strong> improving the quality of the model using event data</li>
+</ul>
+
+<p>먼저 <em>extend</em> 에 대해 이야기 해 보자. <em>decision point</em> 를 마이닝 할 건데, 인풋으로</p>
+
+<ul>
+<li><em>event log</em></li>
+<li><em>process model</em></li>
+</ul>
+
+<p>이 필요하다. 그리고 로그와 모델이 <strong>aligned</strong> 되어 있다는 가정하에 마이닝을 시작한다.</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-33-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><em>decision tree</em> 에서 했던것 처럼 <em>predictor variable</em> 을 이용해 <em>response variable</em> 인 <em>transition</em> 을 선택할 수 있다. 이 때 <em>predictor variable</em> 은 <em>event log</em> 에 있는 <em>attribute</em> 다. 예를 들어</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-35-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>여기서 우측 하단에 <em>inclusive OR</em> 이 있는데, 하나만 택하거나 둘 모두 택할 수 있는 <em>place</em> 다. 이 것도 마찬가지로 <em>decision tree</em> 를 만들듯이 생성할 수 있다. 슬라이드에서는 <code>x, y</code> 로의 두 <em>guard</em> 를 만들었지만 둘다 택 할 수 있는 경우가 있다. 예를 들어 <code>amount &lt; 500, type = silver</code> 면 <code>y, z</code> 모두를 택한다.</p>
+
+<p><em>event log</em> 에 있는 정보 이외에도, <em>decision point</em> 를 마이닝 하기 위해 <em>predictor variable</em> 로 <em>last event</em> 나 <em>previous event</em> 를 사용할 수 있다.</p>
+
+<p>이외에도 <em>predictor variable</em> 는 프로세스 인스턴스의 <em>context</em> 에 근거해서 다양한 값일 수 있는데</p>
+
+<ul>
+<li>number of cases running</li>
+<li>number of resources present</li>
+<li>workload of reousrce</li>
+<li>day of the week 등</li>
+</ul>
+
+<p>한 가지 주의할점은 더 많은 변수, 더 많은 조합들이 있을수록 데이터가 희박해지기 때문에 <em>overfitting</em> 할 수 있다는 점이다.</p>
+
+<p>이벤트 로그의 속성을 이용해 만든 <em>decision tree</em> 로, 모델에 <em>guard</em> 를 추가할 수 있다. 하지만, 이 가드가 <em>prescriptive</em> 한 것은 아니다. 오히려 <em>descriptive</em> 에 가깝다.</p>
+
+<blockquote>
+<p>The guard discovered are describing what has happend rather than what should have happended</p>
+</blockquote>
+
+<h3 id="mining-bottlenecks">Mining Bottlenecks</h3>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-29-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-30-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>위 로그를 돌려보면, 이와 같은 <em>duration</em> 같은 정보를 얻을 수 있다.</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-31-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-32-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>이런식으로 볼 수도 있다.</p>
+
+<h3 id="mining-social-networks">Mining Social Networks</h3>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-18-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>잘 보면 이벤트로그를 <em>arrtibute</em> <code>name</code> 과 연관 지었다.</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-19-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>이 로그를 이용하면 누가 무엇을 얼마나 실행했는지 파악할 수 있고, 이를 이용해서 그래프를 그릴 수 있다. 한 가지 생각해 볼 점은 노드가 얼마나 <strong>중요한가</strong> 는 정의에 따라 다를 수 있다는 것이다. <em>closeness</em>, <em>out degree</em> 등등.</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-21-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>이건 누구로 부터 누구로 일이 전달되었는가를 매트릭스로 표현한 것이다. 이걸 이용하면</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-22-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>이름이 아니라 다른 <em>attribute</em> 인 <em>role</em> 을 이용하면</p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-23-728.jpg?cb=1305062373" alt="" /></p>
+
+<p>소셜 네트워크 마이닝을 위한 기법을 정리하면</p>
+
+<ul>
+<li><strong>Resource-activity matrix</strong> 로 누가 무엇을 하는지</li>
+<li><strong>Handover of work matrix</strong> 로 일이 어떻게 전달되는지</li>
+</ul>
+
+<p>를 파악할 수 있고, 이를 이용해 그래프를 만들 수 있다. 물론 이 외에도 다양한 방법들이 있다.</p>
+
+<h3 id="organizational-mining">Organizational Mining</h3>
+
+<p>클러스터링과 비슷하다고 보면 된다. 이벤트 로그를 기반으로 몇개의 집단으로 묶는 것이다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-24-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-25-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><br/></p>
+
+<p>위의 예에서는 <em>resource</em> 기반으로 묶었지만 <em>case</em> 로 묶어 <em>process variants</em> 를 확인할 수도 있다.</p>
+
+<p>그리고 위에서 발견한 <em>organizational perspective</em> 를 모델에 적용하면 이런 재미난 그림을 얻을 수 있다. 누가 어떤일을 하는지를 넘어, 어떤 집단이 어떤 일을 주로 하는지를 파악할 수 있는 것이다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-26-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><br/></p>
+
+<p>프로세스 마이닝을 실제 로그에 적용해 보면 스트레스 대비 일의 퍼포먼스를 설명하는 [<em>Yerkes-Dodson law</em>] 도 볼 수 있다고 한다.</p>
+
+<p><img src="http://sourcesofinsight.com/wp-content/uploads/2008/09/yerkes-dodson-human-performance-curve.gif" alt="" />
+<p align="center">(<a href="http://sourcesofinsight.com/">http://sourcesofinsight.com/</a>)</p></p>
+
+<p>프로세스 마이닝은 사회과학쪽으로도 유용할 것 같다. <del>근데 이 그래프는 너무 테일러리즘ㅠ</del></p>
+
+<h3 id="conbining-different-perspectives">Conbining Different Perspectives</h3>
+
+<p>이 전 까지 배웠던 다양한 <em>perspectives</em> 들</p>
+
+<ul>
+<li>data perspective</li>
+<li>resource perspective</li>
+<li>time perspective</li>
+<li>control-flow perspective</li>
+</ul>
+
+<p>이런 하나의 모델로 조합해 보자.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter08miningadditionalperspectives-110510153251-phpapp02/95/process-mining-chapter-8-mining-additional-perspectives-37-728.jpg?cb=1305062373" alt="" /></p>
+
+<p><br/></p>
+
+<p><em>control flow</em>, 즉 모델에</p>
+
+<ul>
+<li><em>data perspective</em> 를 추가하면 <em>guard</em> 를 얻을 수 있고</li>
+<li><em>time perspective</em> 는 <em>wating time</em>, <em>service time</em> 을 확인하는데 도움을 준다</li>
+<li><em>resource perspetive</em> 는 모델을 <em>role</em>, <em>individual</em> 관점에서 이해하는데 도움을 준다.</li>
+</ul>
+
+<p>이 조합된 모델에 <em>limitation</em> 이 있다는 것, 그리고 이 모든 것은 <em>descriptive</em>(<strong>as is</strong>) 하다는 것을 명심하자.</p>
+
+<p>다양한 관점이 적용된 모델을 이런 곳에 활용할 수 있다.</p>
+
+<ul>
+<li><em>diagnosis</em></li>
+<li><em>re-engineering</em></li>
+<li>예측이나 추천같은 <em>operational support</em></li>
+<li><strong>What if</strong> 를 다루는 <em>simulation</em></li>
+</ul>
+
+<h3 id="comparative-process-mining-using-process-cubes">Comparative Process Mining Using Process Cubes</h3>
+
+<p><em>event log</em> 에는 다양한 <em>attribute</em> 를 가지고 있다. 이것들을 서로 비교해 가면서 더 좋은 프로세스 마이닝 모델을 선택할 수 있다. 즉, 다양한 조합의 액티비티, 케이스, 리소스 등을 선택해 가면서 가장 적합한 모델을 찾아내는 것이다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter10toolsupport-121219213613-phpapp01/95/process-mining-chapter10toolsupport-4-638.jpg?cb=1355974631" alt="" /></p>
+
+<p>이 큐브의 각 축은 차원을 나타내고, 각 셀은 어떤 특정 패턴의 이벤트 로그를 나타낸다 볼 수 있다.</p>
+
+<p>이렇게 프로세스 큐브를 사용하면 다차원 분석이 가능하다. <em>data ware house</em> 나 <em>OLAP</em> 도 비슷한 일을 하긴 하는데, 프로세스 마이닝과의 큰 차이점이 하나 있다.</p>
+
+<blockquote>
+<p>Related, but often data is aggregated it useless for process mining(events are lost)</p>
+</blockquote>
+
+<h3 id="refined-process-mining-framework">Refined Process Mining Framework</h3>
+
+<p>전체적인 큰 그림은 아래와 같다.</p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-4-728.jpg?cb=1305062304" alt="" /></p>
+
+<p><br/></p>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-5-728.jpg?cb=1305062304" alt="" /></p>
+
+<p>꼭대기부터 차근차근 보자. 여기서 <em>provenance</em> 란 수집하는 이벤트 로그가 신뢰성이 있어야 한다는 것을 의미한다. 그리고 이 이벤트 로그는 두 가지로 나뉘는데</p>
+
+<ul>
+<li><p><strong>Post mortem event data:</strong> refer to information about cases that have completed. i.e., these can be used for process improvement and auditing but not for influencing the cases they refer to</p></li>
+
+<li><p><strong>Pre mortem event data:</strong> If a case is still running, <strong>alive</strong>, then it may be possible that information in the event log about this case <strong>can be exploited</strong> to ensure the correct or efficient handling of this case</p></li>
+</ul>
+
+<p>즉 <em>pre mortem</em> 은 현재 진행중인 것을 말한다. <del>와이리 복잡하게 설명하시뮤ㅠ</del>  예를 들어 <em>student-related event data</em> 에서</p>
+
+<blockquote>
+<p><strong>post mortem:</strong> Understanding where and why students drop out or deviate. Should the curriculum be redesigned? What are the bottlenecks?</p>
+
+<p><strong>pre mortem:</strong> What advice can we give a particular student that is likely do drop out? How to signal the lecturer that the exam is likely to be a <em>massacre</em> due to inactivity of students?</p>
+</blockquote>
+
+<p><br/></p>
+
+<h4 id="de-jure-vs-de-facto">De Jure vs De Facto</h4>
+
+<p>큰 그림에서 밑 부분을 보면 모델에도 두 종류가 있다.</p>
+
+<p><strong>de jure model</strong> 은 <em>normative</em> 즉 <strong>되어야 하는 것</strong> 을 설명하는 것이고, <strong>de facto model</strong> 은 <em>descriptive</em>, 즉 <strong>실제로 행해지는 것</strong> 을 설명한다.</p>
+
+<h4 id="cartography">Cartography</h4>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-8-728.jpg?cb=1305062304" alt="" /></p>
+
+<p>이벤트 로그를 이용해서 모델을 발견하고, 개선하고, 진단하는 과정을 말한다</p>
+
+<h4 id="auditing">Auditing</h4>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-9-728.jpg?cb=1305062304" alt="" /></p>
+
+<ul>
+<li><strong>detect:</strong> <em>de jure model</em> 과 <em>pre mortem</em> 을 비교해 <em>violation</em> 이 없는지 확인한다.</li>
+<li><strong>check:</strong> <em>detect</em> 에서 찾은 것을 수량화하고, 어떤 <em>deviation</em> 인가 확인한다.</li>
+<li><strong>compare:</strong> <em>defacto model</em> 과 비교해서 실제에서 어떤 <em>deviation</em> 이 있는가 본다.</li>
+<li><strong>promote:</strong> 위 정보를 토대로 모델을 개선한다.</li>
+</ul>
+
+<h4 id="navigation">Navigation</h4>
+
+<p><img src="http://image.slidesharecdn.com/processminingchapter09operationalsupport-110510153302-phpapp02/95/process-mining-chapter-9-operational-support-10-728.jpg?cb=1305062304" alt="" /></p>
+
+<p>이 단계에서는 런타임에 <em>explore</em> 할 수도 있고, <em>prediction</em> 나 <em>recommendation</em> 도 가능하다.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <a href="http://issuu.com/wmpvanderaalst/docs/procminbook?e=14081202/9829483">Book: Process Mining</a><br />
+(2) <a href="http://www.slideshare.net/wvdaalst/process-mining-chapter08miningadditionalperspectives">Slide</a><br />
+(3) <strong>Process Mining: Data science in Action</strong> by Wil van der Aalst<br />
+(4) <a href="www.processmining.org">www.processmining.org</a><br />
+(5) <a href="http://pais.hse.ru/en/">http://pais.hse.ru/en/</a><br />
+(6) <a href="http://sourcesofinsight.com/yerkes-dodson-human-performance-curve/">http://sourcesofinsight.com/</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../process-mining-4"> <i class="fa fa-chevron-left"></i></a>
+        
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Design and Analysis: Graph Contraction Algorithm</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/algorithm/design-and-analysis-part1-3/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/algorithm/design-and-analysis-part1-3.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/algorithm/" itemprop="url"><span itemprop="title">Algorithm</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Design and Analysis: Graph Contraction Algorithm</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#graphs">Graphs</a></li>
+<li><a href="#minimum-cut-problem">Minimum Cut Problem</a></li>
+<li><a href="#graph-representation">Graph representation</a></li>
+<li><a href="#adjacency-matrix">Adjacency Matrix</a></li>
+<li><a href="#adjacency-list">Adjacency List</a></li>
+<li><a href="#random-contraction-algorithm">Random Contraction Algorithm</a></li>
+<li><a href="#analysis-contraction-algorithm">Analysis: Contraction Algorithm</a></li>
+<li><a href="#counting-minimum-cuts">Counting Minimum Cuts</a></li>
+<li><a href="#conditional-prob">Conditional Prob</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Design and Analysis: Graph Contraction Algorithm</h1>
+                
+
+
+
+<p>이번엔 지난시간에 배운 <em>randomized algorithm</em> 을 새로운 <em>domain</em> 인 그래프에 적용해 보고, <em>contraction algorithm</em> 이 무엇인지 알아본다.</p>
+
+<h3 id="graphs">Graphs</h3>
+
+<p>용어 정리부터 시작하자. <em>edge</em> <code>(E)</code> 는 <em>pair of vertices</em> 와 같은 말이다. <code>(E)</code> 는 <em>directed or undirected</em> 일 수 있으므로 <em>unordered pair</em> 또는 <em>ordered pair</em> 일 수 있다. <em>directed edges</em> 는 다른말로 <em>arcs</em> 라 부르기도 한다.</p>
+
+<p><em>cut</em> 은 그래프를 비어있지 않은 두개의 그룹으로 분리하는 것을 말한다.</p>
+
+<blockquote>
+<p>A cut of a graph <code>(V, E)</code> is a partition of <code>V</code> into two non-empty sets <code>A</code> and <code>B</code></p>
+</blockquote>
+
+<p>따라서 <em>vertice</em> 가 <code>n</code> 개라면 <code>2^n - 2</code> 개의 <em>cut</em> 을 만들 수 있다.</p>
+
+<h3 id="minimum-cut-problem">Minimum Cut Problem</h3>
+
+<p><em>crossing edge</em> 를 최소로 하는 <em>cut</em> 을 찾는 문제다. 이걸 어디다 쓸 수 있을까?</p>
+
+<p>(1) identify network bottlenecks / weaknesses<br />
+(2) community detection in social network</p>
+
+<p>두 사람 혹은 집단간 강하게 결합되고 나머지와는 약하게 결합된 부분(<em>mimimum cut</em>) 을 찾으면 두 개체간 관련성이 있다고 볼 수 있다.</p>
+
+<p>(3) image segmentation</p>
+
+<p>이미지를 <em>2D grid</em> 라 <em>grid edge</em> 를 만들어 <em>same object</em> 에서 왔을 가능성을 나타내는 가중치를 부여해 <em>min cut</em> 을 하면 쓸모 없는 부분이 잘려나간다.</p>
+
+<h3 id="graph-representation">Graph representation</h3>
+
+<p>그래프가 <em>sparse graphs</em>, <em>dense graphs</em> 냐에 따라 알고리즘이 성능이 잘 나올수도 있고 아닐수도 있기 때문에 이 두 가지를 구분해 보자.</p>
+
+<p><code>n</code> 을 <em>the number of vetices</em>, <code>m</code> 을 <em>the number of edges</em> 라 하자. 대부분의 경우에 <code>m</code> 은 <code>Omega(n)</code>, <code>O(n^2)</code> 이다.</p>
+
+<p><em>sparse graph</em> 는 <code>m</code> 이 <code>O(n)</code> 에 가깝고 <em>dense graphs</em> 는 <code>m</code> 이 <code>O(n^2)</code> 에 가깝다.</p>
+
+<h3 id="adjacency-matrix">Adjacency Matrix</h3>
+
+<p>그래프를 자료구조로 표현하는 몇 가지 방법이 있는데 <em>Adjacency matrix (인접행렬)</em> 의 경우에는 노드 수, <code>n</code> 에 대해 <code>n x n</code> 의 행렬 <code>A</code> 를 만들어서 <code>A_ij</code> 를 <code>i</code> 노드와 <code>j</code> 노드가 연결되었다면 값을 <code>1</code> 채운다</p>
+
+<p>몇 가지 변형이 있을 수 있는데 <em>parallel edges</em> 가 허용된다면 <code>A_ij</code> 는 연결된 엣지 수 일 수 있고, <code>A_ij</code> 에 가중치를 담는 경우도 있다. <em>directed graph</em> 면 <code>i -&gt; j</code> 냐 <code>j -&gt; i</code> 냐에 따라 <code>-1 or +1</code> 을 값으로 사용할 수 있다.</p>
+
+<p>어떤 경우든 <em>adjacency matrix</em> 방식 자체는 <em>edge</em> 수와는 관계 없이 <em>vertice</em> 수의 제곱에 비례하는 공간이 필요하다. 따라서 <em>sparse graphs</em> 에서는 사용하지 않는 편이 낫다.</p>
+
+<h3 id="adjacency-list">Adjacency List</h3>
+
+<p><em>Adjacency list (인접 리스트)</em> 로 그래프를 표현할 경우엔</p>
+
+<p>(1) array (or list) of vertices (<code>theta(n)</code>)<br />
+(2) array (or list) of edges (<code>theta(m)</code>)<br />
+(3) each edge points to its endpoint (<code>theta(m)</code>)<br />
+(4) each vertex points edges (<code>theta(m)</code>)</p>
+
+<p>(4) 의 경우 <em>undirected graph</em> 라면 명확한데, <em>directed graph</em> 의 경우에는 <em>tail</em> 만 저장 한다던지 몇가지 방법을 쓸 수 있다.</p>
+
+<p>그럼 <em>adjacency list</em> 는 얼마의 공간을 차지할까? (3) 의 경우는 위에 표시했듯이 (<code>theta(m)</code>) 인데, 각각의 <em>edge</em> 는 2 개의 <em>vertex</em> 를 저장하지만 <code>2</code> 는 상수 취급한다.</p>
+
+<p>(4) 가 노드마다 간선 수가 달라 계산이 어려울 수 있는데, (3) 과 1:1 대응이라 보면 된다. 노드가 가리키는 간선이나, 간선이 가리키는 노드나 수는 같다. 따라서 (<code>theta(m)</code>) 이므로 전체 메모리 사용은 (<code>theta(m + n)</code>) 이다.</p>
+
+<p>그러면 인접 행렬과 인접 행렬중 어떤게 더 나을까? 둘 다 장단이 있지만 <em>graph search</em> 는 단연 인접 행렬이 더 낫고, 요즘엔 <em>node</em> 는 정말 많은 반면 <em>edge</em> 는 좀 적기 때문에 인접 리스트가 더 낫다.</p>
+
+<p>간단히 웹만 생각해봐도 노드 자체는 엄청나게 많은 반면 간선은 적다. 만약 인접 행렬로 그래프를 표현하면 노드 수의 제곱에 비례하는 메모리가 필요한데, 이건 리소스 문제를 겪을 수 있다.</p>
+
+<h3 id="random-contraction-algorithm">Random Contraction Algorithm</h3>
+
+<p><em>min cut</em> 을 해결하기 위해 <em>quick sort</em>, <em>randomized selection</em> 에서 보았던 랜덤 샘플링을 이용할건데, 이 문제는 랜덤 샘플링이 그래프 문제에도 얼마나 효과적인지 보여준다. 알고리즘은 이렇다.</p>
+
+<p>(1) while there are more than 2 vertices<br />
+(2) pick a remaining edge <code>(u, v)</code> uniformly at random<br />
+(3) merge (or &ldquo;contract&rdquo;) <code>u</code> and <code>v</code> into a single vertex<br />
+(4) remove self-loops<br />
+(5) return cut represented by final 2 vertices</p>
+
+<p>해보면 알겠지만 이 알고리즘은 <em>min cut</em> 을 답으로 제공할 수도, 아닐 수도 있다. 따라서 문제는, <em>What is prob of success?</em> 를 계산하는 것으로 바뀐다.</p>
+
+<h3 id="analysis-contraction-algorithm">Analysis: Contraction Algorithm</h3>
+
+<p>분석 전에 몇 가지 용어를 정의하고 가자. <em>graph</em> <code>G = (V, E)</code> 에 대해 <code>n</code> 개의 <em>vertices</em>, <code>m</code> 개의 <em>edges</em> 가 있다. 그리고 <em>minimum cut</em> <code>(A, B)</code> 는 <code>G</code> 를 두개의 비어있지 않은 그룹 <code>A</code>, <code>B</code> 로 나눈다. 그리고 <code>k</code> 를 <code>(A, B)</code> 의 <em>crossing edges</em> 숫자라 하자. 그리고 이들 <em>crossing edges</em> 를 <code>F</code> 라 부르자.</p>
+
+<p>만약에 <code>F</code> 중 하나의 <em>edge</em> 가 <em>contraction</em> 알고리즘 중에 선택 된다면 <code>(A, B)</code> 는 섞여버린다.</p>
+
+<p>따라서 이터레이션 동안 <code>A</code> 내부에 있는 <em>vertex</em> 끼리만, 그리고 <code>B</code> 내부에 있는 <em>vertex</em> 끼리만 <em>contraction</em> 이 일어나야 한다. 그래야만 <em>minimum cut</em> 을 찾을 수 있다.</p>
+
+<p>따라서 올바른 <code>(A, B)</code> 를 아웃풋으로 얻을 확률은 <code>F</code> 중 어느 *edge*도 선택되지 않을 확률과 같다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5Boutput%20%5C%20is%20%5C%20%28A%2C%20B%29%5D%20%3D%20P_r%5Bnever%5C%20contracts%5C%20an%5C%20edge%5C%20of%20F%5D" alt="" /></p>
+
+<p><del>Tex 에 맛들려서 이미지를 추가한건 아니요!</del></p>
+
+<p><code>S_i</code> 를 <code>F</code> 에 있는 <em>edge</em> 가 이터레이션 <code>i</code> 에서 <em>contracted</em> 되는 <em>event (사건)</em> 이라 하자. 그럼 우리의 목표는 다음의 확률을 계산하는 것이다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%20%5Ccap%20%5Cneg%20S_2%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20S_%7Bn-2%7D%5D" alt="" /></p>
+
+<p>증명에 사용할 재미난 그래프의 특징이 하나 있다. 모든 <em>vertex</em> 의 <em>incident edges, degree</em> 의 값은 <code>k</code> 보다 크거나 같다. 왜냐하면 모든 <em>vertex</em> 는 그 자신과 나머지를 분리하는 <em>cut</em> 을 가지는데, 이게 <code>k</code> 라면 <em>min cut</em> 이고 아니라면 <code>k</code> 보다 크기 때문이다.</p>
+
+<blockquote>
+<p>degree of each vertex is at least <code>k</code></p>
+</blockquote>
+
+<p>그리고 모든 <em>vertex</em> 의 <em>degree</em> 는 <code>2m</code>, 즉 모든 <em>edge</em> 수의 2배이기 때문에 아래 식은 참이고,</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5Csum_%7Bv%7Ddegree%28v%29%20%3D%202m" alt="" /></p>
+
+<p>위 식과 각 <em>degree</em> 합은 <code>kn</code> 보다 크거나 같으므로 <code>2m</code> 도 <code>kn</code> 보다 크거나 같다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?2m%20%5Cgeq%20kn" alt="" /></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?m%20%5Cgeq%20%28kn/2%29" alt="" /></p>
+
+<p>여기서 처음 이터레이션에서 <code>F</code> 내에 있는 <em>edge</em> 가 선택될 확률인 <code>P(S_1) = k / m</code> 이기 때문에</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%7B2%20%5Cover%20n%7D%20%5Cgeq%20%7Bk%20%5Cover%20m%7D" alt="" /></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5BS_1%5D%20%5Cleq%20%7B2%20%5Cover%20n%7D" alt="" /></p>
+
+<p>이제 <code>P(S_1)</code> 을 구했으니, 두번째 이터레이션에서 <code>F</code> 내에 있는 <em>edge</em> 가 선택되지 않을 확률을 구해보자. 조건부 확률 공식을 이용하면,</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%20%5Ccap%20%5Cneg%20S_2%5D%20%3D%20P_r%5B%5Cneg%20S_2%20%7C%20%5Cneg%20S_1%5D%20*%20P_r%5B%5Cneg%20S_1%5D" alt="" /></p>
+
+<p>이때 <code>P(~S_1)</code> 이 <code>n/2</code> 보다 작거나 같으므로</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%5D%20%5Cgeq%20%281%20-%20%7B2%20%5Cover%20n%7D%29" alt="" /></p>
+
+<p>나머지 <code>P(~S_2 | ~S_1)</code> 을 구하려다 보니 남아있는 <em>edge</em> 가 얼만지 알 수가 없다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_2%20%7C%20%5Cneg%20S_1%5D%20%3D%201%20-%7Bk%20%5Cover%20number%20%5C%20of%5C%20remaining%20%5C%20edges%7D" alt="" /></p>
+
+<p>그런데, 본래의 그래프가 모든 <em>vertex</em> 에 대해 <em>at least</em> <code>k</code> 개의 <em>edge</em> 를 가졌으면 <em>contracted</em> 된 그래프도 모든 <em>vertex</em> 에 대해 <em>at least</em> <code>k</code> 개의 <em>edge</em> 를 가져야 한다. (우리는 <code>F</code> 내의 <em>edge</em> 를 선택하지 않았기 때문)</p>
+
+<p>따라서 <em>remaining edge</em> 는 <code>1/2 * k * (n-1)</code> 보다 크다. (<sup>1</sup>&frasl;<sub>2</sub> 은 <code>n</code> 으로 <em>edge</em> 수를 세면 두번씩 카운팅하기 때문에 필요)</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%7Bnumber%20%5C%20of%5C%20remaining%20%5C%20edges%7D%20%5Cgeq%201/2%20*%20k%20*%20%28n-1%29" alt="" /></p>
+
+<p><em>denominator</em> 의 <em>lower bound</em> 를 구했기 때문에 <em>fraction</em> 의 <em>upper bound</em> 를 구한셈이 된다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_2%20%7C%20%5Cneg%20S_1%5D%20%5Cgeq%201%20-%7B2%20%5Cover%20n%20-%201%7D" alt="" /></p>
+
+<p>이제 규칙성이 보인다. 우리가 구하려는 값은</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20S_1%20%5Ccap%20%5Cneg%20S_2%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20S_%7Bn-2%7D%5D" alt="" /></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%3D%20P_r%5B%5Cneg%20S_1%5D%20*%20P_r%5B%5Cneg%20S_2%20%7C%20S_1%5D%20*%20P_r%5B%5Cneg%20S_3%20%7C%20%5Cneg%20S_2%20%5Ccap%20%5Cneg%20S_1%5D%20*%20%5Ccdots%20*%20P_r%5B%5Cneg%20S_%7Bn-2%7D%20%7C%20%5Cneg%20S_1%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20S_%7Bn-3%7D%5D" alt="" /></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cgeq%20%281%20-%20%7B2%20%5Cover%20n%7D%29*%281%20-%20%7B2%20%5Cover%20%28n%20-%201%29%7D%29*%281%20-%20%7B2%20%5Cover%20%28n%20-%202%29%7D%29*%5Ccdots*%20%281%20-%20%7B2%20%5Cover%20%28n%20-%20%28n-4%29%29%7D%29%20*%20%281%20-%20%7B2%20%5Cover%20%28n%20-%20%28n-3%29%29%7D%29" alt="" /></p>
+
+<p>정리하면</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%3D%20%7B2%20%5Cover%20n%20%5C%20%28n-1%29%7D%20%5Cgeq%20%7B1%20%5Cover%20n%5E2%7D" alt="" /></p>
+
+<p>따라서 <em>contraction</em> 알고리즘이 성공할 확률은 <code>n</code> 이 크면 굉장히 낮다. 근데 이게 <em>brute-force</em> 에 비하면 놀랍게도 굉장히 높은 성공률이다.</p>
+
+<p>본래 <code>n</code> 개의 <em>vertex</em> 가 있으면 모든 <em>cut</em> 을 다 해 보려면 <code>2^n</code> 의 시도가 필요하다. 따라서 <em>contraction</em> 알고리즘은 꽤 높은 확률을 보장하는 알고리즘이다.</p>
+
+<p><code>T_i</code> 를 <code>i</code> 번째 <em>trial</em> 에서 <em>min cut</em> 을 찾아낼 확률이라 하자. <code>N</code> 번의 <em>trial</em> 동안 <em>min cut</em> 을 찾지 못할 확률은, 매 <em>trial</em> 이 독립적이기 때문에</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P_r%5B%5Cneg%20T_1%20%5Ccap%20%5Cneg%20T_2%20%5Ccap%20%5Ccdots%20%5Ccap%20%5Cneg%20T_N%20%5Ccap%20%5D%20%3D%20%5Cprod_%7Bi%20%3D%201%7D%5EN%20P_r%5B%5Cneg%20T_i%5D" alt="" /></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5Cprod_%7Bi%20%3D%201%7D%5EN%20P_r%5B%5Cneg%20T_i%5D%20%5Cleq%20%281%20-%20%7B1%20%5Cover%20n%5E2%20%7D%29%5EN" alt="" /></p>
+
+<p>이 때 <code>1 + x &lt;= e^x</code> 란 사실을 이용하면 좀 더 간단한 <em>upper bound</em> 를 찾으 수 있다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%281%20-%20%7B1%20%5Cover%20n%5E2%20%7D%29%5EN%20%5Cleq%20%28e%5E%7B-1%20%5Cover%20n%5E2%7D%29%5EN" alt="" /></p>
+
+<p>이때 <code>N = n^2</code> 이라면 <code>N</code> 번째까지 실패할 확률은 <code>1/e</code> 보다 작거나 같다. 만약에 <code>N = n^2 lnn</code> 이면 <code>1/n</code> 까지 내려간다.</p>
+
+<p>따라서 단순히 계산을 반복하는 것만으로도 성공 확률을 <code>1/n^2</code> 에서 <code>1 - 1/n</code> 까지 올릴 수 있다.</p>
+
+<p><em>running time</em> 은 <code>Omega(n^2 * m)</code> 쯤 된다. <code>n^2</code> 정도의 <em>trial</em> 이 필요하고 매 <em>trial</em> 마다 <code>m</code> 의 <em>edge</em> 를 살펴봐야 한다.</p>
+
+<p>여전히 느리다. 이후에는 단순히 <em>trial</em> 을 늘리는 것 뿐만 아니라 다양한 옵티마이제이션 기법을 활용하는법을 배워보자. 거의 <code>O(n^2)</code> 까지 줄일 수 있다.</p>
+
+<h3 id="counting-minimum-cuts">Counting Minimum Cuts</h3>
+
+<p>그래프를 그려보면 알겠지만 <em>min cut</em> 은 한개가 아니라 여러개 일 수 있다. 그러면 <code>n</code> 개의 <em>vertice</em> 를 가진 그래프에서 최대로 가질 수 있는 <em>min cut</em> 은 몇개 일까?</p>
+
+<p>그래프에서 각 노드마다 <em>edge</em> 가 하나밖에 없을땐 <code>n-1</code> 이고, 아무리 <em>cut</em> 이 많아봐야 <code>2^n - 2</code> 보다 적으니까 이 사이에 있는건 분명하다.</p>
+
+<p>답은 <em>n choose 2</em>, <code>(n * (n - 1)) / 2</code> 다.</p>
+
+<p>먼저 <em>lower bound</em> 부터 보자. <em>n-cycle</em> 그래프를 보면 2개를 끊으면 되므로 <code>nC2</code> 다.</p>
+
+<p>따라서 <code>n</code> 개의 <em>vectice</em> 를 가진 모든 그래프 중에서 가장 많은 <em>min-cut</em> 을 가진 그래프들은 적어도 이것보다는 많은 <em>min-cut</em> 을 가져야 한다.</p>
+
+<p><em>upper bound</em> 를 보자. <code>(A1, B1), (A2, B2), ..., (At, Bt)</code> 만큼의 <em>min cut</em> 이 있다 하자. 이 때 특정 <em>min cut</em> 인 <code>(Ai, Bi)</code> 가 나올 확률은 위의 증명을 다시 보면 <code>1/n^2</code> 보다 큰 <code>2/(n(n-1))</code> 이다. 이건 <code>nC2</code> 를 뒤집은 수다.</p>
+
+<p>다시 말해서 <em>min cut</em> 을 뽑아낼 확률이</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P%5Boutput%5C%20%3D%5C%20%28A_i%2C%20B_i%29%5D%20%5Cgeq%20%7B2%20%5Cover%20n%28n-1%29%7D%20%3D%20%7B1%20%5Cover%20%5Cbinom%7Bn%7D%7B2%7D%7D" alt="" /></p>
+
+<p>이 때 <code>S_i</code> 를 <code>(A_i, B_i)</code> 가 나오는 사건이라 하면 <code>S_i</code> 각각은 <em>disjoint</em> 다.</p>
+
+<p>중요하니까 다시 한번 반복하면, <code>S_i</code> 는 <em>disjoin</em> 고 이로인해 모든 <code>S_i</code> 를 합하면 <code>1</code> 이다. 따라서</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%7Bt%20%5Cover%20%5Cbinom%7Bn%7D%7B2%7D%7D%20%5Cleq%201" alt="" /></p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%7Bt%7D%20%5Cleq%20%5Cbinom%7Bn%7D%7B2%7D" alt="" /></p>
+
+<p>이건 <em>upper bound</em> 다. <em>lower bound</em> 와 같으므로 모든 <code>n</code> 개의 <em>vertice</em> 를 가진 그래프는 최대 <code>nC2</code> 의 <em>min cut</em> 을 가진다.</p>
+
+<h3 id="conditional-prob">Conditional Prob</h3>
+
+<p>중간에 잠깐 조건 부 확률과 독립성, 그리고 기대값에 대해 나오는데 반-직관적인 예제를 교수님이 소개해 주셔서 적어볼까 한다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?X_1%2C%20X_2%20%5Cin%20%5C%7B%200%2C%201%20%5C%7D%20%5C%20and%20%5C%20X_3%20%3D%20X_1%20%5Coplus%20X_3" alt="" /></p>
+
+<p>일때 <code>X_1</code> 과 <code>X_3</code> 는 독립이고, <code>X_1, X_3</code> 와 <code>X_2</code> 는 독립이 아니다. 기대값을 이용하면 쉽게 증명이 가능하다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?E%5BX_1%2C%20X_2%2C%20X_3%5D%20%5Cneq%20E%5BX_1%2C%20X_2%5D%20*%20E%5BX_3%5D" alt="" /></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Algorithms: Design and Analysis, Part 1</em> by <strong>Tim Roughgarden</strong></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../design-and-analysis-part1-2"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../design-and-analysis-part1-4" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

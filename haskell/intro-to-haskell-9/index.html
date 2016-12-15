@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.18-DEV" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>하스켈로 배우는 함수형 언어 9</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/horsey.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/haskell/intro-to-haskell-9/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+    </div>
+    
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+        
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+          
+            
+          
+        
+      
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/home/">
+        <a href="https://1ambda.github.io/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/infrastructure/">
+        <a href="https://1ambda.github.io/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/golang/">
+        <a href="https://1ambda.github.io/golang/">
+          <span>
+            
+              <b>- </b>
+            
+             Golang
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/golang/golang-tutorial/">
+              <a href="https://1ambda.github.io/golang/golang-tutorial/">
+                <span>Golang Tutorial     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/scala/">
+        <a href="https://1ambda.github.io/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/haskell/">
+        <a href="https://1ambda.github.io/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/java/">
+        <a href="https://1ambda.github.io/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/javascript/">
+        <a href="https://1ambda.github.io/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/oh-my-github/">
+        <a href="https://1ambda.github.io/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/algorithm/">
+        <a href="https://1ambda.github.io/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/data-analysis/">
+        <a href="https://1ambda.github.io/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+
+      
+        
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/cloud-computing/">
+        <a href="https://1ambda.github.io/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+     
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/haskell/intro-to-haskell-9.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/haskell/" itemprop="url"><span itemprop="title">Haskell</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> 하스켈로 배우는 함수형 언어 9</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#reasoning-about-haskell">Reasoning about Haskell</a></li>
+<li><a href="#simple-examples">Simple examples</a></li>
+<li><a href="#induction-on-numbers">Induction on numbers</a></li>
+<li><a href="#induction-on-lists">Induction on lists</a></li>
+<li><a href="#marking-append-vanish">Marking append vanish</a>
+<ul>
+<li><a href="#flatten">flatten</a></li>
+</ul></li>
+<li><a href="#compiler-correctness">Compiler Correctness</a></li>
+<li><a href="#rose-tree">Rose Tree</a></li>
+<li><a href="#functor">Functor</a></li>
+<li><a href="#monoid">Monoid</a></li>
+<li><a href="#foldable">Foldable</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>하스켈로 배우는 함수형 언어 9</h1>
+                
+
+
+
+<h3 id="intro">Intro</h3>
+
+<p>이번시간엔 함수형 프로그래밍에서 <em>property</em> 를 증명하는 방법인 <em>induction</em> 에 대해 배워보고, 하스켈에서 알고리즘의 성능이 어떨까에 대해 좀 논의해 보겠습니다. 마지막엔 <em>Rose Tree</em> 를 구현하면서 <em>Functor, Monoid, Foldable</em> 등에 대해 좀 알아봅시다.</p>
+
+<p>수학에서 다음 두 식은 똑같습니다.</p>
+
+<pre><code>xz + yz = (x + y)z
+</code></pre>
+
+<p>근데, 잘 보면 연산의 수가 다릅니다. 좌측은 3개고, 우측은 2개면 되지요. 하스켈에서도 이런 생각들을 좀 해봅시다. <em>built-in</em> 연산자에 대해서뿐만 아니라, <em>user-defined</em> 연산자 (함수) 에 대해서도 생각할 수 있으니까, 좀 다양하겠네요.</p>
+
+<h3 id="reasoning-about-haskell">Reasoning about Haskell</h3>
+
+<pre><code class="language-haskell">double :: Int -&gt; Int
+double x = x + x
+</code></pre>
+
+<p>이제 모든 <code>x + x</code> 는 <code>double x</code> 로, 바꿀 수 있죠. 그 반대도 가능하고요. 근데, <em>multiple equations</em> 를 쓰면 좀 얘기가 다릅니다.</p>
+
+<pre><code class="language-haskell">isZero :: Int -&gt; Bool
+isZero 0 = True
+isZero n = False
+</code></pre>
+
+<p>첫번째 식 <code>isZero 0 = True</code> 는 어느 방향으로든 자유롭게 적용가능하지만, 두번째는 아닙니다. 사실은 이런 뜻이거든요</p>
+
+<pre><code class="language-haskell">isZero 0          = True
+isZero n | n /= 0 = False
+</code></pre>
+
+<p>이제 좌우를 쉽게 치환할 수 있습니다. 이렇게 식의 순서에 의존하지 않는 패턴을 <em>disjoint</em> 혹은 <em>non-overlapping</em> 이라 부릅니다.</p>
+
+<blockquote>
+<p>Patterns that do not rely on the order in which the are matched are called <em>disjoint</em> or <em>non-overlapping</em></p>
+</blockquote>
+
+<p>프로그램에 대해서 <em>reasoning</em> 할 땐 가능하면 <em>non-overlapping</em> 패턴을 사용하는게 좋습니다. <em>standard library</em> 에 있는 대부분의 함수들은 이런식으로 작성 되어있습니다.</p>
+
+<h3 id="simple-examples">Simple examples</h3>
+
+<pre><code class="language-haskell">reverse :: [a] -&gt; [a]
+reverse [] = []
+reverse (x:xs) reverse xs ++ [x]
+</code></pre>
+
+<p>이 구현을 보면 <code>reverse [x] = [x]</code> 입니다. 근데, 이걸 연산하려면</p>
+
+<pre><code class="language-haskell">reverse [x]
+reverse (x:[])
+reverse [] ++ [x]
+[] ++ [x]
+[x]
+</code></pre>
+
+<p>따라서 <code>reverse [x] = [x]</code> 를 추가해서 효율적인 구현을 할 수 있습니다.</p>
+
+<h3 id="induction-on-numbers">Induction on numbers</h3>
+
+<p>함수형 프로그램은 종종 재귀를 이용해 작성되는데, 여기에 <em>induction</em> 을 이용할 수 있습니다. 예전에 본 자연수 타입 <code>Nat</code> 의 정의를 떠올려 보면</p>
+
+<pre><code class="language-haskell">data Nat = Zero | Succ Nat
+</code></pre>
+
+<p>어떤 유한한 수에 대해서 어떤 <em>property</em> <code>p</code> 를 증명하려고 할 때, 먼저 <em>base case</em> 인 <code>Zero</code> 에 대해 보이고, <em>inductive case</em> <code>Succ</code> 에 대해서 보이면 됩니다. 더 자세히는, 어떤 자연수 <code>n</code> 에 대해서 <code>p</code> 가 참일때 (<em>induction hypothesis</em>), <code>Succ n</code> 에 대해서도 참임을 보이면 됩니다.</p>
+
+<p>구체적인 예제를 보도록 하죠. 두 <code>Nat</code> 를 더해 <code>Nat</code> 를 만드는 <code>add</code> 함수를 만들면</p>
+
+<pre><code class="language-haskell">add :: Nat -&gt; Nat -&gt; Nat
+add Zero m = m
+add (Succ n) m = Succ (add n m)
+</code></pre>
+
+<p>첫 번째씩 <code>add Zero m = m</code> 은 모든 자연수 <code>m</code> 에 대해 참이기 때문에, <code>add n Zero = n</code> 을 증명하겠습니다. 이걸 가설 <code>p</code> 라 부릅시다.</p>
+
+<p>(1) <em>base case</em></p>
+
+<pre><code class="language-haskell">add Zero Zero
+Zero
+</code></pre>
+
+<p>(2) <em>inductive case</em></p>
+
+<p>이 단계에서는 <code>p</code> 가 자연수 <code>n</code> 에 대해 참일때 <code>p (Succ n)</code> 이 참임을 보이면 됩니다. 다시 말해 가설 <code>p</code> <code>add n Zero = n</code> 을 이용해 <code>add (Succ n) Zero = Succ n</code> 임을 보여야 합니다.</p>
+
+<pre><code class="language-haskell">add (Succ n) Zero -- should be `Succ n`
+
+= Succ (add n Zero) 
+
+= Succ n -- by induction hypothesis
+</code></pre>
+
+<p>다른 속성으로 <em>associativity</em> 를 증명할 수도 있습니다.</p>
+
+<pre><code class="language-haskell">add x (add y z) = add (add x y) z
+</code></pre>
+
+<p>인자가 3개인데 무엇부터 시작해야 할까요? <code>add</code> 는 패턴매칭을 이용해 작성되었고, 재귀 부분이  첫번째 인자를 주로 이용하므로 <code>x</code> 를 선택하는게 자연스러울 겁니다. <code>y</code>는 1 번 쓰이고, <code>z</code>는 첫번째 인자로 한번도 안쓰이네요.</p>
+
+<p>(1) <em>base case</em></p>
+
+<pre><code class="language-haskell">add Zero (y z) -- should be `add (add Zero y) z`
+
+= add y z
+= add (add Zero y) z -- unapplying add
+</code></pre>
+
+<p>(2) <em>inductive case</em></p>
+
+<p><code>p</code> 는 `add x (add y z) = add (add x y) z</p>
+
+<pre><code class="language-haskell">add (Succ x) (add y z) -- should be 'add (add (Succ x) y) z`
+
+= Succ (add x (add y z)) -- apply outer add
+= Succ (add (add x y) z) -- induction hypothesis
+= add (Succ (add x y) z) -- unapply outer add
+= add (add (Succ x) y) z -- unapply inner add
+</code></pre>
+
+<p>이렇게 <em>unapply, apply</em> 를 편하게 할 수 있는 이유는 위에서 <code>add</code> 를 <em>non-overlapping</em> 패턴으로 작성했기 때문이지요.</p>
+
+<p><em>induction</em> 을 <em>recursive type</em> 인 <code>Nat</code> 에 적용했지만, <code>Integer</code> 타입에도 적용할 수 있습니다.</p>
+
+<p>어떤 <em>property</em> <code>p</code> 를 <code>n &gt;= 0</code> 에 대해 증명하려고 할 때는 먼저 <em>base case</em> 인 <code>0</code> 에 대해 참임을 보이고, <code>n &gt;= 0</code> 일때, <code>n + 1</code> 에 대해서도 참임을 보이면 됩니다.</p>
+
+<pre><code class="language-haskell">replicate :: Int -&gt; a -&gt; [a]
+replicate 0 _       = []
+replicate (n + 1) x = x : replicate n x
+-- replicate n x = x : replicate (n - 1) x
+</code></pre>
+
+<p>요즘 컴파일러는 <code>n + 1</code> 패턴을 막아서 아마 주석처리부분처럼 작성해야 합니다. 무튼 저 정의대로만 보면, <code>n</code> 에 대해 참일때 <code>n + 1</code> 일때도 참임을 보이는건 정말 쉽습니다. 정의 그 자체가 <em>induction</em> 이니까요.</p>
+
+<h3 id="induction-on-lists">Induction on lists</h3>
+
+<p>재귀는 자연수에만 쓸 수 있는건 아니고, 리스트와 같은 다양한 재귀적인 타입에 사용할 수 있습니다. <em>base case</em> 는 <code>[]</code> 이 되겠고, <em>successor function</em> 은 <code>:</code> 이 되겠네요.</p>
+
+<p>그러므로 리스트에 대해 어떤 <em>property</em> <code>p</code> 를 증명하려면, 먼저 <code>[]</code> 에 대해 참임을 보이고 <code>p xs</code> 가 참일때 <code>p x:xs</code> 가 참임을 보이면 됩니다. <del>참 쉽죠?</del></p>
+
+<p><em>reverse</em> 연산에 대해 <code>reverse (reverse xs) = xs</code> 를 증명해 봅시다.</p>
+
+<p>(1) <em>base case</em></p>
+
+<pre><code class="language-haskell">reverse (reverse []) -- should be '[]'
+
+= reverse []
+= []
+</code></pre>
+
+<p>(2) <em>inductive case</em></p>
+
+<pre><code class="language-haskell">-- induction hypothesis
+
+reverse (reverse xs) = xs
+</code></pre>
+
+<p>증명은</p>
+
+<pre><code class="language-haskell">reverse (reverse x:xs) -- = x:xs
+
+= reverse (reverse xs ++ [x])
+= reverse [x] ++ reverse (reverse xs) -- by distributivity
+= [x] ++ xs -- induction hypothesis
+= x:xs
+</code></pre>
+
+<p>여기서 사용한 성질중에 하나가 <em>distributivity</em> 인데,</p>
+
+<pre><code class="language-haskell">-- induction hypothesis
+reverse (xs ++ ys) = reverse ys ++ reverse xs
+</code></pre>
+
+<p>(1) <em>base-case</em></p>
+
+<pre><code class="language-haskell">reverse ([] ++ ys) -- reverse ys ++ reverse [] 
+
+= reverse ys
+= [] ++ reverse ys -- unapply ++
+= reverse [] ++ reverse ys
+</code></pre>
+
+<p>(2) <em>inductive case</em></p>
+
+<pre><code class="language-haskell">reverse ((x:xs) ++ ys) -- reverse ys ++ reverse (x:xs)
+
+= reverse (x:(xs ++ ys))
+= reverse (xs ++ ys) ++ [x]
+= reverse ys ++ (reverse xs ++ [x])
+= reverse ys ++ (reverse (x:xs)) -- unapply second reverse
+</code></pre>
+
+<p>이 증명은 <code>++</code> 가 <em>associative</em> 라는 사실을 이용해 증명했는데, 이것도 마찬가지로 증명할 수 있습니다.</p>
+
+<h3 id="marking-append-vanish">Marking append vanish</h3>
+
+<p>많은 재귀 함수들이 <code>++</code> 연산을 이용해 작성되었는데, 편하긴 하지만 재귀적으로 사용되면 비용이 좀 듭니다. 따라서 이번에는 <code>++</code> 를 제거 해서 좀 더 효율적으로 함수를 작성해봅시다.</p>
+
+<p><code>reverse</code> 함수부터 해 보면</p>
+
+<pre><code class="language-haskell">reverse :: [a] -&gt; [a]
+reverse [] = []
+reverse (x:xs) = reverse xs ++ [x]
+</code></pre>
+
+<p>이렇게 작성된 <code>reverse</code> 함수의 성능은 어떨까요? 먼저 생각해 볼 것은 <code>xs ++ ys</code> 을 <em>evaluation</em> 하기 위해 얼마의 스텝이 필요할까? 입니다. <code>xs ++ ys</code> 는 <code>xs</code> 를 쪼개가면서 <code>xs</code> 에 붙이기 때문에, <code>xs + 1</code> 만큼의 스텝이 필요하죠.</p>
+
+<p>참고로 <code>append</code> 의 정의는</p>
+
+<pre><code class="language-haskell">append :: [a] -&gt; [a] -&gt; [a] 
+append [ ] xs    = xs
+append (x:xs) ys = x : append xs ys
+</code></pre>
+
+<p>좀 간단히 생각하기 위해 <code>xs, ys</code> 가 <em>fully evaluated</em> 되었다 합시다. 그 결과로 <code>++</code> 는 첫 번째 인자 <code>xs</code> 의 길이에 비례하는 <em>linear time</em> 퍼포먼스를 보여줍니다.</p>
+
+<p>결과적으로 <code>reverse xs</code> 의 성능은, 길이를 <code>n</code> 이라 했을 때 <code>1 + 2 + ... + n + 1</code> 입니다. <code>(n^2 + 3n + 2) / 2</code> 겠네요. 이는 <code>reverse</code> 함수가 <em>quadratic time</em> 의 함수라는걸 말해줍니다. 1000 개를 뒤집으려면, 10000000 번만큼 연산을 해야한다는 소리지요.</p>
+
+<p>다행히도 <em>induction</em> 을 이용해 쓸모없는 <code>++</code> 부분을 제거하고, 성능을 개선할 수 있습니다.</p>
+
+<p><code>reverse</code> 와 <code>++</code> 를 합친 좀 더 <em>general</em> 한 함수를 만듭시다. <code>reverse'</code> 라 부를건데, <code>reverse xs += ys</code> 와 같은 일을 할겁니다.</p>
+
+<pre><code class="language-haskell">reverse' xs ys -- = reverse xs ++ ys
+</code></pre>
+
+<p>이렇게 만들면 <code>reverse</code> 자체는 이렇게 정의할 수 있습니다. <code>[]</code> 가 <em>append</em> 를 위한 <em>identity</em> 라는 점을 이용한 것이지요.</p>
+
+<pre><code class="language-haskell">reverse xs = reverse' xs []
+</code></pre>
+
+<p>신기하게도 이 속성을 증명하면서, 이 <code>reverse'</code> 의 정의 자체를 얻을 수 있습니다.</p>
+
+<p>(1) <em>base case</em></p>
+
+<pre><code class="language-haskell">reverse' [] ys 
+
+= reverse [] ++ ys 
+= [] ++ ys
+= ys
+</code></pre>
+
+<p>(2) <em>inductive case</em></p>
+
+<pre><code class="language-haskell">reverse' (x:xs) ys
+
+= reverse (x:xs) ++ ys
+= (reverse xs ++ [x]) ++ ys
+= reverse xs ++ ([x] ++ ys]) -- by associativity of ++
+= reverse' xs ([x] ++ ys) -- by induction hypothesis
+= reverse' xs (x:ys)
+</code></pre>
+
+<p>따라서 <code>reverse'</code> 의 정의는</p>
+
+<pre><code class="language-haskell">reverse' [a] -&gt; [a] -&gt; [a]
+reverse' [] y = ys
+reverse' (x:xs) ys = reverse' xs (x:ys)
+</code></pre>
+
+<p>아까 언급했던대로 <code>reverse</code> 를 다시 만들면</p>
+
+<pre><code class="language-haskell">reverse :: [a] -&gt; [a]
+reverse xs = reverse' xs []
+</code></pre>
+
+<p>이제는 <code>x:ys</code> 처럼, 하나씩 분리해 나가면서 붙기때문에 성능이더 빠릅니다. 정확히는 <code>n + 2</code>  연산이 필요하지요. <em>linear time</em> 입니다.</p>
+
+<p>사실은 7장 에서 이미 개선된 <em>reverse</em> 를 봤었습니다. <code>reverse = foldl (:) []</code> 기억 나시나요?</p>
+
+<h4 id="flatten">flatten</h4>
+
+<pre><code class="language-haskell">data Tree = Leaf Int | Node Tree Tree
+flatten :: Tree -&gt; [Int]
+flatten (Leaf n) = [n]
+flatten (Node l r) = flatten l ++ flatten r
+</code></pre>
+
+<p>이 <code>flatten</code> 도 <code>++</code> 때문에 느립니다. 위 <code>reverse</code> 처럼 개선해 보면</p>
+
+<pre><code class="language-haskell">flatten' t ns = flatten t ++ [ns]
+</code></pre>
+
+<p>(1) <em>base case</em></p>
+
+<pre><code class="language-haskell">flatten' (Leaf n) ns
+
+= flatten (Leaf n) ++ ns
+= [n] ++ ns
+n:ns
+</code></pre>
+
+<p>(2) <em>inductive case</em></p>
+
+<pre><code class="language-haskell">flatten' (Node l r) ns
+
+= (flatten l ++ flatten r) ++ ns
+= flatten l ++ (flatten r ++ ns) -- associativity
+= flatten' l ++ (faltten r ++ ns) -- hypothesis
+= flatten' l (flatten' r ns)
+</code></pre>
+
+<p>따라서 <code>flatten'</code>, <code>flatten</code> 은</p>
+
+<pre><code class="language-haskell">flatten' :: Tree -&gt; [Int] -&gt; [Int]
+flatten' (Leaf n) ns = n:ns
+flatten' (Node l r) ns = flatten' l (flatten' r ns)
+
+flatten :: Tree -&gt; [Int]
+flatten t = flatten' t []
+</code></pre>
+
+<h3 id="compiler-correctness">Compiler Correctness</h3>
+
+<pre><code class="language-haskell">data Expr = Val Int | Add Expr Expr
+
+eval :: Expr -&gt; Int
+eval (Val n) = n
+eval (Add x y) = eval x + eval y
+</code></pre>
+
+<p>지난번에 만들었던 이 계산 기계를 잘 보면, <em>expression</em> 이 간접적으로 <em>evaluated</em> 됩니다. 스택을 이용해 실행되는 코드의 도움을 받아서요.</p>
+
+<p>자세히 보면 스택은 <em>integer list</em> 고, 코드는 <em>push, add</em> 연산의 리스트입니다. 따라서</p>
+
+<pre><code class="language-haskell">type Stack = [Int]
+type Code = [Op]
+data Op = PUSH Int | ADD
+</code></pre>
+
+<p>결국 코드를 실행한다는 말은 초기 스택을 받아, 이걸 이용해 계산을 하고 다시 스택을 돌려준다는 뜻입니다.</p>
+
+<pre><code class="language-haskell">exec :: Code -&gt; Stack -&gt; Stack
+exec []         s       = s
+exec (PUSH n:c) s       = exec c (n:s)
+exec (ADD:c)    (m:n:s) = exec c (m+n:s)
+</code></pre>
+
+<p>이제 <code>Expr</code> 을 <code>Code</code> 로 변경하는 함수 <code>compile</code> 를 만들면</p>
+
+<pre><code class="language-haskell">compile' :: Expr -&gt; Code
+compile' (Val n) = [PUSH n]
+compile' (Add x y) = compile x ++ compile y ++ [ADD]
+
+compile :: Expr -&gt; Code
+compile e = compile' e
+</code></pre>
+
+<p>그리고 화면에 출력을 위해 <code>Show</code> 를 구현하고 샘플식 <code>e</code> 를 만들면</p>
+
+<pre><code class="language-haskell">instance Show Expr where
+  show (Val n) = &quot;(Val &quot; ++ show n ++ &quot;)&quot;
+  show (Add x y) = &quot;(Add &quot; ++ show x ++ &quot; &quot; ++ show y ++ &quot;)&quot;
+
+instance Show Op where
+  show (PUSH n) = &quot;(PUSH &quot; ++ show n ++ &quot;)&quot;
+  show (ADD) = &quot;(ADD)&quot;
+
+e :: Expr
+e = (Add (Add (Val 2) (Val 3)) (Val 4))
+</code></pre>
+
+<pre><code class="language-haskell">&gt; e
+-- (Add (Add (Val 2) (Val 3)) (Val 4))
+
+&gt; eval e
+-- 9
+
+&gt; compile e
+-- [(PUSH 2),(PUSH 3),(ADD),(PUSH 4),(ADD)]
+</code></pre>
+
+<p>잘 보면, 식을 컴파일해서 초기스택 <code>[]</code> 와 함께 실행시킨 것은, <code>[eval e]</code> 와 같다는 것을 알 수 있지요. <code>[]</code> 대신 임의의 스택 <code>s</code> 를 이용하면</p>
+
+<pre><code class="language-haskell">exec (compile e) s = eval e:s
+</code></pre>
+
+<p>(1) <em>base-case:</em> <code>(Val n)</code></p>
+
+<pre><code class="language-haskell">exec (compile (Val n)) s
+
+= exec [PUSH n] s
+= n : s
+eval (Val n) : s -- unapply eval
+</code></pre>
+
+<p>(2) <em>inductive case:</em> <code>(Add x y)</code></p>
+
+<pre><code class="language-haskell">exec (compile (Add x y)) s
+
+= exec (compile x ++ compile y ++ [ADD]) s
+= exec (compile x ++ (compile y ++ [ADD])) s -- associativity
+= exec (compile y ++ [ADD]) (exec (compile x) s) -- distributivity of exec
+= exec (compile y ++ [ADD]) (eval x:s) -- induction hypothesis for x
+= exec [ADD] (exec (compile y) (eval x:s)) -- distributivity
+= exec [ADD] (eval y : eval x : s)
+= (eval x + eval y) : s -- apply exec
+= eval (Add x y) : s -- unapply eval
+</code></pre>
+
+<p>위에서 쓴 <code>exec</code> 의 <em>distributivity</em> 를 보이면</p>
+
+<pre><code class="language-haskell">exec (c ++ d) s = exec d (exec c s)
+</code></pre>
+
+<p><code>c</code> 가 <code>PUSH</code> 일때, 그리고 <code>ADD</code> 일때로 나눠서 증명하면 되죠.</p>
+
+<p>(1) <em>base case</em></p>
+
+<pre><code class="language-haskell">exec ([] ++ d) s 
+
+= exec d s
+= exec d (exec [] s) -- unapply exec
+</code></pre>
+
+<p>(2-1) <em>inductive case:</em> <code>PUSH n</code></p>
+
+<pre><code class="language-haskell">exec ((PUSH n : c) ++ d) s
+
+= exec (PUSH n : (c ++ d)) s
+= exec (c ++ d) (n:s)
+= exec d (exec c (n:s)) -- induction hypothesis
+= exec d (exec (PUSH n:c) s) -- unapply exec
+</code></pre>
+
+<p>(2-2) <em>inductive case:</em> <code>ADD</code></p>
+
+<pre><code class="language-haskell">exec ((ADD : c) ++ d) s
+= exec (ADD : (c ++ d)) s
+= exec (ADD : (c ++ d)) (m:n:s') -- assume s == m:n:s'
+= exec (c ++ d) (m+n:s') -- apply exec
+= exec d (exec c (m+n:s')) -- induction hypothesis
+= exec d (exec (ADD : c) (m:n:s')) -- unapply exec
+= exec d (exec (ADD : c) s)
+</code></pre>
+
+<p><code>s</code> 를 <code>m:n:s'</code> 로 의 가정은 <em>underflow error</em> 를 겪을 수 있는것처럼 보이지만, 실제로는 그렇지 않습니다. 왜냐하면 <code>ADD</code> 연산이 들어있다는 자체가 최소한 두개의 숫자는 스택에 포함한다는 뜻이기 때문입니다. (<code>exec</code> 의 정의를 보세요)</p>
+
+<p>그리고 이전 장에서 <em>append</em> 연산에 적용했던 테크닉을 다시 가져와서, <em>distributivity property</em> 의 <em>underflow</em> 이슈를 예방할 수 있습니다. 이 속성을 유지하도록 하면요</p>
+
+<pre><code class="language-haskell">compile' e c = compile e ++ c
+</code></pre>
+
+<p>이 속성을 <em>induction</em> 을 이용해서 차근차근 풀면, 아래와 같은 정의를 얻을 수 있습니다.</p>
+
+<pre><code class="language-haskell">compile' :: Expr -&gt; Code -&gt; Code
+compile' (Val n) c = PUSH n : c
+compile' (Add x y) = compile' x (compile' y (ADD : c))
+
+compile e = compile' e []
+</code></pre>
+
+<p>그러면 <em>compiler correctness</em> 는</p>
+
+<pre><code class="language-haskell">exec (compiler' e c) s = exec c (eval e : s)
+</code></pre>
+
+<p>해석은 원문을 첨부하겠습니다.</p>
+
+<blockquote>
+<p>That is, compiling an expression and then executing the resulting code together with arbitrary additional code gives the same result as executing the additional code with the value of the expression on top of the original stack</p>
+
+<p>Note that with <code>s = c = [ ]</code>, this new result simplifies to <code>exec (compile e) [] = [eval e]</code>, our original statement of correctness.</p>
+
+<p>In addition to avoiding the problem of stack underflow in the correctness proof, the accumulator version of the compiler has two further benefits.</p>
+
+<p>First of all, <strong>it avoids the use of ++,</strong> and is hence more efficient. And,</p>
+
+<p>secondly, <strong>the new proof is less than half the combined length of our previous two proofs.</strong> As is often the case in formal reasoning, generalising a result in the appropriate manner can considerably simplify its proof. Mathematics is an excellent tool for guiding the development of efficient programs with simple proofs!</p>
+</blockquote>
+
+<h3 id="rose-tree">Rose Tree</h3>
+
+<p>로즈 트리는 원소의 개수가 <em>unbounded</em> 인 트리입니다. 이렇게 정의할 수 있습니다.</p>
+
+<pre><code class="language-haskell">data a = a :&gt; [Rose a] deriving Show
+</code></pre>
+
+<p>여기서 <code>:&gt;</code> 는 <em>constructor</em> 입니다. 생성자가 <em>infix</em> 연산자로 올때는 <code>:</code> 로 시작해야 합니다. <code>deriving Show</code> 는 좀 디버깅 쉬우라고, 화면에 출력하기 위해 사용했습니다.</p>
+
+<p>몇 가지 헬퍼 함수를 만들면,</p>
+
+<pre><code class="language-haskell">root :: Rose a -&gt; a
+root (x :&gt; xs) = x
+
+children :: Rose a -&gt; [Rose a]
+children (x :&gt; xs) = r
+
+size :: Rose a -&gt; Int
+size (x :&gt; xs) = 1 + sum (map size xs)
+
+leaves :: Rose a -&gt; Int
+leaves (_ :&gt; []) = 1
+leaves (_ :&gt; xs) = 1 + sum (map leaves xs)
+</code></pre>
+
+<p>샘플 로즈 트리를 만들어 봅시다.</p>
+
+<pre><code class="language-haskell">tree = 'x' :&gt; map (flip (:&gt;) []) ['a'..'z']
+
+-- same as
+tree = 'x' :&gt; map (\c -&gt; c :&gt; []) ['a'..'z'] 
+
+&gt; tree
+-- 'x' :&gt; ['a' :&gt; [],'b' :&gt; [],'c' :&gt; [],'d' :&gt; [],'e' :&gt; [],'f' :&gt; [],'g' :&gt; [],'h' :&gt; [],'i' :&gt; [],'j' :&gt; [],'k' :&gt; [],'l' :&gt; [],'m' :&gt; [],'n' :&gt; [],'o' :&gt; [],'p' :&gt; [],'q' :&gt; [],'r' :&gt; [],'s' :&gt; [],'t' :&gt; [],'u' :&gt; [],'v' :&gt; [],'w' :&gt; [],'x' :&gt; [],'y' :&gt; [],'z' :&gt; []]
+
+&gt; size tree
+-- 27
+
+&gt; leaves tree
+-- 26
+</code></pre>
+
+<h3 id="functor">Functor</h3>
+
+<p>좀 삼삼하죠? 할게 별로 없으니. <em>rose tree</em> 를 <em>functor</em> 로 만들어 봅시다. 아래 짤방이 아마 세상에서 펑터를 가장 쉽게 설명할겁니다. <code>fmap (+3) (Just 2)</code> 에 대해</p>
+
+<p><img src="http://adit.io/imgs/functors/fmap_just.png" alt="" />
+<p align="center">(<a href="http://adit.io">http://adit.io</a>)</p></p>
+
+<p>즉, <code>Just</code> 는 펑터이므로 <code>2</code> 를 꺼내 <code>+3</code> 을 적용하고, 다시 <code>Just</code> 를 씌워 <code>Just 5</code>로 만들어 줍니다. 그게 <code>fmap</code> 이 하는 일이고, 모든 <em>functor</em> 는 <code>fmap</code> 이 적용 가능합니다. <em>functor</em> 의 정의를 보면</p>
+
+<pre><code class="language-haskell">class  Functor f  where
+    fmap        :: (a -&gt; b) -&gt; f a -&gt; f b
+</code></pre>
+
+<p>타입이 직관적이죠? <code>a -&gt; b</code> 함수를 받아, <code>f a</code> 에 함수를 적용해서 <code>f b</code> 를 만듭니다. <code>f</code> 는 컨테이너라고 보시면 됩니다. <code>Maybe</code> 같은 것들요 대표적인 <code>Functor</code> 로</p>
+
+<pre><code class="language-haskell">instance  Functor Maybe  where
+    fmap f Nothing = Nothing
+    fmap f (Just x) = Just (f x)
+    
+
+instance  Functor []  where
+    fmap = map 
+</code></pre>
+
+<p>그럼 우리가 만든 <code>Rose</code> 는 어떻게 해야 <code>Functor</code> 로 만들 수 있을까요?</p>
+
+<pre><code class="language-haskell">instance Functor Rose  where
+    fmap g (x :&gt; xs) = g x :&gt; map (fmap g) xs  
+</code></pre>
+
+<p>직관적으로 보면 됩니다. 루트에 <code>g</code> 를 적용하고, <code>xs</code> 는 <code>[Rose]</code> 이므로 <code>x :&gt; xs</code> 와 똑같이 취급해서 <code>fmap g</code> 를 적용하면 됩니다. 이 때 지켜줘야 하는 <em>functor laws</em> 는</p>
+
+<pre><code class="language-haskell">fmap id  ==  id
+fmap (f . g)  ==  fmap f . fmap g
+</code></pre>
+
+<p>그럼 이제, 좀 재미난걸 할 수 있습니다. 이젠 <code>Rose</code> 가 <em>functor</em> 니까요. 다양한 함수를 적용할 수 있죠.</p>
+
+<pre><code class="language-haskell">tree' = 1 :&gt; map (flip (:&gt;) []) [1..5]
+
+&gt; tree'
+-- 1 :&gt; [1 :&gt; [],2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; []]
+
+&gt; fmap (+1) tree'
+-- 2 :&gt; [2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; [],6 :&gt; []]
+
+&gt; fmap (*10) tree'
+-- 10 :&gt; [10 :&gt; [],20 :&gt; [],30 :&gt; [],40 :&gt; [],50 :&gt; []]
+
+&gt; fmap (:&gt; []) tree'
+-- (1 :&gt; []) :&gt; [(1 :&gt; []) :&gt; [],(2 :&gt; []) :&gt; [],(3 :&gt; []) :&gt; [],(4 :&gt; []) :&gt; [],(5 :&gt; []) :&gt; []]
+</code></pre>
+
+<h3 id="monoid">Monoid</h3>
+
+<p><em>monoid</em> 는 <code>mempty</code>, <code>mappend</code> 두개의 함수를 가지고 있는 <code>m</code> 타입의 인스턴스입니다.</p>
+
+<ul>
+<li><code>mappend :: m -&gt; m -&gt; m</code> 은 <em>associative</em> 한 연산자로, 두 <code>m</code> 을 받아서, 하나의 <code>m</code> 으로 합칩니다.</li>
+<li><code>mempty :: m</code> 은 <code>mappend</code> 의 <em>neutral element</em> 를 표현합니다.</li>
+</ul>
+
+<p>뭔소리야 하실텐데, 우리 주변의 많은 것들이 <em>monoid</em> 입니다. 예제를 봅시다.</p>
+
+<pre><code class="language-haskell">&gt; (5 + 6) + 10 == 5 + (6 + 10)
+True
+
+&gt; (5 * 6) * 10 == 5 * (6 * 10)
+True
+
+&gt; (&quot;Hello&quot; ++ &quot; &quot;) ++ &quot;world!&quot; == &quot;Hello&quot; ++ (&quot; &quot; ++ &quot;world!&quot;)
+True
+</code></pre>
+
+<p><code>[Char]</code> 에서 <code>mempty</code> 는 <code>[]</code> <code>mappend</code> 는 <code>++</code> 입니다. <code>Integer</code> 의 <code>mappend</code> 는 다양한데, <code>+</code> 라면 <code>mempty</code> 가 <code>0</code> 이고, <code>*</code> 라면 <code>mempty</code> 가 <code>1</code> 일 겁니다. 항등원 기억나시죠? 그거랑 비슷합니다.</p>
+
+<pre><code class="language-haskell">class  Monoid a  where
+    mappend :: a -&gt; a -&gt; a
+    mempty  :: m
+    mconcat :: [a] -&gt; a
+    mconcat :: foldr mappend mempty
+</code></pre>
+
+<p><code>mconcat</code> 은 <code>foldr (++) []</code> 를 생각하시면 이해가 쉽습니다. 네! 리스트도 모노이듭니다!</p>
+
+<pre><code class="language-haskell">instance  Monoid [a]  where
+    mempty = []
+    mappend = (++)
+</code></pre>
+
+<p>모노이드를 일종의 연산과 그에 대한 항등원이 구현된 클래스라 보셔도 됩니다. 그러면 <code>Sum</code>, <code>Product</code> 모노이드를 만들어 보죠. <code>Rose</code> 에 적용할 수 있을 것 같아요.</p>
+
+<pre><code class="language-haskell">newtype Sum a = Sum { getSum :: a } deriving Show
+newtype Product a = Product a deriving Show
+
+unProduct :: Product a -&gt; a
+unProduct (Product x) = x
+
+instance Num a =&gt; Monoid (Sum a) where
+  mempty = Sum 0
+  Sum x `mappend` Sum y = Sum (x + y)
+  
+instance Num a =&gt; Monoid (Product a) where
+  mempty = Product 1
+  Product x `mappend` Product y = Product (x * y)
+</code></pre>
+
+<p>중간에 보면 <code>unProduct</code> 란게 있는데, 생성자에서 <code>getSum</code> 처럼 <em>accessor</em> 를 만들어 주면 필요 없고, 안만들어 주면 저렇게 만들어서 써야 합니다. 차이점을 보여드리기 위해 두 방법을 모두 사용 해봤어요. 근데, <em>accessor</em> 가 있으면 출력때 같이 나와서 좀 불편합니다.</p>
+
+<pre><code class="language-haskell">-- 6 * (3 + 4)
+&gt; unProduct (Product 6 `mappend` (Product . getSum $ Sum 3 `mappend` Sum 4))
+
+-- 42
+</code></pre>
+
+<p>무튼, 이제 모노이드도 있겠다, <code>Rose</code> 에 적용할 수 있습니다. 이게 무슨 뜻이냐면, <code>Rose</code> 컨테이너가 가진 <em>value</em> 가 <code>Product</code>, <code>Sum</code> 연산이 가능하게끔 바꿀 수 있다는 뜻입니다.</p>
+
+<pre><code class="language-haskell">&gt; tree'
+-- 1 :&gt; [1 :&gt; [],2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; []]
+
+&gt; fmap Sum tree'
+-- Sum 1 :&gt; [Sum 1 :&gt; [],Sum 2 :&gt; [],Sum 3 :&gt; [],Sum 4 :&gt; [],Sum 5 :&gt; []]
+
+&gt; fmap Product tree'
+-- Product 1 :&gt; [Product 1 :&gt; [],Product 2 :&gt; [],Product 3 :&gt; [],Product 4 :&gt; [],Product 5 :&gt; []]
+</code></pre>
+
+<h3 id="foldable">Foldable</h3>
+
+<p><img src="https://www.haskell.org/wikiupload/thumb/3/39/FunctorHierarchy.svg/558px-FunctorHierarchy.svg.png" alt="" />
+<p align="center">(<a href="https://www.haskell.org">https://www.haskell.org</a>)</p></p>
+
+<p><em>foldable</em> 은 진짜 말 그대로 접을 수 있는 연산 <code>fold</code> 를 지원하는 인스턴스를 말합니다.</p>
+
+<pre><code class="language-haskell">class Foldable t where
+    fold    :: Monoid m =&gt; t m -&gt; m
+    foldMap :: Monoid m =&gt; (a -&gt; m) -&gt; t a -&gt; m
+
+    foldr   :: (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
+    foldr'  :: (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
+
+    foldl   :: (b -&gt; a -&gt; b) -&gt; b -&gt; t a -&gt; b
+    foldl'  :: (b -&gt; a -&gt; b) -&gt; b -&gt; t a -&gt; b
+
+    foldr1  :: (a -&gt; a -&gt; a) -&gt; t a -&gt; a
+    foldl1  :: (a -&gt; a -&gt; a) -&gt; t a -&gt; a
+</code></pre>
+
+<p>여기선 <code>fold, foldMap</code> 만 다루도록 하죠. <code>fold</code> 의 타입을 보면 아시겠지만, <code>Monoid  m</code> 의 컨테이너인 <code>Foldable t</code> 를 접어서 단일 <code>m</code> 으로 만듭니다.</p>
+
+<p>따라서 복수개의 <code>Sum, Product</code> 를 접어 하나로 만들수 있지요. 어차피 이 두 모노이드에 대해 연산 자체는 정해져 있기 때문에 접는법만 알려주면 됩니다.</p>
+
+<p>그리고 더 중요한 사실은, <code>Rose</code> 가 <code>Foldable</code> 이 되면 <code>Sum</code> 등이 적용된 <code>Rose</code> 를 접어 계산할 수 있습니다. 다시 말해 컨테이너에, 연산을 추가하고, <code>fold</code> 할 수 있다는 이야기지요.</p>
+
+<p>아참! <code>foldMap</code> 은 이름에서 볼 수 있듯이 <code>fmap</code> 후 <code>fold</code> 한다고 생각하면 쉽습니다. <code>fold . fmap</code> 처럼요.</p>
+
+<pre><code class="language-haskell">class Functor f =&gt; Foldable f where
+  fold :: Monoid m    =&gt; f m -&gt; m
+  foldMap :: Monoid m =&gt; (a -&gt; m) -&gt; (f a -&gt; m)
+  foldMap = fold $ fmap g a
+  
+instance Foldable Rose where
+  fold (x :&gt; xs) = (h.g) xs `mappend` x
+    where g = map (fold)
+          h = foldr (mappend) mempty
+</code></pre>
+
+<p>직관적으로 보면 쉽습니다. <code>h</code> 는 모노이드 <code>m</code> 을 펼치는 역할을 합니다. <code>g</code> 는 <code>f m</code> 을  재귀적으로 펼치구요. 이는 로즈 트리가, 복수개의 자식 노드를 가질 수 있기 때문에 그런건데, 어찌 되었든 펼치면서 노드를 끝에다 붙여 나갑니다.</p>
+
+<p>먼저 로즈 트리를 펼친 후에 모노이드를 합칠거니까, 순서는 <code>(g.h)</code> 입니다.</p>
+
+<p>이제 그러면, 로즈트리가 <em>functor</em> 이므로 모노이드로 감쌀 수 있고 (연산을 지정할 수 있고)    게다가 <em>foldable</em> 이므로 그 연산을 이용해 하나로 접을 수 있습니다.</p>
+
+<pre><code class="language-haskell">&gt; tree'
+-- 1 :&gt; [1 :&gt; [],2 :&gt; [],3 :&gt; [],4 :&gt; [],5 :&gt; []]
+
+&gt; fmap Sum tree'
+-- Sum 1 :&gt; [Sum 1 :&gt; [],Sum 2 :&gt; [],Sum 3 :&gt; [],Sum 4 :&gt; [],Sum 5 :&gt; []]
+
+&gt; fold $ fmap Sum tree'
+-- Sum 16
+
+&gt; unSum $ fold $ fmap Sum tree'
+-- 16
+</code></pre>
+
+<p><del>갓스켈</del></p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <strong>DelftX FP 101x</strong><br />
+(2) <em>Programming in Haskell</em><br />
+(3) <a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">Functor, Monad, Applicative</a><br />
+(4) <a href="http://en.wikibooks.org/wiki/Haskell/Monoids">Haskell WikiBooks - Monoids</a><br />
+(5) <a href="https://www.haskell.org/haskellwiki/Foldable_and_Traversable">Foldable, Traversable</a><br />
+(6) <a href="http://blog.jakubarnold.cz/2014/07/30/foldable-and-traversable.html">foldable and traversable</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../intro-to-haskell-8"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../poor-mans-concurrency-monad" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+
