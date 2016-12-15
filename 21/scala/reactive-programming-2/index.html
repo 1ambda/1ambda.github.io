@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>Reactive Programming 2</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/21/scala/reactive-programming-2/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.io/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/15/infrastructure/">
+        <a href="https://1ambda.github.io/15/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/15/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.io/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.io/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.io/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/23/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/23/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.io/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.io/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.io/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.io/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.io/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/21/scala/reactive-programming-2.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/21/scala/" itemprop="url"><span itemprop="title">Scala</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> Reactive Programming 2</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#stateful-object">Stateful Object</a>
+<ul>
+<li><a href="#substitution-model">Substitution Model</a></li>
+<li><a href="#stateful-object-1">Stateful Object</a></li>
+<li><a href="#identity-and-change">Identity and Change</a>
+<ul>
+<li><a href="#operational-equivalence">Operational Equivalence</a></li>
+<li><a href="#assignment-and-substitution-model">Assignment and Substitution Model</a></li>
+</ul></li>
+<li><a href="#loops">Loops</a>
+<ul>
+<li><a href="#for-loops">For-Loops</a></li>
+</ul></li>
+<li><a href="#discrete-event-simulation">Discrete Event Simulation</a>
+<ul>
+<li><a href="#digital-circuit">Digital Circuit</a></li>
+<li><a href="#action">Action</a></li>
+<li><a href="#simulator">Simulator</a></li>
+<li><a href="#wire">Wire</a></li>
+<li><a href="#inverter-and-or-gates">Inverter, AND, OR Gates</a></li>
+</ul></li>
+<li><a href="#the-simulation-trait">The Simulation Trait</a>
+<ul>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#test">Test</a></li>
+<li><a href="#a-variant">A Variant</a></li>
+</ul></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>Reactive Programming 2</h1>
+                
+
+
+
+<h2 id="stateful-object">Stateful Object</h2>
+
+<p>지금까지 우리가 작성한 프로그램은 <em>side-effect free</em> 였기 때문에, <strong>time</strong> 이 중요한 요소가 아니였다. 무슨말인고 하니, 모든 프로그램은 <em>sequence of actions</em> 에 대해 항상 같은 결과를 주게 되어있었다.</p>
+
+<p>이건 <em>substitution model</em> 에 반영되어 있다.</p>
+
+<h3 id="substitution-model">Substitution Model</h3>
+
+<p><em>substitution model</em> 을 복습해 보면, 프로그램의 <em>evaluation</em> 은 <em>rewriting</em> 이다.</p>
+
+<pre><code class="language-scala">def f(x1, ..., xn) = B; ... f(v1, ..., vn)
+</code></pre>
+
+<p>은 다음처럼 평가된다. 여기서 <code>B</code> 는 펑션 바디.</p>
+
+<pre><code class="language-scala">def f(x1, ..., xn) = B; ... f(v1/x1, ..., vn/xn) B
+</code></pre>
+
+<p>예를 들어</p>
+
+<pre><code class="language-scala">def interate(n: Int, f: Int =&gt; Int, x: Int) =
+  if (n == 0) x else iterate(n-1, f, f(x))
+  
+def square(x: int) = x * x
+</code></pre>
+
+<p><code>iterate(1, square, 3)</code> 은 이렇게 평가된다.</p>
+
+<pre><code class="language-scala">if (1 == 0) 3 else iterate(1-1, square, square(3))
+iterate(0, square, square(3))
+iterate(0, square, 3 * 3)
+iterate(0, square, 9)
+if (0 == 0) 9 else iterate(0-1, square, square(9))
+9
+</code></pre>
+
+<p>·¸런데 여기서 재미난 부분이 있다. <em>rewriting</em> 은 어느 <em>term</em> 에서나 일어날 수 있고, 모든 <em>종료되는</em> <em>rewriting</em> 은 같은 결과를 만든다.</p>
+
+<blockquote>
+<p>Rewriting can be done anywhere in a term, and all rewritings which terminated lead to the same solution</p>
+</blockquote>
+
+<p>그리고 이 개념이 람다 대수와, 함수형 프로그래밍의 기반이다. 아래의 두 식은 같은 식이다.</p>
+
+<pre><code class="language-scala">if (1 == 0) 3 iterate(1 - 1, square, square(3))
+
+// ==
+iterate(0, square, square(3))
+
+// ==
+if (1 == 0) 3 else iterate(1 - 1, square, 3 * 3)
+</code></pre>
+
+<p>어느 부분에 집중하냐에 따라 <em>term</em> 에서의 <em>rewriting</em> 이 달라질 수는 있으나, 결과는 같다. 이걸 <em>confluence (합류)</em> 라 부르기도 하고 <a href="http://en.wikipedia.org/wiki/Church%E2%80%93Rosser_theorem">Church-Rosser Theorem</a> 이라 부르기도 한다.</p>
+
+<h3 id="stateful-object-1">Stateful Object</h3>
+
+<p>지금까지는 <em>pure functional world</em> 의 이야기였다. 이제 좀 바깥 세상 이야기를 해보자. 상태가 변하고 하는것들.</p>
+
+<p>일반적으로 <em>world</em> 를 <em>a set of objects</em> 로 정의할 수 있으며, 이 <em>object</em> 들은 시간이 지남에 따라 <em>change</em> 가 일어난다.</p>
+
+<blockquote>
+<p>An object <strong>has a state</strong> if its behavior is influenced by its history</p>
+</blockquote>
+
+<p>예를 들어서 <em>은행 계좌</em> 는 <em>state</em> 를 가지고 있다. 왜냐하면 다음 질문의 답이</p>
+
+<blockquote>
+<p><strong>&ldquo;Can I withdraw 100 CHF?&rdquo;</strong></p>
+</blockquote>
+
+<p>계좌의 이전 상태들이 어땠는지에 따라 달라지기 때문이다. (<em>may vary over the course of the lifetime of the account</em>)</p>
+
+<p>모든 <em>mutable state</em> 는 <em>variable</em> 을 이용해 만들 수 있는데 스칼라에서는 <em>value definition</em> 인 <code>val</code> 대신에 <em>variable definition</em> 인 <code>var</code> 을 이용한다.</p>
+
+<p>실제로는 <code>var</code> 보다는 다수의 <em>variable</em> 을 가진 <em>object</em> 를 이용해 오브젝트를 나타낸다. 아래는 은행 계좌 예제</p>
+
+<pre><code class="language-scala">  class BankAccount {
+    private var balance = 0
+
+    def deposit(amount: Int): Unit = {
+      if (amount &gt; 0) balance = balance + amount
+    }
+
+    def withdraw(amount: Int): Unit = {
+      if (0 &lt; amount &amp;&amp; amount &lt;= balance) balance = balance - amount
+      else throw new Error(&quot;insufficient&quot;)
+    }
+  }
+</code></pre>
+
+<p>여기서 <code>BankAcoount</code> 는 <code>deposit</code> 과 <code>withdraw</code> 가 어떻게 얼마나 호출되었는지(히스토리)에 따라 상태 <code>balance</code> 가 달라진다.</p>
+
+<p>여기서 지난번에 배웠던 <code>Stream</code> 의 구현을 잠깐 보자. 이건 <em>stateful object</em> 일까?</p>
+
+<pre><code class="language-scala">def const[T](hd: T, tl: =&gt; Stream[T]) = new Stream[T] {
+  def head = hd
+  private var tlOpt = Option[Stream[T]] = None
+  def tail: T = tlOpt match {
+    case Some(x) =&gt; x
+    case None =&gt; tlOpt = Some(tl); tail
+  }
+}
+</code></pre>
+
+<p>이건 시스템이 어떠한가 하는 <em>가정</em> 에 따라 참일수도, 아닐수도 있다.</p>
+
+<p>(1) 만약에 <code>tl</code> 연산에서 <em>side-effct</em> 가 없다면 <code>tlOpt</code> 를 캐시하기 위한 최적화는 이 클래스 외부에 대해 어떤 영향도 없으므로 스트림은 <em>stateful object</em> 가 아니다.</p>
+
+<p>(2) 반대로 <code>tl</code> 을 계산하는 과정에서 <em>print</em> 나 등등 <em>side-effect</em> 가 발생한다´ 첫번째로 <code>tl</code> 을 호출하냐, 두번째로 호출하냐에 따라 <em>print</em> 가 발생할 수, 아닐수도 있으므로 <em>stateful object</em> 다.</p>
+
+<p>그럼 이제 이런 은행계좌 클래스를 생각해 보자.</p>
+
+<pre><code class="language-scala">class BankAccountProxy(ba: BankAccount) {
+  def deposit(amount: Int) = ba.deposit(amount)
+  def withdraw(amount: Int) = ba.withdraw(amount)
+}
+</code></pre>
+
+<p>사실 이 <code>BankAccountProxy</code> 클래스는 어느 <em>varaible</em> 도 가지고 있지 않지만, 이 클래스의 <em>behavior</em> 이 <code>ba</code> 의 <em>state</em> 를 결정하기 때문에 <em>stateful object</em> 다.</p>
+
+<h3 id="identity-and-change">Identity and Change</h3>
+
+<p>이번엔 두 <em>state</em> 가 같은지를 판별하는 문제를 생각해 보자.</p>
+
+<p><em>assignment</em> 는 두 <em>expression</em> 이 서로 같은지(<em>the same</em>)에 대한 질문을 던진다.</p>
+
+<p>예를 들어 <code>val x = E; val y = E</code> 라 하자. 여기서 <code>E</code> 는 임의의 <em>expression</em>. 여기서 <em>assignment</em> 가 없다면 아래 식 처럼 바꿔 쓸 수 있다.</p>
+
+<pre><code class="language-scala">val x = E; val y = x
+</code></pre>
+
+<p><em>property</em> 를 <strong>referential transparency</strong> 라 부른다. 근데 만약 <em>assigment</em> 가 있으면, 두 <em>formulation</em> 은 다를 수 있다.</p>
+
+<pre><code class="language-scala">val x = new BankAccount
+val y = new BankAccount
+</code></pre>
+
+<h4 id="operational-equivalence">Operational Equivalence</h4>
+
+<p>두 변수가 같은지를 판별하기 위해서, <em>같다</em> 라는 말을 좀 더 엄밀히 정의해 보자.</p>
+
+<blockquote>
+<p>The precise meaning of <strong>&ldquo;being the same&rdquo;</strong> is defined by the property of *operational equivalence**</p>
+</blockquote>
+
+<p><code>x, y</code> 두 개의 <em>definition</em> 을 가지고 있다고 하자.</p>
+
+<blockquote>
+<p><code>x</code> and <code>y</code> are operationally equivalent if <strong>no possible test</strong> can disingquish between them</p>
+</blockquote>
+
+<p>그러므로 우리는 <code>x, y</code> 가 같은지 비교하기 위해</p>
+
+<blockquote>
+<p>Execute the definitions followed by an arbitrary sequence <code>f</code> of operations that involves <code>x</code> an <code>y</code>, observing the possible outcomes.</p>
+</blockquote>
+
+<pre><code class="language-scala">val x = new BankAccount
+val y = new BankAccount
+f(x, y)
+
+// another execution
+val x = new BankAccount
+val y = new BankAccount
+f(x, x)
+</code></pre>
+
+<blockquote>
+<p>Then, execute the definitions with another sequence <code>S'</code> obtains by renaming all occurences of <code>y</code> by <code>x</code> in <code>S</code></p>
+</blockquote>
+
+<p>만약 이 실행 결과가 다르다면 <code>x, y</code> 는 다른것이고 그 반대로 모든 <code>(S, S')</code> 가 같은 결과를 돌려준다면 <code>x, y</code> 는 같다. 왜냐하면 더이상 구분할 수 없기 때문이다. 이게 바로 <em>operationally equivalence</em></p>
+
+<p>이제 이 <em>operational equvalence</em> 를 이용해서 위에서 나온 질문을 해결해 보자. <em>counter example</em> 로,</p>
+
+<pre><code class="language-scala">// sequence S
+val x = new BankAccount
+val y = new BankAccount
+
+x deposit 30  // 30
+y withdraw 20 // error: insufficient
+
+// sequnece S'
+val x = new BankAccount
+val y = new BankAccount
+
+x deposit 30  // 30
+x withdraw 20 // 10
+</code></pre>
+
+<p>따라서 <code>x, y</code> 는 서로 다르다. 반면 <code>val y = x</code> 로 정의한다면 어떤 <em>operation</em> 도 두 변수를 구분할 수 없기 때문에 똑같다.</p>
+
+<h4 id="assignment-and-substitution-model">Assignment and Substitution Model</h4>
+
+<p>지금까지 논의한 바를 정리해 보면 <em>assignment</em> 가 도입됨에 따라 우리가 가진 <em>computation model</em> 이 적용 불가능해 졌다.</p>
+
+<pre><code class="language-scala">val x = new BankAccount
+val y = x
+
+// will be replaced to, but not correct
+val x = new BankAccount
+val y = new BankAccount
+</code></pre>
+
+<p>위 식은 아래 식처럼 치환되지만, 절대 같은 결과가 아니다. 다른 프로그램이 된다!</p>
+
+<blockquote>
+<p><em>The substitution model</em> <strong>ceases</strong> to be valid when we add the <em>assignment</em></p>
+</blockquote>
+
+<p><em>store</em> 개념을 도입하면 <em>substituion model</em> 을 적용 가능하지만, 이건 프로그램을 상당히 복잡하게 만든다.</p>
+
+<p><em>purely functional world</em> 에서 벗어나니 세상이 복잡해졌다. 어떻게 두 세계를 잘 버무릴수 있을까?</p>
+
+<h3 id="loops">Loops</h3>
+
+<p>사실 <em>loop</em> 는 <em>imperative programming</em> 에서 필수적인 요소는 아니다. <em>variable</em> 만으로 절차형 언어를 모델링하기에 충분하긴 한데, 어쨌든 있긴 하니까 함수형 언어에서도 모델링 할 수 있는 방법을 강구해보자. <em>function</em> 으로 할 수 있다.</p>
+
+<pre><code class="language-scala">def power(x: Double. exp: Int): Double = {
+  var r = 1.0
+  var i = exp
+  
+  while (i &gt; 0) { r = r * x; i = i - 1}
+  r
+}
+</code></pre>
+
+<p>스칼라에서 <code>while</code> 은 키워드니까, <code>WHILE</code> 을 이용해 루프를 모델링하는 함수를 만들어 보자.</p>
+
+<pre><code class="language-scala">def WHILE(condition: =&gt; Boolean)(body: =&gt; Unit): Unit = {
+  if (condition) {
+    body
+    WHILE(condition)(body)
+  } else ()
+}
+</code></pre>
+
+<ul>
+<li><em>re-evaluation</em> 을 피하기 위해서 (인자로넘길때) <code>condition, body</code> 는 <em>by name</em> 으로 넘겨야 한다.</li>
+<li><code>WHILE</code> 은 <em>tail-recursive</em> 이므로 <em>constant stack-size</em> 를 가진다.</li>
+</ul>
+
+<p><em>repeat</em> 는 이런식으로</p>
+
+<pre><code class="language-scala">def REPEAT(body: =&gt; Unit)(condition: =&gt; Boolean): Unit = {
+  body
+  if (condition) ()
+  else REPEAT(body)(condition)
+}
+</code></pre>
+
+<p><em>until</em> 을 만들고 싶으면 내부 함수를 만들면 된다.</p>
+
+<pre><code class="language-scala">// ref: https://gist.github.com/metasim/7503601
+def REPEAT(body: =&gt; Unit) = new {
+  def UNTIL(condition: =&gt; Boolean): Unit = {
+    body
+    if (condition) ()
+    else UNTIL(condition)
+  }
+}
+
+// test code
+REPEAT {
+  x = x + 1
+} UNTIL (x &gt; 3)
+</code></pre>
+
+<h4 id="for-loops">For-Loops</h4>
+
+<p>자바의 <em>for-loop</em> 를 단순히 <em>higher-order function</em> 를 사용하는것 만으는 모델링하기 어렵다. 왜냐하면 <code>i</code> 의 <em>declaration</em> 이 포함되어있기 때문이다.</p>
+
+<pre><code class="language-java">for (int i = 1; i &lt; 3; i = i + 1) { System.out.print(i + &quot; &quot;); }
+</code></pre>
+
+<p>스칼라에서도 비슷한 루프를 제공하긴 하는데, 위 루프보다는 <em>extended</em> 루프에 더 가깝다.</p>
+
+<pre><code class="language-scala">for (i &lt;- 1 until 3) { System.out.print(i + &quot; &quot;) }
+</code></pre>
+
+<p><em>for loop</em> 는 <em>foreach combinator</em> 로  번역 된다. 참고로 <em>for expression</em> 은 <code>map, flatMap</code> 으로 번역된다.</p>
+
+<pre><code class="language-scala">def foreach(f: T =&gt; Unit): Unit = 
+  // apply 'f' to each element of the collection
+  
+// example
+for (i &lt;- 1 until 3; j &lt;- &quot;abc&quot;) println(i + &quot; &quot; + j)
+
+// translated to
+(1 until 3).foreach(i =&gt; &quot;abc&quot; foreach (j =&gt; println(i + &quot; &quot; + j)))
+</code></pre>
+
+<h3 id="discrete-event-simulation">Discrete Event Simulation</h3>
+
+<p>지금까지 <em>world</em> 를 모델링 할 수 있는 <em>state</em> 와, 여기에 적용할 수 있는 <em>control structure</em> 를 살펴봤는데, 이걸 이용해서 시뮬레이션을 해보자.</p>
+
+<h4 id="digital-circuit">Digital Circuit</h4>
+
+<p><em>digital circuit</em> 은 <strong>wires</strong> 와 <strong>functional components</strong> 로 구성된다.</p>
+
+<blockquote>
+<p>Wires transport signals thar are transformed by components</p>
+</blockquote>
+
+<p><em>signal</em> 을 <code>True, False</code> 로 표현하자. 그리고 기본 <em>components</em> 로</p>
+
+<ul>
+<li>Inverter</li>
+<li>AND Gate</li>
+<li>OR Gate</li>
+</ul>
+
+<p>그러면 다른 컴포넌트들은 이 조합으로 만들 수 있다. 그리고 각 컴포넌트는 <em>delay</em> 를 가질 수 있다.</p>
+
+<pre><code class="language-scala">def inverter(input: Wire, output: Wire): Unit
+def andGate(a1: Wire, a2: Wire, output: Wire): Unit
+def orGate(o1: Wire, o2: Wire, output: Wire): Unit
+</code></pre>
+
+<p>이제 <em>half adder, HA</em> 를 만들어 보면</p>
+
+<p><img src="http://i.msdn.microsoft.com/dynimg/IC141779.gif" alt="" />
+<p align="center">(<a href="http://msdn.microsoft.com">http://msdn.microsoft.com</a>)</p></p>
+
+<pre><code class="language-scala">def halfAdder(a: Wire, b: Wire, c: Wire, s: Wire): Unit = {
+  val d = new Wire
+  val e = new Wire
+
+  orGate(a, b, d)
+  andGate(a, b, e)
+  inverter(c, e)
+  andGate(d, e, s)
+}
+</code></pre>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Full_Adder_Blocks.svg/2000px-Full_Adder_Blocks.svg.png" alt="" />
+<p align="center">(<a href="http://en.wikibooks.org">http://en.wikibooks.org</a>)</p></p>
+
+<p><img src="http://hyperphysics.phy-astr.gsu.edu/hbase/electronic/ietron/fulladd.gif" alt="" />
+<p align="center">(<a href="http://hyperphysics.phy-astr.gsu.edu">http://hyperphysics.phy-astr.gsu.edu</a>)</p></p>
+
+<p>그러면 <em>full adder</em> 는</p>
+
+<pre><code class="language-scala">def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire): Unit = {
+  val s = new Wire
+  val c1 = new Wire
+  val c2 = new Wire
+
+  halfAdder(b, cin, s, c1)
+  halfAdder(a, s, sum, c2)
+  orGate(c1, c2, cout)
+}
+</code></pre>
+
+<h4 id="action">Action</h4>
+
+<p><em>discrete event simulator</em> 는 특정 <em>moment</em> 에서의 수행되는 <em>actions</em> 이다. 아무런 파라미터도 필요없는 <em>action</em> 은</p>
+
+<pre><code class="language-scala">type Action = () =&gt; Unit
+</code></pre>
+
+<p>어떤 <em>side-effect</em> 를 수행하면서 <em>time</em> 을 시뮬레이션 할 수 있다.</p>
+
+<h4 id="simulator">Simulator</h4>
+
+<pre><code class="language-scala">  trait Simulation {
+    def currentTime: Int = ???
+    def afterDelay(delay: Int)(block: =&gt; Unit): Unit = ???
+    def run(): Unit = ???
+  }
+</code></pre>
+
+<ul>
+<li><code>currentTime</code> returns the current simulated time</li>
+<li><code>afterDelay</code> registeres an action to perform after a certain delay</li>
+<li><code>run</code> performs the simulation until there are no more actions wating</li>
+</ul>
+
+<p>이렇게 시뮬레이터 <em>trait</em> 를 만들고 상속 구조를 만들면</p>
+
+<pre><code class="language-scala"> Simulation
+     |
+   Gates     // Wire, AND, OR, INV
+     |
+  Circuits   // HA, ADDER  
+     |
+MySimulation // implementation
+</code></pre>
+
+<h4 id="wire">Wire</h4>
+
+<pre><code class="language-scala">class Wire {
+  private var sigVal = false
+  private var actions: List[Action] = List()
+
+  def getSignal: Boolean = sigVal
+  def setSignal(s: Boolean): Unit =
+    if (s != sigVal) {
+      sigVal = s
+      actions foreach (_())
+    }
+    
+ def addAcion(a: Action): Unit = {
+    actions = a :: actions
+    a()
+  }
+}
+</code></pre>
+
+<h4 id="inverter-and-or-gates">Inverter, AND, OR Gates</h4>
+
+<p><em>input wire</em> 로 부터의 입력을 뒤집어서 <em>output wire</em> 에다 돌려주는 <code>inverter</code> 를 구현할 수 있다. 근데 회로에서는 <em>delay</em> 가 있기 때문에 바로는 뒤집기 보다는 <code>InvertDelay</code> 이후에 신호를 반전시키는 <em>action</em> 을 구현하자. 아까 <code>Simulation</code> 내의 <code>afterDelay</code> 를 구현하면 된다.</p>
+
+<pre><code class="language-scala">  def andGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def andAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(AddGateDelay) { output setSignal (in1Signal &amp; in2Signal) }
+    }
+
+    in1 addAction andAction
+    in2 addAction andAction
+  }
+
+  def orGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def orAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(OrGateDelay) { output setSignal (in1Signal | in2Signal) }
+    }
+
+    in1 addAction orAction
+    in2 addAction orAction
+  }
+
+  def inverter(input: Wire, output: Wire): Unit = {
+    def invertAction(): Unit = {
+      val inputSig = input.getSignal
+      afterDelay(InverterDelay) { output setSignal (!inputSig) }
+    }
+    input addAction invertAction
+  }
+</code></pre>
+
+<p><br/></p>
+
+<p><del>혼란이 오기 시작했다</del></p>
+
+<blockquote>
+<p>What happens if we compute <code>in1Sig</code> and <code>in2Sig</code> inline inside <code>afterDelay</code> instead of computing them as value?</p>
+</blockquote>
+
+<p>당연히 <em>delay</em> 후의 <em>signal</em> 값을 가지고 <em>action list</em> 에 추가하므로 제대로 모¸링하지 못한다.</p>
+
+<pre><code class="language-scala">afterDelay(OrGateDelay) {
+  output setSignal (in1.getSignal | in2.getSignal)
+}
+</code></pre>
+
+<h3 id="the-simulation-trait">The Simulation Trait</h3>
+
+<p>지금까지를 정리하면, <code>Wire</code> 클래스는 <em>statefule object</em> 를 나타낸다. 상태 <code>signal</code>, <code>actions</code> 는 <code>addAction, setSignal</code> 호출에 의해 정해진다. 이 함수들의 호출은 일종의 <em>event</em> 이며, <em>delay</em> 와 <em>action</em> 으로 구성된다.</p>
+
+<p>그리고 이 모든 <code>Event</code> 는 <code>Simulation</code> <em>trait</em> 내 리스트로 저장된다. 일종의 할일 목록이나, <em>history</em> 로 보면 쉬울듯.</p>
+
+<pre><code class="language-scala">type Action = () =&gt; Unit
+case class Event(time: Int, action: Action)
+private type Agenda = List[Event]
+private var agenda: Agenda = List()
+
+private var curtime: Int = 0
+def currentTime: Int = curtime
+</code></pre>
+
+<p>현재 시뮬레이션 타임을 기록하기 위해 <code>curtime</code> 정의하고, 이를 이용해 <code>Event</code> 를 정의할 수 있다. <code>Event(curtime + delay, () =&gt; block)</code> 처럼</p>
+
+<pre><code class="language-scala">def afterDelay(delay: Int)(block: =&gt; Unit): Unit = {
+  val item = Event(currentTime + delay, () =&gt; block)
+  agenda = insert(agenda, item)
+}
+
+private def insert(ag: List[Event], item: Event): List[Event] = ag match {
+  case first :: rest if first.time &lt;= item.time =&gt; first :: insert(rest, item)
+  case _ =&gt; item :: ag
+}
+</code></pre>
+
+<p>그리고 <code>agenda</code> 에 있는 액션들을 처리할 <code>loop</code> 와 시뮬레이션을 돌릴 <code>run</code> 함수를 구현하면</p>
+
+<pre><code class="language-scala">private def loop(): Unit = agenda match {
+  case first :: rest =&gt;
+    agenda = rest
+    curtime = first.time
+    first.action()
+    loop()
+  case _ =&gt;
+}
+
+def run(): Unit = {
+  afterDelay(0) {
+    println(&quot;*** simulation started, time = &quot; + currentTime + &quot; ***&quot;)
+  }
+
+  loop()
+}
+</code></pre>
+
+<p>그리고 시뮬레이션 자체는 아무런 <em>output</em> 도 주지 않기 때문에, 디버깅에 유용한 <code>probe</code> 함수를 추가하자. 디버깅용 <em>action</em> 을 추가한다 생각하면 쉽다. 일종의 <em>gate</em> 이기도 하다.</p>
+
+<pre><code class="language-scala">def probe(name: String, wire: Wire): Unit = {
+  def probeAction(): Unit = {
+    println(s&quot;$name $currentTime value = ${wire.getSignal}&quot;)
+  }
+
+  wire addAction probeAction
+}
+</code></pre>
+
+<p>이제 각 게이트마다의 딜레이를 위한 <em>trait</em> 를 만들자. 회로를 무엇으로 구성하냐에 따라 다를 수 있으므로 <em>trait</em> 으로 만드는건 좋은 선택이다.</p>
+
+<pre><code class="language-scala">trait Parameters {
+  def InverterDelay = 2
+  def AndGateDelay = 2
+  def OrGateDelay = 2
+}
+</code></pre>
+
+<h4 id="implementation">Implementation</h4>
+
+<pre><code class="language-scala">
+</code></pre>
+
+<h4 id="test">Test</h4>
+
+<pre><code class="language-scala">trait Simulation {
+  type Action = () =&gt; Unit
+  case class Event(time: Int, action: Action)
+  private type Agenda = List[Event]
+  private var agenda: Agenda = List()
+
+  private var curtime: Int = 0
+  def currentTime: Int = curtime
+
+  def afterDelay(delay: Int)(block: =&gt; Unit): Unit = {
+    val item = Event(currentTime + delay, () =&gt; block)
+    agenda = insert(agenda, item)
+  }
+
+  private def insert(ag: List[Event], item: Event): List[Event] = ag match {
+    case first :: rest if first.time &lt;= item.time =&gt; first :: insert(rest, item)
+    case _ =&gt; item :: ag
+  }
+
+  private def loop(): Unit = agenda match {
+    case first :: rest =&gt;
+      agenda = rest
+      curtime = first.time
+      first.action()
+      loop()
+    case _ =&gt;
+  }
+
+  def run(): Unit = {
+    afterDelay(0) {
+      println(&quot;*** simulation started, time = &quot; + currentTime + &quot; ***&quot;)
+    }
+
+    loop()
+  }
+
+}
+
+abstract class Gates extends Simulation {
+
+  def AndGateDelay: Int
+  def OrGateDelay: Int
+  def InverterGateDelay: Int
+
+  class Wire {
+    private var sigVal = false
+    private var actions: List[Action] = List()
+
+    def getSignal: Boolean = sigVal
+    def setSignal(s: Boolean): Unit =
+      if (s != sigVal) {
+        sigVal = s
+        actions foreach (_())
+      }
+
+    def addAction(a: Action): Unit = {
+      actions = a :: actions
+      a()
+    }
+  }
+
+  def andGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def andAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(AndGateDelay) { output setSignal (in1Signal &amp; in2Signal) }
+    }
+
+    in1 addAction andAction
+    in2 addAction andAction
+  }
+
+  def orGate(in1: Wire, in2: Wire, output: Wire): Unit = {
+    def orAction(): Unit = {
+      val in1Signal = in1.getSignal
+      val in2Signal = in2.getSignal
+      afterDelay(OrGateDelay) { output setSignal (in1Signal | in2Signal) }
+    }
+
+    in1 addAction orAction
+    in2 addAction orAction
+  }
+
+  def inverter(input: Wire, output: Wire): Unit = {
+    def invertAction(): Unit = {
+      val inputSig = input.getSignal
+      afterDelay(InverterGateDelay) { output setSignal (!inputSig) }
+    }
+    input addAction invertAction
+  }
+
+  def probe(name: String, wire: Wire): Unit = {
+    def probeAction(): Unit = {
+      println(s&quot;$name $currentTime value = ${wire.getSignal}&quot;)
+    }
+
+    wire addAction probeAction
+  }
+}
+
+abstract class Circuits extends Gates {
+
+  // input a, b
+  // output sum, carry
+  def halfAdder(a: Wire, b: Wire, s: Wire, c: Wire): Unit = {
+    val d = new Wire
+    val e = new Wire
+
+    orGate(a, b, d)
+    andGate(a, b, c)
+    inverter(c, e)
+    andGate(d, e, s)
+  }
+
+  def fullAdder(a: Wire, b: Wire, cin: Wire, sum: Wire, cout: Wire): Unit = {
+    val s = new Wire
+    val c1 = new Wire
+    val c2 = new Wire
+
+    halfAdder(b, cin, s, c1)
+    halfAdder(a, s, sum, c2)
+    orGate(c1, c2, cout)
+  }
+}
+
+trait Parameters {
+  def InverterGateDelay = 2
+  def AndGateDelay = 3
+  def OrGateDelay = 5
+}
+</code></pre>
+
+<p>테스트코드는</p>
+
+<pre><code class="language-scala">object test extends Circuits with Parameters
+import test._
+val in1, in2, sum, carry = new Wire
+
+halfAdder(in1, in2, sum, carry)
+probe(&quot;sum&quot;, sum)
+probe(&quot;carry&quot;, carry)
+
+in1.setSignal(true)
+test.run()
+in2.setSignal(true)
+test.run()
+</code></pre>
+
+<p>결과는</p>
+
+<pre><code class="language-scala">sum 0 value = false
+carry 0 value = false
+*** simulation started, time = 0 ***
+sum 8 value = true
+*** simulation started, time = 8 ***
+carry 11 value = true
+sum 16 value = false
+</code></pre>
+
+<p>흐름을 정리해 보면,</p>
+
+<p>(1) <code>halfAdder</code><br />
+(2) <code>orGate, andGate, invertGate</code><br />
+(3) <code>addAction</code>
+(4) <code>a()</code> -&gt; <code>afterDelay</code><br />
+(5) <code>insert</code> 에서 시간을 고려해 이벤트리스트에 삽입<br />
+(6) <code>loop</code> 가 돌아가면서 모  <code>action</code> 실행</p>
+
+<h4 id="a-variant">A Variant</h4>
+
+<p><em>OR gate</em> 는 <em>AND, Invert</em> 로 구성될 수 있다. <code>a | b = ~(~a &amp; ~b)</code> 이기 때문인데</p>
+
+<pre><code class="language-scala">def orGateAlt(in1: Wire, in2: Wire, output: Wire): Unit = {
+  def orAction(): Unit = {
+    val notIn1, notIn2, notOut = new Wire
+    inverter(in1,notIn1);
+    inverter(in2,notIn2);
+    andGate(notIn1, notIn2, notOut)
+    inverter(notOut, output)
+  }
+}
+</code></pre>
+
+<p>만약에 이 <em>OR Gate</em> 를 사용하면 어떻게 될까? 시간은 당연히 달라지고, 추가적인 이벤트도 발생한다.</p>
+
+<h3 id="summary">Summary</h3>
+
+<ul>
+<li><em>state</em> 와 <em>assignment</em> 는 모델을 더 복잡하게 만든다.</li>
+<li><em>referential transparency</em> 도 포기해야 한다</li>
+</ul>
+
+<p>반면</p>
+
+<ul>
+<li><em>discrete event simulation</em> 같은 특정 형태의 프로그램을 우아하게 작성할 수 있다</li>
+<li>시스템은 <em>mutable list of actions</em> 로 표현되고</li>
+<li><em>action</em> 이 호출되면 그 효과로 인해 오브젝트의 상태가 변한다</li>
+<li>미래에 호출될 <em>action</em> 을 <em>install</em> 할 수 있다.</li>
+</ul>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Reactive Programming</em> by <strong>Martin Ordersky</strong><br />
+(2) <a href="http://msdn.microsoft.com/en-us/library/aa288734(v=vs.71).aspx">MSDN: Half Adder</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../reactive-programming-1"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../reactive-programming-3" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

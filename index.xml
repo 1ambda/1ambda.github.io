@@ -1,0 +1,2017 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Old Lisper</title>
+    <link>https://1ambda.github.io/</link>
+    <description>Recent content on Old Lisper</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 06 Aug 2016 17:36:43 +0900</lastBuildDate>
+    <atom:link href="https://1ambda.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Infrastructure</title>
+      <link>https://1ambda.github.io/15/infrastructure/</link>
+      <pubDate>Sat, 06 Aug 2016 17:36:43 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/15/infrastructure/</guid>
+      <description>
+
+&lt;h2 id=&#34;infrastructure&#34;&gt;Infrastructure&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Container Infrastructure&lt;/strong&gt;: &lt;a href=&#34;https://coreos.com/rkt/&#34;&gt;rkt&lt;/a&gt; 와 같은 container engine 부터 &lt;a href=&#34;http://kubernetes.io/&#34;&gt;kubernetes&lt;/a&gt; 와 같은 orchestration tool 등&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Infrastructure Automation&lt;/strong&gt;: &lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt; 이나 &lt;a href=&#34;https://www.habitat.sh/&#34;&gt;Habitat&lt;/a&gt; 등 자동화를 위한 모든 방법들&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data Infrastructure&lt;/strong&gt;: &lt;a href=&#34;http://kafka.apache.org/&#34;&gt;Apache Kafka&lt;/a&gt; 등 Data Pipeline 을 구성하고, 유지 하는 방법등에 대한 이야기&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;published&#34;&gt;Published&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;container/kubernetes-intro/&#34;&gt;Kubernetes Intro&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Java</title>
+      <link>https://1ambda.github.io/24/java/</link>
+      <pubDate>Sat, 25 Jun 2016 11:28:05 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/24/java/</guid>
+      <description>
+
+&lt;h2 id=&#34;java-interview-quesitons&#34;&gt;Java Interview Quesitons&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;./interview-questions-collection&#34;&gt;Java Collection&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Javascript</title>
+      <link>https://1ambda.github.io/23/javascript/</link>
+      <pubDate>Sat, 25 Jun 2016 11:27:04 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/23/javascript/</guid>
+      <description>
+
+&lt;h2 id=&#34;javascript&#34;&gt;Javascript&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;tips-for-webpack-and-redux&#34;&gt;Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지 팁들&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;javascript-inheritance&#34;&gt;Javascript Inheritance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;rest-api-put-vs-post&#34;&gt;REST API: Put vs Post&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>oh-my-github</title>
+      <link>https://1ambda.github.io/51/oh-my-github/</link>
+      <pubDate>Sat, 25 Jun 2016 10:05:45 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/51/oh-my-github/</guid>
+      <description>
+
+&lt;h1 id=&#34;oh-my-github&#34;&gt;oh-my-github&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 는 개발자가, 자신의 Github Profile 을 생성하고, gh-pages 로 호스팅 할 수 있도록 도와주는 툴입니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;tutorial&#34;&gt;oh-my-github&lt;/a&gt; - 10 분만에 Github Profile 만들기 (Korean)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Data Analysis</title>
+      <link>https://1ambda.github.io/92/data-analysis/</link>
+      <pubDate>Sat, 25 Jun 2016 10:05:26 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/92/data-analysis/</guid>
+      <description>
+
+&lt;h2 id=&#34;machine-learning&#34;&gt;Machine Learning&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-1&#34;&gt;Chapter 01&lt;/a&gt; - Linear Regression&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-2&#34;&gt;Chapter 02&lt;/a&gt; - Gradient Descent&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-3&#34;&gt;Chapter 03&lt;/a&gt; - Logistic Regression&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-4&#34;&gt;Chapter 04&lt;/a&gt; - Neural Network&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-5&#34;&gt;Chapter 05&lt;/a&gt; - Back Propagation&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-6&#34;&gt;Chapter 06&lt;/a&gt; - Practical Advices&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-7&#34;&gt;Chapter 07&lt;/a&gt; - Support Vector Machine&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-8&#34;&gt;Chapter 08&lt;/a&gt; - K-means, PCA Details&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-9&#34;&gt;Chapter 09&lt;/a&gt; - Anomaly Detection, Recommender System&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;machine-learning-week-10&#34;&gt;Chapter 10&lt;/a&gt; - Stochastic Gradient, Synthetic Data, Ceiling Analysis&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;analytics-edge&#34;&gt;Analytics Edge&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week1&#34;&gt;Week 1 (external)&lt;/a&gt; - Intro&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week2&#34;&gt;Week 2 (external)&lt;/a&gt; - Linear Regression&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week3&#34;&gt;Week 3 (external)&lt;/a&gt; - Logistic Regression&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week4&#34;&gt;Week 4 (external)&lt;/a&gt; - CART, Random Forest&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week5&#34;&gt;Week 5 (external)&lt;/a&gt; - Text Analytics&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week6&#34;&gt;Week 6 (external)&lt;/a&gt; - Clustering, Recommendation&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week7&#34;&gt;Week 7 (external)&lt;/a&gt; - Visualization: Heat Map, Social Network, Wordcloud&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week8&#34;&gt;Week 8 (external)&lt;/a&gt; - Linear Optimization&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/week9&#34;&gt;Week 9 (external)&lt;/a&gt; - Integer Optimization&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/kaggle&#34;&gt;Kaggle Competition (external)&lt;/a&gt; - &lt;a href=&#34;https://www.kaggle.com/c/15-071x-the-analytics-edge-competition-spring-2015/&#34;&gt;Predicting which NY Times Blog Articles Will Be Most Popular&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/data-analysis/tree/master/analytics-edge/final&#34;&gt;Final Exam (external)&lt;/a&gt; - Final Exam: Regression, Clustering, Text Mining&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;intro-to-computational-thinking-and-data-science&#34;&gt;Intro to Computational Thinking and Data Science&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-data-science-1&#34;&gt;Chapter 1&lt;/a&gt; - Modeling&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-data-science-2&#34;&gt;Chapter 2&lt;/a&gt; - Monte Carlo Simulation&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-data-science-3&#34;&gt;Chapter 3&lt;/a&gt; - Optimization Problem&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-data-science-4&#34;&gt;Chapter 4&lt;/a&gt; - State Modeling, Hierarchical Clustering&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;process-mining&#34;&gt;Process Mining&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;process-mining-1&#34;&gt;Week 1&lt;/a&gt; - Process Mining Intro&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;process-mining-2&#34;&gt;Week 2&lt;/a&gt; - Alpha Algorithm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;process-mining-3&#34;&gt;Week 3&lt;/a&gt; - Metric, C-nets&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;process-mining-4&#34;&gt;Week 4&lt;/a&gt; - Conformance Checking, Dotted Chart&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;process-mining-5&#34;&gt;Week 5&lt;/a&gt; - Decision, Social, Organization Mining&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;pattern-discovery&#34;&gt;Pattern Discovery&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;pattern-discovery-1&#34;&gt;Chapter 1&lt;/a&gt; - Apriori, FP Growth&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;pattern-discovery-2&#34;&gt;Chapter 2&lt;/a&gt; - Null-invariant, Pattern-Fusion, Constaint&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;pattern-discovery-3&#34;&gt;Chapter 3&lt;/a&gt; - Sequential Pattern Mining&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Cloud Computing</title>
+      <link>https://1ambda.github.io/93/cloud-computing/</link>
+      <pubDate>Sat, 25 Jun 2016 10:05:23 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/93/cloud-computing/</guid>
+      <description>
+
+&lt;h2 id=&#34;cloud-computing&#34;&gt;Cloud Computing&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-1&#34;&gt;Cloud Computing&lt;/a&gt; - MapReduce&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-2&#34;&gt;Cloud Computing&lt;/a&gt; - Gossip Protocol&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-3&#34;&gt;Cloud Computing&lt;/a&gt; - Membership Protocol&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-4&#34;&gt;Cloud Computing&lt;/a&gt; - P2P Systems&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-5&#34;&gt;Cloud Computing&lt;/a&gt; - Global Snapshot&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-6&#34;&gt;Cloud Computing&lt;/a&gt; - Multicast&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;cloud-computing-7&#34;&gt;Cloud Computing&lt;/a&gt; - Paxos&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Algorithm</title>
+      <link>https://1ambda.github.io/91/algorithm/</link>
+      <pubDate>Sat, 25 Jun 2016 10:05:04 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/91/algorithm/</guid>
+      <description>
+
+&lt;h2 id=&#34;algorithms&#34;&gt;Algorithms&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;design-and-analysis-part1-1&#34;&gt;Design And Analysis Part 1&lt;/a&gt; - Divide And Conquer&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;design-and-analysis-part1-2&#34;&gt;Design And Analysis Part 1&lt;/a&gt; - Randomized Selection&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;design-and-analysis-part1-3&#34;&gt;Design And Analysis Part 1 &lt;/a&gt; - Graphs, The Contraction Algorithm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;design-and-analysis-part1-4&#34;&gt;Design And Analysis Part 1&lt;/a&gt; - Graph Search and Connectivity&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;design-and-analysis-part1-5&#34;&gt;Design And Analysis Part 1&lt;/a&gt; - Dijkstra, Heap, Red-Black Tree&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;design-and-analysis-part1-6&#34;&gt;Design And Analysis Part 1&lt;/a&gt; - Hash Table, Universal Hashing, Bloom filters&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part1-1&#34;&gt;Algorithm Part 1&lt;/a&gt; - Union Find&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part1-2&#34;&gt;Algorithm Part 1&lt;/a&gt; - Analysis of Algorithms&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part2-1&#34;&gt;Algorithm Part 2&lt;/a&gt; - Spanning Tree, Shortest Paths&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part2-2&#34;&gt;Algorithm Part 2&lt;/a&gt; - Radix Sort, Suffix Sort&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part2-3&#34;&gt;Algorithm Part 2&lt;/a&gt; - R-way, Ternary Tries&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part2-4&#34;&gt;Algorithm Part 2&lt;/a&gt; - KMP, Boyer-Moore, Rabin-Karp&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part2-5&#34;&gt;Algorithm Part 2&lt;/a&gt; - Maximum Flow (Ford-Fulkerson)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;algorithm-part2-6&#34;&gt;Algorithm Part 2&lt;/a&gt; - Data Compression, Huffman, LZW&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;artificial-intelligence&#34;&gt;Artificial Intelligence&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;artificial-intelligence-cs188-1&#34;&gt;Artificial Intelligence (CS188)&lt;/a&gt; - Intro&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;artificial-intelligence-cs188-2&#34;&gt;Artificial Intelligence (CS188)&lt;/a&gt; - Search&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;artificial-intelligence-planning-1&#34;&gt;Artificial Intelligence Planning&lt;/a&gt; - Intro&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;artificial-intelligence-planning-2&#34;&gt;Artificial Intelligence Planning&lt;/a&gt; - A*, STRIPS, forward and backward search&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;artificial-intelligence-planning-3&#34;&gt;Artificial Intelligence Planning&lt;/a&gt; - PSP, PoP&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;artificial-intelligence-planning-4&#34;&gt;Artificial Intelligence Planning&lt;/a&gt; - STN, HTN&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Haskell</title>
+      <link>https://1ambda.github.io/22/haskell/</link>
+      <pubDate>Sat, 25 Jun 2016 01:21:27 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/22/haskell/</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction-to-functional-programming-using-haskell&#34;&gt;Introduction to Functional Programming using Haskell&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-1&#34;&gt;Chapter 1&lt;/a&gt; - Basics&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-2&#34;&gt;Chapter 2&lt;/a&gt; - List Comprehension&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-3&#34;&gt;Chapter 3&lt;/a&gt; - Recursion, Higher Order Function&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-4&#34;&gt;Chapter 4&lt;/a&gt; - Monad&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-5&#34;&gt;Chapter 5&lt;/a&gt; - IO Monad&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-6&#34;&gt;Chapter 6&lt;/a&gt; - Type and Class&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-7&#34;&gt;Chapter 7&lt;/a&gt; - The Countdown Problem&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-8&#34;&gt;Chapter 8&lt;/a&gt; - Lazy Evaluation, Strict&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;intro-to-haskell-9&#34;&gt;Chapter 9&lt;/a&gt; - Induction&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;poor-mans-concurrency-monad&#34;&gt;Poor Man&amp;rsquo;s Concurrency Monad&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Scala</title>
+      <link>https://1ambda.github.io/21/scala/</link>
+      <pubDate>Sat, 25 Jun 2016 00:01:56 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/21/scala/</guid>
+      <description>
+
+&lt;h1 id=&#34;scala&#34;&gt;Scala&lt;/h1&gt;
+
+&lt;h2 id=&#34;easy-scalaz&#34;&gt;Easy Scalaz&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;easy-scalaz-1&#34;&gt;Easy Scalaz 1&lt;/a&gt; - State&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;easy-scalaz-2&#34;&gt;Easy Scalaz 2&lt;/a&gt; - Monad Transformer&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;easy-scalaz-3&#34;&gt;Easy Scalaz 3&lt;/a&gt; - ReaderWriterState with Kleisli&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;easy-scalaz-4&#34;&gt;Easy Scalaz 4&lt;/a&gt; - (Co)Yoneda, Free, Trampoline&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;easy-scalaz-5&#34;&gt;Easy Scalaz 5&lt;/a&gt; - Playing with Monoids&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 7] - Stream (TODO)&lt;/li&gt;
+&lt;li&gt;[Easy Scalaz 6] - ST, IO (TOOD)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;functional-programming-in-scala&#34;&gt;Functional Programming in Scala&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-1&#34;&gt;Chapter 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-2&#34;&gt;Chapter 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-3&#34;&gt;Chapter 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-4&#34;&gt;Chapter 4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-5&#34;&gt;Chapter 5&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-6&#34;&gt;Chapter 6&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;functional-programming-7&#34;&gt;Chapter 7&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;reactive-programming-in-scala&#34;&gt;Reactive Programming in Scala&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;reactive-programming-1&#34;&gt;Chapter 1&lt;/a&gt; - Monads, Random Generators&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;reactive-programming-2&#34;&gt;Chapter 2&lt;/a&gt; - Stateful Object&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;reactive-programming-3&#34;&gt;Chapter 3&lt;/a&gt; - Try, Future, Promise&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;reactive-programming-4&#34;&gt;Chapter 4&lt;/a&gt; - Observable, Rx, Scheduler&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;reactive-programming-5&#34;&gt;Chapter 5&lt;/a&gt; - Actor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;concurrent-programming-in-scala&#34;&gt;Concurrent Programming in Scala&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.amazon.com/Learning-Concurrent-Programming-Aleksandar-Prokopec/dp/1783281413/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1433256276&amp;amp;sr=1-1&amp;amp;keywords=concurrent+programming+in+scala&#34;&gt;Ref - Concurrent Programming in Scala&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/scala/tree/master/concurrent-programming-in-scala/src/main/scala/thread&#34;&gt;Chapter2 (external)&lt;/a&gt; - Thread, Volatile, JMM&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/scala/tree/master/concurrent-programming-in-scala/src/main/scala/forkjoin&#34;&gt;Chapter3 (external)&lt;/a&gt; - Fork-Join Framework, Lock-Free Programming, Lazy Values, Concurrent Collections&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/scala/tree/master/concurrent-programming-in-scala/src/main/scala/future&#34;&gt;Chapter4 (external)&lt;/a&gt; - Future, Async&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/scala/tree/master/concurrent-programming-in-scala/src/main/scala/parallel&#34;&gt;Chapter5 (external)&lt;/a&gt; - Parallel Collection&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/scala/tree/master/concurrent-programming-in-scala/src/main/scala/reactive&#34;&gt;Chapter6 (external)&lt;/a&gt; - Rx&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda/scala/tree/master/concurrent-programming-in-scala/src/main/scala/stm&#34;&gt;Chapter7 (external)&lt;/a&gt; - STM&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://1ambda.github.io/0/home/</link>
+      <pubDate>Thu, 23 Jun 2016 10:15:45 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/0/home/</guid>
+      <description>
+
+&lt;h1 id=&#34;home&#34;&gt;HOME&lt;/h1&gt;
+
+&lt;h2 id=&#34;links&#34;&gt;Links&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://linkedin.com/in/1ambda&#34;&gt;Linkedin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/1ambda&#34;&gt;Github&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://1ambda.github.io/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;1ambda&#34;&gt;1ambda&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;빌드 도구와 개발 인프라에 과도하게 집착합니다.&lt;/li&gt;
+&lt;li&gt;개발 생산성에도 상당히 집착합니다. 예로, 해피해킹 위에서 emacs 와 vi 키맵을 섞어 쓰지만 아직 세벌식과 드보락의 경지엔 이르지 못했습니다.&lt;/li&gt;
+&lt;li&gt;다양한 언어를 사용하길 즐겨하며, 언어가 목적이 아니라 도구임을 인식하고 있습니다. 다만, 세상엔 시간을 투자해 배울만한 가치가 있는 언어와 그렇지 않은 언어가 있다고 생각합니다.&lt;/li&gt;
+&lt;li&gt;테스트가 비용을 절약하는 방법이라 믿습니다. 시간이 허락하는 한도 내에서 최대한 작성합니다.&lt;/li&gt;
+&lt;li&gt;살아있는 문서를 위해 노력합니다.&lt;/li&gt;
+&lt;li&gt;기술에 대한 이해 없이 사용하지 않습니다.&lt;/li&gt;
+&lt;li&gt;나로 인해, 다른이가 더 편해지길 바랍니다. &lt;em&gt;세상을 더 풍요롭게 만드는 일에 열과 성을 다하며&lt;/em&gt; 살고 싶습니다.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes: Intro</title>
+      <link>https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/</link>
+      <pubDate>Sat, 06 Aug 2016 20:41:38 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/logo.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;kubernetes-intro&#34;&gt;Kubernetes: Intro&lt;/h2&gt;
+
+&lt;h3 id=&#34;caution&#34;&gt;Caution&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;작성자는 Container 전문가가 아니며 최대한 정확한 내용을 기록하려 했으나, 주말동안 짧게 찾아본 내용이므로 오류가 있을 수 있습니다. Production 적용을 위해서는, 더 많은 자료를 참고 부탁드립니다&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;이하의 내용은 docker, docker-compose, docker-swarm 등에 대해 이해하고 있다는 가정 하에 쓰여졌습니다.
+잘 모르신다면 &lt;a href=&#34;https://training.docker.com/self-paced-training&#34;&gt;Docker Self-Paced Online Learning&lt;/a&gt; 을 보고 오시면 더욱 쉽게 이해할 수 있습니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;이 글에서는 kubernetes 의 구성요소, 인터널 등을 간략히 다룹니다. &lt;a href=&#34;http://autopilotpattern.io/&#34;&gt;Autopilot Pattern&lt;/a&gt; 등의 볼륨 매니지먼트 기술을 찾아 오셨다면, 아래의 글 참고 부탁드립니다.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.joyent.com/blog/persistent-storage-patterns&#34;&gt;Joyent: Persistent storage patterns for Docker in Production&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.joyent.com/blog/dbaas-simplicity-no-lock-in&#34;&gt;Joyent: MySQL on Autopilot&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;kubernetes&#34;&gt;Kubernetes&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;kubernetes.io&#34;&gt;kubernetes&lt;/a&gt; (이하 k8s) 는 container orchestration 툴입니다.
+(e.g &lt;a href=&#34;https://docs.docker.com/swarm/overview/&#34;&gt;docker-swarm&lt;/a&gt;,  &lt;a href=&#34;https://mesosphere.github.io/marathon/&#34;&gt;marathon&lt;/a&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;여러 host (&lt;a href=&#34;http://kubernetes.io/docs/admin/node/&#34;&gt;= node in k8s&lt;/a&gt;) 를 묶어 클러스터를 구성하고&lt;/li&gt;
+&lt;li&gt;container 를 적절한 위치에 배포하고 (auto-placement)&lt;/li&gt;
+&lt;li&gt;container 가 죽으면 자동으로 복구하며 (auto-restart)&lt;/li&gt;
+&lt;li&gt;필요에 따라 container 를 매끄럽게 추가(scaling), 복제(replication), 업데이트(rolling update), 롤백(rollback) 할 수 있습니다&lt;/li&gt;
+&lt;li&gt;이 외에도 수 많은 기능이 있으며, &lt;a href=&#34;http://kubernetes.io/docs/whatisk8s/&#34;&gt;What is k8s?&lt;/a&gt; 에서 확인할 수 있습니다&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;k8s 를 사용하려면, 다음과 같은 내용을 알아야 합니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;k8s object (e.g &lt;a href=&#34;http://kubernetes.io/docs/user-guide/pods/&#34;&gt;pod&lt;/a&gt;, &lt;a href=&#34;http://kubernetes.io/docs/user-guide/petset/&#34;&gt;pet set&lt;/a&gt;, &lt;a href=&#34;http://kubernetes.io/docs/user-guide/services/&#34;&gt;service&lt;/a&gt;, &lt;a href=&#34;http://kubernetes.io/docs/user-guide/labels/&#34;&gt;selector&lt;/a&gt; 등)&lt;/li&gt;
+&lt;li&gt;multi-host 위에서 container 실행시 고려해야 할 것들 (e.g service discovery, networking, volume management, log aggregation)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;k8s internal&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;다행히도 문서가 장황하지 않습니다. 필요한 내용을, 필요한 만큼만 설명하고 있기 때문에 날 잡아서 쭈욱 읽기에도 괜찮습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;내용을 설명하기에 앞서 짧게나마 느낀점을 요약하면 다음과 같습니다&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;docker 1.12 기준으로 &lt;a href=&#34;https://blog.docker.com/2016/06/docker-1-12-built-in-orchestration/&#34;&gt;docker-swarm: built-in orchestration&lt;/a&gt; 이 대폭 개선되었음에도 불구하고, k8s 가 더 많은 기능과 자세한 세팅을 제공합니다.
+실제 production 적용시에 다양한 요구사항이 생길 수 밖에 없기 때문에, k8s 의 다양한 기능은 큰 장점으로 보입니다&lt;/li&gt;
+&lt;li&gt;GCE 를 쓰지 않아도 됩니다. github issue 를 살펴보다 보면 AWS 에서 사용하는 사람도 많은것 같습니다
+(&lt;a href=&#34;http://kubernetes.io/docs/getting-started-guides/aws/&#34;&gt;running k8s on AWS&lt;/a&gt;)
+일부 기능들 (e.g Service type LoadBalancer) 을 사용할 수 없으나, 세팅이 많은 만큼 우회가 가능하며
+AWS 를 직접 지원하기도 합니다. (e.g AWSElasticBlockStore, SSL 등 &lt;del&gt;대인배&lt;/del&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/user-guide/ingress/&#34;&gt;ingress&lt;/a&gt; 등의 기능과 Future Work 등을 보고 있노라면
+정말 다양한 기능을 빠르게 추가하려고 노력한다는 느낌을 받습니다&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;지금 production 에 적용할거라면 swarm 보다는 k8s 에 베팅하고 올라 타겠습니다. (물론 &lt;a href=&#34;https://mesosphere.github.io/marathon/&#34;&gt;marathone&lt;/a&gt; 도 살펴보겠습니다만..)&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;GCE 가입하신 후 &lt;a href=&#34;http://kubernetes.io/docs/hellonode/&#34;&gt;Kubernetes: Hello World Walkthrough&lt;/a&gt; 를 진행하고 오시면 아래의 내용을 이해하시는데 더욱 도움이 됩니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/minikube/blob/master/README.md&#34;&gt;minikube&lt;/a&gt; 를 설치하면 로컬에서 k8s 를 실행해볼 수 있습니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;kubectl 1.3.0+ 의 경우에는 bash 와 zsh completion 이 들어있습니다. 이걸 이용하면 편합니다. (&lt;code&gt;source &amp;lt;(kubectl completion zsh)
+&lt;/code&gt;) gcloud 이용시 1.2.5 버전이 깔릴 수 있습니다. 버전이 낮을시 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/prereqs/&#34;&gt;kubectl isntall&lt;/a&gt; 참고하시어 설치하면 됩니다.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl version
+
+Client Version: version.Info{Major:&amp;quot;1&amp;quot;, Minor:&amp;quot;3&amp;quot;, GitVersion:&amp;quot;v1.3.0&amp;quot;, GitCommit:&amp;quot;283137936a498aed572ee22af6774b6fb6e9fd94&amp;quot;, GitTreeState:&amp;quot;clean&amp;quot;, BuildDate:&amp;quot;2016-07-01T19:26:38Z&amp;quot;, GoVersion:&amp;quot;go1.6.2&amp;quot;, Compiler:&amp;quot;gc&amp;quot;, Platform:&amp;quot;darwin/amd64&amp;quot;}
+
+Server Version: version.Info{Major:&amp;quot;1&amp;quot;, Minor:&amp;quot;3&amp;quot;, GitVersion:&amp;quot;v1.3.3&amp;quot;, GitCommit:&amp;quot;c6411395e09da356c608896d3d9725acab821418&amp;quot;, GitTreeState:&amp;quot;dirty&amp;quot;, BuildDate:&amp;quot;1970-01-01T00:00:00Z&amp;quot;, GoVersion:&amp;quot;go1.6.2&amp;quot;, Compiler:&amp;quot;gc&amp;quot;, Platform:&amp;quot;linux/amd64&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;kubernetes-internal-abbreviated&#34;&gt;Kubernetes Internal (abbreviated)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://k8s.info/cs.html&#34;&gt;k8s.info: Cheat Sheet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.3/docs/design/architecture.md&#34;&gt;k8s design docs: Architecture&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;시작 전에 간단히 구성 요소를 짚고 넘어가겠습니다. 아래의 설명 대신 위에 있는 링크를 읽고 오셔도 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/physical-layout.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;하나의 k8s 클러스터는 하나의 master 와 여러개의 node 로 구성되어 있습니다.
+개발자는 kubectl 을 이용해서 master 에 명령을 내리고, node 를 관리합니다.
+반면 사용자 (endpoint user) 는 node 에 접속해 서비스를 이용합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/arc_k8s_simple.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;조금 더 자세히 보면,&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;master 에는 작업을 위한 &lt;a href=&#34;http://kubernetes.io/docs/admin/kube-apiserver/&#34;&gt;api server&lt;/a&gt;,
+state 를 관리하기 위한 분산 저장소 (default 로 &lt;a href=&#34;https://coreos.com/etcd/&#34;&gt;etcd&lt;/a&gt;),
+&lt;a href=&#34;http://kubernetes.io/docs/admin/kube-scheduler/&#34;&gt;scheduler&lt;/a&gt;,
+&lt;a href=&#34;http://kubernetes.io/docs/admin/kube-controller-manager/&#34;&gt;controller manager&lt;/a&gt; 등이 있습니다. (현재는 master 가 단일 노드이지만 추후 multi-node master 가 지원될 예정)&lt;/li&gt;
+&lt;li&gt;node (= minion) 에는 master 와 통신하는 &lt;a href=&#34;http://kubernetes.io/docs/admin/kubelet/&#34;&gt;kubelet&lt;/a&gt; (agent, 현재는 containerized 되어있지 않음)이 있고,
+외부의 요청을 처리하는 &lt;a href=&#34;http://kubernetes.io/docs/admin/kube-proxy/&#34;&gt;kube-proxy&lt;/a&gt;,
+container 리소스 모니터링을 위한 &lt;a href=&#34;https://github.com/google/cadvisor&#34;&gt;cAdviser&lt;/a&gt; 등이 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이제 다시 큰 그림에서 보면, 다음과 같습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/arc_official.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;pod&#34;&gt;Pod&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/pods.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;하나 또는 여러개의 container 묶음을 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/pods&#34;&gt;pod&lt;/a&gt; 이라 부릅니다.
+docker 에서 container 끼리 통신하려면 같은 network 위에 있도록 구성해야 하는 반면 (compose 도 동일), 하나의 pod 내에 있는 contianer 끼리는 그럴 필요가 없습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;같은 IP 와 port space 를 가지기 때문에 &lt;code&gt;localhost&lt;/code&gt; 로 통신이 가능하며&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/user-guide/volumes/&#34;&gt;volume&lt;/a&gt; 을 공유합니다
+만약 어느 container 가 죽고 재시작되어도 pod 이 살아있는 한 shared volume 은 유지됩니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;In terms of Docker constructs, a pod is modelled as a group of Docker containers with shared namespaces and shared volumes. PID namespace sharing is not yet implemented in Docker.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;pod 의 종료, 삭제 관련해서는 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/pods/#termination-of-pods&#34;&gt;Termination of Pods&lt;/a&gt; 를 참고하시면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;위에서 k8s 가 auto-restart 등을 해준다고 했었는데 테스트 해보겠습니다. 그 전에 먼저 클러스터가 정상적으로 세팅이 되었는지 확인해 보겠습니다. 저는 minikube 를 이용해서 로컬에서 실행했으므로 아래와 같은 결과가 나옵니다.
+kubectl 을 여러 클러스터 중 하나에 붙어서 커맨드를 날릴 수 있도록 도와주는 docker-machine 정도로 이해하시면 됩니다. (단위가 다르지만)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl config view
+
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/1ambda/.minikube/ca.crt
+    server: https://192.168.64.2:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/1ambda/.minikube/apiserver.crt
+    client-key: /Users/1ambda/.minikube/apiserver.key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 아래와 같이 &lt;code&gt;nginx.yaml&lt;/code&gt; 을 만들겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 실행하면,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl create -f nginx.yaml
+replicationcontroller &amp;quot;nginx&amp;quot; created
+
+$ kubectl get replicationcontroller nginx
+NAME      DESIRED   CURRENT   AGE
+nginx     3         3         41s
+
+$ kubectl get pods
+NAME          READY     STATUS    RESTARTS   AGE
+nginx-5aa7m   1/1       Running   0          45s
+nginx-5frtc   1/1       Running   0          45s
+nginx-sg1s5   1/1       Running   0          45s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pod 하나를 죽여보겠습니다. 재생성되는걸 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl delete pod nginx-5aa7m
+pod &amp;quot;nginx-5aa7m&amp;quot; deleted
+
+$ kubectl get pods
+NAME          READY     STATUS              RESTARTS   AGE
+nginx-5frtc   1/1       Running             0          1m
+nginx-6tub7   0/1       ContainerCreating   0          1s
+nginx-sg1s5   1/1       Running             0          1m
+
+
+$ kubectl get pods
+NAME          READY     STATUS    RESTARTS   AGE
+nginx-5frtc   1/1       Running   0          1m
+nginx-6tub7   1/1       Running   0          5s
+nginx-sg1s5   1/1       Running   0          1m
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;service&#34;&gt;Service&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/infra-kubernetes/intro/abstraction.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;pod 은 생성/삭제 될 수 있습니다. &lt;a href=&#34;http://kubernetes.io/docs/user-guide/replication-controller/&#34;&gt;replication-controller&lt;/a&gt; 를 이용하면 심지어 동적으로도 scale up/down 이 가능한데,
+이럴 경우 IP 가 변경/추가/제거 되므로, k8s 는 external &amp;lt;-&amp;gt; pods 이나 pods &amp;lt;-&amp;gt; pods 간의 안정적인 통신을 위해 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/services/&#34;&gt;service&lt;/a&gt; 라는 object 를 도입했습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Services provide a single, stable name and address for a set of pods. They act as basic load balancers.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;위 그림을 잘 보면, pod 에 있는 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/labels/&#34;&gt;label&lt;/a&gt; 과 동일한 컬러의 것이 service 에도 있고,
+해당 service 가 같은 label 컬러를 가진 pod 을 위한 것임을 쉽게 알 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;위에서 생성한 nginx pods 를 위한 service 를 &lt;code&gt;nginx-svc.yaml&lt;/code&gt; 이란 이름으로 만들어 보겠습니다. &lt;code&gt;selector&lt;/code&gt; 를 잘 보세요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  ports:
+    - name: nginx-svc
+      port: 8090
+      targetPort: 80
+  type: NodePort
+  selector:
+    app: nginx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 생성하면,  &lt;code&gt;nginx-svc&lt;/code&gt; service 의 EXTERNAL-IP 가 &lt;code&gt;&amp;lt;nodes&amp;gt;&lt;/code&gt; 로 보입니다.
+전체 node 에 대해서 외부 포트를 열어서 그런데,
+&lt;a href=&#34;http://kubernetes.io/docs/user-guide/services/#type-nodeport&#34;&gt;NodePort&lt;/a&gt;
+대신 &lt;a href=&#34;type-loadbalancer&#34;&gt;LoadBalancer&lt;/a&gt; (cloud provider 가 지원할 경우만 사용가능) 타입을 이용하거나 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/ingress/&#34;&gt;ingress&lt;/a&gt; 를 이용할 수 있습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;As of Kubernetes v1.0, Services are a “layer 3” (TCP/UDP over IP) construct. In Kubernetes v1.1 the Ingress API was added (beta) to represent “layer 7” (HTTP) services.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl create -f nginx-svc.yaml
+service &amp;quot;nginx-svc&amp;quot; created
+
+$ kubtctl get service
+NAME         CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+kubernetes   10.0.0.1     &amp;lt;none&amp;gt;        443/TCP    3d
+nginx-svc    10.0.0.196   &amp;lt;nodes&amp;gt;       8090/TCP   1m
+
+$ kubectl describe service nginx-svc
+  ...
+  Endpoints:              172.17.0.3:80,172.17.0.4:80,172.17.0.5:80
+  
+$ kubectl get node
+NAME          STATUS    AGE
+boot2docker   Ready     3d
+
+$ kubectl describe node boot2docker | grep Address
+Addresses:              192.168.64.2,192.168.64.2
+
+$ curl 192.168.64.2:31968
+
+ &amp;lt;!DOCTYPE html&amp;gt;
+ &amp;lt;html&amp;gt;
+ &amp;lt;head&amp;gt;
+ &amp;lt;title&amp;gt;Welcome to nginx!&amp;lt;/title&amp;gt;
+  ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;192.168.64.2:31968&lt;/strong&gt; 을 접근해보면, nginx 가 떠있음을 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;pod 이 생성될때 active service 에 대해서 kubelet 이 service 의 IP, port 와 관련된 환경변수를 pod 에 주입합니다. (service 가 먼저 생성되어 있어야 함)
+예를 들어 service name 이 &lt;code&gt;redis-master&lt;/code&gt; 라면 다음과 같은 값들이 주입됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;REDIS_MASTER_SERVICE_HOST=10.0.0.11
+REDIS_MASTER_SERVICE_PORT=6379
+REDIS_MASTER_PORT=tcp://10.0.0.11:6379
+REDIS_MASTER_PORT_6379_TCP=tcp://10.0.0.11:6379
+REDIS_MASTER_PORT_6379_TCP_PROTO=tcp
+REDIS_MASTER_PORT_6379_TCP_PORT=6379
+REDIS_MASTER_PORT_6379_TCP_ADDR=10.0.0.11
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;하여 pod 간 통신에는 env variable 을 이용할 수 있으나, &lt;a href=&#34;http://kubernetes.io/docs/user-guide/services/#dns&#34;&gt;DNS&lt;/a&gt; 를 이용하는 것이 더 권장됩니다.&lt;/p&gt;
+
+&lt;p&gt;추가적으로, label 값은 &lt;a href=&#34;https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook&#34;&gt;kubernetes/example/guestbook&lt;/a&gt; 처럼 붙이는 것이 권장됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis-master
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: master
+        tier: backend
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;deployment&#34;&gt;Deployment&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://kubernetes.io/docs/user-guide/deployments/&#34;&gt;deployment&lt;/a&gt; 는 &lt;a href=&#34;http://kubernetes.io/docs/hellonode/&#34;&gt;Kubernetes: Hello World Walkthrough&lt;/a&gt; 를 진행하셨다면 감이 오셨을수도 있겠습니다.
+rolling update, rollback 등을 지원하는 pod, replica set 입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;위와 같이 &lt;code&gt;nginx-deployment.yaml&lt;/code&gt; 을 만들고, 배포하면&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl delete replicationcontroller nginx
+$ kubectl get pod
+
+$ kubectl create -f nginx-deployment.yaml
+deployment &amp;quot;nginx-deployment&amp;quot; created
+
+$ kubectl get deployment
+NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   3         3         3            3           8h
+
+$ kubectl get rs
+NAME                          DESIRED   CURRENT   AGE
+nginx-deployment-1159050644   3         3         8h
+
+$ kubectl get pods
+NAME                                READY     STATUS    RESTARTS   AGE
+nginx-deployment-1159050644-1bhfw   1/1       Running   0          8h
+nginx-deployment-1159050644-hxaxs   1/1       Running   0          8h
+nginx-deployment-1159050644-zc5tc   1/1       Running   0          8h
+
+$ kubectl rollout status deployment/nginx-deployment
+  deployment nginx-deployment successfully rolled out
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;정상적으로 배포되었는지는 &lt;strong&gt;rollout status&lt;/strong&gt; 커맨드를 이용해서 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;이제 container 의 nginx 버전을 올려보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
+deployment &amp;quot;nginx-deployment&amp;quot; image updated
+
+$ # also, we can use `edit` 
+$ # kubectl edit deployment/nginx-deployment
+
+$ kubectl rollout status deployment/nginx-deployment
+deployment nginx-deployment successfully rolled out
+
+$ kubectl get deployment
+NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   3         3         3            3           9h
+
+$ kubectl get rs
+NAME                          DESIRED   CURRENT   AGE
+nginx-deployment-1159050644   0         0         8h
+nginx-deployment-671724942    3         3         1m
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;모든 pod 을 한번에 생성하고, 한번에 오래된 pod 을 죽이는 방식으로 일어나는 것이 아니라 rolling update 처럼 하나하나씩 진행됩니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Deployment can ensure that only a certain number of Pods may be down while they are being updated. By default, it ensures that at least 1 less than the desired number of Pods are up (1 max unavailable).&lt;/p&gt;
+
+&lt;p&gt;Deployment can also ensure that only a certain number of Pods may be created above the desired number of Pods. By default, it ensures that at most 1 more than the desired number of Pods are up (1 max surge).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl get pods
+NAME                               READY     STATUS    RESTARTS   AGE
+nginx-deployment-671724942-1hytl   1/1       Running   0          41s
+nginx-deployment-671724942-7a0f1   1/1       Running   0          41s
+nginx-deployment-671724942-jzgm0   1/1       Running   0          40s
+
+$ kubectl describe deployments
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Sun, 07 Aug 2016 00:48:18 +0900
+Labels:                 app=nginx
+Selector:               app=nginx
+Replicas:               3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  1 max unavailable, 1 max surge
+OldReplicaSets:         &amp;lt;none&amp;gt;
+NewReplicaSet:          nginx-deployment-671724942 (3/3 replicas created)
+Events:
+  FirstSeen     LastSeen        Count   From                            SubobjectPath   Type        Reason                   Message
+  ---------     --------        -----   ----                            -------------   --------    ------                   -------
+  51s           51s             1       {deployment-controller }                        Normal      ScalingReplicaSet        Scaled up replica set nginx-deployment-671724942 to 1
+  51s           51s             1       {deployment-controller }                        Normal      ScalingReplicaSet        Scaled down replica set nginx-deployment-1159050644 to 2
+  51s           51s             1       {deployment-controller }                        Normal      ScalingReplicaSet        Scaled up replica set nginx-deployment-671724942 to 2
+  50s           50s             1       {deployment-controller }                        Normal      ScalingReplicaSet        Scaled down replica set nginx-deployment-1159050644 to 1
+  50s           50s             1       {deployment-controller }                        Normal      ScalingReplicaSet        Scaled up replica set nginx-deployment-671724942 to 3
+  50s           50s             1       {deployment-controller }                        Normal      ScalingReplicaSet        Scaled down replica set nginx-deployment-1159050644 to 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;보면 replica set 은 2개지만 &lt;code&gt;nginx-deployment-1159050644&lt;/code&gt; 은 업데이트 전 버전인 1.7.9 pod 이 하나도 없고 (&lt;strong&gt;desired = 0&lt;/strong&gt;), &lt;code&gt;nginx-deployment-671724942&lt;/code&gt; 만 3 개의 pod 을 가지고 있습니다.
+이전 replica set 을 유지하는 이유는 rollback 을 위해서 인데요&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl rollout history deployment/nginx-deployment
+deployments &amp;quot;nginx-deployment&amp;quot;:
+REVISION        CHANGE-CAUSE
+1               &amp;lt;none&amp;gt;
+2               &amp;lt;none&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;여기서 &lt;code&gt;CHANGE-CAUSE&lt;/code&gt; 가 &lt;strong&gt;none&lt;/strong&gt; 인 이유는 deployment 커맨드 이용해 &lt;strong&gt;--record&lt;/strong&gt; 를 사용하지 않아서 그렇습니다. revision 값을 지정해 살펴보면&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl rollout history deployment/nginx-deployment --revision=1
+deployments &amp;quot;nginx-deployment&amp;quot; revision 1
+  Labels:       app=nginx
+        pod-template-hash=1159050644
+  Containers:
+   nginx:
+    Image:      nginx:1.7.9
+    Port:       80/TCP
+    Environment Variables:      &amp;lt;none&amp;gt;
+  No volumes.
+  
+$ kubectl rollout history deployment/nginx-deployment --revision=2
+deployments &amp;quot;nginx-deployment&amp;quot; revision 2
+  Labels:       app=nginx
+        pod-template-hash=671724942
+  Containers:
+   nginx:
+    Image:      nginx:1.9.1
+    Port:       80/TCP
+    Environment Variables:      &amp;lt;none&amp;gt;
+  No volumes.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 rollback 해 보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kubectl rollout undo deployment/nginx-deployment --to-revision=1
+deployment &amp;quot;nginx-deployment&amp;quot; rolled back
+
+$ kb get pods
+NAME                                READY     STATUS              RESTARTS   AGE
+nginx-deployment-1159050644-mg5e9   1/1       Running             0          2s
+nginx-deployment-1159050644-vsoaw   1/1       Running             0          2s
+nginx-deployment-1159050644-x0319   0/1       ContainerCreating   0          1s
+nginx-deployment-671724942-1hytl    1/1       Terminating         0          23m
+
+$ kb get deployment
+NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   3         3         3            3           9h
+
+$ kb get rs
+NAME                          DESIRED   CURRENT   AGE
+nginx-deployment-1159050644   3         3         9h
+nginx-deployment-671724942    0         0         24m
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이전 pod 이 죽고, 새로운 pod 이 생성되는 과정을 볼 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;pet-set&#34;&gt;Pet Set&lt;/h3&gt;
+
+&lt;p&gt;stateless application 의 경우에는 기존의 pod, replica set 등을 이용해 쉽게 배포하고 확장할 수 있었지만,
+ cluster 로 동작하는 경우에는 각 instance 간 networking 을 위해 reliable name (e.g index based, advertised hostname) 등의 기능이 필요했습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://kubernetes.io/docs/user-guide/petset/&#34;&gt;pet set&lt;/a&gt; 은 stateful (e.g clustering) applications 의 지원을 위해 1.3 버전에서 alpha 기능으로 추가되었습니다. (see &lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG.md#v130&#34;&gt;CHANGELOG#1.3&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.kubernetes.io/2016/07/thousand-instances-of-cassandra-using-kubernetes-pet-set.html&#34;&gt;1000 Instances of Cassandra using Kubernetes Pet Set&lt;/a&gt; 에서는 alpha 기능인 pet set 을 이용해 1000 개의 카산드라 인스턴스를 배포하고 sample job 을 돌린 경험을 공유하고 있습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;We deployed 1,000 pets. Technically with the Cassandra setup, &lt;strong&gt;we could have lost 333 nodes without service or data loss&lt;/strong&gt;.&lt;br /&gt;
+&lt;strong&gt;8,072 Cores&lt;/strong&gt;. The master used 24, minion nodes used the rest&lt;br /&gt;
+&lt;strong&gt;100,510 GB&lt;/strong&gt; persistent disk used by the Minions and the Master&lt;br /&gt;
+&lt;strong&gt;380,020 GB SSD&lt;/strong&gt; disk persistent disk. 20 GB for the master and 340 GB per Cassandra Pet.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;팀 내에서 20+ broker 로 kafka cluster 를 운영하고 있는데다가 container 기반 기술에 관심이 많아 적용을 해보고 싶긴 한데,
+아직 레퍼런스가 없어 안타깝습니다. github issue 를 보면 example 을 만들기 위해 논의는 진행중인것 같습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/5017&#34;&gt;kubernetes #5017: Example: Kafka/Zookeeper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/32140025/kafka-on-kubernetes-multi-node&#34;&gt;SO: Kafka on k8s multi node&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.defuze.org/archives/351-running-a-zookeeper-and-kafka-cluster-with-kubernetes-on-aws.html&#34;&gt;Running a ZK and kafka clusters on k8s&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/CloudTrackInc/kubernetes-kafka/issues&#34;&gt;Github: kubernetes-kafka&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/contrib/tree/master/pets&#34;&gt;Github: kubernetes-contrib/pets&lt;/a&gt; 를 보시면 pet set 을 이용해 cluster 를 구성하는 샘플이 몇개 있습니다.
+현재까지는 mysql, redis, ZK 정도가 있네요. &lt;a href=&#34;https://github.com/kubernetes/kubernetes/tree/master/examples&#34;&gt;Github: kubernetes/examples&lt;/a&gt; 도 다양한 샘플이 있으므로 한번 쭈욱 둘러보시면 도움이 될듯 합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;other-objects&#34;&gt;Other Objects&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/user-guide/volumes/&#34;&gt;Volume&lt;/a&gt;, &lt;a href=&#34;http://kubernetes.io/docs/user-guide/persistent-volumes/&#34;&gt;Persistent Volume&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;위에서는 pod 과 volume 의 life cycle 이 동일하다고 했지만, 사실 꼭 그렇지는 않습니다. 다양한 type 의 volume 이 지원되기 때문인데요,
+&lt;code&gt;emptyDir&lt;/code&gt; 이외의 volume type 을 이용하면 pod 이 죽더라도, 데이터를 유지할 수 있습니다. (e.g &lt;a href=&#34;http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk&#34;&gt;gcePersistentDisk&lt;/a&gt;, &lt;a href=&#34;https://clusterhq.com/flocker/introduction/&#34;&gt;flocker&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;persistent volume (PV) 는 일종의 networked storage 로 pod lifecycle 을 벗어나 존재할수 있으면서도, 사용자가 리소스의 양을 특정지어 요청할 수 있는 volume 입니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Managing storage is a distinct problem from managing compute. The PersistentVolume subsystem provides an API for users and administrators that abstracts details of how storage is provided from how it is consumed&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/admin/daemons/&#34;&gt;Daemon Set&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;daemon set 은 node 마다 추가되야 하는 프로세스가 있을때 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;running a cluster storage daemon, such as &lt;strong&gt;glusterd&lt;/strong&gt;, &lt;strong&gt;ceph&lt;/strong&gt;, on each node&lt;br /&gt;
+running a logs collection daemon on every node, such as &lt;strong&gt;fluentd&lt;/strong&gt; or &lt;strong&gt;logstash&lt;/strong&gt;&lt;br /&gt;
+&amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/user-guide/jobs/&#34;&gt;Job&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;배치 작업처럼, 실행후 종료되는 Job 을 의미합니다.&lt;/p&gt;
+
+&lt;p&gt;기타 오브젝트는 &lt;a href=&#34;http://kubernetes.io/docs/reference/&#34;&gt;Reference&lt;/a&gt; 의 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/annotations/&#34;&gt;Glossary&lt;/a&gt; 를 참조하시면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;etc&#34;&gt;Etc&lt;/h3&gt;
+
+&lt;p&gt;A. Log Aggregation 은 아래의 내용을 참고하실 수 있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/getting-started-guides/logging/&#34;&gt;http://kubernetes.io/docs/getting-started-guides/logging/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/1071&#34;&gt;https://github.com/kubernetes/kubernetes/issues/1071&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/24677&#34;&gt;https://github.com/kubernetes/kubernetes/issues/24677&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;B. k8s cluster 간 연결은 &lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/master/docs/proposals/federation.md&#34;&gt;k8s cluster federation&lt;/a&gt; 이라 불립니다.&lt;/p&gt;
+
+&lt;p&gt;C. k8s production 적용을 위한 &lt;a href=&#34;http://kubernetes.io/docs/user-guide/production-pods/#liveness-and-readiness-probes-aka-health-checks&#34;&gt;guide&lt;/a&gt; 도 있습니다.&lt;/p&gt;
+
+&lt;p&gt;D. 이런 저런 CI 를 테스팅 해봤는데 &lt;a href=&#34;circleci.com&#34;&gt;Circle CI&lt;/a&gt; 가 썩 괜찮습니다.
+싼 가격에, 연동 잘되고 기능 많습니다. 아래와 같이 build (scala) 세팅하면 &lt;a href=&#34;https://cloud.google.com/container-registry/&#34;&gt;google container registry&lt;/a&gt; 에 push 하고
+gcloud 커맨드 까지 직접 내릴 수 있으니, develop branch 정도라면 k8s &lt;a href=&#34;kubernetes.io/docs/user-guide/deployments/&#34;&gt;deployment&lt;/a&gt; 이용해서 바로 롤링 업그레이드 가능합니다. (만약 SBT 가 느리다면 &lt;a href=&#34;https://github.com/alexarchambault/coursier&#34;&gt;courseir&lt;/a&gt; 나 circle CI build cache 등을 이용해보세요.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;machine:
+  environment:
+    SBT_VERSION: 0.13.8
+    SBT_OPTS: &amp;quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
+-XX:MaxPermSize=256M&amp;quot;
+    PROJECT_NAME: dmm-common
+  services:
+    - docker
+  java:
+    version: oraclejdk8
+
+dependencies:
+  cache_directories:
+    - &amp;quot;~/.sbt&amp;quot;
+  pre:
+    # install SBT
+    - wget --output-document=$HOME/bin/sbt-launch.jar
+      https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/&amp;quot;$SBT_VERSION&amp;quot;/sbt-launch.jar
+    - echo &amp;quot;java $SBT_OPTS -jar \`dirname \$0\`/sbt-launch.jar \&amp;quot;\$@\&amp;quot;&amp;quot; &amp;gt; $HOME/bin/sbt
+    - chmod u+x $HOME/bin/sbt
+
+    # install gcloud SDK, kubectl
+    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+
+  override:
+    - sbt sbt-version
+
+test:
+  override:
+    - sbt test
+    - sbt docker
+
+deployment:
+  development:
+    branch: /feature.*/
+    commands:
+      - echo $GCE_KEY &amp;gt; gcloud-key.json
+      - gcloud auth activate-service-account --key-file gcloud-key.json
+      - docker tag 1ambda/sample gcr.io/1ambda/sample:$CIRCLE_SHA1
+      - gcloud docker push gcr.io/1ambda/sample:$CIRCLE_SHA1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://devops.com/2015/11/09/9-more-open-source-devops-tools-we-love/&#34;&gt;Title Image&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://kubernetes.io/docs/whatisk8s/&#34;&gt;What is k8s?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://k8s.info/cs.html&#34;&gt;k8s.info&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/33970251/how-to-expose-a-kubernetes-service-externally-using-nodeport&#34;&gt;SO: How to expose a Kubernetes service externally using NodePort&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://nshani.blogspot.kr/2016/02/getting-started-with-kubernetes.html&#34;&gt;k8s pod image&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.slideshare.net/erialc_w/kubernetes-50626679&#34;&gt;k8s architecture slide1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.slideshare.net/imesh/apache-stratos-410-architecture&#34;&gt;k8s architecture slide2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.kubernetes.io/2016/07/thousand-instances-of-cassandra-using-kubernetes-pet-set.html&#34;&gt;1000 Instances of Cassandra using Kubernetes Pet Set&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.3/docs/design/architecture.md&#34;&gt;k8s design docs: Architecture&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>10분만에 Github Profile 만들기</title>
+      <link>https://1ambda.github.io/51/oh-my-github/tutorial/</link>
+      <pubDate>Sat, 25 Jun 2016 14:53:48 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/51/oh-my-github/tutorial/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg?width=200&amp;amp;height=200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;Github 데이터를 이용해 프로필을 만들려면&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://developer.github.com/v3/&#34;&gt;Github API&lt;/a&gt;&lt;/strong&gt; 를 이용해 데이터를 긁어옵니다.&lt;/li&gt;
+&lt;li&gt;데이터를 보여줄 웹 어플리케이션 (&lt;em&gt;static&lt;/em&gt;) 을 만듭니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page (gh-pages)&lt;/a&gt;&lt;/strong&gt; 를 이용해 남들에게 보여줍니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이 때, (1) 에서 만든 데이터의 &lt;strong&gt;포맷을 정형화하면&lt;/strong&gt;, 이것을 사용하는 (2) 의 웹 어플리케이션을 일종의 &lt;em&gt;viewer&lt;/em&gt; 로 생각할 수 있습니다. 포맷이 고정되어 있으므로 데이터를 사용하는 &lt;em&gt;viewer&lt;/em&gt; 를 &lt;strong&gt;쉽게 교체하거나&lt;/strong&gt;, 자신이 원하는대로 &lt;strong&gt;커스터마이징&lt;/strong&gt; 할 수 있게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;demo&#34;&gt;Demo&lt;/h3&gt;
+
+&lt;p&gt;시작 전에 오늘 만들 결과물의 데모를 보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://1ambda.github.io/oh-my-github/&#34;&gt;Demo (Chrome, Firefox, Safari, IE11+)&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Langauge&lt;/strong&gt;: 즐겨 사용하는 프로그래밍 언어&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Repository&lt;/strong&gt;: 레포지토리 정보 (&lt;em&gt;stargazer&lt;/em&gt;, &lt;em&gt;fork count&lt;/em&gt; 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Contribution&lt;/strong&gt;: 오픈소스 커밋 내역&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Activity&lt;/strong&gt;: 최근 활동 내역 (&lt;em&gt;Push&lt;/em&gt;, &lt;em&gt;PullRequest&lt;/em&gt; 등)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;등의 정보를 확인할 수 있습니다. 커스터마이징 등은 아래에서 설명하겠습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h3&gt;
+
+&lt;p&gt;이제 Github 프로필을 만들어 보겠습니다. 준비물을 먼저 확인하면,&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;SSH Key&lt;/em&gt; 가 Github 에 등록이 안되어있을 경우 &lt;strong&gt;&lt;a href=&#34;https://help.github.com/articles/generating-an-ssh-key/&#34;&gt;Github: Generating an SSH key&lt;/a&gt;&lt;/strong&gt; 를 참조해서 등록해주세요.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;oh-my-github&lt;/strong&gt; 란 이름의 &lt;strong&gt;&lt;a href=&#34;https://github.com/new&#34;&gt;Github Repository&lt;/a&gt;&lt;/strong&gt; 를 만들어주세요. &lt;strong&gt;&lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page&lt;/a&gt;&lt;/strong&gt; 를 이용해 배포시 사용할 저장소입니다. (이름은 반드시 &lt;strong&gt;oh-my-github&lt;/strong&gt; 여야 합니다)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://github.com/settings/tokens/new&#34;&gt;Github Access Token&lt;/a&gt;&lt;/strong&gt; 을 만들어주세요. 50 개 이상의 Github API 호출을 위해선 Access Token 이 꼭 필요합니다. (Write Permission 은 필요 없습니다.)&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;데이터를 보여주는 정적 웹 어플리케이션인 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;viewer&lt;/a&gt; 와 Github API 를 호출해 데이터를 생성하는 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 설치법은 아래서 설명하겠습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;install-viewer&#34;&gt;Install: Viewer&lt;/h3&gt;
+
+&lt;p&gt;먼저 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;default viewer&lt;/a&gt; 를 클론 받고, &lt;code&gt;upstream&lt;/code&gt; 업데이트를 위해 remote 를 등록합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:oh-my-github/viewer.git oh-my-github
+$ cd oh-my-github
+
+$ git remote add upstream git@github.com:oh-my-github/viewer.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고, 위에서 만든 자신의 레포지토리 url 을 &lt;code&gt;origin&lt;/code&gt; 으로 등록합니다. &lt;code&gt;[GITHUB_ID]&lt;/code&gt; 대신 자신의 아이디를 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git remote remove origin
+$ git remote add origin git@github.com:[GITHUB_ID]/oh-my-github
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;install-oh-my-github&#34;&gt;Install: oh-my-github&lt;/h3&gt;
+
+&lt;p&gt;먼저 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 를 설치하겠습니다. NodeJS 가 없다면, &lt;a href=&#34;https://github.com/creationix/nvm&#34;&gt;NVM&lt;/a&gt; 설치 후 문서에 나와있는 대로 NodeJS 5.0.0 이상 버전을 설치해 주세요. 이 문서에서는 5.0.0 을 사용하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nvm use 5.0.0
+Now using node v5.0.0
+
+$ nvm ls
+   v0.12.9
+-&amp;gt;  v5.0.0
+    v5.4.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 를 설치합니다. 네트워크 상황에 따라 2분 ~ 4분정도 걸립니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install oh-my-github -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 Linux 를 사용하고 있고, 위 설치 과정에서 &lt;code&gt;LIBXXX&lt;/code&gt; 등의 에러를 마주쳤을 경우 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github/wiki/Installation-Guide-for-Linux&#34;&gt;Linux Install Guide&lt;/a&gt; 를 참조해주세요.&lt;/p&gt;
+
+&lt;p&gt;이제 &lt;em&gt;viewer&lt;/em&gt; 를 클론 받은 디렉토리로 이동한 뒤 &lt;em&gt;oh-my-github&lt;/em&gt; 를 실행합니다. 여기서 &lt;code&gt;[GITHUB_TOKEN]&lt;/code&gt; 은 위에서 만든 &lt;a href=&#34;https://github.com/settings/tokens/new&#34;&gt;Github Access Token&lt;/a&gt; 값이고, &lt;code&gt;[GITHUB_ID]&lt;/code&gt; 는 자신의 Github ID 입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ oh-my-github
+
+$ omg init [GITHUB_ID] oh-my-github       # (e.g) omg init 1ambda oh-my-github
+$ omg generate [GITHUB_TOKEN]             # (e.g) omg generate 394fbad49191aca
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;omg generate&lt;/code&gt; 를 실행하면, 현재 디렉토리에 &lt;code&gt;oh-my-github.json&lt;/code&gt; (프로필 데이터) 가 생성됩니다. &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page&lt;/a&gt; 에 배포하기 전에 먼저 로컬에 띄워 볼 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ omg preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;code&gt;gh-pages&lt;/code&gt; 브랜치를 만들고 push 를 해야하는데, 아래의 명령어를 이용해 한번에 해결할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ omg publish
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 &lt;code&gt;omg publish&lt;/code&gt; 명령어가 동작하지 않는다면, 직접 Git 커맨드를 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git add --all
+$ git commit -m &amp;quot;feat: Update Profile&amp;quot;
+$ git checkout -b gh-pages
+$ git push origin HEAD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 30초 정도 기다리고, 자신의 oh-my-github 레포지토리 &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page&lt;/a&gt; URL 을 확인해 봅니다. 예를 들어 Github ID 가 &lt;code&gt;1ambda&lt;/code&gt; 라면, &lt;a href=&#34;http://1ambda.github.io/oh-my-github&#34;&gt;http://1ambda.github.io/oh-my-github&lt;/a&gt; 에 프로필이 생성됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;update&#34;&gt;Update&lt;/h3&gt;
+
+&lt;h4 id=&#34;profile&#34;&gt;Profile&lt;/h4&gt;
+
+&lt;p&gt;프로필 데이터 &lt;code&gt;oh-my-github.json&lt;/code&gt; 내용은 크게 분류하면 두가지로 나뉩니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;activities&lt;/code&gt;: 사용자의 활동 정보로, 이전 정보에 새로운 값이 추가됨(&lt;em&gt;append&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;repositories&lt;/code&gt;, &lt;code&gt;languages&lt;/code&gt; 등: 최신 정보로 덮어 씌워짐 (&lt;em&gt;overwrite&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;omg generate&lt;/code&gt; 를 실행할 때 마다, 새로운 이벤트가 있다면 &lt;code&gt;activities&lt;/code&gt; 값이 추가 (&lt;em&gt;append&lt;/em&gt;) 됩니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;더 정확히는, Github API 는 최대 10개월 혹은 최대 300개의 event 만 제공하기 때문에, 이것보다 더 많은 양의 event 를 프로필 데이터에 저장하고자 event id 값으로 중복 제거를 한 뒤 &lt;em&gt;append&lt;/em&gt; 방식으로 데이터를 쌓습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;따라서 프로필 데이터를 업데이트 하고, Github 에 푸시하려면 다음의 명령어를 실행하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd oh-my-github         # oh-my-github.json 이 위치한 곳
+
+$ omg generate [GITHUB_TOKEN]
+$ omg publish
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;viewer&#34;&gt;Viewer&lt;/h4&gt;
+
+&lt;p&gt;&lt;em&gt;viewer&lt;/em&gt; 를 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;upstream&lt;/a&gt; 에서 다음처럼 업데이트 할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd oh-my-github         # oh-my-github.json 이 위치한 곳
+
+$ git checkout master
+$ git pull upstream master --rebase
+
+$ git checkout gh-pages
+$ git rebase master
+
+$ git push origin HEAD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;customizing&#34;&gt;Customizing&lt;/h3&gt;
+
+&lt;p&gt;만약 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;default viewer&lt;/a&gt; 가 맘에 들지 않는다거나, 새로운 기능 (e.g 그래프) 을 추가하고 싶다면 클론받아 &lt;code&gt;app/src&lt;/code&gt; 아래의 코드를 수정할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app
+├── LICENSE.md
+├── package.json
+├── src (웹 애플리케이션 소스)
+│   ├── actions
+│   ├── components
+│   ├── constants
+│   ├── containers
+│   ├── reducers
+│   ├── store
+│   ├── theme
+│   └── util
+└── tools (빌드도구 관련)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;app&lt;/code&gt; 디렉토리로 이동 후 &lt;code&gt;npm start -s&lt;/code&gt; 를 실행하고 코드를 수정한 뒤, &lt;code&gt;npm run build&lt;/code&gt; 를 실행하면 루트 디렉토리에 &lt;code&gt;bundle.js&lt;/code&gt; 와 &lt;code&gt;index.html&lt;/code&gt; 이 업데이트 됩니다. 이 두 파일을 자신의 &lt;strong&gt;oh-my-github&lt;/strong&gt; 에 업데이트 하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;추가로, 다른 사람들이 자신이 수정한 &lt;em&gt;viewer&lt;/em&gt; 를 찾을 수 있게 &lt;a href=&#34;https://www.npmjs.com/search?q=oh-my-github%2C+viewer&#34;&gt;NPM&lt;/a&gt; 에 등록하고 싶다면 &lt;code&gt;package.json&lt;/code&gt; 을 수정 후 &lt;code&gt;app&lt;/code&gt; 디렉토리에서 &lt;code&gt;npm publish&lt;/code&gt; 명령을 실행하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;아래의 내용을 수정하고, 배포하면 NPM 에서 &lt;code&gt;oh-my-github, viewer&lt;/code&gt; 키워드로 검색할 수 있습니다. &lt;a href=&#34;https://www.npmjs.com/search?q=oh-my-github%2C+viewer&#34;&gt;(NPM: oh-my-github, viewer)&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  ...
+
+  &amp;quot;name&amp;quot;: &amp;quot;oh-my-github-viewer-default&amp;quot;,
+  &amp;quot;version&amp;quot;: &amp;quot;0.0.1&amp;quot;,
+  &amp;quot;author&amp;quot;: &amp;quot;1ambda&amp;quot;,
+  &amp;quot;description&amp;quot;: &amp;quot;&amp;quot;,
+  &amp;quot;homepage&amp;quot;: &amp;quot;https://github.com/oh-my-github/viewer#readme&amp;quot;,
+  &amp;quot;repository&amp;quot;: {
+    &amp;quot;type&amp;quot;: &amp;quot;git&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;git+https://github.com/oh-my-github/viewer.git&amp;quot;
+  },
+  &amp;quot;bugs&amp;quot;: {
+    &amp;quot;url&amp;quot;: &amp;quot;https://github.com/oh-my-github/viewer/issues&amp;quot;
+  },
+
+  ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://octodex.github.com/baracktocat&#34;&gt;@baracktocat on octodex (Title Iamge)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github: generator&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;oh-my-github: viewer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CC 01: Map Reduce</title>
+      <link>https://1ambda.github.io/93/cloud-computing/cloud-computing-1/</link>
+      <pubDate>Sat, 25 Jun 2016 14:42:29 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/93/cloud-computing/cloud-computing-1/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://ook.co/wp-content/uploads/cloudcomputing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;intro&#34;&gt;Intro&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;map&lt;/em&gt; 과 &lt;em&gt;reduce&lt;/em&gt; 라는 단어는 &lt;em&gt;functional language&lt;/em&gt; 에서 왔다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;map:&lt;/em&gt; processes each record sequentially and independently&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;reduce:&lt;/em&gt; processes set of all records in batches&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(map square &#39;(1 2 3 4))
+;; (1 4 9 16)
+
+(reduce + &#39;(1 4 9 16))
+;; (+16 (+9 (+4 1)))
+;; 30
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;mapreduce&#34;&gt;MapReduce&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://webmapreduce.sourceforge.net/docs/User_Guide/images/map-reduce.png&#34; alt=&#34;&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://webmapreduce.sourceforge.net/&#34;&gt;http://webmapreduce.sourceforge.net/&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Map:&lt;/em&gt; &lt;strong&gt;Parallelly&lt;/strong&gt; process &lt;strong&gt;a large number&lt;/strong&gt; of individual records to generate intermediate key/value pairs
+&lt;br/&gt;
+&lt;em&gt;Reduce:&lt;/em&gt; processes and merges all intermediate values associated per key&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;각 키는 하나의 &lt;em&gt;reducer&lt;/em&gt; 에 할당되고, &lt;em&gt;partitioning keys&lt;/em&gt; 에 의해 &lt;em&gt;reduce&lt;/em&gt; 가 진행된다. 자주 쓰이는 기법으로 &lt;em&gt;hash partitioning&lt;/em&gt; 이 있다. &lt;code&gt;hash(key) % # of reduce servers&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public static class MapClass extends MapReduceBase 
+            implements Mapper&amp;lt;LongWriteable, Text, Text, IntWritable&amp;gt; {
+
+  private final static IntWritable one = new IntWritable(1);
+  private Text word = new Text();
+  
+  public void map(LongWritable key, Text value, 
+                  OutputCollector&amp;lt;Text, IntWritable&amp;gt; output,
+                  Reporter reporter) throws IOException {
+  
+    String line = value.toString();
+    StringTokenizer itr = new StringTokenizer(line);
+    
+    while (itr.hasMoreTokens()) {
+      word.set(itr.nextToken());
+      output.collect(word, one);
+    }
+  }
+}
+
+public static class ReduceClass extends MapReduceBase
+            implements Reducer&amp;lt;Text, IntWritable, Text, IntWritable&amp;gt; {
+            
+  public void reduce(Text key, Iterator&amp;lt;IntWritable&amp;gt; values,
+                     OutputCollector&amp;lt;Text, IntWritable&amp;gt; output,
+                     Reporter reporter) throw IOException {
+    
+    int sum = 0;
+    while (values.hasNext()) {
+      sum += values.next().get();
+    }
+    
+    output.collect(key, new IntWritable(sum));
+  }                     
+}
+
+public void run(String inputPath, String outputPath) throw Exception {
+
+  // The job
+  JobConf conf = new JobConf(WordCount.class);
+  conf.setJobName(&amp;quot;mywordcount&amp;quot;);
+  
+  // The keys are words
+  (srings) conf.setOutputKeyClass(Text.class);
+  
+  // The values are counts (ints)
+  conf.setOutputValueClass(IntWritable.class);
+  conf.setMapperClass(MapClass.class);
+  conf.setReducerClass(ReduceClass.class);
+  
+  FileInputFormat.addInputPat(conf, new Path(inputPath);
+  FileOutputFormat.setOutputPath(conf, new Path(outputPath));
+  
+  JobClient.runJob(conf);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;mapreduce-application&#34;&gt;MapReduce Application&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;strong&gt;Distributed Grep&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;input:&lt;/em&gt; large set of files&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;output:&lt;/em&gt; lines that match pattern&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;map:&lt;/em&gt; emits a line if it matches the supplied pattern&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;reduce:&lt;/em&gt; copies the intermediate data to output&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(2) &lt;strong&gt;Reverse Web-Link Graph&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;input:&lt;/em&gt; web graph(tuple &lt;code&gt;(a,b)&lt;/code&gt; where page &lt;code&gt;a&lt;/code&gt; -&amp;gt; page &lt;code&gt;b&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;output:&lt;/em&gt; for each page, list of pages that link to it&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;map:&lt;/em&gt; process we log and for each input &lt;code&gt;&amp;lt;source, target&amp;gt;&lt;/code&gt;, it outputs &lt;code&gt;&amp;lt;target, source&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;reduce:&lt;/em&gt; emits &lt;code&gt;&amp;lt;target, list(source)&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(3) &lt;strong&gt;Count of URL Access Frequency&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;input:&lt;/em&gt; log of accessed URLs&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;em&gt;output:&lt;/em&gt; for each URL, the number of total accesses for that URL&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;em&gt;map:&lt;/em&gt; process web log and outputs &lt;code&gt;&amp;lt;URL, 1&amp;gt;&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;em&gt;multiple reducers:&lt;/em&gt; emits `&lt;URL, URL_count&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;chain another MapReduce job to calculate&lt;/strong&gt; &lt;code&gt;overall_count&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(4) &lt;em&gt;Sort&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;map&lt;/em&gt; task&amp;rsquo;s output is sorted (e.g., &lt;em&gt;quicksort&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;reduce&lt;/em&gt; task&amp;rsquo;s input is osrted (e.g., &lt;em&gt;mergesort&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;따라서 정렬을 하기 위해&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;map:&lt;/em&gt; &lt;code&gt;&amp;lt;key, value&amp;gt;&lt;/code&gt; -&amp;gt; &lt;code&gt;&amp;lt;value, _&amp;gt;&lt;/code&gt; (identity)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;reduce:&lt;/em&gt; &lt;code&gt;&amp;lt;key, value&amp;gt;&lt;/code&gt; -&amp;gt; &lt;code&gt;&amp;lt;key, value&amp;gt;&lt;/code&gt; (identity)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이 때 &lt;em&gt;parttition key&lt;/em&gt; 로 &lt;em&gt;range&lt;/em&gt; 를 사용하는 것이 가능하다. 다만, 특정 구간에 &lt;em&gt;data&lt;/em&gt; 가 몰려있을 수 있으므로 &lt;em&gt;dstiribution&lt;/em&gt; 을 고려해 &lt;em&gt;reducer&lt;/em&gt; 에게 할당해주면 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;scheduling&#34;&gt;Scheduling&lt;/h3&gt;
+
+&lt;p&gt;일반 &lt;em&gt;user&lt;/em&gt; 는&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Write a Map program, write a Reduce program&lt;/li&gt;
+&lt;li&gt;Submit job; wait for result&lt;/li&gt;
+&lt;li&gt;Need to know nothing about parallel/distributed programming&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그러나 내부적으로는&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Parallelize Map&lt;/li&gt;
+&lt;li&gt;Transfer data from Map to Reduce&lt;/li&gt;
+&lt;li&gt;Parallelize Reduce&lt;/li&gt;
+&lt;li&gt;Implement Stroage for Map input, Map output, Reduce input, Reduce output&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그리고 &lt;em&gt;reduce&lt;/em&gt; 가 시작되기 전에 반드시 &lt;em&gt;map&lt;/em&gt; 이 끝나야 한다. 다시 말해서 &lt;em&gt;map phase&lt;/em&gt; 와 &lt;em&gt;reduce phase&lt;/em&gt; 사이에는 &lt;em&gt;barrier&lt;/em&gt; 가 있어야 한다. 그렇지 않으면 결과가 부정확할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이제 하나하나씩 살펴보자.&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;em&gt;Parallelize Map:&lt;/em&gt; Easy. Each map task is independent of the other&lt;/p&gt;
+
+&lt;p&gt;(2) &lt;em&gt;Transfer data from Map to Reduce:&lt;/em&gt; All map output records with same key assigned to same Reduce task. Use &lt;strong&gt;Partitionning Function&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;(3) &lt;em&gt;Parallelize Reduce:&lt;/em&gt; Easy. Each reduce task is independent of the other&lt;/p&gt;
+
+&lt;p&gt;(4) &lt;em&gt;Implement Storage for Map input, Map output, Reduce input and Reduce output:&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Map input: from &lt;strong&gt;distributed file system&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Map output: to local disk at Map node; Use &lt;strong&gt;local file systems&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Reduce input: from (multiple) remote disks; Uses local file systems&lt;/li&gt;
+&lt;li&gt;Reduce output: to &lt;strong&gt;distributed file system&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;DFS 의 예로 &lt;em&gt;Google File System&lt;/em&gt;, &lt;em&gt;HDFS&lt;/em&gt; 등이 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;하둡은 스케쥴러로 *YARN, Yet Another Resouce Negotiator*를 사용한다. &lt;em&gt;YARN&lt;/em&gt; 은 각 서버를 &lt;em&gt;a collection of containers&lt;/em&gt; 로 취급한다. 여기서 &lt;em&gt;container = some CPU + some Memory&lt;/em&gt; 다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;YARN&lt;/em&gt; 은 크게 3파트로 나눌 수 있는데&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;Global Resource Manager(RM):&lt;/em&gt; scheduling&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Per-server Node Manager(NM):&lt;/em&gt; Daemon and server-specific functions&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Per-application(job) Application Master(AM):&lt;/em&gt; Container negotiation with RM and NMs, Detecting task failures of that job&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/cloud-computing-concept-1/week1/YARN.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;container&lt;/em&gt; 가 필요하면 &lt;em&gt;AM1&lt;/em&gt; 이 &lt;em&gt;RM&lt;/em&gt; 에게 알리고, &lt;em&gt;Node B&lt;/em&gt; 의 &lt;em&gt;NM2&lt;/em&gt; 에서 &lt;em&gt;Task&lt;/em&gt; 가 끝나면, &lt;em&gt;RM&lt;/em&gt; 이 &lt;em&gt;Node A&lt;/em&gt; 의 &lt;em&gt;AM1&lt;/em&gt; 에게 사용 가능한 컨테이너가 있다는 사실을 알려 &lt;em&gt;AM1&lt;/em&gt; 이 &lt;em&gt;NM2&lt;/em&gt; 에게 컨테이너를 사용하겠다는 요청을 보내는 식이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;fault-tolerance&#34;&gt;Fault-Tolerance&lt;/h3&gt;
+
+&lt;p&gt;(1) Server Failure&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;NM&lt;/em&gt; hearbeats to &lt;em&gt;RM&lt;/em&gt;. If server fails &lt;em&gt;RM&lt;/em&gt; lets all affected &lt;em&gt;AMs&lt;/em&gt; know, and &lt;em&gt;AMs&lt;/em&gt; take action&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;NM&lt;/em&gt; keeps track of each task running at its server. If task fails while in-progress, mark the task as idle and restart it&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;AM&lt;/em&gt; heartbeats to &lt;em&gt;RM&lt;/em&gt;. On failure, &lt;em&gt;RM&lt;/em&gt; restarts &lt;em&gt;AM&lt;/em&gt;, which then syncs up with its running tasks&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(2) RM Failure&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Use old checkpoints and bring up secondary &lt;em&gt;RM&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Heartbeats also used to piggyback container requests. Avoids extra mesages&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;요약하자면, &lt;em&gt;NM&lt;/em&gt;, &lt;em&gt;AM&lt;/em&gt; 은 &lt;em&gt;RM&lt;/em&gt; 에게 &lt;em&gt;heartbeat&lt;/em&gt; 를 보낸다. &lt;em&gt;NM&lt;/em&gt; 에서 오류가 나면 &lt;em&gt;RM&lt;/em&gt; 이 영향을 받는 &lt;em&gt;AM&lt;/em&gt; 에게 알리고, 해당 &lt;em&gt;AM&lt;/em&gt; 이 적절히 처리한다. 또한 &lt;em&gt;NM&lt;/em&gt; 은 &lt;em&gt;task&lt;/em&gt; 를 유지하면서, &lt;em&gt;task&lt;/em&gt; 에러가 발생하면 재시작한다. &lt;em&gt;AM&lt;/em&gt; 에서 오류가 나면 &lt;em&gt;RM&lt;/em&gt; 이 재시작하고, 해당 &lt;em&gt;AM&lt;/em&gt; 의 태스크와 싱크를 맞춘다. &lt;em&gt;RM&lt;/em&gt; 에서 오류가 날 경우엔 &lt;em&gt;secondary RM&lt;/em&gt; 을 이용한다.&lt;/p&gt;
+
+&lt;h3 id=&#34;stragglers&#34;&gt;Stragglers&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;slow nodes&lt;/em&gt; 를 부르는 다른말이다. &lt;em&gt;speculative execution&lt;/em&gt; 으로 해결할 수 있다. 보통 느린 이유는 &lt;em&gt;disk&lt;/em&gt;, &lt;em&gt;network bandwidth&lt;/em&gt;, &lt;em&gt;CPU&lt;/em&gt;, &lt;em&gt;memory&lt;/em&gt; 등 때문인데 &lt;em&gt;task&lt;/em&gt; 를 복제해서 다른 &lt;em&gt;node&lt;/em&gt; 에서 돌린 뒤 먼저 완료되는 노드의 결과를 이용하는 방식이다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Perform backup (replicated) execution of straggler task: task considered done when first replica completed&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;locality&#34;&gt;Locality&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;cloud&lt;/em&gt; 의 &lt;em&gt;hierarchical topology&lt;/em&gt; 때문에 &lt;em&gt;GFS&lt;/em&gt;, &lt;em&gt;HDFS&lt;/em&gt; 등은 각 &lt;em&gt;chunk&lt;/em&gt; 를 3군데에 복제한다. 이때 같은 &lt;em&gt;rack&lt;/em&gt; 에 위치할수도 아닐수도 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;MapReduce&lt;/em&gt; 연산에서는 &lt;em&gt;map task&lt;/em&gt; 를 스케쥴링할때 가능하면 다음의 순서로 배치한다.&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;em&gt;chunk&lt;/em&gt; 가 있는 머신에 or failing that&lt;br /&gt;
+(2) 아니면 같은 &lt;em&gt;rack&lt;/em&gt; 에 or failing that&lt;br /&gt;
+(3) Anywhere&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;summary&#34;&gt;Summary&lt;/h3&gt;
+
+&lt;p&gt;(1) MapReduce uses parallelization + aggregation to schedule applications across clusters.&lt;/p&gt;
+
+&lt;p&gt;(2) Need to deal with failure&lt;/p&gt;
+
+&lt;p&gt;(3) Plenty of ongoing research work in scheduling and fault-tolerance for Mapreduce and Hadoop&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;refs&#34;&gt;Refs&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;a href=&#34;http://ook.co/solutions/cloud-computing/&#34;&gt;Title Image&lt;/a&gt;&lt;br /&gt;
+(2) &lt;strong&gt;Cloud Computing Concept 1&lt;/strong&gt; by &lt;em&gt;Indranil Gupta&lt;/em&gt;, Coursera&lt;br /&gt;
+(3) &lt;a href=&#34;http://webmapreduce.sourceforge.net/docs/User_Guide/sect-User_Guide-Introduction-What_is_Map_Reduce.html&#34;&gt;MapReduce Image&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ML 01: Linear Regression</title>
+      <link>https://1ambda.github.io/92/data-analysis/machine-learning-week-1/</link>
+      <pubDate>Sat, 25 Jun 2016 14:25:15 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/92/data-analysis/machine-learning-week-1/</guid>
+      <description>
+
+&lt;p&gt;&lt;strong&gt;Machine Learning&lt;/strong&gt; by Andrew Ng, &lt;em&gt;Coursera&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;what-is-machine-learning&#34;&gt;What is Machine Learning?&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Field of study that gies computers the abiliry to learn without being explicitly programmed. (1959, Arthur Samuel)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Well-posed Learning Problem:&lt;/strong&gt; A computer program is said to &lt;em&gt;learn&lt;/em&gt; from experience E with respect to some task T and some performance measure P, if its performance on T, as measured by P, improves with experience E (1998, Tom Michell)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;체크메이트를 예로 들면, 수천번의 체스 게임은 &lt;em&gt;E&lt;/em&gt; 에 해당하고 게임 속에서 체크메이트는 &lt;em&gt;T&lt;/em&gt; 에, &lt;em&gt;P&lt;/em&gt; 는 다음 게임에서 이길 확률로 볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;다른 예로, 이메일을 분류하는 스팸검사기가 있다고 할때&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;E&lt;/em&gt;: Wathing you label emails as spam or not spam.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;T&lt;/em&gt;: Classifying emails as spam or not spam.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;P&lt;/em&gt;: The number(or fraction) of emails correctly classified as spam/not spam.&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;supervised-learning&#34;&gt;Supervised Learning&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Given the rihgt answer&lt;/strong&gt; for each example in the data&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;즉, 주어진 정답이 있을때 사용할 수 있다. 이런 문제들은 많은데, &lt;em&gt;Regression&lt;/em&gt; 이나 &lt;em&gt;Classification&lt;/em&gt; 등이 있다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Regression:&lt;/strong&gt; Predict continuous valued output&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Classification:&lt;/strong&gt; Discrete valued output (0 or 1)&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;단순히 1개 혹은 2개의 attribute 를 사용할 수 있지만, infinite number of features(attribute) 를 사용하는 &lt;em&gt;Support Vector Machine&lt;/em&gt; 같은 알고리즘도 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;unsupervised-learning&#34;&gt;Unsupervised Learning&lt;/h3&gt;
+
+&lt;p&gt;즉 모든 데이터에 attribute 는 있지만 주어진 정답이 없을때 사용한다. 다시 말해서, 여러 집단으로 분류될때 미리 컴퓨터에게 이건 &lt;code&gt;type1&lt;/code&gt; 이야 등의 정보를 제공하지 않는다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어서, 다음의 두가지 예는 &lt;em&gt;Unsupervised leanring&lt;/em&gt; 이 아니라 &lt;em&gt;Supervised learning&lt;/em&gt; 이다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;(1) &lt;strong&gt;Given email labeled as spam/not spam&lt;/strong&gt;, learn a spam filter&lt;br/&gt;&lt;br/&gt;
+(2) &lt;strong&gt;Given a dataset of patients diagnosed as either having diabetes or not&lt;/strong&gt;, learn to classify new patients as having diabetes or not&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Clustering&lt;/strong&gt; 이라 불리는데, DNS Clustering, Social network analysis, market segmentation 등에 쓰인다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Cocktail party problem&lt;/strong&gt; 은 2명이 동시에 말하고, 이걸 서로 다른 위치에 있는 마이크가 녹음한다고 할 때 이 소리를 구분할 수 있는가 하는 문제다. 이것 또한 &lt;em&gt;Unsupervised lerning&lt;/em&gt; 으로 해결할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;model-representation&#34;&gt;Model Representation&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://mercris.files.wordpress.com/2012/07/genericmlatwork.png&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://mercris.files.wordpress.com/2012/07/genericmlatwork.png&#34;&gt;http://mercris.files.wordpress.com/2012/07/genericmlatwork.png&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Traning Set&lt;/em&gt; 을 넣고 &lt;em&gt;Learning Algorithm&lt;/em&gt; 을 돌리면 &lt;em&gt;Hypothesis&lt;/em&gt; 가 나오는데, 이건 사실 함수라 보면 된다. 여기에 새로운 &lt;em&gt;Input X&lt;/em&gt; 를 넣으면 &lt;em&gt;Estimated Y&lt;/em&gt; 가 나온다.&lt;/p&gt;
+
+&lt;p&gt;참고로, 변수가 하나인 &lt;em&gt;Linear regression&lt;/em&gt; 은 &lt;strong&gt;Univariate linear regression&lt;/strong&gt; 이라 부른다.&lt;/p&gt;
+
+&lt;h3 id=&#34;cost-function&#34;&gt;Cost Function&lt;/h3&gt;
+
+&lt;p&gt;예를 들어서 다음과 같은 데이터셋이 있을때,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584&#34;&gt;http://mercris.files.wordpress.com/2012/07/screen-shot-2012-07-17-at-2-12-05-pm.png?w=584&lt;/a&gt;&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;H(hypothesis)&lt;/em&gt; 가 다음처럼 나온다면&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s0.wp.com/latex.php?latex=h_%7B%5Ctheta%7Dx+%3D+%5Ctheta_%7B0%7D+%2B+%5Ctheta_%7B1%7Dx&amp;bg=ffffff&amp;fg=333333&amp;s=0&#34; align=&#34;center&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 &lt;code&gt;0 (Theta)&lt;/code&gt; 는 &lt;em&gt;parameter&lt;/em&gt; 라고 부른다.
+문제는, 상수를 어떻게 찾느냐인데, 아이디어는 간단하다. training set &lt;code&gt;(x, y)&lt;/code&gt; 에 가까운 &lt;code&gt;h(x)&lt;/code&gt; 를 찾으면 된다.&lt;/p&gt;
+
+&lt;p&gt;따라서 다음과 같은 식을 만들 수 있고,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s0.wp.com/latex.php?latex=J%28%5Ctheta_%7B0%7D%2C+%5Ctheta_%7B1%7D%29+%3D+%5Cdfrac+%7B1%7D%7B2m%7D+%5Csum+%5Climits_%7Bi%3D1%7D%5E%7Bm%7D+%28h_%7B%5Ctheta%7D+%28x%5E%7B%28i%29%7D%29+-+y%5E%7B%28i%29%7D%29%5E2&amp;bg=ffffff&amp;fg=333333&amp;s=0&#34; align=&#34;center&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;J(01, 02)&lt;/code&gt; 를 최소화 하는 &lt;code&gt;(01, 02)&lt;/code&gt; 를 찾으면 된다. 이 식을 &lt;strong&gt;cost function&lt;/strong&gt; 또는 &lt;strong&gt;squred error function&lt;/strong&gt; 이라 부른다. 여기서 &lt;code&gt;1/2m&lt;/code&gt; 으로 나누는 이유에 대해 좀 궁금해서 구글링 해봤는데, &lt;code&gt;1/m&lt;/code&gt; 으로 나누는 이유는 &lt;em&gt;squared error&lt;/em&gt; 에 대해 &lt;em&gt;mean&lt;/em&gt; 을 얻기 위한거고, &lt;code&gt;1/2&lt;/code&gt; 로 다시 나누는 이유는 미분했을때 나오는 &lt;code&gt;2&lt;/code&gt; 를 제거하기 위해서다. &lt;a href=&#34;http://stackoverflow.com/questions/21099289/cant-understand-the-cost-function-for-linear-regression&#34;&gt;SO 답변&lt;/a&gt; 을 첨부하면,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The cost function is&lt;/p&gt;
+
+&lt;p&gt;J(theta_0, theta&lt;em&gt;1) = 1/(2m) * sum&lt;/em&gt;(i=1)^m [ h_theta(x^i) - y^i ]^2
+By h_theta(x^i) we denote what model outputs for x^i, so h_theta(x^i) - y^i is its error (assuming, that y^i is a correct output).&lt;/p&gt;
+
+&lt;p&gt;Now, we calculate the square of this error [ h_theta(x^i) - y^i ]^2 (which removes the sign, as this error could be both positive and negative) and sum it over all samples, and to &lt;strong&gt;bound it somehow we normalize it - simply by dividing by m,&lt;/strong&gt; so we have mean (because we devide by number of samples) squared (because we square) error (because we compute an error):&lt;/p&gt;
+
+&lt;p&gt;1/m * sum_(i=1)^m [ h_theta(x^i) - y^i ]^2
+&lt;strong&gt;This 2 which appears in the front is used only for simplification of the derivative&lt;/strong&gt;, because when you will try to minimize it, you will use the steepest descent method, which is based on the derivative of this function. Derivative of a^2 is 2a, and our function is a square of something, so this 2 will cancel out. This is the only reason of its existance.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;이 &lt;em&gt;cost function&lt;/em&gt; 은 &lt;em&gt;regression&lt;/em&gt; 문제를 위해 자주 쓰이는 기법이다.&lt;/p&gt;
+
+&lt;h3 id=&#34;cost-function-intuition-1&#34;&gt;Cost Function: Intuition 1&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Cost function&lt;/em&gt; 에서 만약에 &lt;code&gt;0_0&lt;/code&gt; 이 제로라면 &lt;code&gt;0_1&lt;/code&gt; 만 찾으면 된다. 따라서 다음과 같은 실제 데이터에서&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://cfile3.uf.tistory.com/image/2275174452D612AE06C75B&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://mapository.tistory.com/59&#34;&gt;http://mapository.tistory.com/59&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;J(0_1)&lt;/code&gt; 을 찾아보면, 다음과 같은 이차함수가 나온다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img align=&#34;center&#34; src=&#34;http://cfile29.uf.tistory.com/image/234E894A52D6113D1F8267&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://mapository.tistory.com/59&#34;&gt;http://mapository.tistory.com/59&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;당연히 이차함수이므로, 기울기가 0이 되는 지점은 &lt;code&gt;J(0_1)&lt;/code&gt; 을 미분해서 찾으면 된다. (이래서 아까 1/2가 있던 것)&lt;/p&gt;
+
+&lt;h3 id=&#34;cost-function-intuition-2&#34;&gt;Cost Function: Intuition 2&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Parameter&lt;/em&gt; 가 &lt;code&gt;0_1&lt;/code&gt; 만 있었을때는, (&lt;code&gt;0_0&lt;/code&gt; = 0) &lt;code&gt;J(0_1)&lt;/code&gt; 이 이차함수였지만, &lt;code&gt;J(0_0, 0_1)&lt;/code&gt; 일때는 다음과 같은 모양을 보여준다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img align=&#34;center&#34; src=&#34;http://cfile2.uf.tistory.com/image/2232CA4C52D611111DDFCD&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://mapository.tistory.com/59&#34;&gt;http://mapository.tistory.com/59&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 &lt;code&gt;J(0_0, 0_1)&lt;/code&gt; 값을 제외하고 &lt;code&gt;(0_0, 0_1)&lt;/code&gt; 을 평면으로 나타내면 아래 사진에서 우측과 같은 여러 궤도가 나온다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://cfile24.uf.tistory.com/original/2107074652D6134E0ECB0F&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://mapository.tistory.com/59&#34;&gt;http://mapository.tistory.com/59&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 같은 궤도에 있는 &lt;code&gt;(0_0, 0_1)&lt;/code&gt; 쌍은, 같은 &lt;code&gt;J&lt;/code&gt; 함수를 만든다. 그리고 재밌는 사실은 궤도가 가장 좁은 타원의 중심에 있는 &lt;code&gt;(0_0, 0_1)&lt;/code&gt; 가 가장 작은 &lt;code&gt;J(0_0, 0_1)&lt;/code&gt; 를 만들어 낸다.&lt;/p&gt;
+
+&lt;h3 id=&#34;gradient-descent&#34;&gt;Gradient Descent&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Gradient Descent&lt;/em&gt; 알고리즘은 &lt;em&gt;Linear Regression&lt;/em&gt; 에만 쓸 수 있는건 아니고, 범용적인 알고리즘이다. &lt;em&gt;cost function&lt;/em&gt; 의 최소값을 찾기 위해 사용할 수 있는데, 다음과 같은 &lt;code&gt;J&lt;/code&gt; 가 있을때,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://cfile28.uf.tistory.com/image/2401353E52D618322EDFB5&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://mapository.tistory.com/59&#34;&gt;http://mapository.tistory.com/59&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;높이를 비교해 가며 점점 낮은쪽으로 이동해 가면서 &lt;code&gt;J&lt;/code&gt; 의 최소값을 찾을 수 있다. 식은 다음과 같은데,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://2.bp.blogspot.com/-AdV-O-MoZHE/TtLibFTaf9I/AAAAAAAAAVM/aOxUGP7zl98/s1600/gradient+descent+algorithm+OLS.png&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://econometricsense.blogspot.kr/2011_11_01_archive.html&#34;&gt;http://econometricsense.blogspot.kr/2011_11_01_archive.html&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 &lt;code&gt;:=&lt;/code&gt; 는 &lt;em&gt;assignment&lt;/em&gt; 다. &lt;code&gt;a(alpha)&lt;/code&gt; 는 &lt;em&gt;learning rate&lt;/em&gt; 라 부른다. 이때 &lt;code&gt;(0_0, 0_1)&lt;/code&gt; 은 동시에 업데이트 되야한다. &lt;strong&gt;(Simultaneous update)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;gradient-descent-intuition&#34;&gt;Gradient Descent: Intuition&lt;/h3&gt;
+
+&lt;p&gt;이제 저 식을 분해하기 위해 &lt;code&gt;J(0_1)&lt;/code&gt; 처럼 &lt;em&gt;parameter&lt;/em&gt; 하나만 놓고 보면, 이차원 함수가 나올테다. 만약 현재 &lt;code&gt;0_1&lt;/code&gt; 이 이차함수의 최저점 우측에 있다면, &lt;code&gt;J(0_1)&lt;/code&gt; 을 미분한 값&lt;strong&gt;(Slope, 기울기)&lt;/strong&gt; 에 양수 &lt;code&gt;a&lt;/code&gt; 를 곱한 값을 &lt;code&gt;0_1&lt;/code&gt; 에서 뻬면서 갱신하면 &lt;code&gt;0_1&lt;/code&gt; 은 점점 최저점 쪽으로 간다,&lt;/p&gt;
+
+&lt;p&gt;반대로 &lt;code&gt;0_1&lt;/code&gt; 이 &lt;code&gt;J(0_1)&lt;/code&gt; 의 좌측에 위치한다면 우측으로 이동하고, 아래는 그걸 요약한 그림이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://i.ytimg.com/vi/ud4o8AYe9tI/hqdefault.jpg&#34; align=&#34;center&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;따라서 &lt;em&gt;learning late&lt;/em&gt; &lt;code&gt;a&lt;/code&gt; 가 너무 작으면 &lt;em&gt;Gradient descent&lt;/em&gt; 가 너무 느려진다. 왜냐하면 &lt;code&gt;0&lt;/code&gt; 의 차이가 점점 작이지기 때문에 최저점에 도착할때 까지 너무 많은 step 이 필요하다.&lt;/p&gt;
+
+&lt;p&gt;반대로 너무 크면 최저점을 넘어갈 수 있다. 심지어 최저점에서 점점 더 멀어질 수 있다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;if &lt;code&gt;a&lt;/code&gt; is too small, &lt;em&gt;gradient descent&lt;/em&gt; can be slow &lt;br/&gt;&lt;br/&gt;
+if &lt;code&gt;a&lt;/code&gt; is too large, &lt;em&gt;gradient desscent&lt;/em&gt; can overshoot the minimum, It may fail to converge, or even diverge&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;그런데 이 &lt;em&gt;gradient descent&lt;/em&gt; 알고리즘의 문제는 &lt;strong&gt;local optimum&lt;/strong&gt; 수 있다는 점이다. 왜냐하면 &lt;strong&gt;local optimum&lt;/strong&gt; 에서도 &lt;code&gt;J&lt;/code&gt; 의 derivative 가 &lt;code&gt;0&lt;/code&gt; 이기 때문이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Extrema_example.svg/2000px-Extrema_example.svg.png&#34; align=&#34;center&#34; /&gt;&lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Backpropagation&#34;&gt;http://en.wikipedia.org/wiki/Backpropagation&lt;/a&gt;&lt;/p&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;gradient-descent-for-linear-regression&#34;&gt;Gradient Descent For Linear Regression&lt;/h3&gt;
+
+&lt;p&gt;이제 &lt;em&gt;cost function&lt;/em&gt; 을 &lt;em&gt;gradient descent&lt;/em&gt; 에 집어넣고, 정리하자. &lt;code&gt;0_0(Theta zero)&lt;/code&gt;, 과 &lt;code&gt;0_1(Theta one)&lt;/code&gt; 대해서 시그마 내부 제곱을 각각 미분해서 정리하면,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://pingax.com/wp-content/uploads/2013/11/Convergence-300x107.png&#34;  align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://pingax.com/linear-regression-with-r-step-by-step-implementation-part-1/&#34;&gt;http://pingax.com/linear-regression-with-r-step-by-step-implementation-part-1/&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;참고로 &lt;strong&gt;Convex function&lt;/strong&gt; 은 &lt;em&gt;Bowl shaped&lt;/em&gt; 처럼 &lt;em&gt;local optima&lt;/em&gt; 가 없는 &lt;code&gt;h&lt;/code&gt;(Hypothesis) 를 말한다. 따라서 &lt;em&gt;convex function&lt;/em&gt; 을 선택할 수 있다면, 하는편이 낫다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Batch&lt;/strong&gt; &lt;em&gt;gradient descent&lt;/em&gt; 는 모든 training example 을 사용하는 &lt;em&gt;gradient descent&lt;/em&gt; 를 말한다. (시그마에서)&lt;/p&gt;
+
+&lt;p&gt;어떤 경우에는 &lt;em&gt;gradient descent&lt;/em&gt; 같은 interative algorithm 없이도 &lt;code&gt;min J(0_0, 0_1)&lt;/code&gt; 를 풀 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;a href=&#34;http://mercris.wordpress.com/&#34;&gt;http://mercris.wordpress.com/&lt;/a&gt;&lt;br /&gt;
+(2) &lt;a href=&#34;http://mapository.tistory.com/&#34;&gt;http://mapository.tistory.com/&lt;/a&gt;&lt;br /&gt;
+(3) &lt;a href=&#34;http://econometricsense.blogspot.kr&#34;&gt;http://econometricsense.blogspot.kr&lt;/a&gt;&lt;br /&gt;
+(4) &lt;a href=&#34;http://pingax.com/&#34;&gt;http://pingax.com/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Design and Analysis: Divide &amp; Conquer</title>
+      <link>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/</link>
+      <pubDate>Sat, 25 Jun 2016 12:54:35 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/</guid>
+      <description>
+
+&lt;p&gt;&lt;em&gt;Divide and Conquer (분할 정복)&lt;/em&gt; 을 배운다. &lt;em&gt;merge, quick sort&lt;/em&gt; 를 배우고 이 과정에서 왜 &lt;em&gt;combine&lt;/em&gt; 단계가 &lt;code&gt;O(n)&lt;/code&gt; 이 되어야 하는지 알아본다. 뒷부분에서는 &lt;em&gt;Big O&lt;/em&gt; 뿐만 아니라 &lt;em&gt;master method&lt;/em&gt;, &lt;em&gt;decomposition approach&lt;/em&gt; 를 이용해 성능을 분석한다.&lt;/p&gt;
+
+&lt;h3 id=&#34;divide-and-conquer&#34;&gt;Divide and Conquer&lt;/h3&gt;
+
+&lt;p&gt;각 level 의 문제 갯수는 &lt;code&gt;2^j (j = 0, 1, 2, ... , log2n)&lt;/code&gt; 이고 문제의 사이즈는 &lt;code&gt;n / 2^j&lt;/code&gt; 이므로 연산수를 &lt;code&gt;k&lt;/code&gt; 라 하면, 각 레벨에서 연산 수는 &lt;code&gt;k * n&lt;/code&gt;, 레벨의 &lt;em&gt;depth&lt;/em&gt; 가 &lt;code&gt;log2n + 1&lt;/code&gt; 이므로,&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;merge sort&lt;/em&gt; 같은 경우는 연산수 &lt;code&gt;k = 6&lt;/code&gt; 에서 &lt;code&gt;6n (log2n + 1)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Big O 는 &lt;code&gt;O(f(n))&lt;/code&gt; 이라 했을때 &lt;em&gt;at most&lt;/em&gt;, &lt;code&gt;f(n)&lt;/code&gt; 에 proportional 하므로 upper 바운드.
+반면 Omega 는 &lt;code&gt;omega(f(n))&lt;/code&gt; 이라 했을 때 &lt;em&gt;at least&lt;/em&gt; &lt;code&gt;f(n)&lt;/code&gt; 에 proportional 하므로 lower 바운드.&lt;/p&gt;
+
+&lt;p&gt;분할 정복의 핵심은 각 sub-problem 에서 연산 수를 o(n) 으로 맞출 수 있느냐 없느냐, 맞춘다면 nlogn 알고리즘이 되는 것이다.&lt;/p&gt;
+
+&lt;p&gt;알고리즘은 3단계로 구성된다.&lt;/p&gt;
+
+&lt;p&gt;(1) Divide&lt;br /&gt;
+(2) Conquer sub problems&lt;br /&gt;
+(3) combine (merge)&lt;/p&gt;
+
+&lt;p&gt;여기서 중요한건, combine 단계인데 이게 O(n) 이기만 하면 전체 알고리즘의 성능을 O(nlogn) 으로 보장할 수 있음.&lt;/p&gt;
+
+&lt;h3 id=&#34;master-method-motivation&#34;&gt;Master Method: Motivation&lt;/h3&gt;
+
+&lt;p&gt;T(n) 을 O(n) 으로 upper bound 를 구하긴 했지만 O(n) 연산 수 구하는게 좀 힘들다. 재귀 호출의 갯수나, 문제의 분할 사이즈로 O(n) 을 쉽게 구해보자.&lt;/p&gt;
+
+&lt;p&gt;가우스 곱셈? 의 경우에 T(n) &amp;lt;= 4 * T(n/2) + O(n)&lt;/p&gt;
+
+&lt;p&gt;그러나 더 작아질 수 있음. (a+b)(c+d) 에서 ad+bc = (a+b)(c+d) - ad - bd 로 구할 수 있음&lt;/p&gt;
+
+&lt;p&gt;즉 3개의 부분식만 구해도 됌.&lt;/p&gt;
+
+&lt;p&gt;T(n) &amp;lt;= 3 * T(n/2) + O(n)&lt;/p&gt;
+
+&lt;p&gt;머지소트는 2 * T(n/2) + O(n) 쯤 되니까 가우스보다 더 낫긴 함. 그럼 가우스의 그것은 얼마일까?&lt;/p&gt;
+
+&lt;h4 id=&#34;master-method&#34;&gt;Master Method&lt;/h4&gt;
+
+&lt;p&gt;&lt;em&gt;Master method&lt;/em&gt; 는 재귀 문제의 러닝타임을 구하는데 &lt;em&gt;black box&lt;/em&gt; 같은 역할을 한다. 대강의 코드만으로도 러닝타임을 추측할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;그러나 &lt;em&gt;master method&lt;/em&gt; 는 가정을 하나 하는데, 바로 모든 문제가 같은 사이즈로 분할 된다는 것.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;All sub priblems have equal size&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code&gt;n&lt;/code&gt; 이 충분히 작다면, &lt;code&gt;T(n)&lt;/code&gt; 은 상수라 볼 수 있고 만약 &lt;code&gt;n&lt;/code&gt; 이 충분히 크다면 &lt;em&gt;master method&lt;/em&gt; 는 다음의 포맷을 가진다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://acrocontext.files.wordpress.com/2014/01/master-method.png?w=300&amp;h=160&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;https://acrocontext.wordpress.com&#34;&gt;https://acrocontext.wordpress.com&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 &lt;code&gt;a&lt;/code&gt; 는 재귀 함수 호출의 수고, &lt;code&gt;b&lt;/code&gt; 는 분할된 문제의 사이즈다. &lt;code&gt;d&lt;/code&gt; 는 &lt;em&gt;combine&lt;/em&gt; 스텝에서 사용하는 함수의 러닝타임의 지수다. (&lt;em&gt;merge-sort&lt;/em&gt; 에서 머징하는 함수라 보면 된다.)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;a&lt;/code&gt;: number of recursive calls (&lt;code&gt;&amp;gt;= 1&lt;/code&gt;)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;b&lt;/code&gt;: input size shrinkage factor (&lt;code&gt;&amp;gt; 1&lt;/code&gt;)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d&lt;/code&gt;: exponent in running time of &lt;em&gt;combine step&lt;/em&gt; (&lt;code&gt;&amp;gt;= 0&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이제 몇 가지 예제를 좀 살펴보자.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;merge sort&lt;/em&gt; 의 경우는 &lt;code&gt;a = 2, b = 2, d = 1&lt;/code&gt; 이므로 &lt;code&gt;2 = 2^1&lt;/code&gt; 이어서 &lt;code&gt;O(n^1 * logn)&lt;/code&gt; 즉 &lt;code&gt;O(nlogn)&lt;/code&gt; 의 러닝타임을 가진다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;binary search&lt;/em&gt; 는 문제 수가 절반으로 줄긴 하나 반쪽만 사용하고, 매 재귀호출 마다 한번의 비교만 하므로 &lt;code&gt;a = 1, b = 2, d = 0&lt;/code&gt; 이므로 &lt;code&gt;a = b^d&lt;/code&gt; 는 &lt;code&gt;1 = 1^1&lt;/code&gt; 이 되어 &lt;code&gt;O(nlogn)&lt;/code&gt; 이 된다.&lt;/p&gt;
+
+&lt;p&gt;가우스 곱셈은 &lt;code&gt;a = 3, b = 2, d = 1&lt;/code&gt; 이므로 &lt;code&gt;O(n^log2_3)&lt;/code&gt; 이 된다. 더 정확히는 &lt;code&gt;O(n^1.59)&lt;/code&gt; &lt;em&gt;merge-sort&lt;/em&gt; 보다 빠르진 않지만 &lt;em&gt;quadratic&lt;/em&gt; 보단 빠르다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;strassen&lt;/em&gt; 행렬 곱셈은 어떨까? &lt;code&gt;a = 7, b = 2, d = 2&lt;/code&gt; 에서 마찬가지로 &lt;em&gt;case 3&lt;/em&gt; 이므로 &lt;code&gt;O(n^log2_7)&lt;/code&gt; 이다. &lt;code&gt;O(n^2.81)&lt;/code&gt; 쯤 되므로 &lt;code&gt;O(n^3)&lt;/code&gt; 보다는 훨씬 낫다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;merge-sort&lt;/em&gt; 에서 &lt;code&gt;d = 2&lt;/code&gt; 라면 &lt;code&gt;O(n^2)&lt;/code&gt; 이 나온다. 사실 일반적으로 생각하기에는 &lt;code&gt;O(n^2 * logn)&lt;/code&gt; 이 나올거 같은데, 사실 이건 &lt;em&gt;upper bound&lt;/em&gt; 이므로 &lt;code&gt;O(n^2)&lt;/code&gt; 이 좀 더 나은 &lt;em&gt;upper bound&lt;/em&gt; 임을 알 수 있다. 이 사실은  &lt;em&gt;master method&lt;/em&gt; 를 이용하면 수학적으로 더 근사한 값을 찾아낼 수 있다는걸 알려준다.&lt;/p&gt;
+
+&lt;h4 id=&#34;proof-master-method&#34;&gt;Proof: Master Method&lt;/h4&gt;
+
+&lt;p&gt;재귀의 각 단계를 &lt;code&gt;j = 0, 1, 2, ... , logb_n (base b)&lt;/code&gt; 라 하면 각 단계에서는 &lt;code&gt;a^j&lt;/code&gt; 사이즈의 &lt;em&gt;sub-problem&lt;/em&gt; 수와 &lt;code&gt;n / b^j&lt;/code&gt; 사이즈의 문제가 있다.&lt;/p&gt;
+
+&lt;p&gt;단계 &lt;code&gt;j&lt;/code&gt; 에서의 연산은 &lt;code&gt;a^j * c * (n / b^j)^d&lt;/code&gt; 즉 &lt;em&gt;문제의 수 x 각 문제의 사이즈와 일어나는 거기서 일어나는 연산 수&lt;/em&gt; 로 정의할 수 있다. 수식을 &lt;code&gt;j&lt;/code&gt; 로 다시 정리하면&lt;/p&gt;
+
+&lt;p&gt;각 단계의 &lt;em&gt;sub problem&lt;/em&gt; 에서 일어나는 연산은 &lt;code&gt;c * n ^d * (a / b^d)^j&lt;/code&gt; 다. 따라서 전체 단계를 구하려면 여기에 시그마를 씌우면 된다.&lt;/p&gt;
+
+&lt;p&gt;식을 좀 더 자세히 보면&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;&lt;code&gt;a&lt;/code&gt;:&lt;/em&gt; rate of sub problem proliferation &lt;em&gt;(RSP)&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;&lt;code&gt;b^d&lt;/code&gt;:&lt;/em&gt; rate of work shirinkage &lt;em&gt;(RWS)&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;d&lt;/code&gt; 가 &lt;code&gt;n^d&lt;/code&gt; 에도 섞여있어 좀 복잡하긴 한데 느낌만 알아보자면 &lt;code&gt;b = 2, d = 1&lt;/code&gt; 일때는 &lt;em&gt;sub-problem&lt;/em&gt; 당 문제가 &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; 씩 줄어든다. 하지만 &lt;code&gt;b = 2, d  = 2&lt;/code&gt; 라면 문제의 수가 2배가 될때 문제 사이즈는 4배가 되고, &lt;code&gt;b^d = 4&lt;/code&gt; 가 되어 &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;4&lt;/sub&gt; 만큼의 연산만 줄어든다. 따라서 &lt;code&gt;d&lt;/code&gt; 가 커지는 건 생각보다 영향이 큰 걸 알 수 있다.&lt;/p&gt;
+
+&lt;p&gt;위 식으로부터 다음의 관계를 이끌어 낼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;(1) if &lt;em&gt;RSP &amp;lt; RWS&lt;/em&gt;, then the amount of work is decreasing with the recursion level &lt;code&gt;j&lt;/code&gt;&lt;br /&gt;
+(2) if &lt;em&gt;RSP &amp;gt; RWS&lt;/em&gt;, then the amount of work is increasing with the recursion level &lt;code&gt;j&lt;/code&gt;&lt;br /&gt;
+(3) if &lt;em&gt;RSP = RWS&lt;/em&gt;, then the amount of work is same at every recursion level &lt;code&gt;j&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;따라서 &lt;code&gt;(3)&lt;/code&gt; 의 경우 각 단계에서의 연산이 &lt;code&gt;c* n^d * 1^j&lt;/code&gt; 이므로 깊이 &lt;code&gt;logb_n (base b)&lt;/code&gt; 을 곱하면 &lt;code&gt;O(n^d * logn)&lt;/code&gt; 이다. &lt;em&gt;(&lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt; 는 문제의 사이즈와 관계가 없다 그리고 더 정확히는 시그마를 더하면 &lt;code&gt;O(n^d * (1 + logb_n)&lt;/code&gt; 이다)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;(2)&lt;/code&gt; 의 경우 깊이가 깊어질 수록 각 단계에서의 연산이 급격하게 줄어들고, 루트에서의 (&lt;code&gt;j = 0&lt;/code&gt;) 연산이 가장 크므로 루트에서의 연산을 &lt;em&gt;upper bound&lt;/em&gt; 로 보면 &lt;code&gt;O(n^d)&lt;/code&gt; 라 볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;마지막으로 &lt;code&gt;(1)&lt;/code&gt; 의 경우 깊이가 깊어질수록 연산이 늘어나고, 대충 생각하면 마지막 노드의 개수에 비례하는 &lt;em&gt;Big O&lt;/em&gt; 를 가지리라는 생각을 해볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;좀 더 수식에 대한 이해를 얻기 위해 수학적으로 접근해 보자.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;1 + r + r^2 + ... + r^k&lt;/code&gt; 를 귀납법으로 풀면 &lt;code&gt;r^(k+1) - 1 / r - 1&lt;/code&gt; 이란 값이 나온다. &lt;code&gt;(r != 1)&lt;/code&gt; 이 때&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;r &amp;lt; 1&lt;/code&gt; 이고 &lt;code&gt;k&lt;/code&gt; 가 충분히 크다면 이 식은 &lt;code&gt;1 / (1 - r)&lt;/code&gt; 이라 보아도 된다. 다시 말해서 &lt;code&gt;k&lt;/code&gt; 와는 관련 없는 상수라 보아도 된다는 뜻이다. 그리고 첫번 째 항이 다른 것들의 합보다 크다고 볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;r &amp;gt; 1&lt;/code&gt; 이라 했을때, 우측 식 &lt;code&gt;r^(k+1) - 1 / r - 1&lt;/code&gt; 은 &lt;code&gt;r^k * (1 + 1 / r - 1)&lt;/code&gt; 보다 항상 작거나 같다는 사실을 알 수 있다 &lt;em&gt;(upper bound)&lt;/em&gt; 다시 말해서 마지막 항 &lt;code&gt;r^k&lt;/code&gt; 의 2배보다 작거나 같다는 사실을 알 수 있다. 이것도 &lt;code&gt;r = 2&lt;/code&gt; 일때나 맥시멈 두배다.&lt;/p&gt;
+
+&lt;p&gt;1 부터 256까지 더해봐도 512 보다 작거나 같다는 사실을 알 수 있다. 다시 말해서 마지막 항이 그 전 모든 항을 합한 것 보다 크다.&lt;/p&gt;
+
+&lt;p&gt;이제 다시 &lt;em&gt;master method&lt;/em&gt; 로 다시 돌아오자.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;c* n^d * sigma(j) (a / b^d)^j&lt;/code&gt; (&lt;code&gt;j = 0 to logb_n&lt;/code&gt;) 에서 &lt;code&gt;a / b^d&lt;/code&gt; 를 &lt;code&gt;r&lt;/code&gt; 이라 두자.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;RSP &amp;lt; RWS (case 2)&lt;/em&gt; 이면 &lt;code&gt;r &amp;lt; 1&lt;/code&gt; 이므로 시그마를 합해봐야 특정 상수다. &lt;code&gt;O(n^d)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;반대로 &lt;em&gt;RSP &amp;gt; RSW (case 3)&lt;/em&gt; 이면 &lt;code&gt;r &amp;gt; 1&lt;/code&gt; 이므로 시그마를 합해봐야 &lt;code&gt;r^k * 상수&lt;/code&gt; 보다 작거나 같으므로 가장 큰 항 &lt;code&gt;r^k&lt;/code&gt; 는 &lt;code&gt;(a / b^d)^logb_n&lt;/code&gt; 이다. 여기서 &lt;code&gt;b^(-dlogb_n)&lt;/code&gt; 이 &lt;code&gt;n^-d&lt;/code&gt; 라는 사실을 이용하면 &lt;code&gt;O(a^logb_n)&lt;/code&gt;만 남는다.&lt;/p&gt;
+
+&lt;p&gt;그런데, 재미있는 사실은 &lt;code&gt;logb_n&lt;/code&gt; 이 마지막 단계이고, &lt;code&gt;a&lt;/code&gt; 는 각 단계에서 분할되는 노드의 갯수이므로 &lt;code&gt;a^(logb_n)&lt;/code&gt; 은 &lt;em&gt;recursion tree&lt;/em&gt; 에서 &lt;em&gt;leave&lt;/em&gt; 의 갯수다.&lt;/p&gt;
+
+&lt;p&gt;다시 말해서 마지막 단계에서의 노드의 갯수에 연산이 비례한다. 근데 처음에 우리가 봤던건 &lt;code&gt;n^(logb_n)&lt;/code&gt; 아니었던가? 사실 로그를 배우면 위 두 식은 같다는걸 알 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;quick-sort&#34;&gt;Quick Sort&lt;/h3&gt;
+
+&lt;p&gt;퀵소트는 평균적으로 &lt;code&gt;O(n logn)&lt;/code&gt; 성능을 보여주며 &lt;em&gt;in-place&lt;/em&gt; 로 작동하는 인기있는 정렬 알고리즘이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;key idea&lt;/em&gt; 는 &lt;em&gt;pivot&lt;/em&gt; 을 중심으로 문제를 좌우로 분할하는 것이다.   &lt;em&gt;less than pivot&lt;/em&gt; 들은 왼쪽에, &lt;em&gt;greater than pivot&lt;/em&gt; 들은 우측에 놓음으로써 최소한 한번의 분할당 하나의 원소 &lt;em&gt;(pivot)&lt;/em&gt; 은 자리를 잡는 다는 것을 보장한다.&lt;/p&gt;
+
+&lt;p&gt;퀵소트의 매 호출당 일어나는 &lt;em&gt;partition (분할)&lt;/em&gt; 은 다음의 두 특징을 가진다.&lt;/p&gt;
+
+&lt;p&gt;(1) linear time, &lt;code&gt;O(n)&lt;/code&gt;&lt;br /&gt;
+(2) no extra memory&lt;/p&gt;
+
+&lt;p&gt;대강의 로직은 이렇다. &lt;code&gt;Quicksort(array A, length n)&lt;/code&gt; 에 대해서&lt;/p&gt;
+
+&lt;p&gt;(1) if &lt;code&gt;n = 1&lt;/code&gt; return &lt;code&gt;A&lt;/code&gt;&lt;br /&gt;
+(2) &lt;code&gt;p&lt;/code&gt; = choose &lt;code&gt;Pivot(A, n)&lt;/code&gt;&lt;br /&gt;
+(3) partition &lt;code&gt;A&lt;/code&gt; round &lt;code&gt;p&lt;/code&gt; =&amp;gt; &lt;code&gt;L, R&lt;/code&gt;&lt;br /&gt;
+(4) recursively solve &lt;code&gt;L&lt;/code&gt;, &lt;code&gt;R&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;보면 알겠지만 &lt;em&gt;combine&lt;/em&gt; 혹은 &lt;em&gt;merge&lt;/em&gt; 스텝이 전혀 없다.&lt;/p&gt;
+
+&lt;h4 id=&#34;partition-in-place&#34;&gt;Partition: In-place&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;O(n)&lt;/code&gt; 의 추가 메모리를 사용하면 연산시간 &lt;code&gt;O(n)&lt;/code&gt; 을 구현하기 쉽다. 추가 메모리 없이 어떻게 &lt;code&gt;O(n)&lt;/code&gt; 으로 &lt;em&gt;partitioning&lt;/em&gt; 을 구현할 수 있을까?&lt;/p&gt;
+
+&lt;p&gt;(1) 첫 번째 원소를 &lt;em&gt;pivot&lt;/em&gt; 이라 놓고&lt;br /&gt;
+(2) &lt;em&gt;pivot&lt;/em&gt; 다음의 원소를 &lt;code&gt;i&lt;/code&gt;, &lt;code&gt;j&lt;/code&gt; 가 가리키게 한다.&lt;br /&gt;
+(3) &lt;code&gt;j&lt;/code&gt; 보다 작은 원소들은 &lt;em&gt;partitioned&lt;/em&gt; , 큰 원소는 &lt;em&gt;unpartitioned&lt;/em&gt; 라 보고&lt;br /&gt;
+(4) &lt;code&gt;i&lt;/code&gt; 보다 작은 원소들은 &lt;em&gt;pivot&lt;/em&gt; 보다 작은 값, 큰 원소들은 &lt;em&gt;pivot&lt;/em&gt; 보다 큰 값이다.&lt;br /&gt;
+(5) &lt;code&gt;i &amp;lt;= j&lt;/code&gt; 이며, &lt;code&gt;i == j&lt;/code&gt; 일때는 &lt;code&gt;j&lt;/code&gt; 값을 증가시켜 원소를 비교 한뒤 &lt;code&gt;j&lt;/code&gt; 에 있는 원소가 &lt;code&gt;i&lt;/code&gt; 가 가리키는 원소보다 크면 &lt;em&gt;swap&lt;/em&gt; 하고 &lt;code&gt;i += 1, j +=1&lt;/code&gt; 아니면 &lt;code&gt;j += 1&lt;/code&gt; 한다.&lt;/p&gt;
+
+&lt;p&gt;이해가 쉽게 그림을 첨부하면&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://sadakurapati.files.wordpress.com/2013/10/qsort_1.png&#34; align=&#34;center&#34; /&gt;
+&lt;img src=&#34;http://sadakurapati.files.wordpress.com/2013/10/qsort_2.png&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://sadakurapati.wordpress.com&#34;&gt;http://sadakurapati.wordpress.com&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;이런 로직으로 &lt;code&gt;n&lt;/code&gt; 개의 원소를 순회하면, &lt;code&gt;n-1&lt;/code&gt; 번 만큼 &lt;code&gt;j&lt;/code&gt; 순회를 하고 최악의 경우 &lt;code&gt;n-1&lt;/code&gt; 번의 &lt;em&gt;swap&lt;/em&gt; 과 &lt;em&gt;i += 1&lt;/em&gt; 연산이 일어난다.  다시 말해 각 원소마다 &lt;code&gt;O(1)&lt;/code&gt; 연산이므로, &lt;em&gt;partition&lt;/em&gt; 연산은 &lt;code&gt;O(n)&lt;/code&gt; 이라 보장할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;quick-sort&lt;/em&gt; 는 귀납법으로 증명하기도 쉬운데, &lt;code&gt;P(n)&lt;/code&gt; 이 1부터 &lt;code&gt;n&lt;/code&gt; 까지의 정렬된 원소를 가지고 있는 배열이라고 하면,&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;P(1)&lt;/code&gt; 임은 자명하고, 문제의 수 &lt;code&gt;k&lt;/code&gt; 에 대해 퀵소트가 &lt;code&gt;P(k)&lt;/code&gt; 일때  &lt;code&gt;P(k+1)&lt;/code&gt; 임을 보이면 &lt;code&gt;P(n)&lt;/code&gt; 에 대해서도 참임을 알 수 있다.&lt;/p&gt;
+
+&lt;p&gt;그런데, &lt;code&gt;P(k+1)&lt;/code&gt; 에서 &lt;em&gt;pivot&lt;/em&gt; 을 제외한 좌측과 우측의 사이즈를 &lt;code&gt;k1&lt;/code&gt;, &lt;code&gt;k2&lt;/code&gt; 라 하면 &lt;code&gt;k1, k2 &amp;lt; k&lt;/code&gt; 이다. 좌측 또는 우측이 없을 때라야 &lt;code&gt;k1 or k2 = k&lt;/code&gt; 다. 이때 &lt;code&gt;P(k)&lt;/code&gt; 가 참이므로 이보다 작거나 같은 &lt;code&gt;k1, k2&lt;/code&gt; 의 문제 사이즈에 대해서도 참이다. 따라서 &lt;code&gt;P(k+1)&lt;/code&gt; 도 참이다.&lt;/p&gt;
+
+&lt;h4 id=&#34;choosing-a-good-pivot&#34;&gt;Choosing a good pivot&lt;/h4&gt;
+
+&lt;p&gt;그럼 &lt;em&gt;pivot&lt;/em&gt; 은 무엇을 기준으로 잡는게 좋을까? 어차피 비교에서 &lt;code&gt;i != p and j != p&lt;/code&gt; 라면 구현에는 어느 위치에 잡던 문제가 없을것 같은데..&lt;/p&gt;
+
+&lt;p&gt;만약에 &lt;em&gt;pivot&lt;/em&gt; 이 첫 번째 원소이고, 입력이 이미 정렬이 된 배열이라면 성능이 어떻게 될까? 바로 &lt;code&gt;O(n^2)&lt;/code&gt; 이다. 왜냐하면 이미 정렬이 되어있으므로 문제가 &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; 로 분할되지 않기 때문이다. 배열 사이즈만 1씩 줄어들면서 재귀호출이 반복된다.&lt;/p&gt;
+
+&lt;p&gt;그럼 만약에, &lt;em&gt;pivot&lt;/em&gt; 을 원소들의 &lt;em&gt;median (중앙값)&lt;/em&gt; 으로 고른다면? 매 재귀마다 문제가 좌우로 분할되므로 &lt;code&gt;O(nlogn)&lt;/code&gt; 이라 볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;근데 생각해 볼 거리가 있다. &lt;em&gt;pivot&lt;/em&gt; 을 구하는 함수의 비용은 어떻게 되는걸까? 이것 또한 &lt;code&gt;O(n)&lt;/code&gt; 이므로 전체 &lt;em&gt;partition&lt;/em&gt; 의 비용은 &lt;code&gt;O(n)&lt;/code&gt; 이라 보아도 된다.&lt;/p&gt;
+
+&lt;h4 id=&#34;randomized-pivots&#34;&gt;Randomized pivots&lt;/h4&gt;
+
+&lt;p&gt;그럼 만약에 &lt;em&gt;pivot&lt;/em&gt; 을 무작위로 고르면 어떻게 될까 생각해 보자. &lt;em&gt;pivot&lt;/em&gt; 을 무작위로 선택했을 때 한쪽이 &lt;code&gt;25-75%&lt;/code&gt; 로 분할될 확률은 &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; 이다.&lt;/p&gt;
+
+&lt;p&gt;그리고 무작위로 &lt;em&gt;pivot&lt;/em&gt; 을 선택했을때 첫번째 다음 재귀 호출에 넘겨질 배열의 길이의 기대값을 구하면, 다시 말해 &lt;code&gt;X&lt;/code&gt; 를 &lt;em&gt;subproblem size&lt;/em&gt; 라 했을때 &lt;code&gt;E(X)&lt;/code&gt; 를 구하면&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;1/n * (0 + 1 + ... + (n - 1)) = (n - 1) / 2&lt;/code&gt; 다.&lt;/p&gt;
+
+&lt;p&gt;여기서 잠깐 중요한 속성인 &lt;em&gt;linearity of expection&lt;/em&gt; 을 설명하면&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;모든 &lt;em&gt;random variable&lt;/em&gt; &lt;code&gt;X&lt;/code&gt; 의 합의 기대값은, 각 &lt;code&gt;X&lt;/code&gt;의 기대값의 합과 같다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.opendatastructures.org/ods-java/img333.png&#34; align=&#34;center&#34; /&gt;
+&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://www.opendatastructures.org&#34;&gt;http://www.opendatastructures.org&lt;/a&gt;)&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Xj(i)P(i)&lt;/code&gt; 를 컬럼의 개수가 &lt;code&gt;j&lt;/code&gt;, 행의 개수가 &lt;code&gt;i&lt;/code&gt; 인 행렬의 원소로 보면 이 &lt;em&gt;linearity of expectation&lt;/em&gt; 은 쉽게 이해할 수 있다. 이 속성은 꽤나 유용하다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어 두개의 주사위를 독립적으로 굴린다고 할 때 나오는 값인 &lt;em&gt;random variable&lt;/em&gt; &lt;code&gt;X1, X2&lt;/code&gt; 에 대한 기대값을 직접 구하려면 36개의 &lt;em&gt;sample space&lt;/em&gt; 를 살펴봐야 하는데, 그러지 말고 하나를 굴렸을때의 값을 구해 이걸 2배 하면 된다. 하나를 굴렸을때는 6개의 &lt;em&gt;sample space&lt;/em&gt; 만 살피면 되니 금방 구한다.&lt;/p&gt;
+
+&lt;p&gt;로드 밸런싱문제에 &lt;em&gt;linearity of expectation&lt;/em&gt; 을 적용해보자. &lt;code&gt;n&lt;/code&gt;개의 서버가 있고 여기에 &lt;code&gt;n&lt;/code&gt; 개의 프로세스를 랜덤하게 할당할때 한개의 서버에 할당될 프로세스의 기대값은 얼마일까? 다시 말해 평균적으로 몇개의 프로세스가 서버에 할당될까?&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;sample space&lt;/em&gt; 는 &lt;code&gt;n&lt;/code&gt; 개의 항끼리의 곱에서 항의 개수를 구하는 문제와 같으므로 &lt;code&gt;n^n&lt;/code&gt; 이다.&lt;/p&gt;
+
+&lt;p&gt;이때 &lt;code&gt;Y&lt;/code&gt; 를 첫 번째 서버에 할당된 프로세스 수의 합이라 하면 이때 &lt;code&gt;Y&lt;/code&gt; 는 &lt;code&gt;sigma Xj (j = 1 to n, Xj = 1 or 0)&lt;/code&gt;이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;E[Y]&lt;/code&gt; 를 구하는 것이 본래의 문제인데 가능한 &lt;code&gt;Y&lt;/code&gt; 값을 모두 구한 뒤에 각각의 확률을 곱해서 더하느니, &lt;code&gt;Y&lt;/code&gt; 를 분해해 각각의 기대값을 구한 후 더하는게 훨씬 빠르다. (주사위 굴리기 문제처럼)&lt;/p&gt;
+
+&lt;p&gt;다시 말해서, &lt;code&gt;Y&lt;/code&gt; 가 여러개의 항으로 구성될때는 각각의 기대값을 구하는게 더 계산이 빠르다는것이 &lt;em&gt;lineariry of expectation&lt;/em&gt; 의 본질이다.&lt;/p&gt;
+
+&lt;p&gt;따라서 기대값을 시그마 뒤쪽으로 빼서 계산하면 &lt;code&gt;1&lt;/code&gt; 이 나온다. 다시 말해 서버 하나당 평균적으로 1개의 프로세스를 가진다는 이야기.&lt;/p&gt;
+
+&lt;p&gt;다시 이 확률 테크닉을 &lt;em&gt;randomized pivot&lt;/em&gt; 을 선택하는 &lt;em&gt;merge sort&lt;/em&gt; 에 적용하러 가 보자.&lt;/p&gt;
+
+&lt;h3 id=&#34;decomposition-principle&#34;&gt;Decomposition Principle&lt;/h3&gt;
+
+&lt;p&gt;일단 랜덤 피벗을 가지는 퀵소트를 &lt;em&gt;master method&lt;/em&gt; 로는 &lt;em&gt;Big O&lt;/em&gt; 를 찾을 수가 없다는 사실을 알아 두자. 이는 입력한 배열이 일정하게 분할되지 않고 피벗때문에 랜덤하게 분할되지 때문이다.&lt;/p&gt;
+
+&lt;p&gt;이제, 퀵 소트의 각 재귀에서 일어나는 연산 중 &lt;em&gt;comparison (비교)&lt;/em&gt; 가 다른 연산보다 &lt;em&gt;dominant&lt;/em&gt; 하다고 하면, 다시 말해서 비교하는 숫자에 의해 연산 수가 결정된다고 하자. 이건 생각해보면 사실인데, &lt;em&gt;partition&lt;/em&gt; 과정에서 일어나는 비교가 각 &lt;em&gt;sub-problem&lt;/em&gt; 에서의 연산 수를 결정한다.&lt;/p&gt;
+
+&lt;p&gt;이렇게 하면 연산수의 기대값, 다시 말해서 &lt;em&gt;비교가 일어나는 회수의 평균으로&lt;/em&gt;, 퀵소트의 평균 성능을 찾아낼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;그런데 입력 배열에 대한 전체 비교 수를 &lt;code&gt;C&lt;/code&gt; 라 두면 &lt;code&gt;E(C)&lt;/code&gt; 는 사실 구하기가 굉장히 어렵다. 그런데, &lt;code&gt;E(C)&lt;/code&gt; 를 시그마 두번으로 분해할 수 있고, 심지어 가장 내부의 항은 &lt;code&gt;1&lt;/code&gt; 또는 &lt;code&gt;0&lt;/code&gt; 을 가지는 원소이다. 따라서 &lt;em&gt;linearity of expectation&lt;/em&gt; 을 이용할 수 있다 &lt;del&gt;할렐루야&lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;참고로 가장 내부의 항에 대해서 설명하자면, 전체 입력에서 두개의 원소를 골랐을 때 이 두개의 원소가 비교 되는 수다. 이 두개의 원소는 &lt;code&gt;i&lt;/code&gt;, &lt;code&gt;j&lt;/code&gt; 를 기준으로 구할 수 있으므로 &lt;code&gt;X_ij&lt;/code&gt; 라 두면 &lt;code&gt;i, j&lt;/code&gt; 에 각각에 대해 시그마를 씌울 수 있다. 이것이 &lt;code&gt;C&lt;/code&gt; 이므로 &lt;code&gt;E(C)&lt;/code&gt; 를 구하기는 상당히 복잡함을 알 수 있다. 그런데 &lt;code&gt;X_ij&lt;/code&gt; 자체는 &lt;code&gt;0&lt;/code&gt; 또는 &lt;code&gt;1&lt;/code&gt; 만 가지는 값이니 이것에 대해 &lt;code&gt;E(X_ij)&lt;/code&gt; 를 구하면 심플해진다. (수식을 적기 힘드니 자세한 내용은 강의 &lt;em&gt;Analysis I: A Decomposition Principle&lt;/em&gt; 을 참조)&lt;/p&gt;
+
+&lt;p&gt;따라서 &lt;code&gt;E(C)&lt;/code&gt; 는 &lt;code&gt;sigma i &amp;lt;- 1 to n-1, sigma j &amp;lt;- i+1 to n P(X_ij = 1)&lt;/code&gt; 이다.&lt;/p&gt;
+
+&lt;p&gt;여기서 잠깐 이제 까지 나온 &lt;em&gt;decompositio principle&lt;/em&gt; 을 설명하자면&lt;/p&gt;
+
+&lt;p&gt;(1) 구하고자 하는 랜덤 변수 &lt;code&gt;Y&lt;/code&gt; 를 정의하고&lt;br /&gt;
+(2) &lt;code&gt;Y&lt;/code&gt; 를 더 간단한 랜덤 변수 &lt;code&gt;X&lt;/code&gt; 의 합으로 정의하자. &lt;code&gt;X&lt;/code&gt; 가 0 또는 1만 가지는 값이면 더 좋다.
+(3) &lt;em&gt;linearity of expectation&lt;/em&gt; 을 적용&lt;/p&gt;
+
+&lt;p&gt;다시 말해 알고리즘의 성능을 결정하는 &lt;em&gt;dominant operation&lt;/em&gt; 을 확률변수로 표현할 수 있고, 더 간단한 확률 변수의 합으로 표현할 수 있다면 해해 여기에 &lt;em&gt;기대값의 선형성&lt;/em&gt; 을 이용해 알고리즘의 평균적인 성능을 구할 수 있다는 뜻이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sigma i &amp;lt;- 1 to n-1, sigma j &amp;lt;- i+1 to n P(X_ij = 1)&lt;/code&gt; 다시 이 식으로 돌아오자. 여기에 적용할 수 있는 퀵소트의 특징이 있다. 여기서 &lt;code&gt;z_i&lt;/code&gt; 를 정렬된 배열의 &lt;code&gt;i&lt;/code&gt; 번쨰 원소라 했을때 &lt;em&gt;pivot&lt;/em&gt; 이 될 수 있는 것은 &lt;code&gt;z_i, z_i+1, ... z_j-1, z_j&lt;/code&gt; 다. 이때&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;code&gt;z_i&lt;/code&gt; 또는 &lt;code&gt;z_j&lt;/code&gt; 가 &lt;em&gt;pivot&lt;/em&gt; 이 되면, 즉 가장 작은 수나 가장 큰 수가 &lt;em&gt;pivot&lt;/em&gt; 이 되면 &lt;code&gt;z_i&lt;/code&gt; 와 &lt;code&gt;z_j&lt;/code&gt; 는 한번만 비교된다. (이후에는 다른 재귀로 넘어가 둘 중 하나의 수만 남음)&lt;br /&gt;
+(2) &lt;code&gt;z_i+1&lt;/code&gt;, &amp;hellip;, &lt;code&gt;z_j-1&lt;/code&gt; 이 &lt;em&gt;pivot&lt;/em&gt; 이 되면 &lt;code&gt;z_i&lt;/code&gt; 와 &lt;code&gt;z_j&lt;/code&gt; 는 절대로 비교되지 않는다. &lt;em&gt;pivot&lt;/em&gt; 기준으로 큰 수와 작은수는 서로 비교되지 않으며 둘 다 피벗과만 비교된다. 이후에도 다른 파티션으로 나누어져 비교되지 않는다.&lt;/p&gt;
+
+&lt;p&gt;따라서 각 &lt;em&gt;sub-problem&lt;/em&gt; 에서 일어나는 비교가 일어날 확률은 &lt;code&gt;2 / (j - i + 1)&lt;/code&gt; 이다. 다시 말해서 전체 원소 중에서 &lt;code&gt;z_i&lt;/code&gt; 와 &lt;code&gt;z_j&lt;/code&gt; 를 피벗으로 삼는 경우에만 비교가 일어난다.&lt;/p&gt;
+
+&lt;p&gt;따라서 평균 연산 수 &lt;code&gt;E(C)&lt;/code&gt; 는 &lt;code&gt;sigma i &amp;lt;- 1 to n-1, sigma j &amp;lt;- i+1 to n [2 / (j -i + 1)]&lt;/code&gt; 이다.&lt;/p&gt;
+
+&lt;p&gt;이때 &lt;code&gt;j = i +1&lt;/code&gt; 부터 시작하므로 내부 시그마는 &lt;code&gt;1/2 + 1/3 + ... 1/n&lt;/code&gt; 이다. 그리고 내부 시그마에서 &lt;code&gt;i&lt;/code&gt; 가 사라졌으므로 외부 시그마 &lt;code&gt;i &amp;lt;- 1 to n-1&lt;/code&gt; 을 &lt;code&gt;n-1&lt;/code&gt; 대신 대략 &lt;code&gt;n&lt;/code&gt; 이라고 놓으면,&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;E(C) &amp;lt;= 2 * n * [sigma k &amp;lt;- 2 to n (1/k)]&lt;/code&gt; 다.&lt;/p&gt;
+
+&lt;p&gt;이때 &lt;code&gt;sigma k &amp;lt;- 2 to n (1/k)&lt;/code&gt; &amp;lt;= &lt;code&gt;ln n&lt;/code&gt; 인데, 본래 식의 &lt;code&gt;k&lt;/code&gt; 1 부터의 시그마보다 작으므로 이걸 적분으로 넓이를 구하면 &lt;code&gt;ln n - ln 1 =  ln n&lt;/code&gt; 이다.&lt;/p&gt;
+
+&lt;p&gt;따라서 &lt;code&gt;E(C) &amp;lt;= 2 * n * ln n&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;notes&#34;&gt;Notes&lt;/h3&gt;
+
+&lt;p&gt;이하는 필기 노트입니다.&lt;/p&gt;
+
+&lt;h4 id=&#34;matrix-multiplication&#34;&gt;matrix multiplication&lt;/h4&gt;
+
+&lt;p&gt;단순히 brute force 로 3 for-loop 로 구현하면 당연히 o(n^3) -_-;&lt;/p&gt;
+
+&lt;p&gt;스트라센 매트릭스 곱셈으로 구현하면 놀랍게도 n^2&lt;/p&gt;
+
+&lt;h4 id=&#34;multiplication&#34;&gt;Multiplication&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;define Input, output&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;assess performance&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;can we do better strait forard?&lt;/p&gt;
+
+&lt;p&gt;일반적인 곱셈(초등3학년)은 2n * n&lt;/p&gt;
+
+&lt;h4 id=&#34;karatsuba-multiplication&#34;&gt;Karatsuba Multiplication&lt;/h4&gt;
+
+&lt;p&gt;a * c
+b * d = 2652
+(a + b)(c + d) = 6164
+(a+b)(c+d) - a*c - b * d = 2840&lt;/p&gt;
+
+&lt;p&gt;ad bc&lt;/p&gt;
+
+&lt;p&gt;6164 + * 10000
++ 2652
++ 2840 * 100&lt;/p&gt;
+
+&lt;p&gt;x = 10^n/2 a + b
+y = 10^n/2 c + d&lt;/p&gt;
+
+&lt;p&gt;x * y =&amp;gt; 10^n ac + 10 n/2 (ad+bc) + bd
+따라서 &lt;em&gt;Karatsuba multiplication&lt;/em&gt; 은 &lt;em&gt;product&lt;/em&gt; 문제를 ac, ad, bc, bd 의 곱으로 쪼갬.&lt;/p&gt;
+
+&lt;p&gt;여기서도, ac, ad, bc, bd 를 모두 구하는 대신에&lt;/p&gt;
+
+&lt;p&gt;(a+b)(c+d) - ac bd 를 빼면,  ac bd (a+b)(c+d) 3개만 구하면 된다.&lt;/p&gt;
+
+&lt;p&gt;따라서 3개의 recursive multiplication 만 필요&lt;/p&gt;
+
+&lt;h4 id=&#34;closest-pairs&#34;&gt;Closest Pairs&lt;/h4&gt;
+
+&lt;p&gt;brute force 는 n^2 인데,&lt;/p&gt;
+
+&lt;p&gt;1D 의 closest pair 에서 sorting 하면 n^2 가 아니라 nlogn 이다.&lt;/p&gt;
+
+&lt;p&gt;로직은 다음과 같다.&lt;/p&gt;
+
+&lt;p&gt;문제를 반으로 잘라가면서 왼쪽에서 거리가 가장 짧은것 좌표 쌍, 오른쪽에서 가장 짧은것을 찾고, 각 영역에 좌표가 하나씩 있는 쌍도 검사 한다.&lt;/p&gt;
+
+&lt;p&gt;(1) 주어진 배열을 P 라 하고 반으로 각각 좌우 Q, R 자른다. O(n) Q를 x 정렬한것을 Qx, y 축 기준으로 Qy, R도 Rx, Ry. 이건 전체 인풋 n 에 대해서 n logn&lt;br /&gt;
+(2) ClosestPair(Qx, Qy), Closest(Rx, Ry) 해서 각각 좌 우에서 가장 짧은 거리를 가진 pair 쌍을 찾는다.  이걸 (p1, q1), (p2, q2)  라 하면&lt;br /&gt;
+(3) (p1, q1), (p2, q2) 의 거리를 구해 최소값인 d 를 찾는다&lt;br /&gt;
+(4) Closest(Px, Py, d) 해서 (p3 , q3) 가 있으면 찾아낸다. 여기서 찾은건 하나는 Q 하나는 R 에 있는 d 보다 작은 거리를 가진 점의 쌍&lt;br /&gt;
+(5) p1, p2, p3 쌍중 가장 작은 d 를 가진 것을 리턴&lt;/p&gt;
+
+&lt;p&gt;ClosestSplitPair&lt;/p&gt;
+
+&lt;p&gt;(1) Px 의 가운데 점을 xBar 라 하면 이것 기준으로 -d, +d 의 x 값을 가진 점들을 Py 에서 찾아낸다. 정의에 의해서 x1 - x2 &amp;lt;= d 이기 때문에 아무리 커봐야 xBar 기준으로 좌우 d 까지밖에 존재하지 못함. 이걸 Sy 라 부르자. 이건 Py 가 이미 정렬되어 있기 때문에 O(n) 시간.&lt;br /&gt;
+(2) Sy 는 y 축 기준으로 이미 정렬되어 있는데, 여기서 Sy 의 원소를 루프로 돌면서 이것 기준으로 +7개 원소를 검사하면서 거리가 d 보다 작은것이 있는지 검사. 이것 또한 마찬가지로 d 의 정의와 두 점이 Q, R 에 있다는 점을 이용해서 증명이 가능함.&lt;/p&gt;
+
+&lt;p&gt;y1 - y2 도 d 보다 작거나 같이 때문에 y 기준으로 정렬된 점을 기준으로 잡았을때,&lt;/p&gt;
+
+&lt;p&gt;p 와 같은 왼편에 있는 것들은 p와의 거리가 d 보다 작을 수 없다. 왜냐하면 d 자체가 같은 사이드에 있는 것들의 최소 거리이기 때문.
+이런점들을 아무리 많이 왼쪽에 구겨 넣어도 3개. p 포함하면 4개다. 마찬가지로 q 와 같은 편에 있는것들도 3개.&lt;/p&gt;
+
+&lt;p&gt;따라서 운이 나쁠 경우 Sy 에서 p, q + 6개를 더 검사해야.&lt;/p&gt;
+
+&lt;p&gt;직사각형을 그려보면 이해가 쉬움.&lt;/p&gt;
+
+&lt;p&gt;Input 은 (x1, y1) &amp;hellip; (xn, yn) 의 pair n개 편의상 p1, p2, &amp;hellip; pn&lt;/p&gt;
+
+&lt;p&gt;d(p_i, p_j) 는 두 point 사이 거리&lt;/p&gt;
+
+&lt;p&gt;(1) 모든 점들을 x 기준으로 정렬했을때 가운데에 있는 점을 xBar 라 하면 S_y 는 xBard - d, xBar + d 사이에 있는 모든 점이다. 만약에 왼쪽에 있는 p, 오른쪽에 있는 q 가 존재한다면 이 둘은 S_y 사이에 있고 아래 증명에 에해서 x1, x2 사이 거리는 d 보다 작다.&lt;/p&gt;
+
+&lt;p&gt;왜냐하면, p(x1, y1), q(x2, y2) 사이의 거리가 d 보다 작기 때문에 x1 - x2 &amp;lt;= d 이다.&lt;/p&gt;
+
+&lt;p&gt;(2) S_y 에서 p, q 가 존재한다면 그건 y 기준으로 7 원소 이내에 인접해 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;a href=&#34;https://acrocontext.wordpress.com&#34;&gt;https://acrocontext.wordpress.com&lt;/a&gt;&lt;br /&gt;
+(2) &lt;a href=&#34;http://sadakurapati.wordpress.com/2013/10/25/quicksort-a-practical-and-efficient-sorting-algorithm/&#34;&gt;http://sadakurapati.wordpress.com&lt;/a&gt;&lt;br /&gt;
+(3) &lt;a href=&#34;http://www.opendatastructures.org/ods-java/1_3_Mathematical_Background.html&#34;&gt;http://www.opendatastructures.org&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

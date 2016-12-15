@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>AI Planning 4: STN, HTN</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/91/algorithm/artificial-intelligence-planning-4/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.io/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/15/infrastructure/">
+        <a href="https://1ambda.github.io/15/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/15/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.io/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.io/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.io/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/23/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/23/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.io/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.io/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.io/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.io/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.io/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/91/algorithm/artificial-intelligence-planning-4.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/91/algorithm/" itemprop="url"><span itemprop="title">Algorithm</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                  
+                
+                <span itemprop="title"> AI Planning 4: STN, HTN</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#stn">STN</a></li>
+<li><a href="#task">Task</a></li>
+<li><a href="#methods-refinements">Methods (Refinements)</a></li>
+<li><a href="#decomposition">Decomposition</a></li>
+<li><a href="#domains-problems-and-solution">Domains, Problems and Solution</a></li>
+<li><a href="#stn-planning">STN Planning</a></li>
+<li><a href="#tfd-vs-foward-backward-search">TFD vs Foward/Backward Search</a></li>
+<li><a href="#htn-planning">HTN Planning</a></li>
+<li><a href="#sipe-2-htn-planner">SIPE-2 HTN Planner</a></li>
+<li><a href="#refs">Refs</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>AI Planning 4: STN, HTN</h1>
+                
+
+
+
+<p><img src="http://uxmag.com/sites/default/files/legacy/articleimage_15.jpg" alt="" /></p>
+
+<p>지금까지 <em>State-Space Planning</em>, <em>Plan-Space Planning</em> 기법을 배웠는데, 이 두 가지는 같은 문제를 푸는 방법이었다. 이제 문제를 조금 변형해, 인간의 사고와 비슷하게 <em>Task</em> 중심으로 분할해서 해결하는 법을 배워보자.</p>
+
+<h3 id="stn">STN</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning.jpg" alt="" /></p>
+
+<p><em>terms</em> 는 <em>constant</em>, <em>variable</em>, <em>object</em> 따위의 것들이고 <em>literals</em> 는 참이거나 거짓이 될 수 있는 <em>proposition</em> 이다.</p>
+
+<p><em>task network</em> 에서 새롭게 도입되는 것은</p>
+
+<ul>
+<li><strong>task:</strong> to be performed</li>
+<li><strong>method:</strong> describing ways in which tasks can be performed</li>
+<li><strong>organized collections of tasks:</strong> called task networks</li>
+</ul>
+
+<p><em>DWR</em> 예제로 보면</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/DWR_STN_example.jpg" alt="" /></p>
+
+<p><br/></p>
+
+<h3 id="task">Task</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/tasks_def.jpg" alt="" /></p>
+
+<p><em>task</em> 는 <code>T_S</code> 처럼 <em>non-primitive</em> 일 수도, <code>t1, ..., tn</code> 처럼 <em>subsete</em> 에 속하는 <em>primitive task</em> 일 수 있다.</p>
+
+<p><em>task</em> 를 <code>t_i(r1, ..., rk)</code> 라 표기하는데, <code>r</code> 은 <em>task</em> 에 의해 조작되는 <em>object</em> 등의 <em>term</em> 이다.</p>
+
+<p>그리고 슬라이드에 나와 있듯이 <em>ground task</em> 는 <em>variable</em> 이 아니라 <em>action</em> 처럼 <em>constant</em> 를 가져야 하고, <em>action</em> 은 <em>ground primitive task</em> 만 <em>accomplish</em> 할 수 있다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/simple_task_network_def.jpg" alt="" /></p>
+
+<p><em>STN</em> 은 <em>acyclic directed graph</em> <code>(U, E)</code> 다. 각 <em>node</em> 는 <em>task</em> 고, <em>edge</em> 는 <em>task</em> 의 <em>partial ordering</em> 을 정의한다. <code>t_i &lt; t_j</code> 처럼</p>
+
+<p>그리고 <em>task network</em> 는 모든 <em>node</em> 가 <em>ground/primitive</em> 일때만 <em>ground/primitive</em> 고, 하나라도 아니라면 <em>unground/non-primitive</em> 다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/total_ordered_STN.jpg" alt="" /></p>
+
+<p><em>STN</em> <code>w</code> 는 위상 정렬처럼, 모든 <em>edge</em> 가 <em>node</em> 에 대해 순서를 정의할 수 있으면 <em>totally ordered</em> 하다고 말한다. 그러면 <code>w</code> 는 <em>task</em> 의 시퀀스로 나타낼 수 있다. <code>w = &lt;t1, ..., tn&gt;</code></p>
+
+<p>그리고 <code>w</code> 가 <em>totally ordered</em>, <em>ground</em>, <em>primitive</em> 이면 <code>w</code> 를 위한 <em>plan</em> <code>ㅠ</code> 는</p>
+
+<p><code>ㅠ(w) = &lt;a1, ..., an&gt;</code> where <code>ai = ti</code>, <code>1 &lt;= i &lt;= n</code></p>
+
+<p><br/></p>
+
+<p>DWR 예제로 STN 의 표기법을 알아보자.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STNs_DWR_ex.jpg" alt="" /></p>
+
+<p><code>take</code> <em>task</em> 는 똑같은 <em>operator</em> 이름이 있으므로 <em>primitive</em> 고, 변수가 없으므로 <em>ground</em> 다.</p>
+
+<p><code>move-stack</code> 은 <em>DWR domain</em> 에 정의한 같은 이름의 <em>operator</em> 가 없으므로 <em>non-primitive</em> 이고, 변수가 있으므로 <em>unground</em> 다.</p>
+
+<p>이 3개의 <em>task</em> 를 기반으로 <em>task network</em> 를 구성할 수 있다.</p>
+
+<p><code>w1</code> 은 <code>(t1, t2), (t1, t3)</code> 고, <code>t2, t3</code> 에 대한 <em>ordering</em> 이 없으므로 <em>partially ordered network</em> 다.</p>
+
+<p><br/></p>
+
+<h3 id="methods-refinements">Methods (Refinements)</h3>
+
+<blockquote>
+<p><strong>method:</strong> describing ways in which tasks can be performed</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_def.jpg" alt="" /></p>
+
+<p>메소드는 <em>name</em>, <em>task</em>, <em>precond</em> <em>network</em> 로 구성되어 있다.</p>
+
+<ul>
+<li><em>name(m)</em>: <code>n(x1, ..., xk)</code> 의 형태로 <em>unique</em> 한 심볼 <code>n</code> 과 다뤄지는 <em>variable</em> 인 <code>x</code> 를 포함한다</li>
+<li><em>task(m)</em>: <em>non-primitive task</em></li>
+<li><em>precond(m)</em>: set of literals</li>
+<li><em>network(m)</em>: task network <code>(U, E)</code> containing the set of subtasks <code>U</code> of <code>m</code></li>
+</ul>
+
+<p>잘 보면 <em>effect</em> 가 없는데, 여기선 <em>goal</em> 을 달성하는 것이 아니라 <em>task</em> 를 수행해야 하기 때문에 <em>effect</em> 는 없고 <em>precond</em> 만 신경쓴다.</p>
+
+<p>그리고 <em>task</em> 는 무엇을 달성해야 하는지를 나타내기 때문에, <em>task</em> 가 같으면 같은 <em>method</em> 가 아니냐고 질문할 수 있으나, <em>network</em> 때문에 다르다. <em>network</em> 는 <em>subtask</em> 를 <em>ordering</em> 한 것으로 <strong>어떻게</strong> <em>task</em> 를 수행할지를 나타내기 때문이다.</p>
+
+<p>만약 <em>method</em> 의 <em>network</em> 가 <em>partially ordered</em> 이면 <em>method</em> 도 <em>partially ordered metohd</em> 라 부른다.</p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex.jpg" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex2.jpg" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex3.jpg" alt="" /></p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/app_relev.jpg" alt="" /></p>
+
+<p><em>appicability</em> 는 <em>action</em> 과 비슷하다.</p>
+
+<p>만약 <em>substitution</em> <code>σ</code> 에 대해, <code>σ(t) = task(m)</code> 이면 메소드 인스턴스 <code>m</code> 이 태스크 <code>t</code> 와 <em>relevant</em> 하다고 말한다. <del>왜죠?</del></p>
+
+<p>무슨 뜻인가 하면, 우리가 달성하려고 하는 <code>t</code> 에 대해 <code>σ(t)</code> 가 메소드의 태스크인 <code>task(m)</code> 과 동일하면, 해당 <code>t</code> 를 위해 메소드 <code>m</code> 을 사용할 수 있다는 뜻이다.</p>
+
+<p>그리고 태스크 <code>t</code> 와 <em>relevant</em> 인 <em>method</em> <code>m</code> 에 대해</p>
+
+<ul>
+<li><code>δ(t, m, σ) = σ(network(m))</code> 또는</li>
+<li><code>δ(t, m, σ) = σ(&lt;subtasks(m)&gt;)</code> if <code>m</code> is <strong>totally ordered</strong></li>
+</ul>
+
+<p>로 <em>decomposition</em> 할 수 있다. 그냥 분해인데, 표기법을 저렇게 사용한다고 보면 된다. 당연히 <em>decomposition</em> 되면 <em>subtask</em> 가 되는데, <em>totally ordered</em> 면 <em>subtask</em> 만 돌려주면 되고, 아니라면 <em>network</em> 를 돌려주면 된다는 이야기. DWR 예제로 보자.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_method_DWR_ex2.jpg" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/method_app_relev_DWR_ex.jpg" alt="" /></p>
+
+<p><em>substitution</em> 을 적용했을때<em>task</em> 이름이 같으므로 <em>relevant</em> 하고 <em>precond</em> 를 검사해보면 <em>applicable</em> 하다는 것을 알 수 있다.</p>
+
+<p><br/></p>
+
+<h3 id="decomposition">Decomposition</h3>
+
+<p><em>method decomposition</em> 을 자세히 살펴보자.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/method_decomp_DWR_ex.jpg" alt="" /></p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/decomposition_def.jpg" alt="" /></p>
+
+<p><code>w</code> 를 <em>STN</em> 이라고 하면, <code>U</code> 에 속하는 <em>task</em> <code>t</code> (<em>predecessors</em> 가 없는) 에 대해 <em>relevant</em> 메소드 <code>m</code> 이 있고, <em>substitution</em> <code>σ</code> 와, <code>m</code> 의 <em>network</em> <code>(U_m, E_m)</code> 이 있다. 이 때 <em>decomposition</em> <code>δ(w, t, m, σ)</code> 은</p>
+
+<ul>
+<li><code>t</code> is replaced in <code>U</code> by <code>σ(U_m)</code></li>
+<li>edges in <code>E</code> involving <code>t</code> are replaced by edges to appropriate nodes in <code>σ(U_m)</code></li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="domains-problems-and-solution">Domains, Problems and Solution</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_domain.jpg" alt="" /></p>
+
+<p><em>STN planning domain</em> <code>D = (O, M)</code> 이다. <code>O</code> 는 <em>STRIPS planning operators</em>, <code>M</code> 은 <em>STN methods</em> 다. 만약 모든 메소드가 <em>totally ordered</em> 이면 <code>D</code> 도 <em>total-order STN planning domain</em> 이다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_problem.jpg" alt="" /></p>
+
+<p><em>STN planning problem</em> <code>P</code> 는 <code>P = (s_i, w_i, O, M)</code> 으로 구성된다. 잘보면 <em>goal</em> 대신 <em>initial state network</em> 인 <code>w_i</code> 가 있다. <code>w_i</code> 와 <code>D = (O, M)</code> 이 <em>totally ordered</em> 면 <code>P</code> 를 <em>total order STN planning problem</em> 이라 부른다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/STN_planning_solution.jpg" alt="" /></p>
+
+<p>(1) <code>w_i</code> 와 <em>plan</em> <code>ㅠ</code> 가 <em>empty</em> 여서 태스크가 없거나</p>
+
+<p>(2) <em>predecessors</em> 가 없는 <em>primitive task</em> <code>t</code> 에 대해, <code>a1 = t</code> 가 <code>s_i</code> 에 <em>applicable</em> 하고, <code>ㅠ = &lt;a2, ..., an&gt;</code> 이 <code>P' = (γ(s_i, a1), w_i - {t}, O, M)</code> 의 솔루션이거나</p>
+
+<p>(3) <em>predecessors</em> 가 없는 <em>non-primitive task</em> <code>t</code> 에 대해 <em>relevant</em> 메소드 <em>m</em> 이 <code>s_i</code> 에 대해 <em>applicable</em> 하고, <code>ㅠ</code> 가 <code>P' = (s_i, δ(w, t, m, σ), O, M)</code> 면 된다.</p>
+
+<p>즉 <em>primitive task</em> 일때는 <em>action</em> 으로 시작하고, 아닐때는 <em>decomposition</em> 한 네트워크에 대해 <code>ㅠ</code> 를 찾으면 된다.</p>
+
+<p></br></p>
+
+<h3 id="stn-planning">STN Planning</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/state_vs_plan_planner.jpg" alt="" /></p>
+
+<p>여기서 <em>TFD</em> 는 <em>Total-order Forward Decomposition</em> 의 약자다.</p>
+
+<pre><code>function Ground-TFD(s, &lt;t, ..., tk&gt;, O, M)
+  // empty plan, no task
+  if k = 0 return &lt;&gt;
+  
+  if t1.isPrimitive() thne
+    actions = {(a, σ), a = σ(t1) and a applicable in s}
+    
+    if actions.isEmpty() then return failure
+    (a, σ) = actions.chooseOne()
+    plan &lt;- Ground-TFD(γ(s, a), σ(&lt;t2, ..., tk&gt;), O, M)
+    
+    if plan = failure then return failure
+    else return &lt;a&gt; * plan // add plan 
+  	  
+  else 
+    methods = {(m, σ) | m is relevant for σ(t1) and m is appicable in s}
+    
+    if methods.isEmpty then return failure
+    
+    (m, σ) = methods.chooseOne()
+    // prepend subtasks
+    plan &lt;- subtasks(m) * σ(&lt;t2, ..., tk&gt;)
+    
+    return Ground-TFD(s, plan, O, M)
+</code></pre>
+
+<p><em>DWR</em> 예제를 보면</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/DWR_decompos_tree_ex.jpg" alt="" /></p>
+
+<p><code>move-stack</code> 은 <em>non-primitive</em> 이므로 <em>decomposition</em> 하고, 이 과정을 반복하면서 <em>ground, primitive task</em> 를 얻어 <em>action</em> 으로 해결한다.</p>
+
+<p><br/></p>
+
+<h3 id="tfd-vs-foward-backward-search">TFD vs Foward/Backward Search</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/TFD_vs_fwd_backwd.jpg" alt="" /></p>
+
+<ul>
+<li>TFD consider only applicable actions like forward search</li>
+<li>TFD consider only relevant actions like backward search</li>
+<li>TFD generate actions execution order. current world state always known</li>
+<li>Ground-TFD can be generalized to Lifted-TFD resulting in same advantages as lifted backward search</li>
+</ul>
+
+<p><em>TFD</em> 의 경우 <em>action execution order</em> 를 생성하기 때문에, 현재 어디에 위치해 있는지를 알 수 있다. 이 때문에 <em>goal</em> 까지 더 빠르게 가기 위한 <em>good heuristics</em> 를 적용할 수 있다.</p>
+
+<p><em>Lifted-TFD</em> 는 <em>variable</em> 을 최대한 유지해, 불필요한 <em>binding</em> 을 막는다.</p>
+
+<p><br/></p>
+
+<p><em>Partial-order FD</em> 코드도 살펴보자.</p>
+
+<pre><code>function Ground-PFD(s, w, O, M)
+  if w.U = {} return &lt;&gt;
+  
+  task &lt;- { t ∈ U | t has no predecessors in w.E}.chooseOne()
+  
+  if task.isPrimitive() then
+    actions = {(a, σ) | a = σ(t1) and a applicable in s}
+    
+    if actions.isEmpty() then return failure
+    
+    (a, σ) = actions.chooseOne()
+    plan &lt;- Ground-PFD(γ(s, a), σ(w-{task}), O, M)
+    
+    if plan = failure then return failure
+    else return &lt;a&gt; * plan
+    
+  else
+    methods = {(m, σ) | m is relevant for σ(t1) and m is applicable in s}
+    
+    if methods.isEmpty then return failure
+    
+    (m, σ) = methods.chooseOne()
+    
+    return Gound-PFD(s, δ(w, task, m, σ), O, M)    
+</code></pre>
+
+<p><em>TFD</em> 와 별 차이가 없다. 초기에 <em>TFD</em> 가 아니므로 인자로 <em>network</em> 인 <code>w</code> 를 받아, <code>task</code> 를 직접 구하는거 이외에는.</p>
+
+<p><br/></p>
+
+<h3 id="htn-planning">HTN Planning</h3>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/precond_STN_planning.jpg" alt="" /></p>
+
+<p><em>STN planning</em> 에서는 <em>ordering constaints</em> 를 유지해야 하고, <em>applicability</em> 를 테스트하기 위해서 <em>precondition</em> 을 이용했다. 또한 <em>effect</em> 없이 <em>precond</em> 만 이용하므로 반드시 <em>forward search</em> 를 해야 했다.</p>
+
+<p><em>HTN planning</em> 에서는 <em>ordering constaints</em> 나 <em>precondition</em> 이외에 추가적으로 <em>general constraints</em> 를 유지하여 다른 종류의 <em>constraints</em> 를 조합하는 등 더 유연하게 플래닝할 수 있다.</p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_methods_def.jpg" alt="" /></p>
+
+<p>예를 들어 <em>HTN methods</em> 는 <code>constr(m)</code> 을 포함한다. <em>DWR</em> 예제를 보자.</p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_method_DWR_ex.jpg" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_method_DWR_ex2.jpg" alt="" /></p>
+
+<p><code>move-one</code> 같은 경우 <code>no-move</code> 대신 이용하는데, 이는 <em>HTN planning</em> 에서는 <em>task</em> 가 없으면 <em>constraints</em> 를 추가할 수 없기 때문이다.</p>
+
+<p><br/></p>
+
+<p><img src="https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/ai-planning/3-partial-plan/HTN_vs_STRIPS.jpg" alt="" /></p>
+
+<p><em>HTN</em> 은 <em>STN</em> 의 더 유연한 버전이고, <em>STN</em> 은 <em>undecidable</em> 한 문제를 풀 수 있지만, <em>STRIPS</em> 에서는 불가능하다. <em>STRIPS</em> 에서는 유한한 오브젝트, 아톰 등으로 구성된 유한한 상태 공간을 탐색하기 때문이다. 반대로 <em>STN</em> 이 <em>background</em> 를 더 필요로 하지만, 더 <em>expressie</em> 함을 알 수 있다.</p>
+
+<p>그렇다고 <em>STRIPS</em> 가 후지다는 것이 아니라, 서로 다른 종류의 문제를 풀 수 있는 두개의 방법이라 보면 된다.</p>
+
+<p>참고로 <em>non-recursive STN</em> 은 <em>STRIPS</em> 로 번역될 수 있다고 한다. 그리고 <em>regular STN</em> 은 <em>STRIPS</em> 와 동일하다고 하는데, <em>regular</em> 란 뜻은 <em>recursive call</em> 이 그리 많지 않은 것을 의미한다.</p>
+
+<h3 id="sipe-2-htn-planner">SIPE-2 HTN Planner</h3>
+
+<p><a href="https://www.youtube.com/watch?v=gE0wPgT2qrw">Youtube: SIPE-2 HTN Planner by David Wilkins</a></p>
+
+<h3 id="refs">Refs</h3>
+
+<p>(1) <strong>Artificial Integelligence Planning</strong>, by Dr.Gerhard Wickler, Prof. Austin Tate<br />
+(2) <a href="http://uxmag.com/articles/psychological-usability-heuristics">brain image</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../artificial-intelligence-planning-3"> <i class="fa fa-chevron-left"></i></a>
+        
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

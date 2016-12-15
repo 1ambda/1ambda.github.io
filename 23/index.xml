@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>23s on Old Lisper</title>
+    <link>https://1ambda.github.io/23/</link>
+    <description>Recent content in 23s on Old Lisper</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 25 Jun 2016 11:27:04 +0900</lastBuildDate>
+    <atom:link href="https://1ambda.github.io/23/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Javascript</title>
+      <link>https://1ambda.github.io/23/javascript/</link>
+      <pubDate>Sat, 25 Jun 2016 11:27:04 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/23/javascript/</guid>
+      <description>
+
+&lt;h2 id=&#34;javascript&#34;&gt;Javascript&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;tips-for-webpack-and-redux&#34;&gt;Redux 와 Webpack 을 사용할 때 알아두면 도움이 될 9 가지 팁들&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;javascript-inheritance&#34;&gt;Javascript Inheritance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;rest-api-put-vs-post&#34;&gt;REST API: Put vs Post&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Javascript Inheritance</title>
+      <link>https://1ambda.github.io/23/javascript/javascript-inheritance/</link>
+      <pubDate>Sat, 25 Jun 2016 12:22:02 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/23/javascript/javascript-inheritance/</guid>
+      <description>
+
+&lt;h2 id=&#34;prototype-inheritance&#34;&gt;Prototype Inheritance?&lt;/h2&gt;
+
+&lt;p&gt;자바스크립트는 프로토타입 방식의 상속을 사용한다고들 말합니다. 프로토타입이란 무엇이고, 클래스 기반 상속과는 어떻게 다른지, 그리고 주의해야 할 점은 무엇인지 알아보겠습니다. 이 글에서 다루는 키워드는 아래와 같습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;.constructor&lt;/li&gt;
+&lt;li&gt;.__proto__&lt;/li&gt;
+&lt;li&gt;.prototype&lt;/li&gt;
+&lt;li&gt;Object.create&lt;/li&gt;
+&lt;li&gt;new&lt;/li&gt;
+&lt;li&gt;Object, Function&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;먼저 예제부터 보시겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
+// Shape - superclass (1)
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+// superclass method (2)
+Shape.prototype.move = function(x, y) {
+    this.x += x;
+    this.y += y;
+    console.info(&amp;quot;Shape moved.&amp;quot;);
+};
+
+// Rectangle - subclass (3)
+function Rectangle() {
+  Shape.call(this); // call super constructor.
+}
+
+// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype); (4)
+Rectangle.prototype.constructor = Rectangle; (5)
+
+var rect = new Rectangle();
+
+rect instanceof Rectangle // true.
+rect instanceof Shape // true.
+
+rect.move(1, 1); // Outputs, &amp;quot;Shape moved.&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(1). 먼저 &lt;code&gt;Shape&lt;/code&gt; 이라는 함수를 만듭니다. 자바스크립트에서는 객체를 생성하기 위한 함수를 &lt;code&gt;Constructor(생성자)&lt;/code&gt; 라고 부르며, 생성자임을 알아볼 수 있게 첫 글자를 &lt;strong&gt;대문자&lt;/strong&gt;로 작성하는 것이 관례입니다. 이렇게 만들어진 생성자는 &lt;code&gt;new&lt;/code&gt; 를 통해 호출할 수 있습니다. 물론 생성자는 그 자체로서 함수이기 때문에 &lt;code&gt;Shape()&lt;/code&gt; 과 같이 호출도 가능합니다. 그러나 &lt;code&gt;new&lt;/code&gt; 가 있는것과 없는것은 조금 차이가 있습니다. 아래에서 알아보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;(2). 생성자에 존재하는 &lt;code&gt;prototype&lt;/code&gt; 속성, 즉 &lt;code&gt;Shape.prototype&lt;/code&gt; 에 &lt;code&gt;move&lt;/code&gt; 란 메소드를 추가하고 있습니다. 생성자의 &lt;code&gt;prototype&lt;/code&gt; 속성에 추가된 모든 것들은 이 생성자를 통해 생성된 모든 객체에서 사용 가능합니다. 그러나, 생성자의 &lt;code&gt;prototype&lt;/code&gt; 이 아니라, 인스턴스에 추가된 속성들은 그 인스턴스만 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt; var s1 = new Shape();
+s1.move(3, 3);
+
+s1.isShape = true;
+
+var s2 = new Shape();
+console.log (s2.isShape) // undefined
+console.log (typeof s2.isShape === &amp;quot;undefined&amp;quot;) // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(3). &lt;code&gt;Rectangle&lt;/code&gt; 이라는 새로운 생성자를 정의하고 있습니다. 그리고 이 생성자 내에서 &lt;code&gt;Shape.call(this)&lt;/code&gt; 를 호출하여, &lt;code&gt;new Rectangle()&lt;/code&gt; 을 통해 만들어지는 모든 인스턴스가 &lt;code&gt;Shape&lt;/code&gt; 처럼 &lt;code&gt;this.x&lt;/code&gt; 와 &lt;code&gt;this.y&lt;/code&gt; 를 가지고, 0으로 초기화 하도록 합니다. 이 과정이 끝나면 다음과 같은 결과가 나옵니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function Rectangle() {
+	Shape.call(this);
+}
+
+var r1 = new Rectangle();
+console.log (r1.x); // 0
+console.log (r2.y); // 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그러나 이 시점에서 &lt;code&gt;r1&lt;/code&gt; 은 &lt;code&gt;move&lt;/code&gt; 란 메소드를 사용할 수 없습니다. &lt;code&gt;Shape.move&lt;/code&gt; 는 있지만 이 &lt;code&gt;move&lt;/code&gt; 메소드를 상속받은것은 아닙니다. &lt;code&gt;Rectangle&lt;/code&gt; 은 단지 &lt;code&gt;this.x&lt;/code&gt;, &lt;code&gt;this.y&lt;/code&gt; 란 멤버변수를 상속받은 것 뿐입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;console.log (r1.move); // undefined 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(4). 드디어 &lt;code&gt;Rectangle.prototye&lt;/code&gt; 에 &lt;code&gt;Shape.prototype&lt;/code&gt; 을 연결해 주어 &lt;code&gt;r1&lt;/code&gt; 에서도 &lt;code&gt;Shape.prototype&lt;/code&gt; 에 정의된 메소드들을 사용할 수 있게끔 해줍니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;r1.move(2, 2);
+console.log(r1.x); // 2
+console.log(r1.y); // 2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;여기서 Rectangle.prototype = Shape.prototype 을 하지않고 새롭게 Object.create 해주는 이유는, &lt;code&gt;Rectangle.prototype&lt;/code&gt; 에 새로운 속성을 추가했을때, &lt;code&gt;Shape.prototype&lt;/code&gt; 에 추가되도록 하지 않기 위함입니다. 다시 말해, &lt;code&gt;Rectangle&lt;/code&gt; 에 추가한 것은, &lt;code&gt;Rectangle&lt;/code&gt; 에만 추가되라는 것이지요.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Rectangle.prototype = new Shape();&lt;/code&gt; 처럼 &lt;code&gt;new&lt;/code&gt; 를 사용하게 되면, 생성자를 호출하게 되어 &lt;code&gt;Rectangle.prototype&lt;/code&gt; 에 인스턴스 변수인 &lt;code&gt;this.x&lt;/code&gt; 와 &lt;code&gt;this.y&lt;/code&gt; 가 추가됩니다.   이것은 우리가 원하지 않은 동작이기에, 일반적으로 &lt;code&gt;new&lt;/code&gt; 를 이용해서 프로토타입을 생성하지 않습니다.&lt;/p&gt;
+
+&lt;p&gt;(5). &lt;code&gt;Object.create(Shape.prototype)&lt;/code&gt; 으로 생성한 객체는 &lt;code&gt;constructor&lt;/code&gt; 값으로 &lt;code&gt;Shape&lt;/code&gt; 를 가지고 있습니다. 이 객체를 이제, &lt;code&gt;Rectangle.prototype&lt;/code&gt; 에서 사용하므로 값을 변경해 줍니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;proto&#34;&gt;&lt;strong&gt;proto&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;__proto__&lt;/code&gt; 속성은 자바스크립트에서 상속의 핵심입니다. 모든 객체들은 자신의 속성을 찾다가 실패하면, &lt;code&gt;__proto__&lt;/code&gt; 를 통해 더 검색을 시도합니다. 무슨말인고 하니, 다음과 같은 코드가 있을때&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var r1 = new Rectangle();
+
+r1.move(1, 1);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;실제로 &lt;code&gt;Rectangle&lt;/code&gt; 은 &lt;code&gt;move&lt;/code&gt; 라는 메소드를 인스턴스 멤버로도, 프로토타입 멤버로도 가지고 있지 않습니다. 다시 말해서, 아래와 같은 코드를 작성한 적이 없단 말이지요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// Method per instance
+function Rectangle() {
+	this.move = function(_x, _y) { this.x = _x; this.y = _y; };
+}
+
+// Method for specific instance
+r1.move = function(_x, _y) { this.x = _x; this.y = _y; };
+
+// Prototype method
+Rectangle.prototype.move = function(_x, _y) { this.x = _x; this.y = _y; };
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이런 작업을 해 준 적이 없는데, 어떻게 &lt;code&gt;move&lt;/code&gt; 메소드를 찾는걸까요? 우리는 &lt;code&gt;move&lt;/code&gt; 를 &lt;code&gt;Shape.prototype&lt;/code&gt; 에만 추가했는데요! 비결은 아래와 같습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;r1&lt;/code&gt; 인스턴스 자체에 &lt;code&gt;move&lt;/code&gt; 메소드가 인스턴스에 없기 때문에 &lt;code&gt;r1.__proto__&lt;/code&gt; 에서 탐색하게 됩니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;인스턴스가 가지고 있는 &lt;code&gt;__proto__&lt;/code&gt; 의 값은, 생성자의 프로토타입, 즉 &lt;code&gt;Rectangle.prototype&lt;/code&gt; 입니다. 따라서 이곳을 검색합니다. 그러나 &lt;code&gt;Rectangle&lt;/code&gt; 프로토타입에도 &lt;code&gt;move&lt;/code&gt; 메소드는 없습니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Rectangle.prototype.__proto__&lt;/code&gt; 를 검색합니다. &lt;code&gt;Rectangle.prototype&lt;/code&gt; 은 &lt;code&gt;Object.create(Shape.prototype)&lt;/code&gt; 을 통해 생성되었고, 이것은 인스턴스 멤버가 없는 &lt;code&gt;Shape&lt;/code&gt; 인스턴스 이기 때문에, &lt;code&gt;Rectangle.prototype.__proto__&lt;/code&gt; 의 값은 &lt;code&gt;Shape.prototype&lt;/code&gt; 이 됩니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Shape.prototype&lt;/code&gt; 에는 &lt;code&gt;move&lt;/code&gt; 가 있기 때문에, 이를 실행합니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;만약 &lt;code&gt;Shape.prototype&lt;/code&gt; 에도 &lt;code&gt;move&lt;/code&gt; 가 없다면, &lt;code&gt;Shape.prototype.__proto__&lt;/code&gt; 를 탐색합니다. 모든 객체는 Default 값으로 &lt;code&gt;Object&lt;/code&gt; 를 상속받으며, &lt;code&gt;Shape&lt;/code&gt; 도 마찬가지입니다. &lt;code&gt;Shape&lt;/code&gt; 은 &lt;code&gt;Object&lt;/code&gt; 를 상속받았기 때문에 &lt;code&gt;Shape.prototype.__proto__&lt;/code&gt; 는 &lt;code&gt;Object.prototype&lt;/code&gt; 을 가리킵니다. 여기서 메소드를 검색합니다.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;만약 &lt;code&gt;Object.prototype&lt;/code&gt; 에도 없다면, &lt;code&gt;Object.prototype.__proto__&lt;/code&gt; 를 검색하나, 이 값은 &lt;code&gt;null&lt;/code&gt; 이기 때문에 멤버 검색에 실패하고 &lt;code&gt;undefined&lt;/code&gt; 를 돌려줍니다.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;다른 예제지만, 이미지를 통해 보는것도 이해에 도움이 될 듯 하여 이미지를 같이 첨부합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;p&gt;
+&lt;img src=&#34;http://mckoss.com/jscript/Prototype.gif&#34; /&gt;
+&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+(&lt;a href=&#34;http://mckoss.com/jscript/object.htm&#34;&gt;http://mckoss.com/jscript/object.htm&lt;/a&gt;)
+&lt;/p&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;object-function&#34;&gt;Object, Function&lt;/h3&gt;
+
+&lt;p&gt;자바스크립트의 모든 함수는 &lt;code&gt;Function&lt;/code&gt; 의 인스턴스입니다. 무슨 말인고 하니, 사용자가 정의한 함수들은 &lt;code&gt;__proto__&lt;/code&gt; 값으로 &lt;code&gt;Function.prototype&lt;/code&gt; 을 가진다는 뜻이지요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function example() {};
+
+example.__proto__ === Function.prototype; // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고 &lt;code&gt;Function&lt;/code&gt; 은 &lt;code&gt;Object&lt;/code&gt; 를 상속합니다. 다시 말해,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;example.__proto__.__proto__ == Object.prototype
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고 이전에 언급했듯이, &lt;code&gt;Object.prototype.__proto__&lt;/code&gt; 는 &lt;code&gt;null&lt;/code&gt; 입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;Object.prototype.__proto__ === null // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고 &lt;code&gt;Object&lt;/code&gt; 그 자체는, &lt;code&gt;Function&lt;/code&gt; 을 상속합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;Object.__proto__ === Function.prototype // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그래서 &lt;code&gt;Function&lt;/code&gt; 과 &lt;code&gt;Object&lt;/code&gt; 를 설명할때, 아래와 같은 그림으로 설명할 수 있습니다. 아래 그림에서 빨간 선으로 이어진 &lt;code&gt;[[Prototype]]&lt;/code&gt; 은 &lt;code&gt;__proto__&lt;/code&gt; 입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img src=&#34;http://i.stack.imgur.com/rcGmc.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+(&lt;a href=&#34;http://iwiki.readthedocs.org/en/latest/javascript/js_core.html#inheritance&#34;&gt;http://iwiki.readthedocs.org/en/latest/javascript/js_core.html#inheritance&lt;/a&gt;)
+&lt;/p&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;prototype-inhertance-vs-classical-inheritance&#34;&gt;Prototype Inhertance vs Classical Inheritance&lt;/h3&gt;
+
+&lt;p&gt;&amp;ldquo;그래요. 프로토타입 기반 상속이란 이런거군요!. 근데 이거 왜 하는건가요?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;제 짧은 지식으로 어줍잖게 대답하는 것보다, 링크로 연결해드리는게 더 나을것 같아서 관련 링크를 적어놓습니다. 꼭 읽어보셨으면 좋겠습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/19633762/classical-inheritance-vs-protoypal-inheritance-in-javascript&#34;&gt;classical-inheritance-vs-protoypal-inheritance-in-javascript&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://aaditmshah.github.io/why-prototypal-inheritance-matters/#toc_6&#34;&gt;why-prototypal-inheritance-matters&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/2800964/benefits-of-prototypal-inheritance-over-classical&#34;&gt;benefits-of-prototypal-inheritance-over-classical&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/1450582/classical-vs-prototypal-inheritance&#34;&gt;classical-vs-prototypal-inheritance&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;new-vs-object-create&#34;&gt;new vs Object.create&lt;/h3&gt;
+
+&lt;p&gt;위에서 잠깐 언급했듯이 일반적으로는 프로토타입 객체를 만들기 위해서 &lt;code&gt;Object.create()&lt;/code&gt;를 사용한다고 했었습니다. &lt;code&gt;new&lt;/code&gt; 대신에요. 왜 그런가 &lt;code&gt;Object.create&lt;/code&gt; 의 동작을 한번 알아보겠습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;Object.create&lt;/code&gt; 는 첫 번째 인자로 프로토타입을 받습니다.&lt;/li&gt;
+&lt;li&gt;빈 객체를 하나 만들고, 이 객체의 &lt;code&gt;__proto__&lt;/code&gt; 에 인자로 받은 프로토타입 객체를 연결합니다.&lt;/li&gt;
+&lt;li&gt;프로토타입이 연결된 객체를 리턴합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;아마 코드는 아래와 비슷할 겁니다. 간단한 설명을 위해 두번째 인자는 생략하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;Object.prototype.create == function(proto) {
+  var obj = {};
+  obj.__proto__ = proto;
+  return obj;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;따라서 어떠한 경우에도 생성자를 호출하지 않으므로 다음과 같은 코드가 생성자에 있을 경우 호출되지 않을겁니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+  
+  console.log(&amp;quot;This is constructor for Shape&amp;quot;);
+}
+
+var created = Object.create(Shape.prototype);
+var newed  = new Shape(); // &amp;quot;This is constructor for Shape&amp;quot; 
+
+console.log( created.x ); // undefined
+console.log( newed.x ); // 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;new&lt;/code&gt; 를 이용해 생성한 객체만 생성자가 호출되어, &lt;strong&gt;&amp;ldquo;This is constructor for Shape&amp;rdquo;&lt;/strong&gt; 가 출력되고 &lt;code&gt;this.x = 0&lt;/code&gt; 이 실행됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;new Shape()&lt;/code&gt; 의 로직은 아마 다음과 비슷할 겁니다. (더 자세한 내용은 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new&#34;&gt;MDN: new Operator&lt;/a&gt; 를 보시면 되겠습니다.)&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;새로운 오브젝트를 생성하고,&lt;/li&gt;
+&lt;li&gt;이 오브젝트의 &lt;code&gt;__proto__&lt;/code&gt; 에 생성자의 프로토타입 객체를 연결합니다.&lt;/li&gt;
+&lt;li&gt;생성자를 호출하고, 리턴합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// new Shape();
+
+{
+  var obj = {};
+  obj.__proto__ = Shape.prototype;
+  return Shape.apply(obj, arguments) || obj; 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이렇게 &lt;code&gt;new&lt;/code&gt; 연산자는 생성자를 호출하기 때문에, 새롭게 사용할 프로토타입 객체에 의도치 않은 속성이 추가될 수 있습니다. 위의 예에서 &lt;code&gt;Rectangle&lt;/code&gt; 에서 새롭게 사용할 프로토타입 객체는, 다시 말해 &lt;code&gt;Rectangle.prototype&lt;/code&gt; 에 들어갈 객체는 단순히 &lt;code&gt;__proto__&lt;/code&gt; 값으로 &lt;code&gt;Shape.prototype&lt;/code&gt; 만 가지고 있으면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;만약 &lt;code&gt;Object.create&lt;/code&gt; 대신 &lt;code&gt;new&lt;/code&gt; 를 사용하게 되면 &lt;code&gt;Rectangle.prototype.x&lt;/code&gt; 와 &lt;code&gt;Rectangle.prototype.y&lt;/code&gt; 가 &lt;code&gt;0&lt;/code&gt; 으로 초기화되게 됩니다. 이는 원치 않았던 부작용입니다. 이런 이유에서 일반적인 경우에는 &lt;code&gt;new&lt;/code&gt; 대신 &lt;code&gt;Object.create&lt;/code&gt; 를 프로토타입 객체 생성에 사용해야 합니다. 아래처럼요&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;constructor&#34;&gt;.constructor&lt;/h3&gt;
+
+&lt;p&gt;모든 프로토타입 객체들은, &lt;code&gt;constructor&lt;/code&gt; 란 프로퍼티가 있습니다. 이 값은 생성자를 가리킵니다. 그러므로 아래 코드는 &lt;code&gt;true&lt;/code&gt; 를 출력합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;Rectangle.prototype.constructor === Rectangle // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;우리의 예제인 &lt;code&gt;Rectangle&lt;/code&gt; 에서도 위에 있는 코드처럼 프로토타입의 &lt;code&gt;constructor&lt;/code&gt; 값을 초기화 하고 있습니다. 왜 그래야 할까요?&lt;/p&gt;
+
+&lt;p&gt;사실 &lt;code&gt;.constructor&lt;/code&gt; 값은 별로 의미있는 값은 아닙니다. 만약 우리가 &lt;code&gt;constructor&lt;/code&gt; 값으로 어떤 종류의 객체인지 판별한다면, 의미는 있겠지요. 그러나 일반적으로는 &lt;code&gt;instanceof&lt;/code&gt; 를 사용합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function Shape() { this.x = 0; }
+
+var s1 = new Shape();
+
+console.log( s1.__proto__.constrctor === Shape) // true
+console.log( s1 instanceof Shape) // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그럼 이렇게 &lt;code&gt;constructor&lt;/code&gt; 를 비교하는 작업을 &lt;code&gt;instanceof&lt;/code&gt; 내부에서 사용하느냐, 그것도 아닙니다. &lt;code&gt;instanceof&lt;/code&gt; 는 &lt;code&gt;s1.__proto__&lt;/code&gt; 와 &lt;code&gt;Shape.prototype&lt;/code&gt; 을 비교합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;.constructor&lt;/code&gt; 는 사실 정말로 쓸모가 없을지도 모르겠습니다. 그러나 자바스크립트 표준이 프로토타입 객체의 &lt;code&gt;constructor&lt;/code&gt; 프로퍼티는 생성자를 가르켜야 한다고 말하는 한, 적어도 세팅은 해주는게 나쁘지 않다는게 제 생각입니다. 아래는 관련된 논의입니다.&lt;/p&gt;
+
+&lt;p&gt;Link : &lt;strong&gt;&lt;a href=&#34;http://stackoverflow.com/questions/4012998/what-it-the-significance-of-the-javascript-constructor-property&#34;&gt;What it the significance of the javascript constructor property&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;다시 우리의 예제로 돌아와서, 코드를 살펴보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype); (1)
+Rectangle.prototype.constructor = Rectangle; (2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Rectangle.prototype.constuctor&lt;/code&gt; 를 다시 세팅해 주는 이유는, 이 값이 &lt;code&gt;Shape&lt;/code&gt; 이기 때문입니다. &lt;code&gt;Rectangle.protoype&lt;/code&gt; 은 &lt;code&gt;__proto__&lt;/code&gt; 를 &lt;code&gt;Shape.prototype&lt;/code&gt; 으로 가지는 오브젝트고, 따라서 (1) 라인에서 코드를 실행시켰을 때는 다음과 같은 결과가 나옵니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;console.log( Rectangle.prototype.constructor ); // Shape&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;왜냐 하면 &lt;code&gt;Rectangle.prototype&lt;/code&gt; 에는 &lt;code&gt;constructor&lt;/code&gt; 가 없기 때문에 &lt;code&gt;Rectangle.prototype.__proto__&lt;/code&gt; 에서 &lt;code&gt;constructor&lt;/code&gt; 를 찾는데, &lt;code&gt;Rectangle.prototype.__proto__&lt;/code&gt; 는 &lt;code&gt;Shape.prototype&lt;/code&gt; 이기 때문이지요.&lt;/p&gt;
+
+&lt;p&gt;기본적으로 우리가 생성자를 만들면, 자바스크립트는 다음과 같이 프로토타입 객체를 만들고 이 프로토타입 객체의 &lt;code&gt;constructor&lt;/code&gt; 를 세팅해 줍니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function Shape() { this.x = 0; }
+
+console.log( Shape.prototype.constructor ); // Shape;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Rectangle.prototype.constructor&lt;/code&gt; 는 본래 처음 &lt;code&gt;Rectangle&lt;/code&gt; 생성자를 만들었을때는 &lt;code&gt;Rectangle&lt;/code&gt; 이었겠지만, (1) 라인의 코드를 실행 시킨 순간 &lt;code&gt;Shape&lt;/code&gt; 으로 변경되고, 더 정확히 이 값은 &lt;code&gt;Rectangle.prototype.__proto__.consturctor&lt;/code&gt; 에서 옵니다. 결국 값이 바뀌었기 때문에 원래대로 돌려주어야 하므로 아래와 같은 코드를 작성해준 것입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;Rectangle.prototype.constructor = Rectangle;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;자 이제, 아래 그림이 완벽히 이해되실 겁니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img src=&#34;http://i.stack.imgur.com/UfXRZ.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+(&lt;a href=&#34;http://dmitrysoshnikov.com/ecmascript/javascript-the-core/&#34;&gt;http://dmitrysoshnikov.com/ecmascript/javascript-the-core/&lt;/a&gt;)
+&lt;/p&gt;
+&lt;br/&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Tips for Webpack and Redux</title>
+      <link>https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/</link>
+      <pubDate>Sat, 25 Jun 2016 12:24:38 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/redux/redux_logo.png?width=30%&amp;amp;height=30%&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;지난 한달 동안 자그마한 웹앱 프로젝트를 Redux 를 이용해서 진행했습니다. 그 과정에서 배운 몇 가지를 적었습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;#1combinereducersreducer&#34;&gt;Redux: 1. combineReducers 를 이용해 Reducer 를 잘게 분해하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#2reduceractionactiontype&#34;&gt;Redux: 2. Reducer 에서는 관련있는 Action 만 처리하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#3reduxinternal&#34;&gt;Redux: 3. redux internal 이해하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#4reduxsaga&#34;&gt;Redux: 4. redux-saga 사용하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#5api&#34;&gt;Redux: 5. API 호출 실패에 대한 액션을 여러개 만들지 않기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#6jestmocha&#34;&gt;Webpack: 6. 테스팅 프레임워크로 jest 대신 mocha 사용하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#7postcss&#34;&gt;Webpack: 7. postcss 를 사용할 경우, 테스팅 환경에서 스타일파일 무시하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#8defineplugin&#34;&gt;Webpack: 8. DefinePlugin 을 이용해 클라이언트 파일에 환경변수 주입하기&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&#34;#9jsonserver&#34;&gt;Etc: 9. json-server 사용하기&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;redux&#34;&gt;Redux&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-combinereducers-를-이용해-reducer-를-잘게-분해하기&#34;&gt;1. combineReducers 를 이용해 Reducer 를 잘게 분해하기&lt;/h3&gt;
+
+&lt;p&gt;Root Reducer 가 &lt;code&gt;JobReducer&lt;/code&gt; 를 포함하고 있고, &lt;code&gt;JobReducer&lt;/code&gt; 는 Job 과 관련된 모든 상태를 다룬다고 할 때 다음처럼 &lt;code&gt;combineReducers&lt;/code&gt; 를 이용해서 &lt;code&gt;JobReducer&lt;/code&gt; 를 분해하면, 개별 컴포넌트의 상태(&lt;em&gt;State&lt;/em&gt;) 는 각각의 서브 리듀서 (이하 핸들러) 에서 다루면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/master/src/reducers/JobReducer/index.js
+
+import { combineReducers, } from &#39;redux&#39;
+
+import * as JobItemState from &#39;./JobItemState&#39;
+import * as PaginatorState from &#39;./PaginatorState&#39;
+import * as FilterState from &#39;./FilterState&#39;
+import * as SorterState from &#39;./SorterState&#39;
+...
+
+export const JOB_STATE_PROPERTY = {
+  JOB_ITEMS: &#39;items&#39;,
+  PAGINATOR: &#39;paginator&#39;,
+  FILTER: &#39;filterKeyword&#39;,
+  SORTER: &#39;sortingStrategy&#39;,
+  ...
+}
+
+export default combineReducers({
+
+
+
+
+
+  ...
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/master/src/reducers/JobReducer/FilterState.js
+
+import { createAction, handleActions, } from &#39;redux-actions&#39;
+
+const INITIAL_STATE = &#39;&#39; /** initial state of FilterState */
+
+export const ActionType = {
+  FILTER: &#39;JOB_FILTER&#39;,
+  INITIALIZE_FILTER: &#39;JOB_INITIALIZE_FILTER&#39;,
+}
+
+export const Action = {
+  filterJob: createAction(ActionType.FILTER),
+  initializeFilter: createAction(ActionType.INITIALIZE_FILTER),
+}
+
+export const handler = handleActions({
+  [ActionType.FILTER]: (state, { payload, }) =&amp;gt;
+    payload.filterKeyword, /** since string is immutable. we don&#39;t need to copy old state */
+
+  [ActionType.INITIALIZE_FILTER]: (state, { payload, }) =&amp;gt;
+    INITIAL_STATE,
+}, INITIAL_STATE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-reducer-action-actiontype-을-한-파일로-모으기&#34;&gt;2. Reducer, Action, ActionType 을 한 파일로 모으기&lt;/h3&gt;
+
+&lt;p&gt;[Redux Github]() 에 나와있는 예제에서는 &lt;code&gt;ActionType&lt;/code&gt; 과 &lt;code&gt;Action&lt;/code&gt; 을 하나의 파일에 모아놓는데, 프로젝트가 커질수록 부담스럽습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Action&lt;/code&gt;, &lt;code&gt;ActionType&lt;/code&gt;, &lt;code&gt;Handler&lt;/code&gt; 를 한 파일에 모아놓으면 이 핸들러가 어떤 일들을 하는지, 페이로드는 무엇인지 한 눈에 파악할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/master/src/reducers/JobReducer/PaginatorState.js
+
+import { createAction, handleActions, } from &#39;redux-actions&#39;
+
+import { PAGINATOR_ITEM_COUNT_PER_PAGE, } from &#39;../../constants/config&#39;
+
+import * as FilterState from &#39;./FilterState&#39;
+import * as SorterState from &#39;./SorterState&#39;
+
+const INITIAL_PAGINATOR_STATE = {
+  currentPageOffset: 0,
+  currentItemOffset: 0,
+  itemCountPerPage: PAGINATOR_ITEM_COUNT_PER_PAGE,
+}
+
+export const ActionType = {
+  CHANGE_PAGE_OFFSET: &#39;JOB_CHANGE_PAGE_OFFSET&#39;,
+}
+
+export const Action = {
+  changePageOffset: createAction(ActionType.CHANGE_PAGE_OFFSET),
+}
+
+export const handler = handleActions({
+  [ActionType.CHANGE_PAGE_OFFSET]: (state, { payload, }) =&amp;gt; {
+    const { newPageOffset, } = payload
+    const currentItemOffset = newPageOffset * state.itemCountPerPage
+    return Object.assign({}, state, {currentPageOffset: newPageOffset, currentItemOffset,})
+  },
+
+  /** reset paginator if filter or sorter action is occurred */
+  [SorterState.ActionType.SORT]: (state) =&amp;gt; INITIAL_PAGINATOR_STATE,
+  [FilterState.ActionType.FILTER]: (state) =&amp;gt; INITIAL_PAGINATOR_STATE,
+}, INITIAL_PAGINATOR_STATE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Paginator&lt;/code&gt; 가 어떤 액션을 처리하고, 페이로드는 무엇인지 하나의 파일에서 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-redux-internal-이해하기&#34;&gt;3. redux internal 이해하기&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/reactjs/redux&#34;&gt;redux&lt;/a&gt; 의 놀라운 점중 하나는 소스코드가 길지 않다는 점입니다. 따라서 내부 구조를 이해하기도 어렵지 않은데요,&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://briantroncone.com/?p=529&#34;&gt;Redux Middleware: Behind the Scenes&lt;/a&gt; 를 참고하면, &lt;em&gt;enhancer&lt;/em&gt; 가 어떻게 조합되고, &lt;em&gt;store&lt;/em&gt; 가 어떻게 생성되는지 쉽게 알 수 있습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;4-redux-saga-사용하기&#34;&gt;4. redux-saga 사용하기&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/yelouafi/redux-saga&#34;&gt;redux-saga&lt;/a&gt; 를 이용하면 &lt;code&gt;Promise&lt;/code&gt; 가 들어가는 비동기 로직을 &lt;a href=&#34;https://tc39.github.io/ecmascript-asyncawait/&#34;&gt;ES7 async&lt;/a&gt; 를 이용하는것처럼 작성할 수 있습니다. 추가적으로 사이드이펙트 (e.g API call) 의 선언과 실행 시점을 분리해 테스트를 쉽게 할 수 있도록 도와줍니다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어, 초기화 시점에 서버로부터 전체 Job 을 가져오는 로직을 &lt;a href=&#34;https://github.com/yelouafi/redux-saga&#34;&gt;redux-saga&lt;/a&gt; 를 이용해 다음처럼 작성할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/master/src/middlewares/sagas.js#L12
+
+import { fork, call, put, } from &#39;redux-saga/effects&#39;
+
+import * as SnackbarState from &#39;../reducers/JobReducer/ClosableSnackbarState&#39;
+import * as Handler from &#39;./handler&#39;
+
+export function* initialize() {
+  try {
+    yield call(Handler.callFetchContainerJobs)
+  } catch (error) {
+    yield put(
+      SnackbarState.Action.openErrorSnackbar(
+        { message: &#39;Failed to fetch jobs&#39;, error, }
+      )
+    )
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;위 코드는 서버로부터 모든 Job 을 가져오고, 그 과정에서 예외가 발생하면 Snackbar 에 예외메세지를 출력하는 Action 을 Reducer 로 보내는 코드입니다. (여기서 &lt;code&gt;Handler.callFetchContainerJobs&lt;/code&gt; 가 &lt;code&gt;Promise&lt;/code&gt; 를 돌려준다고 보고)&lt;/p&gt;
+
+&lt;p&gt;이 때 다음처럼 테스트를 작성할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/master/src/middlewares/__tests__/sagas.spec.js#L87
+
+  describe(&#39;initialize&#39;, () =&amp;gt; {
+    it(&#39;should callFetchContainerJobs&#39;, () =&amp;gt; {
+      const gen = Sagas.initialize()
+      expect(gen.next().value).to.deep.equal(
+        call(Handler.callFetchContainerJobs)
+      )
+
+      expect(gen.next().done).to.deep.equal(true)
+    })
+
+    it(`should callFetchJobs
+        - if exception is occurred,
+          put(openErrorSnackbar with { message, error }`, () =&amp;gt; {
+      const gen = Sagas.initialize()
+
+      expect(gen.next().value).to.deep.equal(
+        call(Handler.callFetchContainerJobs)
+      )
+
+      const error = new Error(&#39;error&#39;)
+      expect(gen.throw(error).value).to.deep.equal(
+        put(ClosableSnackBarState.Action.openErrorSnackbar({ message: &#39;Failed to fetch jobs&#39;, error, }))
+      )
+    })
+  })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;위 테스트 코드에서 알 수 있듯이, &lt;code&gt;redux-saga/effects&lt;/code&gt; 의 &lt;code&gt;call&lt;/code&gt; 을 호출하는 시점에서 AJAX 이 실행되지 않습니다. 실제로는 &lt;code&gt;call&lt;/code&gt; 은 AJAX 실행할것임을 &lt;strong&gt;선언&lt;/strong&gt; 만 합니다. AJAX 은 &lt;code&gt;call&lt;/code&gt; 로 부터 생성된 redux 액션이 &lt;code&gt;redux-saga&lt;/code&gt; 미들웨어에서 처리되는 순간에 &lt;strong&gt;실행&lt;/strong&gt; 됩니다. &lt;code&gt;call&lt;/code&gt; 의 리턴값은, 어떤 redux 액션이 실행될 것인지 알려주는 자바스크립트 객체입니다. 위에서는 이 리턴값을 이용해 테스트를 작성한 것입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// https://github.com/yelouafi/redux-saga/blob/master/docs/basics/DeclarativeEffects.md
+
+
+{
+  CALL: {
+    fn: Handler.callFetchContainerJobs,
+    args: []  
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-api-호출-실패에-대한-액션을-여러개-만들지-않기&#34;&gt;5. API 호출 실패에 대한 액션을 여러개 만들지 않기&lt;/h3&gt;
+
+&lt;p&gt;redux 나 &lt;a href=&#34;https://github.com/yelouafi/redux-saga/blob/ce1d701467d2ec4e8c5c40288d9a41254c6f3583/examples/real-world/actions/index.js&#34;&gt;redux-saga 예제&lt;/a&gt; 를 보면, API 실패에 대한 액션을 여러 종류로 만드는 것을 알 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;그러나 일반적으로 예외는 단일화된 방식으로 (e.g 에러 다이어로그, 팝업, 페이지 등) 처리되기 때문에 에러를 다룰 UI 컴포넌트에 대한 1개의 액션만 만드는 것이 더 바람직 합니다. 예를 들어 Snackbar 에서 예외 메세지를 보여준다고 할 때 다음처럼 액션 핸들러를 작성할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/e2fc9c1260a5c8202ad747c31f5907ff29ab9a94/src/reducers/JobReducer/ClosableSnackbarState.js#L27
+
+export const handler = handleActions({
+  /** snackbar related */
+  [ActionType.CLOSE_SNACKBAR]: (state) =&amp;gt;
+    Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE, }),
+
+  [ActionType.OPEN_ERROR_SNACKBAR]: (state, { payload, }) =&amp;gt;
+    Object.assign({}, state, {
+      snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+      message: `[ERROR] ${payload.message} (${payload.error.message})`,
+    }),
+
+  [ActionType.OPEN_INFO_SNACKBAR]: (state, { payload, }) =&amp;gt;
+    Object.assign({}, state, {
+      snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+      message: `[INFO] ${payload.message}`,
+    }),
+
+}, INITIAL_SNACKBAR_STATE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 여러 종류의 API 실패에 대한 액션을 처리하도록 작성했다면, 이런 코드가 되었을 거고 API_FAILED 액션 타입이 삭제되고 추가될 때 마다 수정해야 하므로 변경에 취약했을 것입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+const FAILED_API_ACTION_TYPES = [
+  ActionType.LOAD_ALL_JOBS_FAILED,
+  ActionType.CREATE_JOB_FAILED,
+  ActionType.REMOVE_JOB_FAILED,
+  ...
+]
+
+const FailureHandlers = FAILED_API_ACTION_TYPES.map(actionType =&amp;gt; {
+  return { [actionType]: (state, { payload, }) =&amp;gt;
+    Object.assign({}, state, {
+      snackbarMode: CLOSABLE_SNACKBAR_MODE.OPEN,
+      message: `[ERROR] ${payload.message} (${payload.error.message})`,
+    })
+  }
+})
+
+export const handler = handleActions({
+  /** snackbar related */
+  [ActionType.CLOSE_SNACKBAR]: (state) =&amp;gt;
+    Object.assign({}, state, { snackbarMode: CLOSABLE_SNACKBAR_MODE.CLOSE, }),
+
+  ...FailureHandlers,
+
+}, INITIAL_SNACKBAR_STATE)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;webpack&#34;&gt;Webpack&lt;/h2&gt;
+
+&lt;h3 id=&#34;6-테스팅-프레임워크로-jest-대신-mocha-사용하기&#34;&gt;6. 테스팅 프레임워크로 jest 대신 mocha 사용하기&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://facebook.github.io/jest/&#34;&gt;jest&lt;/a&gt; 는 Facebook 에서 만든 테스팅 프레임워크입니다. 모든 &lt;code&gt;import&lt;/code&gt; 는 기본적으로 mocking 됩니다. 따라서 테스트할 &lt;code&gt;.js&lt;/code&gt; 파일에서 사용되는 모든 라이브러리도 mocking 됩니다. 이런식으로 테스트 대상만 unmocking 해서 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/facebook/jest
+
+jest.unmock(&#39;../sum&#39;); // unmock to use the actual implementation of sum
+
+describe(&#39;sum&#39;, () =&amp;gt; {
+  it(&#39;adds 1 + 2 to equal 3&#39;, () =&amp;gt; {
+    const sum = require(&#39;../sum&#39;);
+    expect(sum(1, 2)).toBe(3);
+  });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/facebook/jest&#34;&gt;jest&lt;/a&gt; 사용시 주의 할 사항이 두 가지 있습니다.&lt;/p&gt;
+
+&lt;p&gt;jest 0.9.0 기준으로 아직 모든 라이브러리가 mocking 되진 않습니다. (e.g redux-saga)
+babel 을 사용할 경우 babel-jest 로 테스트 실행이 가능하지만 여기에 postcss 까지 같이 쓸 경우, &lt;code&gt;import (‘*.css)&lt;/code&gt; 구문 때문에 테스팅이 불가능합니다. 커스텀 jest 로더를 등록하면, babel-runtime 로딩이 제대로 안되며 &lt;a href=&#34;https://github.com/atecarlos/webpack-babel-jest&#34;&gt;webpack-babel-jest&lt;/a&gt; 란것도 있으나 제대로 동작하지 않습니다. (관련이슈 &lt;a href=&#34;https://github.com/facebook/jest/issues/334&#34;&gt;jest issue: 334 - How to test with Jest when I&amp;rsquo;m using webpack&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h3 id=&#34;7-postcss-를-사용할-경우-테스팅-환경에서-스타일파일-무시하기&#34;&gt;7. postcss 를 사용할 경우, 테스팅 환경에서 스타일파일 무시하기&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/postcss/postcss&#34;&gt;postcss&lt;/a&gt; 를 이용하면 &lt;a href=&#34;https://github.com/postcss/autoprefixer&#34;&gt;autoprefixer&lt;/a&gt; 등의 각종 플러그인을 사용 가능합니다. 특히 &lt;a href=&#34;https://github.com/postcss/postcss-loader&#34;&gt;postcss-loader&lt;/a&gt; 를 이용하면
+ 지엽적인 css 클래스 생성과 적용이 가능하므로 모듈, 컴포넌트 단위로 관리되는 React 와 같이 쓰기 좋습니다.&lt;/p&gt;
+
+&lt;p&gt;그런데, 테스팅 환경에서는 &lt;a href=&#34;https://webpack.github.io/&#34;&gt;webpack&lt;/a&gt; 이 돌지 않으므로 css 파일 임포트가 불가능 하고, 테스트 실행이 안됩니다. 이 경우 &lt;a href=&#34;https://www.npmjs.com/package/ignore-styles&#34;&gt;ignore-styles&lt;/a&gt; 를 이용하거나 mocha 설정을 이용해 css 파일 임포트 문장을 무시할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/f1e94a9e693c30f466d92a4d3c988b75d5db4118/package.json#L28
+
+&amp;quot;test&amp;quot;: &amp;quot;cross-env NODE_ENV=test mocha --reporter progress --compilers js:babel-core/register --recursive \&amp;quot;./src/**/*.spec.js\&amp;quot; --require ignore-styles&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;아니면 &lt;a href=&#34;https://github.com/coryhouse/react-slingshot&#34;&gt;react-slingshot&lt;/a&gt; 처럼 셋업 파일을 분리해서 mocha 설정으로 이용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/coryhouse/react-slingshot/blob/16ec28c9029bf7e2b65b26c22a1c2daadab427a2/tools/testSetup.js
+
+process.env.NODE_ENV = &#39;production&#39;;
+
+// Disable webpack-specific features for tests since
+// Mocha doesn&#39;t know what to do with them.
+require.extensions[&#39;.css&#39;] = function () {
+  return null;
+};
+require.extensions[&#39;.png&#39;] = function () {
+  return null;
+};
+require.extensions[&#39;.jpg&#39;] = function () {
+  return null;
+};
+
+// Register babel so that it will transpile ES6 to ES5
+// before our tests run.
+require(&#39;babel-register&#39;)();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이후 &lt;code&gt;package.son&lt;/code&gt; 에서 &lt;code&gt;&amp;quot;test&amp;quot;: &amp;quot;mocha tools/testSetup.js src/**/*.spec.js --reporter&lt;/code&gt; 처럼 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;8-defineplugin-을-이용해-클라이언트-파일에-환경변수-주입하기&#34;&gt;8. DefinePlugin 을 이용해 클라이언트 파일에 환경변수 주입하기&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://webpack.github.io/docs/list-of-plugins.html#defineplugin&#34;&gt;Webpack: DefinePlugin&lt;/a&gt; 을 이용하면 Webpack 실행 시점에 존재하는 변수를 클라이언트에 주입할 수 있습니다. (e.g 환경변수, 별도 파일로 존재하는 설정값 등) 예를 들어&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/f1e94a9e693c30f466d92a4d3c988b75d5db4118/tools/config.js
+
+import { ENV_DEV, ENV_PROD, ENV_TEST, } from &#39;./env&#39;
+import * as DEV_CONFIG from &#39;../config/development.config&#39;
+import * as PROD_CONFIG from &#39;../config/production.config&#39;
+
+const env = process.env.NODE_ENV
+
+export const CONFIG = (env === ENV_DEV) ? DEV_CONFIG : PROD_CONFIG
+
+export const GLOBAL_VARIABLES = { /** used by Webpack.DefinePlugin */
+  &#39;process.env.ENV_DEV&#39;: JSON.stringify(ENV_DEV),
+  &#39;process.env.ENV_PROD&#39;: JSON.stringify(ENV_PROD),
+  &#39;process.env.NODE_ENV&#39;: JSON.stringify(env),
+
+  /** variables defined in `CONFIG` file ares already stringified */
+  &#39;process.env.CONTAINERS&#39;: CONFIG.CONTAINERS,
+  &#39;process.env.TITLE&#39;: CONFIG.TITLE,
+  &#39;process.env.PAGINATOR_ITEM_COUNT&#39;: CONFIG.PAGINATOR_ITEM_COUNT,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;좌측이 클라이언트에서 사용할 변수, 우측이 주입할 변수입니다. 이렇게 만든 후 Webpack 설정에서 다음처럼 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/f1e94a9e693c30f466d92a4d3c988b75d5db4118/webpack.config.js
+
+const getPlugins = function (env) {
+  const plugins = [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.DefinePlugin(GLOBAL_VARIABLES),
+    ...
+  ]
+
+  /* eslint-disable no-console */
+  console.log(&#39;Injecting Global Variable&#39;.green)
+  console.log(GLOBAL_VARIABLES)
+  /* eslint-enable no-console */
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 때 몇 가지 주의할 사항이 있습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If the value is a string it will be used as a code fragment.
+If the value isn’t a string, it will be stringified (including functions).
+If the value is an object all keys are defined the same way.
+If you prefix typeof to the key, it’s only defined for typeof calls.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;따라서 우측 값이 문자열일 경우, 코드값으로 사용되므로 &lt;code&gt;undefined&lt;/code&gt; 로 주입되거나, Webpack 실행시 예외가 발생할 경우는 확인해 보아야 합니다. 실제로 문자열을 주입하고 싶다면 한번 더 문자열로 감싸야 하구요. 이 부분은 문서에도 나와 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+
+new webpack.DefinePlugin({
+    VERSION: JSON.stringify(&amp;quot;5fa3b9&amp;quot;),
+    BROWSER_SUPPORTS_HTML5: true,
+    TWO: &amp;quot;1+1&amp;quot;,
+    &amp;quot;typeof window&amp;quot;: JSON.stringify(&amp;quot;object&amp;quot;)
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;etc&#34;&gt;Etc&lt;/h2&gt;
+
+&lt;h3 id=&#34;9-json-server-사용하기&#34;&gt;9. json-server 사용하기&lt;/h3&gt;
+
+&lt;p&gt;웹 클라이언트 개발 과정에서, API 연동을 하다보면 두 가지 문제점에 마주칩니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;아직 백엔드가 개발되지 않았는데 연동이 필요할 경우&lt;/strong&gt;: 테스팅은 mock 등을 어찌어찌 해서 짤 수 있으나, UI 시뮬레이션은 최소한 로컬호스트 개발용 서버라도 갖추어야 하므로 어려움&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RESTful API 구현&lt;/strong&gt;: HTTP Status, Methods, URI 등에 대한 학습과 고민이 필요&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;로컬에서 미리 정의된 리소스를 읽어 표준화된 REST API 서버를 제공하는 &lt;a href=&#34;https://github.com/typicode/json-server&#34;&gt;json-server&lt;/a&gt; 를 이용하면 이 두 가지 문제를 해결할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어 Job 을 &lt;code&gt;/api/jobs&lt;/code&gt; 에서 돌려준다고 하면 리소스 파일을 다음처럼 작성할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;jobs&amp;quot;: [
+    {
+      &amp;quot;id&amp;quot;: &amp;quot;akka-cluster-A-1&amp;quot;,
+      &amp;quot;tags&amp;quot;: [
+        &amp;quot;cluster&amp;quot;
+      ],
+      &amp;quot;active&amp;quot;: true,
+      &amp;quot;enabled&amp;quot;: true,
+      &amp;quot;kafka&amp;quot;: {
+        &amp;quot;topic&amp;quot;: &amp;quot;akka-A&amp;quot;,
+        &amp;quot;consumer-group&amp;quot;: &amp;quot;cluster-consumers&amp;quot;
+      },
+      &amp;quot;hdfs&amp;quot;: &amp;quot;/data/akka/cluster-A&amp;quot;
+    }
+  , ...
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;추가적으로 라우팅 세팅을 위해 &lt;code&gt;routes.json&lt;/code&gt; 파일을 다음처럼 작성하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;/api/&amp;quot;: &amp;quot;/&amp;quot;,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/typicode/json-server&#34;&gt;json-server&lt;/a&gt; 를 사용할 때 두 가지 주의해야 할 점이 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1. &lt;code&gt;id&lt;/code&gt; 값은 &lt;em&gt;immutable&lt;/em&gt; 이고, 모든 리소스는 &lt;code&gt;id&lt;/code&gt; 값을 가지고 있어야 합니다. (키 값은 &lt;code&gt;--id&lt;/code&gt; 옵션으로 변경 가능함)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;따라서 각 Job 의 실행 상태와 설정값을 별개의 리소스가 아니라 (별개의 리소스라면 &lt;code&gt;jobId&lt;/code&gt; 를 주어 &lt;em&gt;join&lt;/em&gt; 을 해야함) &lt;code&gt;/api/jobs/:id/state&lt;/code&gt;, &lt;code&gt;/api/jobs/:id/config&lt;/code&gt; 처럼 nested 된 형태로 돌려주고 싶을 때는 &lt;code&gt;routes.json&lt;/code&gt; 의 라우팅 트릭을 이용할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;// https://github.com/1ambda/slott/blob/f1e94a9e693c30f466d92a4d3c988b75d5db4118/resource/routes.json
+
+{
+  &amp;quot;/api/&amp;quot;: &amp;quot;/&amp;quot;,
+  &amp;quot;/:resource/:id/state&amp;quot;: &amp;quot;/:resource/:id&amp;quot;,
+  &amp;quot;/:resource/:id/config&amp;quot;: &amp;quot;/:resource/:id&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 때, 이 리소스는 별개의 리소스가 아니라 URI 만 매핑된 것이므로 &lt;code&gt;config&lt;/code&gt;, &lt;code&gt;state&lt;/code&gt; 등에 대한 변경은 HTTP &lt;em&gt;PATCH&lt;/em&gt; 메소드로 변경해야 합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. 모든 리소스 변경은 즉시 파일에 변경됩니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;따라서 매 실행마다 동일한 리소스로 시작하려면, 리소스 파일을 복사 후 실행하는 간단한 스크립트를 작성하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// https://github.com/1ambda/slott/blob/f1e94a9e693c30f466d92a4d3c988b75d5db4118/tools/remote.js
+
+import fs from &#39;fs-extra&#39;
+
+/** initialize resource/remote/db.json */
+
+const resourceDir = &#39;resource&#39;
+
+// 3개의 서버를 별개로 띄우므로 3벌 복사
+const remotes = [&#39;remote1&#39;, &#39;remote2&#39;, &#39;remote3&#39;,]
+
+remotes.map(remote =&amp;gt; {
+  fs.copySync(`${resourceDir}/${remote}/db.origin.json`, `${resourceDir}/${remote}/db.json`)
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이후 &lt;code&gt;package.json&lt;/code&gt; 에 다음의 스크립트를 작성하고, 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;// https://github.com/1ambda/slott/blob/f1e94a9e693c30f466d92a4d3c988b75d5db4118/package.json#L9
+
+...
+
+ &amp;quot;start:mock-server1&amp;quot;: &amp;quot;json-server resource/remote1/db.json --routes resource/routes.json --port 3002&amp;quot;,
+    &amp;quot;start:mock-server2&amp;quot;: &amp;quot;json-server resource/remote2/db.json --routes resource/routes.json --port 3003&amp;quot;,
+    &amp;quot;start:mock-server3&amp;quot;: &amp;quot;json-server resource/remote3/db.json --routes resource/routes.json --port 3004&amp;quot;,
+    &amp;quot;start:mock-server&amp;quot;: &amp;quot;npm-run-all --parallel start:mock-server1 start:mock-server2 start:mock-server3&amp;quot;,
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/reactjs/redux/issues/151&#34;&gt;Redux Logo&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://briantroncone.com/?p=529&#34;&gt;Redux Middleware: Behind the Scenes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://tc39.github.io/ecmascript-asyncawait/&#34;&gt;ES7 async&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/yelouafi/redux-saga/blob/master/docs/basics/DeclarativeEffects.md&#34;&gt;redux-saga: Declarative Effects&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://webpack.github.io/docs/list-of-plugins.html#defineplugin&#34;&gt;Webpack: DefinePlugin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/coryhouse/react-slingshot&#34;&gt;react-slingshot&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>REST API: Put vs Post</title>
+      <link>https://1ambda.github.io/23/javascript/rest-api-put-vs-post/</link>
+      <pubDate>Sat, 25 Jun 2016 22:25:23 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/23/javascript/rest-api-put-vs-post/</guid>
+      <description>
+
+&lt;h3 id=&#34;idempotent&#34;&gt;idempotent&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;PUT&lt;/code&gt; 과 &lt;code&gt;POST&lt;/code&gt; 를 이해하려면, &lt;strong&gt;&lt;a href=&#34;http://stackoverflow.com/questions/1077412/what-is-an-idempotent-operation&#34;&gt;idempotent&lt;/a&gt;&lt;/strong&gt; 라는 개념의 도입이 필요하다. 한글로 직역하면 &lt;em&gt;멱등의&lt;/em&gt; 정도 되시겠다. 수학적으로 이해하는 편이 쉬운데,&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;f(x) = f(f(x))&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;라 보면 된다. 다시 말해 몇 번이고 같은 &lt;em&gt;연산&lt;/em&gt; 을 반복해도 같은 값이 나온다는 것. 이건 fault-tolerant API 를 디자인 하는데 있어서 굉장히 중요한 요소다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어보자. 클라이언트가 &lt;code&gt;POST /dogs&lt;/code&gt; 를 요청했는데, 어떤 이유로간에 요청이  time-out (408) 되었다고 해 보자. 클라이언트는 요청이 전달되었으나 네트워크가 끊어졌는지, 아니면 요청조차 전달이 되지 않았는지 알 수 없다.&lt;/p&gt;
+
+&lt;p&gt;이 때, 클라이언트가 원하는 operation 이 &lt;strong&gt;idempotent&lt;/strong&gt; 하다면 다시 요청해도 상관 없다. 항상 같은 결과를 만드니까. 그러나 &lt;code&gt;POST&lt;/code&gt; 는 &lt;strong&gt;idempotent&lt;/strong&gt; 하지 않다.&lt;/p&gt;
+
+&lt;h3 id=&#34;post&#34;&gt;POST&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;POST&lt;/code&gt; 는 클라이언트가 &lt;em&gt;리소스의 위치를 지정하지 않았을때&lt;/em&gt; 리소스를 생성하기 위해 사용하는 연산이다. 예를들어&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;POST /dogs HTTP/1.1
+
+{ &amp;quot;name&amp;quot;: &amp;quot;blue&amp;quot;, &amp;quot;age&amp;quot;: 5 }
+
+HTTP/1.1 201 Created
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;따라서 이 연산을 수행하면 &lt;code&gt;/dogs/2&lt;/code&gt; 에 생기고, 그 다음번엔 &lt;code&gt;/dogs/3&lt;/code&gt; 등 매번 다른곳에 새로운 리소스가 생성될 수 있으므로, 이 연산은 &lt;strong&gt;idempotent 하지 않다&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;put&#34;&gt;PUT&lt;/h3&gt;
+
+&lt;p&gt;반면 리소스의 위치가 명확히 지정된 다음의 요청을 고려해 보자.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;PUT /dogs/3 HTTP/1.1
+
+{ &amp;quot;name&amp;quot;: &amp;quot;blue&amp;quot;, &amp;quot;age&amp;quot;: 5 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;/dogs&lt;/code&gt; 의 프로퍼티가 &lt;code&gt;name&lt;/code&gt; 과 &lt;code&gt;age&lt;/code&gt; 뿐이라면, 이건 몇 번을 수행하더라도, 같은 결과를 보장한다. 다시 말해 &lt;strong&gt;idempotent&lt;/strong&gt; 하다.&lt;/p&gt;
+
+&lt;p&gt;그리고 위에 예에서 알 수 있듯이 &lt;code&gt;PUT&lt;/code&gt; 은 &lt;em&gt;리소스의 위치가 지정되었을때&lt;/em&gt; &lt;strong&gt;생성&lt;/strong&gt; 또는 &lt;strong&gt;업데이트&lt;/strong&gt; 를 위해 사용할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;### PATCH&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;PUT&lt;/code&gt; 이 리소스의 모든 프로퍼티를 업데이트 하기 위해 사용된다면, &lt;code&gt;PATCH&lt;/code&gt; 는 부분만을 업데이트하기 위해 사용한다. &lt;code&gt;PUT&lt;/code&gt; 과 마찬가지로 리소스의 위치를 클라이언트가 알고 있을 때 사용한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/630453/put-vs-post-in-rest&#34;&gt;SO&lt;/a&gt; 에는 3개의 메소드를 다음과 같이 요약하는 답변이 있다.&lt;/p&gt;
+
+&lt;p&gt;(1) &lt;strong&gt;POST&lt;/strong&gt; to a URL &lt;strong&gt;creates a child resouce&lt;/strong&gt; at a server defiend URL&lt;br /&gt;
+(&lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5&#34;&gt;RFC 2616 POST&lt;/a&gt;)&lt;br /&gt;
+(2) &lt;strong&gt;PUT&lt;/strong&gt; to a URL &lt;strong&gt;create/replaces the resource&lt;/strong&gt; in is entirely at the client defined URL&lt;br /&gt;
+(&lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6&#34;&gt;RFC 2616 PUT&lt;/a&gt;)&lt;br /&gt;
+(3) &lt;strong&gt;PATCH&lt;/strong&gt; to a URL &lt;strong&gt;updates part of the resource&lt;/strong&gt; at that client defined URL&lt;br /&gt;
+(&lt;a href=&#34;http://tools.ietf.org/html/rfc5789&#34;&gt;RFC 5789: Patch Method for HTTP&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h3 id=&#34;response-code&#34;&gt;Response Code&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;POST&lt;/code&gt; 이나 &lt;code&gt;POST&lt;/code&gt; 요청이 리소스를 새로 생성할 경우엔 리소스의 위치를 response header 의 &lt;strong&gt;Location&lt;/strong&gt; field 에 담아 &lt;em&gt;201 Created&lt;/em&gt; 를 보낼 수 있다. 그러나 not-identifiable 한 리소스를 생성할 경우엔 &lt;em&gt;200 OK&lt;/em&gt; 또는 &lt;em&gt;204 No Content&lt;/em&gt; 를 보낼수도 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.w3.org/Protocols이나 `POST` /rfc2616/rfc2616-sec9스의tml#sec9.5&#34;&gt;원문&lt;/a&gt;을 첨부하자면,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The action performed by the POST method might not result in a resource that can be identified by a URI. In this case, either 200 (OK) or 204 (No Content) is the appropriate response status, depending on whether or not the response includes an entity that describes the result. &lt;br/&gt;&lt;br/&gt;
+If a resource has been created on the origin server, the response SHOULD be 201 (Created) and contain an entity which describes the status of the request and refers to the new resource, and a Location header (see section 14.30).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Async 하게 서버가 처리한다면, 요청은 수락 되었으나 아직 커밋되지 않았음을 알리기 위해 &lt;em&gt;202 Accepted&lt;/em&gt; 를 보내야 한다. (if the operation has not been commited yet)&lt;/p&gt;
+
+&lt;p&gt;아래 사진은, response code decision tree&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;a href=&#34;http://i.stack.imgur.com/whhD1.png&#34;&gt;&lt;img src=&#34;http://i.stack.imgur.com/whhD1.png&#34; /&gt;&lt;/a&gt;&lt;p align=&#34;center&#34;&gt;(&lt;a href=&#34;http://i.stack.imgur.com/whhD1.png&#34;&gt;http://i.stack.imgur.com/whhD1.png&lt;/a&gt;)&lt;/p&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;safe-methods&#34;&gt;Safe Methods&lt;/h3&gt;
+
+&lt;p&gt;리소스를 수정하지 않는 메소드들, &lt;code&gt;OPTIONS&lt;/code&gt;, &lt;code&gt;GET&lt;/code&gt;, &lt;code&gt;HEAD&lt;/code&gt; 등을 &lt;em&gt;safe&lt;/em&gt; 하다고 말한다. 대부분의 경우 &lt;em&gt;idempotent&lt;/em&gt; 하면 &lt;em&gt;safe&lt;/em&gt; 하다. 물론 예외도 있는데 &lt;code&gt;DELETE&lt;/code&gt; 는 &lt;em&gt;idempotent&lt;/em&gt; 하지만 리소스를 변경하므로 &lt;em&gt;safe&lt;/em&gt; 하지 않다. 자세한 내용은 &lt;a href=&#34;http://tools.ietf.org/html/rfc7231#section-4.2&#34;&gt;RFC 7231: Safe Methods&lt;/a&gt; 를 보자. 참고로 &lt;a href=&#34;http://tools.ietf.org/html/rfc7231#section-4.2.1&#34;&gt;RFC 7231&lt;/a&gt; 은 &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;DELETE&lt;/code&gt; 와 &lt;em&gt;safe methods&lt;/em&gt; 를 &lt;em&gt;idempotent&lt;/em&gt; 하다고 정의한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;HEAD&lt;/code&gt; 는 Response-Body 없이 Header 만 얻기 위해 사용하고, &lt;code&gt;OPTIONS&lt;/code&gt; 는 해당 리소스에 대해 가능한 operation 이 무엇인지 응답을 얻기 위해 사용한다. 만약 &lt;code&gt;OPTIONS&lt;/code&gt; 에 대한 응답이 온다면 response &lt;code&gt;Allow&lt;/code&gt; 에 가능한 operation 이 와야한다. &lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html&#34;&gt;RFC2616&lt;/a&gt; 에는 다음과 같이 나와있다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;code&gt;OPTIONS&lt;/code&gt; method represents a request for information about the communication options available on the request/response chain identified by the Request-URI. This method allows the client to determine the options and/or requirements associated with a resource, or the capabilities of a server, without implying a resource action or initiating a resource retrieval. &lt;br/&gt;&lt;br/&gt;
+Responses to this method are not cacheable.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;cacheable-methods&#34;&gt;Cacheable Methods&lt;/h3&gt;
+
+&lt;p&gt;왜 &lt;code&gt;OPTIONS&lt;/code&gt; 메소드에 대한 응답은 캐시가 불가능한걸까? SO 에서 이 &lt;a href=&#34;http://stackoverflow.com/questions/13073313/http-options-not-cacheable&#34;&gt;답변&lt;/a&gt; 이 제일 나은것 같아서 가져왔다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;code&gt;OPTIONS&lt;/code&gt; HTTP request returns the available methods which can be performed on a resource. (The objects methods)&lt;/p&gt;
+
+&lt;p&gt;I can not say for certain why you can not cache the response, but its most likely a precaution. Caching would have little value for the &lt;code&gt;OPTIONS&lt;/code&gt; http method.&lt;/p&gt;
+
+&lt;p&gt;A Resource is &amp;ldquo;any information that can be given a name&amp;rdquo;, that name is its URI. the response from the OPTIONs request is only a list of methods that can be requested on this resource (e.g. &amp;ldquo;GET PUT POST&amp;rdquo; maybe the response). To actually get at the information stored, you must use the GET method.&lt;/p&gt;
+
+&lt;p&gt;History, more than anything; OPTIONS was defined that way to start with. The underlying reason is that HTTP caches are defined in terms of representations, which means the way you get something out of the cache is GET. This is why OPTIONS, PROPFIND, etc. caching are problematic.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;다시 말해서, 리소스는 주어진 URI 에 대한 정보인데 &lt;code&gt;OPTIONS&lt;/code&gt; 는 정보를 가지고 오는 것이 아니라, 정보에 대해 어떤 연산이 가능한지를 알려준다. HTTP 에서는 정보에 대해 캐싱하므로, &lt;code&gt;GET&lt;/code&gt; 이나 &lt;code&gt;HEAD&lt;/code&gt; 같이 정보를 돌려주는 연산만 캐싱할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&#34;trace-connect&#34;&gt;Trace, Connect&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;TRACE&lt;/code&gt; 는 클라이언트가 방금 보낸 요청을 다시 달라고, 서버에게 요청하는 것이고 &lt;code&gt;CONNECT&lt;/code&gt; 는 HTTP 터널링을 할때 쓰인다. 중간의 프록시 서버를 위해서는 &lt;code&gt;CONNECT&lt;/code&gt; 로 요청하고, 마지막 프록시에서 end-point 로는 &lt;code&gt;GET&lt;/code&gt; 또는 &lt;code&gt;CONNECT&lt;/code&gt; 를 날린다. &lt;code&gt;HTTPS&lt;/code&gt; 라면 &lt;code&gt;CONNECT&lt;/code&gt; 를, &lt;code&gt;HTTP&lt;/code&gt; 라면 둘 중 아무거나 써도 상관 없다. 더 자세한건 &lt;a href=&#34;http://stackoverflow.com/questions/11697943/when-should-one-use-connect-and-get-http-methods-at-http-proxy-server&#34;&gt;SO 답변&lt;/a&gt; 으로&lt;/p&gt;
+
+&lt;p&gt;원문을 첨부하면,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;CONNECT:&lt;/strong&gt; This method could allow a client to use the web server as a proxy.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TRACE:&lt;/strong&gt; This method simply echoes back to the client whatever string has been sent to the server, and is used mainly for debugging purposes. This method, originally assumed harmless, can be used to mount an attack known as Cross Site Tracing, which has been discovered by Jeremiah Grossman (see links at the bottom of the page).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;summary&#34;&gt;Summary&lt;/h3&gt;
+
+&lt;p&gt;HTTP 메소드에 대해서 알아보았는데, 조금 더 찾아보니 HTTP 는 0.9 -&amp;gt; 1.0 -&amp;gt; 1.1 순으로 변화했다고 한다. 0.9 에선 &lt;code&gt;GET&lt;/code&gt; 을 이용한 Read-only 버전이었고 1.0 에 들어와서야 &lt;code&gt;HEAD&lt;/code&gt;, &lt;code&gt;POST&lt;/code&gt; 등을 이용해 서버로 데이터 전송이 가능해졌다.   HTTP 1.1 (RFC 2616) 에 와서야 &lt;code&gt;DELETE&lt;/code&gt;, &lt;code&gt;PUT&lt;/code&gt; 등이 추가되면서 변경, 삭제까지 가능해졌다.&lt;/p&gt;
+
+&lt;p&gt;다음번에 HTTP 를 또 살펴 볼 일이 생긴다면, &lt;a href=&#34;http://tools.ietf.org/html/rfc7234&#34;&gt;RFC 7243: Caching&lt;/a&gt; 과 &lt;a href=&#34;http://tools.ietf.org/html/rfc7235&#34;&gt;RFC 7235: Authentication&lt;/a&gt; 에 대해서 보지 않을까 싶다.&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;(1) &lt;a href=&#34;http://restcookbook.com/HTTP%20Methods/put-vs-post/&#34;&gt;REST Cookbook: PUT vs POST&lt;/a&gt;&lt;br /&gt;
+(2) &lt;a href=&#34;http://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete&#34;&gt;HTTP status code for UPDATE and DELETE&lt;/a&gt;&lt;br /&gt;
+(3) &lt;a href=&#34;http://stackoverflow.com/questions/630453/put-vs-post-in-rest/18243587#18243587&#34;&gt;PUT vs POST in REST&lt;/a&gt;&lt;br /&gt;
+(4) &lt;a href=&#34;http://restcookbook.com/HTTP%20Methods/idempotency/&#34;&gt;REST Coookbook: idempotency&lt;/a&gt;&lt;br /&gt;
+(5) &lt;a href=&#34;http://zacstewart.com/2012/04/14/http-options-method.html&#34;&gt;HTTP OPTIONS Method&lt;/a&gt;&lt;br /&gt;
+(6) &lt;a href=&#34;https://www.mnot.net/blog/2012/10/29/NO_OPTIONS&#34;&gt;NO OPTIONS&lt;/a&gt;&lt;br /&gt;
+(7) &lt;a href=&#34;http://www.mkexdev.net/Article/Content.aspx?parentCategoryID=1&amp;amp;categoryID=11&amp;amp;ID=119&#34;&gt;HTTP History&lt;/a&gt;&lt;br /&gt;
+(8) &lt;a href=&#34;http://stackoverflow.com/questions/13073313/http-options-not-cacheable&#34;&gt;HTTP OPTIONS not cacheable&lt;/a&gt;&lt;br /&gt;
+(9) &lt;a href=&#34;http://stackoverflow.com/questions/11697943/when-should-one-use-connect-and-get-http-methods-at-http-proxy-server&#34;&gt;CONNECT vs GET in proxy&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

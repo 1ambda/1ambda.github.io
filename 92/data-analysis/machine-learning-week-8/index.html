@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="description" content="hugo content for 1ambda.github.io">
+<meta name="author" content="1ambda">
+
+    <link rel="shortcut icon" href="https://1ambda.github.io/images/favicon.png" type="image/x-icon" />
+
+    
+    <title>ML 08: K-means, PCA Details</title>
+    <link href="https://1ambda.github.io/css/nucleus.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hybrid.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/featherlight.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/theme.css" rel="stylesheet">
+    <link href="https://1ambda.github.io/css/hugo-theme.css" rel="stylesheet">
+    <style type="text/css">:root #header + #content > #left > #rlblock_left
+    {display:none !important;}</style>
+    <link href="https://1ambda.github.io/css/theme-1ambda.css" rel="stylesheet">
+
+  </head>
+  <body class="" data-url="/92/data-analysis/machine-learning-week-8/">
+    <nav id="sidebar">
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://1ambda.github.io/home" style="color: white; margin-top:10px;">
+  <div> <i class="fa fa-github fa-4x"></i> </div>
+</a>
+<div style="margin-top:5px; font-size: 25px;">1ambda</div>
+
+      
+    </div>
+</div>
+
+
+  <div class="highlightable">
+    <ul class="topics">
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/0/home/">
+        <a href="https://1ambda.github.io/0/home/">
+          <span>
+            
+              <b>HOME</b>
+            
+             
+            
+           </span>
+        </a>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/15/infrastructure/">
+        <a href="https://1ambda.github.io/15/infrastructure/">
+          <span>
+            
+              <b>- </b>
+            
+             Infrastructure
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/15/infrastructure/container/kubernetes-intro/">
+              <a href="https://1ambda.github.io/15/infrastructure/container/kubernetes-intro/">
+                <span>Kubernetes: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/21/scala/">
+        <a href="https://1ambda.github.io/21/scala/">
+          <span>
+            
+              <b>-</b>
+            
+             Scala
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-1/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-1/">
+                <span>Easy Scalaz 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-2/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-2/">
+                <span>Easy Scalaz 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-3/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-3/">
+                <span>Easy Scalaz 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-4/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-4/">
+                <span>Easy Scalaz 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-5/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-5/">
+                <span>Easy Scalaz 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/easy-scalaz-6/">
+              <a href="https://1ambda.github.io/21/scala/easy-scalaz-6/">
+                <span>Easy Scalaz 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-1/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-1/">
+                <span>Functional Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-2/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-2/">
+                <span>Functional Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-3/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-3/">
+                <span>Functional Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-4/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-4/">
+                <span>Functional Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-5/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-5/">
+                <span>Functional Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-6/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-6/">
+                <span>Functional Programming 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/functional-programming-7/">
+              <a href="https://1ambda.github.io/21/scala/functional-programming-7/">
+                <span>Functional Programming 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-1/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-1/">
+                <span>Reactive Programming 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-2/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-2/">
+                <span>Reactive Programming 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-3/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-3/">
+                <span>Reactive Programming 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-4/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-4/">
+                <span>Reactive Programming 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/21/scala/reactive-programming-5/">
+              <a href="https://1ambda.github.io/21/scala/reactive-programming-5/">
+                <span>Reactive Programming 5     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/22/haskell/">
+        <a href="https://1ambda.github.io/22/haskell/">
+          <span>
+            
+              <b>- </b>
+            
+             Haskell
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-1/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-1/">
+                <span>하스켈로 배우는 함수형 언어 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-2/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-2/">
+                <span>하스켈로 배우는 함수형 언어 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-3/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-3/">
+                <span>하스켈로 배우는 함수형 언어 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-4/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-4/">
+                <span>하스켈로 배우는 함수형 언어 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-5/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-5/">
+                <span>하스켈로 배우는 함수형 언어 5     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-6/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-6/">
+                <span>하스켈로 배우는 함수형 언어 6     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-7/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-7/">
+                <span>하스켈로 배우는 함수형 언어 7     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-8/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-8/">
+                <span>하스켈로 배우는 함수형 언어 8     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/intro-to-haskell-9/">
+              <a href="https://1ambda.github.io/22/haskell/intro-to-haskell-9/">
+                <span>하스켈로 배우는 함수형 언어 9     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/22/haskell/poor-mans-concurrency-monad/">
+              <a href="https://1ambda.github.io/22/haskell/poor-mans-concurrency-monad/">
+                <span>Poor Man&#39;s Concurrency Monad     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/23/javascript/">
+        <a href="https://1ambda.github.io/23/javascript/">
+          <span>
+            
+              <b>- </b>
+            
+             Javascript
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/javascript-inheritance/">
+              <a href="https://1ambda.github.io/23/javascript/javascript-inheritance/">
+                <span>Javascript Inheritance     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/tips-for-webpack-and-redux/">
+              <a href="https://1ambda.github.io/23/javascript/tips-for-webpack-and-redux/">
+                <span>Tips for Webpack and Redux     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/23/javascript/rest-api-put-vs-post/">
+              <a href="https://1ambda.github.io/23/javascript/rest-api-put-vs-post/">
+                <span>REST API: Put vs Post     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/24/java/">
+        <a href="https://1ambda.github.io/24/java/">
+          <span>
+            
+              <b>- </b>
+            
+             Java
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/24/java/interview-questions-collection/">
+              <a href="https://1ambda.github.io/24/java/interview-questions-collection/">
+                <span>Interview Questions: Collection     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/51/oh-my-github/">
+        <a href="https://1ambda.github.io/51/oh-my-github/">
+          <span>
+            
+              <b>- </b>
+            
+             oh-my-github
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/51/oh-my-github/tutorial/">
+              <a href="https://1ambda.github.io/51/oh-my-github/tutorial/">
+                <span>10분만에 Github Profile 만들기     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/91/algorithm/">
+        <a href="https://1ambda.github.io/91/algorithm/">
+          <span>
+            
+              <b>- </b>
+            
+             Algorithm
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-1/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-1/">
+                <span>Design and Analysis: Divide &amp; Conquer     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-2/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-2/">
+                <span>Design and Analysis: Randomized Selection     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-3/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-3/">
+                <span>Design and Analysis: Graph Contraction Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-4/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-4/">
+                <span>Design and Analysis: Graph Search and Connectivity     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-5/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-5/">
+                <span>Design and Analysis: Dijkstra, Heap, Red-Black Tree     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/design-and-analysis-part1-6/">
+              <a href="https://1ambda.github.io/91/algorithm/design-and-analysis-part1-6/">
+                <span>Design and Analysis: Hash Table, Universal Hashing, Bloom filters     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-1/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part1-1/">
+                <span>Algorithm: Union Find     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part1-2/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part1-2/">
+                <span>Algorithm: Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-1/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-1/">
+                <span>Algorithm: Spanning Tree, Shortest Paths     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-2/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-2/">
+                <span>Algorithm: Radix Sort, Suffix Sort     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-3/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-3/">
+                <span>Algorithm: R-way, Ternary Tries     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-4/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-4/">
+                <span>Algorithm: KMP, Boyer-Moore, Rabin-Karp     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-5/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-5/">
+                <span>Algorithm: Maximum Flow (Ford-Fulkerson)     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/algorithm-part2-6/">
+              <a href="https://1ambda.github.io/91/algorithm/algorithm-part2-6/">
+                <span>Algorithm: Data Compression, Huffman, LZW     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-1/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-cs188-1/">
+                <span>AI (CS188): Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-cs188-2/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-cs188-2/">
+                <span>AI (CS188): Search     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-1/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-1/">
+                <span>AI Planning 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-2/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-2/">
+                <span>AI Planning 2: A*. STRIPS     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-3/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-3/">
+                <span>AI Planning 3: PSP, PoP     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/91/algorithm/artificial-intelligence-planning-4/">
+              <a href="https://1ambda.github.io/91/algorithm/artificial-intelligence-planning-4/">
+                <span>AI Planning 4: STN, HTN     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  parent" data-nav-id="/92/data-analysis/">
+        <a href="https://1ambda.github.io/92/data-analysis/">
+          <span>
+            
+              <b>- </b>
+            
+             Data Analysis
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-1/">
+                <span>ML 01: Linear Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-2/">
+                <span>ML 02: Gradient Descent     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-3/">
+                <span>ML 03: Logistic Regression     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-4/">
+                <span>ML 04: Neural Network     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-5/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-5/">
+                <span>ML 05: Back Propagation     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-6/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-6/">
+                <span>ML 06: Practical Advices     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-7/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-7/">
+                <span>ML 07: Support Vector Machine     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item active" data-nav-id="/92/data-analysis/machine-learning-week-8/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-8/">
+                <span>ML 08: K-means, PCA Details     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-9/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-9/">
+                <span>ML 09: Anomaly Detection, Recommender System     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/machine-learning-week-10/">
+              <a href="https://1ambda.github.io/92/data-analysis/machine-learning-week-10/">
+                <span>ML 10: Stochastic Gradient, Synthetic Data, Ceiling Analysis     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-1/">
+                <span>Intro to Data Science 1     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-2/">
+                <span>Intro to Data Science 2     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-3/">
+                <span>Intro to Data Science 3     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/intro-to-data-science-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/intro-to-data-science-4/">
+                <span>Intro to Data Science 4     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-1/">
+                <span>Process Mining 1: Intro     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-2/">
+                <span>Process Mining 2: Alpha Algorithm     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-3/">
+                <span>Process Mining 3: Metric, C-nets     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-4/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-4/">
+                <span>Process Mining 4: Conformance Checking, Dotted Chart     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/process-mining-5/">
+              <a href="https://1ambda.github.io/92/data-analysis/process-mining-5/">
+                <span>Process Mining 5: Decision, Social, Organization Mining     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-1/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-1/">
+                <span>Pattern Discovery 1: Apriori, FP Growth     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-2/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-2/">
+                <span>Pattern Discovery 2: Null-invariant, Pattern-Fusion, Constaint     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/92/data-analysis/pattern-discovery-3/">
+              <a href="https://1ambda.github.io/92/data-analysis/pattern-discovery-3/">
+                <span>Pattern Discovery 3: Sequential Pattern Mining     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+      
+      
+
+      <li class="dd-item  " data-nav-id="/93/cloud-computing/">
+        <a href="https://1ambda.github.io/93/cloud-computing/">
+          <span>
+            
+              <b>- </b>
+            
+             Cloud Computing
+            
+           </span>
+        </a>
+        
+        <ul>
+          
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-1/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-1/">
+                <span>CC 01: Map Reduce     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-2/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-2/">
+                <span>CC 02: Gossip Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-3/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-3/">
+                <span>CC 03: Membership Protocol     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-4/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-4/">
+                <span>CC 04: P2P Systems     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-5/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-5/">
+                <span>CC 05: Global Snapshot     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-6/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-6/">
+                <span>CC 06: Multicast     </i></span>
+              </a>
+            </li>
+          
+          
+          
+            <li class="dd-item " data-nav-id="/93/cloud-computing/cloud-computing-7/">
+              <a href="https://1ambda.github.io/93/cloud-computing/cloud-computing-7/">
+                <span>CC 07: Paxos     </i></span>
+              </a>
+            </li>
+          
+          
+        </ul>
+        
+      </li>
+      
+      
+    </ul>
+    <hr>
+      
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fa fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+    </section>
+  </div>
+</nav>
+
+        <section id="body">
+        <div id="overlay"></div>
+
+        <div class="padding highlightable">
+
+            <div id="top-bar">
+              
+                
+                
+                
+              <div id="top-github-link">
+                  <a class="github-link" href="https://github.com/1ambda/1ambda.github.io-hugo/edit/master/content/92/data-analysis/machine-learning-week-8.md" target="blank">
+                    <i class="fa fa-code-fork"></i>
+                    Edit this page
+                  </a>
+              </div>
+                
+              
+              <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                  <span id="sidebar-toggle-span">
+                      <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                        <i class="fa fa-bars"></i>
+                      </a>
+                  </span>
+                
+                <span id="toc-menu"><a href=""><i class="fa fa-list-alt"></i></a></span>
+                
+                
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                    
+                    
+                <a href="https://1ambda.github.io/92/data-analysis/" itemprop="url"><span itemprop="title">Data Analysis</span></a> <i class="fa fa-angle-right"></i>
+                    
+                  
+                
+                  
+                
+                <span itemprop="title"> ML 08: K-means, PCA Details</span>
+              </div>
+              
+                  <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#unsupervised-learning-intro">Unsupervised Learning Intro</a></li>
+<li><a href="#k-means">K-Means</a></li>
+<li><a href="#optimization-objective">Optimization Objective</a></li>
+<li><a href="#random-initialization">Random Initialization</a></li>
+<li><a href="#choosing-the-number-of-cluster">Choosing the Number of Cluster</a></li>
+<li><a href="#dimensionality-reduction">Dimensionality Reduction</a></li>
+<li><a href="#data-compression">Data Compression</a></li>
+<li><a href="#data-visualization">Data Visualization</a></li>
+<li><a href="#principal-component-analysis-problem-formulation">Principal Component Analysis Problem Formulation</a></li>
+<li><a href="#pca-algorithm">PCA Algorithm</a></li>
+<li><a href="#pca-details">PCA Details</a>
+<ul>
+<li><a href="#covariance">Covariance</a></li>
+<li><a href="#covariance-matrix">Covariance Matrix</a></li>
+<li><a href="#eigen-vector-eigen-value">Eigen vector, Eigen value</a></li>
+<li><a href="#diagonalization">Diagonalization</a></li>
+</ul></li>
+<li><a href="#singular-value-decomposition">Singular Value Decomposition</a></li>
+<li><a href="#choosing-the-number-of-pca">Choosing the number of PCA</a></li>
+<li><a href="#reconstruction-from-compressed-representation">Reconstruction from Compressed Representation</a></li>
+<li><a href="#advice-for-apply-pca">Advice for Apply PCA</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+              
+
+            </div>
+            
+    	        <div id="body-inner">
+                
+                <h1>ML 08: K-means, PCA Details</h1>
+                
+
+
+
+<p>이번시간에는 <em>PCA</em> 와 <em>clustering</em> 을 배운다. <em>PCA</em> 가 어떻게 돌아가는지 알기위해 <em>covariance matrix</em>, <em>eigen decomposition</em>, <em>singular value decomposition</em> 등의 배경지식도 익혀보자. ~~K-means 는 거들뿐</p>
+
+<h3 id="unsupervised-learning-intro">Unsupervised Learning Intro</h3>
+
+<p><em>clustering</em> 은 다양한 분야에 활용할 수 있다.</p>
+
+<ul>
+<li>Market Segmentation</li>
+<li>Social Network Analysis</li>
+<li>Organize Computing Clusters</li>
+<li>Astronomical Data Analysis</li>
+</ul>
+
+<h3 id="k-means">K-Means</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360978231_7390.png" alt="" /></p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360978245_9923.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>랜덤한 위치에 <em>centroid</em> 를 잡고, 가까운 점들을 색칠 한뒤 그 점들의 중심으로 <em>centroid</em> 를 옮겨가면서 집단을 만들어 낸다.</p>
+
+<p><em>k-means</em> 의 인풋은 <em>centroid</em> 의 수인 <code>k</code> 와 <code>x1, x2, ... , xm</code> 의 트레이닝 셋이다. 구체적인 알고리즘은</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360978315_1086.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>매 이터레이션마다 <code>i to m</code> 까지 루프를 돌면서 클러스터링된 원소들의 배열인 <code>c^(i)</code> 에 <code>1 to K</code> 사이의 값을 넣는다. 이때 <code>c^(i)</code> 에 삽입될 값은, 해당 원소로부터 가장 가까운 <em>centroid</em> 의 인덱스다.</p>
+
+<blockquote>
+<p><code>c^(i)</code> is index of cluster <code>(1, ..., K)</code> to which example <code>x^(i)</code> is currently assigned</p>
+</blockquote>
+
+<p>따라서 각 원소로부터의 거리를 최소로 하는 <code>k</code> 에 대해 <code>c^(i) = k</code> 다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?min_k%20%5Cleft%20%7B%20%5C%7C%20x%5E%7B%28i%29%7D%20-%20%5Cmu_k%20%5Cright%20%5C%7C%20%7D%20%5C%5C%20%5C%5C%20%5CRightarrow%20c%5E%7B%28i%29%7D%20%3D%20k" alt="" /></p>
+
+<h3 id="optimization-objective">Optimization Objective</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360979250_8035.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><em>k-means</em> 에서 최소화 하려는 <em>cost function</em> 은</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?J%28c%5E%7B%281%29%7D%2C%20...%2C%20c%5E%7B%28m%29%7D%2C%20%5Cmu_1%2C%20...%2C%20%5Cmu_K%29%20%3D%20%7B1%20%5Cover%20m%7D%20%5Csum_%7Bi%3D1%7D%5Em%5Cleft%20%5C%7C%20x%5E%7B%28i%29%7D%20-%20%5Cmu_%7Bc%5E%7B%28i%29%7D%7D%20%5Cright%20%5C%7C" alt="" /></p>
+
+<p>다시 말해서 각 점에서 <em>centroid</em> 까지의 거리를 최소화 하는 것이 목표다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?min_%7Bc%5E%7B%281%29%7D%2C%20...%2C%20c%5E%7B%28m%29%7D%2C%20%5Cmu_1%2C%20...%2C%20%5Cmu_K%7D%20%5C%20%5C%20J%28c%5E%7B%281%29%7D%2C%20...%2C%20c%5E%7B%28m%29%7D%2C%20%5Cmu_1%2C%20...%2C%20%5Cmu_K%29" alt="" /></p>
+
+<p>이 함수 <code>J</code> 를 다른말로는 <em>distortion function</em> 이라 부른다. 알고리즘을 다시 보면</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360979289_8146.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>(1) <em>clustering assignment step</em> 에서는 <code>mu</code> 를 고정시키고 <code>c^(i)</code> 에 대해서 <code>J</code> 를 최소화 한다.<br />
+(2) <em>move centroid step</em> 에서는 <code>c^(i)</code> 를 고정시키고 <code>mu</code> 에 대해서 <code>J</code> 를 최소화 한다.</p>
+
+<h3 id="random-initialization">Random Initialization</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360980200_9803.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>위쪽 예제는 <em>centroid</em> 의 랜덤 초기화에서 좋게 배치된 경우이고, 아래쪽은 운이 나쁜 경우를 설명하는 그림이다. 이것이 설명하는 바는 <em>centroid</em> 의 초기화에 따라 결과가 달라질 수 있다는 것이다. 아래 그림을 보면</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360980222_7891.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>따라서 <em>local optima</em> 를 피가히 위해, 그리고 좋은 <em>clustering</em> 을 얻기 위해 <em>random initialization</em> 이용하여 <em>k-mean</em> 를 여러번 돌릴 수 있다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360980246_7140.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>여러번 <em>k-mean</em> 를 돌려 얻은 <code>J</code> 에 대해 최소값을 가지는 <code>J</code> 를 이용해 클러스터링을 얻을 수 있다.</p>
+
+<p>그러나 <code>K</code> 가 매우 크다면, <em>random initialization</em> 들어가는 계산 비용에 비해 별로 좋은 결과를 돌려주지 못할 것이다.</p>
+
+<p><em>random initialization</em> 을 하는 방법으로</p>
+
+<blockquote>
+<p>Pick <code>k</code> distinct random integers <code>i_1, ..., i_k</code> from <code>{1, ..., m}</code>.<br />
+Set <code>mu_1 = x^(i_1), ..., mu_k = x^(i_k)</code></p>
+</blockquote>
+
+<h3 id="choosing-the-number-of-cluster">Choosing the Number of Cluster</h3>
+
+<p><code>K</code> 값을 선택하기 위해 <em>Elbow method</em> 를 이용할 수 있다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/16/1360981609_7528.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><code>K</code> 값의 변화에 따라 <em>distortion function</em> <code>J</code> 값이 급격히 감소하는 지점을 선택하는 방법이다. 그런데 <code>J</code> 값이 오른쪽 그림처럼 좀 애매하게 감소하면 어떻게 할까?</p>
+
+<blockquote>
+<p>Sometimes, you are running K-means to get clusters to use for some later / downstream purpose. Evaluate K-means based on a metric for hwo well it perfomrs for that later purpose.</p>
+</blockquote>
+
+<p>예를 들어서, 몸무게 / 키 에 따라 집단을 분류해 그에 맞추어 티셔츠를 만든다고 할 때 <code>K = 3 or 5</code> 에 대해서는 단순히 좋은 클러스터링을 얻는것은 물론  어떤 <code>K</code> 가 수지타산이 더 맞을지 티셔츠 비즈니스적인 관점에서 생각을 해봐야 한다.</p>
+
+<p><img src="http://my.csdn.net/uploads/201208/28/1346132804_2121.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a>)</p></p>
+
+<h3 id="dimensionality-reduction">Dimensionality Reduction</h3>
+
+<p>이번엔 <em>unsupervised learning</em> 의 또 다른 기법인 <em>dimensionality reduction</em> 을 알아보자. 이 기법의 <em>motivation</em> 은 2가지다.</p>
+
+<p>(1) Data Compression<br />
+(2) Data Visualization</p>
+
+<h3 id="data-compression">Data Compression</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361235893_4367.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>두 축을 보면 하나는 인치로, 다른 하나는 센치다. <em>highly redundant data</em> 이기 때문에 하나의 차원으로 축소할 수 있다.</p>
+
+<p>중복된 *feature*만 차원을 줄일 수 있는 것은 아니다</p>
+
+<p>예를 들어 데이터의 한 축을 <em>pilot skill</em> 다른 축을 <em>pilot enjoyment</em> 라 하고 두 <em>feature</em> 간 관계를 거의 직선으로 나타낼 수 있다고 하자. 이 새로운 직선을 <em>pliot aptitude</em> 라 부르고 두개의 <em>feature</em> 를 대신하는 새로운 <em>feature</em> 로 사용할 수 있다.</p>
+
+<p><em>feature</em> 가 한 두개면 중복되는 것을 걸러내거나, 새로운 <em>feature</em> 로 만들기 쉬운데 만약 수백개라면 이것도 일이다.</p>
+
+<p>위 그림을 다시 보면 <code>x_1, x_2</code> 를 <code>z_1</code> 으로 대신하고 있다. <em>feature</em> 의 수가 줄어든 것이다.</p>
+
+<p>이렇게 차원을 줄이면 연산량이 줄어들의 전체 알고리즘의 성능도 빨라진다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361235907_7086.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>위 그림이 <em>dimensionality reduction</em> 에 대한 <em>intuition</em> 을 제공한다. 3차원의 데이터를 2차원의 평면으로 투영해 새로운 <em>feature set</em> 인 <code>z</code> 를 사용해 데이터를 나타낼 수 있다.</p>
+
+<p>그림은 3차원 -&gt; 2차원 이지만, 만약 10000 개를 1000 개를 줄일 수 있다면 어마어마한 중복을 줄일 수 있다.</p>
+
+<p>조금 더 이해가 잘되는 3차원 그림을 가져오면</p>
+
+<p><img src="http://scipy-lectures.github.io/_images/pca_3d_axis.jpg" alt="" />
+<img src="http://scipy-lectures.github.io/_images/pca_3d_aligned.jpg" alt="" />
+<p align="center">(<a href="http://scipy-lectures.github.io">http://scipy-lectures.github.io</a>)</p></p>
+
+<h3 id="data-visualization">Data Visualization</h3>
+
+<p><em>dimensionality reduction</em> 의 두 번째 <em>motivation</em> 은 바로 <em>data visualization</em> 이다.</p>
+
+<p><em>GDP</em>, <em>Country size</em> 등 다양한 <em>feature</em> 500개를 2개로 줄여 그래프에 그려보면 데이터에 대한 어떤 <em>intuition</em> 을 얻을 수도 있다. 즉 데이터가 주로 어떤 종류의 <em>feature</em> 에 의해 많이 영향을 받는지 파악할수 있다는 것이다.</p>
+
+<p>강의에 나온 예제에서는 <code>z_1</code> 은 <em>country size / GDP</em>, <code>z_2</code> 는 <em>per person GDP</em> 였다.</p>
+
+<p><em>visualization</em> 을 위한 경우 <code>2, 3</code> 개 정도로 차원을 줄일 수 있다.</p>
+
+<h3 id="principal-component-analysis-problem-formulation">Principal Component Analysis Problem Formulation</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236095_4842.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>2개의 <em>feature</em> <code>x_1, x_2</code> 를 하나로 줄인다고 하자. 이 경우 <em>projection error</em> (파란선의 길이) 를 최소로 하는 선 (빨강)을 찾으려고 할 것이다. 반면 자주색 선의 경우 <em>projection error</em> 가 가장 큰 선이라 볼 수있다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236100_6448.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>따라서 <code>n</code> 차원을 <code>k</code> 차원으로 축소할때는 각 데이터를 <code>k</code> 개의 벡터 <code>u</code> 에 대해 투영시켰을때의 <em>projection error</em> 를 최소로 하는 벡터 <code>u</code> 를 찾으면 된다.</p>
+
+<blockquote>
+<p>Reduce from <code>n</code>-dimension to <code>k</code>-dimension, find <code>k</code> vectors <code>u^1, ..., u^k</code> onto wihch to project the data, so as to minimized the projection error</p>
+</blockquote>
+
+<p>쉽게 생각하면 <code>k</code> 개의 <em>direction</em> 을 찾는다고 생각하면 된다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236106_9904.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>왼쪽 그림은 <em>linear regression</em> 에서 찾아내는 오차, 즉 <code>y</code> 값과 <em>prediction</em> 간의 거리이고</p>
+
+<p>우측 그림은 <em>PCA</em> 로 찾아낸 선과 각 점사이의 <em>projection error</em> 를 파란샌으로 나타냈다.</p>
+
+<p>두 그림에서 볼 수 있듯이 <em>PCA</em> 는 <em>linear regression</em> 이 아니다. <em>PCA</em> 에서는 <code>y</code> 값이란 개념이 없다.</p>
+
+<h3 id="pca-algorithm">PCA Algorithm</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236182_1422.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><em>PCA</em> 전에는 <em>preprocessing step</em> 을 거친다. 이는 다양한 <em>feature</em> 간 스케일이 다르기 때문에 비교할만한 스케일을 얻기 위함이다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236421_3927.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>그 후에는 <code>n</code> 차원으로부터 <em>projection error</em> 가 최소인 <code>k</code> 개의 벡터를 얻는 계산을 수행한다.</p>
+
+<p>(1) 먼저 <code>Sigma</code> 라 부르는 <em>covariance matrix</em> 를 계산하고 (작은 시그마)<br />
+(2) 그 후에 <code>Sigma</code> 의 <em>eigenvectors</em> 를 계산한다.</p>
+
+<p>여기서 <code>svd</code> 는 <em>sigular value decomposition</em> 을 의미한다.</p>
+
+<p><code>Sigma</code> 를 얻기 위한 <em>vectorization</em> 은 <code>(1/m) * X' * X</code> 다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236425_3920.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><code>svd</code> 함수의 리턴값으로 <code>U</code> 매트릭스가 나오는데, 이건 <code>n x n</code> 매트릭스다. 여기서 첫 <code>k</code> 개의 컬럼을 취한다. 이 매트릭스를 <code>Y</code> 라 부르면 새로운 <em>feature vector</em>  <code>z</code> 는</p>
+
+<p><code>z = Y^T * x</code></p>
+
+<p>정리하면 아래 그림과 같다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236428_5117.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<h3 id="pca-details">PCA Details</h3>
+
+<p>넘어가기 전에 잠깐 <em>PCA</em> 에서 다룬 <em>covariance matrix</em> 나 <em>eigen vector</em> 를 좀 보고 넘어가자.</p>
+
+<h4 id="covariance">Covariance</h4>
+
+<p>두 확률 변수 <code>X</code>, <code>Y</code> 에 대해서 <em>covariance</em> 는</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5Csigma%28X%2C%20Y%29%20%3D%20E%5B%28X%20-%20E%28X%29%29%28Y%20-%20E%28Y%29%29%5D%20%5C%5C%20%5C%5C%20%3D%20E%28XY%29%20-%20E%28X%29E%28Y%29%20%5C%20%7B%5Ccolor%7BBlue%7D%20%28by%5C%20linearity%5C%20of%5C%20expectation%29%7D" alt="" /></p>
+
+<p>보면 알겠지만, 독립이면 <em>covariance</em> 값이 <code>0</code> 이다. 따라서 두 변수간 상관정도라 보면 된다. 공분산이 양수면 양의 상관관계를, 음수이면 음의 상관관계를 가진다.</p>
+
+<p>이해를 위해서 <a href="http://darkpgmr.tistory.com/110">여기</a>로 부터 인용을 하자면</p>
+
+<blockquote>
+<p>x의 분산은 x들이 평균을 중심으로 얼마나 흩어져 있는지를 나타내고, x와 y의 공분산은 x, y의 흩어진 정도가 얼마나 서로 상관관계를 가지고 흩어졌는지를 나타낸다. 예를 들어, x와 y 각각의 분산은 일정한데 x가 E(x)보다 클때 y도 E(y)보다 크면 공분산은 최대가 되고, x가 E(x)보다 커질때 y는 E(y)보다 작아지면 공분산은 최소(음수가 됨), 서로 상관관계가 없으면 공분산은 0이 된다.</p>
+</blockquote>
+
+<p>공분산은 몇 가지 성질이 있는데</p>
+
+<p>(1) <code>X, Y</code> 가 독립이면 <em>covariance = <code>0</code></em> 이다. 그러나 역은 <em>gaussian random variable</em> 일때만 성립한다.</p>
+
+<p>(2) <img src="http://upload.wikimedia.org/math/0/6/0/060cda617e0812f174f5f75b6032b3dd.png" alt="" /></p>
+
+<p>(3) <img src="http://upload.wikimedia.org/math/5/e/9/5e9674eac71398dcb022fc5cb76e2717.png" alt="" /></p>
+
+<p>(4) <img src="http://upload.wikimedia.org/math/8/2/3/823d4a54cac228efe1658718bfa7707a.png" alt="" /></p>
+
+<p>공분산마다 값이 다르기 때문에 비교를 위해 <code>X</code>, <code>Y</code> 의 표준편차로 나눈 것을 <em>correlation, 상관계수</em> 라 부른다.</p>
+
+<p><img src="http://upload.wikimedia.org/math/0/7/6/076d3820a46afe55ee680f3c85e34c76.png" alt="" /></p>
+
+<p><br/></p>
+
+<h4 id="covariance-matrix">Covariance Matrix</h4>
+
+<p>이제 <em>covariance matrix</em> 를 알아보자. 공분산 행렬은 데이터 <code>X</code> (벡터) 에 대해 <code>X</code> 의 두 원소 <code>X^(i), X^(j)</code> 간 공분산을 구한 행렬이다. <code>X</code> 를 <code>n</code> 벡터라 하면, <code>X</code> 의 공분산 행렬은 <code>n x n</code> 행렬이다. 그리고 <code>Cov(X, Y) = Cov(Y, X)</code> 이므로 <em>symmetric matrix, 대칭행렬</em> 이기도 하다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236421_3927.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<h4 id="eigen-vector-eigen-value">Eigen vector, Eigen value</h4>
+
+<p>아까 슬라이드에서 잠깐 <em>eigen vector</em> 가 나왔는데, 우리말로 <em>고유벡터</em> 라 부른다. 고유벡터 <code>v</code> 는 행렬 <code>A</code> 곱했을때 상수 <code>λ</code> 와 다음의 관계를 가진다. (<code>A</code> 는 <code>n x n</code> 매트릭스)</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?Av%20%3D%20%5Clambda%20v" alt="" /></p>
+
+<p>이해를 위해 <a href="http://darkpgmr.tistory.com/105">여기</a>서 인용하면</p>
+
+<blockquote>
+<p><em>square matrix</em> <code>A</code> 를 선형변환으로 봤을 때, 선형 변환 <code>A</code> 에 의한 변환 결과가 자기 자신의 상수배 <code>λ</code> 가 되는 <code>0</code> 이 아닌 벡터 <code>v</code> 를 <em>eigen vector</em> 라 하고, 이 <code>λ</code> 를 <em>eigen value</em> 라 한다.</p>
+</blockquote>
+
+<p>기하학적으로 보면</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Eigenvalue_equation.svg/375px-Eigenvalue_equation.svg.png" alt="" />
+<p align="center">(<a href="http://en.wikipedia.org">http://en.wikipedia.org</a>)</p></p>
+
+<h4 id="diagonalization">Diagonalization</h4>
+
+<p><em>SVD</em> 에 대해 이야기 하기 전에 <em>matri diagonalizaion, 행렬 대각화</em> 도 좀 보자.</p>
+
+<p>대각행렬은 <em>principal diagonal</em> 원소를 제외한 모든 원소가 0 인 <em>sqaure matrix</em> 인데, <em>sqaure matrix, 정방행렬</em> <code>A</code> 에 대해서</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?P%5E%7B-1%7DAP%20%3D%20D" alt="" /></p>
+
+<p>인 <code>P</code> 와 <code>D</code> 가 존재하면 <code>A</code> 는 <em>diagonalizable matrix, 대각화 가능 행렬</em> <code>P</code> 를 <em>diagonalizing matrix, 대각화하는 행렬</em> 이라 부른다.</p>
+
+<p>위 식에서 <code>D</code> 는 <em>diagonal matrix</em> 인데,</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?D%20%3D%20%5Cbegin%7Bbmatrix%7D%20%5Clambda_1%20%26%200%20%26%20...%20%26%200%5C%5C%200%20%26%20%5Clambda_2%20%26%20...%20%26%200%5C%5C%20%5Cvdots%20%26%20%5Cvdots%20%26%20%5C%20%26%20%5Cvdots%5C%5C%200%20%26%200%20%26%20%5Ccdots%20%26%20%5Clambda_n%20%5Cend%7Bbmatrix%7D" alt="" /></p>
+
+<p>저 식에서 <code>A</code> 위주로 정리하면</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?A%20%3D%20PDP%5E%7B-1%7D" alt="" /></p>
+
+<p>이 때 <code>P</code> 가 고유벡터를 열벡터로 하는 행렬이고, <code>D</code> 가 고유값들을 대각 원소로 하는 대각행렬이면 <em>eigen decomposition</em> 이라 부른다.</p>
+
+<p>위에서 <em>covariance matrix</em> 는 대칭행렬이라 말했는데, (<code>A = A^T</code>) 이 대칭행렬은</p>
+
+<p>(1) 항상 <em>eigen decomposition</em> 이 가능하며<br />
+(2) <em>orthogonal matrix</em> 로 대각화가 가능하다. (<code>P^-1 = P^T)</code></p>
+
+<h3 id="singular-value-decomposition">Singular Value Decomposition</h3>
+
+<p>이제, <em>Sigular Value Decomposition, 특이값 분해</em> 에 대해 이야기 하자. <em>SVD</em> 도 행렬을 대각화 하는 한 방법인데, <em>eigen decomposition</em> 과 달리 <code>m x n</code> 행렬에 적용 가능하다.</p>
+
+<p><code>m x n</code> 행렬 <code>A</code> 에 대해 <em>SVD</em> 는</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?A%20%3D%20U%20%5CSigma%20V%5ET" alt="" /></p>
+
+<p>여기서 <code>m x m</code> 의 <code>U</code> 는 <code>AA^T</code> 를 <em>eigen decomposition</em> 해서 얻은 <em>orthogonal matrix</em> 고, <code>U</code> 의 열벡터를 <code>A</code> 의 <em>left singular vector</em> 라 부른다.</p>
+
+<p>이 때 <code>U</code> <em>eigen decomposition</em> 해서 나온 <em>diagonalizing matrix</em> 이므로 <code>U</code> 의 열벡터는 <code>AA^T</code> 의 <em>eigen vectors</em> 다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?AA%5ET%20%3D%20U%28%5CSigma%20%5CSigma%5ET%29U%5ET" alt="" /></p>
+
+<p><code>n x n</code> 의 <code>V</code> 는 <code>A^TA</code> 를 <em>eigen decomposition</em> 해서 얻은 <em>orthogonal matrix</em> 고 <code>V</code> 의 열벡터를 <code>A</code> 의 <em>right singular vector</em> 라 부른다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?A%5ETA%20%3D%20V%28%5CSigma%5ET%20%5CSigma%29V%5ET" alt="" /></p>
+
+<p>마찬가지로 <code>V</code> 도 <em>eigen decomposition</em> 의 결과로 얻은 <em>diagonalizing matrix</em> 이므로 <code>V</code> 의 열벡터는 <code>A^TA</code> 의 <em>eigen vectors</em> 다</p>
+
+<p><code>\\Sigma</code> 는 <code>AA^T, A^TA</code> 를 <em>eigen decomposition</em> 해서 얻은 <em>eigen value</em> 의 <em>square root</em> 를 대각원소로 하는 <code>m x n</code> 의 직사각 대각행렬이다. 이 때 대각 원소들이 <code>A</code> 의 <em>singular value, 특이값</em> 이다.</p>
+
+<p><img src="http://cfile5.uf.tistory.com/image/277E3949525F5A872F520E" alt="" /></p>
+
+<p>(관련 그림과 설명은 <a href="http://darkpgmr.tistory.com/106">여기</a>서 참조했습니다.)</p>
+
+<p>이 때 <code>AA^T</code> 와 <code>A^TA</code> 의 고유값 <code>λ</code> 는 동일하며 0 이상이다. 그렇기 때문에 <em>square root</em> 를 씌우고, 동일한 행렬 <code>\\Sigma</code> 로 표현할 수 있다. (자세한 설명은 <a href="http://darkpgmr.tistory.com/106">여기</a> 참조)</p>
+
+<p><code>AA^T</code> 와 <code>A^TA</code> 의 공통의 고유값에 대해</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%5Csigma_1%5E2%20%3E%3D%20%5Csigma_2%5E2%20%3E%3D%20%5Ccdots%20%3E%3D%20%5Csigma_s%5E2%20%3E%3D%200%20%5C%20%5C%20%28s%20%3D%20min%28m%2C%20n%29%29" alt="" /></p>
+
+<p>이고 여기에 <em>square root</em> 를 취한 것이 <code>A</code> 의 <em>singular value, 특이값</em> 이며, 이 특이값들을 대각원소로 하는 <code>m x n</code> 행렬이 <code>\\Sigma</code> 다.</p>
+
+<p>이 때 <code>A</code> 의 특이값과 <em>left singular value</em> <code>u_i</code>, <em>right singular value</em> <code>v_i</code> 에 대해</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?Av_i%20%3D%20%5Csigma_i%20u_i" alt="" /></p>
+
+<p><em>SVD</em> 의 기하학적 의미는 <a href="http://darkpgmr.tistory.com/106">여기</a>를 인용하면</p>
+
+<blockquote>
+<p>행렬을 x&rsquo; = Ax와 같이 좌표공간에서의 선형변환으로 봤을 때 직교행렬(orthogonal matrix)의 기하학적 의미는 회전변환(rotation transformation) 또는 반전된(reflected) 회전변환, 대각행렬(diagonal maxtrix)의 기하학적 의미는 각 좌표성분으로의 스케일변환(scale transformation)이다.</p>
+
+<p>행렬 R이 직교행렬(orthogonal matrix)이라면 RRT = E이다. 따라서 det(RRT) = det&reg;det(RT) = det&reg;2 = 1이므로 det&reg;는 항상 +1, 또는 -1이다. 만일 det&reg;=1라면 이 직교행렬은 회전변환을 나타내고 det&reg;=-1라면 뒤집혀진(reflected) 회전변환을 나타낸다.</p>
+
+<p>따라서 식 (1), A = UΣVT에서 U, V는 직교행렬, Σ는 대각행렬이므로 Ax는 x를 먼저 VT에 의해 회전시킨 후 Σ로 스케일을 변화시키고 다시 U로 회전시키는 것임을 알 수 있다.</p>
+</blockquote>
+
+<p><img src="http://cfile2.uf.tistory.com/image/2725C84C5260AA5F28DFCA" alt="" />
+<p align="center">(<a href="http://darkpgmr.tistory.com/106">http://darkpgmr.tistory.com/106</a>)</p></p>
+
+<p><br/></p>
+
+<p>다시 처음의 슬라이드로 돌아가면</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236421_3927.png" alt="" />
+<p align="center">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>여기서 <code>svd</code> 함수의 인자 <code>Sigma</code> 가 <em>covariant matrix</em> 고 리턴값 <code>U, S, V</code> 가 각각 위에서 본 <code>U, \\Sigma, V</code> 다. <del>변수 이름을 헷갈리게 지으심;</del></p>
+
+<p>마지막 질문이다. <em>PCA</em> 에서 데이터 매트릭스 <code>X</code> 에 대해 <em>covariant matrix</em> <code>XX^T</code> 로 구한 <em>eigen vector</em> 의 열벡터가, 왼쪽부터 순서대로 분산을 최대로 하는 벡터(방향)인데, (<a href="http://darkpgmr.tistory.com/110">여기</a>참조)</p>
+
+<p>왜 우리는 <em>SVD</em> 의 <code>U</code> 를 택하는 것일까? 다시 말해 <em>PCA</em> 와 <em>SVD</em> 는 무슨 관계일까?</p>
+
+<p><a href="http://math.stackexchange.com/questions/3869/what-is-the-intuitive-relationship-between-svd-and-pca">What is the intuitive relationship between SVD and PCA</a> 를 참조하면,</p>
+
+<p>데이터 매트릭스 <code>X</code> 에 대해서, 공분산 매트릭스 <code>XX^T</code> 에 대해</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?XX%5ET%20%3D%20WDW%5ET" alt="" /></p>
+
+<p>이 때 <code>X</code> 의 <em>SVD</em> 는</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?X%20%3D%20U%20%5CSigma%20V%5ET" alt="" /></p>
+
+<p><code>U, V</code> 는 위에서 언급했듯이 <code>XX^T, X^TT</code> 의 고유값 분해로 얻은 대칭행렬 이므로 <code>VV^T = I, UU^T = I</code> 이다. 따라서</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?XX%5ET%20%3D%20%28U%20%5CSigma%20V%5ET%29%28U%20%5CSigma%20V%5ET%29%5ET%20%5C%5C%20%5C%5C%20%3D%20%28U%20%5CSigma%20V%5ET%29%28V%20%5CSigma%20U%5ET%29%20%5C%5C%20%5C%5C%20%3D%20U%20%5CSigma%5E2%20U%5ET" alt="" /></p>
+
+<p>이므로 분산이 큰 순서대로의 벡터를 열벡터로 담고 있는 <code>XX^T = WDW^T</code> 에서의 <code>W</code> 가 바로 <em>SVD</em> 의 결과인 <code>U</code> 다.</p>
+
+<p>실제로 <em>PCA</em> 를 하기 위해 <em>SVD</em> 를 이용하는건 <em>numerically</em> 더 낫다고 한다.</p>
+
+<blockquote>
+<p>In fact, using the SVD to perform PCA makes much better sense numerically than forming the covariance matrix to begin with, since the formation of XX⊤ can cause loss of precision. This is detailed in books on numerical linear algebra, but I&rsquo;ll leave you with an example of a matrix that can be stable SVD&rsquo;d, but forming XX⊤ can be disastrous</p>
+</blockquote>
+
+<p>다 정리하고 보니 드는 생각이,</p>
+
+<blockquote>
+<p>&ldquo;왜 공분산 행렬을 <em>eigen decomposition</em> 한 결과 <code>XX^T = WDW^T</code> 에서 <code>W</code> 가 공분산 행렬, 즉 데이터간 상관관계, 즉 데이터 그 자체를 설명하는 걸까?&rdquo;</p>
+</blockquote>
+
+<p><a href="http://math.stackexchange.com/questions/23596/why-is-the-eigenvector-of-a-covariance-matrix-equal-to-a-principal-component">여기</a> 에서 얻은 답은,</p>
+
+<p>공분산 매트릭스 자체는 <em>diagonal matrix</em> 가 아니다. 다시 말해 데이터 <code>X</code> 의 각 변수간 상관 관계를 담고 있다.</p>
+
+<p>그런데, 공분산 매트릭스를 대각화 한다면 변수간 상관관계는 사라진다. 다시 말해</p>
+
+<p><code>XX^T = WDW^T</code> 에서 <code>D</code> 자체에는 본래 데이터 <code>X</code>의 변수간 상관 관계가 포함되어 있지 않다. 그러면, 그 데이터는 다 <code>W</code> 와 <code>W^T</code> 에 들어있다는 소리인데, <code>W^T</code> 는 <code>W</code> 로 표현 가능하므로 <code>W</code> 에 데이터간 상관 관계가 모두 담겨있다는 소리다.</p>
+
+<blockquote>
+<p>Covariance matrix Cy (it is symmetric) encodes the correlations between variables of a vector. In general a covariance matrix is non-diagonal (i.e. have non zero correlations with respect to different variables).</p>
+
+<p>But it&rsquo;s interesting to ask, is it possible to diagonalize the covariance matrix by changing basis of the vector?. In this case there will be no (i.e. zero) correlations between different variables of the vector.</p>
+
+<p>Diagonalization of this symmetric matrix is possible with eigen value decomposition.</p>
+</blockquote>
+
+<p>그러면 마지막 질문, <code>W</code> 의 좌측열부터가 왜 높은 분산을 가질까?</p>
+
+<h3 id="choosing-the-number-of-pca">Choosing the number of PCA</h3>
+
+<p>적절한 <code>k</code> 의 수는 어떻게 구할까?</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236222_7050.png" alt="" />
+<p align="cener">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>위에서 언급했듯이 <em>PCA</em> 가 하는 일은 <em>projection error</em> 를 최소화 하는 것이다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%7B1/m%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%5Cleft%20%5C%7C%20x%5E%7B%28i%29%7D%20-%20x_%7Bapprox%7D%5E%7B%28i%29%7D%20%5Cright%20%5C%7C%20%5Cover%201/m%20%5Csum_%7Bi%20%3D%201%7D%5Em%20%5Cleft%20%5C%7C%20x%5E%7B%28i%29%7D%20%5Cright%20%5C%7C%20%7D%20%5Cleq%200.01" alt="" /></p>
+
+<p>인 <code>k</code> 를 구하면 99% 의 <em>variance</em> 가 유지된다. 적당한 <em>treshold</em> 값에 해당하는 <code>k</code> 값을 찾으면 된다.</p>
+
+<p>알고리즘은 이런데 (좌측),</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236236_2278.png" alt="" />
+<p align="cener">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>매번 계산하는건 굉장히 비 효율적이다. 따라서 우측처럼 데이터에 대한 <em>singular value</em> 를 이용하면 더 계산이 쉬워진다.</p>
+
+<p><img src="http://latex.codecogs.com/gif.latex?%7B%5Csum_%7Bi%20%3D%201%7D%5Ek%20%5Cover%20%5Csum_%7Bi%20%3D%201%7D%5En%20%7D%20%5Cgeq%200.99" alt="" /></p>
+
+<h3 id="reconstruction-from-compressed-representation">Reconstruction from Compressed Representation</h3>
+
+<p>잘 보면 <em>PCA</em> 가 하는 일은 높은 차원의 데이터를 최대한 보존하면서 차수를 줄이는 일이다. 압축 알고리즘과 비슷하다. (실제로 이미지 압축에 쓴다고 한다.)</p>
+
+<p>그럼 압축된 차원 <code>z</code> 에서 다시 본래의 데이터 차원 <code>x</code> 를 복구하려면 어떻게 해야할까?</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236299_8368.png" alt="" />
+<p align="cener">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>위 그림처럼 <code>z = U^T * x</code> 라 할때 좌변에 <code>U</code> 를 곱하면 <code>x_app = U * z</code> 에서 <code>x_app</code> 는 거의 <code>x</code> 에 가까워진다.</p>
+
+<h3 id="advice-for-apply-pca">Advice for Apply PCA</h3>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236320_8959.png" alt="" />
+<p align="cener">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><em>supervised learning</em> 의 속도를 올리는데도 쓸 수 있다. 이미지가 <code>100 x 100</code> 이면 <code>10000</code> 개의 <em>feature</em> 인데, 이건 어마어마하다.</p>
+
+<p>먼저 <em>input</em> <code>x</code> 를 뽑아내 여기에 대해 <em>PCA</em> 를 실행하면 차원을 줄인 <em>training set</em> 을 얻을 수 있다.</p>
+
+<p>주의할점은 <code>U</code> 를 찾을때 <em>training set</em> 에만 하고 <em>cross validation</em> 이나 <em>test</em> 까지 포함해서 <code>U</code> 를 찾으면 안된다. 나중에 <em>training set</em> 으로만 찾아낸 <code>U</code> 를 이용해서 <em>CV, test</em> 에 대해 다시 <em>PCA</em> 하자.</p>
+
+<p><br/></p>
+
+<p>다른 <em>PCA</em> 응용으로는</p>
+
+<ul>
+<li>Reduce memory, disk needed to store data</li>
+<li>Speed up learning algorithm</li>
+<li>Visualization (<code>k = 2 or 3</code>)</li>
+</ul>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236325_5356.png" alt="" />
+<p align="cener">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p><em>PCA</em> 를 이용하면 <em>feature</em> 의 수가 줄기 때문에 <em>overfitting</em> 을 방지하기 위해 사용할 수 있다고 생각하겠지만, 별로 좋은 생각은 아니다.</p>
+
+<p>작동은 할지 모르겠지만 <em>regularization</em> 을 이용하는 편이 낫다.</p>
+
+<p>왜냐하면 <em>PCA</em> 는 <code>y</code> 값이 없는 상태에서 작동하기 때문에 <code>y</code> 를 고려하지 않은 데이터가 손실이 발생할 수 있다. <code>1%</code> 만 손실된다 하더라도, 그 <code>1%</code> 가 <code>y</code> 와 관련해 굉장히 중요한 정보일 수 있다.</p>
+
+<p><img src="http://img.my.csdn.net/uploads/201302/19/1361236329_4045.png" alt="" />
+<p align="cener">(<a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a>)</p></p>
+
+<p>또 다른 잘못된 <em>PCA</em> 의 사용으로는, 그냥 무작정 <em>PCA</em> 를 사용하는 것이다.</p>
+
+<p><em>original data</em> <code>x</code> 에 대해 알고리즘을 구현도 안해보고, 바로 <em>PCA</em> 의 결과인 <code>z</code> 를 이용하려는건 좋은 생각이 아니다.</p>
+
+<p><code>x</code> 대해 작업 해보고 결과가 별로일때 <em>PCA</em> 를 고려하자.</p>
+
+<h3 id="references">References</h3>
+
+<p>(1) <em>Machine Learning</em> by <strong>Andrew NG</strong><br />
+(2) <a href="http://blog.csdn.net/linuxcumt">http://blog.csdn.net/linuxcumt</a><br />
+(3) <a href="http://blog.csdn.net/abcjennifer">http://blog.csdn.net/abcjennifer</a><br />
+(4) <a href="http://scipy-lectures.github.io">http://scipy-lectures.github.io</a><br />
+(5) <a href="http://en.wikipedia.org/wiki/Correlation_and_dependence">Wiki: Correlation and dependence</a><br />
+(6) <a href="http://en.wikipedia.org/wiki/Covariance">http://en.wikipedia.org/wiki/Covariance</a><br />
+(7) <a href="http://darkpgmr.tistory.com/110">http://darkpgmr.tistory.com/110</a><br />
+(8) <a href="http://darkpgmr.tistory.com/105">http://darkpgmr.tistory.com/105</a><br />
+(9) <a href="http://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">Wiki: Eigenvalues and Eigenvectors</a><br />
+(10) <a href="http://www.ktword.co.kr/abbr_view.php?m_temp1=4695&amp;id=762">http://www.ktword.co.kr</a><br />
+(11) <a href="http://darkpgmr.tistory.com/106">http://darkpgmr.tistory.com/106</a><br />
+(12) <a href="http://math.stackexchange.com/questions/3869/what-is-the-intuitive-relationship-between-svd-and-pca">What is the intuitive relationship between SVD and PCA</a></p>
+
+<br/>
+<br/>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '1ambda';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      
+      </div>
+    </div>
+
+    <div id="navigation">
+        <a class="nav nav-prev" href="../machine-learning-week-7"> <i class="fa fa-chevron-left"></i></a>
+        <a class="nav nav-next" href="../machine-learning-week-9" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+    </div>
+
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="https://1ambda.github.io/js/jquery-2.x.min.js"></script>
+    <script src="https://1ambda.github.io/js/clipboard.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.min.js"></script>
+    <script src="https://1ambda.github.io/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://1ambda.github.io/js/jquery.sticky-kit.min.js"></script>
+    <script src="https://1ambda.github.io/js/featherlight.min.js"></script>
+    <script src="https://1ambda.github.io/js/html5shiv-printshiv.min.js"></script>
+    <script src="https://1ambda.github.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://1ambda.github.io/js/modernizr.custom.71422.js"></script>
+    <script src="https://1ambda.github.io/js/learn.js"></script>
+    <script src="https://1ambda.github.io/js/hugo-learn.js"></script>
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-52181619-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+
+

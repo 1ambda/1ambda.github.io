@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>51s on Old Lisper</title>
+    <link>https://1ambda.github.io/51/</link>
+    <description>Recent content in 51s on Old Lisper</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 25 Jun 2016 10:05:45 +0900</lastBuildDate>
+    <atom:link href="https://1ambda.github.io/51/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>oh-my-github</title>
+      <link>https://1ambda.github.io/51/oh-my-github/</link>
+      <pubDate>Sat, 25 Jun 2016 10:05:45 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/51/oh-my-github/</guid>
+      <description>
+
+&lt;h1 id=&#34;oh-my-github&#34;&gt;oh-my-github&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 는 개발자가, 자신의 Github Profile 을 생성하고, gh-pages 로 호스팅 할 수 있도록 도와주는 툴입니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;tutorial&#34;&gt;oh-my-github&lt;/a&gt; - 10 분만에 Github Profile 만들기 (Korean)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>10분만에 Github Profile 만들기</title>
+      <link>https://1ambda.github.io/51/oh-my-github/tutorial/</link>
+      <pubDate>Sat, 25 Jun 2016 14:53:48 +0900</pubDate>
+      
+      <guid>https://1ambda.github.io/51/oh-my-github/tutorial/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/1ambda/1ambda.github.io/master/assets/images/oh-my-github/baracktocat-large.jpg?width=200&amp;amp;height=200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;Github 데이터를 이용해 프로필을 만들려면&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://developer.github.com/v3/&#34;&gt;Github API&lt;/a&gt;&lt;/strong&gt; 를 이용해 데이터를 긁어옵니다.&lt;/li&gt;
+&lt;li&gt;데이터를 보여줄 웹 어플리케이션 (&lt;em&gt;static&lt;/em&gt;) 을 만듭니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page (gh-pages)&lt;/a&gt;&lt;/strong&gt; 를 이용해 남들에게 보여줍니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이 때, (1) 에서 만든 데이터의 &lt;strong&gt;포맷을 정형화하면&lt;/strong&gt;, 이것을 사용하는 (2) 의 웹 어플리케이션을 일종의 &lt;em&gt;viewer&lt;/em&gt; 로 생각할 수 있습니다. 포맷이 고정되어 있으므로 데이터를 사용하는 &lt;em&gt;viewer&lt;/em&gt; 를 &lt;strong&gt;쉽게 교체하거나&lt;/strong&gt;, 자신이 원하는대로 &lt;strong&gt;커스터마이징&lt;/strong&gt; 할 수 있게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;demo&#34;&gt;Demo&lt;/h3&gt;
+
+&lt;p&gt;시작 전에 오늘 만들 결과물의 데모를 보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://1ambda.github.io/oh-my-github/&#34;&gt;Demo (Chrome, Firefox, Safari, IE11+)&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Langauge&lt;/strong&gt;: 즐겨 사용하는 프로그래밍 언어&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Repository&lt;/strong&gt;: 레포지토리 정보 (&lt;em&gt;stargazer&lt;/em&gt;, &lt;em&gt;fork count&lt;/em&gt; 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Contribution&lt;/strong&gt;: 오픈소스 커밋 내역&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Activity&lt;/strong&gt;: 최근 활동 내역 (&lt;em&gt;Push&lt;/em&gt;, &lt;em&gt;PullRequest&lt;/em&gt; 등)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;등의 정보를 확인할 수 있습니다. 커스터마이징 등은 아래에서 설명하겠습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h3&gt;
+
+&lt;p&gt;이제 Github 프로필을 만들어 보겠습니다. 준비물을 먼저 확인하면,&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;SSH Key&lt;/em&gt; 가 Github 에 등록이 안되어있을 경우 &lt;strong&gt;&lt;a href=&#34;https://help.github.com/articles/generating-an-ssh-key/&#34;&gt;Github: Generating an SSH key&lt;/a&gt;&lt;/strong&gt; 를 참조해서 등록해주세요.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;oh-my-github&lt;/strong&gt; 란 이름의 &lt;strong&gt;&lt;a href=&#34;https://github.com/new&#34;&gt;Github Repository&lt;/a&gt;&lt;/strong&gt; 를 만들어주세요. &lt;strong&gt;&lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page&lt;/a&gt;&lt;/strong&gt; 를 이용해 배포시 사용할 저장소입니다. (이름은 반드시 &lt;strong&gt;oh-my-github&lt;/strong&gt; 여야 합니다)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://github.com/settings/tokens/new&#34;&gt;Github Access Token&lt;/a&gt;&lt;/strong&gt; 을 만들어주세요. 50 개 이상의 Github API 호출을 위해선 Access Token 이 꼭 필요합니다. (Write Permission 은 필요 없습니다.)&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;데이터를 보여주는 정적 웹 어플리케이션인 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;viewer&lt;/a&gt; 와 Github API 를 호출해 데이터를 생성하는 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 설치법은 아래서 설명하겠습니다.&lt;/p&gt;
+
+&lt;h3 id=&#34;install-viewer&#34;&gt;Install: Viewer&lt;/h3&gt;
+
+&lt;p&gt;먼저 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;default viewer&lt;/a&gt; 를 클론 받고, &lt;code&gt;upstream&lt;/code&gt; 업데이트를 위해 remote 를 등록합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:oh-my-github/viewer.git oh-my-github
+$ cd oh-my-github
+
+$ git remote add upstream git@github.com:oh-my-github/viewer.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고, 위에서 만든 자신의 레포지토리 url 을 &lt;code&gt;origin&lt;/code&gt; 으로 등록합니다. &lt;code&gt;[GITHUB_ID]&lt;/code&gt; 대신 자신의 아이디를 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git remote remove origin
+$ git remote add origin git@github.com:[GITHUB_ID]/oh-my-github
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;install-oh-my-github&#34;&gt;Install: oh-my-github&lt;/h3&gt;
+
+&lt;p&gt;먼저 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 를 설치하겠습니다. NodeJS 가 없다면, &lt;a href=&#34;https://github.com/creationix/nvm&#34;&gt;NVM&lt;/a&gt; 설치 후 문서에 나와있는 대로 NodeJS 5.0.0 이상 버전을 설치해 주세요. 이 문서에서는 5.0.0 을 사용하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nvm use 5.0.0
+Now using node v5.0.0
+
+$ nvm ls
+   v0.12.9
+-&amp;gt;  v5.0.0
+    v5.4.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github&lt;/a&gt; 를 설치합니다. 네트워크 상황에 따라 2분 ~ 4분정도 걸립니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install oh-my-github -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 Linux 를 사용하고 있고, 위 설치 과정에서 &lt;code&gt;LIBXXX&lt;/code&gt; 등의 에러를 마주쳤을 경우 &lt;a href=&#34;https://github.com/oh-my-github/oh-my-github/wiki/Installation-Guide-for-Linux&#34;&gt;Linux Install Guide&lt;/a&gt; 를 참조해주세요.&lt;/p&gt;
+
+&lt;p&gt;이제 &lt;em&gt;viewer&lt;/em&gt; 를 클론 받은 디렉토리로 이동한 뒤 &lt;em&gt;oh-my-github&lt;/em&gt; 를 실행합니다. 여기서 &lt;code&gt;[GITHUB_TOKEN]&lt;/code&gt; 은 위에서 만든 &lt;a href=&#34;https://github.com/settings/tokens/new&#34;&gt;Github Access Token&lt;/a&gt; 값이고, &lt;code&gt;[GITHUB_ID]&lt;/code&gt; 는 자신의 Github ID 입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ oh-my-github
+
+$ omg init [GITHUB_ID] oh-my-github       # (e.g) omg init 1ambda oh-my-github
+$ omg generate [GITHUB_TOKEN]             # (e.g) omg generate 394fbad49191aca
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;omg generate&lt;/code&gt; 를 실행하면, 현재 디렉토리에 &lt;code&gt;oh-my-github.json&lt;/code&gt; (프로필 데이터) 가 생성됩니다. &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page&lt;/a&gt; 에 배포하기 전에 먼저 로컬에 띄워 볼 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ omg preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 &lt;code&gt;gh-pages&lt;/code&gt; 브랜치를 만들고 push 를 해야하는데, 아래의 명령어를 이용해 한번에 해결할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ omg publish
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 &lt;code&gt;omg publish&lt;/code&gt; 명령어가 동작하지 않는다면, 직접 Git 커맨드를 사용하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git add --all
+$ git commit -m &amp;quot;feat: Update Profile&amp;quot;
+$ git checkout -b gh-pages
+$ git push origin HEAD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이제 30초 정도 기다리고, 자신의 oh-my-github 레포지토리 &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Page&lt;/a&gt; URL 을 확인해 봅니다. 예를 들어 Github ID 가 &lt;code&gt;1ambda&lt;/code&gt; 라면, &lt;a href=&#34;http://1ambda.github.io/oh-my-github&#34;&gt;http://1ambda.github.io/oh-my-github&lt;/a&gt; 에 프로필이 생성됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;update&#34;&gt;Update&lt;/h3&gt;
+
+&lt;h4 id=&#34;profile&#34;&gt;Profile&lt;/h4&gt;
+
+&lt;p&gt;프로필 데이터 &lt;code&gt;oh-my-github.json&lt;/code&gt; 내용은 크게 분류하면 두가지로 나뉩니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;activities&lt;/code&gt;: 사용자의 활동 정보로, 이전 정보에 새로운 값이 추가됨(&lt;em&gt;append&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;repositories&lt;/code&gt;, &lt;code&gt;languages&lt;/code&gt; 등: 최신 정보로 덮어 씌워짐 (&lt;em&gt;overwrite&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;omg generate&lt;/code&gt; 를 실행할 때 마다, 새로운 이벤트가 있다면 &lt;code&gt;activities&lt;/code&gt; 값이 추가 (&lt;em&gt;append&lt;/em&gt;) 됩니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;더 정확히는, Github API 는 최대 10개월 혹은 최대 300개의 event 만 제공하기 때문에, 이것보다 더 많은 양의 event 를 프로필 데이터에 저장하고자 event id 값으로 중복 제거를 한 뒤 &lt;em&gt;append&lt;/em&gt; 방식으로 데이터를 쌓습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;따라서 프로필 데이터를 업데이트 하고, Github 에 푸시하려면 다음의 명령어를 실행하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd oh-my-github         # oh-my-github.json 이 위치한 곳
+
+$ omg generate [GITHUB_TOKEN]
+$ omg publish
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;viewer&#34;&gt;Viewer&lt;/h4&gt;
+
+&lt;p&gt;&lt;em&gt;viewer&lt;/em&gt; 를 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;upstream&lt;/a&gt; 에서 다음처럼 업데이트 할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd oh-my-github         # oh-my-github.json 이 위치한 곳
+
+$ git checkout master
+$ git pull upstream master --rebase
+
+$ git checkout gh-pages
+$ git rebase master
+
+$ git push origin HEAD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;customizing&#34;&gt;Customizing&lt;/h3&gt;
+
+&lt;p&gt;만약 &lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;default viewer&lt;/a&gt; 가 맘에 들지 않는다거나, 새로운 기능 (e.g 그래프) 을 추가하고 싶다면 클론받아 &lt;code&gt;app/src&lt;/code&gt; 아래의 코드를 수정할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app
+├── LICENSE.md
+├── package.json
+├── src (웹 애플리케이션 소스)
+│   ├── actions
+│   ├── components
+│   ├── constants
+│   ├── containers
+│   ├── reducers
+│   ├── store
+│   ├── theme
+│   └── util
+└── tools (빌드도구 관련)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;app&lt;/code&gt; 디렉토리로 이동 후 &lt;code&gt;npm start -s&lt;/code&gt; 를 실행하고 코드를 수정한 뒤, &lt;code&gt;npm run build&lt;/code&gt; 를 실행하면 루트 디렉토리에 &lt;code&gt;bundle.js&lt;/code&gt; 와 &lt;code&gt;index.html&lt;/code&gt; 이 업데이트 됩니다. 이 두 파일을 자신의 &lt;strong&gt;oh-my-github&lt;/strong&gt; 에 업데이트 하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;추가로, 다른 사람들이 자신이 수정한 &lt;em&gt;viewer&lt;/em&gt; 를 찾을 수 있게 &lt;a href=&#34;https://www.npmjs.com/search?q=oh-my-github%2C+viewer&#34;&gt;NPM&lt;/a&gt; 에 등록하고 싶다면 &lt;code&gt;package.json&lt;/code&gt; 을 수정 후 &lt;code&gt;app&lt;/code&gt; 디렉토리에서 &lt;code&gt;npm publish&lt;/code&gt; 명령을 실행하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;아래의 내용을 수정하고, 배포하면 NPM 에서 &lt;code&gt;oh-my-github, viewer&lt;/code&gt; 키워드로 검색할 수 있습니다. &lt;a href=&#34;https://www.npmjs.com/search?q=oh-my-github%2C+viewer&#34;&gt;(NPM: oh-my-github, viewer)&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  ...
+
+  &amp;quot;name&amp;quot;: &amp;quot;oh-my-github-viewer-default&amp;quot;,
+  &amp;quot;version&amp;quot;: &amp;quot;0.0.1&amp;quot;,
+  &amp;quot;author&amp;quot;: &amp;quot;1ambda&amp;quot;,
+  &amp;quot;description&amp;quot;: &amp;quot;&amp;quot;,
+  &amp;quot;homepage&amp;quot;: &amp;quot;https://github.com/oh-my-github/viewer#readme&amp;quot;,
+  &amp;quot;repository&amp;quot;: {
+    &amp;quot;type&amp;quot;: &amp;quot;git&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;git+https://github.com/oh-my-github/viewer.git&amp;quot;
+  },
+  &amp;quot;bugs&amp;quot;: {
+    &amp;quot;url&amp;quot;: &amp;quot;https://github.com/oh-my-github/viewer/issues&amp;quot;
+  },
+
+  ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://octodex.github.com/baracktocat&#34;&gt;@baracktocat on octodex (Title Iamge)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/oh-my-github/oh-my-github&#34;&gt;oh-my-github: generator&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/oh-my-github/viewer&#34;&gt;oh-my-github: viewer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
