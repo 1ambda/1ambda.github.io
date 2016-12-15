@@ -44,7 +44,7 @@
   </url>
   
   <url>
-    <loc>https://1ambda.github.io/javascript/javascript-inheritance/</loc>
+    <loc>https://1ambda.github.io/javascripts/javascript-inheritance/</loc>
     <lastmod>2016-06-25T12:22:02+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -79,14 +79,14 @@
   </url>
   
   <url>
-    <loc>https://1ambda.github.io/javascript/tips-for-webpack-and-redux/</loc>
+    <loc>https://1ambda.github.io/javascripts/tips-for-webpack-and-redux/</loc>
     <lastmod>2016-06-25T12:24:38+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://1ambda.github.io/javascript/rest-api-put-vs-post/</loc>
+    <loc>https://1ambda.github.io/javascripts/rest-api-put-vs-post/</loc>
     <lastmod>2016-06-25T22:25:23+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -611,7 +611,7 @@
   </url>
   
   <url>
-    <loc>https://1ambda.github.io/javascript/</loc>
+    <loc>https://1ambda.github.io/javascripts/</loc>
     <lastmod>2016-06-25T11:27:04+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -723,7 +723,7 @@
   </url>
   
   <url>
-    <loc>https://1ambda.github.io/javascript/</loc>
+    <loc>https://1ambda.github.io/javascripts/</loc>
     <lastmod>2016-06-25T11:27:04+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0</priority>
